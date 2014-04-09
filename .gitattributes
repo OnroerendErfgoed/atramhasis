@@ -1,0 +1,21 @@
+# Default behaviour
+* text=auto
+
+# Files that should always be normalized and converted to native line
+# endings on checkout.
+*.js text
+*.htm text
+*.html text
+*.styl text
+*.json text
+*.md text
+*.svg text
+*.txt text
+*.py text
+*.rst text
+
+# Files that are truly binary and should not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
