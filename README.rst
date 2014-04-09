@@ -1,4 +1,4 @@
-atramhasis
+Atramhasis
 ==========
 
 An online SKOS editor
