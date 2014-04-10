@@ -1,0 +1,13 @@
+language: python
+python:
+ - "2.7"
+ - "3.2"
+ - "3.3"
+install:
+ - easy_install -U setuptools
+ - python setup.py -q install
+ - pip install nose coverage nose-testconfig coveralls webtest
+script:
+  nosetests --nologcapture --config nose_cover.cfg --tc-file nose_travis.ini
+after_success:
+  coveralls
