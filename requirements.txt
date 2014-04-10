@@ -5,8 +5,8 @@ pyramid-tm==0.7
 
 # skos
 skosprovider==0.3.0a1
-skosprovider-sqlalchemy==0.2.0a1
-pyramid-skosprovider==0.1.0
+skosprovider_sqlalchemy==0.2.0a1
+pyramid_skosprovider==0.1.0
 
 # sqlalchemy
 sqlalchemy==0.9.4
