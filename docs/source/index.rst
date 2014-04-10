@@ -11,6 +11,11 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   intro
+   development
+   api
+   changes
+   glossary
 
 
 Indices and tables
