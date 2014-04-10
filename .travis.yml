@@ -6,8 +6,8 @@ python:
 install:
  - easy_install -U setuptools
  - python setup.py -q install
- - pip install nose coverage nose-testconfig coveralls webtest
+ - pip install -U pytest pytest-cov coveralls
 script:
-  nosetests --nologcapture --config nose_cover.cfg --tc-file nose_travis.ini
+  py.test --cov atramhasis --cov-report term-missing atramhasis\tests.py
 after_success:
   coveralls
