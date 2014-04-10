@@ -16,4 +16,3 @@ Technology stack:
  * Jinja2
  * Zurb Foundation + jQuery for Public frontend
  * Dojo for Admin frontend
- * Travis
