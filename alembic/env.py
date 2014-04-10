@@ -58,7 +58,7 @@ def run_migrations_online():
     metadata = MetaData()
     for md in target_metadata:
         for table in md.tables.values():
-	        table.tometadata(metadata)
+            table.tometadata(metadata)
 
     connection = engine.connect()
     context.configure(

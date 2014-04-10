@@ -12,3 +12,6 @@ coveralls==0.4.1
 
 # Documentation
 Sphinx==1.2
+
+# waitress
+waitress==0.8.8
