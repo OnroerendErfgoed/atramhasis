@@ -51,3 +51,14 @@ coverage.xml
 
 # Sphinx documentation
 docs/build/
+
+# IDE stuff:
+.idea
+.idea/
+.idea/atramhasis.iml
+*.iml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/scopes/scope_settings.xml
+.idea/vcs.xml
