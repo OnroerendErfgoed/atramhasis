@@ -12,6 +12,7 @@ def includeme(config):
     config.include('pyramid_jinja2')
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
+    config.scan()
 
 
 def main(global_config, **settings):
@@ -22,5 +23,5 @@ def main(global_config, **settings):
     Base.metadata.bind = engine
     config = Configurator(settings=settings)
     includeme(config)
-    config.scan()
+
     return config.make_wsgi_app()

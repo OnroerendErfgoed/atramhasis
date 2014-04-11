@@ -54,28 +54,9 @@ TREES = DictionaryProvider(
     [larch, chestnut, species]
 )
 
-
-def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
-    csv_reader = csv.reader(utf8_data, dialect=dialect, **kwargs)
-    for row in csv_reader:
-        yield [unicode(cell, 'utf-8') for cell in row]
-
-reader = unicode_csv_reader(
-    open(os.path.join(os.path.dirname(__file__), 'menu.csv'), 'r'),
-    delimiter=',',
-    quotechar='"'
-)
-
-MENU = SimpleCsvProvider(
-    {'id': 'MENU'},
-    reader
-)
-
-
 def includeme(config):
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
     skosregis = config.get_skos_registry()
     skosregis.register_provider(TREES)
-    skosregis.register_provider(MENU)
 
