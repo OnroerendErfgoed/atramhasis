@@ -21,34 +21,30 @@ requires = [
     'pyramid_skosprovider',
     'pyramid_jinja2',
     'alembic'
-]
+    ]
 
-setup(name='atramhasis',
+setup(name='{{project}}',
       version='0.0',
-      description='atramhasis',
+      description='{{project}}',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
-          "Programming Language :: Python",
-          "Framework :: Pyramid",
-          "Topic :: Internet :: WWW/HTTP",
-          "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-      ],
+        "Programming Language :: Python",
+        "Framework :: Pyramid",
+        "Topic :: Internet :: WWW/HTTP",
+        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+        ],
       author='',
       author_email='',
       url='',
-      keywords='web wsgi bfg pylons pyramid',
+      keywords='web pyramid pylons',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='atramhasis',
       install_requires=requires,
+      tests_require=requires,
+      test_suite="{{package}}",
       entry_points="""\
       [paste.app_factory]
-      main = atramhasis:main
-      [console_scripts]
-      initialize_atramhasis_db = atramhasis.scripts.initializedb:main
-      [pyramid.scaffold]
-        atramhasis_scaffold=atramhasis.scaffolds:AtramhasisTemplate
-        atramhasis_demo=atramhasis.scaffolds:AtramhasisDemoTemplate
+      main = {{package}}:main
       """,
-)
+      )

@@ -1,0 +1,81 @@
+# -*- coding: utf-8 -*-
+
+import os
+import csv
+
+from skosprovider.providers import (
+    DictionaryProvider,
+    SimpleCsvProvider
+)
+
+import logging
+log = logging.getLogger(__name__)
+
+larch = {
+    'id': '1',
+    'uri': 'http://id.trees.org/1',
+    'labels': [
+        {'type': 'prefLabel', 'language': 'en', 'label': 'The Larch'},
+        {'type': 'prefLabel', 'language': 'nl', 'label': 'De Lariks'}
+    ],
+    'notes': [
+        {'type': 'definition', 'language': 'en', 'note': 'A type of tree.'}
+    ]
+}
+
+chestnut = {
+    'id': '2',
+    'uri': 'http://id.trees.org/2',
+    'labels': [
+        {'type': 'prefLabel', 'language': 'en', 'label': 'The Chestnut'},
+        {'type': 'altLabel', 'language': 'nl', 'label': 'De Paardekastanje'}
+    ],
+    'notes': [
+        {
+            'type': 'definition', 'language': 'en',
+            'note': 'A different type of tree.'
+        }
+    ]
+}
+
+species = {
+    'id': 3,
+    'uri': 'http://id.trees.org/3',
+    'labels': [
+        {'type': 'prefLabel', 'language': 'en', 'label': 'Trees by species'},
+        {'type': 'prefLabel', 'language': 'nl', 'label': 'Bomen per soort'}
+    ],
+    'type': 'collection',
+    'members': ['1', '2']
+}
+
+TREES = DictionaryProvider(
+    {'id': 'TREES', 'default_language': 'nl'},
+    [larch, chestnut, species]
+)
+
+
+def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
+    csv_reader = csv.reader(utf8_data, dialect=dialect, **kwargs)
+    for row in csv_reader:
+        yield [unicode(cell, 'utf-8') for cell in row]
+
+reader = unicode_csv_reader(
+    open(os.path.join(os.path.dirname(__file__), 'menu.csv'), 'r'),
+    delimiter=',',
+    quotechar='"'
+)
+
+MENU = SimpleCsvProvider(
+    {'id': 'MENU'},
+    reader
+)
+
+
+def includeme(config):
+    config.include('pyramid_skosprovider')
+    config.scan('pyramid_skosprovider')
+    skosregis = config.get_skos_registry()
+    skosregis.register_provider(TREES)
+    skosregis.register_provider(MENU)
+
