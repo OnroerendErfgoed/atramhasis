@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    intro
+   demo
    development
    api
    changes
