@@ -4,4 +4,4 @@
 History
 =======
 
-.. include:: ../HISTORY.rst
+.. include:: ../../CHANGES.txt
