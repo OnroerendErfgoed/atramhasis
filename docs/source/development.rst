@@ -17,8 +17,16 @@ manually is good for running a distinct set of unit tests. For a full test run,
 tox is prefered since this can run the unit tests against mutiple versions of 
 python.
 
+To install a fully working development environment a pip requirements-dev.txt
+file is provided. By passing this file to :command:`pip install -r` all 
+requirements for Atramhasis and development of the software (Sphinx, py.test,
+tox) will be installed.
+
 .. code-block:: bash
 
+    # Install dependencies
+    $ pip install -r requirements-dev.txt
+    # Run unit tests for all environments 
     $ tox
     # No coverage
     $ py.test 
