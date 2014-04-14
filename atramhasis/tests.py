@@ -56,6 +56,7 @@ class TestMyViewFailureCondition(unittest.TestCase):
         info = my_view(request)
         self.assertEqual(info.status_int, 500)
 
+
 class TestScaffolding(unittest.TestCase):
     def test_scaffolding(self):
         atemp= AtramhasisTemplate('test')
