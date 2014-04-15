@@ -15,7 +15,7 @@ pyramid.includes =
     pyramid_debugtoolbar
     pyramid_tm
 
-sqlalchemy.url = sqlite:///%(here)s/atramhasis.sqlite
+sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 # By default, the toolbar only appears for clients from IP addresses
 # '127.0.0.1' and '::1'.

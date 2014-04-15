@@ -1,3 +1,4 @@
 include *.txt *.ini *.cfg *.rst
 recursive-include atramhasis *.ico *.png *.css *.gif *.jpg *.pt *.txt *.jinja2 *.js *.html *.xml
 graft atramhasis/scaffolds
+graft atramhasis/alembic

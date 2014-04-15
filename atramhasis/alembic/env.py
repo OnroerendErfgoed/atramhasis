@@ -1,10 +1,12 @@
 from __future__ import with_statement
+from configparser import ConfigParser
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 from atramhasis.models import Base
 from skosprovider_sqlalchemy.models import Base as SkosBase
 from sqlalchemy.schema import MetaData
+from os import path
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -24,6 +26,19 @@ target_metadata = [SkosBase.metadata, Base.metadata]
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
+def load_app_ini(ini_file):
+    """Load the settings for the application.ini file."""
+    ini = ConfigParser()
+    ini.read_file(open(ini_file))
+    here = path.abspath(path.dirname(ini_file))
+    ini.set('app:main', 'here', here)
+    return ini
+
+app_ini = config.get_main_option('ini_location')
+app_config = load_app_ini(app_ini)
+sa_url = app_config.get('app:main', 'sqlalchemy.url')
+config.set_main_option('sqlalchemy.url', sa_url)
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
