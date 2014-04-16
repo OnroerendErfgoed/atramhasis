@@ -64,4 +64,4 @@ docs/build/
 .idea/vcs.xml
 
 # sqlite stuff
-.sqlite
+*.sqlite
