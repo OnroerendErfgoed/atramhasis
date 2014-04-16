@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+	<head>
+    {% block head %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{{project}} base</title>
+        <!-- Included CSS Files (Uncompressed) -->
+        <!--
+		<link rel="stylesheet" href="{{request.application_url}}/static/foundation/css/foundation.css">
+		-->
+        <!-- Included CSS Files (Compressed) -->
+        <link rel="stylesheet" href="{{request.application_url}}/static/foundation/css/foundation.min.css">        
+        <script src="{{request.application_url}}/static/foundation/js/vendor/modernizr.js"></script>
+    {% endblock %}
+	</head>
+	<body>
+    {% block body %}
+    {% endblock %}
+    {% block tail %}    
+        <!-- Included JS Files (Compressed) -->
+        <script src="{{request.application_url}}/static/foundation/js/foundation.min.js"></script>
+		<script>
+		  $(document).foundation();
+		</script>		
+    {% endblock %}
+</body>
+</html>

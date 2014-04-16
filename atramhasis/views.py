@@ -33,3 +33,6 @@ After you fix the problem, please restart the Pyramid application to
 try it again.
 """
 
+@view_config(route_name='foundation', renderer='templates/foundation.jinja2')
+def my_view2(request):
+    return {'project': 'atramhasis'}
