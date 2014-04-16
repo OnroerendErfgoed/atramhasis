@@ -134,7 +134,6 @@ geo = DictionaryProvider(
 
 
 def includeme(config):
-    print('skos include')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
     skosregis = config.get_skos_registry()

@@ -6,7 +6,7 @@ from atramhasis.views import home_view
 from .fixtures.data import trees
 
 
-class TestMyViewSuccessCondition(unittest.TestCase):
+class TestHomeView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         self.regis = Registry()

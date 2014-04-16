@@ -1,6 +1,5 @@
 from pyramid.view import view_config
 from pyramid.response import Response
-from pyramid_skosprovider import ISkosRegistry
 
 err_msg = """
 No SKOS registry found, please check your application setup
