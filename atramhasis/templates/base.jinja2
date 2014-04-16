@@ -5,21 +5,18 @@
 		<meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{{project}} base</title>
-		<link rel="stylesheet" href="{{request.application_url}}/static/foundation/css/foundation.css">     
-        <script src="{{request.application_url}}/static/foundation/js/vendor/modernizr.js"></script>
+		<link rel="stylesheet" href="{{request.application_url}}/static/css/foundation.css">
+        <script src="{{request.application_url}}/static/js/vendor/modernizr.js"></script>
 	</head>
 	<body>
     {% block body %}
     {% endblock %}
 
-        <script src="{{request.application_url}}/static/foundation/js/vendor/jquery.js"></script>
+        <script src="{{request.application_url}}/static/js/vendor/jquery.js"></script>
         <!-- Included JS Files (Compressed) -->
-        <script src="{{request.application_url}}/static/foundation/js/foundation/foundation.js"></script>
+        <script src="{{request.application_url}}/static/js/foundation.min.js"></script>
 		<script>
 		  $(document).foundation();
-
-		  var doc = document.documentElement;
-		  doc.setAttribute('data-useragent', navigator.userAgent);		  
 		</script>		
 	</body>
 </html>
