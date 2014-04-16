@@ -10,6 +10,7 @@ from .models import (
 def includeme(config):
     """this function adds some configuration for the application"""
     config.include('pyramid_jinja2')
+    config.include('.skos')
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.scan()
