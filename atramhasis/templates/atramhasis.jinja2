@@ -29,6 +29,12 @@
 				<p class="app-welcome">
 					Welcome to <span class="app-name">{{project}}</span>, An online SKOS editor
 				</p>
+				<p>Available list of schemes:</p>
+                <ul>
+                {% for item in conceptschemes %}
+                    <li>{{ item.id }}</li>
+                {% endfor %}
+                </ul>
 			</div>
 		</div>
 		<div id="bottom">
