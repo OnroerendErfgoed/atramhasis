@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
 	<head>
-    {% block head %}
+		<meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{{project}} base</title>
-        <!-- Included CSS Files (Uncompressed) -->
-        <!--
-		<link rel="stylesheet" href="{{request.application_url}}/static/foundation/css/foundation.css">
-		-->
-        <!-- Included CSS Files (Compressed) -->
-        <link rel="stylesheet" href="{{request.application_url}}/static/foundation/css/foundation.min.css">        
+		<link rel="stylesheet" href="{{request.application_url}}/static/foundation/css/foundation.css">     
         <script src="{{request.application_url}}/static/foundation/js/vendor/modernizr.js"></script>
-    {% endblock %}
 	</head>
 	<body>
     {% block body %}
     {% endblock %}
-    {% block tail %}    
+
+        <script src="{{request.application_url}}/static/foundation/js/vendor/jquery.js"></script>
         <!-- Included JS Files (Compressed) -->
-        <script src="{{request.application_url}}/static/foundation/js/foundation.min.js"></script>
+        <script src="{{request.application_url}}/static/foundation/js/foundation/foundation.js"></script>
 		<script>
 		  $(document).foundation();
+
+		  var doc = document.documentElement;
+		  doc.setAttribute('data-useragent', navigator.userAgent);		  
 		</script>		
-    {% endblock %}
-</body>
+	</body>
 </html>
