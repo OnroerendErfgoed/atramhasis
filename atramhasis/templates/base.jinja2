@@ -1,0 +1,22 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+	<head>
+		<meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{{project}} base</title>
+		<link rel="stylesheet" href="{{request.application_url}}/static/css/foundation.css">
+        <script src="{{request.application_url}}/static/js/vendor/modernizr.js"></script>
+	</head>
+	<body>
+    {% block body %}
+    {% endblock %}
+
+        <script src="{{request.application_url}}/static/js/vendor/jquery.js"></script>
+        <!-- Included JS Files (Compressed) -->
+        <script src="{{request.application_url}}/static/js/foundation.min.js"></script>
+		<script>
+		  $(document).foundation();
+		</script>		
+	</body>
+</html>

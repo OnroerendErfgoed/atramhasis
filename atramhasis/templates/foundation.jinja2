@@ -1,0 +1,48 @@
+{% include 'templates/base.jinja2' %}
+
+{% block body %}
+<div class="row">
+  <div class="large-12 columns">
+    <!-- Navigation -->
+
+    <nav class="top-bar" data-topbar>
+      <ul class="title-area">
+        <!-- Title Area -->
+
+        <li class="name">
+          <h1><a href="#">[{{project}}]</a></h1>
+        </li>
+      </ul>
+
+      <section class="top-bar-section">
+
+      </section>
+    </nav><!-- End Navigation -->
+  </div>
+</div>
+
+<div class="row">
+  <div class="large-12 columns">
+      <label>Schemes:
+        <select>
+             {% for item in conceptschemes %}
+                    <option>{{ item.id }}</option>
+                {% endfor %}
+        </select>
+      </label>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="row">
+  <div class="large-12 columns">
+    <hr>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <p>© Copyright 2014 Onroerend Erfgoed</p>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock %}

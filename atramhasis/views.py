@@ -19,6 +19,14 @@ def home_view(request):
     else:
         return Response(err_msg, content_type='text/plain', status_int=500)
 
+@view_config(route_name='foundation', renderer='templates/foundation.jinja2')
+def foundation_view(request):
+    if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+        conceptschemes = [x.get_metadata() for x in request.skos_registry.get_providers()]
+        return {'project': 'atramhasis', 'conceptschemes': conceptschemes}
+    else:
+        return Response(err_msg, content_type='text/plain', status_int=500)
+
 
 @view_config(route_name='concept', renderer='templates/concept.jinja2')
 def concept_view(request):
