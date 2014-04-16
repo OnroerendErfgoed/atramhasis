@@ -7,10 +7,9 @@ No SKOS registry found, please check your application setup
 """
 
 @view_config(route_name='home', renderer='templates/atramhasis.jinja2')
-def my_view(request):
-    skos_registry = request.registry.queryUtility(ISkosRegistry)
-    if skos_registry is not None:
-        conceptschemes = [x.get_metadata() for x in skos_registry.get_providers()]
+def home_view(request):
+    if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+        conceptschemes = [x.get_metadata() for x in request.skos_registry.get_providers()]
         return {'project': 'atramhasis', 'conceptschemes': conceptschemes}
     else:
         return Response(err_msg, content_type='text/plain', status_int=500)
