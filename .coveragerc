@@ -1,5 +1,6 @@
 [run]
 source = atramhasis
+omit = atramhasis/scripts/*
 
 [report]
 show_missing = True

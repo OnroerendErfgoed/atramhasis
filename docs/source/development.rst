@@ -34,6 +34,8 @@ tox) will be installed.
     $ py.test --cov atramhasis --cov-report term-missing
     # Only run a subset of the tests
     $ py.test atramhasis/tests.py
+    # create or update database
+    $ alembic upgrade head
 
 Every pull request will be run through Travis-ci_. When providing a pull 
 request, please run the unit tests first and make sure they all pass. Please 

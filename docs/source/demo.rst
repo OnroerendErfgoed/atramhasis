@@ -24,7 +24,7 @@ This creates a local demo package you can run with just a few more commands:
 
 .. code-block:: bash    
 
-    $ initialize_atramhasis_db development.ini
+    $ alembic upgrade head
     $ python setup.py develop
     $ pserve development.ini
 
