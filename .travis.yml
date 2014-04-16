@@ -8,6 +8,6 @@ install:
  - python setup.py -q install
  - pip install -U pytest pytest-cov coveralls
 script:
-  py.test --cov atramhasis --cov-report term-missing
+  py.test --cov atramhasis --cov-report term-missing atramhasis/tests
 after_success:
   coveralls
