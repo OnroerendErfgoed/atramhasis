@@ -10,11 +10,12 @@ from .models import (
 def includeme(config):
     """this function adds some configuration for the application"""
     config.include('pyramid_jinja2')
-    config.include('.skos')
+
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
-    config.add_route('concept', '/conceptscheme/{scheme_id}/c/{c_id}')
+    config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html')
     config.add_route('foundation', '/foundation')
+    config.include('.skos')
     config.scan()
 
 
