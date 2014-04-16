@@ -7,6 +7,11 @@ No SKOS registry found, please check your application setup
 
 @view_config(route_name='home', renderer='templates/atramhasis.jinja2')
 def home_view(request):
+    '''
+    This view displays the homepage.
+
+    :param request: A :class:`pyramid.request.Request`
+    '''
     if hasattr(request, 'skos_registry') and request.skos_registry is not None:
         conceptschemes = [x.get_metadata() for x in request.skos_registry.get_providers()]
         return {'project': 'atramhasis', 'conceptschemes': conceptschemes}
