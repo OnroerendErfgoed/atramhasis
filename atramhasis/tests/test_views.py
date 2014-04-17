@@ -2,6 +2,7 @@ import unittest
 
 from skosprovider.registry import Registry
 from pyramid import testing
+from webob.multidict import MultiDict
 from atramhasis.errors import SkosRegistryNotFoundException
 
 from atramhasis.views import AtramhasisView
@@ -74,3 +75,45 @@ class TestConceptView(unittest.TestCase):
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
         self.assertIsNone(info['concept'])
+
+
+class TestSearchResultView(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_find_by_label(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.params = MultiDict()
+        request.params.add('label', 'De Paardekastanje')
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        info = atramhasisview.search_result()
+        self.assertIsNotNone(info['concepts'])
+        concept = info['concepts'][0]
+        self.assertIsNotNone(concept)
+        self.assertEqual(concept['label'], 'De Paardekastanje')
+
+    def test_no_querystring(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.params = MultiDict()
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        info = atramhasisview.search_result()
+        self.assertIsNotNone(info['concepts'])
+        self.assertEqual(len(info['concepts']), 3)
+
+    def test_no_schema(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'GG'
+        request.params = MultiDict()
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        info = atramhasisview.search_result()
+        self.assertIsNone(info['concepts'])
