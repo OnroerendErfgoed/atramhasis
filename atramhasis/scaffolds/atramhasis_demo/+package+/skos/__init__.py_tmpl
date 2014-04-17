@@ -11,14 +11,18 @@ from atramhasis.models import (
 log = logging.getLogger(__name__)
 
 TREES = SQLAlchemyProvider(
-    {'id': 'TREES', 'default_language': 'nl'},
+    {'id': 'TREES', 'conceptscheme_id': 1},
+    DBSession
+)
+
+GEO = SQLAlchemyProvider(
+    {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
     DBSession
 )
 
 
 def includeme(config):
-    config.include('pyramid_skosprovider')
-    config.scan('pyramid_skosprovider')
     skosregis = config.get_skos_registry()
     skosregis.register_provider(TREES)
+    skosregis.register_provider(GEO)
 

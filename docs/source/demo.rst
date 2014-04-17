@@ -24,8 +24,13 @@ This creates a local demo package you can run with just a few more commands:
 
 .. code-block:: bash    
 
+    # create or upgrade database
     $ alembic upgrade head
+    # setup
     $ python setup.py develop
+    # intialize sample data
+    $ initialize_atramhasis_db development.ini
+    # start server
     $ pserve development.ini
 
 The Atramhasis demo instance is now running on your localhost at post 6543.

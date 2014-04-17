@@ -34,3 +34,4 @@ def main(argv=sys.argv):
     with transaction.manager:
         import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), DBSession)
         import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), DBSession)
+    print('--atramhasis-db-initialized--')
