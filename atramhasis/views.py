@@ -46,7 +46,7 @@ class AtramhasisView(object):
     @view_config(route_name='search_result', renderer='templates/search_result.jinja2')
     def search_result(self):
         '''
-        This view displays the concept details
+        This view displays the search results
 
         :param request: A :class:`pyramid.request.Request`
         '''
