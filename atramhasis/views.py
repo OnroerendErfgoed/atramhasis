@@ -1,4 +1,6 @@
 from pyramid.view import view_config, view_defaults
+from skosprovider.skos import Concept
+from skosprovider.skos import Collection
 
 from atramhasis.errors import SkosRegistryNotFoundException
 
@@ -41,7 +43,12 @@ class AtramhasisView(object):
         print('concept_view ' + scheme_id + ' ' + c_id)
         prov = self.request.skos_registry.get_provider(scheme_id)
         if prov:
-            concept = prov.get_by_id(c_id)
-            if concept:
-                return {'concept': concept}
+            c = prov.get_by_id(c_id)
+            if c:
+                skostype = ""
+                if isinstance(c, Concept):
+                    skostype = "Concept"
+                if isinstance(c, Collection):
+                    skostype = "Collection"
+                return {'concept': c, 'conceptType': skostype}
         return {'concept': None}

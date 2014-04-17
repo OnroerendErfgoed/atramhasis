@@ -1,0 +1,78 @@
+{% include 'templates/base.jinja2' %}
+
+{% block body %}
+
+        <h1>[{{ conceptType }}] {{ concept.label().label}}</h1>
+        <ul>
+            <li>Id: {{ concept.id}}</li>
+            <li>Uri: <a href="{{ concept.uri }}">{{ concept.uri }}</a></li>
+        </ul>
+
+		<h2>Labels</h2>
+		<ul>
+		    {%- for label in concept.labels %}
+            <li>
+                {{ label.label}}
+                <ul>
+                    <li>type: {{ label.type }} </li>
+                    <li>language: {{ label.language }} </li>
+                </ul>
+            </li>
+		    {%- endfor %}
+		</ul>
+
+
+    {% if conceptType == 'Concept' %}
+		<h2>Notes</h2>
+		<ul>
+		    {%- for note in concept.notes %}
+            <li>
+                {{ note.note}}
+                <ul>
+                    <li>type: {{ note.type }} </li>
+                    <li>language: {{ note.language }} </li>
+                </ul>
+            </li>
+		    {%- endfor %}
+		</ul>
+
+		<h2>Narrower</h2>
+        <ul>
+            {%- for linkid in concept.narrower %}
+            <li>
+                <a href="{{ linkid }}">{{ linkid }}</a>
+            </li>
+            {%- endfor %}
+        </ul>
+
+        <h2>Broader</h2>
+        <ul>
+            {%- for linkid in concept.broader %}
+            <li>
+                <a href="{{ linkid }}">{{ linkid }}</a>
+            </li>
+            {%- endfor %}
+        </ul>
+
+        <h2>Related</h2>
+        <ul>
+            {%- for linkid in concept.related %}
+            <li>
+                <a href="{{ linkid }}">{{ linkid }}</a>
+            </li>
+            {%- endfor %}
+        </ul>
+    {% endif %}
+
+    {% if conceptType == 'Collection' %}
+        <h2>Members</h2>
+        <ul>
+            {%- for linkid in concept.members %}
+            <li>
+                <a href="{{ linkid }}">{{ linkid }}</a>
+            </li>
+            {%- endfor %}
+        </ul>
+    {% endif %}
+
+{% endblock %}
