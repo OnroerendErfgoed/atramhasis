@@ -27,7 +27,7 @@ class AtramhasisView(object):
 
     @view_config(route_name='foundation', renderer='templates/foundation.jinja2')
     def foundation_view(self):
-        self.home_view()
+        return self.home_view()
 
     @view_config(route_name='concept', renderer='templates/concept.jinja2')
     def concept_view(self):
@@ -62,6 +62,7 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         if 'label' in self.request.params:
             label = self.request.params.getone('label')
+            print('search for: ' + label)
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
