@@ -25,11 +25,9 @@ class AtramhasisView(object):
         conceptschemes = [x.get_metadata() for x in self.skos_registry.get_providers()]
         return {'project': 'atramhasis', 'conceptschemes': conceptschemes}
 
-
     @view_config(route_name='foundation', renderer='templates/foundation.jinja2')
     def foundation_view(self):
         self.home_view()
-
 
     @view_config(route_name='concept', renderer='templates/concept.jinja2')
     def concept_view(self):
@@ -40,15 +38,29 @@ class AtramhasisView(object):
         '''
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
-        print('concept_view ' + scheme_id + ' ' + c_id)
         prov = self.request.skos_registry.get_provider(scheme_id)
         if prov:
-            c = prov.get_by_id(c_id)
-            if c:
-                skostype = ""
-                if isinstance(c, Concept):
-                    skostype = "Concept"
-                if isinstance(c, Collection):
-                    skostype = "Collection"
-                return {'concept': c, 'conceptType': skostype}
+            concept = prov.get_by_id(c_id)
+            if concept:
+                return {'concept': concept}
         return {'concept': None}
+
+    @view_config(route_name='search_result', renderer='templates/search_result.jinja2')
+    def search_result(self):
+        '''
+        This view displays the search results
+
+        :param request: A :class:`pyramid.request.Request`
+        '''
+        concepts = None
+        label = None
+        scheme_id = self.request.matchdict['scheme_id']
+        if 'label' in self.request.params:
+            label = self.request.params.getone('label')
+        provider = self.skos_registry.get_provider(scheme_id)
+        if provider:
+            if label is not None:
+                concepts = provider.find({'label': label})
+            else:
+                concepts = provider.get_all()
+        return {'concepts': concepts}
