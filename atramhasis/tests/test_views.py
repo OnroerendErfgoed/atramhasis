@@ -65,7 +65,7 @@ class TestConceptView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
-        self.assertIsNone(info['concept'])
+        self.assertEqual(info.status_int, 404)
 
     def test_not_found(self):
         request = testing.DummyRequest()
@@ -74,7 +74,7 @@ class TestConceptView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
-        self.assertIsNone(info['concept'])
+        self.assertEqual(info.status_int, 404)
 
 
 class TestSearchResultView(unittest.TestCase):
@@ -116,4 +116,4 @@ class TestSearchResultView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.search_result()
-        self.assertIsNone(info['concepts'])
+        self.assertEqual(info.status_int, 404)
