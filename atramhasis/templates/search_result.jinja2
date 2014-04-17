@@ -1,0 +1,13 @@
+{% include 'templates/base.jinja2' %}
+
+{% block body %}
+
+    {{concepts|length}} result(s):
+
+    <ul>
+        {%- for c in concepts %}
+         <li><a href="c/{{ c.id }}">{{ c.label }}</a></li>
+        {%- endfor %}
+    </ul>
+
+{% endblock %}
