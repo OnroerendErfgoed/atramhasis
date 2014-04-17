@@ -40,9 +40,14 @@ class AtramhasisView(object):
         c_id = self.request.matchdict['c_id']
         prov = self.request.skos_registry.get_provider(scheme_id)
         if prov:
-            concept = prov.get_by_id(c_id)
-            if concept:
-                return {'concept': concept}
+            c = prov.get_by_id(c_id)
+            if c:
+                skostype = ""
+                if isinstance(c, Concept):
+                    skostype = "Concept"
+                if isinstance(c, Collection):
+                    skostype = "Collection"
+                return {'concept': c, 'conceptType': skostype}
         return {'concept': None}
 
     @view_config(route_name='search_result', renderer='templates/search_result.jinja2')
