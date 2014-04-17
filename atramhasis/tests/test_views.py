@@ -35,7 +35,6 @@ class TestHomeView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.home_view()
-        self.assertEqual(info['project'], 'atramhasis')
         self.assertIsNotNone(info['conceptschemes'][0])
         self.assertEqual(info['conceptschemes'][0]['id'], 'TREES')
 
