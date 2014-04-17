@@ -1,48 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<title>{{project}}</title>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
-	<meta name="keywords" content="python web application" />
-	<meta name="description" content="pyramid web application" />
-	<link rel="shortcut icon" href="{{request.application_url}}/static/favicon.ico" />
-	<link rel="stylesheet" href="{{request.application_url}}/static/pylons.css" type="text/css" media="screen" charset="utf-8" />
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-	<!--[if !IE 7]>
-	<style type="text/css">
-		#wrap {display:table;height:100%}
-    </style>
-	<![endif]-->
-    <style type="text/css">
-        .locale { text-align: center; }
-        .locale-name { font-weight: bold; }
-    </style>
-</head>
-<body>
-	<div id="wrap">
-		<div id="header">
-			<div class="header">{{project}}, an online SKOS editor</div>
-		</div>
-		<div id="top">
-			<div class="top align-center">
-				<h1>{{project}}</h1>
-				<p class="app-welcome">
-					Welcome to <span class="app-name">{{project}}</span>, An online SKOS editor
-				</p>
-				<p>Available list of schemes:</p>
-                <ul>
-                {% for item in conceptschemes %}
-                    <li>{{ item.id }}</li>
-                {% endfor %}
-                </ul>
-			</div>
-		</div>
-		<div id="bottom">
+{% extends 'templates/base.jinja2' %}
 
-		</div>
-	</div>
-	<div id="footer">
-		<div class="footer">© 2014 Onroerend Erfgoed</div>
-	</div>
-</body>
-</html>
+{% block html_title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="large-12 columns">
+      <label>Schemes:
+        <select>
+             {% for item in conceptschemes %}
+                    <option>{{ item.id }}</option>
+                {% endfor %}
+        </select>
+      </label>
+  </div>
+</div>
+{% endblock %}

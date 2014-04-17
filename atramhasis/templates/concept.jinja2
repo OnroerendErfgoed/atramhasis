@@ -1,6 +1,8 @@
-{% include 'templates/base.jinja2' %}
+{% extends 'templates/base.jinja2' %}
 
-{% block body %}
+{% block html_title %}Detail{% endblock %}
+
+{% block content %}
 
         <h1>[{{ conceptType }}] {{ concept.label().label}}</h1>
         <ul>

@@ -24,11 +24,7 @@ class AtramhasisView(object):
         :param request: A :class:`pyramid.request.Request`
         '''
         conceptschemes = [x.get_metadata() for x in self.skos_registry.get_providers()]
-        return {'project': 'atramhasis', 'conceptschemes': conceptschemes}
-
-    @view_config(route_name='foundation', renderer='templates/foundation.jinja2')
-    def foundation_view(self):
-        return self.home_view()
+        return {'conceptschemes': conceptschemes}
 
     @view_config(route_name='concept', renderer='templates/concept.jinja2')
     def concept_view(self):

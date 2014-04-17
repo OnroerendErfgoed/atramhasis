@@ -4,13 +4,41 @@
 	<head>
 		<meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>{{project}} base</title>
+		<title>atramhasis - {% block html_title %}Base{% endblock %}</title>
 		<link rel="stylesheet" href="{{request.application_url}}/static/css/foundation.css">
+		<link rel="shortcut icon" type="image/ico" href="{{request.application_url}}/static/img/favicon.ico" />
         <script src="{{request.application_url}}/static/js/vendor/modernizr.js"></script>
 	</head>
 	<body>
-    {% block body %}
-    {% endblock %}
+        <div class="row">
+            <div class="large-12 columns">
+                <nav class="top-bar" data-topbar>
+                    <ul class="title-area">
+                        <li class="name">
+                            <h1><a href="/">[atramhasis]</a></h1>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+            {% block content %}
+            {% endblock %}
+            </div>
+        </div>
+
+        <footer class="row">
+            <div class="large-12 columns">
+                <hr>
+                <div class="row">
+                    <div class="large-12 columns">
+                        <p>&copy; Copyright 2014 <a href="https://www.onroerenderfgoed.be/">Flanders Heritage Agency</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
         <script src="{{request.application_url}}/static/js/vendor/jquery.js"></script>
         <!-- Included JS Files (Compressed) -->

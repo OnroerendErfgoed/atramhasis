@@ -1,8 +1,10 @@
-{% include 'templates/base.jinja2' %}
+{% extends 'templates/base.jinja2' %}
 
-{% block body %}
+{% block html_title %}Search{% endblock %}
 
-    {{concepts|length}} result(s):
+{% block content %}
+
+    <h2>{{concepts|length}} result(s):</h2>
 
     <ul>
         {%- for c in concepts %}

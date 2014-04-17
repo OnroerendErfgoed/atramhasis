@@ -14,7 +14,6 @@ def includeme(config):
     config.add_route('home', '/')
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html')
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
-    config.add_route('foundation', '/foundation')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
 
