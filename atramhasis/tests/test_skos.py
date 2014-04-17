@@ -12,6 +12,8 @@ class TestSkos(unittest.TestCase):
         testing.tearDown()
 
     def test_include(self):
+        self.config.include('pyramid_skosprovider')
+        self.config.scan('pyramid_skosprovider')
         includeme(self.config)
         self.assertIsNotNone(self.config.get_skos_registry())
 

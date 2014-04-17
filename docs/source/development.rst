@@ -36,6 +36,8 @@ tox) will be installed.
     $ py.test atramhasis/tests.py
     # create or update database
     $ alembic upgrade head
+    # insert sample data
+    $ initialize_atramhasis_db development.ini
 
 Every pull request will be run through Travis-ci_. When providing a pull 
 request, please run the unit tests first and make sure they all pass. Please 

@@ -1,21 +1,18 @@
 import os
 import sys
+
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.utils import import_provider
 import transaction
-
 from sqlalchemy import engine_from_config
-
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
     )
-
 from pyramid.scripts.common import parse_vars
+from atramhasis import DBSession, Base
 
-from ..models import (
-    DBSession,
-    MyModel,
-    Base,
-    )
+from atramhasis.tests.fixtures.data import trees, geo
 
 
 def usage(argv):
@@ -34,7 +31,6 @@ def main(argv=sys.argv):
     settings = get_appsettings(config_uri, options=options)
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
-    Base.metadata.create_all(engine)
     with transaction.manager:
-        model = MyModel(name='one', value=1)
-        DBSession.add(model)
+        import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), DBSession)
+        import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), DBSession)

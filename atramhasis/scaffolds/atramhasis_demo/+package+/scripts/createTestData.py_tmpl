@@ -2,55 +2,13 @@ import os
 import sys
 from pyramid.paster import setup_logging, get_appsettings
 from pyramid.scripts.common import parse_vars
-from skosprovider.providers import DictionaryProvider
 from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy import engine_from_config
 import transaction
 from atramhasis import DBSession
 
-larch = {
-    'id': '1',
-    'uri': 'http://id.trees.org/1',
-    'labels': [
-        {'type': 'prefLabel', 'language': 'en', 'label': 'The Larch'},
-        {'type': 'prefLabel', 'language': 'nl', 'label': 'De Lariks'}
-    ],
-    'notes': [
-        {'type': 'definition', 'language': 'en', 'note': 'A type of tree.'}
-    ]
-}
-
-chestnut = {
-    'id': '2',
-    'uri': 'http://id.trees.org/2',
-    'labels': [
-        {'type': 'prefLabel', 'language': 'en', 'label': 'The Chestnut'},
-        {'type': 'altLabel', 'language': 'nl', 'label': 'De Paardekastanje'}
-    ],
-    'notes': [
-        {
-            'type': 'definition', 'language': 'en',
-            'note': 'A different type of tree.'
-        }
-    ]
-}
-
-species = {
-    'id': 3,
-    'uri': 'http://id.trees.org/3',
-    'labels': [
-        {'type': 'prefLabel', 'language': 'en', 'label': 'Trees by species'},
-        {'type': 'prefLabel', 'language': 'nl', 'label': 'Bomen per soort'}
-    ],
-    'type': 'collection',
-    'members': ['1', '2']
-}
-
-TREES = DictionaryProvider(
-    {'id': 'TREES', 'default_language': 'nl'},
-    [larch, chestnut, species]
-)
+from atramhasis.tests.fixtures.data import geo, trees
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -68,9 +26,9 @@ def main(argv=sys.argv):
     settings = get_appsettings(config_uri, options=options)
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
-    cs = ConceptScheme(id=1)
     with transaction.manager:
-        import_provider(TREES, cs, DBSession)
+        import_provider(trees, ConceptScheme(uri='http://id.trees.org'), DBSession)
+        import_provider(geo, ConceptScheme(uri='http://id.geo.org'), DBSession)
 
 if __name__ == "__main__":
     main()
