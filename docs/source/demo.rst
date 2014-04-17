@@ -19,6 +19,7 @@ the demo site.
 .. code-block:: bash    
     
     $ pcreate -s atramhasis_demo atramhasis_demo
+    $ cd atramhasis_demo
 
 This creates a local demo package you can run with just a few more commands:
 
