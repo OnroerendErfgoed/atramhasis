@@ -1,3 +1,4 @@
+from pyramid.response import Response
 from pyramid.view import view_config, view_defaults
 from skosprovider.skos import Concept
 from skosprovider.skos import Collection
@@ -48,7 +49,7 @@ class AtramhasisView(object):
                 if isinstance(c, Collection):
                     skostype = "Collection"
                 return {'concept': c, 'conceptType': skostype}
-        return {'concept': None}
+        return Response(content_type='text/plain', status_int=404)
 
     @view_config(route_name='search_result', renderer='templates/search_result.jinja2')
     def search_result(self):
@@ -57,7 +58,6 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
-        concepts = None
         label = None
         scheme_id = self.request.matchdict['scheme_id']
         if 'label' in self.request.params:
@@ -69,4 +69,5 @@ class AtramhasisView(object):
                 concepts = provider.find({'label': label})
             else:
                 concepts = provider.get_all()
-        return {'concepts': concepts}
+            return {'concepts': concepts}
+        return Response(content_type='text/plain', status_int=404)
