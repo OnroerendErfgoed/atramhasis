@@ -8,6 +8,9 @@ from atramhasis.errors import SkosRegistryNotFoundException
 
 @view_defaults(accept='text/html')
 class AtramhasisView(object):
+    '''
+    This object groups HTML views part of the public user interface.
+    '''
 
     def __init__(self, request):
         self.request = request
