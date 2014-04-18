@@ -51,6 +51,8 @@ coverage.xml
 
 # Sphinx documentation
 docs/build/
+# Sphinx on rtd
+_build
 
 # IDE stuff:
 .idea
