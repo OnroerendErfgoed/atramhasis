@@ -1,4 +1,4 @@
-# French translations for atramhasis.
+# English translations for atramhasis.
 # Copyright (C) 2014 ORGANIZATION
 # This file is distributed under the same license as the atramhasis project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -10,8 +10,8 @@ msgstr ""
 "POT-Creation-Date: 2014-04-18 14:14+0200\n"
 "PO-Revision-Date: 2014-04-18 14:38+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,5 +19,5 @@ msgstr ""
 
 #: atramhasis/templates/atramhasis.jinja2:10
 msgid "tr_search"
-msgstr "Rechercher"
+msgstr "Search"
 

@@ -18,6 +18,17 @@
                             <h1><a href="{{ request.route_path('home') }}">[atramhasis]</a></h1>
                         </li>
                     </ul>
+
+
+                    <section class="top-bar-section">
+                    <ul class="right">
+                        <select id="LanguageDropDownList">
+                            <option value="nl">nl</option>
+                            <option value="fr">fr</option>
+                            <option value="en">en</option>
+                        </select>
+                        </ul>
+                    </section>
                 </nav>
             </div>
         </div>
@@ -41,6 +52,7 @@
         </footer>
 
         <script src="{{request.application_url}}/static/js/vendor/jquery.js"></script>
+        <script src="{{request.application_url}}/static/js/vendor/jquery.cookie.js"></script>
         <!-- Included JS Files (Compressed) -->
         <script src="{{request.application_url}}/static/js/foundation.min.js"></script>
 		<script src="{{request.application_url}}/static/js/vendor/app.js"></script>
