@@ -44,7 +44,7 @@ class AtramhasisView(object):
                     skostype = "Concept"
                 if isinstance(c, Collection):
                     skostype = "Collection"
-                return {'concept': c, 'conceptType': skostype}
+                return {'concept': c, 'conceptType': skostype, 'scheme_id': scheme_id}
         return Response(content_type='text/plain', status_int=404)
 
     @view_config(route_name='search_result', renderer='templates/search_result.jinja2')
@@ -65,5 +65,5 @@ class AtramhasisView(object):
                 concepts = provider.find({'label': label})
             else:
                 concepts = provider.get_all()
-            return {'concepts': concepts}
+            return {'concepts': concepts, 'scheme_id': scheme_id}
         return Response(content_type='text/plain', status_int=404)

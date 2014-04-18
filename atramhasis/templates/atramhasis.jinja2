@@ -2,6 +2,8 @@
 
 {% block html_title %}Home{% endblock %}
 
+
+
 {% block content %}
     <div class="row">
         <div class="large-12 columns">
@@ -15,7 +17,7 @@
                         <div class="large-10 columns">
                             <select id="scheme">
                                 {% for item in conceptschemes %}
-                                <option>{{ item.id }}</option>
+                                <option value="{{ request.route_path('search_result', scheme_id=item.id) }}">{{ item.id }}</option>
                                 {% endfor %}
                             </select>
                         </div>

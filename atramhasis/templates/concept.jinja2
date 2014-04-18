@@ -2,12 +2,18 @@
 
 {% block html_title %}Detail{% endblock %}
 
+{% from "templates/macros.jinja2" import
+    render_relaties_lijst
+%}
+
 {% block content %}
 
         <h1>[{{ conceptType }}] {{ concept.label().label}}</h1>
         <ul>
             <li>Id: {{ concept.id}}</li>
+            {% if concept.uri %}
             <li>Uri: <a href="{{ concept.uri }}">{{ concept.uri }}</a></li>
+            {% endif %}
         </ul>
 
 		<h2>Labels</h2>
@@ -39,42 +45,18 @@
 		</ul>
 
 		<h2>Narrower</h2>
-        <ul>
-            {%- for linkid in concept.narrower %}
-            <li>
-                <a href="{{ linkid }}">{{ linkid }}</a>
-            </li>
-            {%- endfor %}
-        </ul>
+        {{ render_relaties_lijst(request, concept.narrower, scheme_id) }}
 
         <h2>Broader</h2>
-        <ul>
-            {%- for linkid in concept.broader %}
-            <li>
-                <a href="{{ linkid }}">{{ linkid }}</a>
-            </li>
-            {%- endfor %}
-        </ul>
+        {{ render_relaties_lijst(request, concept.broader, scheme_id) }}
 
         <h2>Related</h2>
-        <ul>
-            {%- for linkid in concept.related %}
-            <li>
-                <a href="{{ linkid }}">{{ linkid }}</a>
-            </li>
-            {%- endfor %}
-        </ul>
+         {{ render_relaties_lijst(request, concept.related, scheme_id) }}
     {% endif %}
 
     {% if conceptType == 'Collection' %}
         <h2>Members</h2>
-        <ul>
-            {%- for linkid in concept.members %}
-            <li>
-                <a href="{{ linkid }}">{{ linkid }}</a>
-            </li>
-            {%- endfor %}
-        </ul>
+        {{ render_relaties_lijst(request, concept.members, scheme_id) }}
     {% endif %}
 
 {% endblock %}

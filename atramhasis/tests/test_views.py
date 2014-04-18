@@ -56,6 +56,8 @@ class TestConceptView(unittest.TestCase):
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
         self.assertIsNotNone(info['concept'])
+        self.assertEqual(info['conceptType'], 'Concept')
+        self.assertEqual(info['scheme_id'], 'TREES')
 
     def test_provider_not_found(self):
         request = testing.DummyRequest()
@@ -97,6 +99,7 @@ class TestSearchResultView(unittest.TestCase):
         concept = info['concepts'][0]
         self.assertIsNotNone(concept)
         self.assertEqual(concept['label'], 'De Paardekastanje')
+        self.assertEqual(info['scheme_id'], 'TREES')
 
     def test_no_querystring(self):
         request = testing.DummyRequest()

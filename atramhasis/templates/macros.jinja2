@@ -1,0 +1,11 @@
+{% macro render_relaties_lijst(request, relaties, scheme_id) %}
+	{% if relaties|length > 0 %}
+        <ul>
+            {%- for linkid in relaties %}
+                <li>
+                    <a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = linkid) }}">{{ linkid }}</a>
+                </li>
+            {%- endfor %}
+        </ul>
+	{% endif %}
+{% endmacro %}

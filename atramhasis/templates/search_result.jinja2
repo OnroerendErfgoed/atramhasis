@@ -8,7 +8,7 @@
 
     <ul>
         {%- for c in concepts %}
-         <li>{{ c.id }}: <a href="c/{{ c.id }}">{{ c.label }}</a></li>
+         <li>{{ c.id }}: <a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}">{{ c.label }}</a></li>
         {%- endfor %}
     </ul>
 
