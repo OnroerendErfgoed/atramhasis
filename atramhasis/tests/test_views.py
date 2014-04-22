@@ -5,7 +5,7 @@ from pyramid import testing
 from webob.multidict import MultiDict
 from atramhasis.errors import SkosRegistryNotFoundException
 
-from atramhasis.views import AtramhasisView
+from atramhasis.views.views import AtramhasisView
 from .fixtures.data import trees
 
 
