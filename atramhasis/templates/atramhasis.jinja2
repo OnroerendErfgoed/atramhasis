@@ -7,14 +7,14 @@
 {% block content %}
     <div class="row">
         <div class="large-12 columns">
-            <h5 class="title"> {% trans %}tr_search{% endtrans %} </h5>
+            <h5 class="title"> {% trans %}search{% endtrans %} </h5>
             <div class="content">
                 <form id="search-form" action="#" method="get">
                     <div class="row collapse">
-                        <div class="large-2 columns">
-                            <label class="inline">Select scheme:</label>
+                        <div class="large-3 columns">
+                            <label class="inline">{% trans %}select_scheme{% endtrans %}:</label>
                         </div>
-                        <div class="large-10 columns">
+                        <div class="large-9 columns">
                             <select id="scheme">
                                 {% for item in conceptschemes %}
                                 <option value="{{ request.route_path('search_result', scheme_id=item.id) }}">{{ item.id }}</option>
@@ -23,14 +23,14 @@
                         </div>
                     </div>
                     <div class="row collapse">
-                        <div class="large-2 columns">
-                            <label class="inline">Search for:</label>
+                        <div class="large-3 columns">
+                            <label class="inline">{% trans %}search_for{% endtrans %}:</label>
                         </div>
-                        <div class="large-10 columns">
+                        <div class="large-9 columns">
                             <input type="text" name="label" id="label" placeholder="<label>">
                         </div>
                     </div>
-                    <button type="submit" class="radius button">Submit</button>
+                    <button type="submit" class="radius button">{% trans %}submit{% endtrans %}</button>
                 </form>
             </div>
         </div>

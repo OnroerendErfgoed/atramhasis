@@ -7,17 +7,79 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-18 14:14+0200\n"
-"PO-Revision-Date: 2014-04-18 14:38+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2014-04-22 16:02+0200\n"
+"PO-Revision-Date: 2014-04-22 16:03+0100\n"
+"Last-Translator: \n"
 "Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 1.3\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: atramhasis/templates/atramhasis.jinja2:10
-msgid "tr_search"
+msgid "search"
 msgstr "Search"
 
+#: atramhasis/templates/atramhasis.jinja2:15
+msgid "select_scheme"
+msgstr "Select scheme"
+
+#: atramhasis/templates/atramhasis.jinja2:27
+msgid "search_for"
+msgstr "Search for"
+
+#: atramhasis/templates/atramhasis.jinja2:33
+msgid "submit"
+msgstr "Submit"
+
+#: atramhasis/templates/concept.jinja2:12
+msgid "concept"
+msgstr "concept"
+
+#: atramhasis/templates/concept.jinja2:15
+msgid "collection"
+msgstr "collection"
+
+#: atramhasis/templates/concept.jinja2:25
+msgid "labels"
+msgstr "labels"
+
+#: atramhasis/templates/concept.jinja2:31
+#: atramhasis/templates/concept.jinja2:46
+msgid "type"
+msgstr "type"
+
+#: atramhasis/templates/concept.jinja2:32
+#: atramhasis/templates/concept.jinja2:47
+msgid "language"
+msgstr "language"
+
+#: atramhasis/templates/concept.jinja2:40
+msgid "notes"
+msgstr "notes"
+
+#: atramhasis/templates/concept.jinja2:53
+msgid "narrower"
+msgstr "narrower"
+
+#: atramhasis/templates/concept.jinja2:56
+msgid "broader"
+msgstr "broader"
+
+#: atramhasis/templates/concept.jinja2:59
+msgid "related"
+msgstr "related"
+
+#: atramhasis/templates/concept.jinja2:64
+msgid "members"
+msgstr "members"
+
+#: atramhasis/templates/search_result.jinja2:8
+#, python-format
+msgid "There is %(count)s result:"
+msgid_plural "There are %(count)s results:"
+msgstr[0] "There is %(count)s result:"
+msgstr[1] "There are %(count)s results:"

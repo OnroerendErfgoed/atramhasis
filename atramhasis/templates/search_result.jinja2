@@ -4,7 +4,8 @@
 
 {% block content %}
 
-    <h2>{{concepts|length}} result(s):</h2>
+
+<h2>{% trans count=concepts|length %}There is {{ count }} result:{% pluralize %}There are {{ count }} results:{% endtrans %}</h2>
 
     <ul>
         {%- for c in concepts %}
