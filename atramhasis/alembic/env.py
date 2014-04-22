@@ -1,5 +1,8 @@
 from __future__ import with_statement
-from configparser import ConfigParser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
@@ -29,7 +32,7 @@ target_metadata = [SkosBase.metadata, Base.metadata]
 
 def load_app_ini(ini_file):
     """Load the settings for the application.ini file."""
-    ini = ConfigParser()
+    ini = configparser.ConfigParser()
     ini.read_file(open(ini_file))
     here = path.abspath(path.dirname(ini_file))
     ini.set('app:main', 'here', here)
