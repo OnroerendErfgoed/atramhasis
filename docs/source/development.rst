@@ -14,7 +14,7 @@ monitored with `Coveralls`_.
 
 Locally you can run unit tests by using `pytest`_ or `tox`_. Running pytest 
 manually is good for running a distinct set of unit tests. For a full test run, 
-tox is prefered since this can run the unit tests against mutiple versions of 
+tox is preferred since this can run the unit tests against multiple versions of
 python.
 
 To install a fully working development environment a pip requirements-dev.txt
@@ -38,6 +38,8 @@ tox) will be installed.
     $ alembic upgrade head
     # insert sample data
     $ initialize_atramhasis_db development.ini
+    # compile the Message Catalog Files
+    $ python setup.py compile_catalog
 
 Every pull request will be run through Travis-ci_. When providing a pull 
 request, please run the unit tests first and make sure they all pass. Please 
