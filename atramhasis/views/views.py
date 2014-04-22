@@ -20,7 +20,7 @@ class AtramhasisView(object):
         else:
             raise SkosRegistryNotFoundException()
 
-    @view_config(route_name='home', renderer='templates/atramhasis.jinja2')
+    @view_config(route_name='home', renderer='atramhasis:templates/atramhasis.jinja2')
     def home_view(self):
         '''
         This view displays the homepage.
@@ -30,7 +30,7 @@ class AtramhasisView(object):
         conceptschemes = [x.get_metadata() for x in self.skos_registry.get_providers()]
         return {'conceptschemes': conceptschemes}
 
-    @view_config(route_name='concept', renderer='templates/concept.jinja2')
+    @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
         '''
         This view displays the concept details
@@ -51,7 +51,7 @@ class AtramhasisView(object):
                 return {'concept': c, 'conceptType': skostype, 'scheme_id': scheme_id}
         return Response(content_type='text/plain', status_int=404)
 
-    @view_config(route_name='search_result', renderer='templates/search_result.jinja2')
+    @view_config(route_name='search_result', renderer='atramhasis:templates/search_result.jinja2')
     def search_result(self):
         '''
         This view displays the search results
