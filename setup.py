@@ -20,7 +20,8 @@ requires = [
     'skosprovider_sqlalchemy',
     'pyramid_skosprovider',
     'pyramid_jinja2',
-    'alembic'
+    'alembic',
+    'babel'
 ]
 
 setup(name='atramhasis',
