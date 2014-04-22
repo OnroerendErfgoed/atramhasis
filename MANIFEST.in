@@ -1,4 +1,4 @@
 include *.txt *.ini *.cfg *.rst LICENSE
-recursive-include atramhasis *.ico *.png *.css *.gif *.jpg *.pt *.txt *.jinja2 *.js *.html *.xml
+recursive-include atramhasis *.ico *.png *.css *.gif *.jpg *.pt *.txt *.jinja2 *.js *.html *.xml *.po
 graft atramhasis/scaffolds
 graft atramhasis/alembic
