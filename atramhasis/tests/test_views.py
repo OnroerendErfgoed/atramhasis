@@ -59,6 +59,17 @@ class TestConceptView(unittest.TestCase):
         self.assertEqual(info['conceptType'], 'Concept')
         self.assertEqual(info['scheme_id'], 'TREES')
 
+    def test_passing_collection_view(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.matchdict['c_id'] = '3'
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        info = atramhasisview.concept_view()
+        self.assertIsNotNone(info['concept'])
+        self.assertEqual(info['conceptType'], 'Collection')
+        self.assertEqual(info['scheme_id'], 'TREES')
+
     def test_provider_not_found(self):
         request = testing.DummyRequest()
         request.matchdict['scheme_id'] = 'ZZ'
@@ -119,3 +130,23 @@ class TestSearchResultView(unittest.TestCase):
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.search_result()
         self.assertEqual(info.status_int, 404)
+
+class TestCookieView(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_cookie(self):
+        request = testing.DummyRequest()
+        request.skos_registry = self.regis
+        request.GET = MultiDict()
+        request.GET.add('language', 'nl')
+        request.environ = MultiDict()
+        request.environ.add('HTTP_REFERER', 'http://localhost:6543/conceptschemes/TREES/c/1')
+        atramhasisview = AtramhasisView(request)
+        response = atramhasisview.set_locale_cookie()
+        self.assertIsNotNone(response.headers['Set-Cookie'])
