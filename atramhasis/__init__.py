@@ -14,6 +14,7 @@ def includeme(config):
     config.add_route('home', '/')
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html')
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
+    config.add_route('locale', '/locale')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
     config.add_translation_dirs('atramhasis:locale/')

@@ -19,15 +19,12 @@
                         </li>
                     </ul>
 
-
                     <section class="top-bar-section">
                     <ul class="right">
-                        <select id="LanguageDropDownList">
-                            <option value="nl">nl</option>
-                            <option value="fr">fr</option>
-                            <option value="en">en</option>
-                        </select>
-                        </ul>
+                        <li><a href="{{ request.route_path('locale') }}?language=en">EN</a></li>
+                        <li><a href="{{ request.route_path('locale') }}?language=nl">NL</a></li>
+                        <li><a href="{{ request.route_path('locale') }}?language=fr">FR</a></li>
+                    </ul>
                     </section>
                 </nav>
             </div>

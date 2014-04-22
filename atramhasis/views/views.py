@@ -1,5 +1,6 @@
 from pyramid.response import Response
 from pyramid.view import view_config, view_defaults
+from pyramid.httpexceptions import HTTPFound
 from skosprovider.skos import Concept
 from skosprovider.skos import Collection
 
@@ -70,3 +71,18 @@ class AtramhasisView(object):
                 concepts = provider.get_all()
             return {'concepts': concepts, 'scheme_id': scheme_id}
         return Response(content_type='text/plain', status_int=404)
+
+    @view_config(route_name='locale')
+    def set_locale_cookie(self):
+        '''
+        This view will set a language cookie
+
+        :param request: A :class:`pyramid.request.Request`
+        '''
+        if self.request.GET['language']:
+            language = self.request.GET['language']
+            response = HTTPFound(location=self.request.environ['HTTP_REFERER'])
+            response.set_cookie('_LOCALE_',
+                                value=language,
+                                max_age=31536000)  # max_age = year
+        return response
