@@ -7,6 +7,7 @@ from skosprovider.skos import Collection
 from atramhasis.errors import SkosRegistryNotFoundException
 
 
+
 @view_defaults(accept='text/html')
 class AtramhasisView(object):
     '''
@@ -81,7 +82,10 @@ class AtramhasisView(object):
         '''
         if self.request.GET['language']:
             language = self.request.GET['language']
-            response = HTTPFound(location=self.request.environ['HTTP_REFERER'])
+            try:
+                response = HTTPFound(location=self.request.environ['HTTP_REFERER'])
+            except KeyError:
+                response = HTTPFound(location=self.request.route_url("home"))
             response.set_cookie('_LOCALE_',
                                 value=language,
                                 max_age=31536000)  # max_age = year

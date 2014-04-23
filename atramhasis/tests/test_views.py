@@ -151,3 +151,14 @@ class TestCookieView(unittest.TestCase):
         atramhasisview = AtramhasisView(request)
         response = atramhasisview.set_locale_cookie()
         self.assertIsNotNone(response.headers['Set-Cookie'])
+
+    def test_no_http_referer(self):
+        self.config.add_route('home', '/')
+        request = testing.DummyRequest()
+        # request.GET.add('language', 'nl')
+        request.skos_registry = self.regis
+        request.GET = MultiDict()
+        request.GET['language'] = 'nl'
+        atramhasisview = AtramhasisView(request)
+        response = atramhasisview.set_locale_cookie()
+        self.assertEqual(response.status, '302 Found')
