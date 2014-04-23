@@ -1,4 +1,4 @@
-# French translations for atramhasis.
+﻿# French translations for atramhasis.
 # Copyright (C) 2014 ORGANIZATION
 # This file is distributed under the same license as the atramhasis project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
