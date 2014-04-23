@@ -1,7 +1,7 @@
 from textwrap import dedent
 from pyramid.scaffolds import PyramidTemplate, Template
 import os
-import distutils
+import distutils.dir_util
 
 
 def copy_locale(output_dir, package):
