@@ -66,9 +66,9 @@ class AtramhasisView(object):
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
-                concepts = provider.find({'label': label})
+                concepts = provider.find({'label': label}, language=self.request.locale_name)
             else:
-                concepts = provider.get_all()
+                concepts = provider.get_all(language=self.request.locale_name)
             return {'concepts': concepts, 'scheme_id': scheme_id}
         return Response(content_type='text/plain', status_int=404)
 

@@ -9,10 +9,10 @@
 {% block content %}
 
     {% if conceptType == 'Concept' %}
-        <h1>[{% trans %}concept{% endtrans %}] {{ concept.label().label}}</h1>
+        <h1>[{% trans %}concept{% endtrans %}] {{ concept.label(request.locale_name).label}}</h1>
     {% endif %}
     {% if conceptType == 'Collection' %}
-        <h1>[{% trans %}collection{% endtrans %}] {{ concept.label().label}}</h1>
+        <h1>[{% trans %}collection{% endtrans %}] {{ concept.label(request.locale_name).label}}</h1>
     {% endif %}
 
         <ul>
