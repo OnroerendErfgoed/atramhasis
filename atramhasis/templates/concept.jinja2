@@ -28,7 +28,7 @@
             <li>
                 {{ label.label}}
                 <ul>
-                    <li>{% trans %}type{% endtrans %}: {{ label.type }} </li>
+                    <li lang="{{ label.language }}">{% trans %}type{% endtrans %}: {{ label.type }} </li>
                     <li>{% trans %}language{% endtrans %}: {{ label.language }} </li>
                 </ul>
             </li>
@@ -43,7 +43,7 @@
             <li>
                 {{ note.note}}
                 <ul>
-                    <li>{% trans %}type{% endtrans %}: {{ note.type }} </li>
+                    <li lang="{{ note.language }}">{% trans %}type{% endtrans %}: {{ note.type }} </li>
                     <li>{% trans %}language{% endtrans %}: {{ note.language }} </li>
                 </ul>
             </li>
