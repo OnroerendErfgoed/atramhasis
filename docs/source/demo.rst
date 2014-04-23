@@ -31,6 +31,8 @@ This creates a local demo package you can run with just a few more commands:
     $ python setup.py develop
     # intialize sample data
     $ initialize_atramhasis_db development.ini
+    # compile translations
+    $ python setup.py compile_catalog
     # start server
     $ pserve development.ini
 
