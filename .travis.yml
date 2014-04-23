@@ -6,7 +6,7 @@ python:
 install:
  - easy_install -U setuptools
  - python setup.py -q install
- - pip install -U pytest pytest-cov coveralls
+ - pip install -U pytest pytest-cov coveralls webtest
 script:
   py.test --cov atramhasis --cov-report term-missing atramhasis/tests
 after_success:
