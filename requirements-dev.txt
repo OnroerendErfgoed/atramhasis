@@ -9,6 +9,7 @@ pytest==2.5.2
 pytest-cov==1.6
 py==1.4.20
 coveralls==0.4.1
+webtest==2.0.14
 
 # Documentation
 Sphinx==1.2

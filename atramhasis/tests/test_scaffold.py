@@ -1,6 +1,8 @@
 import unittest
+import tempfile
+import os
 
-from atramhasis.scaffolds import AtramhasisTemplate, AtramhasisDemoTemplate
+from atramhasis.scaffolds import AtramhasisTemplate, AtramhasisDemoTemplate, copy_locale
 
 
 class TestScaffolding(unittest.TestCase):
@@ -11,3 +13,11 @@ class TestScaffolding(unittest.TestCase):
         self.assertEqual(atempdemo.summary, 'Create an Atramhasis demo')
         self.assertEqual(atemp.name, 'test')
         self.assertEqual(atempdemo.name, 'demo')
+
+    def test_copy_locale(self):
+        temp_dir = tempfile.mkdtemp()
+        copy_locale(temp_dir, 'package')
+        result_dir = os.path.join(temp_dir, 'package', 'locale')
+        self.assertTrue(os.path.exists(result_dir))
+        size = len([name for name in os.listdir(result_dir)])
+        self.assertTrue(size > 0)

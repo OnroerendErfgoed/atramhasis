@@ -132,6 +132,7 @@ class TestSearchResultView(unittest.TestCase):
         info = atramhasisview.search_result()
         self.assertEqual(info.status_int, 404)
 
+
 class TestCookieView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
