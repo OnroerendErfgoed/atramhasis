@@ -103,6 +103,7 @@ class TestSearchResultView(unittest.TestCase):
         request.matchdict['scheme_id'] = 'TREES'
         request.params = MultiDict()
         request.params.add('label', 'De Paardekastanje')
+        request.params.add('_LOCALE_', 'nl')
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.search_result()
