@@ -1,0 +1,21 @@
+[compile_catalog]
+directory = {{package}}/locale
+domain = atramhasis
+statistics = true
+
+[extract_messages]
+add_comments = TRANSLATORS:
+output_file = {{package}}/locale/atramhasis.pot
+width = 80
+mapping_file = message-extraction.ini
+
+[init_catalog]
+domain = atramhasis
+input_file = {{package}}/locale/atramhasis.pot
+output_dir = {{package}}/locale
+
+[update_catalog]
+domain = atramhasis
+input_file = {{package}}/locale/atramhasis.pot
+output_dir = {{package}}/locale
+previous = true

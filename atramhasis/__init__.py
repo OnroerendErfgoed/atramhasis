@@ -17,7 +17,7 @@ def includeme(config):
     config.add_route('locale', '/locale')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
-    config.add_translation_dirs('atramhasis:locale/')
+
 
     config.scan()
 
@@ -30,6 +30,8 @@ def main(global_config, **settings):
     Base.metadata.bind = engine
     config = Configurator(settings=settings)
     includeme(config)
+
+    config.add_translation_dirs('atramhasis:locale/')
 
     # if standalone include skos sample data
     config.include('.skos')

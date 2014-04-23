@@ -24,6 +24,9 @@ def main(global_config, **settings):
     #Add skos support
     config.include('{{package}}.skos')
 
+    # Set up translations
+    config.add_translation_dirs('{{package}}:locale/')
+
     config.scan()
 
     return config.make_wsgi_app()
