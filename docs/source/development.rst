@@ -33,7 +33,7 @@ tox) will be installed.
     # Coverage
     $ py.test --cov atramhasis --cov-report term-missing
     # Only run a subset of the tests
-    $ py.test atramhasis/tests.py
+    $ py.test atramhasis/tests/test_views.py
     # create or update database
     $ alembic upgrade head
     # insert sample data
