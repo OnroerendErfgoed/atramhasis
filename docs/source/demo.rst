@@ -10,7 +10,7 @@ install it. We recommend doing this in a virtualenvironment.
 .. code-block:: bash    
     
     $ mkvirtualenv atramhasis_demo
-    $ pip install atramhasis
+    $ pip install -U atramhasis
 
 
 Once Atramhasis is installed, you can call upon a pyramid scaffold to generate
