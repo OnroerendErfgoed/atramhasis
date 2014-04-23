@@ -17,7 +17,8 @@ chestnut = {
     'uri': 'urn:x-skosprovider:trees/2',
     'labels': [
         {'type': 'prefLabel', 'language': 'en', 'label': 'The Chestnut'},
-        {'type': 'altLabel', 'language': 'nl', 'label': 'De Paardekastanje'}
+        {'type': 'altLabel', 'language': 'nl', 'label': 'De Paardekastanje'},
+        {'type': 'altLabel', 'language': 'fr', 'label': 'la châtaigne'},
     ],
     'notes': [
         {
