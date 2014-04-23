@@ -14,6 +14,7 @@ Contents:
    intro
    demo
    development
+   services
    api
    changes
    glossary
