@@ -21,9 +21,9 @@
 
                     <section class="top-bar-section">
                     <ul class="right">
-                        <li><a href="{{ request.route_path('locale') }}?language=en">EN</a></li>
-                        <li><a href="{{ request.route_path('locale') }}?language=nl">NL</a></li>
-                        <li><a href="{{ request.route_path('locale') }}?language=fr">FR</a></li>
+                        <li {% if request.locale_name=="en" %}class='active'{% endif %}><a href="{{ request.route_path('locale') }}?language=en">EN</a></li>
+                        <li {% if request.locale_name=="nl" %}class='active'{% endif %}><a href="{{ request.route_path('locale') }}?language=nl">NL</a></li>
+                        <li {% if request.locale_name=="fr" %}class='active'{% endif %}><a href="{{ request.route_path('locale') }}?language=fr">FR</a></li>
                     </ul>
                     </section>
                 </nav>
