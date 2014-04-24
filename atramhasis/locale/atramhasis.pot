@@ -80,3 +80,11 @@ msgid_plural "There are %(count)s results:"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "prefLabel"
+msgstr ""
+
+msgid "altLabel"
+msgstr ""
+
+msgid "hiddenLabel"
+msgstr ""

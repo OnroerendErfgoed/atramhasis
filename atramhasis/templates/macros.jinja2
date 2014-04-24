@@ -9,3 +9,26 @@
         </ul>
 	{% endif %}
 {% endmacro %}
+
+{% macro render_labels(labels, type) %}
+    {% set type_labels = [] %}
+    {%- for label in labels %}
+        {% if label.type == type %}
+            {% if type_labels.append(label) %}{% endif %}
+        {% endif %}
+    {%- endfor %}
+    {% if type_labels|length > 0 %}
+        {% if type == 'prefLabel' %}
+        <h3>{% trans %}prefLabel{% endtrans %}</h3>
+        {% elif type == 'altLabel' %}
+        <h3>{% trans %}altLabel{% endtrans %}</h3>
+        {% elif type == 'hiddenLabel' %}
+        <h3>{% trans %}hiddenLabel{% endtrans %}</h3>
+        {% endif %}
+		<ul>
+		    {%- for label in type_labels|sort(attribute='label') %}
+            <li>{{ label.label}} <em class="language">({{ label.language }})</em></li>
+		    {%- endfor %}
+		</ul>
+    {% endif %}
+{% endmacro %}

@@ -1,4 +1,3 @@
-﻿# English translations for atramhasis.
 # Copyright (C) 2014 ORGANIZATION
 # This file is distributed under the same license as the atramhasis project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-04-22 16:02+0200\n"
-"PO-Revision-Date: 2014-04-22 16:03+0100\n"
+"PO-Revision-Date: 2014-04-24 15:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: en <LL@li.org>\n"
 "Language: en\n"
@@ -21,19 +20,19 @@ msgstr ""
 
 #: atramhasis/templates/atramhasis.jinja2:10
 msgid "search"
-msgstr "Search"
+msgstr "search"
 
 #: atramhasis/templates/atramhasis.jinja2:15
 msgid "select_scheme"
-msgstr "Select scheme"
+msgstr "select scheme"
 
 #: atramhasis/templates/atramhasis.jinja2:27
 msgid "search_for"
-msgstr "Search for"
+msgstr "search for"
 
 #: atramhasis/templates/atramhasis.jinja2:33
 msgid "submit"
-msgstr "Submit"
+msgstr "submit"
 
 #: atramhasis/templates/concept.jinja2:12
 msgid "concept"
@@ -81,5 +80,14 @@ msgstr "members"
 #, python-format
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
-msgstr[0] "There is %(count)s result:"
-msgstr[1] "There are %(count)s results:"
+msgstr[0] "there is %(count)s result:"
+msgstr[1] "there are %(count)s results:"
+
+msgid "prefLabel"
+msgstr "preferred labels"
+
+msgid "altLabel"
+msgstr "alternative labels"
+
+msgid "hiddenLabel"
+msgstr "hidden labels"

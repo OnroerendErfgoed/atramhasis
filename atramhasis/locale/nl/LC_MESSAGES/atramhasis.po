@@ -1,4 +1,3 @@
-﻿# Dutch translations for atramhasis.
 # Copyright (C) 2014 ORGANIZATION
 # This file is distributed under the same license as the atramhasis project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-04-22 16:02+0200\n"
-"PO-Revision-Date: 2014-04-22 16:04+0100\n"
+"PO-Revision-Date: 2014-04-24 15:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: nl <LL@li.org>\n"
 "Language: nl\n"
@@ -81,5 +80,14 @@ msgstr "leden"
 #, python-format
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
-msgstr[0] "Er is %(count)s resultaat gevonden:"
-msgstr[1] "Er zijn %(count)s resultaten gevonden:"
+msgstr[0] "er is %(count)s resultaat gevonden:"
+msgstr[1] "er zijn %(count)s resultaten gevonden:"
+
+msgid "prefLabel"
+msgstr "geprefereerde labels"
+
+msgid "altLabel"
+msgstr "alternatieve labels"
+
+msgid "hiddenLabel"
+msgstr "verborgen labels"

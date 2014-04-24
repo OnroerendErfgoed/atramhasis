@@ -3,7 +3,8 @@
 {% block html_title %}Detail{% endblock %}
 
 {% from "macros.jinja2" import
-    render_relaties_lijst
+    render_relaties_lijst,
+    render_labels
 %}
 
 {% block content %}
@@ -23,18 +24,9 @@
         </ul>
 
 		<h2>{% trans %}labels{% endtrans %}</h2>
-		<ul>
-		    {%- for label in concept.labels %}
-            <li>
-                {{ label.label}}
-                <ul>
-                    <li lang="{{ label.language }}">{% trans %}type{% endtrans %}: {{ label.type }} </li>
-                    <li>{% trans %}language{% endtrans %}: {{ label.language }} </li>
-                </ul>
-            </li>
-		    {%- endfor %}
-		</ul>
-
+        {{ render_labels(concept.labels, 'prefLabel') }}
+        {{ render_labels(concept.labels, 'altLabel') }}
+        {{ render_labels(concept.labels, 'hiddenLabel') }}
 
     {% if conceptType == 'Concept' %}
 		<h2>{% trans %}notes{% endtrans %}</h2>

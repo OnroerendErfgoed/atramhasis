@@ -1,4 +1,3 @@
-﻿# French translations for atramhasis.
 # Copyright (C) 2014 ORGANIZATION
 # This file is distributed under the same license as the atramhasis project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-04-22 16:02+0200\n"
-"PO-Revision-Date: 2014-04-22 16:07+0100\n"
+"PO-Revision-Date: 2014-04-24 15:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -45,7 +44,7 @@ msgstr "collection"
 
 #: atramhasis/templates/concept.jinja2:25
 msgid "labels"
-msgstr "étiquettes"
+msgstr "libellés"
 
 #: atramhasis/templates/concept.jinja2:31
 #: atramhasis/templates/concept.jinja2:46
@@ -83,3 +82,12 @@ msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
 msgstr[0] "%(count)s résultat:"
 msgstr[1] "%(count)s résultats:"
+
+msgid "prefLabel"
+msgstr "libellés préférentiels"
+
+msgid "altLabel"
+msgstr "libellés alternatifs"
+
+msgid "hiddenLabel"
+msgstr "libellés cachés"
