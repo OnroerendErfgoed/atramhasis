@@ -22,6 +22,14 @@ class ConceptSchemeNotFoundException(Exception):
         return repr(self.value)
 
 
+class ConceptNotFoundException(Exception):
+    def __init__(self, c_id):
+        self.value = 'No contept found with the given id ' + c_id
+
+    def __str__(self):
+        return repr(self.value)
+
+
 class ValidationError(Exception):
     def __init__(self, value, errors):
         self.value = value

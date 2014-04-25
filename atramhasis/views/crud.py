@@ -1,8 +1,9 @@
 import colander
 from pyramid.view import view_defaults, view_config
 from sqlalchemy import func
+from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import InvalidJsonException, SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
-    ValidationError
+    ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept
 
 from atramhasis.models import DBSession
@@ -73,12 +74,23 @@ class AtramhasisCrud(object):
 
     @view_config(route_name='atramhasis.edit_concept')
     def edit_concept(self):
-        payload = self._get_json_body()
         c_id = self.request.matchdict['c_id']
-
-        return {'test': 'edit_concept'}
+        validated_json_concept = self._validate_concept(self._get_json_body())
+        try:
+            concept = DBSession.query(Concept).filter_by(concept_id=c_id).one()
+        except NoResultFound:
+            raise ConceptNotFoundException(c_id)
+        map_concept(concept, validated_json_concept)
+        self.request.response.status = '200'
+        return from_thing(concept)
 
     @view_config(route_name='atramhasis.delete_concept')
     def delete_concept(self):
         c_id = self.request.matchdict['c_id']
-        return {'test': 'delete_concept'}
+        try:
+            concept = DBSession.query(Concept).filter_by(concept_id=c_id).one()
+        except NoResultFound:
+            raise ConceptNotFoundException(c_id)
+        DBSession.delete(concept)
+        self.request.response.status = '200'
+        return from_thing(concept)
