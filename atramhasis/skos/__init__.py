@@ -19,7 +19,13 @@ GEO = SQLAlchemyProvider(
 )
 
 
+STYLES = SQLAlchemyProvider(
+    {'id': 'STYLES', 'conceptscheme_id': 3},
+    DBSession
+)
+
 def includeme(config):
     skosregis = config.get_skos_registry()
     skosregis.register_provider(TREES)
     skosregis.register_provider(GEO)
+    skosregis.register_provider(STYLES)
