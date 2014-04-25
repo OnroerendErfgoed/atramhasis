@@ -1,6 +1,7 @@
 from pyramid.response import Response
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPFound
+from pyramid.threadlocal import get_current_registry
 from skosprovider.skos import Concept
 from skosprovider.skos import Collection
 
@@ -80,8 +81,14 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        settings = get_current_registry().settings
+        available_languages = settings['available_languages'].split()
+        default_lang = settings['pyramid.default_locale_name']
+
         if self.request.GET['language']:
             language = self.request.GET['language']
+            if language not in available_languages:
+                language = default_lang
             try:
                 response = HTTPFound(location=self.request.environ['HTTP_REFERER'])
             except KeyError:

@@ -21,9 +21,10 @@
 
                     <section class="top-bar-section">
                     <ul class="right">
-                        <li {% if request.locale_name=="en" %}class='active'{% endif %}><a href="{{ request.route_path('locale') }}?language=en">EN</a></li>
-                        <li {% if request.locale_name=="nl" %}class='active'{% endif %}><a href="{{ request.route_path('locale') }}?language=nl">NL</a></li>
-                        <li {% if request.locale_name=="fr" %}class='active'{% endif %}><a href="{{ request.route_path('locale') }}?language=fr">FR</a></li>
+                    {% set languages = request.registry.settings["available_languages"].split() %}
+                    {%- for language in languages %}
+                        <li {% if request.locale_name==language %}class='active'{% endif %}><a href="{{ request.route_path('locale') }}?language={{ language }}">{{ language|upper }}</a></li>
+                    {%- endfor %}
                     </ul>
                     </section>
                 </nav>

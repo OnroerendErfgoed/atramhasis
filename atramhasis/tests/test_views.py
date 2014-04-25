@@ -1,13 +1,18 @@
+import os
 import unittest
 
 from skosprovider.registry import Registry
 from pyramid import testing
 from webob.multidict import MultiDict
 from atramhasis.errors import SkosRegistryNotFoundException
-
+from webtest import TestApp
 from atramhasis.views.views import AtramhasisView
+from atramhasis import main
 from .fixtures.data import trees
+from paste.deploy.loadwsgi import appconfig
 
+TEST_DIR = os.path.dirname(__file__)
+settings = appconfig('config:' + os.path.join(TEST_DIR, 'conf_test.ini'))
 
 class TestAtramhasisView(unittest.TestCase):
     def test_no_registry(self):
@@ -134,7 +139,13 @@ class TestSearchResultView(unittest.TestCase):
 
 
 class TestCookieView(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.app = main({}, **settings)
+
     def setUp(self):
+        self.testapp = TestApp(self.app)
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
@@ -142,24 +153,15 @@ class TestCookieView(unittest.TestCase):
     def tearDown(self):
         testing.tearDown()
 
-    def test_cookie(self):
-        request = testing.DummyRequest()
-        request.skos_registry = self.regis
-        request.GET = MultiDict()
-        request.GET.add('language', 'nl')
-        request.environ = MultiDict()
-        request.environ.add('HTTP_REFERER', 'http://localhost:6543/conceptschemes/TREES/c/1')
-        atramhasisview = AtramhasisView(request)
-        response = atramhasisview.set_locale_cookie()
-        self.assertIsNotNone(response.headers['Set-Cookie'])
+    def _get_default_headers(self):
+        return {'Accept': 'text/html'}
 
-    def test_no_http_referer(self):
-        self.config.add_route('home', '/')
-        request = testing.DummyRequest()
-        # request.GET.add('language', 'nl')
-        request.skos_registry = self.regis
-        request.GET = MultiDict()
-        request.GET['language'] = 'nl'
-        atramhasisview = AtramhasisView(request)
-        response = atramhasisview.set_locale_cookie()
+    def test_cookie(self):
+        response = self.testapp.get('/locale?language=nl', headers=self._get_default_headers())
+        self.assertIsNotNone(response.headers['Set-Cookie'])
         self.assertEqual(response.status, '302 Found')
+        self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=nl'))
+
+    def test_unsupported_language(self):
+        response = self.testapp.get('/locale?language=fr', headers=self._get_default_headers())
+        self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=en'))
