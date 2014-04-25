@@ -21,7 +21,8 @@
 
                     <section class="top-bar-section">
                     <ul class="right">
-                    {% set languages = request.registry.settings["available_languages"].split() %}
+                    {% set default_lang = request.registry.settings.get('pyramid.default_locale_name') %}
+                    {% set languages = request.registry.settings.get('available_languages', default_lang).split() %}
                     {%- for language in languages %}
                         <li {% if request.locale_name==language %}class='active'{% endif %}><a href="{{ request.route_path('locale') }}?language={{ language }}">{{ language|upper }}</a></li>
                     {%- endfor %}
