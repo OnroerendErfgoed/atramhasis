@@ -4,8 +4,34 @@
 API Documentation
 =================
 
-Views module
-------------
+Errors
+------
 
-.. automodule:: atramhasis.views
+.. automodule:: atramhasis.errors
+   :members:
+
+
+Utils
+-----
+
+.. automodule:: atramhasis.utils
+   :members:
+
+Validators
+----------
+
+.. automodule:: atramhasis.validators
+   :members:
+
+
+Views
+-----
+
+.. automodule:: atramhasis.views.views
+   :members:
+
+.. automodule:: atramhasis.views.crud
+   :members:
+
+.. automodule:: atramhasis.views.exception_views
    :members:
