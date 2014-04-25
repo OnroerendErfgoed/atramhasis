@@ -36,7 +36,7 @@ Write Services
                 {
                     "type": "prefLabel",
                     "language": "en",
-                    "label: "The Larch"
+                    "label": "The Larch"
                 }
             ],
             "notes": []
@@ -61,7 +61,7 @@ Write Services
                 {
                     "type": "prefLabel",
                     "language": "en",
-                    "label: "The Larch"
+                    "label": "The Larch"
                 }
             ],
             "notes": []
@@ -109,7 +109,7 @@ Write Services
                 }, {
                     "type": "prefLabel",
                     "language": "nl",
-                    "label: "De Lariks"
+                    "label": "De Lariks"
                 }
             ],
             "notes": []
@@ -137,7 +137,7 @@ Write Services
                 }, {
                     "type": "prefLabel",
                     "language": "nl",
-                    "label: "De Lariks"
+                    "label": "De Lariks"
                 }
             ],
             "notes": []
@@ -193,7 +193,7 @@ Write Services
                 }, {
                     "type": "prefLabel",
                     "language": "nl",
-                    "label: "De Lariks"
+                    "label": "De Lariks"
                 }
             ],
             "notes": []
