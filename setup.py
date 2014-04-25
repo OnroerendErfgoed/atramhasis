@@ -21,7 +21,8 @@ requires = [
     'pyramid_skosprovider',
     'pyramid_jinja2',
     'alembic',
-    'babel'
+    'babel',
+    'colander'
 ]
 
 setup(name='atramhasis',

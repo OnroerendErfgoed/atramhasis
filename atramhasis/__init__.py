@@ -6,6 +6,8 @@ from .models import (
     Base,
 )
 
+from skosprovider_sqlalchemy.models import Base as SkosBase
+
 
 def includeme(config):
     """this function adds some configuration for the application"""
@@ -14,10 +16,15 @@ def includeme(config):
     config.add_route('home', '/')
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html')
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
+    config.add_route('atramhasis.add_concept', pattern='/conceptschemes/{scheme_id}/c', accept='application/json',
+                     request_method="POST")
+    config.add_route('atramhasis.edit_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',
+                     request_method="PUT")
+    config.add_route('atramhasis.delete_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',
+                     request_method="DELETE")
     config.add_route('locale', '/locale')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
-
 
     config.scan()
 
@@ -28,6 +35,7 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
+    SkosBase.metadata.bind = engine
     config = Configurator(settings=settings)
     includeme(config)
 

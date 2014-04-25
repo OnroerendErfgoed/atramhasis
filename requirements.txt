@@ -20,3 +20,6 @@ Babel==1.3
 
 # alembic
 alembic==0.6.4
+
+# colander
+colander
