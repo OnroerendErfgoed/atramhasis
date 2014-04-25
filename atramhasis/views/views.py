@@ -82,8 +82,8 @@ class AtramhasisView(object):
         :param request: A :class:`pyramid.request.Request`
         '''
         settings = get_current_registry().settings
-        available_languages = settings['available_languages'].split()
-        default_lang = settings['pyramid.default_locale_name']
+        default_lang = settings.get('pyramid.default_locale_name')
+        available_languages = settings.get('available_languages', default_lang).split()
 
         if self.request.GET['language']:
             language = self.request.GET['language']
