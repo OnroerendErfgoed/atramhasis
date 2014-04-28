@@ -1,10 +1,7 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 
-from .models import (
-    DBSession,
-    Base,
-)
+from .models import Base
 
 from skosprovider_sqlalchemy.models import Base as SkosBase
 
@@ -35,13 +32,14 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
     Base.metadata.bind = engine
     SkosBase.metadata.bind = engine
     config = Configurator(settings=settings)
     includeme(config)
 
     config.add_translation_dirs('atramhasis:locale/')
+
+    config.include('atramhasis:db')
 
     # if standalone include skos sample data
     config.include('.skos')

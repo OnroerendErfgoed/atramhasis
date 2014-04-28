@@ -10,11 +10,12 @@ from paste.deploy.loadwsgi import appconfig
 from atramhasis.errors import SkosRegistryNotFoundException
 from atramhasis.views.views import AtramhasisView
 from atramhasis import main
-from .fixtures.data import trees
+from tests.fixtures.data import trees
 
 
 TEST_DIR = os.path.dirname(__file__)
 settings = appconfig('config:' + os.path.join(TEST_DIR, 'conf_test.ini'))
+
 
 class TestAtramhasisView(unittest.TestCase):
     def test_no_registry(self):
@@ -139,34 +140,6 @@ class TestSearchResultView(unittest.TestCase):
         info = atramhasisview.search_result()
         self.assertEqual(info.status_int, 404)
 
-
-class TestCookieView(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        cls.app = main({}, **settings)
-
-    def setUp(self):
-        self.testapp = TestApp(self.app)
-        self.config = testing.setUp()
-        self.regis = Registry()
-        self.regis.register_provider(trees)
-
-    def tearDown(self):
-        testing.tearDown()
-
-    def _get_default_headers(self):
-        return {'Accept': 'text/html'}
-
-    def test_cookie(self):
-        response = self.testapp.get('/locale?language=nl', headers=self._get_default_headers())
-        self.assertIsNotNone(response.headers['Set-Cookie'])
-        self.assertEqual(response.status, '302 Found')
-        self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=nl'))
-
-    def test_unsupported_language(self):
-        response = self.testapp.get('/locale?language=fr', headers=self._get_default_headers())
-        self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=en'))
 
 class TestCsvView(unittest.TestCase):
 

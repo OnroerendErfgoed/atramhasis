@@ -3,6 +3,7 @@ import sys
 
 from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.utils import import_provider
+from sqlalchemy.orm import sessionmaker
 import transaction
 from sqlalchemy import engine_from_config
 from pyramid.paster import (
@@ -10,8 +11,8 @@ from pyramid.paster import (
     setup_logging,
     )
 from pyramid.scripts.common import parse_vars
+from zope.sqlalchemy import ZopeTransactionExtension
 
-from atramhasis import DBSession
 from tests.fixtures.data import trees, geo
 from tests.fixtures.styles_and_cultures import styles_and_cultures
 from tests.fixtures.materials import materials
@@ -32,10 +33,14 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
     engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
+    session_maker = sessionmaker(
+        bind=engine,
+        extension=ZopeTransactionExtension()
+    )
+    db_session = session_maker()
     with transaction.manager:
-        import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), DBSession)
-        import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), DBSession)
-        import_provider(styles_and_cultures, ConceptScheme(id=3, uri='urn:x-vioe:styles'), DBSession)
-        import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), DBSession)
+        import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), db_session)
+        import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), db_session)
+        import_provider(styles_and_cultures, ConceptScheme(id=3, uri='urn:x-vioe:styles'), db_session)
+        import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), db_session)
     print('--atramhasis-db-initialized--')

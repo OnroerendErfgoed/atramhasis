@@ -6,7 +6,6 @@ from atramhasis.errors import InvalidJsonException, SkosRegistryNotFoundExceptio
     ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept
 
-from atramhasis.models import DBSession
 from skosprovider_sqlalchemy.models import Concept, Thing
 from atramhasis.utils import from_thing
 
@@ -19,6 +18,7 @@ class AtramhasisCrud(object):
 
     def __init__(self, request):
         self.request = request
+        self.db = request.db
         self.scheme_id = self.request.matchdict['scheme_id']
         if hasattr(request, 'skos_registry') and request.skos_registry is not None:
             self.skos_registry = self.request.skos_registry
@@ -56,7 +56,7 @@ class AtramhasisCrud(object):
     @view_config(route_name='atramhasis.add_concept')
     def add_concept(self):
         validated_json_concept = self._validate_concept(self._get_json_body())
-        cid = DBSession.query(
+        cid = self.db.query(
             func.max(Thing.concept_id)
         ).filter_by(conceptscheme_id=self.provider.conceptscheme_id).first()[0]
         if not cid:
@@ -66,7 +66,7 @@ class AtramhasisCrud(object):
         concept.concept_id = cid
         concept.conceptscheme_id = self.provider.conceptscheme_id
         map_concept(concept, validated_json_concept)
-        DBSession.add(concept)
+        self.db.add(concept)
         self.request.response.status = '201'
         self.request.response.location = self.request.route_path(
             'skosprovider.c', scheme_id=self.scheme_id, c_id=concept.concept_id)
@@ -77,7 +77,7 @@ class AtramhasisCrud(object):
         c_id = self.request.matchdict['c_id']
         validated_json_concept = self._validate_concept(self._get_json_body())
         try:
-            concept = DBSession.query(Concept).filter_by(concept_id=c_id).one()
+            concept = self.db.query(Concept).filter_by(concept_id=c_id).one()
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
         map_concept(concept, validated_json_concept)
@@ -88,9 +88,9 @@ class AtramhasisCrud(object):
     def delete_concept(self):
         c_id = self.request.matchdict['c_id']
         try:
-            concept = DBSession.query(Concept).filter_by(concept_id=c_id).one()
+            concept = self.db.query(Concept).filter_by(concept_id=c_id).one()
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
-        DBSession.delete(concept)
+        self.db.delete(concept)
         self.request.response.status = '200'
         return from_thing(concept)

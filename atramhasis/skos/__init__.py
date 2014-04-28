@@ -4,32 +4,32 @@ import logging
 
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
-from atramhasis import DBSession
-
 log = logging.getLogger(__name__)
 
-TREES = SQLAlchemyProvider(
-    {'id': 'TREES', 'conceptscheme_id': 1},
-    DBSession
-)
 
-GEO = SQLAlchemyProvider(
-    {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
-    DBSession
-)
-
-
-STYLES = SQLAlchemyProvider(
-    {'id': 'STYLES', 'conceptscheme_id': 3},
-    DBSession
-)
-
-MATERIALS = SQLAlchemyProvider(
-    {'id': 'MATERIALS', 'conceptscheme_id': 4},
-    DBSession
-)
 
 def includeme(config):
+    TREES = SQLAlchemyProvider(
+        {'id': 'TREES', 'conceptscheme_id': 1},
+        config.registry.dbmaker()
+    )
+
+    GEO = SQLAlchemyProvider(
+        {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
+        config.registry.dbmaker()
+    )
+
+
+    STYLES = SQLAlchemyProvider(
+        {'id': 'STYLES', 'conceptscheme_id': 3},
+        config.registry.dbmaker()
+    )
+
+    MATERIALS = SQLAlchemyProvider(
+        {'id': 'MATERIALS', 'conceptscheme_id': 4},
+        config.registry.dbmaker()
+    )
+
     skosregis = config.get_skos_registry()
     skosregis.register_provider(TREES)
     skosregis.register_provider(GEO)

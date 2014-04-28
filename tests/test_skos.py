@@ -1,12 +1,14 @@
 import unittest
 
 from pyramid import testing
+from sqlalchemy.orm import sessionmaker
 from atramhasis.skos import includeme
 
 
 class TestSkos(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
+        self.config.registry.dbmaker = sessionmaker()
 
     def tearDown(self):
         testing.tearDown()
