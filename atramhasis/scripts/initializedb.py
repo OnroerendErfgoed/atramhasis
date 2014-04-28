@@ -13,7 +13,8 @@ from pyramid.scripts.common import parse_vars
 from atramhasis import DBSession, Base
 
 from atramhasis.tests.fixtures.data import trees, geo
-
+from atramhasis.tests.fixtures.styles_and_cultures import styles_and_cultures
+from atramhasis.tests.fixtures.materials import materials
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -34,4 +35,6 @@ def main(argv=sys.argv):
     with transaction.manager:
         import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), DBSession)
         import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), DBSession)
+        import_provider(styles_and_cultures, ConceptScheme(id=3, uri='urn:x-vioe:styles'), DBSession)
+        import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), DBSession)
     print('--atramhasis-db-initialized--')
