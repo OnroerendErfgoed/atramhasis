@@ -8,8 +8,8 @@
 <h2>{% trans count=concepts|length %}There is {{ count }} result:{% pluralize %}There are {{ count }} results:{% endtrans %}</h2>
 
     <ul>
-        {%- for c in concepts %}
-         <li>{{ c.id }}: <a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}">{{ c.label }}</a></li>
+        {%- for c in concepts|sort(attribute='label') %}
+         <li><a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}">{{ c.label }}</a> <em>(id: {{ c.id }})</em></li>
         {%- endfor %}
     </ul>
 
