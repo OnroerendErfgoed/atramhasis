@@ -11,7 +11,7 @@ from atramhasis import DBSession
 from atramhasis.skos import TREES
 
 TEST_DIR = os.path.dirname(__file__)
-settings = get_appsettings('atramhasis/tests/conf_test.ini')
+settings = get_appsettings('tests/conf_test.ini')
 engine = engine_from_config(settings, prefix='sqlalchemy.')
 DBSession.configure(bind=engine)
 Base.metadata.create_all(engine)

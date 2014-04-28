@@ -10,11 +10,12 @@ from pyramid.paster import (
     setup_logging,
     )
 from pyramid.scripts.common import parse_vars
-from atramhasis import DBSession, Base
 
-from atramhasis.tests.fixtures.data import trees, geo
-from atramhasis.tests.fixtures.styles_and_cultures import styles_and_cultures
-from atramhasis.tests.fixtures.materials import materials
+from atramhasis import DBSession
+from tests.fixtures.data import trees, geo
+from tests.fixtures.styles_and_cultures import styles_and_cultures
+from tests.fixtures.materials import materials
+
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
