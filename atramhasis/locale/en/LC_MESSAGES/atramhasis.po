@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-22 16:02+0200\n"
-"PO-Revision-Date: 2014-04-24 15:07+0100\n"
+"POT-Creation-Date: 2014-04-28 13:22+0200\n"
+"PO-Revision-Date: 2014-04-28 13:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: en <LL@li.org>\n"
 "Language: en\n"
@@ -23,58 +23,84 @@ msgid "search"
 msgstr "search"
 
 #: atramhasis/templates/atramhasis.jinja2:15
+msgid "select_type"
+msgstr "select type"
+
+#: atramhasis/templates/atramhasis.jinja2:19
+msgid "type_all"
+msgstr "all types"
+
+#: atramhasis/templates/atramhasis.jinja2:20
+msgid "type_concept"
+msgstr "concepts"
+
+#: atramhasis/templates/atramhasis.jinja2:21
+msgid "type_collection"
+msgstr "collections"
+
+#: atramhasis/templates/atramhasis.jinja2:27
 msgid "select_scheme"
 msgstr "select scheme"
 
-#: atramhasis/templates/atramhasis.jinja2:27
+#: atramhasis/templates/atramhasis.jinja2:39
 msgid "search_for"
 msgstr "search for"
 
-#: atramhasis/templates/atramhasis.jinja2:33
+#: atramhasis/templates/atramhasis.jinja2:45
 msgid "submit"
 msgstr "submit"
 
-#: atramhasis/templates/concept.jinja2:12
+#: atramhasis/templates/concept.jinja2:13
 msgid "concept"
 msgstr "concept"
 
-#: atramhasis/templates/concept.jinja2:15
+#: atramhasis/templates/concept.jinja2:16
 msgid "collection"
 msgstr "collection"
 
-#: atramhasis/templates/concept.jinja2:25
+#: atramhasis/templates/concept.jinja2:26
 msgid "labels"
 msgstr "labels"
 
-#: atramhasis/templates/concept.jinja2:31
-#: atramhasis/templates/concept.jinja2:46
-msgid "type"
-msgstr "type"
-
 #: atramhasis/templates/concept.jinja2:32
-#: atramhasis/templates/concept.jinja2:47
-msgid "language"
-msgstr "language"
-
-#: atramhasis/templates/concept.jinja2:40
 msgid "notes"
 msgstr "notes"
 
-#: atramhasis/templates/concept.jinja2:53
+#: atramhasis/templates/concept.jinja2:38
+msgid "type"
+msgstr "type"
+
+#: atramhasis/templates/concept.jinja2:39
+msgid "language"
+msgstr "language"
+
+#: atramhasis/templates/concept.jinja2:45
 msgid "narrower"
 msgstr "narrower"
 
-#: atramhasis/templates/concept.jinja2:56
+#: atramhasis/templates/concept.jinja2:48
 msgid "broader"
 msgstr "broader"
 
-#: atramhasis/templates/concept.jinja2:59
+#: atramhasis/templates/concept.jinja2:51
 msgid "related"
 msgstr "related"
 
-#: atramhasis/templates/concept.jinja2:64
+#: atramhasis/templates/concept.jinja2:56
 msgid "members"
 msgstr "members"
+
+#: atramhasis/templates/macros.jinja2:22
+msgid "prefLabel"
+msgstr "preferred labels"
+
+#: atramhasis/templates/macros.jinja2:24
+msgid "altLabel"
+msgstr "alternative labels"
+
+#: atramhasis/templates/macros.jinja2:26
+msgid "hiddenLabel"
+msgstr "hidden labels"
 
 #: atramhasis/templates/search_result.jinja2:8
 #, python-format
@@ -82,12 +108,3 @@ msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
 msgstr[0] "there is %(count)s result:"
 msgstr[1] "there are %(count)s results:"
-
-msgid "prefLabel"
-msgstr "preferred labels"
-
-msgid "altLabel"
-msgstr "alternative labels"
-
-msgid "hiddenLabel"
-msgstr "hidden labels"

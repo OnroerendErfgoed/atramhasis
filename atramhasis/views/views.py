@@ -22,6 +22,14 @@ class AtramhasisView(object):
         else:
             raise SkosRegistryNotFoundException()
 
+    def _read_request_param(self, param):
+        value = None
+        if param in self.request.params:
+            value = self.request.params.getone(param).strip()
+            if not value:
+                value = None
+        return value
+
     @view_config(route_name='home', renderer='atramhasis:templates/atramhasis.jinja2')
     def home_view(self):
         '''
@@ -60,15 +68,15 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
-        label = None
         scheme_id = self.request.matchdict['scheme_id']
-        if 'label' in self.request.params:
-            label = self.request.params.getone('label')
-            print('search for: ' + label)
+        label = self._read_request_param('label')
+        ctype = self._read_request_param('ctype')
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
-                concepts = provider.find({'label': label}, language=self.request.locale_name)
+                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name)
+            elif (label is None) and (ctype is not None):
+                concepts = provider.find({'type': ctype}, language=self.request.locale_name)
             else:
                 concepts = provider.get_all(language=self.request.locale_name)
             return {'concepts': concepts, 'scheme_id': scheme_id}
@@ -102,15 +110,15 @@ class AtramhasisView(object):
     def results_csv(self):
         header = ['conceptscheme', 'id', 'uri', 'type', 'label', 'prefLabels', 'altLabels', 'definition', 'broader', 'narrower', 'related']
         rows = []
-
-        label = None
         scheme_id = self.request.matchdict['scheme_id']
-        if 'label' in self.request.params:
-            label = self.request.params.getone('label')
+        label = self._read_request_param('label')
+        ctype = self._read_request_param('ctype')
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
-                concepts = provider.find({'label': label}, language=self.request.locale_name)
+                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name)
+            elif (label is None) and (ctype is not None):
+                concepts = provider.find({'type': ctype}, language=self.request.locale_name)
             else:
                 concepts = provider.get_all(language=self.request.locale_name)
             for concept in concepts:

@@ -12,6 +12,18 @@
                 <form id="search-form" action="#" method="get">
                     <div class="row collapse">
                         <div class="large-3 columns">
+                            <label class="inline">{% trans %}select_type{% endtrans %}:</label>
+                        </div>
+                        <div class="large-9 columns">
+                            <select id="ctype"  name="ctype" >
+                                <option value="all" selected>{% trans %}type_all{% endtrans %}</option>
+                                <option value="concept">{% trans %}type_concept{% endtrans %}</option>
+                                <option value="collection">{% trans %}type_collection{% endtrans %}</option>
+                            </select>
+                        </div>
+                    </div>                    
+					<div class="row collapse">
+                        <div class="large-3 columns">
                             <label class="inline">{% trans %}select_scheme{% endtrans %}:</label>
                         </div>
                         <div class="large-9 columns">
