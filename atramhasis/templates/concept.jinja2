@@ -8,18 +8,16 @@
 %}
 
 {% block content %}
-
-    {% if conceptType == 'Concept' %}
-        <h1>[{% trans %}concept{% endtrans %}] {{ concept.label(request.locale_name).label}}</h1>
-    {% endif %}
-    {% if conceptType == 'Collection' %}
-        <h1>[{% trans %}collection{% endtrans %}] {{ concept.label(request.locale_name).label}}</h1>
-    {% endif %}
-
+        <h1>{{ concept.label(request.locale_name).label}}</h1>
         <ul>
-            <li>Id: {{ concept.id}}</li>
+            <li>id: {{ concept.id}}</li>
+            {% if conceptType == 'Concept' %}
+            <li>type: {% trans %}concept{% endtrans %}</li>
+            {% elif conceptType == 'Collection' %}
+            <li>type: {% trans %}collection{% endtrans %}</li>
+            {% endif %}
             {% if concept.uri %}
-            <li>Uri: <a href="{{ concept.uri }}">{{ concept.uri }}</a></li>
+            <li>uri: <a href="{{ concept.uri }}">{{ concept.uri }}</a></li>
             {% endif %}
         </ul>
 
@@ -42,11 +40,11 @@
 		    {%- endfor %}
 		</ul>
 
-		<h2>{% trans %}narrower{% endtrans %}</h2>
-        {{ render_relaties_lijst(request, concept.narrower, scheme_id) }}
-
         <h2>{% trans %}broader{% endtrans %}</h2>
         {{ render_relaties_lijst(request, concept.broader, scheme_id) }}
+
+		<h2>{% trans %}narrower{% endtrans %}</h2>
+        {{ render_relaties_lijst(request, concept.narrower, scheme_id) }}
 
         <h2>{% trans %}related{% endtrans %}</h2>
          {{ render_relaties_lijst(request, concept.related, scheme_id) }}
