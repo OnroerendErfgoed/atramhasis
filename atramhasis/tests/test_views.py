@@ -165,3 +165,25 @@ class TestCookieView(unittest.TestCase):
     def test_unsupported_language(self):
         response = self.testapp.get('/locale?language=fr', headers=self._get_default_headers())
         self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=en'))
+
+class TestCsvView(unittest.TestCase):
+
+    def setUp(self):
+        self.config = testing.setUp()
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_csv(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.params = MultiDict()
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        res = atramhasisview.results_csv()
+        self.assertEqual(res['filename'], 'atramhasis_export')
+        self.assertIsInstance(res['header'], list)
+        self.assertIsInstance(res['rows'], list)
+        self.assertEqual(3, len(res['rows']))

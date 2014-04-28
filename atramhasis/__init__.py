@@ -13,9 +13,11 @@ def includeme(config):
     """this function adds some configuration for the application"""
     config.include('pyramid_jinja2')
     config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_renderer('csv', 'atramhasis.renderers.CSVRenderer')
     config.add_route('home', '/')
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html')
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
+    config.add_route('search_result_export', pattern='/conceptschemes/{scheme_id}/c.csv')
     config.add_route('atramhasis.add_concept', pattern='/conceptschemes/{scheme_id}/c', accept='application/json',
                      request_method="POST")
     config.add_route('atramhasis.edit_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',

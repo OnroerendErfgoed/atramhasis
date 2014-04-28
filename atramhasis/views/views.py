@@ -97,3 +97,26 @@ class AtramhasisView(object):
                                 value=language,
                                 max_age=31536000)  # max_age = year
         return response
+
+    @view_config(route_name='search_result_export', renderer='csv')
+    def results_csv(self):
+        header = ['conceptscheme', 'id', 'uri', 'type', 'label', 'prefLabels', 'altLabels', 'definition', 'broader', 'narrower', 'related']
+        rows = []
+
+        label = None
+        scheme_id = self.request.matchdict['scheme_id']
+        if 'label' in self.request.params:
+            label = self.request.params.getone('label')
+        provider = self.skos_registry.get_provider(scheme_id)
+        if provider:
+            if label is not None:
+                concepts = provider.find({'label': label}, language=self.request.locale_name)
+            else:
+                concepts = provider.get_all(language=self.request.locale_name)
+            for concept in concepts:
+                rows.append((scheme_id, concept['id'], '<uri>', '<type>', concept['label'], '<prefLabels>', '<altLabels>', '<definition>', '<broader>', '<narrower>', '<related>'))
+        return {
+            'header': header,
+            'rows': rows,
+            'filename' : 'atramhasis_export'
+        }
