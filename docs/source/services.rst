@@ -67,6 +67,45 @@ Write Services
             "notes": []
         }
 
+    **Example request**:
+
+    .. sourcecode:: http
+
+        POST /conceptschemes/TAUNTS/c HTTP/1.1
+        Host: demo.atramhasis.org
+        Accept: application/json
+
+        {
+            "type": "concept",
+            "broader": [],
+            "narrower": [],
+            "related": [],
+            "labels": [
+                {
+                    "type": "tauntLabel",
+                    "language": "en-FR",
+                    "label": "Your mother was a Hamster!"
+                }
+            ],
+            "notes": []
+        }
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 400 Bad Request
+        Location: http://demo.atramhasis.org/conceptschemes/TREES/c/1
+        Content-Type: application/json
+
+        {
+            "message": "Concept could not be validated.",
+            "errors": [
+                "Invalid labeltype.",
+                "Invalid language."
+            ]
+        }
+
     :param scheme_id: The identifier for a certain concept scheme.
 
     :reqheader Accept: The response content type depends on this header. 
