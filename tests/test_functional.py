@@ -14,6 +14,7 @@ from pyramid.paster import get_appsettings
 from sqlalchemy import engine_from_config, func
 from atramhasis.db import db
 from tests.fixtures.data import trees
+from tests.fixtures.materials import materials
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
@@ -31,6 +32,21 @@ json_value = {
         }
     ],
     "notes": []
+}
+
+json_value_relations = {
+    "broader": [12],
+    "id": 13,
+    "related": [],
+    "type": "concept",
+    "labels": [{
+        "label": "koperlegeringen",
+        "language": "nl",
+        "type": "prefLabel"
+    }],
+    "label": "koperlegeringen",
+    "notes": [],
+    "narrower": [15, 14]
 }
 
 
@@ -75,7 +91,9 @@ class FunctionalTests(unittest.TestCase):
         self.config.include('atramhasis.skos')
 
         with transaction.manager:
-            import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), self.session_maker())
+            local_session = self.session_maker()
+            import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
+            import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials:materials'), local_session)
 
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)
@@ -106,6 +124,13 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
 
+    def test_add_concept_empty_conceptscheme(self):
+        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
+                                     params=json_value)
+        self.assertEqual('201 Created', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+
     def test_add_concept_invalid_json(self):
         res = self.testapp.post_json(
             '/conceptschemes/TREES/c', headers=self._get_default_headers(), params=json_value_invalid, status=400)
@@ -124,6 +149,13 @@ class RestFunctionalTests(FunctionalTests):
             '/conceptschemes/TREES/c/1', headers=self._get_default_headers(), params=json_value)
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_edit_concept_has_relations(self):
+        res = self.testapp.put_json(
+            '/conceptschemes/MATERIALS/c/13', headers=self._get_default_headers(), params=json_value_relations)
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertEqual(2, len(res.json['narrower']))
 
     def test_edit_concept_not_found(self):
         res = self.testapp.put_json(

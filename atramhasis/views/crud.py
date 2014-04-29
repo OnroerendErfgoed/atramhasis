@@ -78,7 +78,8 @@ class AtramhasisCrud(object):
         c_id = self.request.matchdict['c_id']
         validated_json_concept = self._validate_concept(self._get_json_body())
         try:
-            concept = self.db.query(Concept).filter_by(concept_id=c_id).one()
+            concept = self.db.query(Concept).filter_by(concept_id=c_id,
+                                                       conceptscheme_id=self.provider.conceptscheme_id).one()
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
         map_concept(concept, validated_json_concept)
@@ -89,7 +90,8 @@ class AtramhasisCrud(object):
     def delete_concept(self):
         c_id = self.request.matchdict['c_id']
         try:
-            concept = self.db.query(Concept).filter_by(concept_id=c_id).one()
+            concept = self.db.query(Concept).filter_by(concept_id=c_id,
+                                                       conceptscheme_id=self.provider.conceptscheme_id).one()
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
         self.db.delete(concept)
