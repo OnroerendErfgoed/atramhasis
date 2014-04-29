@@ -1,4 +1,5 @@
 import colander
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_defaults, view_config
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound

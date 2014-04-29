@@ -27,7 +27,7 @@ class AtramhasisView(object):
         if param in self.request.params:
             value = self.request.params.getone(param).strip()
             if not value:
-                value = None
+                value = None    # pragma: no cover
         return value
 
     @view_config(route_name='home', renderer='atramhasis:templates/atramhasis.jinja2')
@@ -92,7 +92,7 @@ class AtramhasisView(object):
         settings = get_current_registry().settings
         default_lang = settings.get('pyramid.default_locale_name')
         available_languages = settings.get('available_languages', default_lang).split()
-
+        response = None
         if self.request.GET['language']:
             language = self.request.GET['language']
             if language not in available_languages:
