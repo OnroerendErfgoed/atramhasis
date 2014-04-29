@@ -1,34 +1,6 @@
 import colander
 
 
-# def sqlalchemy_validator(node, value, model, session=None, msg='%s is invalid'):
-#     '''
-#     Validate a sqlalchemy object or identifier.
-#
-#     Function checks if value is an instance of sqlalchemy model
-#     or an id of one.
-#
-#     :param node: A colander SchemaNode.
-#     :param value: The value to be validated. Can be an instance of the
-#         SQLAlchemy model or a key of one.
-#     :param model: A SQLAlchemy model.
-#     :param session: A SQLAlchemy session. Is required if value is not an
-#         instance of a SQLAlchemy model.
-#     :param msg: A msg to attach to a `colander.Invalid` exception.
-#     :raises colander.Invalid: If not a valid sqlalchemy model.
-#     '''
-#     if isinstance(value, model):
-#         return
-#
-#     m = session.query(model).get(value)
-#
-#     if not m:
-#         raise colander.Invalid(
-#             node,
-#             msg % value
-#         )
-
-
 class Label(colander.MappingSchema):
     label = colander.SchemaNode(
         colander.String(),
@@ -88,3 +60,18 @@ class Concept(colander.MappingSchema):
     broader = Concepts(missing=[])
     narrower = Concepts(missing=[])
     related = Concepts(missing=[])
+
+
+def concept_schema_validator(node, cstruct):
+    if 'labels' in cstruct:
+        labels = cstruct['labels']
+        preflabel_found = []
+        for label in labels:
+            if label['type'] == 'prefLabel':
+                if label['language'] in preflabel_found:
+                    raise colander.Invalid(
+                        node['labels'],
+                        'A concept or collection can have only one prefLabel per language.'
+                    )
+                else:
+                    preflabel_found.append(label['language'])

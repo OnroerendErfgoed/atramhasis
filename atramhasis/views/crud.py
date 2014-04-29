@@ -41,9 +41,12 @@ class AtramhasisCrud(object):
     def _validate_concept(self, json_concept):
         from atramhasis.validators import (
             Concept as ConceptSchema,
+            concept_schema_validator
         )
 
-        concept_schema = ConceptSchema().bind(
+        concept_schema = ConceptSchema(
+            validator=concept_schema_validator
+        ).bind(
             request=self.request
         )
         try:
