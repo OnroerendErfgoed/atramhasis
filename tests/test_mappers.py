@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 from skosprovider_sqlalchemy.models import Concept, Label
 from atramhasis.mappers import map_concept
