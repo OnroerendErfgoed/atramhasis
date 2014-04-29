@@ -1,3 +1,6 @@
+from pyramid.httpexceptions import HTTPNotFound
+
+
 class SkosRegistryNotFoundException(Exception):
     def __init__(self, value='No SKOS registry found, please check your application setup'):
         self.value = value
@@ -14,7 +17,7 @@ class InvalidJsonException(Exception):
         return repr(self.value)
 
 
-class ConceptSchemeNotFoundException(Exception):
+class ConceptSchemeNotFoundException(HTTPNotFound):
     def __init__(self, scheme_id):
         self.value = 'No conteptscheme found with the given id ' + scheme_id
 
@@ -22,7 +25,7 @@ class ConceptSchemeNotFoundException(Exception):
         return repr(self.value)
 
 
-class ConceptNotFoundException(Exception):
+class ConceptNotFoundException(HTTPNotFound):
     def __init__(self, c_id):
         self.value = 'No contept found with the given id ' + c_id
 
