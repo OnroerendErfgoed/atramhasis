@@ -6,8 +6,8 @@ def from_thing(thing):
         Map a :class:`skosprovider_sqlalchemy.models.Thing` to a :class:`skosprovider.skos.Concept` or
         a :class:`skosprovider.skos.Collection`, depending on the type
 
-        :param :class:`skosprovider_sqlalchemy.models.Thing` thing: Thing
-            to map.
+        :param :class:`skosprovider_sqlalchemy.models.Thing` ,
+        Thing to map.
         '''
         if thing.type and thing.type == 'collection':
             return Collection(

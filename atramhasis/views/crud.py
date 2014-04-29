@@ -14,7 +14,7 @@ from atramhasis.utils import from_thing
 @view_defaults(accept='application/json', renderer='skosjson')
 class AtramhasisCrud(object):
     '''
-    This object groups CRUD REST views part of the user interface.
+    This object groups CRUD REST views part of the private user interface.
     '''
 
     def __init__(self, request):
@@ -56,6 +56,11 @@ class AtramhasisCrud(object):
 
     @view_config(route_name='atramhasis.add_concept')
     def add_concept(self):
+        '''
+        Add a new concept to a conceptscheme
+
+        :raises :class:`atramhasis.errors.ValidationError`: If the provided json can't be validated
+        '''
         validated_json_concept = self._validate_concept(self._get_json_body())
         cid = self.db.query(
             func.max(Thing.concept_id)
@@ -75,6 +80,12 @@ class AtramhasisCrud(object):
 
     @view_config(route_name='atramhasis.edit_concept')
     def edit_concept(self):
+        '''
+        Edit an existing concept
+
+        :raises :class:`atramhasis.errors.ConceptNotFoundException`: If the concept can't be found
+        :raises :class:`atramhasis.errors.ValidationError`: If the provided json can't be validated
+        '''
         c_id = self.request.matchdict['c_id']
         validated_json_concept = self._validate_concept(self._get_json_body())
         try:
@@ -88,6 +99,11 @@ class AtramhasisCrud(object):
 
     @view_config(route_name='atramhasis.delete_concept')
     def delete_concept(self):
+        '''
+        Delete an existing concept
+
+        :raises :class:`atramhasis.errors.ConceptNotFoundException`: If the concept can't be found
+        '''
         c_id = self.request.matchdict['c_id']
         try:
             concept = self.db.query(Concept).filter_by(concept_id=c_id,
