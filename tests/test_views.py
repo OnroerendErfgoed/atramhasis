@@ -121,6 +121,20 @@ class TestSearchResultView(unittest.TestCase):
         self.assertEqual(concept['label'], 'De Paardekastanje')
         self.assertEqual(info['scheme_id'], 'TREES')
 
+    def test_find_by_concept(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.params = MultiDict()
+        request.params.add('ctype', 'concept')
+        request.params.add('_LOCALE_', 'nl')
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        info = atramhasisview.search_result()
+        self.assertIsNotNone(info['concepts'])
+        concept = info['concepts'][0]
+        self.assertIsNotNone(concept)
+        self.assertEqual(info['scheme_id'], 'TREES')
+
     def test_no_querystring(self):
         request = testing.DummyRequest()
         request.matchdict['scheme_id'] = 'TREES'
@@ -162,3 +176,29 @@ class TestCsvView(unittest.TestCase):
         self.assertIsInstance(res['header'], list)
         self.assertIsInstance(res['rows'], list)
         self.assertEqual(3, len(res['rows']))
+
+    def test_csv_label(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.params = MultiDict()
+        request.params.add('label', 'De Paardekastanje')
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        res = atramhasisview.results_csv()
+        self.assertEqual(res['filename'], 'atramhasis_export')
+        self.assertIsInstance(res['header'], list)
+        self.assertIsInstance(res['rows'], list)
+        self.assertEqual(1, len(res['rows']))
+
+    def test_csv_ctype(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.params = MultiDict()
+        request.params.add('ctype', 'concept')
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        res = atramhasisview.results_csv()
+        self.assertEqual(res['filename'], 'atramhasis_export')
+        self.assertIsInstance(res['header'], list)
+        self.assertIsInstance(res['rows'], list)
+        self.assertEqual(2, len(res['rows']))
