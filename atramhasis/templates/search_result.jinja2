@@ -12,5 +12,6 @@
          <li><a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}">{{ c.label }}</a> <em>(id: {{ c.id }})</em></li>
         {%- endfor %}
     </ul>
+    {% trans %}export{% endtrans %}: <a href = "{{ request.path }}.csv?{{ request.query_string }}">csv</a>
 
 {% endblock %}
