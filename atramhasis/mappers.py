@@ -15,10 +15,22 @@ def map_concept(concept, concept_json):
     for n in notes:
             note = Note(note=n.get('note', ''), notetype_id=n.get('type', ''), language_id=n.get('language', ''))
             concept.notes.append(note)
-    # for rc in concept.related_concepts:
-    #     concept.related_concepts.remove(rc)
-    # related = concept_json.get('related', [])
-    # for related_c in related:
-    #     rc = Concept()
-    #     concept.related_concepts.append(rc)
+    concept.related_concepts.clear()
+    related = concept_json.get('related', [])
+    for related_id in related:
+        related_concept = Concept()
+        related_concept.concept_id = related_id
+        concept.related_concepts.add(related_concept)
+    concept.broader_concepts.clear()
+    broader = concept_json.get('broader', [])
+    for broader_id in broader:
+        broader_concept = Concept()
+        broader_concept.concept_id = broader_id
+        concept.broader_concepts.add(broader_concept)
+    concept.narrower_concepts.clear()
+    narrower = concept_json.get('narrower', [])
+    for narrower_id in narrower:
+        narrower_concept = Concept()
+        narrower_concept.concept_id = narrower_id
+        concept.narrower_concepts.add(narrower_concept)
     return concept
