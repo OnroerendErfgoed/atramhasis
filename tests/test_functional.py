@@ -153,5 +153,6 @@ class TestCookieView(FunctionalTests):
         self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=nl'))
 
     def test_unsupported_language(self):
+        config_default_lang = settings.get('pyramid.default_locale_name')
         response = self.testapp.get('/locale?language=fr', headers=self._get_default_headers())
-        self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=en'))
+        self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=' + config_default_lang))

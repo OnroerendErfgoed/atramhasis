@@ -92,18 +92,20 @@ class AtramhasisView(object):
         settings = get_current_registry().settings
         default_lang = settings.get('pyramid.default_locale_name')
         available_languages = settings.get('available_languages', default_lang).split()
-        response = None
-        if self.request.GET['language']:
-            language = self.request.GET['language']
-            if language not in available_languages:
-                language = default_lang
-            try:
-                response = HTTPFound(location=self.request.environ['HTTP_REFERER'])
-            except KeyError:
-                response = HTTPFound(location=self.request.route_url("home"))
-            response.set_cookie('_LOCALE_',
-                                value=language,
-                                max_age=31536000)  # max_age = year
+        [x.lower() for x in available_languages]
+        language = self.request.GET.get('language', default_lang).lower()
+        if language not in available_languages:
+            language = default_lang
+
+        referer = self.request.referer
+        if referer is not None:
+            response = HTTPFound(location=referer)
+        else:
+            response = HTTPFound(location=self.request.route_url('home'))
+
+        response.set_cookie('_LOCALE_',
+                            value=language,
+                            max_age=31536000)  # max_age = year
         return response
 
     @view_config(route_name='search_result_export', renderer='csv')

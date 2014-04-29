@@ -202,3 +202,68 @@ class TestCsvView(unittest.TestCase):
         self.assertIsInstance(res['header'], list)
         self.assertIsInstance(res['rows'], list)
         self.assertEqual(2, len(res['rows']))
+
+
+class TestLocaleView(unittest.TestCase):
+
+    def setUp(self):
+        self.config = testing.setUp()
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+        config = testing.setUp()
+        config.add_route('home', 'foo')
+        config.add_settings(settings)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_default_locale(self):
+        config_default_lang = settings.get('pyramid.default_locale_name')
+        request = testing.DummyRequest()
+        request.referer = None
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        res = atramhasisview.set_locale_cookie()
+        self.assertTrue((res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + config_default_lang))
+
+    def test_unsupported_lang(self):
+        config_default_lang = settings.get('pyramid.default_locale_name')
+        request = testing.DummyRequest()
+        request.GET['language'] = 'XX'
+        request.referer = None
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        res = atramhasisview.set_locale_cookie()
+        self.assertTrue((res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + config_default_lang))
+
+    def test_locale(self):
+        testlang = 'it'
+        request = testing.DummyRequest()
+        request.GET['language'] = testlang
+        request.referer = None
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        res = atramhasisview.set_locale_cookie()
+        self.assertTrue((res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + testlang))
+
+    def test_locale_uppercase(self):
+        testlang = 'it'
+        request = testing.DummyRequest()
+        request.GET['language'] = testlang.upper()
+        request.referer = None
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        res = atramhasisview.set_locale_cookie()
+        self.assertTrue((res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + testlang))
+
+    def test_referer(self):
+        testlang = 'it'
+        testurl = 'http://www.foo.bar'
+        request = testing.DummyRequest()
+        request.GET['language'] = testlang.upper()
+        request.referer = testurl
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        res = atramhasisview.set_locale_cookie()
+        self.assertEqual(res.status, '302 Found')
+        self.assertEqual(res.location, testurl)
