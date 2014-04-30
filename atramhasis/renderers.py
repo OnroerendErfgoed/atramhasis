@@ -1,5 +1,5 @@
 import csv
-from io import StringIO
+from six import StringIO
 
 
 class CSVRenderer(object):

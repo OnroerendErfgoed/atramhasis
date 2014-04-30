@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
+
 import os
 import unittest
+import six
 from pyramid.config import Configurator
 from skosprovider_sqlalchemy.models import Base, Thing, ConceptScheme
 from skosprovider_sqlalchemy.utils import import_provider
@@ -111,6 +114,21 @@ class HtmlFunctionalTests(FunctionalTests):
         res = self.testapp.get('/', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIn('text/html', res.headers['Content-Type'])
+
+
+class CsvFunctionalTests(FunctionalTests):
+
+    def test_get_csv(self):
+        response = self.testapp.get('/conceptschemes/TREES/c.csv?ctype=collection&label=')
+        self.assertEqual('200 OK', response.status)
+        self.assertIn('text/csv', response.headers['Content-Type'])
+        self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
+
+    def test_unicode_csv(self):
+        response = self.testapp.get('/conceptschemes/TREES/c.csv?label=Chestnut&_LOCALE_=fr')
+        data = response.body.decode('utf-8')
+        self.assertIsInstance(data, six.text_type)
+        self.assertIn('châtaigne', data)
 
 
 class RestFunctionalTests(FunctionalTests):
