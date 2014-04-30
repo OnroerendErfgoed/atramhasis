@@ -3,7 +3,7 @@ import unittest
 try:
     from unittest.mock import Mock
 except ImportError:
-    from mock import Mock
+    from mock import Mock   # pragma: no cover
 import colander
 from pyramid import testing
 from skosprovider_sqlalchemy.models import Concept
