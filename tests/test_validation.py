@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import unittest
-from unittest.mock import Mock
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from mock import Mock
 import colander
 from pyramid import testing
 from skosprovider_sqlalchemy.models import Concept
