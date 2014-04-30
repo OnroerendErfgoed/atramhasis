@@ -1,20 +1,47 @@
 # -*- coding: utf-8 -*-
 import unittest
+from unittest.mock import Mock
 import colander
 from pyramid import testing
+from skosprovider_sqlalchemy.models import Concept
 from atramhasis.validators import (
     Concept as ConceptSchema,
     concept_schema_validator
 )
 
 
+def filter_by_mock_concept(concept_id, conceptscheme_id):
+    concept = Concept(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
+    concept.type = 'concept'
+    if concept_id == 666:
+        concept.type = 'collection'
+    filter_mock = Mock()
+    filter_mock.one = Mock(return_value=concept)
+    return filter_mock
+
+
+def create_query_mock(some_class):
+    query_mock = Mock()
+    query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    return query_mock
+
+
+def db(request):
+    session_mock = Mock()
+    session_mock.query = Mock(side_effect=create_query_mock)
+    return session_mock
+
+
 class TestValidation(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
+        self.request = testing.DummyRequest()
+        self.request.db = db(self.request)
         self.concept_schema = ConceptSchema(
             validator=concept_schema_validator
         ).bind(
-            request=testing.DummyRequest()
+            request=self.request,
+            conceptscheme_id=1
         )
         self.json_concept = {
             "narrower": [8, 7, 9],
@@ -82,3 +109,24 @@ class TestValidation(unittest.TestCase):
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
+
+    def test_related_concept_type_concept(self):
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)
+
+    def test_related_concept_type_collection(self):
+        self.json_concept['related'].append(666)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)

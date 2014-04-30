@@ -38,7 +38,7 @@ class AtramhasisCrud(object):
             json_body['id'] = self.request.matchdict['id']
         return json_body
 
-    def _validate_concept(self, json_concept):
+    def _validate_concept(self, json_concept, conceptscheme_id):
         from atramhasis.validators import (
             Concept as ConceptSchema,
             concept_schema_validator
@@ -47,7 +47,8 @@ class AtramhasisCrud(object):
         concept_schema = ConceptSchema(
             validator=concept_schema_validator
         ).bind(
-            request=self.request
+            request=self.request,
+            conceptscheme_id=conceptscheme_id
         )
         try:
             return concept_schema.deserialize(json_concept)
@@ -64,7 +65,7 @@ class AtramhasisCrud(object):
 
         :raises :class:`atramhasis.errors.ValidationError`: If the provided json can't be validated
         '''
-        validated_json_concept = self._validate_concept(self._get_json_body())
+        validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
         cid = self.db.query(
             func.max(Thing.concept_id)
         ).filter_by(conceptscheme_id=self.provider.conceptscheme_id).first()[0]
@@ -90,7 +91,7 @@ class AtramhasisCrud(object):
         :raises :class:`atramhasis.errors.ValidationError`: If the provided json can't be validated
         '''
         c_id = self.request.matchdict['c_id']
-        validated_json_concept = self._validate_concept(self._get_json_body())
+        validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
         try:
             concept = self.db.query(Concept).filter_by(concept_id=c_id,
                                                        conceptscheme_id=self.provider.conceptscheme_id).one()

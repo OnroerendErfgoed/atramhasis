@@ -1,4 +1,7 @@
 import colander
+from skosprovider_sqlalchemy.models import (
+    Concept as DomainConcept
+)
 
 
 class Label(colander.MappingSchema):
@@ -63,6 +66,8 @@ class Concept(colander.MappingSchema):
 
 
 def concept_schema_validator(node, cstruct):
+    request = node.bindings['request']
+    conceptscheme_id = node.bindings['conceptscheme_id']
     if 'labels' in cstruct:
         labels = cstruct['labels']
         preflabel_found = []
@@ -75,3 +80,12 @@ def concept_schema_validator(node, cstruct):
                     )
                 else:
                     preflabel_found.append(label['language'])
+    if 'related' in cstruct:
+        related = cstruct['related']
+        for related_concept_id in related:
+            related_concept = request.db.query(DomainConcept).filter_by(concept_id=related_concept_id, conceptscheme_id=conceptscheme_id).one()
+            if related_concept.type != 'concept':
+                 raise colander.Invalid(
+                        node['related'],
+                        'A related concept, should always be a concept, not a collection'
+                    )
