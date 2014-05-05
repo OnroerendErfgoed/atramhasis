@@ -135,13 +135,14 @@ class AtramhasisView(object):
             'filename' : 'atramhasis_export'
         }
 
-    @view_config(route_name='search_result_json', renderer='json')
+    @view_config(route_name='search_result_json', renderer='skosjson')
     def results_json(self):
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.skos_registry.get_provider(scheme_id)
         try:
-            # concepts = self.db.query(DomainConcept).filter_by(conceptscheme_id=provider.conceptscheme_id).all()
-            concept = self.db.query(DomainConcept).filter_by(conceptscheme_id=provider.conceptscheme_id).first()
-            return from_thing(concept)
+            skosconcepts = self.db.query(DomainConcept).filter_by(conceptscheme_id=provider.conceptscheme_id).all()
+            # concept = self.db.query(DomainConcept).filter_by(conceptscheme_id=provider.conceptscheme_id).first()
+            jsonconcepts = [from_thing(c) for c in skosconcepts]
+            return jsonconcepts
         except NoResultFound:
             raise ConceptSchemeNotFoundException(scheme_id)
