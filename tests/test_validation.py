@@ -16,6 +16,16 @@ from atramhasis.validators import (
 def filter_by_mock_concept(concept_id, conceptscheme_id):
     concept = Concept(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
     concept.type = 'concept'
+    if concept_id == 2:
+        broader_concept = Concept(concept_id=1, conceptscheme_id=conceptscheme_id)
+        broader_concepts = set()
+        broader_concepts.add(broader_concept)
+        concept.broader_concepts = broader_concepts
+    if concept_id == 7:
+        narrower_concept = Concept(concept_id=14, conceptscheme_id=conceptscheme_id)
+        narrower_concepts = set()
+        narrower_concepts.add(narrower_concept)
+        concept.narrower_concepts = narrower_concepts
     if concept_id == 666:
         concept.type = 'collection'
     if concept_id == 777:
@@ -213,7 +223,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNone(validated_concept)
 
     def test_broader_concept_hierarchy(self):
-        self.json_concept['broader'].append(8)
+        self.json_concept['broader'].append(14)
         error_raised = False
         validated_concept = None
         try:
@@ -226,6 +236,29 @@ class TestValidation(unittest.TestCase):
     def test_broader_concept_hierarchy_no_narrower(self):
         self.json_concept['broader'].append(8)
         self.json_concept['narrower'] = []
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)
+
+    def test_narrower_concept_hierarchy(self):
+        self.json_concept['narrower'].append(1)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_narrower_concept_hierarchy_no_broader(self):
+        self.json_concept['narrower'].append(1)
+        self.json_concept['broader'] = []
         error_raised = False
         validated_concept = None
         try:

@@ -1,3 +1,5 @@
+import copy
+
 import colander
 from skosprovider_sqlalchemy.models import (
     Concept as DomainConcept
@@ -69,21 +71,22 @@ def concept_schema_validator(node, cstruct):
     request = node.bindings['request']
     conceptscheme_id = node.bindings['conceptscheme_id']
     if 'labels' in cstruct:
-        labels = cstruct['labels']
+        labels = copy.deepcopy(cstruct['labels'])
         max_preflabels_rule(node, labels)
     if 'related' in cstruct:
-        related = cstruct['related']
+        related = copy.deepcopy(cstruct['related'])
         different_conceptscheme_rule(node['related'], request, conceptscheme_id, related)
         concept_type_rule(node['related'], request, conceptscheme_id, related)
     if 'narrower' in cstruct:
-        narrower = cstruct['narrower']
+        narrower = copy.deepcopy(cstruct['narrower'])
         different_conceptscheme_rule(node['narrower'], request, conceptscheme_id, narrower)
         concept_type_rule(node['narrower'], request, conceptscheme_id, narrower)
+        narrower_hierarchy_rule(node['narrower'], request, conceptscheme_id, cstruct)
     if 'broader' in cstruct:
-        broader = cstruct['broader']
+        broader = copy.deepcopy(cstruct['broader'])
         different_conceptscheme_rule(node['broader'], request, conceptscheme_id, broader)
         concept_type_rule(node['broader'], request, conceptscheme_id, broader)
-        check_broader_hierarchy(node['broader'], request, conceptscheme_id, cstruct)
+        broader_hierarchy_rule(node['broader'], request, conceptscheme_id, cstruct)
 
 
 def max_preflabels_rule(node, labels):
@@ -121,13 +124,13 @@ def different_conceptscheme_rule(node_location, request, conceptscheme_id, membe
             )
 
 
-def check_broader_hierarchy(node_location, request, conceptscheme_id, cstruct):
+def broader_hierarchy_rule(node_location, request, conceptscheme_id, cstruct):
     narrower_hierarchy = []
     broader = []
     if 'broader' in cstruct:
-        broader = cstruct['broader']
+        broader = copy.deepcopy(cstruct['broader'])
     if 'narrower' in cstruct:
-        narrower = cstruct['narrower']
+        narrower = copy.deepcopy(cstruct['narrower'])
         narrower_hierarchy = narrower
         narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy)
     for broader_concept_id in broader:
@@ -142,8 +145,36 @@ def narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hiera
     for narrower_concept_id in narrower:
         narrower_concept = request.db.query(DomainConcept).filter_by(concept_id=narrower_concept_id,
                                                                      conceptscheme_id=conceptscheme_id).one()
-        narrower_concepts = [n.concept_id for n in narrower_concept.narrower_concepts]
-        for narrower_id in narrower_concepts:
-            narrower_hierarchy.append(narrower_id)
-        narrower_hierarchy = narrower_hierarchy_build(request, conceptscheme_id, narrower_concepts, narrower_hierarchy)
-    return narrower_hierarchy
+        if narrower_concept is not None:
+            narrower_concepts = [n.concept_id for n in narrower_concept.narrower_concepts]
+            for narrower_id in narrower_concepts:
+                narrower_hierarchy.append(narrower_id)
+            narrower_hierarchy_build(request, conceptscheme_id, narrower_concepts, narrower_hierarchy)
+
+
+def narrower_hierarchy_rule(node_location, request, conceptscheme_id, cstruct):
+    broader_hierarchy = []
+    narrower = []
+    if 'narrower' in cstruct:
+        narrower = copy.deepcopy(cstruct['narrower'])
+    if 'broader' in cstruct:
+        broader = copy.deepcopy(cstruct['broader'])
+        broader_hierarchy = broader
+        broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy)
+    for narrower_concept_id in narrower:
+        if narrower_concept_id in broader_hierarchy:
+            raise colander.Invalid(
+                node_location,
+                'The narrower concept of a concept must not itself be a broader concept of the concept being edited.'
+            )
+
+
+def broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy):
+    for broader_concept_id in broader:
+        broader_concept = request.db.query(DomainConcept).filter_by(concept_id=broader_concept_id,
+                                                                    conceptscheme_id=conceptscheme_id).one()
+        if broader_concept is not None:
+            broader_concepts = [n.concept_id for n in broader_concept.broader_concepts]
+            for broader_id in broader_concepts:
+                broader_hierarchy.append(broader_id)
+            broader_hierarchy_build(request, conceptscheme_id, broader_concepts, broader_hierarchy)
