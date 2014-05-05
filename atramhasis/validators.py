@@ -73,14 +73,16 @@ def concept_schema_validator(node, cstruct):
         max_preflabels_rule(node, labels)
     if 'related' in cstruct:
         related = cstruct['related']
-        different_conceptscheme_rule(node, request, conceptscheme_id, related)
-        related_concept_type_rule(node, request, conceptscheme_id, related)
+        different_conceptscheme_rule(node['related'], request, conceptscheme_id, related)
+        concept_type_rule(node['related'], request, conceptscheme_id, related)
     if 'narrower' in cstruct:
         narrower = cstruct['narrower']
-        different_conceptscheme_rule(node, request, conceptscheme_id, narrower)
+        different_conceptscheme_rule(node['narrower'], request, conceptscheme_id, narrower)
+        concept_type_rule(node['narrower'], request, conceptscheme_id, narrower)
     if 'broader' in cstruct:
         broader = cstruct['broader']
-        different_conceptscheme_rule(node, request, conceptscheme_id, broader)
+        different_conceptscheme_rule(node['broader'], request, conceptscheme_id, broader)
+        concept_type_rule(node['broader'], request, conceptscheme_id, broader)
 
 
 def max_preflabels_rule(node, labels):
@@ -96,23 +98,23 @@ def max_preflabels_rule(node, labels):
                 preflabel_found.append(label['language'])
 
 
-def related_concept_type_rule(node, request, conceptscheme_id, related):
-    for related_concept_id in related:
-        related_concept = request.db.query(DomainConcept).filter_by(concept_id=related_concept_id,
-                                                                    conceptscheme_id=conceptscheme_id).one()
-        if related_concept.type != 'concept':
+def concept_type_rule(node_location, request, conceptscheme_id, members):
+    for member_concept_id in members:
+        member_concept = request.db.query(DomainConcept).filter_by(concept_id=member_concept_id,
+                                                                   conceptscheme_id=conceptscheme_id).one()
+        if member_concept.type != 'concept':
             raise colander.Invalid(
-                node['related'],
-                'A related concept, should always be a concept, not a collection'
+                node_location,
+                'A member should always be a concept, not a collection'
             )
 
 
-def different_conceptscheme_rule(node, request, conceptscheme_id, members):
+def different_conceptscheme_rule(node_location, request, conceptscheme_id, members):
     for member_concept_id in members:
         stored_concept = request.db.query(DomainConcept).filter_by(concept_id=member_concept_id,
                                                                    conceptscheme_id=conceptscheme_id).one()
         if stored_concept is None:
             raise colander.Invalid(
-                node['related'],
+                node_location,
                 'Concept not found, check concept_id. Please be aware members should be within one scheme'
             )
