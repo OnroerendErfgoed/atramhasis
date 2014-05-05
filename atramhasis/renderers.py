@@ -34,7 +34,7 @@ def concept_adapter(obj, request):
     return {
         'id': obj.concept_id,
         'type': 'concept',
-        'label': obj.label().label,
+        'label': obj.label(request.locale_name).label,
     }
 
 
@@ -47,8 +47,8 @@ def collection_adapter(obj, request):
     return {
         'id': obj.concept_id,
         'type': 'collection',
-        'label': obj.label().label,
-        'children': sorted(children, key=lambda member: member.label().label)
+        'label': obj.label(request.locale_name).label,
+        'children': sorted(children, key=lambda member: member.label(request.locale_name).label.lower())
     }
 
 json_tree_renderer.add_adapter(Concept, concept_adapter)
