@@ -83,6 +83,7 @@ def concept_schema_validator(node, cstruct):
         broader = cstruct['broader']
         different_conceptscheme_rule(node['broader'], request, conceptscheme_id, broader)
         concept_type_rule(node['broader'], request, conceptscheme_id, broader)
+        check_broader_hierarchy(node['broader'], request, conceptscheme_id, cstruct)
 
 
 def max_preflabels_rule(node, labels):
@@ -118,3 +119,31 @@ def different_conceptscheme_rule(node_location, request, conceptscheme_id, membe
                 node_location,
                 'Concept not found, check concept_id. Please be aware members should be within one scheme'
             )
+
+
+def check_broader_hierarchy(node_location, request, conceptscheme_id, cstruct):
+    narrower_hierarchy = []
+    broader = []
+    if 'broader' in cstruct:
+        broader = cstruct['broader']
+    if 'narrower' in cstruct:
+        narrower = cstruct['narrower']
+        narrower_hierarchy = narrower
+        narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy)
+    for broader_concept_id in broader:
+        if broader_concept_id in narrower_hierarchy:
+            raise colander.Invalid(
+                node_location,
+                'The broader concept of a concept must not itself be a narrower concept of the concept being edited.'
+            )
+
+
+def narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy):
+    for narrower_concept_id in narrower:
+        narrower_concept = request.db.query(DomainConcept).filter_by(concept_id=narrower_concept_id,
+                                                                     conceptscheme_id=conceptscheme_id).one()
+        narrower_concepts = [n.concept_id for n in narrower_concept.narrower_concepts]
+        for narrower_id in narrower_concepts:
+            narrower_hierarchy.append(narrower_id)
+        narrower_hierarchy = narrower_hierarchy_build(request, conceptscheme_id, narrower_concepts, narrower_hierarchy)
+    return narrower_hierarchy

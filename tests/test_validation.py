@@ -211,3 +211,26 @@ class TestValidation(unittest.TestCase):
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
+
+    def test_broader_concept_hierarchy(self):
+        self.json_concept['broader'].append(8)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_broader_concept_hierarchy_no_narrower(self):
+        self.json_concept['broader'].append(8)
+        self.json_concept['narrower'] = []
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)
