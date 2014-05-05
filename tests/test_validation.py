@@ -18,6 +18,9 @@ def filter_by_mock_concept(concept_id, conceptscheme_id):
     concept.type = 'concept'
     if concept_id == 666:
         concept.type = 'collection'
+    if concept_id == 777:
+        if conceptscheme_id != 3:
+            concept = None
     filter_mock = Mock()
     filter_mock.one = Mock(return_value=concept)
     return filter_mock
@@ -125,6 +128,39 @@ class TestValidation(unittest.TestCase):
 
     def test_related_concept_type_collection(self):
         self.json_concept['related'].append(666)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_related_concept_different_conceptscheme(self):
+        self.json_concept['related'].append(777)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_narrower_concept_different_conceptscheme(self):
+        self.json_concept['narrower'].append(777)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_broader_concept_different_conceptscheme(self):
+        self.json_concept['broader'].append(777)
         error_raised = False
         validated_concept = None
         try:
