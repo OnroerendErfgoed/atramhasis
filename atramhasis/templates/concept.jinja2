@@ -8,51 +8,85 @@
 %}
 
 {% block content %}
-        <h1>{{ concept.label(request.locale_name).label}}</h1>
-        <ul>
-            <li>id: {{ concept.id}}</li>
-            {% if conceptType == 'Concept' %}
-            <li>type: {% trans %}concept{% endtrans %}</li>
-            {% elif conceptType == 'Collection' %}
-            <li>type: {% trans %}collection{% endtrans %}</li>
-            {% endif %}
-            {% if concept.uri %}
-            <li>uri: <a href="{{ concept.uri }}">{{ concept.uri }}</a></li>
-            {% endif %}
-        </ul>
+    <div class="row">
+        <div class="large-6 columns">
+            <div id="tree1" data-url="/static/js/boom_label.json"></div>
+        </div>
+        <div class="large-6 columns">
+            <h1>{{ concept.label(request.locale_name).label}}</h1>
+            <ul>
+                <li>id: {{ concept.id }}</li>
+                {% if conceptType == 'Concept' %}
+                <li>type: {% trans %}concept{% endtrans %}</li>
+                {% elif conceptType == 'Collection' %}
+                <li>type: {% trans %}collection{% endtrans %}</li>
+                {% endif %}
+                {% if concept.uri %}
+                <li>uri: <a href="{{ concept.uri }}">{{ concept.uri }}</a></li>
+                {% endif %}
+            </ul>
 
-		<h2>{% trans %}labels{% endtrans %}</h2>
-        {{ render_labels(concept.labels, 'prefLabel') }}
-        {{ render_labels(concept.labels, 'altLabel') }}
-        {{ render_labels(concept.labels, 'hiddenLabel') }}
+            <h2>{% trans %}labels{% endtrans %}</h2>
+            {{ render_labels(concept.labels, 'prefLabel') }}
+            {{ render_labels(concept.labels, 'altLabel') }}
+            {{ render_labels(concept.labels, 'hiddenLabel') }}
 
-    {% if conceptType == 'Concept' %}
-		<h2>{% trans %}notes{% endtrans %}</h2>
-		<ul>
-		    {%- for note in concept.notes %}
-            <li>
-                {{ note.note}}
-                <ul>
-                    <li lang="{{ note.language }}">{% trans %}type{% endtrans %}: {{ note.type }} </li>
-                    <li>{% trans %}language{% endtrans %}: {{ note.language }} </li>
-                </ul>
-            </li>
-		    {%- endfor %}
-		</ul>
+        {% if conceptType == 'Concept' %}
+            <h2>{% trans %}notes{% endtrans %}</h2>
+            <ul>
+                {%- for note in concept.notes %}
+                <li>
+                    {{ note.note}}
+                    <ul>
+                        <li lang="{{ note.language }}">{% trans %}type{% endtrans %}: {{ note.type }} </li>
+                        <li>{% trans %}language{% endtrans %}: {{ note.language }} </li>
+                    </ul>
+                </li>
+                {%- endfor %}
+            </ul>
 
-        <h2>{% trans %}broader{% endtrans %}</h2>
-        {{ render_relaties_lijst(request, concept.broader, scheme_id) }}
+            <h2>{% trans %}broader{% endtrans %}</h2>
+            {{ render_relaties_lijst(request, concept.broader, scheme_id) }}
 
-		<h2>{% trans %}narrower{% endtrans %}</h2>
-        {{ render_relaties_lijst(request, concept.narrower, scheme_id) }}
+            <h2>{% trans %}narrower{% endtrans %}</h2>
+            {{ render_relaties_lijst(request, concept.narrower, scheme_id) }}
 
-        <h2>{% trans %}related{% endtrans %}</h2>
-         {{ render_relaties_lijst(request, concept.related, scheme_id) }}
-    {% endif %}
+            <h2>{% trans %}related{% endtrans %}</h2>
+             {{ render_relaties_lijst(request, concept.related, scheme_id) }}
+        {% endif %}
 
-    {% if conceptType == 'Collection' %}
-        <h2>{% trans %}members{% endtrans %}</h2>
-        {{ render_relaties_lijst(request, concept.members, scheme_id) }}
-    {% endif %}
+        {% if conceptType == 'Collection' %}
+            <h2>{% trans %}members{% endtrans %}</h2>
+            {{ render_relaties_lijst(request, concept.members, scheme_id) }}
+        {% endif %}
+        </div>
+    </div>
 
+    <hr />
+
+
+{% endblock %}
+
+{% block footer %}
+		<script>
+            var $tree = $('#tree1');
+            $tree.tree({
+                dataFilter: function(data) {
+                    return data['items'];
+                },
+                onCreateLi: function(node, $li) {
+                    $li.find('.jqtree-title').wrap(function() {
+                        return "<a href='/conceptschemes/STYLES/c/" + node.id + "'></a>";
+                    });
+                }
+            });
+
+            $tree.bind(
+                'tree.init',
+                function() {
+                    var node = $tree.tree('getNodeById', {{ concept.id }});
+                    $tree.tree('selectNode', node, true);
+                }
+            );
+        </script>
 {% endblock %}

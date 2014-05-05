@@ -4,8 +4,10 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.threadlocal import get_current_registry
 from skosprovider.skos import Concept
 from skosprovider.skos import Collection
-
-from atramhasis.errors import SkosRegistryNotFoundException
+from sqlalchemy.orm.exc import NoResultFound
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
+from skosprovider_sqlalchemy.models import Concept as DomainConcept
+from atramhasis.utils import from_thing
 
 
 
@@ -21,6 +23,8 @@ class AtramhasisView(object):
             self.skos_registry = self.request.skos_registry
         else:
             raise SkosRegistryNotFoundException()
+        self.request = request
+        self.db = request.db
 
     def _read_request_param(self, param):
         value = None
@@ -130,3 +134,14 @@ class AtramhasisView(object):
             'rows': rows,
             'filename' : 'atramhasis_export'
         }
+
+    @view_config(route_name='search_result_json', renderer='json')
+    def results_json(self):
+        scheme_id = self.request.matchdict['scheme_id']
+        provider = self.skos_registry.get_provider(scheme_id)
+        try:
+            # concepts = self.db.query(DomainConcept).filter_by(conceptscheme_id=provider.conceptscheme_id).all()
+            concept = self.db.query(DomainConcept).filter_by(conceptscheme_id=provider.conceptscheme_id).first()
+            return from_thing(concept)
+        except NoResultFound:
+            raise ConceptSchemeNotFoundException(scheme_id)
