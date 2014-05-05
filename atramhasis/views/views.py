@@ -7,7 +7,7 @@ from skosprovider.skos import Collection
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
 from skosprovider_sqlalchemy.models import Concept as DomainConcept
-from atramhasis.utils import from_thing
+from skosprovider_sqlalchemy.models import Collection as DomainCollection
 
 
 
@@ -132,17 +132,16 @@ class AtramhasisView(object):
         return {
             'header': header,
             'rows': rows,
-            'filename' : 'atramhasis_export'
+            'filename': 'atramhasis_export'
         }
 
-    @view_config(route_name='search_result_json', renderer='skosjson')
+    @view_config(route_name='scheme_tree', renderer='treejson')
     def results_json(self):
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.skos_registry.get_provider(scheme_id)
         try:
-            skosconcepts = self.db.query(DomainConcept).filter_by(conceptscheme_id=provider.conceptscheme_id).all()
-            # concept = self.db.query(DomainConcept).filter_by(conceptscheme_id=provider.conceptscheme_id).first()
-            jsonconcepts = [from_thing(c) for c in skosconcepts]
-            return jsonconcepts
+            skostree = self.db.query(DomainCollection).filter_by(concept_id=0,
+                                                                 conceptscheme_id=provider.conceptscheme_id).one()
+            return [skostree]
         except NoResultFound:
             raise ConceptSchemeNotFoundException(scheme_id)

@@ -9,10 +9,10 @@
 
 {% block content %}
     <div class="row">
-        <div class="large-6 columns">
-            <div id="tree1" data-url="/static/js/boom_label.json"></div>
+        <div class="large-4 columns">
+            <div id="tree1" data-url="{{ request.route_path('scheme_tree', scheme_id= scheme_id) }}"></div>
         </div>
-        <div class="large-6 columns">
+        <div class="large-8 columns">
             <h1>{{ concept.label(request.locale_name).label}}</h1>
             <ul>
                 <li>id: {{ concept.id }}</li>
@@ -62,21 +62,15 @@
         </div>
     </div>
 
-    <hr />
-
-
 {% endblock %}
 
 {% block footer %}
 		<script>
             var $tree = $('#tree1');
             $tree.tree({
-                dataFilter: function(data) {
-                    return data['items'];
-                },
                 onCreateLi: function(node, $li) {
                     $li.find('.jqtree-title').wrap(function() {
-                        return "<a href='/conceptschemes/STYLES/c/" + node.id + "'></a>";
+                        return "<a href='{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}" + node.id + "'></a>";
                     });
                 }
             });
@@ -86,6 +80,7 @@
                 function() {
                     var node = $tree.tree('getNodeById', {{ concept.id }});
                     $tree.tree('selectNode', node, true);
+                    $tree.tree('openNode', node);
                 }
             );
         </script>
