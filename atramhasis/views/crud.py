@@ -2,11 +2,11 @@ import colander
 from pyramid.view import view_defaults, view_config
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
+from skosprovider_sqlalchemy.models import Concept, Thing
+
 from atramhasis.errors import InvalidJsonException, SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept
-
-from skosprovider_sqlalchemy.models import Concept, Thing
 from atramhasis.utils import from_thing
 
 
@@ -74,7 +74,7 @@ class AtramhasisCrud(object):
         concept = Concept()
         concept.concept_id = cid
         concept.conceptscheme_id = self.provider.conceptscheme_id
-        map_concept(concept, validated_json_concept)
+        map_concept(concept, validated_json_concept, self.request.db)
         self.db.add(concept)
         self.request.response.status = '201'
         self.request.response.location = self.request.route_path(
@@ -96,7 +96,7 @@ class AtramhasisCrud(object):
                                                        conceptscheme_id=self.provider.conceptscheme_id).one()
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
-        map_concept(concept, validated_json_concept)
+        map_concept(concept, validated_json_concept, self.request.db)
         self.request.response.status = '200'
         return from_thing(concept)
 
