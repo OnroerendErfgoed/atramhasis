@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>atramhasis - {% block html_title %}Base{% endblock %}</title>
 		<link rel="stylesheet" href="{{request.application_url}}/static/css/foundation.css">
+		<link rel="stylesheet" href="{{request.application_url}}/static/css/jqtree.css">
 		<link rel="shortcut icon" type="image/ico" href="{{request.application_url}}/static/img/favicon.ico" />
         <script src="{{request.application_url}}/static/js/vendor/modernizr.js"></script>
 	</head>
@@ -52,11 +53,15 @@
 
         <script src="{{request.application_url}}/static/js/vendor/jquery.js"></script>
         <script src="{{request.application_url}}/static/js/vendor/jquery.cookie.js"></script>
+        <script src="{{request.application_url}}/static/js/vendor/tree.jquery.js"></script>
         <!-- Included JS Files (Compressed) -->
         <script src="{{request.application_url}}/static/js/foundation.min.js"></script>
 		<script src="{{request.application_url}}/static/js/vendor/app.js"></script>
 		<script>
 		    $(document).foundation();
 		</script>
+
+            {% block footer %}
+            {% endblock %}
 	</body>
 </html>
