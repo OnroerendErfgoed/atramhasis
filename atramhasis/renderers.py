@@ -1,5 +1,10 @@
 import csv
 from six import StringIO
+from pyramid.renderers import JSON
+from skosprovider_sqlalchemy.models import (
+    Concept,
+    Collection
+)
 
 
 class CSVRenderer(object):
@@ -17,3 +22,34 @@ class CSVRenderer(object):
         resp.content_type = 'text/csv'
         resp.content_disposition = 'attachment;filename="' + value['filename'] + '.csv"'
         return f_out.getvalue()
+
+
+json_tree_renderer = JSON()
+
+
+def concept_adapter(obj, request):
+    '''
+    Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Concept` to json for tree view.
+    '''
+    return {
+        'id': obj.concept_id,
+        'type': 'concept',
+        'label': obj.label(request.locale_name).label,
+    }
+
+
+def collection_adapter(obj, request):
+    '''
+    Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Collection` to json for tree view.
+    '''
+
+    children = [member for member in obj.members] if hasattr(obj, 'members') else None
+    return {
+        'id': obj.concept_id,
+        'type': 'collection',
+        'label': obj.label(request.locale_name).label,
+        'children': sorted(children, key=lambda member: member.label(request.locale_name).label.lower())
+    }
+
+json_tree_renderer.add_adapter(Concept, concept_adapter)
+json_tree_renderer.add_adapter(Collection, collection_adapter)

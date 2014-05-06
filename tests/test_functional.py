@@ -206,3 +206,28 @@ class TestCookieView(FunctionalTests):
         config_default_lang = settings.get('pyramid.default_locale_name')
         response = self.testapp.get('/locale?language=fr', headers=self._get_default_headers())
         self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=' + config_default_lang))
+
+
+class JsonTreeFunctionalTests(FunctionalTests):
+
+    def _get_default_headers(self):
+        return {'Accept': 'application/json'}
+
+    def test_db_tree(self):
+        response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        self.assertEqual('200 OK', response.status)
+        self.assertIn('application/json', response.headers['Content-Type'])
+        self.assertIsNotNone(response.json)
+        self.assertEqual('Materiaal', response.json[0]['label'])
+
+    def test_skos_tree(self):
+        response = self.testapp.get('/conceptschemes/TREES/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        self.assertEqual('200 OK', response.status)
+        self.assertIn('application/json', response.headers['Content-Type'])
+        self.assertIsNotNone(response.json)
+        self.assertEqual(3, len(response.json))
+
+    def test_no_tree(self):
+        response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl',
+                                    headers=self._get_default_headers(),  status=404)
+        self.assertEqual('404 Not Found', response.status)
