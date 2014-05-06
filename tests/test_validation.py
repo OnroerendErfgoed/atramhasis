@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 import unittest
+
+from sqlalchemy.orm.exc import NoResultFound
+
+
 try:
     from unittest.mock import Mock
 except ImportError:
@@ -30,7 +34,7 @@ def filter_by_mock_concept(concept_id, conceptscheme_id):
         concept.type = 'collection'
     if concept_id == 777:
         if conceptscheme_id != 3:
-            concept = None
+            raise NoResultFound()
     filter_mock = Mock()
     filter_mock.one = Mock(return_value=concept)
     return filter_mock
