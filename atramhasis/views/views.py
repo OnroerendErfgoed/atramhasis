@@ -133,7 +133,7 @@ class AtramhasisView(object):
             'filename': 'atramhasis_export'
         }
 
-    @view_config(route_name='scheme_tree', renderer='treejson')
+    @view_config(route_name='scheme_tree', renderer='treejson', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.skos_registry.get_provider(scheme_id)
@@ -148,4 +148,4 @@ class AtramhasisView(object):
                 concepts = provider.get_all(language=self.request.locale_name)
                 if concepts:
                     return concepts
-        return Response(content_type='text/plain', status_int=404)
+        return Response(status_int=404)

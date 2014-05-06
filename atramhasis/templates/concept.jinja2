@@ -10,7 +10,9 @@
 {% block content %}
     <div class="row">
         <div class="large-4 columns">
-            <div id="tree1" data-url="{{ request.route_path('scheme_tree', scheme_id= scheme_id) }}"></div>
+            <div class="panel">
+                <div id="tree1" data-url="{{ request.route_path('scheme_tree', scheme_id= scheme_id) }}"></div>
+            </div>
         </div>
         <div class="large-8 columns">
             <h1>{{ concept.label(request.locale_name).label}}</h1>
