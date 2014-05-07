@@ -7,7 +7,8 @@ from skosprovider.skos import Collection
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
 from skosprovider_sqlalchemy.models import Collection as DomainCollection
-
+from skosprovider_sqlalchemy.models import Concept as DomainConcept
+from sqlalchemy.orm import joinedload
 
 
 @view_defaults(accept='text/html')
@@ -138,14 +139,22 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
-            try:
-                skostree = self.request.db.query(DomainCollection).filter_by(
-                    concept_id=0,
-                    conceptscheme_id=provider.conceptscheme_id
-                ).one()
-                return [skostree]
-            except NoResultFound:
-                concepts = provider.get_all(language=self.request.locale_name)
-                if concepts:
-                    return concepts
+            conceptscheme_id = provider.conceptscheme_id
+            tco = self.request.db\
+                .query(DomainConcept)\
+                .options(joinedload('labels'))\
+                .filter(
+                    DomainConcept.conceptscheme_id == conceptscheme_id,
+                    ~DomainConcept.broader_concepts.any(),
+                    ~DomainCollection.collections.any()
+                ).all()
+            tcl = self.request.db\
+                .query(DomainCollection)\
+                .options(joinedload('labels'))\
+                .filter(
+                    DomainCollection.conceptscheme_id == conceptscheme_id,
+                    ~DomainCollection.collections.any()
+                ).all()
+            skostree = tco + tcl
+            return skostree
         return Response(status_int=404)
