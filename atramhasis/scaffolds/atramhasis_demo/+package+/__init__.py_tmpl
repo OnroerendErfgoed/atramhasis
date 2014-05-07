@@ -1,6 +1,7 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
-
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from atramhasis.models import Base
 
 
@@ -19,6 +20,13 @@ def main(global_config, **settings):
     config.include('atramhasis')
     # Set up atramhasis db
     config.include('atramhasis:db')
+
+    # Set up security
+    authn_policy = AuthTktAuthenticationPolicy(secret='test', hashalg='sha512', debug=True)
+    authz_policy = ACLAuthorizationPolicy()
+    #config.set_root_factory(Root)
+    config.set_authentication_policy(authn_policy)
+    config.set_authorization_policy(authz_policy)
 
     #Add skos support
     config.include('{{package}}.skos')
