@@ -1,9 +1,8 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
+from skosprovider_sqlalchemy.models import Base as SkosBase
 
 from .models import Base
-
-from skosprovider_sqlalchemy.models import Base as SkosBase
 
 
 def includeme(config):

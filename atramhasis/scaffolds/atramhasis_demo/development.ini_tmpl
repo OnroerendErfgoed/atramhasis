@@ -14,7 +14,8 @@ pyramid.default_locale_name = en
 pyramid.includes =
     pyramid_debugtoolbar
     pyramid_tm
-
+jinja2.directories =
+	atramhasis:templates
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 jinja2.i18n.domain = atramhasis

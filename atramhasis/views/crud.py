@@ -57,7 +57,7 @@ class AtramhasisCrud(object):
                 e.asdict()
             )
 
-    @view_config(route_name='atramhasis.add_concept')
+    @view_config(route_name='atramhasis.add_concept', permission='edit')
     def add_concept(self):
         '''
         Add a new concept to a conceptscheme
@@ -81,7 +81,7 @@ class AtramhasisCrud(object):
             'skosprovider.c', scheme_id=self.scheme_id, c_id=concept.concept_id)
         return from_thing(concept)
 
-    @view_config(route_name='atramhasis.edit_concept')
+    @view_config(route_name='atramhasis.edit_concept', permission='edit')
     def edit_concept(self):
         '''
         Edit an existing concept
@@ -100,7 +100,7 @@ class AtramhasisCrud(object):
         self.request.response.status = '200'
         return from_thing(concept)
 
-    @view_config(route_name='atramhasis.delete_concept')
+    @view_config(route_name='atramhasis.delete_concept', permission='edit')
     def delete_concept(self):
         '''
         Delete an existing concept
