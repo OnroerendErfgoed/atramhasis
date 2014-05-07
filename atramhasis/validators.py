@@ -4,6 +4,7 @@ import colander
 from skosprovider_sqlalchemy.models import (
     Concept as DomainConcept
 )
+from sqlalchemy.orm.exc import NoResultFound
 
 
 class Label(colander.MappingSchema):
@@ -70,23 +71,33 @@ class Concept(colander.MappingSchema):
 def concept_schema_validator(node, cstruct):
     request = node.bindings['request']
     conceptscheme_id = node.bindings['conceptscheme_id']
+    narrower = None
+    broader = None
+    related = None
+    r_validated = False
+    n_validated = False
+    b_validated = False
     if 'labels' in cstruct:
         labels = copy.deepcopy(cstruct['labels'])
         max_preflabels_rule(node, labels)
     if 'related' in cstruct:
         related = copy.deepcopy(cstruct['related'])
-        different_conceptscheme_rule(node['related'], request, conceptscheme_id, related)
-        concept_type_rule(node['related'], request, conceptscheme_id, related)
+        r_validated = concept_exists_andnot_different_conceptscheme_rule(node['related'], request,
+                                                                         conceptscheme_id, related)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
-        different_conceptscheme_rule(node['narrower'], request, conceptscheme_id, narrower)
-        concept_type_rule(node['narrower'], request, conceptscheme_id, narrower)
-        narrower_hierarchy_rule(node['narrower'], request, conceptscheme_id, cstruct)
+        n_validated = concept_exists_andnot_different_conceptscheme_rule(node['narrower'], request,
+                                                                         conceptscheme_id, narrower)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
-        different_conceptscheme_rule(node['broader'], request, conceptscheme_id, broader)
+        b_validated = concept_exists_andnot_different_conceptscheme_rule(node['broader'], request,
+                                                                         conceptscheme_id, broader)
+    if r_validated and n_validated and b_validated:
+        concept_type_rule(node['narrower'], request, conceptscheme_id, narrower)
+        narrower_hierarchy_rule(node['narrower'], request, conceptscheme_id, cstruct)
         concept_type_rule(node['broader'], request, conceptscheme_id, broader)
         broader_hierarchy_rule(node['broader'], request, conceptscheme_id, cstruct)
+        concept_type_rule(node['related'], request, conceptscheme_id, related)
 
 
 def max_preflabels_rule(node, labels):
@@ -113,15 +124,17 @@ def concept_type_rule(node_location, request, conceptscheme_id, members):
             )
 
 
-def different_conceptscheme_rule(node_location, request, conceptscheme_id, members):
+def concept_exists_andnot_different_conceptscheme_rule(node_location, request, conceptscheme_id, members):
     for member_concept_id in members:
-        stored_concept = request.db.query(DomainConcept).filter_by(concept_id=member_concept_id,
-                                                                   conceptscheme_id=conceptscheme_id).one()
-        if stored_concept is None:
+        try:
+            stored_concept = request.db.query(DomainConcept).filter_by(concept_id=member_concept_id,
+                                                                       conceptscheme_id=conceptscheme_id).one()
+        except NoResultFound:
             raise colander.Invalid(
                 node_location,
                 'Concept not found, check concept_id. Please be aware members should be within one scheme'
             )
+    return True
 
 
 def broader_hierarchy_rule(node_location, request, conceptscheme_id, cstruct):
