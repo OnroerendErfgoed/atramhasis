@@ -46,6 +46,7 @@ class TestHomeView(unittest.TestCase):
         self.assertIsNotNone(info['conceptschemes'][0])
         self.assertEqual(info['conceptschemes'][0]['id'], 'TREES')
 
+
 class TestFavicoView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
@@ -285,3 +286,23 @@ class TestLocaleView(unittest.TestCase):
         res = atramhasisview.set_locale_cookie()
         self.assertEqual(res.status, '302 Found')
         self.assertEqual(res.location, testurl)
+
+
+class TestHtmlTreeView(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_passing_view(self):
+        request = testing.DummyRequest()
+        request.skos_registry = self.regis
+        request.matchdict['scheme_id'] = 'TREES'
+        atramhasisview = AtramhasisView(request)
+        response = atramhasisview.results_tree_html()
+        self.assertEqual(response['conceptType'], None)
+        self.assertEqual(response['concept'], None)
+        self.assertEqual(response['scheme_id'], 'TREES')

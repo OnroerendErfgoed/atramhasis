@@ -177,3 +177,8 @@ class AtramhasisView(object):
             skostree = tco + tcl
             return skostree
         return Response(status_int=404)
+
+    @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
+    def results_tree_html(self):
+        scheme_id = self.request.matchdict['scheme_id']
+        return {'concept': None, 'conceptType': None, 'scheme_id': scheme_id}

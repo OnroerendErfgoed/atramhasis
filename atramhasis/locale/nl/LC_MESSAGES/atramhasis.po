@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-29 09:57+0200\n"
-"PO-Revision-Date: 2014-04-29 09:58+0100\n"
+"POT-Creation-Date: 2014-05-07 11:32+0200\n"
+"PO-Revision-Date: 2014-05-07 11:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: nl <LL@li.org>\n"
 "Language: nl\n"
@@ -23,70 +23,74 @@ msgid "search"
 msgstr "zoeken"
 
 #: atramhasis/templates/atramhasis.jinja2:15
-msgid "select_type"
-msgstr "kies een type"
-
-#: atramhasis/templates/atramhasis.jinja2:19
-msgid "type_all"
-msgstr "alle types"
-
-#: atramhasis/templates/atramhasis.jinja2:20
-msgid "type_concept"
-msgstr "concepten"
-
-#: atramhasis/templates/atramhasis.jinja2:21
-msgid "type_collection"
-msgstr "collecties"
-
-#: atramhasis/templates/atramhasis.jinja2:27
 msgid "select_scheme"
 msgstr "kies een schema"
 
-#: atramhasis/templates/atramhasis.jinja2:39
+#: atramhasis/templates/atramhasis.jinja2:25
+msgid "open"
+msgstr "open"
+
+#: atramhasis/templates/atramhasis.jinja2:28
+msgid "select_type"
+msgstr "kies een type"
+
+#: atramhasis/templates/atramhasis.jinja2:32
+msgid "type_all"
+msgstr "alle types"
+
+#: atramhasis/templates/atramhasis.jinja2:33
+msgid "type_concept"
+msgstr "concepten"
+
+#: atramhasis/templates/atramhasis.jinja2:34
+msgid "type_collection"
+msgstr "collecties"
+
+#: atramhasis/templates/atramhasis.jinja2:40
 msgid "search_for"
 msgstr "zoek naar"
 
-#: atramhasis/templates/atramhasis.jinja2:45
+#: atramhasis/templates/atramhasis.jinja2:46
 msgid "submit"
 msgstr "zoek"
 
-#: atramhasis/templates/concept.jinja2:15
+#: atramhasis/templates/concept.jinja2:23
 msgid "concept"
 msgstr "concept"
 
-#: atramhasis/templates/concept.jinja2:17
+#: atramhasis/templates/concept.jinja2:25
 msgid "collection"
 msgstr "collectie"
 
-#: atramhasis/templates/concept.jinja2:24
+#: atramhasis/templates/concept.jinja2:32
 msgid "labels"
 msgstr "labels"
 
-#: atramhasis/templates/concept.jinja2:30
+#: atramhasis/templates/concept.jinja2:38
 msgid "notes"
 msgstr "notities"
 
-#: atramhasis/templates/concept.jinja2:36
+#: atramhasis/templates/concept.jinja2:44
 msgid "type"
 msgstr "type"
 
-#: atramhasis/templates/concept.jinja2:37
+#: atramhasis/templates/concept.jinja2:45
 msgid "language"
 msgstr "taal"
 
-#: atramhasis/templates/concept.jinja2:43
+#: atramhasis/templates/concept.jinja2:51
 msgid "broader"
 msgstr "algemener"
 
-#: atramhasis/templates/concept.jinja2:46
+#: atramhasis/templates/concept.jinja2:54
 msgid "narrower"
 msgstr "specifieker"
 
-#: atramhasis/templates/concept.jinja2:49
+#: atramhasis/templates/concept.jinja2:57
 msgid "related"
 msgstr "gerelateerd"
 
-#: atramhasis/templates/concept.jinja2:54
+#: atramhasis/templates/concept.jinja2:62
 msgid "members"
 msgstr "leden"
 
