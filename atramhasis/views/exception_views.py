@@ -6,7 +6,7 @@ from atramhasis.errors import SkosRegistryNotFoundException, InvalidJsonExceptio
 @notfound_view_config(renderer='json')
 def failed_not_found(exc, request):
     request.response.status_int = 404
-    return {'message': exc.value}
+    return {'message': exc.explanation}
 
 
 @view_config(context=SkosRegistryNotFoundException, renderer='json')
