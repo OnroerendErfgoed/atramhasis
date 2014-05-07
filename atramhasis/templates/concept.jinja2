@@ -73,7 +73,7 @@
             var $tree = $('#tree1');
             $tree.tree({
                 onCreateLi: function(node, $li) {
-                    $li.find('.jqtree-title').wrap(function() {
+					$li.find('div.jqtree-element').wrap(function() {
                         return "<a href='{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}" + node.id + "'></a>";
                     });
                 }
