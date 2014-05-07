@@ -15,6 +15,7 @@
             </div>
         </div>
         <div class="large-8 columns">
+		{% if concept %}
             <h1>{{ concept.label(request.locale_name).label}}</h1>
             <ul>
                 <li>id: {{ concept.id }}</li>
@@ -33,7 +34,7 @@
             {{ render_labels(concept.labels, 'altLabel') }}
             {{ render_labels(concept.labels, 'hiddenLabel') }}
 
-        {% if conceptType == 'Concept' %}
+			{% if conceptType == 'Concept' %}
             <h2>{% trans %}notes{% endtrans %}</h2>
             <ul>
                 {%- for note in concept.notes %}
@@ -55,13 +56,14 @@
 
             <h2>{% trans %}related{% endtrans %}</h2>
              {{ render_relaties_lijst(request, concept.related, scheme_id) }}
-        {% endif %}
+			{% endif %}
 
-        {% if conceptType == 'Collection' %}
+			{% if conceptType == 'Collection' %}
             <h2>{% trans %}members{% endtrans %}</h2>
             {{ render_relaties_lijst(request, concept.members, scheme_id) }}
+			{% endif %}
         {% endif %}
-        </div>
+		</div>
     </div>
 
 {% endblock %}
@@ -71,19 +73,21 @@
             var $tree = $('#tree1');
             $tree.tree({
                 onCreateLi: function(node, $li) {
-                    $li.find('.jqtree-title').wrap(function() {
+					$li.find('div.jqtree-element').wrap(function() {
                         return "<a href='{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}" + node.id + "'></a>";
                     });
                 }
             });
-
+			
+			{% if concept %}
             $tree.bind(
                 'tree.init',
                 function() {
-                    var node = $tree.tree('getNodeById', {{ concept.id }});
-                    $tree.tree('selectNode', node, true);
-                    $tree.tree('openNode', node);
+						var node = $tree.tree('getNodeById', {{ concept.id }});
+						$tree.tree('selectNode', node, true);
+						$tree.tree('openNode', node);
                 }
             );
+			{% endif %}
         </script>
 {% endblock %}

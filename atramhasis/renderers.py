@@ -31,10 +31,12 @@ def concept_adapter(obj, request):
     '''
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Concept` to json for tree view.
     '''
+    narrower = [nconcept for nconcept in obj.narrower_concepts] if hasattr(obj, 'narrower_concepts') else None
     return {
         'id': obj.concept_id,
         'type': 'concept',
         'label': obj.label(request.locale_name).label,
+        'children': sorted(narrower, key=lambda child: child.label(request.locale_name).label.lower())
     }
 
 
@@ -48,7 +50,7 @@ def collection_adapter(obj, request):
         'id': obj.concept_id,
         'type': 'collection',
         'label': obj.label(request.locale_name).label,
-        'children': sorted(children, key=lambda member: member.label(request.locale_name).label.lower())
+        'children': sorted(children, key=lambda child: child.label(request.locale_name).label.lower())
     }
 
 json_tree_renderer.add_adapter(Concept, concept_adapter)
