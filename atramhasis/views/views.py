@@ -44,7 +44,7 @@ class AtramhasisView(object):
         :param request: A :class:`pyramid.request.Request`
         '''
         here = os.path.dirname(__file__)
-        icon = os.path.join(os.path.dirname(here), 'static', 'favicon.ico')
+        icon = os.path.join(os.path.dirname(here), 'static', 'img', 'favicon.ico')
         response = FileResponse(
             icon,
             request=self.request,
