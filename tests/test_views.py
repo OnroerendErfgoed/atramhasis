@@ -46,6 +46,24 @@ class TestHomeView(unittest.TestCase):
         self.assertIsNotNone(info['conceptschemes'][0])
         self.assertEqual(info['conceptschemes'][0]['id'], 'TREES')
 
+class TestFavicoView(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_passing_view(self):
+        request = testing.DummyRequest()
+        request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(request)
+        response = atramhasisview.favicon_view()
+        self.assertEqual(response.status_int, 200)
+        self.assertIn('image/x-icon', response.headers['Content-Type'])
+        self.assertIsNotNone(response.body)
+
 
 class TestConceptView(unittest.TestCase):
     def setUp(self):

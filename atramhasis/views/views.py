@@ -1,4 +1,7 @@
+import os
+
 from pyramid.response import Response
+from pyramid.response import FileResponse
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPFound
 from pyramid.threadlocal import get_current_registry
@@ -32,6 +35,22 @@ class AtramhasisView(object):
             if not value:
                 value = None    # pragma: no cover
         return value
+
+    @view_config(name='favicon.ico')
+    def favicon_view(self):
+        '''
+        This view returns the favicon when requested from the web root.
+
+        :param request: A :class:`pyramid.request.Request`
+        '''
+        here = os.path.dirname(__file__)
+        icon = os.path.join(os.path.dirname(here), 'static', 'favicon.ico')
+        response = FileResponse(
+            icon,
+            request=self.request,
+            content_type='image/x-icon'
+        )
+        return response
 
     @view_config(route_name='home', renderer='atramhasis:templates/atramhasis.jinja2')
     def home_view(self):
