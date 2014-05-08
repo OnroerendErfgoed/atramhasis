@@ -37,7 +37,6 @@ setup(name='atramhasis',
           "Topic :: Internet :: WWW/HTTP",
           "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
           "Programming Language :: Python :: 2.7",
-          "Programming Language :: Python :: 3.2",
           "Programming Language :: Python :: 3.3",
           "Programming Language :: Python :: 3.4"
       ],
