@@ -153,10 +153,12 @@ class AtramhasisView(object):
             'filename': 'atramhasis_export'
         }
 
-    @view_config(route_name='scheme_tree', renderer='treejson', accept='application/json')
+    @view_config(route_name='scheme_tree', renderer='json', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.skos_registry.get_provider(scheme_id)
+        locale = self.request.locale_name
+
         if provider:
             conceptscheme_id = provider.conceptscheme_id
             tco = self.request.db\
@@ -174,9 +176,41 @@ class AtramhasisView(object):
                     DomainCollection.conceptscheme_id == conceptscheme_id,
                     ~DomainCollection.collections.any()
                 ).all()
-            skostree = tco + tcl
-            return skostree
+            skostree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
+                       sorted(tcl, key=lambda child: child.label(locale).label.lower())
+            dicts = []
+            for index, thing in enumerate(skostree, 1):
+                dicts.append(self.parse_thing(thing, index, 'root'))
+
+            return dicts
         return Response(status_int=404)
+
+    def parse_thing(self, thing, idx, parent):
+        treeid = self.create_treeid(parent, idx)
+        locale = self.request.locale_name
+
+        if thing.type and thing.type == 'collection':
+            cs = [member for member in thing.members] if hasattr(thing, 'members') else []
+        else:
+            cs = [c for c in thing.narrower_concepts]
+
+        sortedcs = sorted(cs, key=lambda child: child.label(locale).label.lower())
+        children = [self.parse_thing(c, index, treeid) for index, c in enumerate(sortedcs, 1)]
+        dict_thing = {
+            'id': treeid,
+            'concept_id': thing.concept_id,
+            'type': thing.type,
+            'label': thing.label(locale).label,
+            'children': children
+        }
+
+        return dict_thing
+
+    def create_treeid(self, parentid, counter):
+        if parentid == 'root':
+            return str(counter)
+        else:
+            return parentid + "." + str(counter)
 
     @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
     def results_tree_html(self):

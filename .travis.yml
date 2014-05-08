@@ -1,13 +1,13 @@
 language: python
 python:
  - "2.7"
- - "3.2"
  - "3.3"
  - "3.4"
 install:
- - easy_install -U setuptools
- - python setup.py -q install
- - pip install -U pytest pytest-cov coveralls webtest
+ - pip install -U setuptools
+ - python setup.py develop
+ - pip install -r requirements.txt #fix versions
+ - pip install -U pytest pytest-cov coveralls webtest #install test deps
 script:
   py.test --cov atramhasis --cov-report term-missing tests
 after_success:
