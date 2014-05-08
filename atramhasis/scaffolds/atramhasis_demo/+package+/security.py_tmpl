@@ -1,0 +1,10 @@
+from authomatic.providers import oauth2
+
+CONFIG = {
+    'github': {
+        'class_': oauth2.GitHub,
+        'consumer_key': '#####',
+        'consumer_secret': '#####',
+        'access_headers': {'User-Agent': 'Atramhasis-demo-app'},
+    }
+}

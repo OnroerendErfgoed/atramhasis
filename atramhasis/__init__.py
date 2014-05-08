@@ -1,8 +1,12 @@
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
+from pyramid.session import SignedCookieSessionFactory
 from sqlalchemy import engine_from_config
 from skosprovider_sqlalchemy.models import Base as SkosBase
 
 from .models import Base
+from .security import Root, groupfinder
 
 
 def includeme(config):
@@ -24,6 +28,7 @@ def includeme(config):
     config.add_route('atramhasis.delete_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',
                      request_method="DELETE")
     config.add_route('locale', '/locale')
+    config.add_route('admin', '/admin')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
 
@@ -42,6 +47,15 @@ def main(global_config, **settings):
     config.add_translation_dirs('atramhasis:locale/')
 
     config.include('atramhasis:db')
+
+    # Set up security
+    config.add_route('login', '/auth/login')
+    config.add_route('logout', '/auth/logout')
+    authz_policy = ACLAuthorizationPolicy()
+    config.set_authentication_policy(AuthTktAuthenticationPolicy(
+        'sosecret', callback=groupfinder, hashalg='sha512'))
+    config.set_authorization_policy(authz_policy)
+    config.set_root_factory(Root)
 
     # if standalone include skos sample data
     config.include('.skos')

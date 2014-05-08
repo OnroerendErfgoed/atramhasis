@@ -182,3 +182,7 @@ class AtramhasisView(object):
     def results_tree_html(self):
         scheme_id = self.request.matchdict['scheme_id']
         return {'concept': None, 'conceptType': None, 'scheme_id': scheme_id}
+
+    @view_config(route_name='admin', renderer='atramhasis:templates/admin.jinja2')
+    def admin_view(self):
+        return {'admin': None}

@@ -1,8 +1,9 @@
+from authomatic.core import Authomatic
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
-from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from atramhasis.models import Base
+from .security import CONFIG
 
 
 def main(global_config, **settings):
@@ -22,7 +23,7 @@ def main(global_config, **settings):
     config.include('atramhasis:db')
 
     # Set up security
-    authn_policy = AuthTktAuthenticationPolicy(secret='test', hashalg='sha512', debug=True)
+    authn_policy = Authomatic(config=CONFIG, secret='some random atramhasis secret string')
     authz_policy = ACLAuthorizationPolicy()
     #config.set_root_factory(Root)
     config.set_authentication_policy(authn_policy)
