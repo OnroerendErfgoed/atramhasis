@@ -81,6 +81,8 @@ class FunctionalTests(unittest.TestCase):
 
     def setUp(self):
         self.config = Configurator(settings=settings)
+        self.config.add_route('login', '/auth/login')
+        self.config.add_route('logout', '/auth/logout')
         includeme(self.config)
 
         Base.metadata.drop_all(self.engine)
