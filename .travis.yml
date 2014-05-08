@@ -6,7 +6,7 @@ python:
  - "3.4"
 install:
  - pip install -U setuptools
- - python setyp.py develop
+ - python setup.py develop
  - pip install -r requirements.txt #fix versions
  - pip install -U pytest pytest-cov coveralls webtest #install test deps
 script:
