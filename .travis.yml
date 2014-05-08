@@ -5,9 +5,10 @@ python:
  - "3.3"
  - "3.4"
 install:
- - easy_install -U setuptools
- - python setup.py -q install
+ - pip install -U setuptools
+ - pip install -r requirements.txt
  - pip install -U pytest pytest-cov coveralls webtest
+# - python setup.py -q install
 script:
   py.test --cov atramhasis --cov-report term-missing tests
 after_success:
