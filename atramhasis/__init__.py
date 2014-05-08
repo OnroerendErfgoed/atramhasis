@@ -53,7 +53,7 @@ def main(global_config, **settings):
     config.add_route('logout', '/auth/logout')
     authz_policy = ACLAuthorizationPolicy()
     config.set_authentication_policy(AuthTktAuthenticationPolicy(
-        'sosecret', callback=groupfinder, hashalg='sha512'))
+        'sosecret', callback=groupfinder, hashalg='sha512', debug=True))
     config.set_authorization_policy(authz_policy)
     config.set_root_factory(Root)
 

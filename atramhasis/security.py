@@ -1,15 +1,15 @@
 import json
+
 from pyramid.httpexceptions import HTTPFound, HTTPBadRequest, HTTPServerError
 from pyramid.response import Response
-from pyramid.security import Allow, ALL_PERMISSIONS, Authenticated, forget, remember
-from pyramid.session import SignedCookieSessionFactory
+from pyramid.security import Allow, ALL_PERMISSIONS, forget, remember
 from pyramid.view import view_defaults, view_config
 import requests
 
 
 def groupfinder(userid, request):
     if userid:
-        return 'g:edit'
+        return ['g:edit']
 
 
 class Root(object):
@@ -45,9 +45,9 @@ class LoginView(object):
             # Check if the assertion was valid
             if verification_data['status'] == 'okay':
                 email = verification_data['email']
-                headers = remember(self.request, email, max_age='100')
+                headers = remember(self.request, email, max_age='1000')
                 response = Response(json={'email': email}, headers=headers, status_int=200)
-                response.set_cookie('_USER_', value=email, max_age=100)
+                response.set_cookie('_USER_', value=email, max_age=1000)
                 return response
         return HTTPServerError()
 

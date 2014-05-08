@@ -22,7 +22,8 @@ requires = [
     'pyramid_jinja2',
     'alembic',
     'babel',
-    'colander'
+    'colander',
+    'requests'
 ]
 
 setup(name='atramhasis',
