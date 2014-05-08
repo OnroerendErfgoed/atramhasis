@@ -74,7 +74,7 @@
             $tree.tree({
                 onCreateLi: function(node, $li) {
                     $li.find('.jqtree-title').wrap(function() {
-                        return "<a href='{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}" + node.id + "'><div></div></a>";
+                        return "<a href='{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}" + node.concept_id + "?treeid=" + node.id + "'><div></div></a>";
                     });
                 }
             });
@@ -83,10 +83,25 @@
             $tree.bind(
                 'tree.init',
                 function() {
-						var node = $tree.tree('getNodeById', {{ concept.id }});
+					var treeid = getUrlVar("treeid");
+					if(treeid != '') {
+						var node = $tree.tree('getNodeById', treeid);
 						$tree.tree('selectNode', node, true);
-						$tree.tree('openNode', node);
-                }
+						$tree.tree('openNode', node);	
+					}
+					else {	
+						var nodes = $tree.tree('getNodesByProperty', 'concept_id', {{ concept.id }} );
+						$.each(nodes, function( index, node ) {
+							$tree.tree('addToSelection', node);
+							if ( node.children.length > 0){
+								$tree.tree('openNode', node);
+							} else {
+								$tree.tree('openNode', node.parent);
+							}
+							
+						});					
+					}
+                }			
             );
 			{% endif %}
         </script>
