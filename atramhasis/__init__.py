@@ -1,12 +1,8 @@
-from pyramid.authentication import AuthTktAuthenticationPolicy
-from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
-from pyramid.session import SignedCookieSessionFactory
 from sqlalchemy import engine_from_config
 from skosprovider_sqlalchemy.models import Base as SkosBase
 
 from .models import Base
-from .security import Root, groupfinder
 
 
 def includeme(config):
