@@ -7,7 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 try:
     from unittest.mock import Mock
 except ImportError:
-    from mock import Mock   # pragma: no cover
+    from mock import Mock  # pragma: no cover
 import colander
 from pyramid import testing
 from skosprovider_sqlalchemy.models import Concept
@@ -81,11 +81,27 @@ class TestValidation(unittest.TestCase):
                           "language": "nl"
                       }]
         }
+        self.json_collection = {
+            "id": 0,
+            "labels": [{
+                           "language": "nl",
+                           "label": "Stijlen en culturen",
+                           "type": "prefLabel"
+                       }],
+            "type": "collection",
+            "label": "Stijlen en culturen",
+            "members": [61, 60],
+            "notes": [{
+                          "note": "een notitie",
+                          "type": "note",
+                          "language": "nl"
+                      }]
+        }
 
     def tearDown(self):
         testing.tearDown()
 
-    def test_validation(self):
+    def test_validation_concept(self):
         error_raised = False
         validated_concept = None
         try:
@@ -271,3 +287,16 @@ class TestValidation(unittest.TestCase):
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
+
+    def test_validation_collection(self):
+        error_raised = False
+        validated_collection = None
+        try:
+            validated_collection = self.concept_schema.deserialize(self.json_collection)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_collection)
+        self.assertEqual(2, len(validated_collection['members']))
+        self.assertEqual(1, len(validated_collection['labels']))
+        self.assertEqual(1, len(validated_collection['notes']))
