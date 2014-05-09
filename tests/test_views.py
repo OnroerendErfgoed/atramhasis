@@ -4,13 +4,11 @@ import unittest
 from skosprovider.registry import Registry
 from pyramid import testing
 from webob.multidict import MultiDict
-from webtest import TestApp
 from paste.deploy.loadwsgi import appconfig
 
 from atramhasis.errors import SkosRegistryNotFoundException
 from atramhasis.views.views import AtramhasisView
-from atramhasis import main
-from tests.fixtures.data import trees
+from fixtures.data import trees
 
 
 TEST_DIR = os.path.dirname(__file__)

@@ -2,22 +2,24 @@
 
 import os
 import unittest
+
 import six
 from pyramid.config import Configurator
-from skosprovider_sqlalchemy.models import Base, Thing, ConceptScheme
+from skosprovider_sqlalchemy.models import Base, ConceptScheme
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
 from webtest import TestApp
-
 from pyramid import testing
 from zope.sqlalchemy import ZopeTransactionExtension
-from atramhasis import includeme
 from pyramid.paster import get_appsettings
-from sqlalchemy import engine_from_config, func
+from sqlalchemy import engine_from_config
+
+from atramhasis import includeme
 from atramhasis.db import db
-from tests.fixtures.data import trees
-from tests.fixtures.materials import materials
+from fixtures.data import trees
+from fixtures.materials import materials
+
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
