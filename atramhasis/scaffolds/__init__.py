@@ -2,13 +2,19 @@ from textwrap import dedent
 from pyramid.scaffolds import PyramidTemplate, Template
 import os
 import distutils.dir_util
+import distutils.file_util
 
 
-def copy_locale(output_dir, package):
-    source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'locale'))
-    dest_dir = os.path.join(output_dir, package, 'locale')
-
+def copy_dir_to_scaffold(output_dir, package, dir):
+    source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', dir))
+    dest_dir = os.path.join(output_dir, package, dir)
     distutils.dir_util.copy_tree(source_dir, dest_dir)
+
+
+def copy_file_to_scaffold(output_dir, file):
+    source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', file))
+    dest = os.path.join(output_dir, file)
+    distutils.file_util.copy_file(source_dir, dest)
 
 
 class AtramhasisTemplate(PyramidTemplate):
@@ -18,7 +24,8 @@ class AtramhasisTemplate(PyramidTemplate):
     def post(self, command, output_dir, vars):  # pragma: no cover
         """ Overrides :meth:`pyramid.scaffolds.template.Template.post`"""
 
-        copy_locale(output_dir, vars['package'])
+        copy_dir_to_scaffold(output_dir, vars['package'], 'locale')
+        #copy_file_to_scaffold(output_dir, 'requirements.txt')
 
         separator = "=" * 79
         msg = dedent(
@@ -40,7 +47,8 @@ class AtramhasisDemoTemplate(PyramidTemplate):
     def post(self, command, output_dir, vars):  # pragma: no cover
         """ Overrides :meth:`pyramid.scaffolds.template.Template.post`"""
 
-        copy_locale(output_dir, vars['package'])
+        copy_dir_to_scaffold(output_dir, vars['package'], 'locale')
+        #copy_file_to_scaffold(output_dir, 'requirements.txt')
 
         separator = "=" * 79
         msg = dedent(
