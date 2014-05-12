@@ -4,7 +4,7 @@ from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 from skosprovider_sqlalchemy.models import Concept, Thing, Collection
 
-from atramhasis.errors import InvalidJsonException, SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept
 from atramhasis.utils import from_thing
@@ -29,10 +29,7 @@ class AtramhasisCrud(object):
             raise ConceptSchemeNotFoundException(self.scheme_id)
 
     def _get_json_body(self):
-        try:
-            json_body = self.request.json_body
-        except (ValueError, AttributeError) as e:
-            raise InvalidJsonException()
+        json_body = self.request.json_body
         if 'id' in self.request.matchdict and not 'id' in json_body:
             json_body['id'] = self.request.matchdict['id']
         return json_body

@@ -1,5 +1,5 @@
 import unittest
-from atramhasis.errors import SkosRegistryNotFoundException, InvalidJsonException, ConceptSchemeNotFoundException, \
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ConceptNotFoundException, ValidationError
 
 
@@ -8,11 +8,6 @@ class TestErrors(unittest.TestCase):
         error = SkosRegistryNotFoundException()
         self.assertIsNotNone(error)
         self.assertEqual("'No SKOS registry found, please check your application setup'", str(error))
-
-    def test_invalid_json_error(self):
-        error = InvalidJsonException()
-        self.assertIsNotNone(error)
-        self.assertEqual('"Content provided doesn\'t contain valid JSON"', str(error))
 
     def test_conceptsheme_notfound_error(self):
         error = ConceptSchemeNotFoundException('TREES')

@@ -58,7 +58,7 @@ json_value_invalid = """{
     "type": "concept",
     "broader": [],
     "narrower": [],
-    "related": [],
+    "related"[]: [],
     "labels": [
         {
             "type": "prefLabel",
@@ -247,3 +247,41 @@ class JsonTreeFunctionalTests(FunctionalTests):
         response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
                                     status=404, expect_errors=True)
         self.assertEqual('404 Not Found', response.status)
+
+
+class SkosFunctionalTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
+        cls.session_maker = sessionmaker(
+            bind=cls.engine,
+            extension=ZopeTransactionExtension()
+        )
+
+    def setUp(self):
+        self.config = Configurator(settings=settings)
+        includeme(self.config)
+
+        Base.metadata.drop_all(self.engine)
+        Base.metadata.create_all(self.engine)
+
+        Base.metadata.bind = self.engine
+
+        self.config.registry.dbmaker = self.session_maker
+        self.config.add_request_method(db, reify=True)
+
+        self.app = self.config.make_wsgi_app()
+        del self.app.request_extensions.descriptors['skos_registry']
+        self.testapp = TestApp(self.app)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def _get_default_headers(self):
+        return {'Accept': 'text/html'}
+
+    def test_admin_no_skos_provider(self):
+        res = self.testapp.get('/admin', headers=self._get_default_headers(), expect_errors=True)
+        self.assertEqual('500 Internal Server Error', res.status)
+        self.assertTrue('message' in res)
+        self.assertTrue('No SKOS registry found, please check your application setup' in res)

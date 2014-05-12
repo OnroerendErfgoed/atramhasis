@@ -9,14 +9,6 @@ class SkosRegistryNotFoundException(Exception):
         return repr(self.value)
 
 
-class InvalidJsonException(Exception):
-    def __init__(self, value='Content provided doesn\'t contain valid JSON'):
-        self.value = value
-
-    def __str__(self):
-        return repr(self.value)
-
-
 class ConceptSchemeNotFoundException(HTTPNotFound):
     def __init__(self, scheme_id):
         self.value = 'No conteptscheme found with the given id ' + scheme_id

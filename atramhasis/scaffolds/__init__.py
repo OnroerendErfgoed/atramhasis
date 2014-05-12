@@ -11,12 +11,6 @@ def copy_dir_to_scaffold(output_dir, package, dir):
     distutils.dir_util.copy_tree(source_dir, dest_dir)
 
 
-def copy_file_to_scaffold(output_dir, file):
-    source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..', file))
-    dest = os.path.join(output_dir, file)
-    distutils.file_util.copy_file(source_dir, dest)
-
-
 class AtramhasisTemplate(PyramidTemplate):
     _template_dir = 'atramhasis_scaffold'
     summary = 'Create an Atramhasis implementation'
@@ -25,7 +19,6 @@ class AtramhasisTemplate(PyramidTemplate):
         """ Overrides :meth:`pyramid.scaffolds.template.Template.post`"""
 
         copy_dir_to_scaffold(output_dir, vars['package'], 'locale')
-        #copy_file_to_scaffold(output_dir, 'requirements.txt')
 
         separator = "=" * 79
         msg = dedent(
@@ -48,7 +41,6 @@ class AtramhasisDemoTemplate(PyramidTemplate):
         """ Overrides :meth:`pyramid.scaffolds.template.Template.post`"""
 
         copy_dir_to_scaffold(output_dir, vars['package'], 'locale')
-        #copy_file_to_scaffold(output_dir, 'requirements.txt')
 
         separator = "=" * 79
         msg = dedent(

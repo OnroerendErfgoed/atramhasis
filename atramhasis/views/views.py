@@ -26,7 +26,6 @@ class AtramhasisView(object):
             self.skos_registry = self.request.skos_registry
         else:
             raise SkosRegistryNotFoundException()
-        self.request = request
 
     def _read_request_param(self, param):
         value = None
@@ -216,6 +215,19 @@ class AtramhasisView(object):
     def results_tree_html(self):
         scheme_id = self.request.matchdict['scheme_id']
         return {'concept': None, 'conceptType': None, 'scheme_id': scheme_id}
+
+@view_defaults(accept='text/html')
+class AtramhasisAdminView(object):
+    '''
+    This object groups HTML views part of the admin user interface.
+    '''
+
+    def __init__(self, request):
+        self.request = request
+        if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+            self.skos_registry = self.request.skos_registry
+        else:
+            raise SkosRegistryNotFoundException()
 
     @view_config(route_name='admin', renderer='atramhasis:templates/admin.jinja2')
     def admin_view(self):

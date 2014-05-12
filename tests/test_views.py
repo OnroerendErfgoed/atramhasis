@@ -7,7 +7,7 @@ from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
 from atramhasis.errors import SkosRegistryNotFoundException
-from atramhasis.views.views import AtramhasisView
+from atramhasis.views.views import AtramhasisView, AtramhasisAdminView
 from fixtures.data import trees
 
 
@@ -304,3 +304,31 @@ class TestHtmlTreeView(unittest.TestCase):
         self.assertEqual(response['conceptType'], None)
         self.assertEqual(response['concept'], None)
         self.assertEqual(response['scheme_id'], 'TREES')
+
+
+class TestAdminView(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_no_registry(self):
+        error_raised = False
+        request = testing.DummyRequest()
+        try:
+            AtramhasisAdminView(request)
+        except SkosRegistryNotFoundException as e:
+            error_raised = True
+            self.assertIsNotNone(e.__str__())
+        self.assertTrue(error_raised)
+
+    def test_passing_view(self):
+        request = testing.DummyRequest()
+        request.skos_registry = self.regis
+        atramhasisAdminview = AtramhasisAdminView(request)
+        info = atramhasisAdminview.admin_view()
+        self.assertIsNotNone(info)
+        self.assertTrue('admin' in info)
