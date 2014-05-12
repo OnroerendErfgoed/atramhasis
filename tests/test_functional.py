@@ -160,7 +160,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['type'], 'concept')
 
     def test_add_concept_empty_conceptscheme(self):
-        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
+        res = self.testapp.post_json('/conceptschemes/STYLES/c', headers=self._get_default_headers(),
                                      params=json_value)
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
@@ -201,11 +201,15 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_delete_concept(self):
         new_id = 1
-        self.assertIsNotNone(new_id)
         res = self.testapp.delete('/conceptschemes/TREES/c/' + str(new_id), headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(new_id, res.json['id'])
+
+    def test_delete_concept_not_found(self):
+        res = self.testapp.delete('/conceptschemes/TREES/c/7895', headers=self._get_default_headers(),
+                                  expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
 
     def test_add_collection(self):
         res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
@@ -280,8 +284,18 @@ class SkosFunctionalTests(unittest.TestCase):
     def _get_default_headers(self):
         return {'Accept': 'text/html'}
 
+    def _get_json_headers(self):
+        return {'Accept': 'application/json'}
+
     def test_admin_no_skos_provider(self):
         res = self.testapp.get('/admin', headers=self._get_default_headers(), expect_errors=True)
+        self.assertEqual('500 Internal Server Error', res.status)
+        self.assertTrue('message' in res)
+        self.assertTrue('No SKOS registry found, please check your application setup' in res)
+
+    def test_crud_no_skos_provider(self):
+        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_json_headers(),
+                                     params=json_collection_value, expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)

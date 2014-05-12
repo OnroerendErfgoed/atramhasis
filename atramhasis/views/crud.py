@@ -30,8 +30,8 @@ class AtramhasisCrud(object):
 
     def _get_json_body(self):
         json_body = self.request.json_body
-        if 'id' in self.request.matchdict and not 'id' in json_body:
-            json_body['id'] = self.request.matchdict['id']
+        if 'c_id' in self.request.matchdict and not 'id' in json_body:
+            json_body['id'] = self.request.matchdict['c_id']
         return json_body
 
     def _validate_concept(self, json_concept, conceptscheme_id):
