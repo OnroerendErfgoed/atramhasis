@@ -2,7 +2,7 @@ import unittest
 import tempfile
 import os
 
-from atramhasis.scaffolds import AtramhasisTemplate, AtramhasisDemoTemplate, copy_locale
+from atramhasis.scaffolds import AtramhasisTemplate, AtramhasisDemoTemplate, copy_dir_to_scaffold
 
 
 class TestScaffolding(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestScaffolding(unittest.TestCase):
 
     def test_copy_locale(self):
         temp_dir = tempfile.mkdtemp()
-        copy_locale(temp_dir, 'package')
+        copy_dir_to_scaffold(temp_dir, 'package', 'locale')
         result_dir = os.path.join(temp_dir, 'package', 'locale')
         self.assertTrue(os.path.exists(result_dir))
         size = len([name for name in os.listdir(result_dir)])

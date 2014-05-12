@@ -9,7 +9,7 @@ try:
 except ImportError:
     from mock import Mock  # pragma: no cover
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Label
+from skosprovider_sqlalchemy.models import Concept, Label, Collection
 from atramhasis.mappers import map_concept
 
 test_json = {
@@ -28,6 +28,22 @@ test_json = {
                    "type": "prefLabel",
                    "language": "nl"
                }],
+    "notes": [{
+                  "note": "een notitie",
+                  "type": "note",
+                  "language": "nl"
+              }]
+}
+json_collection = {
+    "id": 0,
+    "labels": [{
+                   "language": "nl",
+                   "label": "Stijlen en culturen",
+                   "type": "prefLabel"
+               }],
+    "type": "collection",
+    "label": "Stijlen en culturen",
+    "members": [61, 60, 12],
     "notes": [{
                   "note": "een notitie",
                   "type": "note",
@@ -66,6 +82,9 @@ class TestMappers(unittest.TestCase):
         self.concept = Concept()
         self.concept.concept_id = 1
         self.concept.conceptscheme_id = 1
+        self.collection = Collection()
+        self.collection.concept_id = 0
+        self.collection.conceptscheme_id = 1
 
     def tearDown(self):
         self.concept = None
@@ -78,6 +97,7 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(2, len(result_concept.related_concepts))
         self.assertEqual(2, len(result_concept.labels))
         self.assertEqual(1, len(result_concept.notes))
+        self.assertFalse(hasattr(result_concept, 'memebers'))
 
     def test_mapping_collections_filled(self):
         label = Label(label='test', labeltype_id='altLabel', language_id='nl')
@@ -99,3 +119,11 @@ class TestMappers(unittest.TestCase):
                 self.assertIsNone(narrower_concept.id)
             else:
                 self.assertIsNotNone(narrower_concept.id)
+
+    def test_mapping_collection(self):
+        result_collection = map_concept(self.collection, json_collection, self.request.db)
+        self.assertIsNotNone(result_collection)
+        self.assertEqual(3, len(result_collection.members))
+        self.assertEqual(1, len(result_collection.labels))
+        self.assertEqual(1, len(result_collection.notes))
+        self.assertFalse(hasattr(result_collection, 'related_concepts'))

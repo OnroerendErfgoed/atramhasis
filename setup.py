@@ -23,6 +23,7 @@ requires = [
     'alembic',
     'babel',
     'colander',
+    'requests',
     'dogpile.cache'
 ]
 

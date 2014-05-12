@@ -2,6 +2,7 @@
 
 import os
 import unittest
+
 import six
 from pyramid.config import Configurator
 from skosprovider_sqlalchemy.models import Base, Thing, ConceptScheme
@@ -9,15 +10,16 @@ from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
 from webtest import TestApp
-
 from pyramid import testing
 from zope.sqlalchemy import ZopeTransactionExtension
-from atramhasis import includeme
 from pyramid.paster import get_appsettings
-from sqlalchemy import engine_from_config, func
+from sqlalchemy import engine_from_config
+
+from atramhasis import includeme
 from atramhasis.db import db
-from tests.fixtures.data import trees
-from tests.fixtures.materials import materials
+from fixtures.data import trees, geo
+from fixtures.materials import materials
+
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
@@ -43,21 +45,20 @@ json_value_relations = {
     "related": [],
     "type": "concept",
     "labels": [{
-        "label": "koperlegeringen",
-        "language": "nl",
-        "type": "prefLabel"
-    }],
+                   "label": "koperlegeringen",
+                   "language": "nl",
+                   "type": "prefLabel"
+               }],
     "label": "koperlegeringen",
     "notes": [],
     "narrower": [15, 14]
 }
 
-
 json_value_invalid = """{
     "type": "concept",
     "broader": [],
     "narrower": [],
-    "related": [],
+    "related"[]: [],
     "labels": [
         {
             "type": "prefLabel",
@@ -68,9 +69,24 @@ json_value_invalid = """{
     "notes": []}
 }"""
 
+json_collection_value = {
+    "labels": [{
+                   "language": "nl",
+                   "label": "Test verzameling",
+                   "type": "prefLabel"
+               }],
+    "type": "collection",
+    "label": "Test verzameling",
+    "members": [333, 7],
+    "notes": [{
+                  "note": "een notitie",
+                  "type": "note",
+                  "language": "nl"
+              }]
+}
+
 
 class FunctionalTests(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
@@ -81,6 +97,8 @@ class FunctionalTests(unittest.TestCase):
 
     def setUp(self):
         self.config = Configurator(settings=settings)
+        self.config.add_route('login', '/auth/login')
+        self.config.add_route('logout', '/auth/logout')
         includeme(self.config)
 
         Base.metadata.drop_all(self.engine)
@@ -97,6 +115,7 @@ class FunctionalTests(unittest.TestCase):
             local_session = self.session_maker()
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials:materials'), local_session)
+            import_provider(geo, ConceptScheme(id=2), local_session)
 
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)
@@ -106,7 +125,6 @@ class FunctionalTests(unittest.TestCase):
 
 
 class HtmlFunctionalTests(FunctionalTests):
-
     def _get_default_headers(self):
         return {'Accept': 'text/html'}
 
@@ -117,7 +135,6 @@ class HtmlFunctionalTests(FunctionalTests):
 
 
 class CsvFunctionalTests(FunctionalTests):
-
     def test_get_csv(self):
         response = self.testapp.get('/conceptschemes/TREES/c.csv?ctype=collection&label=')
         self.assertEqual('200 OK', response.status)
@@ -132,7 +149,6 @@ class CsvFunctionalTests(FunctionalTests):
 
 
 class RestFunctionalTests(FunctionalTests):
-
     def _get_default_headers(self):
         return {'Accept': 'application/json'}
 
@@ -141,9 +157,10 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['type'], 'concept')
 
     def test_add_concept_empty_conceptscheme(self):
-        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
+        res = self.testapp.post_json('/conceptschemes/STYLES/c', headers=self._get_default_headers(),
                                      params=json_value)
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
@@ -184,15 +201,26 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_delete_concept(self):
         new_id = 1
-        self.assertIsNotNone(new_id)
         res = self.testapp.delete('/conceptschemes/TREES/c/' + str(new_id), headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(new_id, res.json['id'])
 
+    def test_delete_concept_not_found(self):
+        res = self.testapp.delete('/conceptschemes/TREES/c/7895', headers=self._get_default_headers(),
+                                  expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+
+    def test_add_collection(self):
+        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
+                                     params=json_collection_value)
+        self.assertEqual('201 Created', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['type'], 'collection')
+
 
 class TestCookieView(FunctionalTests):
-
     def _get_default_headers(self):
         return {'Accept': 'text/html'}
 
@@ -209,7 +237,6 @@ class TestCookieView(FunctionalTests):
 
 
 class JsonTreeFunctionalTests(FunctionalTests):
-
     def _get_default_headers(self):
         return {'Accept': 'application/json'}
 
@@ -225,6 +252,53 @@ class JsonTreeFunctionalTests(FunctionalTests):
                                     status=404, expect_errors=True)
         self.assertEqual('404 Not Found', response.status)
 
+
+class SkosFunctionalTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
+        cls.session_maker = sessionmaker(
+            bind=cls.engine,
+            extension=ZopeTransactionExtension()
+        )
+
+    def setUp(self):
+        self.config = Configurator(settings=settings)
+        includeme(self.config)
+
+        Base.metadata.drop_all(self.engine)
+        Base.metadata.create_all(self.engine)
+
+        Base.metadata.bind = self.engine
+
+        self.config.registry.dbmaker = self.session_maker
+        self.config.add_request_method(db, reify=True)
+
+        self.app = self.config.make_wsgi_app()
+        del self.app.request_extensions.descriptors['skos_registry']
+        self.testapp = TestApp(self.app)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def _get_default_headers(self):
+        return {'Accept': 'text/html'}
+
+    def _get_json_headers(self):
+        return {'Accept': 'application/json'}
+
+    def test_admin_no_skos_provider(self):
+        res = self.testapp.get('/admin', headers=self._get_default_headers(), expect_errors=True)
+        self.assertEqual('500 Internal Server Error', res.status)
+        self.assertTrue('message' in res)
+        self.assertTrue('No SKOS registry found, please check your application setup' in res)
+
+    def test_crud_no_skos_provider(self):
+        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_json_headers(),
+                                     params=json_collection_value, expect_errors=True)
+        self.assertEqual('500 Internal Server Error', res.status)
+        self.assertTrue('message' in res)
+        self.assertTrue('No SKOS registry found, please check your application setup' in res)
 
 class CacheFunctionalTests(FunctionalTests):
 

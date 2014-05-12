@@ -13,9 +13,9 @@ from pyramid.paster import (
 from pyramid.scripts.common import parse_vars
 from zope.sqlalchemy import ZopeTransactionExtension
 
-from tests.fixtures.data import trees, geo
-from tests.fixtures.styles_and_cultures import styles_and_cultures
-from tests.fixtures.materials import materials
+from fixtures.data import trees, geo
+from fixtures.styles_and_cultures import styles_and_cultures
+from fixtures.materials import materials
 
 
 def usage(argv):

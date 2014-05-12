@@ -23,6 +23,7 @@ def includeme(config):
     config.add_route('atramhasis.delete_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',
                      request_method="DELETE")
     config.add_route('locale', '/locale')
+    config.add_route('admin', '/admin')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
 

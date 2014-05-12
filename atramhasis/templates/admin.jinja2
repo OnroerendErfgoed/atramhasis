@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>atramhasis - Admin</title>
+		<link rel="icon" type="image/x-icon" href="{{request.application_url}}/static/img/favicon.ico" />
+        <script src="{{request.application_url}}/static/js/vendor/jquery.js"></script>
+        <script src="{{request.application_url}}/static/js/vendor/jquery.cookie.js"></script>
+        <script src="https://login.persona.org/include.js"></script>
+
+	</head>
+	<body>
+        <a id="signin" href="#">sign in</a>
+        <a id="signout" href="#">sign out</a>
+        <span id="user_info">User: <span id="user_id"> </span></span>
+
+         <script type="text/javascript">
+
+            var currentUser = null;
+
+            var currentUser = $.cookie("_USER_");
+            var auth_tkt = $.cookie("auth_tkt");
+            if(currentUser){
+                if(!auth_tkt){
+                    $.removeCookie("_USER_");
+                    currentUser = null;
+                    $('#user_info').hide();
+                    $('#signout').hide();
+                    $('#signin').show();
+                }else{
+                    $('#user_id').html(currentUser);
+                    $('#user_info').show();
+                    $('#signout').show();
+                    $('#signin').hide();
+                }
+            }else{
+                $('#user_info').hide();
+                $('#signout').hide();
+                $('#signin').show();
+            }
+
+
+            $('#signin').click(function() {
+                navigator.id.request();
+            });
+
+            $('#signout').click(function() {
+                navigator.id.logout();
+            });
+
+            navigator.id.watch({
+              loggedInUser: currentUser,
+              onlogin: function(assertion) {
+                // A user has logged in! Here you need to:
+                // 1. Send the assertion to your backend for verification and to create a session.
+                // 2. Update your UI.
+                $.ajax({
+                  type: 'POST',
+                  url: '/auth/login', // This is a URL on your website.
+                  data: {assertion: assertion},
+                  success: function(res, status, xhr) {
+                    jsonRes = jQuery.parseJSON(res);
+                    currentUser = jsonRes.email;
+                    $('#user_id').html(currentUser);
+                    $('#user_info').show();
+                    $('#signout').show();
+                    $('#signin').hide();
+                  },
+                  error: function(xhr, status, err) {
+                    navigator.id.logout();
+                    alert("Login failure: " + err);
+                  }
+                });
+              },
+              onlogout: function() {
+                // A user has logged out! Here you need to:
+                // Tear down the user's session by redirecting the user or making a call to your backend.
+                // Also, make sure loggedInUser will get set to null on the next page load.
+                // (That's a literal JavaScript null. Not false, 0, or undefined. null.)
+                $.ajax({
+                  type: 'POST',
+                  url: '/auth/logout', // This is a URL on your website.
+                  success: function(res, status, xhr) {
+                    currentUser = null;
+                    $('#user_info').hide();
+                    $('#signout').hide();
+                    $('#signin').show();
+                  },
+                  error: function(xhr, status, err) { alert("Logout failure: " + err); }
+                });
+              }
+            });
+        </script>
+	</body>
+</html>

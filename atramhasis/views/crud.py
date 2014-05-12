@@ -2,9 +2,9 @@ import colander
 from pyramid.view import view_defaults, view_config
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
-from skosprovider_sqlalchemy.models import Concept, Thing
+from skosprovider_sqlalchemy.models import Concept, Thing, Collection
 
-from atramhasis.errors import InvalidJsonException, SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept
 from atramhasis.utils import from_thing
@@ -29,12 +29,9 @@ class AtramhasisCrud(object):
             raise ConceptSchemeNotFoundException(self.scheme_id)
 
     def _get_json_body(self):
-        try:
-            json_body = self.request.json_body
-        except (ValueError, AttributeError) as e:
-            raise InvalidJsonException()
-        if 'id' in self.request.matchdict and not 'id' in json_body:
-            json_body['id'] = self.request.matchdict['id']
+        json_body = self.request.json_body
+        if 'c_id' in self.request.matchdict and not 'id' in json_body:
+            json_body['id'] = self.request.matchdict['c_id']
         return json_body
 
     def _validate_concept(self, json_concept, conceptscheme_id):
@@ -71,7 +68,10 @@ class AtramhasisCrud(object):
         if not cid:
             cid = 0
         cid += 1
-        concept = Concept()
+        if validated_json_concept['type'] == 'concept':
+            concept = Concept()
+        else:
+            concept = Collection()
         concept.concept_id = cid
         concept.conceptscheme_id = self.provider.conceptscheme_id
         map_concept(concept, validated_json_concept, self.request.db)
