@@ -5,7 +5,7 @@ import unittest
 
 import six
 from pyramid.config import Configurator
-from skosprovider_sqlalchemy.models import Base, Thing, ConceptScheme
+from skosprovider_sqlalchemy.models import Base, ConceptScheme
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
@@ -29,8 +29,7 @@ json_value = {
     "broader": [],
     "narrower": [],
     "related": [],
-    "labels": [
-        {
+    "labels": [        {
             "type": "prefLabel",
             "language": "en",
             "label": "The Larch"
