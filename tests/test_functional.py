@@ -224,3 +224,19 @@ class JsonTreeFunctionalTests(FunctionalTests):
         response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
                                     status=404, expect_errors=True)
         self.assertEqual('404 Not Found', response.status)
+
+
+class CacheFunctionalTests(FunctionalTests):
+
+    def _get_default_headers(self):
+        return {'Accept': 'application/json'}
+
+    def test_tree_cache(self):
+        response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertEqual('200 OK', response.status)
+        self.assertIsNotNone(response.json)
+        self.testapp.delete('/conceptschemes/MATERIALS/c/13', headers=self._get_default_headers())
+        response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertEqual('200 OK', response2.status)
+        self.assertIsNotNone(response2.json)
+        self.assertEqual(response.json, response2.json)
