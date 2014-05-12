@@ -301,3 +301,18 @@ class SkosFunctionalTests(unittest.TestCase):
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)
+
+class CacheFunctionalTests(FunctionalTests):
+
+    def _get_default_headers(self):
+        return {'Accept': 'application/json'}
+
+    def test_tree_cache(self):
+        response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertEqual('200 OK', response.status)
+        self.assertIsNotNone(response.json)
+        self.testapp.delete('/conceptschemes/MATERIALS/c/13', headers=self._get_default_headers())
+        response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertEqual('200 OK', response2.status)
+        self.assertIsNotNone(response2.json)
+        self.assertEqual(response.json, response2.json)

@@ -11,7 +11,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
 from skosprovider_sqlalchemy.models import Collection as DomainCollection
 from skosprovider_sqlalchemy.models import Concept as DomainConcept
-from sqlalchemy.orm import joinedload
+from dogpile.cache import make_region
 
 
 @view_defaults(accept='text/html')
@@ -19,6 +19,10 @@ class AtramhasisView(object):
     '''
     This object groups HTML views part of the public user interface.
     '''
+
+    region = make_region().configure(
+        'dogpile.cache.memory'
+    )
 
     def __init__(self, request):
         self.request = request
@@ -160,29 +164,34 @@ class AtramhasisView(object):
 
         if provider:
             conceptscheme_id = provider.conceptscheme_id
-            tco = self.request.db\
-                .query(DomainConcept)\
-                .options(joinedload('labels'))\
-                .filter(
-                    DomainConcept.conceptscheme_id == conceptscheme_id,
-                    ~DomainConcept.broader_concepts.any(),
-                    ~DomainCollection.collections.any()
-                ).all()
-            tcl = self.request.db\
-                .query(DomainCollection)\
-                .options(joinedload('labels'))\
-                .filter(
-                    DomainCollection.conceptscheme_id == conceptscheme_id,
-                    ~DomainCollection.collections.any()
-                ).all()
-            skostree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
-                       sorted(tcl, key=lambda child: child.label(locale).label.lower())
+            skostree = self.get_scheme(conceptscheme_id, locale)
             dicts = []
             for index, thing in enumerate(skostree, 1):
                 dicts.append(self.parse_thing(thing, index, 'root'))
 
             return dicts
         return Response(status_int=404)
+
+    @region.cache_on_arguments()
+    def get_scheme(self, scheme_id, locale):
+        tco = self.request.db\
+            .query(DomainConcept)\
+            .filter(
+                DomainConcept.conceptscheme_id == scheme_id,
+                ~DomainConcept.broader_concepts.any(),
+                ~DomainCollection.collections.any()
+            ).all()
+        tcl = self.request.db\
+            .query(DomainCollection)\
+            .filter(
+                DomainCollection.conceptscheme_id == scheme_id,
+                ~DomainCollection.collections.any()
+            ).all()
+
+        scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
+            sorted(tcl, key=lambda child: child.label(locale).label.lower())
+
+        return scheme_tree
 
     def parse_thing(self, thing, idx, parent):
         treeid = self.create_treeid(parent, idx)

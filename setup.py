@@ -23,7 +23,8 @@ requires = [
     'alembic',
     'babel',
     'colander',
-    'requests'
+    'requests',
+    'dogpile.cache'
 ]
 
 setup(name='atramhasis',

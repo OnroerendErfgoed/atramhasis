@@ -27,6 +27,9 @@ alembic==0.6.4
 # colander
 colander>=1.0b1
 
+# caching
+dogpile.cache==0.5.3
+
 # other
 six==1.6.1
 requests==2.2.1
