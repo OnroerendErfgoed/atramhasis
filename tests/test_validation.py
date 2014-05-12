@@ -300,3 +300,14 @@ class TestValidation(unittest.TestCase):
         self.assertEqual(2, len(validated_collection['members']))
         self.assertEqual(1, len(validated_collection['labels']))
         self.assertEqual(1, len(validated_collection['notes']))
+
+    def test_member_concept_different_conceptscheme(self):
+        error_raised = False
+        validated_collection = None
+        self.json_collection['members'].append(777)
+        try:
+            validated_collection = self.concept_schema.deserialize(self.json_collection)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_collection)

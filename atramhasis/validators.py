@@ -93,6 +93,10 @@ def concept_schema_validator(node, cstruct):
         broader = copy.deepcopy(cstruct['broader'])
         b_validated = concept_exists_andnot_different_conceptscheme_rule(node['broader'], request,
                                                                          conceptscheme_id, broader)
+    if 'members' in cstruct:
+        members = copy.deepcopy(cstruct['members'])
+        b_validated = concept_exists_andnot_different_conceptscheme_rule(node['members'], request,
+                                                                         conceptscheme_id, members)
     if r_validated and n_validated and b_validated:
         concept_type_rule(node['narrower'], request, conceptscheme_id, narrower)
         narrower_hierarchy_rule(node['narrower'], request, conceptscheme_id, cstruct)
