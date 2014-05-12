@@ -17,7 +17,7 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.db import db
-from fixtures.data import trees
+from fixtures.data import trees, geo
 from fixtures.materials import materials
 
 
@@ -45,15 +45,14 @@ json_value_relations = {
     "related": [],
     "type": "concept",
     "labels": [{
-        "label": "koperlegeringen",
-        "language": "nl",
-        "type": "prefLabel"
-    }],
+                   "label": "koperlegeringen",
+                   "language": "nl",
+                   "type": "prefLabel"
+               }],
     "label": "koperlegeringen",
     "notes": [],
     "narrower": [15, 14]
 }
-
 
 json_value_invalid = """{
     "type": "concept",
@@ -70,9 +69,24 @@ json_value_invalid = """{
     "notes": []}
 }"""
 
+json_collection_value = {
+    "labels": [{
+                   "language": "nl",
+                   "label": "Test verzameling",
+                   "type": "prefLabel"
+               }],
+    "type": "collection",
+    "label": "Test verzameling",
+    "members": [333, 7],
+    "notes": [{
+                  "note": "een notitie",
+                  "type": "note",
+                  "language": "nl"
+              }]
+}
+
 
 class FunctionalTests(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
@@ -101,6 +115,7 @@ class FunctionalTests(unittest.TestCase):
             local_session = self.session_maker()
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials:materials'), local_session)
+            import_provider(geo, ConceptScheme(id=2), local_session)
 
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)
@@ -110,7 +125,6 @@ class FunctionalTests(unittest.TestCase):
 
 
 class HtmlFunctionalTests(FunctionalTests):
-
     def _get_default_headers(self):
         return {'Accept': 'text/html'}
 
@@ -121,7 +135,6 @@ class HtmlFunctionalTests(FunctionalTests):
 
 
 class CsvFunctionalTests(FunctionalTests):
-
     def test_get_csv(self):
         response = self.testapp.get('/conceptschemes/TREES/c.csv?ctype=collection&label=')
         self.assertEqual('200 OK', response.status)
@@ -136,7 +149,6 @@ class CsvFunctionalTests(FunctionalTests):
 
 
 class RestFunctionalTests(FunctionalTests):
-
     def _get_default_headers(self):
         return {'Accept': 'application/json'}
 
@@ -145,6 +157,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['type'], 'concept')
 
     def test_add_concept_empty_conceptscheme(self):
         res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
@@ -194,9 +207,16 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(new_id, res.json['id'])
 
+    def test_add_collection(self):
+        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
+                                     params=json_collection_value)
+        self.assertEqual('201 Created', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['type'], 'collection')
+
 
 class TestCookieView(FunctionalTests):
-
     def _get_default_headers(self):
         return {'Accept': 'text/html'}
 
@@ -213,7 +233,6 @@ class TestCookieView(FunctionalTests):
 
 
 class JsonTreeFunctionalTests(FunctionalTests):
-
     def _get_default_headers(self):
         return {'Accept': 'application/json'}
 

@@ -2,7 +2,7 @@ import colander
 from pyramid.view import view_defaults, view_config
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
-from skosprovider_sqlalchemy.models import Concept, Thing
+from skosprovider_sqlalchemy.models import Concept, Thing, Collection
 
 from atramhasis.errors import InvalidJsonException, SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
@@ -71,7 +71,10 @@ class AtramhasisCrud(object):
         if not cid:
             cid = 0
         cid += 1
-        concept = Concept()
+        if validated_json_concept['type'] == 'concept':
+            concept = Concept()
+        else:
+            concept = Collection()
         concept.concept_id = cid
         concept.conceptscheme_id = self.provider.conceptscheme_id
         map_concept(concept, validated_json_concept, self.request.db)

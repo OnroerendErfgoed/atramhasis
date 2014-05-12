@@ -2,8 +2,8 @@ import copy
 
 import colander
 from skosprovider_sqlalchemy.models import (
-    Concept as DomainConcept
-)
+    Concept as DomainConcept,
+    Thing)
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -95,7 +95,7 @@ def concept_schema_validator(node, cstruct):
                                                                          conceptscheme_id, broader)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
-        b_validated = concept_exists_andnot_different_conceptscheme_rule(node['members'], request,
+        m_validated = concept_exists_andnot_different_conceptscheme_rule(node['members'], request,
                                                                          conceptscheme_id, members)
     if r_validated and n_validated and b_validated:
         concept_type_rule(node['narrower'], request, conceptscheme_id, narrower)
@@ -132,7 +132,7 @@ def concept_type_rule(node_location, request, conceptscheme_id, members):
 def concept_exists_andnot_different_conceptscheme_rule(node_location, request, conceptscheme_id, members):
     for member_concept_id in members:
         try:
-            stored_concept = request.db.query(DomainConcept).filter_by(concept_id=member_concept_id,
+            stored_concept = request.db.query(Thing).filter_by(concept_id=member_concept_id,
                                                                        conceptscheme_id=conceptscheme_id).one()
         except NoResultFound:
             raise colander.Invalid(
