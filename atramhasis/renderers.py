@@ -1,10 +1,5 @@
 import csv
-from six import StringIO
-from pyramid.renderers import JSON
-from skosprovider_sqlalchemy.models import (
-    Concept,
-    Collection
-)
+from six import StringIO, text_type
 
 
 class CSVRenderer(object):
@@ -16,7 +11,14 @@ class CSVRenderer(object):
         writer = csv.writer(f_out, delimiter=',', quoting=csv.QUOTE_ALL)
 
         writer.writerow(value['header'])
-        writer.writerows(value['rows'])
+        #writer.writerows(value['rows'])
+        for row in value['rows']:
+            r = []
+            for item in row:
+                # Ensure item is an object and not an empty unicode string
+                if item and isinstance(item, text_type) and item != u'':
+                    r.append(item.encode("UTF-8"))
+            writer.writerow(r)
 
         resp = system['request'].response
         resp.content_type = 'text/csv'

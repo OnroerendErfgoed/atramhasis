@@ -145,7 +145,9 @@ class CsvFunctionalTests(FunctionalTests):
         response = self.testapp.get('/conceptschemes/TREES/c.csv?label=Chestnut&_LOCALE_=fr')
         data = response.body.decode('utf-8')
         self.assertIsInstance(data, six.text_type)
-        self.assertIn('châtaigne', data)
+        self.assertEqual('200 OK', response.status)
+        self.assertIn('text/csv', response.headers['Content-Type'])
+        self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
 
 
 class RestFunctionalTests(FunctionalTests):
