@@ -29,7 +29,8 @@ json_value = {
     "broader": [],
     "narrower": [],
     "related": [],
-    "labels": [        {
+    "labels": [
+        {
             "type": "prefLabel",
             "language": "en",
             "label": "The Larch"
