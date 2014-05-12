@@ -221,6 +221,21 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['type'], 'collection')
 
+    def test_edit_collection(self):
+        json_collection_value['members'] = [7, 8]
+        res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers(),
+                                    params=json_collection_value)
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['type'], 'collection')
+        self.assertEqual(2, len(res.json['members']))
+
+    def test_delete_collection(self):
+        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+
 
 class TestCookieView(FunctionalTests):
     def _get_default_headers(self):
@@ -302,8 +317,8 @@ class SkosFunctionalTests(unittest.TestCase):
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)
 
-class CacheFunctionalTests(FunctionalTests):
 
+class CacheFunctionalTests(FunctionalTests):
     def _get_default_headers(self):
         return {'Accept': 'application/json'}
 
