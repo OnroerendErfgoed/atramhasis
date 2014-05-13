@@ -2,6 +2,7 @@
 import unittest
 
 from sqlalchemy.orm.exc import NoResultFound
+from atramhasis.errors import ValidationError
 
 
 try:
@@ -121,7 +122,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
@@ -141,7 +142,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -156,7 +157,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
@@ -166,7 +167,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
@@ -177,7 +178,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -187,7 +188,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
@@ -198,7 +199,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -208,7 +209,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
@@ -219,7 +220,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -230,7 +231,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -241,7 +242,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -252,7 +253,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -263,7 +264,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -275,7 +276,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
@@ -286,7 +287,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -298,7 +299,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
@@ -308,7 +309,7 @@ class TestValidation(unittest.TestCase):
         validated_collection = None
         try:
             validated_collection = self.concept_schema.deserialize(self.json_collection)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_collection)
@@ -322,7 +323,7 @@ class TestValidation(unittest.TestCase):
         self.json_collection['members'].append(777)
         try:
             validated_collection = self.concept_schema.deserialize(self.json_collection)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_collection)
@@ -337,7 +338,7 @@ class TestValidation(unittest.TestCase):
         })
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_concept)
@@ -352,7 +353,7 @@ class TestValidation(unittest.TestCase):
         })
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
@@ -367,7 +368,7 @@ class TestValidation(unittest.TestCase):
         })
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
-        except colander.Invalid as e:
+        except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
