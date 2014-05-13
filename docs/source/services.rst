@@ -99,11 +99,11 @@ Write Services
         Content-Type: application/json
 
         {
-            "message": "Concept could not be validated.",
             "errors": [
-                "Invalid labeltype.",
-                "Invalid language."
-            ]
+                        {"labels": "Invalid labeltype."},
+                        {"labels": "Invalid language."}
+                      ],
+            "message": "Concept could not be validated"
         }
 
     :param scheme_id: The identifier for a certain concept scheme.
