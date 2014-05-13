@@ -110,7 +110,7 @@ def concept_schema_validator(node, cstruct):
     if len(errors) > 0:
         raise ValidationError(
             'Concept could not be validated',
-            errors
+            [e.asdict() for e in errors]
         )
 
 
