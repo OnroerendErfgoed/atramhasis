@@ -3,7 +3,7 @@ import copy
 import colander
 from skosprovider_sqlalchemy.models import (
     Concept as DomainConcept,
-    Thing)
+    Thing, LabelType, Language)
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -80,6 +80,8 @@ def concept_schema_validator(node, cstruct):
     b_validated = False
     if 'labels' in cstruct:
         labels = copy.deepcopy(cstruct['labels'])
+        label_type_rule(node, request, labels)
+        label_lang_rule(node, request, labels)
         max_preflabels_rule(node, labels)
     if 'related' in cstruct:
         related = copy.deepcopy(cstruct['related'])
@@ -118,6 +120,28 @@ def max_preflabels_rule(node, labels):
                 preflabel_found.append(label['language'])
 
 
+def label_type_rule(node, request, labels):
+    label_types = request.db.query(LabelType).all()
+    label_types = [label_type.name for label_type in label_types]
+    for label in labels:
+        if label['type'] not in label_types:
+            raise colander.Invalid(
+                node['labels'],
+                'Invalid labeltype.'
+            )
+
+
+def label_lang_rule(node, request, labels):
+    languages = request.db.query(Language).all()
+    languages = [language.id for language in languages]
+    for label in labels:
+        if label['language'] not in languages:
+            raise colander.Invalid(
+                node['labels'],
+                'Invalid language.'
+            )
+
+
 def concept_type_rule(node_location, request, conceptscheme_id, members):
     for member_concept_id in members:
         member_concept = request.db.query(DomainConcept).filter_by(concept_id=member_concept_id,
@@ -133,7 +157,7 @@ def concept_exists_andnot_different_conceptscheme_rule(node_location, request, c
     for member_concept_id in members:
         try:
             stored_concept = request.db.query(Thing).filter_by(concept_id=member_concept_id,
-                                                                       conceptscheme_id=conceptscheme_id).one()
+                                                               conceptscheme_id=conceptscheme_id).one()
         except NoResultFound:
             raise colander.Invalid(
                 node_location,

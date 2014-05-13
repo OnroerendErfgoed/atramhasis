@@ -10,7 +10,7 @@ except ImportError:
     from mock import Mock  # pragma: no cover
 import colander
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import Concept, LabelType, Language
 from atramhasis.validators import (
     Concept as ConceptSchema,
     concept_schema_validator
@@ -40,9 +40,24 @@ def filter_by_mock_concept(concept_id, conceptscheme_id):
     return filter_mock
 
 
+def list_all_types():
+    types = [LabelType('hiddenLabel', 'A hidden label.'), LabelType('altLabel', 'An alternative label.'),
+             LabelType('prefLabel', 'A preferred label.')]
+    return types
+
+
+def list_all_languages():
+    languages = [Language('nl', 'Dutch'), Language('en', 'English')]
+    return languages
+
+
 def create_query_mock(some_class):
     query_mock = Mock()
     query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    if some_class == LabelType:
+        query_mock.all = Mock(side_effect=list_all_types)
+    if some_class == Language:
+        query_mock.all = Mock(side_effect=list_all_languages)
     return query_mock
 
 
@@ -311,3 +326,48 @@ class TestValidation(unittest.TestCase):
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_collection)
+
+    def test_label_type(self):
+        error_raised = False
+        validated_concept = None
+        self.json_concept['labels'].append({
+            "label": "Belgium",
+            "type": "altLabel",
+            "language": "en"
+        })
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)
+
+    def test_label_type_invalid(self):
+        error_raised = False
+        validated_concept = None
+        self.json_concept['labels'].append({
+            "label": "Belgium",
+            "type": "testLabelInvalid",
+            "language": "en"
+        })
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_label_language_invalid(self):
+        error_raised = False
+        validated_concept = None
+        self.json_concept['labels'].append({
+            "label": "Belgium",
+            "type": "altLabel",
+            "language": "en-FR"
+        })
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)

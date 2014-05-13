@@ -5,7 +5,7 @@ import unittest
 
 import six
 from pyramid.config import Configurator
-from skosprovider_sqlalchemy.models import Base, ConceptScheme
+from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
@@ -116,6 +116,11 @@ class FunctionalTests(unittest.TestCase):
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2), local_session)
+            local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
+            local_session.add(LabelType('altLabel', 'An alternative label.'))
+            local_session.add(LabelType('prefLabel', 'A preferred label.'))
+            local_session.add(Language('nl', 'Dutch'))
+            local_session.add(Language('en', 'English'))
 
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)
