@@ -1,12 +1,38 @@
 import os
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, distutils, Command
+import distutils.file_util
 
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst')) as f:
     README = f.read()
 with open(os.path.join(here, 'CHANGES.rst')) as f:
     CHANGES = f.read()
+
+
+def copy_files_sdist(filename, output_dir):
+        source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
+        dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, filename + '_tmpl')
+        distutils.file_util.copy_file(source_dir, dest_dir, update=True)
+
+
+class PrepareScaffold(Command):
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        print('==**==' * 4500)
+        copy_files_sdist("requirements.txt", "atramhasis_demo")
+        copy_files_sdist("requirements-dev.txt", "atramhasis_demo")
+        copy_files_sdist("requirements.txt", "atramhasis_scaffold")
+        copy_files_sdist("requirements-dev.txt", "atramhasis_scaffold")
+
 
 requires = [
     'pyramid',
@@ -61,4 +87,7 @@ setup(name='atramhasis',
         atramhasis_scaffold=atramhasis.scaffolds:AtramhasisTemplate
         atramhasis_demo=atramhasis.scaffolds:AtramhasisDemoTemplate
       """,
+      cmdclass={
+          'prepare': PrepareScaffold
+      }
 )
