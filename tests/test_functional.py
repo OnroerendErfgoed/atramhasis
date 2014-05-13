@@ -114,7 +114,7 @@ class FunctionalTests(unittest.TestCase):
         with transaction.manager:
             local_session = self.session_maker()
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
-            import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials:materials'), local_session)
+            import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2), local_session)
 
         self.app = self.config.make_wsgi_app()
@@ -235,6 +235,13 @@ class RestFunctionalTests(FunctionalTests):
         res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_uri(self):
+        res = self.testapp.post_json('/conceptschemes/MATERIALS/c', headers=self._get_default_headers(),
+                                     params=json_value)
+        self.assertEqual('201 Created', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertEqual('urn:x-vioe:materials:51', res.json['uri'])
 
 
 class TestCookieView(FunctionalTests):

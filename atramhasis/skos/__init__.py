@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from skosprovider.uri import UriPatternGenerator
 
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
 log = logging.getLogger(__name__)
-
 
 
 def includeme(config):
@@ -19,7 +19,6 @@ def includeme(config):
         config.registry.dbmaker()
     )
 
-
     STYLES = SQLAlchemyProvider(
         {'id': 'STYLES', 'conceptscheme_id': 3},
         config.registry.dbmaker()
@@ -27,7 +26,8 @@ def includeme(config):
 
     MATERIALS = SQLAlchemyProvider(
         {'id': 'MATERIALS', 'conceptscheme_id': 4},
-        config.registry.dbmaker()
+        config.registry.dbmaker(),
+        uri_generator=UriPatternGenerator('urn:x-vioe:materials:%s')
     )
 
     skosregis = config.get_skos_registry()

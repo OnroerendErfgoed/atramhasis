@@ -74,6 +74,7 @@ class AtramhasisCrud(object):
             concept = Collection()
         concept.concept_id = cid
         concept.conceptscheme_id = self.provider.conceptscheme_id
+        concept.uri = self.provider.uri_generator.generate(id=cid)
         map_concept(concept, validated_json_concept, self.request.db)
         self.db.add(concept)
         self.request.response.status = '201'
