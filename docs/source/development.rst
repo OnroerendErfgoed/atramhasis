@@ -41,17 +41,19 @@ tox) will be installed.
     # compile the Message Catalog Files
     $ python setup.py compile_catalog
 
-For building a distribution use the prepare command before the distribution command.
-This will update the requirement files in the scaffolds.
-
-.. code-block:: bash
-    $ python setup.py prepare sdist
-
 Every pull request will be run through Travis-ci_. When providing a pull 
 request, please run the unit tests first and make sure they all pass. Please 
 provide new unit tests to maintain 100% coverage. If you send us a pull request
 and this build doesn't function, please correct the issue at hand or let us 
 know why it's not working.
+
+For building a distribution use the prepare command before the distribution command.
+This will update the requirement files in the scaffolds.
+
+.. code-block:: bash
+
+    $ python setup.py prepare sdist
+
 
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
 .. _Github page for Atramhasis: https://github.com/OnroerendErfgoed/atramhasis
