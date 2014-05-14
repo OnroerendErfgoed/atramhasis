@@ -334,12 +334,36 @@ class CacheFunctionalTests(FunctionalTests):
     def _get_default_headers(self):
         return {'Accept': 'application/json'}
 
-    def test_tree_cache(self):
-        response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
-        self.assertEqual('200 OK', response.status)
-        self.assertIsNotNone(response.json)
-        self.testapp.delete('/conceptschemes/MATERIALS/c/13', headers=self._get_default_headers())
-        response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
-        self.assertEqual('200 OK', response2.status)
-        self.assertIsNotNone(response2.json)
-        self.assertEqual(response.json, response2.json)
+    def test_create_cache(self):
+        #clear entire cache before start
+        invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
+        self.assertEqual('200 OK', invalidate_cache_response.status)
+
+        tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertEqual('200 OK', tree_response.status)
+        self.assertIsNotNone(tree_response.json)
+
+        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertEqual('200 OK', cached_tree_response.status)
+        self.assertIsNotNone(cached_tree_response.json)
+
+        self.assertEqual(tree_response.json, cached_tree_response.json)
+
+    def test_auto_invalidate_cache(self):
+        #clear entire cache before start
+        invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
+        self.assertEqual('200 OK', invalidate_cache_response.status)
+
+        tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertEqual(tree_response.json, cached_tree_response.json)
+
+        delete_response = self.testapp.delete('/conceptschemes/MATERIALS/c/31', headers=self._get_default_headers())
+        self.assertEqual('200 OK', delete_response.status)
+        self.assertIsNotNone(delete_response.json['id'])
+
+        tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertNotEqual(tree_response.json, tree_response2.json)
+
+        cached_tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        self.assertEqual(tree_response2.json, cached_tree_response2.json)

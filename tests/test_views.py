@@ -7,6 +7,7 @@ from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
 from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.views import tree_cache_dictionary
 from atramhasis.views.views import AtramhasisView, AtramhasisAdminView
 from fixtures.data import trees
 
@@ -332,3 +333,32 @@ class TestAdminView(unittest.TestCase):
         info = atramhasisAdminview.admin_view()
         self.assertIsNotNone(info)
         self.assertTrue('admin' in info)
+
+    def test_invalidate_scheme_tree(self):
+        tree_cache_dictionary['foo |TREES nl'] = []
+        tree_cache_dictionary['foo |TREES fr'] = []
+        tree_cache_dictionary['bar |MATERIALS fr'] = []
+
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.skos_registry = self.regis
+        atramhasisAdminview = AtramhasisAdminView(request)
+        response = atramhasisAdminview.invalidate_scheme_tree()
+
+        self.assertEqual(response.status_int, 200)
+        self.assertIn('bar |MATERIALS fr', tree_cache_dictionary.keys())
+        self.assertNotIn('foo |TREES nl', tree_cache_dictionary.keys())
+        self.assertNotIn('foo |TREES fr', tree_cache_dictionary.keys())
+
+    def test_invalidate_tree(self):
+        tree_cache_dictionary['foo |TREES nl'] = []
+        tree_cache_dictionary['foo |TREES fr'] = []
+        tree_cache_dictionary['bar |MATERIALS fr'] = []
+
+        request = testing.DummyRequest()
+        request.skos_registry = self.regis
+        atramhasisAdminview = AtramhasisAdminView(request)
+        response = atramhasisAdminview.invalidate_tree()
+
+        self.assertEqual(response.status_int, 200)
+        self.assertEqual(len(tree_cache_dictionary), 0)
