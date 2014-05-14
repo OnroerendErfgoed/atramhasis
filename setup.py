@@ -1,7 +1,7 @@
 import os
+import distutils.file_util
 
 from setuptools import setup, find_packages, distutils, Command
-import distutils.file_util
 
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst')) as f:
@@ -10,10 +10,10 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
     CHANGES = f.read()
 
 
-def copy_files_sdist(filename, output_dir):
-        source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
-        dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, filename + '_tmpl')
-        distutils.file_util.copy_file(source_dir, dest_dir, update=True)
+def copy_files_scaffolds(filename, output_dir):
+    source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
+    dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, filename + '_tmpl')
+    distutils.file_util.copy_file(source_dir, dest_dir, update=True)
 
 
 class PrepareScaffold(Command):
@@ -27,11 +27,10 @@ class PrepareScaffold(Command):
         pass
 
     def run(self):
-        print('==**==' * 4500)
-        copy_files_sdist("requirements.txt", "atramhasis_demo")
-        copy_files_sdist("requirements-dev.txt", "atramhasis_demo")
-        copy_files_sdist("requirements.txt", "atramhasis_scaffold")
-        copy_files_sdist("requirements-dev.txt", "atramhasis_scaffold")
+        copy_files_scaffolds("requirements.txt", "atramhasis_demo")
+        copy_files_scaffolds("requirements-dev.txt", "atramhasis_demo")
+        copy_files_scaffolds("requirements.txt", "atramhasis_scaffold")
+        copy_files_scaffolds("requirements-dev.txt", "atramhasis_scaffold")
 
 
 requires = [
