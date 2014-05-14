@@ -16,6 +16,7 @@ Contents:
    development
    services
    api
+   security
    changes
    glossary
 
