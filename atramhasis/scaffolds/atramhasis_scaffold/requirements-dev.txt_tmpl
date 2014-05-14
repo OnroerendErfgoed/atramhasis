@@ -1,0 +1,26 @@
+# Runtime requirements
+--requirement requirements.txt
+
+# pyramid
+pyramid-debugtoolbar==2.0.2
+
+# Testing
+pytest==2.5.2
+pytest-cov==1.6
+py==1.4.20
+coveralls==0.4.1
+webtest==2.0.14
+mock==1.0.1
+
+# Documentation
+Sphinx==1.2
+sphinxcontrib-httpdomain==1.2.1
+
+# waitress
+waitress==0.8.8
+
+# Linting
+flake8==2.1.0
+mccabe==0.2.1
+pep8==1.4.6
+pyflakes==0.7.3
