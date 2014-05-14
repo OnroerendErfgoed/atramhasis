@@ -8,6 +8,7 @@ from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFou
     ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept
 from atramhasis.utils import from_thing
+from atramhasis.views import invalidate_scheme_cache
 
 
 @view_defaults(accept='application/json', renderer='skosjson')
@@ -77,6 +78,9 @@ class AtramhasisCrud(object):
         concept.uri = self.provider.uri_generator.generate(id=cid)
         map_concept(concept, validated_json_concept, self.request.db)
         self.db.add(concept)
+
+        invalidate_scheme_cache(self.scheme_id)
+
         self.request.response.status = '201'
         self.request.response.location = self.request.route_path(
             'skosprovider.c', scheme_id=self.scheme_id, c_id=concept.concept_id)
@@ -98,6 +102,9 @@ class AtramhasisCrud(object):
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
         map_concept(concept, validated_json_concept, self.request.db)
+
+        invalidate_scheme_cache(self.scheme_id)
+
         self.request.response.status = '200'
         return from_thing(concept)
 
@@ -115,5 +122,8 @@ class AtramhasisCrud(object):
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
         self.db.delete(concept)
+
+        invalidate_scheme_cache(self.scheme_id)
+
         self.request.response.status = '200'
         return from_thing(concept)

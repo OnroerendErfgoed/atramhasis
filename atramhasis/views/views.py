@@ -11,7 +11,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
 from skosprovider_sqlalchemy.models import Collection as DomainCollection
 from skosprovider_sqlalchemy.models import Concept as DomainConcept
-from dogpile.cache import make_region
+from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
 
 
 @view_defaults(accept='text/html')
@@ -19,10 +19,6 @@ class AtramhasisView(object):
     '''
     This object groups HTML views part of the public user interface.
     '''
-
-    region = make_region().configure(
-        'dogpile.cache.memory'
-    )
 
     def __init__(self, request):
         self.request = request
@@ -159,37 +155,39 @@ class AtramhasisView(object):
     @view_config(route_name='scheme_tree', renderer='json', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
-        provider = self.skos_registry.get_provider(scheme_id)
         locale = self.request.locale_name
+        skostree = self.get_scheme(scheme_id, locale)
+        dicts = []
+        for index, thing in enumerate(skostree, 1):
+            dicts.append(self.parse_thing(thing, index, 'root'))
+        if dicts:
+            return dicts
+        else:
+            return Response(status_int=404)
 
+    @tree_region.cache_on_arguments()
+    def get_scheme(self, scheme, locale):
+        scheme_tree = []
+        provider = self.skos_registry.get_provider(scheme)
         if provider:
             conceptscheme_id = provider.conceptscheme_id
-            skostree = self.get_scheme(conceptscheme_id, locale)
-            dicts = []
-            for index, thing in enumerate(skostree, 1):
-                dicts.append(self.parse_thing(thing, index, 'root'))
 
-            return dicts
-        return Response(status_int=404)
+            tco = self.request.db\
+                .query(DomainConcept)\
+                .filter(
+                    DomainConcept.conceptscheme_id == conceptscheme_id,
+                    ~DomainConcept.broader_concepts.any(),
+                    ~DomainCollection.member_of.any()
+                ).all()
+            tcl = self.request.db\
+                .query(DomainCollection)\
+                .filter(
+                    DomainCollection.conceptscheme_id == conceptscheme_id,
+                    ~DomainCollection.member_of.any()
+                ).all()
 
-    @region.cache_on_arguments()
-    def get_scheme(self, scheme_id, locale):
-        tco = self.request.db\
-            .query(DomainConcept)\
-            .filter(
-                DomainConcept.conceptscheme_id == scheme_id,
-                ~DomainConcept.broader_concepts.any(),
-                ~DomainCollection.member_of.any()
-            ).all()
-        tcl = self.request.db\
-            .query(DomainCollection)\
-            .filter(
-                DomainCollection.conceptscheme_id == scheme_id,
-                ~DomainCollection.member_of.any()
-            ).all()
-
-        scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
-            sorted(tcl, key=lambda child: child.label(locale).label.lower())
+            scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
+                sorted(tcl, key=lambda child: child.label(locale).label.lower())
 
         return scheme_tree
 
@@ -241,3 +239,14 @@ class AtramhasisAdminView(object):
     @view_config(route_name='admin', renderer='atramhasis:templates/admin.jinja2')
     def admin_view(self):
         return {'admin': None}
+
+    @view_config(route_name='scheme_tree_invalidate', renderer='json', accept='application/json', permission='edit')
+    def invalidate_scheme_tree(self):
+        scheme_id = self.request.matchdict['scheme_id']
+        invalidate_scheme_cache(scheme_id)
+        return Response(status_int=200)
+
+    @view_config(route_name='tree_invalidate', renderer='json', accept='application/json', permission='edit')
+    def invalidate_tree(self):
+        invalidate_cache()
+        return Response(status_int=200)
