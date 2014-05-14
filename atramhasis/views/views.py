@@ -179,13 +179,13 @@ class AtramhasisView(object):
             .filter(
                 DomainConcept.conceptscheme_id == scheme_id,
                 ~DomainConcept.broader_concepts.any(),
-                ~DomainCollection.collections.any()
+                ~DomainCollection.member_of.any()
             ).all()
         tcl = self.request.db\
             .query(DomainCollection)\
             .filter(
                 DomainCollection.conceptscheme_id == scheme_id,
-                ~DomainCollection.collections.any()
+                ~DomainCollection.member_of.any()
             ).all()
 
         scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
