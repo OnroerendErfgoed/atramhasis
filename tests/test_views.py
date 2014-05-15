@@ -3,17 +3,61 @@ import unittest
 
 from skosprovider.registry import Registry
 from pyramid import testing
+from skosprovider_sqlalchemy.models import Concept, Collection, Thing
+from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
-from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.views import tree_cache_dictionary
 from atramhasis.views.views import AtramhasisView, AtramhasisAdminView
 from fixtures.data import trees
 
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from mock import Mock  # pragma: no cover
 
 TEST_DIR = os.path.dirname(__file__)
 settings = appconfig('config:' + os.path.join(TEST_DIR, 'conf_test.ini'))
+
+
+def provider(some_id):
+    provider_mock = Mock()
+    if some_id == 1:
+        provider_mock.get_vocabulary_id = Mock(return_value='TREES')
+    return provider_mock
+
+
+def db(request):
+    session_mock = Mock()
+    session_mock.query = Mock(side_effect=create_query_mock)
+    return session_mock
+
+
+def create_query_mock(some_class):
+    query_mock = Mock()
+    query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    return query_mock
+
+
+def filter_by_mock_concept(concept_id, conceptscheme_id):
+    filter_mock = Mock()
+    if concept_id == '1':
+        c = Concept(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
+        c.type = 'concept'
+        filter_mock.one = Mock(return_value=c)
+    elif concept_id == '3':
+        c = Collection(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
+        c.type = 'collection'
+        filter_mock.one = Mock(return_value=c)
+    elif concept_id == '555':
+        c = Thing(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
+        filter_mock.one = Mock(return_value=c)
+    elif concept_id == '666':
+        raise NoResultFound
+
+    return filter_mock
 
 
 class TestAtramhasisView(unittest.TestCase):
@@ -68,14 +112,16 @@ class TestFavicoView(unittest.TestCase):
 class TestConceptView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
+        self.request = testing.DummyRequest()
         self.regis = Registry()
-        self.regis.register_provider(trees)
+        self.regis.register_provider(provider(1))
+        self.request.db = db(self.request)
 
     def tearDown(self):
         testing.tearDown()
 
     def test_passing_view(self):
-        request = testing.DummyRequest()
+        request = self.request
         request.matchdict['scheme_id'] = 'TREES'
         request.matchdict['c_id'] = '1'
         request.skos_registry = self.regis
@@ -86,7 +132,7 @@ class TestConceptView(unittest.TestCase):
         self.assertEqual(info['scheme_id'], 'TREES')
 
     def test_passing_collection_view(self):
-        request = testing.DummyRequest()
+        request = self.request
         request.matchdict['scheme_id'] = 'TREES'
         request.matchdict['c_id'] = '3'
         request.skos_registry = self.regis
@@ -97,22 +143,41 @@ class TestConceptView(unittest.TestCase):
         self.assertEqual(info['scheme_id'], 'TREES')
 
     def test_provider_not_found(self):
-        request = testing.DummyRequest()
+        request = self.request
         request.matchdict['scheme_id'] = 'ZZ'
         request.matchdict['c_id'] = '1'
         request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
-        info = atramhasisview.concept_view()
-        self.assertEqual(info.status_int, 404)
+        error_raised = False
+        try:
+            atramhasisview = AtramhasisView(request)
+            atramhasisview.concept_view()
+        except ConceptSchemeNotFoundException as e:
+            error_raised = True
+            self.assertIsNotNone(e.__str__())
+        self.assertTrue(error_raised)
 
     def test_not_found(self):
-        request = testing.DummyRequest()
+        request = self.request
         request.matchdict['scheme_id'] = 'TREES'
         request.matchdict['c_id'] = '666'
         request.skos_registry = self.regis
+        error_raised = False
+        try:
+            atramhasisview = AtramhasisView(request)
+            atramhasisview.concept_view()
+        except ConceptNotFoundException as e:
+            error_raised = True
+            self.assertIsNotNone(e.__str__())
+        self.assertTrue(error_raised)
+
+    def test_no_type(self):
+        request = self.request
+        request.matchdict['scheme_id'] = 'TREES'
+        request.matchdict['c_id'] = '555'
+        request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
-        self.assertEqual(info.status_int, 404)
+        self.assertEqual(info.status_int, 500)
 
 
 class TestSearchResultView(unittest.TestCase):
