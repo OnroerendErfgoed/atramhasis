@@ -1,0 +1,18 @@
+/* override jqtree css */
+ul.jqtree-tree li.jqtree-folder .jqtree-title {
+    margin-left: 5px;
+}
+
+
+h1.concept {
+    width: 100%;
+    border-bottom: 3px solid #0078A0;
+}
+h2.concept {
+    width: 100%;
+    border-bottom: 2px solid #0078A0;
+}
+
+ul.concept{
+    padding-left: 20px;
+}
