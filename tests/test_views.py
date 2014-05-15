@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 import os
 import unittest
 
 from skosprovider.registry import Registry
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Collection, Thing
+from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label
 from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
@@ -26,6 +27,7 @@ def provider(some_id):
     provider_mock = Mock()
     if some_id == 1:
         provider_mock.get_vocabulary_id = Mock(return_value='TREES')
+    provider_mock.conceptscheme_id = Mock(return_value=some_id)
     return provider_mock
 
 
@@ -41,8 +43,14 @@ def create_query_mock(some_class):
     return query_mock
 
 
-def filter_by_mock_concept(concept_id, conceptscheme_id):
+def filter_by_mock_concept(**kwargs):
     filter_mock = Mock()
+    concept_id = None
+    conceptscheme_id = None
+    if 'concept_id' in kwargs:
+        concept_id = kwargs['concept_id']
+    if 'conceptscheme_id' in kwargs:
+        conceptscheme_id = kwargs['conceptscheme_id']
     if concept_id == '1':
         c = Concept(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
         c.type = 'concept'
@@ -57,6 +65,14 @@ def filter_by_mock_concept(concept_id, conceptscheme_id):
     elif concept_id == '666':
         raise NoResultFound
 
+    a_concept = Concept(concept_id=7895, conceptscheme_id=conceptscheme_id, type='concept')
+    a_labels = [Label(label='De Paardekastanje', language_id='nl'), Label(label='The Chestnut', language_id='en'),
+                Label(label='la châtaigne', language_id='fr')]
+    a_concept.labels = a_labels
+    b_concept = Concept(concept_id=9863, conceptscheme_id=conceptscheme_id, type='concept')
+    b_labels = [Label(label='test', language_id='nl')]
+    b_concept.labels = b_labels
+    filter_mock.all = Mock(return_value=[a_concept, b_concept])
     return filter_mock
 
 
@@ -239,47 +255,43 @@ class TestSearchResultView(unittest.TestCase):
 
 
 class TestCsvView(unittest.TestCase):
-
     def setUp(self):
         self.config = testing.setUp()
+        self.request = testing.DummyRequest()
         self.regis = Registry()
-        self.regis.register_provider(trees)
+        self.regis.register_provider(provider(1))
+        self.request.skos_registry = self.regis
+        self.request.db = db(self.request)
 
     def tearDown(self):
         testing.tearDown()
 
     def test_csv(self):
-        request = testing.DummyRequest()
-        request.matchdict['scheme_id'] = 'TREES'
-        request.params = MultiDict()
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.matchdict['scheme_id'] = 'TREES'
+        self.request.params = MultiDict()
+        atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.results_csv()
         self.assertEqual(res['filename'], 'atramhasis_export')
         self.assertIsInstance(res['header'], list)
         self.assertIsInstance(res['rows'], list)
-        self.assertEqual(3, len(res['rows']))
+        self.assertEqual(2, len(res['rows']))
 
     def test_csv_label(self):
-        request = testing.DummyRequest()
-        request.matchdict['scheme_id'] = 'TREES'
-        request.params = MultiDict()
-        request.params.add('label', 'De Paardekastanje')
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.matchdict['scheme_id'] = 'TREES'
+        self.request.params = MultiDict()
+        self.request.params.add('label', 'De Paardekastanje')
+        atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.results_csv()
         self.assertEqual(res['filename'], 'atramhasis_export')
         self.assertIsInstance(res['header'], list)
         self.assertIsInstance(res['rows'], list)
-        self.assertEqual(1, len(res['rows']))
+        self.assertEqual(2, len(res['rows']))
 
     def test_csv_ctype(self):
-        request = testing.DummyRequest()
-        request.matchdict['scheme_id'] = 'TREES'
-        request.params = MultiDict()
-        request.params.add('ctype', 'concept')
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.matchdict['scheme_id'] = 'TREES'
+        self.request.params = MultiDict()
+        self.request.params.add('ctype', 'concept')
+        atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.results_csv()
         self.assertEqual(res['filename'], 'atramhasis_export')
         self.assertIsInstance(res['header'], list)
@@ -288,7 +300,6 @@ class TestCsvView(unittest.TestCase):
 
 
 class TestLocaleView(unittest.TestCase):
-
     def setUp(self):
         self.config = testing.setUp()
         self.regis = Registry()

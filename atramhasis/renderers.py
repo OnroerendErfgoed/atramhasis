@@ -4,13 +4,13 @@ from six import StringIO, text_type, PY2
 
 
 class UnicodeWriter:
-
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         self.stream = f
         self.writer = csv.writer(self.stream, dialect=dialect, **kwds)
         self.encoder = codecs.getincrementalencoder(encoding)()
 
-    def writerow(self, row):
+    def writerow(self, row):  # pragma: no cover
+        #some ugly code to support python2
         if PY2:
             encoded_row = []
             for s in row:
