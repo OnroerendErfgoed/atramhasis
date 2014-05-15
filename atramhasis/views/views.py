@@ -5,12 +5,9 @@ from pyramid.response import FileResponse
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPFound
 from pyramid.threadlocal import get_current_registry
-from skosprovider.skos import Concept
-from skosprovider.skos import Collection
 from sqlalchemy.orm.exc import NoResultFound
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
-from skosprovider_sqlalchemy.models import Collection as DomainCollection, Thing
-from skosprovider_sqlalchemy.models import Concept as DomainConcept
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
+from skosprovider_sqlalchemy.models import Collection, Thing, Concept
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
 
 
@@ -70,17 +67,24 @@ class AtramhasisView(object):
         '''
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
-        prov = self.request.skos_registry.get_provider(scheme_id)
-        if prov:
-            c = prov.get_by_id(c_id)
-            if c:
-                skostype = ""
-                if isinstance(c, Concept):
-                    skostype = "Concept"
-                if isinstance(c, Collection):
-                    skostype = "Collection"
-                return {'concept': c, 'conceptType': skostype, 'scheme_id': scheme_id}
-        return Response(content_type='text/plain', status_int=404)
+        provider = self.request.skos_registry.get_provider(scheme_id)
+
+        if not provider:
+            raise ConceptSchemeNotFoundException(scheme_id)
+        try:
+            c = self.request.db.query(Thing)\
+                .filter_by(concept_id=c_id, conceptscheme_id=provider.conceptscheme_id)\
+                .one()
+            if isinstance(c, Concept):
+                concept_type = "Concept"
+            elif isinstance(c, Collection):
+                concept_type = "Collection"
+            else:
+                return Response('Thing without type: ' + str(c_id), status_int=500)
+            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id}
+        except NoResultFound:
+            raise ConceptNotFoundException(c_id)
+
 
     @view_config(route_name='search_result', renderer='atramhasis:templates/search_result.jinja2')
     def search_result(self):
@@ -178,17 +182,17 @@ class AtramhasisView(object):
             conceptscheme_id = provider.conceptscheme_id
 
             tco = self.request.db\
-                .query(DomainConcept)\
+                .query(Concept)\
                 .filter(
-                    DomainConcept.conceptscheme_id == conceptscheme_id,
-                    ~DomainConcept.broader_concepts.any(),
-                    ~DomainCollection.member_of.any()
+                    Concept.conceptscheme_id == conceptscheme_id,
+                    ~Concept.broader_concepts.any(),
+                    ~Collection.member_of.any()
                 ).all()
             tcl = self.request.db\
-                .query(DomainCollection)\
+                .query(Collection)\
                 .filter(
-                    DomainCollection.conceptscheme_id == conceptscheme_id,
-                    ~DomainCollection.member_of.any()
+                    Collection.conceptscheme_id == conceptscheme_id,
+                    ~Collection.member_of.any()
                 ).all()
 
             scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \

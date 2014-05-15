@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-07 11:32+0200\n"
-"PO-Revision-Date: 2014-05-07 11:33+0100\n"
+"POT-Creation-Date: 2014-05-15 08:40+0200\n"
+"PO-Revision-Date: 2014-05-15 08:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -86,13 +86,17 @@ msgstr "générique"
 msgid "narrower"
 msgstr "spécifique"
 
-#: atramhasis/templates/concept.jinja2:57
+#: atramhasis/templates/concept.jinja2:58
 msgid "related"
 msgstr "associé"
 
-#: atramhasis/templates/concept.jinja2:62
+#: atramhasis/templates/concept.jinja2:63
 msgid "members"
 msgstr "membres"
+
+#: atramhasis/templates/concept.jinja2:67
+msgid "member_of"
+msgstr "membre de"
 
 #: atramhasis/templates/macros.jinja2:22
 msgid "prefLabel"

@@ -1,9 +1,9 @@
 {% macro render_relaties_lijst(request, relaties, scheme_id) %}
 	{% if relaties|length > 0 %}
         <ul>
-            {%- for linkid in relaties|sort() %}
+            {%- for c in relaties %}
                 <li>
-                    <a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = linkid) }}">{{ linkid }}</a>
+                    <a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.concept_id) }}">{{ c.label(request.locale_name).label }}</a>
                 </li>
             {%- endfor %}
         </ul>
@@ -13,7 +13,7 @@
 {% macro render_labels(labels, type) %}
     {% set type_labels = [] %}
     {%- for label in labels %}
-        {% if label.type == type %}
+        {% if label.labeltype_id == type %}
             {% if type_labels.append(label) %}{% endif %}
         {% endif %}
     {%- endfor %}
