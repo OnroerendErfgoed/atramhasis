@@ -1,5 +1,30 @@
 import csv
-from six import StringIO, text_type
+import codecs
+from six import StringIO, text_type, PY2
+
+
+class UnicodeWriter:
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        self.stream = f
+        self.writer = csv.writer(self.stream, dialect=dialect, **kwds)
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def writerow(self, row):
+        if PY2:
+            encoded_row = []
+            for s in row:
+                if isinstance(s, text_type):
+                    encoded_row.append(self.encoder.encode(s))
+                else:
+                    encoded_row.append(s)
+            self.writer.writerow(encoded_row)
+        else:
+            self.writer.writerow(row)
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
 
 
 class CSVRenderer(object):
@@ -8,17 +33,10 @@ class CSVRenderer(object):
 
     def __call__(self, value, system):
         f_out = StringIO()
-        writer = csv.writer(f_out, delimiter=',', quoting=csv.QUOTE_ALL)
+        writer = UnicodeWriter(f_out, delimiter=',', quoting=csv.QUOTE_ALL)
 
         writer.writerow(value['header'])
-        #writer.writerows(value['rows'])
-        for row in value['rows']:
-            r = []
-            for item in row:
-                # Ensure item is an object and not an empty unicode string
-                if item and isinstance(item, text_type) and item != u'':
-                    r.append(item.encode("UTF-8"))
-            writer.writerow(r)
+        writer.writerows(value['rows'])
 
         resp = system['request'].response
         resp.content_type = 'text/csv'

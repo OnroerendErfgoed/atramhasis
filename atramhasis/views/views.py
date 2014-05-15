@@ -9,7 +9,7 @@ from skosprovider.skos import Concept
 from skosprovider.skos import Collection
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
-from skosprovider_sqlalchemy.models import Collection as DomainCollection
+from skosprovider_sqlalchemy.models import Collection as DomainCollection, Thing
 from skosprovider_sqlalchemy.models import Concept as DomainConcept
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
 
@@ -139,13 +139,18 @@ class AtramhasisView(object):
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
-                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name)
+                #concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name)
+                concepts = self.request.db.query(Thing).filter_by(conceptscheme_id=provider.conceptscheme_id,
+                                                                  label=label, type=ctype).all()
             elif (label is None) and (ctype is not None):
-                concepts = provider.find({'type': ctype}, language=self.request.locale_name)
+                #concepts = provider.find({'type': ctype}, language=self.request.locale_name)
+                concepts = self.request.db.query(Thing).filter_by(conceptscheme_id=provider.conceptscheme_id,
+                                                                  type=ctype).all()
             else:
-                concepts = provider.get_all(language=self.request.locale_name)
+                #concepts = provider.get_all(language=self.request.locale_name)
+                concepts = self.request.db.query(Thing).filter_by(conceptscheme_id=provider.conceptscheme_id).all()
             for concept in concepts:
-                rows.append((scheme_id, concept['id'], '<uri>', '<type>', concept['label'], '<prefLabels>', '<altLabels>', '<definition>', '<broader>', '<narrower>', '<related>'))
+                rows.append((scheme_id, concept.id, concept.uri, concept.type, concept.label(self.request.locale_name).label, '<prefLabels>', '<altLabels>', '<definition>', '<broader>', '<narrower>', '<related>'))
         return {
             'header': header,
             'rows': rows,
