@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-15 08:40+0200\n"
-"PO-Revision-Date: 2014-05-15 08:42+0100\n"
+"POT-Creation-Date: 2014-05-15 16:24+0200\n"
+"PO-Revision-Date: 2014-05-15 16:29+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -62,39 +62,35 @@ msgstr "concept"
 msgid "collection"
 msgstr "collection"
 
-#: atramhasis/templates/concept.jinja2:32
+#: atramhasis/templates/concept.jinja2:33
 msgid "labels"
 msgstr "libellés"
 
-#: atramhasis/templates/concept.jinja2:38
+#: atramhasis/templates/concept.jinja2:41
 msgid "notes"
 msgstr "notes"
 
-#: atramhasis/templates/concept.jinja2:44
-msgid "type"
-msgstr "type"
+#: atramhasis/templates/concept.jinja2:52
+msgid "relations"
+msgstr "relations"
 
-#: atramhasis/templates/concept.jinja2:45
-msgid "language"
-msgstr "langage"
-
-#: atramhasis/templates/concept.jinja2:51
+#: atramhasis/templates/concept.jinja2:56
 msgid "broader"
 msgstr "générique"
 
-#: atramhasis/templates/concept.jinja2:54
+#: atramhasis/templates/concept.jinja2:61
 msgid "narrower"
 msgstr "spécifique"
 
-#: atramhasis/templates/concept.jinja2:58
+#: atramhasis/templates/concept.jinja2:66
 msgid "related"
 msgstr "associé"
 
-#: atramhasis/templates/concept.jinja2:63
+#: atramhasis/templates/concept.jinja2:72
 msgid "members"
 msgstr "membres"
 
-#: atramhasis/templates/concept.jinja2:67
+#: atramhasis/templates/concept.jinja2:77
 msgid "member_of"
 msgstr "membre de"
 
@@ -120,3 +116,9 @@ msgstr[1] "%(count)s résultats:"
 #: atramhasis/templates/search_result.jinja2:15
 msgid "export"
 msgstr "exporter"
+
+#~ msgid "type"
+#~ msgstr "type"
+
+#~ msgid "language"
+#~ msgstr "langage"

@@ -1,6 +1,6 @@
 {% macro render_relaties_lijst(request, relaties, scheme_id) %}
 	{% if relaties|length > 0 %}
-        <ul>
+        <ul class="concept">
             {%- for c in relaties %}
                 <li>
                     <a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.concept_id) }}">{{ c.label(request.locale_name).label }}</a>
@@ -19,13 +19,13 @@
     {%- endfor %}
     {% if type_labels|length > 0 %}
         {% if type == 'prefLabel' %}
-        <h3>{% trans %}prefLabel{% endtrans %}</h3>
+        <h4 class="subheader">{% trans %}prefLabel{% endtrans %}:</h4>
         {% elif type == 'altLabel' %}
-        <h3>{% trans %}altLabel{% endtrans %}</h3>
+        <h4 class="subheader">{% trans %}altLabel{% endtrans %}:</h4>
         {% elif type == 'hiddenLabel' %}
-        <h3>{% trans %}hiddenLabel{% endtrans %}</h3>
+        <h4 class="subheader">{% trans %}hiddenLabel{% endtrans %}:</h4>
         {% endif %}
-		<ul>
+		<ul class="concept">
 		    {%- for label in type_labels|sort(attribute='label') %}
             <li>{{ label.label}} <em class="language">({{ label.language }})</em></li>
 		    {%- endfor %}
