@@ -22,13 +22,12 @@ def main(global_config, **settings):
     # Set up atramhasis db
     config.include('atramhasis:db')
 
-   # Set up security
+    # Set up security
     config.add_route('login', '/auth/login', request_method="POST")
     config.add_route('logout', '/auth/logout', request_method="POST")
-    authz_policy = ACLAuthorizationPolicy()
     config.set_authentication_policy(AuthTktAuthenticationPolicy(
         'sosecret', callback=groupfinder, hashalg='sha512'))
-    config.set_authorization_policy(authz_policy)
+    config.set_authorization_policy(ACLAuthorizationPolicy())
     config.set_root_factory(Root)
 
     #Add skos support
