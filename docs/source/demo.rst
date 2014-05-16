@@ -25,10 +25,11 @@ This creates a local demo package you can run with just a few more commands:
 
 .. code-block:: bash    
 
+    # setup
+    $ pip install -r requirements-dev.txt
+    $ python setup.py develop
     # create or upgrade database
     $ alembic upgrade head
-    # setup
-    $ python setup.py develop
     # intialize sample data
     $ initialize_atramhasis_db development.ini
     # compile translations
@@ -36,4 +37,4 @@ This creates a local demo package you can run with just a few more commands:
     # start server
     $ pserve development.ini
 
-The Atramhasis demo instance is now running on your localhost at post 6543.
+The Atramhasis demo instance is now running on your localhost at port 6543.
