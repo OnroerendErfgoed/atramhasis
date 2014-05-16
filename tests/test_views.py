@@ -4,14 +4,14 @@ import unittest
 
 from skosprovider.registry import Registry
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label
+from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note
 from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.views import tree_cache_dictionary
-from atramhasis.views.views import AtramhasisView, AtramhasisAdminView
+from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, labels_to_string, get_definition
 from fixtures.data import trees
 
 try:
@@ -40,7 +40,34 @@ def db(request):
 def create_query_mock(some_class):
     query_mock = Mock()
     query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    query_mock.all = get_all_mock()
+    query_mock.options = Mock(side_effect=options_mock)
     return query_mock
+
+
+def options_mock(options, **kwargs):
+    options = Mock()
+    options.filter = Mock(side_effect=filter_mock)
+    return options
+
+
+def filter_mock(filer, **kwargs):
+    filtermock = Mock()
+    filtermock.filter = Mock(side_effect=filter_mock)
+    filtermock.all = get_all_mock()
+    return filtermock
+
+
+def get_all_mock():
+    a_concept = Concept(concept_id=7895, conceptscheme_id=1, type='concept')
+    a_labels = [Label(label='De Paardekastanje', language_id='nl'), Label(label='The Chestnut', language_id='en'),
+                Label(label='la châtaigne', language_id='fr')]
+    a_concept.labels = a_labels
+    b_concept = Concept(concept_id=9863, conceptscheme_id=1, type='concept')
+    b_labels = [Label(label='test', language_id='nl')]
+    b_concept.labels = b_labels
+    all_mock = Mock(return_value=[a_concept, b_concept])
+    return all_mock
 
 
 def filter_by_mock_concept(**kwargs):
@@ -438,3 +465,17 @@ class TestAdminView(unittest.TestCase):
 
         self.assertEqual(response.status_int, 200)
         self.assertEqual(len(tree_cache_dictionary), 0)
+
+
+class TestViewFunctions(unittest.TestCase):
+
+    def test_labels_to_string(self):
+        labels = [Label(label='De Paardekastanje', language_id='nl'), Label(label='The Chestnut', language_id='en')]
+        s = labels_to_string(labels, 'prefLabel')
+        self.assertEqual('De Paardekastanje (nl), The Chestnut (en)', s)
+
+    def test_get_definition(self):
+        notes = [Note(note='test', language_id='nl', notetype_id='note'),
+                 Note(note='test2', language_id='nl', notetype_id='definition')]
+        s = get_definition(notes)
+        self.assertEqual('test2', s)

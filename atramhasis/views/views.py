@@ -8,7 +8,21 @@ from pyramid.threadlocal import get_current_registry
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from skosprovider_sqlalchemy.models import Collection, Thing, Concept
+from atramhasis.service import AtramhasisService
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
+
+
+def labels_to_string(labels, ltype):
+    labelstring = ''
+    for label in (l for l in labels if l.labeltype_id == ltype):
+        labelstring += '{} ({}), '.format(label.label, label.language_id)
+    return labelstring[:-2]
+
+
+def get_definition(notes):
+    for note in notes:
+        if note.notetype_id == 'definition':
+            return note.note
 
 
 @view_defaults(accept='text/html')
@@ -29,7 +43,7 @@ class AtramhasisView(object):
         if param in self.request.params:
             value = self.request.params.getone(param).strip()
             if not value:
-                value = None    # pragma: no cover
+                value = None  # pragma: no cover
         return value
 
     @view_config(name='favicon.ico')
@@ -72,8 +86,8 @@ class AtramhasisView(object):
         if not provider:
             raise ConceptSchemeNotFoundException(scheme_id)
         try:
-            c = self.request.db.query(Thing)\
-                .filter_by(concept_id=c_id, conceptscheme_id=provider.conceptscheme_id)\
+            c = self.request.db.query(Thing) \
+                .filter_by(concept_id=c_id, conceptscheme_id=provider.conceptscheme_id) \
                 .one()
             if isinstance(c, Concept):
                 concept_type = "Concept"
@@ -135,26 +149,36 @@ class AtramhasisView(object):
 
     @view_config(route_name='search_result_export', renderer='csv')
     def results_csv(self):
-        header = ['conceptscheme', 'id', 'uri', 'type', 'label', 'prefLabels', 'altLabels', 'definition', 'broader', 'narrower', 'related']
+        header = ['conceptscheme', 'id', 'uri', 'type', 'label', 'prefLabels', 'altLabels', 'definition', 'broader',
+                  'narrower', 'related']
         rows = []
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
         ctype = self._read_request_param('ctype')
         provider = self.skos_registry.get_provider(scheme_id)
+        service = AtramhasisService(self.request.db, provider.conceptscheme_id)
         if provider:
             if label is not None:
-                #concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name)
-                concepts = self.request.db.query(Thing).filter_by(conceptscheme_id=provider.conceptscheme_id,
-                                                                  label=label, type=ctype).all()
+                concepts = service.find({'label': label, 'type': ctype}, language=self.request.locale_name)
             elif (label is None) and (ctype is not None):
-                #concepts = provider.find({'type': ctype}, language=self.request.locale_name)
-                concepts = self.request.db.query(Thing).filter_by(conceptscheme_id=provider.conceptscheme_id,
-                                                                  type=ctype).all()
+                concepts = service.find({'type': ctype}, language=self.request.locale_name)
             else:
-                #concepts = provider.get_all(language=self.request.locale_name)
-                concepts = self.request.db.query(Thing).filter_by(conceptscheme_id=provider.conceptscheme_id).all()
+                concepts = service.get_all(language=self.request.locale_name)
             for concept in concepts:
-                rows.append((scheme_id, concept.id, concept.uri, concept.type, concept.label(self.request.locale_name).label, '<prefLabels>', '<altLabels>', '<definition>', '<broader>', '<narrower>', '<related>'))
+                if concept.type == 'concept':
+                    rows.append((
+                        scheme_id, concept.concept_id, concept.uri, concept.type,
+                        concept.label(self.request.locale_name).label,
+                        labels_to_string(concept.labels, 'prefLabel'), labels_to_string(concept.labels, 'altLabel'),
+                        get_definition(concept.notes), [c.concept_id for c in concept.broader_concepts],
+                        [c.concept_id for c in concept.narrower_concepts],
+                        [c.concept_id for c in concept.related_concepts]))
+                else:
+                    rows.append((
+                        scheme_id, concept.concept_id, concept.uri, concept.type,
+                        concept.label(self.request.locale_name).label,
+                        labels_to_string(concept.labels, 'prefLabel'), labels_to_string(concept.labels, 'altLabel'),
+                        get_definition(concept.notes), '', [c.concept_id for c in concept.members], ''))
         return {
             'header': header,
             'rows': rows,
@@ -174,6 +198,7 @@ class AtramhasisView(object):
         else:
             return Response(status_int=404)
 
+
     @tree_region.cache_on_arguments()
     def get_scheme(self, scheme, locale):
         scheme_tree = []
@@ -181,24 +206,25 @@ class AtramhasisView(object):
         if provider:
             conceptscheme_id = provider.conceptscheme_id
 
-            tco = self.request.db\
-                .query(Concept)\
+            tco = self.request.db \
+                .query(Concept) \
                 .filter(
-                    Concept.conceptscheme_id == conceptscheme_id,
-                    ~Concept.broader_concepts.any(),
-                    ~Collection.member_of.any()
-                ).all()
-            tcl = self.request.db\
-                .query(Collection)\
+                Concept.conceptscheme_id == conceptscheme_id,
+                ~Concept.broader_concepts.any(),
+                ~Collection.member_of.any()
+            ).all()
+            tcl = self.request.db \
+                .query(Collection) \
                 .filter(
-                    Collection.conceptscheme_id == conceptscheme_id,
-                    ~Collection.member_of.any()
-                ).all()
+                Collection.conceptscheme_id == conceptscheme_id,
+                ~Collection.member_of.any()
+            ).all()
 
             scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
-                sorted(tcl, key=lambda child: child.label(locale).label.lower())
+                          sorted(tcl, key=lambda child: child.label(locale).label.lower())
 
         return scheme_tree
+
 
     def parse_thing(self, thing, idx, parent):
         treeid = self.create_treeid(parent, idx)
@@ -221,16 +247,19 @@ class AtramhasisView(object):
 
         return dict_thing
 
+
     def create_treeid(self, parentid, counter):
         if parentid == 'root':
             return str(counter)
         else:
             return parentid + "." + str(counter)
 
+
     @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
     def results_tree_html(self):
         scheme_id = self.request.matchdict['scheme_id']
         return {'concept': None, 'conceptType': None, 'scheme_id': scheme_id}
+
 
 @view_defaults(accept='text/html')
 class AtramhasisAdminView(object):

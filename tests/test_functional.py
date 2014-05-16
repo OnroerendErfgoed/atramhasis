@@ -153,6 +153,13 @@ class CsvFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', response.status)
         self.assertIn('text/csv', response.headers['Content-Type'])
         self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
+        self.assertIn(u'la châtaigne', data)
+
+    def test_get_csv_all(self):
+        response = self.testapp.get('/conceptschemes/TREES/c.csv')
+        self.assertEqual('200 OK', response.status)
+        self.assertIn('text/csv', response.headers['Content-Type'])
+        self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
 
 
 class RestFunctionalTests(FunctionalTests):
