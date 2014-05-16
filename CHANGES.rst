@@ -1,3 +1,13 @@
+0.2.0 (16-05-2014)
+------------------
+
+- Full public userinterface
+- REST CRUD service
+- Security integration
+- CSV export
+- demo using Mozilla Persona as sample security setup
+
+
 0.1.0 (22-04-2014)
 ------------------
 
