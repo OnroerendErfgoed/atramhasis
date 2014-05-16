@@ -191,13 +191,12 @@ class AtramhasisView(object):
         locale = self.request.locale_name
         skostree = self.get_scheme(scheme_id, locale)
         dicts = []
-        for index, thing in enumerate(skostree, 1):
-            dicts.append(self.parse_thing(thing, index, 'root'))
+        for thing in skostree:
+            dicts.append(self.parse_thing(thing, None))
         if dicts:
             return dicts
         else:
             return Response(status_int=404)
-
 
     @tree_region.cache_on_arguments()
     def get_scheme(self, scheme, locale):
@@ -225,9 +224,8 @@ class AtramhasisView(object):
 
         return scheme_tree
 
-
-    def parse_thing(self, thing, idx, parent):
-        treeid = self.create_treeid(parent, idx)
+    def parse_thing(self, thing, parent_tree_id):
+        tree_id = self.create_treeid(parent_tree_id, thing.concept_id)
         locale = self.request.locale_name
 
         if thing.type and thing.type == 'collection':
@@ -236,9 +234,9 @@ class AtramhasisView(object):
             cs = [c for c in thing.narrower_concepts]
 
         sortedcs = sorted(cs, key=lambda child: child.label(locale).label.lower())
-        children = [self.parse_thing(c, index, treeid) for index, c in enumerate(sortedcs, 1)]
+        children = [self.parse_thing(c, tree_id) for index, c in enumerate(sortedcs, 1)]
         dict_thing = {
-            'id': treeid,
+            'id': tree_id,
             'concept_id': thing.concept_id,
             'type': thing.type,
             'label': thing.label(locale).label,
@@ -247,12 +245,11 @@ class AtramhasisView(object):
 
         return dict_thing
 
-
-    def create_treeid(self, parentid, counter):
-        if parentid == 'root':
-            return str(counter)
+    def create_treeid(self, parent_tree_id, concept_id):
+        if parent_tree_id is None:
+            return str(concept_id)
         else:
-            return parentid + "." + str(counter)
+            return parent_tree_id + "." + str(concept_id)
 
 
     @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
