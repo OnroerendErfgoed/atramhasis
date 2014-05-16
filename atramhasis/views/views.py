@@ -15,7 +15,7 @@ from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_ca
 def labels_to_string(labels, ltype):
     labelstring = ''
     for label in (l for l in labels if l.labeltype_id == ltype):
-        labelstring += '{} ({}), '.format(label.label, label.language_id)
+        labelstring += label.label + ' (' + label.language_id + '), '
     return labelstring[:-2]
 
 

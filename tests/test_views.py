@@ -470,9 +470,9 @@ class TestAdminView(unittest.TestCase):
 class TestViewFunctions(unittest.TestCase):
 
     def test_labels_to_string(self):
-        labels = [Label(label='De Paardekastanje', language_id='nl'), Label(label='The Chestnut', language_id='en')]
+        labels = [Label(label='De Paardekastanje', language_id='nl'), Label(label='la châtaigne', language_id='fr')]
         s = labels_to_string(labels, 'prefLabel')
-        self.assertEqual('De Paardekastanje (nl), The Chestnut (en)', s)
+        self.assertEqual('De Paardekastanje (nl), la châtaigne (fr)', s)
 
     def test_get_definition(self):
         notes = [Note(note='test', language_id='nl', notetype_id='note'),
