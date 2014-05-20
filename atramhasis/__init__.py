@@ -26,6 +26,8 @@ def includeme(config):
     config.add_route('admin', '/admin')
     config.add_route('scheme_tree_invalidate', pattern='/admin/tree/invalidate/{scheme_id}', accept='application/json')
     config.add_route('tree_invalidate', pattern='/admin/tree/invalidate', accept='application/json')
+    config.add_route('atramhasis.rdf_export_turtle', pattern='/conceptschemes/{scheme_id}/c.ttl')
+    config.add_route('atramhasis.rdf_export', pattern='/conceptschemes/{scheme_id}/c.rdf')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
 
