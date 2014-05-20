@@ -1,6 +1,7 @@
-from pyramid.response import FileResponse, Response
+from pyramid.response import Response
 from pyramid.view import view_defaults, view_config
 from skosprovider_rdf import utils
+
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
 
 
@@ -15,10 +16,10 @@ class AtramhasisRDF(object):
         if hasattr(request, 'skos_registry') and request.skos_registry is not None:
             self.skos_registry = self.request.skos_registry
         else:
-            raise SkosRegistryNotFoundException()
+            raise SkosRegistryNotFoundException()   # pragma: no cover
         self.provider = self.skos_registry.get_provider(self.scheme_id)
         if not self.provider:
-            raise ConceptSchemeNotFoundException(self.scheme_id)
+            raise ConceptSchemeNotFoundException(self.scheme_id)   # pragma: no cover
 
     @view_config(route_name='atramhasis.rdf_export')
     def rdf_export(self):

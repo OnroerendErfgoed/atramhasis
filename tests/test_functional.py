@@ -374,3 +374,16 @@ class CacheFunctionalTests(FunctionalTests):
 
         cached_tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
         self.assertEqual(tree_response2.json, cached_tree_response2.json)
+
+
+class RdfFunctionalTests(FunctionalTests):
+
+    def test_rdf_xml(self):
+        rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c.rdf')
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('application/rdf+xml', rdf_response.content_type)
+
+    def test_rdf_turtle(self):
+        ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c.ttl')
+        self.assertEqual('200 OK', ttl_response.status)
+        self.assertEqual('text/turtle', ttl_response.content_type)
