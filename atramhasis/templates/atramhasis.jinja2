@@ -21,8 +21,16 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>	
-					<a id="schemerootlink" href="#" class="button radius">{% trans %}open{% endtrans %}</a>
+                    </div>
+
+                    <div class="row collapse">
+                        <ul class="inline-list right">
+                            <li><a id="schemerootlink" href="#">{% trans %}open{% endtrans %}</a></li>
+                            <li><a id="exportrdflink" href="#">{% trans %}export{% endtrans %} rdf</a></li>
+                            <li><a id="exportttllink" href="#">{% trans %}export{% endtrans %} ttl</a></li>
+                        </ul>
+                    </div>
+
                     <div class="row collapse">
                         <div class="large-3 columns">
                             <label class="inline">{% trans %}select_type{% endtrans %}:</label>
