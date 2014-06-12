@@ -17,7 +17,8 @@ def from_thing(thing):
                     Label(l.label, l.labeltype_id, l.language_id)
                     for l in thing.labels
                 ],
-                members=[member.concept_id for member in thing.members] if hasattr(thing, 'members') else []
+                members=[member.concept_id for member in thing.members] if hasattr(thing, 'members') else [],
+                member_of=[c.concept_id for c in thing.member_of]
             )
         else:
             return Concept(
@@ -34,4 +35,5 @@ def from_thing(thing):
                 broader=[c.concept_id for c in thing.broader_concepts],
                 narrower=[c.concept_id for c in thing.narrower_concepts],
                 related=[c.concept_id for c in thing.related_concepts],
+                member_of=[c.concept_id for c in thing.member_of],
             )
