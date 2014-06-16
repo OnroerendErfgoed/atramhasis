@@ -1,0 +1,12 @@
+<html>
+<head>
+    <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/App.css') }}">
+    <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/FilteredGrid.css') }}">
+</head>
+<body class="claro">
+    <div id='appDiv'></div>
+    <script data-dojo-config="async: 1, tlmSiblingOfDojo: 0, isDebug: 1" src="{{ request.static_path('atramhasis:static/admin/src/dojo/dojo.js') }}"></script>
+    <!--<script src='app/run.js'></script>-->
+    <script src="{{ request.static_path('atramhasis:static/admin/src/app/run.js') }}"></script>
+</body>
+</html>

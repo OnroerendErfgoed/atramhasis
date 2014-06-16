@@ -1,15 +1,15 @@
 (function () {
     // let the loader know where to look for packages
     var config = {
-        baseUrl: './',
+        baseUrl: 'http://localhost:6543/static/admin/src/',
         packages: [
             'dojo',
             'dijit',
             'dojox',
-            'app',
             'dgrid',
             'put-selector',
-            'xstyle'
+            'xstyle',
+            { name: 'app', location: 'app', map: {} },
         ]
     };
     require(config, ['app']);
