@@ -12,6 +12,15 @@ amount of code coverage present and run frequent unit tests. All commits and
 pull requests will be tested with `Travis-ci`_. Code coverage is being 
 monitored with `Coveralls`_.
 
+To work on the admin part, you'll need `npm`_ and `bower`_ installed.
+
+.. code-block:: bash
+
+    $ sudo apt-get install nodejs
+    $ sudo apt-get install npm
+    $ npm install bower
+
+
 Locally you can run unit tests by using `pytest`_ or `tox`_. Running pytest 
 manually is good for running a distinct set of unit tests. For a full test run, 
 tox is preferred since this can run the unit tests against multiple versions of
@@ -24,6 +33,10 @@ tox) will be installed.
 
 .. code-block:: bash
 
+    # Install npm and bower
+    $ sudo apt-get install nodejs
+    $ sudo apt-get install npm
+    $ npm install bower
     # Install dependencies
     $ pip install -r requirements-dev.txt
     # Run unit tests for all environments 
@@ -40,6 +53,9 @@ tox) will be installed.
     $ initialize_atramhasis_db development.ini
     # compile the Message Catalog Files
     $ python setup.py compile_catalog
+    # install js dependencies using bower
+    $ cd atramhasis/static/admin
+    $ bower install
 
 Every pull request will be run through Travis-ci_. When providing a pull 
 request, please run the unit tests first and make sure they all pass. Please 
@@ -61,3 +77,5 @@ This will update the requirement files in the scaffolds.
 .. _Coveralls: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 .. _pytest: http://pytest.org
 .. _tox: http://tox.readthedocs.org
+.. _npm: https://www.npmjs.org/
+.. _bower: http://bower.io/
