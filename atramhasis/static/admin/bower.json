@@ -1,0 +1,26 @@
+{
+  "name": "atradmin",
+  "version": "0.1.0",
+  "authors": [
+    "Cedrik Vanderhaegen <cedrik.vanderhaegen@geosolutions.be>"
+  ],
+  "description": "atramhasis private frontend for administration",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "dijit": "~1.9.3",
+    "dojo": "~1.9.3",
+    "put-selector": "~0.3.5",
+    "dojox": "~1.9.3",
+    "util": "dojo-util#~1.9.3",
+    "xstyle": "~0.2.1",
+    "dgrid": "~0.3.15"
+  }
+}

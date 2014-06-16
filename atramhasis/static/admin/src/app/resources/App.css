@@ -1,0 +1,44 @@
+@import '../../dojo/resources/dojo.css';
+@import '../../dijit/themes/claro/claro.css';
+@import '../../dgrid/css/dgrid.css';
+@import '../../dgrid/css/skins/claro.css';
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+#appHeader{
+    background-color: #333333;
+    height: 45px;
+    margin: 0;
+    padding: 0;
+}
+#appHeader h1{
+    padding: 0 15px;
+    line-height: 45px;
+    margin: 0;
+}
+#appHeader h1 a{
+    font-size: 17px;
+    text-decoration: none;
+    color: white;
+}
+
+#appMenu{
+    width: 40%;
+    background-color: #f2f2f2;
+}
+
+#appContainer {
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+    border: none;
+}
+
+#select-wrapper{
+    font-size: 14px;
+    padding:10px;
+}
