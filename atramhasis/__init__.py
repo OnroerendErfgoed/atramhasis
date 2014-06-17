@@ -11,7 +11,8 @@ def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_renderer('csv', 'atramhasis.renderers.CSVRenderer')
     config.add_route('home', '/')
-    config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html')
+    config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
+                     request_method="GET")
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
     config.add_route('scheme_root', pattern='/conceptschemes/{scheme_id}/c/', accept='text/html')
     config.add_route('scheme_tree', pattern='/conceptschemes/{scheme_id}/tree', accept='application/json')
