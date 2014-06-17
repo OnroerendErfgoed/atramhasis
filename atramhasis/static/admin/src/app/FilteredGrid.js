@@ -136,7 +136,10 @@ define([
             console.log("grid setScheme: " + schemeid);
             this._resetFilters();
             this.conceptScheme = schemeid;
-            this.conceptStore = Cache(dojo.store.JsonRest({target:"/conceptschemes/" + schemeid + "/c"}), Memory());
+            this.conceptStore = Cache(dojo.store.JsonRest({
+                target:"/conceptschemes/" + schemeid + "/c",
+                sortParam: "sort"
+            }), Memory());
             this.conceptGrid.set("store", this.conceptStore, this.conceptFilter);
         },
 
