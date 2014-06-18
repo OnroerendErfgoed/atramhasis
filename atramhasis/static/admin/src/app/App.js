@@ -3,6 +3,7 @@ define([
     "dojo/on",
     "dojo/topic",
     "dojo/_base/lang",
+    "dojo/store/Memory",
 
     "dijit/registry",
     "dijit/_Widget",
@@ -25,6 +26,8 @@ define([
 ], function(
     declare, on, topic, lang,
 
+    Memory,
+
     registry,
     _Widget,
     _TemplatedMixin,
@@ -42,10 +45,7 @@ define([
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
-
-        conceptschemes: null,
-        concepttypes: null,
-
+        thesauri: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -61,27 +61,24 @@ define([
 
         postCreate: function () {
             this.inherited(arguments);
-
             console.log('postCreate', arguments);
+            this.thesauri = new ThesaurusCollection();
         },
 
         startup: function () {
             this.inherited(arguments);
             console.log('startup', arguments);
 
-            this.thesauri = new ThesaurusCollection();
-
             var schemeCombo = new ComboBox({
                 id: "schemeSelect",
                 name: "scheme",
-                store: this.conceptschemes,
+                store: new Memory({ data: this.thesauri.schemelist }),
                 searchAttr: "id",
                 placeHolder: 'select thesaurus'
             }, "selectNode");
 
             var filteredGrid = new FilteredGrid({
-                id: "conceptGrid",
-                concepttypes: this.concepttypes
+                id: "conceptGrid"
             }, "filteredGridNode");
             filteredGrid.startup();
 
@@ -141,6 +138,18 @@ define([
                 }
 
             }));
+
+            topic.subscribe("concept.delete",function(conceptid, schemeid){
+                console.log("concept.delete subscribe: " + conceptid + "(" + schemeid + ")");
+                var thesaurus = self.thesauri.stores[schemeid];
+                filteredGrid.conceptGrid.store.remove(conceptid).then(
+                    function(){
+                        filteredGrid.conceptGrid.refresh();
+                        var cp = registry.byId(schemeid + "_" + conceptid);
+                        tc.removeChild(cp);
+                        cp.destroyRecursive();
+                     });
+            });
         }
 
     });

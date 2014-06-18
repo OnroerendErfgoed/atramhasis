@@ -4,6 +4,7 @@ define([
     "dojo/dom-construct",
     "dojo/query",
     "dojo/on",
+    "dojo/topic",
 
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
@@ -11,7 +12,7 @@ define([
     'dojo/text!./templates/ConceptDetail.html'
 
 ], function (
-    declare, arrayUtil, domConstruct, query, on,
+    declare, arrayUtil, domConstruct, query, on, topic,
 
     _WidgetBase,
     _TemplatedMixin,
@@ -39,6 +40,18 @@ define([
 
 
         postCreate: function () {
+            var self = this;
+
+            var actionNode = this.actionNode;
+            var deleteLi = domConstruct.create("li", {
+                innerHTML: "<a href='#'>Delete</a>"
+            }, actionNode);
+            on(deleteLi, "click", function(){
+                console.log("concept.delete publish:" + self.conceptid);
+                topic.publish("concept.delete", self.conceptid, self.schemeid);
+
+            });
+
             var labelListNode = this.labelListNode;
             arrayUtil.forEach(this.labels, function(label){
                 console.log(label);

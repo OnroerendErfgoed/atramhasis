@@ -11,9 +11,10 @@ define([
 
     "dijit/form/ComboBox",
     "dijit/form/TextBox",
+    "dijit/form/Button",
 
     "dojo/store/Memory", "dojo/store/Cache",
-    "dgrid/OnDemandGrid", "dgrid/Selection", "dgrid/Keyboard"
+    "dgrid/OnDemandGrid", "dgrid/Selection", "dgrid/Keyboard", "dgrid/editor"
 
 ], function(
     declare, on, topic, lang,
@@ -25,10 +26,11 @@ define([
     template,
     ComboBox,
     TextBox,
+    Button,
 
     Memory, Cache,
 
-    OnDemandGrid, Selection, Keyboard
+    OnDemandGrid, Selection, Keyboard, editor
 
     ) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -54,6 +56,13 @@ define([
 
         postCreate: function () {
             this.inherited(arguments);
+
+            this.concepttypes = new Memory({
+                data: [
+                    {name:"All", id:"all"},
+                    {name:"Concepts", id:"concept"},
+                    {name:"Collections", id:"collection"}
+                ]});
         },
 
         startup: function () {
@@ -76,6 +85,33 @@ define([
                 placeHolder: 'filter by label',
                 intermediateChanges:true
             }, "filterNode");
+
+            var self = this;
+
+            var addButton = new Button({
+                label: "Add row",
+                onClick: function() {
+                    var rowToAdd = {
+                        "type": "concept",
+                        "broader": [],
+                        "narrower": [],
+                        "related": [],
+                        "labels": [
+                            {
+                                "type": "prefLabel",
+                                "language": "nl",
+                                "label": "testconcept"
+                            }
+                        ],
+                        "notes": []
+                    };
+                    self.conceptGrid.store.add(rowToAdd)
+                        .then(function(){
+                            console.log("row added");
+                            self.conceptGrid.refresh();
+                        });
+                }
+            }, "addNode");
 
             var columns = [
                 {label:"ID", field:"id"},

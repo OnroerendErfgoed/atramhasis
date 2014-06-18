@@ -4,25 +4,18 @@ define(
         "dojo/_base/lang",
         "dojo/_base/array",
         "dojo/request",
-        "dojo/store/JsonRest",
-        "dojo/store/Memory",
-        "dojo/store/Cache",
-        "dojo/store/Observable",
-        "dojo/topic"
+        "dojo/store/JsonRest"
     ],
     function (
         declare,
         lang,
         array,
         request,
-        JsonRest,
-        Memory,
-        Cache,
-        Observable,
-        topic) {
+        JsonRest) {
         return declare( null,
             {
 
+                schemelist: [],
                 stores: {},
 
                 constructor: function (/*Object*/ args) {
@@ -31,15 +24,13 @@ define(
                         '/conceptschemes',
                         {'handleAs': 'json'}
                     ).then(lang.hitch(this,function(schemes) {
-                            array.forEach(schemes, lang.hitch(this, function(scheme) {
-                                var store = new JsonRest({
-                                    'target': '/conceptschemes/' + scheme.id + '/c/'
-                                });
-                                //var mstore = new Memory();
-                                //var store = new Cache(rstore, mstore);
-                                this.stores[scheme.id] = store;
-                            }));
+                        array.forEach(schemes, lang.hitch(this, function(scheme) {
+                            this.schemelist.push({name:scheme.id, id:scheme.id});
+                            this.stores[scheme.id] = new JsonRest({
+                                'target': '/conceptschemes/' + scheme.id + '/c/'
+                            });
                         }));
+                    }))
                 }
 
             }
