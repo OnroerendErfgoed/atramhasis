@@ -1,0 +1,51 @@
+<form data-dojo-attach-point='containerNode'>
+    <div data-dojo-attach-point="formNode">
+        <ul>
+            <li>
+                scheme: TREES
+                <input type="hidden" id="cscheme"  name="cscheme" value="TREES"
+                    data-dojo-type="dijit/form/TextBox" />
+            </li>
+            <li>
+                <label for='ctype'>Type</label>
+                <select id="ctype" name="ctype" data-dojo-type='dijit/form/Select'>
+                    <option value="concept" selected>Concept</option>
+                    <option value="collection">Collection</option>
+                </select>
+            </li>
+            <li>
+                <label for='clabel'>label</label>
+                <input type="text" name="clabel" placeHolder="[label]"
+                    data-dojo-type="dijit/form/TextBox"
+                    data-dojo-props="trim:true, propercase:true" id="clabel" />
+                <select id="clabeltype" name="clabeltype" data-dojo-type='dijit/form/Select'>
+                    <option value="prefLabel" selected>Preferred</option>
+                    <option value="altLabel">Alternative</option>
+                    <option value="hiddenLabel">Hidden</option>
+                </select>
+                <select id="clabellang" name="clabellang" data-dojo-type='dijit/form/Select'>
+                    <option value="nl" selected>nl</option>
+                    <option value="fr">fr</option>
+                    <option value="en">en</option>
+                </select>
+            </li>
+            <li>
+                <label for='cmemberof'>member of</label>
+                <input type="text" name="cmemberof"
+                    data-dojo-type="dijit/form/NumberTextBox"
+                    id="cmemberof" />
+            </li>
+            <li>
+                <button id='submit' data-dojo-type='dijit/form/Button' name='submit' type='submit'>submit</button>
+            </li>
+        </ul>
+    </div>
+
+    <div data-dojo-attach-point="spinnerNode" style="display:none">
+        Please wait…
+    </div>
+
+    <div data-dojo-attach-point="successNode" style="display:none">
+        The concept or collection has been added to the thesaurus
+    </div>
+</form>

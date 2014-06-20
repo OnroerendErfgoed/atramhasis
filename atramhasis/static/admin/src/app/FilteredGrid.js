@@ -88,31 +88,6 @@ define([
 
             var self = this;
 
-            var addButton = new Button({
-                label: "Add row",
-                onClick: function() {
-                    var rowToAdd = {
-                        "type": "concept",
-                        "broader": [],
-                        "narrower": [],
-                        "related": [],
-                        "labels": [
-                            {
-                                "type": "prefLabel",
-                                "language": "nl",
-                                "label": "testconcept"
-                            }
-                        ],
-                        "notes": []
-                    };
-                    self.conceptGrid.store.add(rowToAdd)
-                        .then(function(){
-                            console.log("row added");
-                            self.conceptGrid.refresh();
-                        });
-                }
-            }, "addNode");
-
             var columns = [
                 {label:"ID", field:"id"},
                 {label:"label", field:"label"},

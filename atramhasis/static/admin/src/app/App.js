@@ -12,11 +12,13 @@ define([
 
     "dojo/text!./templates/App.html",
 
-    "dijit/form/ComboBox",
+    "dijit/form/ComboBox", "dijit/form/Button", "dijit/Dialog",
 
     "./FilteredGrid",
     "./ConceptDetail",
     "./ThesaurusCollection",
+    "./ConceptForm",
+    "dojo/text!./templates/ConceptForm.html",
 
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
@@ -35,10 +37,12 @@ define([
 
     template,
 
-    ComboBox,
+    ComboBox, Button, Dialog,
 
     FilteredGrid, ConceptDetail,
     ThesaurusCollection,
+    ConceptForm,
+    formTemplate,
 
     ContentPane, TabContainer
     ){
@@ -81,6 +85,20 @@ define([
                 id: "conceptGrid"
             }, "filteredGridNode");
             filteredGrid.startup();
+
+            var conceptDialog = new Dialog({
+                id: 'conceptDialog',
+                content:new ConceptForm({templateString:formTemplate}),
+                title:"Add concept"
+            }).placeAt(document.body);
+
+            var addConceptButton = new Button({
+                label: "Add concept or collection",
+                onClick: function() {
+                    conceptDialog.content.init();
+                    conceptDialog.show();
+                }
+            }, "addConceptNode");
 
             var tc = new TabContainer({
                 tabPosition: 'bottom'
@@ -142,14 +160,49 @@ define([
             topic.subscribe("concept.delete",function(conceptid, schemeid){
                 console.log("concept.delete subscribe: " + conceptid + "(" + schemeid + ")");
                 var thesaurus = self.thesauri.stores[schemeid];
-                filteredGrid.conceptGrid.store.remove(conceptid).then(
-                    function(){
+                filteredGrid.conceptGrid.store.remove(conceptid)
+                    .then(function(){
                         filteredGrid.conceptGrid.refresh();
                         var cp = registry.byId(schemeid + "_" + conceptid);
                         tc.removeChild(cp);
                         cp.destroyRecursive();
                      });
             });
+
+            topic.subscribe("conceptform.submit", function(form){
+                console.log("conceptform.submit subscribe");
+                console.log(form);
+
+                var rowToAdd = {
+                    "type": form.ctype,
+                    "broader": [],
+                    "narrower": [],
+                    "related": [],
+                    "labels": [
+                        {
+                            "type": form.clabeltype,
+                            "language": form.clabellang,
+                            "label": form.clabel
+                        }
+                    ],
+                    "notes": [],
+                    "member_of": [
+                        3
+//                        form.cmemberof
+                    ]
+                };
+                filteredGrid.conceptGrid.store.add(rowToAdd)
+                    .then(function(){
+                        filteredGrid.conceptGrid.refresh();
+                        console.log("row added");
+                        conceptDialog.content.show({
+                            spinnerNode: false,
+                            formNode: false,
+                            successNode: true
+                        });
+                        conceptDialog && conceptDialog.resize();
+                    });
+                });
         }
 
     });
