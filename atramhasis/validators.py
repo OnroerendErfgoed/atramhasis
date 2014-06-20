@@ -68,6 +68,7 @@ class Concept(colander.MappingSchema):
     narrower = Concepts(missing=[])
     related = Concepts(missing=[])
     members = Concepts(missing=[])
+    member_of = Concepts(missing=[])
 
 
 def concept_schema_validator(node, cstruct):
