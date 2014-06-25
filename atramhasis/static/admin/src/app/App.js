@@ -18,7 +18,7 @@ define([
     "./ConceptDetail",
     "./ThesaurusCollection",
     "./ConceptForm",
-    "dojo/text!./templates/ConceptForm.html",
+//    "dojo/text!./templates/ConceptForm.html",
 
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
@@ -42,7 +42,6 @@ define([
     FilteredGrid, ConceptDetail,
     ThesaurusCollection,
     ConceptForm,
-    formTemplate,
 
     ContentPane, TabContainer
     ){
@@ -50,6 +49,7 @@ define([
 
         templateString: template,
         thesauri: null,
+        currentScheme: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -72,6 +72,7 @@ define([
         startup: function () {
             this.inherited(arguments);
             console.log('startup', arguments);
+            var self = this;
 
             var schemeCombo = new ComboBox({
                 id: "schemeSelect",
@@ -88,16 +89,13 @@ define([
 
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
-                content:new ConceptForm({templateString:formTemplate}),
-                title:"Add concept"
+                content:new ConceptForm(),
+                title:"Add concept",
+                style: "width: 500px"
             }).placeAt(document.body);
 
             var addConceptButton = new Button({
-                label: "Add concept or collection",
-                onClick: function() {
-                    conceptDialog.content.init();
-                    conceptDialog.show();
-                }
+                label: "Add concept or collection"
             }, "addConceptNode");
 
             var tc = new TabContainer({
@@ -114,11 +112,17 @@ define([
             tc.startup();
 
             on(schemeCombo, "change", function(e){
-                console.log("on ", e);
+                console.log("on schemeCombo ", e);
+                self.currentScheme = e;
                 filteredGrid.setScheme(e);
             });
 
-            var self = this;
+            on(addConceptButton, "click", function(){
+                console.log("on addConceptButton " + self.currentScheme);
+                conceptDialog.content.init(self.currentScheme);
+                conceptDialog.show();
+            });
+
             topic.subscribe("conceptOpen", lang.hitch(this, function(concept){
                 var schemeid = concept.scheme;
                 var cp = registry.byId(schemeid + "_" + concept.id);
@@ -175,7 +179,6 @@ define([
 
                 var rowToAdd = {
                     "type": form.ctype,
-                    "broader": [],
                     "narrower": [],
                     "related": [],
                     "labels": [
@@ -186,9 +189,8 @@ define([
                         }
                     ],
                     "notes": [],
-                    "member_of": [
-                        3
-//                        form.cmemberof
+                    "broader": [
+                        form.cbroader
                     ]
                 };
                 filteredGrid.conceptGrid.store.add(rowToAdd)
