@@ -222,6 +222,19 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
 
+    def test_collection_with_narrower(self):
+        # Collections can not have narrower relations
+        self.json_collection['narrower'] = []
+        self.json_collection['narrower'].append(2)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
     def test_broader_concept_type_concept(self):
         error_raised = False
         validated_concept = None
@@ -238,6 +251,19 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_collection_with_broader(self):
+        # Collections can not have broader relations
+        self.json_collection['broader'] = []
+        self.json_collection['broader'].append(2)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_collection)
         except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)

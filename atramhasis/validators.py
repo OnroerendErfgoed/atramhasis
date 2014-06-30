@@ -96,14 +96,17 @@ def concept_schema_validator(node, cstruct):
         related = copy.deepcopy(cstruct['related'])
         r_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['related'], request,
                                                                          conceptscheme_id, related)
+        concept_relations_rule(errors, node, related, concept_type)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
         n_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['narrower'], request,
                                                                          conceptscheme_id, narrower)
+        concept_relations_rule(errors, node, narrower, concept_type)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
         b_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['broader'], request,
                                                                          conceptscheme_id, broader)
+        concept_relations_rule(errors, node, broader, concept_type)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
         m_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['members'], request,
@@ -131,6 +134,14 @@ def concept_schema_validator(node, cstruct):
             'Concept could not be validated',
             [e.asdict() for e in errors]
         )
+
+
+def concept_relations_rule(errors, node_location, relations, concept_type):
+    if relations is not None and len(relations) > 0 and concept_type != 'concept':
+        errors.append(colander.Invalid(
+            node_location,
+            'Only concepts can have narrower/broader/related relations'
+        ))
 
 
 def max_preflabels_rule(errors, node, labels):
