@@ -201,6 +201,19 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
 
+    def test_collection_with_related(self):
+        # Collections can not have related relations
+        self.json_collection['related'] = []
+        self.json_collection['related'].append(2)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
     def test_narrower_concept_type_concept(self):
         error_raised = False
         validated_concept = None
