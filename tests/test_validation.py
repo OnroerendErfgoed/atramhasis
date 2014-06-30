@@ -11,7 +11,7 @@ except ImportError:
     from mock import Mock  # pragma: no cover
 import colander
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, LabelType, Language
+from skosprovider_sqlalchemy.models import Concept, Collection, LabelType, Language
 from atramhasis.validators import (
     Concept as ConceptSchema,
     concept_schema_validator
@@ -32,7 +32,22 @@ def filter_by_mock_concept(concept_id, conceptscheme_id):
         narrower_concepts.add(narrower_concept)
         concept.narrower_concepts = narrower_concepts
     if concept_id == 666:
+        concept = Collection(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
         concept.type = 'collection'
+    if concept_id == 667:
+        concept = Collection(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
+        concept.type = 'collection'
+        memberof = Collection(concept_id=60, conceptscheme_id=conceptscheme_id)
+        memberofs = set()
+        memberofs.add(memberof)
+        concept.member_of = memberofs
+    if concept_id == 62:
+        concept = Collection(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
+        concept.type = 'collection'
+        member = Collection(concept_id=666, conceptscheme_id=conceptscheme_id)
+        members = set()
+        members.add(member)
+        concept.members = members
     if concept_id == 777:
         if conceptscheme_id != 3:
             raise NoResultFound()
@@ -95,7 +110,8 @@ class TestValidation(unittest.TestCase):
                           "note": "een notitie",
                           "type": "note",
                           "language": "nl"
-                      }]
+                      }],
+            "member_of": [666]
         }
         self.json_collection = {
             "id": 0,
@@ -111,7 +127,8 @@ class TestValidation(unittest.TestCase):
                           "note": "een notitie",
                           "type": "note",
                           "language": "nl"
-                      }]
+                      }],
+            "member_of": [666]
         }
 
     def tearDown(self):
@@ -131,6 +148,7 @@ class TestValidation(unittest.TestCase):
         self.assertEqual(3, len(validated_concept['narrower']))
         self.assertEqual(1, len(validated_concept['broader']))
         self.assertEqual(1, len(validated_concept['related']))
+        self.assertEqual(1, len(validated_concept['member_of']))
 
     def test_max_preflabels_2_en(self):
         self.json_concept['labels'].append({
@@ -368,6 +386,102 @@ class TestValidation(unittest.TestCase):
         })
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_memberof_concept_type_collection(self):
+        #A Collection/Concept can be a member_of a Collection
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)
+
+    def test_memberof_concept_type_concept(self):
+        # Nothing can be a member_of a Concept
+        self.json_concept['member_of'].append(2)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_members_collection_unique(self):
+        # A Collection is a Set (every element of the Collection should be unique).
+        self.json_collection['members'].append(61)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_concept_members(self):
+        # A Concept does not have members.
+        self.json_concept['members'] = []
+        self.json_concept['members'].append(2)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_memberof_concept_hierarchy_simple(self):
+        # The hierarchy should not contain loops
+        self.json_collection['members'].append(666)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_memberof_concept_hierarchy_deep(self):
+        # The hierarchy should not contain loops
+        self.json_collection['members'].append(62)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_members_concept_hierarchy_simple(self):
+        # The hierarchy should not contain loops
+        self.json_collection['member_of'].append(61)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_members_concept_hierarchy_deep(self):
+        # The hierarchy should not contain loops
+        self.json_collection['member_of'].append(667)
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_collection)
         except ValidationError as e:
             error_raised = True
         self.assertTrue(error_raised)
