@@ -1,0 +1,44 @@
+.conceptDetail {
+    color: #404245;
+}
+
+.actionBar{
+    background-color: #008CBA;
+    height: 20px;
+}
+
+.actionBar ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.actionBar ul li{
+    display: inline;
+    float: right;
+}
+
+.actionBar ul li a:link, .actionBar ul li a:visited {
+    line-height: 20px;
+    display: block;
+    text-decoration: none;
+    color: white;
+    width: 60px;
+    text-align: center;
+    background-color: #008CBA;
+}
+
+.actionBar ul li a:hover {
+    background-color: #0078A0;
+}
+
+.conceptDetail h1 {
+    text-align: center;
+    border-bottom: 2px solid #0078A0;
+}
+
+.conceptDetail h2 {
+    padding-left: 10px;
+    border-bottom: 1px solid #0078A0;
+}

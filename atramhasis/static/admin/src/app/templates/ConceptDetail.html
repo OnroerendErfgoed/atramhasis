@@ -1,11 +1,13 @@
 <div>
-    <ul data-dojo-attach-point="actionNode"></ul>
-    <h1 data-dojo-attach-point='nameNode'>${label}</h1>
+    <div class="actionBar">
+        <ul data-dojo-attach-point="actionNode"></ul>
+    </div>
+
+    <h1 data-dojo-attach-point='nameNode'>${schemeid}: <i>${label}</i></h1>
     <ul>
         <li data-dojo-attach-point='idNode'>id: ${conceptid}</li>
         <li data-dojo-attach-point='typeNode'>type: ${type}</li>
         <li data-dojo-attach-point='uriNode'>uri: ${uri}</li>
-        <li data-dojo-attach-point='schemeidNode'>scheme: ${schemeid}</li>
     </ul>
 
     <h2>labels</h2>

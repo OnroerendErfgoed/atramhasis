@@ -98,11 +98,7 @@ define([
                 label: "Add concept or collection"
             }, "addConceptNode");
 
-            var tc = new TabContainer({
-                tabPosition: 'bottom'
-            });
-            var centerPane = registry.byId("center");
-            centerPane.set("content", tc);
+            var tc = registry.byId("center");
 
             var cpwelcome = new ContentPane({
                 title: "Welcome",
@@ -150,8 +146,10 @@ define([
                         });
                         cp = new ContentPane({
                             id: schemeid + "_" + item.id,
+//                            baseClass: "dijitContentPaneNoPadding", /*niet ok, scrollbars zijn weg*/
                             title: item.label,
                             closable: true,
+                            style: "padding: 0",
                             content: concept
                         });
                         tc.addChild(cp);
@@ -171,6 +169,10 @@ define([
                         tc.removeChild(cp);
                         cp.destroyRecursive();
                      });
+            });
+
+            topic.subscribe("concept.edit",function(conceptid, schemeid){
+                console.log("concept.edit subscribe: " + conceptid + "(" + schemeid + ")");
             });
 
             topic.subscribe("conceptform.submit", function(form){

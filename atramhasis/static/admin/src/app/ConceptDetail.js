@@ -8,6 +8,7 @@ define([
 
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
+    "dijit/ConfirmDialog",
 
     'dojo/text!./templates/ConceptDetail.html'
 
@@ -16,6 +17,8 @@ define([
 
     _WidgetBase,
     _TemplatedMixin,
+
+    ConfirmDialog,
 
     template
     ) {
@@ -46,10 +49,36 @@ define([
             var deleteLi = domConstruct.create("li", {
                 innerHTML: "<a href='#'>Delete</a>"
             }, actionNode);
-            on(deleteLi, "click", function(){
-                console.log("concept.delete publish:" + self.conceptid);
-                topic.publish("concept.delete", self.conceptid, self.schemeid);
+            var editLi = domConstruct.create("li", {
+                innerHTML: "<a href='#'>Edit</a>"
+            }, actionNode);
+            on(deleteLi, "click", function(evt){
+                evt.preventDefault();
 
+                var myDialog = new ConfirmDialog({
+                    title: "Delete",
+                    content: "Are you sure you want to delete this?",
+                    style: "width: 200px"
+                });
+                on(myDialog, "cancel", function(){
+                    console.log("confirmdialog cancel");
+                });
+                on(myDialog, "execute", function(){
+                    console.log("concept.delete publish:" + self.conceptid);
+                    topic.publish("concept.delete", self.conceptid, self.schemeid);
+                });
+                on(myDialog, "hide", function(){
+                    console.log("confirmdialog destroy on hide");
+                    myDialog.destroyRecursive();
+                });
+                myDialog.show();
+                return false;
+            });
+            on(editLi, "click", function(evt){
+                evt.preventDefault();
+                console.log("concept.edit publish:" + self.conceptid);
+                topic.publish("concept.edit", self.conceptid, self.schemeid);
+                return false;
             });
 
             var labelListNode = this.labelListNode;
