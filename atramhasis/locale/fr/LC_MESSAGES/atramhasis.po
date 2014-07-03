@@ -32,7 +32,7 @@ msgstr "ouvrir"
 
 #: atramhasis/templates/atramhasis.jinja2:28
 msgid "select_type"
-msgstr "sélectionnez le type"
+msgstr "sélectionnez un type"
 
 #: atramhasis/templates/atramhasis.jinja2:32
 msgid "type_all"
@@ -48,7 +48,7 @@ msgstr "collections"
 
 #: atramhasis/templates/atramhasis.jinja2:40
 msgid "search_for"
-msgstr "entrer le mot de recherche"
+msgstr "rechercher"
 
 #: atramhasis/templates/atramhasis.jinja2:46
 msgid "submit"
@@ -96,7 +96,7 @@ msgstr "membre de"
 
 #: atramhasis/templates/macros.jinja2:22
 msgid "prefLabel"
-msgstr "libellés préférentiels"
+msgstr "libellés principal"
 
 #: atramhasis/templates/macros.jinja2:24
 msgid "altLabel"
@@ -104,18 +104,18 @@ msgstr "libellés alternatifs"
 
 #: atramhasis/templates/macros.jinja2:26
 msgid "hiddenLabel"
-msgstr "libellés cachés"
+msgstr "libellés masqué"
 
 #: atramhasis/templates/search_result.jinja2:8
 #, python-format
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
-msgstr[0] "%(count)s résultat:"
-msgstr[1] "%(count)s résultats:"
+msgstr[0] "%(count)s occurence:"
+msgstr[1] "%(count)s occurences:"
 
 #: atramhasis/templates/search_result.jinja2:15
 msgid "export"
-msgstr "exporter"
+msgstr "exporter au format"
 
 #~ msgid "type"
 #~ msgstr "type"
