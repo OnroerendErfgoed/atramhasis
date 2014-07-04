@@ -109,7 +109,7 @@ define([
                 var row = evt.rows[0];
                 row.scheme = this.conceptScheme;
                 console.log("row selected: " + row.id);
-                topic.publish("conceptOpen", row);
+                topic.publish("concept.open", row.id, row.scheme);
             }));
 
             on(this.typeCombo, "change", lang.hitch(this, function(evt) {

@@ -2,27 +2,31 @@ define([
     'dojo/_base/declare',
     "dojo/_base/array",
     "dojo/dom-construct",
-    "dojo/query",
+    "dojo/dom-class",
     "dojo/on",
     "dojo/topic",
 
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
+    'dijit/_WidgetsInTemplateMixin',
     "dijit/ConfirmDialog",
 
-    'dojo/text!./templates/ConceptDetail.html'
+    'dojo/text!./templates/ConceptDetail.html',
 
+    "dijit/TitlePane"
 ], function (
-    declare, arrayUtil, domConstruct, query, on, topic,
+    declare, arrayUtil,
+    domConstruct, domClass, on, topic,
 
     _WidgetBase,
     _TemplatedMixin,
+    _WidgetsInTemplateMixin,
 
     ConfirmDialog,
 
     template
     ) {
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
 
@@ -46,12 +50,14 @@ define([
             var self = this;
 
             var actionNode = this.actionNode;
+
             var deleteLi = domConstruct.create("li", {
                 innerHTML: "<a href='#'>Delete</a>"
             }, actionNode);
             var editLi = domConstruct.create("li", {
                 innerHTML: "<a href='#'>Edit</a>"
             }, actionNode);
+
             on(deleteLi, "click", function(evt){
                 evt.preventDefault();
 
@@ -60,64 +66,100 @@ define([
                     content: "Are you sure you want to delete this?",
                     style: "width: 200px"
                 });
-                on(myDialog, "cancel", function(){
-                    console.log("confirmdialog cancel");
-                });
                 on(myDialog, "execute", function(){
-                    console.log("concept.delete publish:" + self.conceptid);
                     topic.publish("concept.delete", self.conceptid, self.schemeid);
                 });
+                on(myDialog, "cancel", function(){
+                    //do nothing, will be destroyed on hide
+                });
                 on(myDialog, "hide", function(){
-                    console.log("confirmdialog destroy on hide");
                     myDialog.destroyRecursive();
                 });
                 myDialog.show();
+
                 return false;
             });
+
             on(editLi, "click", function(evt){
                 evt.preventDefault();
-                console.log("concept.edit publish:" + self.conceptid);
                 topic.publish("concept.edit", self.conceptid, self.schemeid);
                 return false;
             });
 
-            var labelListNode = this.labelListNode;
-            arrayUtil.forEach(this.labels, function(label){
-                console.log(label);
-                domConstruct.create("li", {
-                    innerHTML: label.label + " (<em>" + label.language + "</em>)"
-                }, labelListNode);
-            });
-            var notesListNode = this.notesListNode;
-            arrayUtil.forEach(this.notes, function(note){
-                console.log(note);
-                domConstruct.create("li", {
-                    innerHTML: note.type + " (<em>" + note.language + "</em>): " + note.note
-                }, notesListNode);
-            });
-            this._buildLinkList(this.narrowerListNode, this.narrower);
+            this._buidList(this.prefLabelListNode, this._mapLabelsForList(this.labels, "prefLabel"), "Preferred labels", false);
+            this._buidList(this.altLabelListNode, this._mapLabelsForList(this.labels, "altLabel"), "Alternate labels", false);
+            this._buidList(this.hiddenLabelListNode, this._mapLabelsForList(this.labels, "hiddenLabel"), "Hidden labels", false);
 
-            this._buildLinkList(this.broaderListNode, this.broader);
+            this._buidList(this.definitionListNode, this._mapNotesForList(this.notes, "definition"), "Definition", false);
+            this._buidList(this.changeNoteListNode, this._mapNotesForList(this.notes, "changeNote"), "Change note", false);
+            this._buidList(this.editorialNoteListNode, this._mapNotesForList(this.notes, "editorialNote"), "Editorial note", false);
+            this._buidList(this.exampleListNode, this._mapNotesForList(this.notes, "example"), "Example", false);
+            this._buidList(this.historyNoteListNode, this._mapNotesForList(this.notes, "historyNote"), "Historynote", false);
+            this._buidList(this.scopeNoteListNode, this._mapNotesForList(this.notes, "scopeNote"), "Scopenote", false);
+            this._buidList(this.noteListNode, this._mapNotesForList(this.notes, "note"), "Note", false);
 
-            this._buildLinkList(this.relatedListNode, this.related);
-
-            this._buildLinkList(this.membersListNode, this.members);
-
-            this._buildLinkList(this.memberofListNode, this.member_of);
+            this._buidList(this.broaderListNode, this._mapRelationsForList(this.broader), "Broader",  true);
+            this._buidList(this.narrowerListNode, this._mapRelationsForList(this.narrower), "Narrower", true);
+            this._buidList(this.relatedListNode, this._mapRelationsForList(this.related), "Related",  true);
+            this._buidList(this.membersListNode, this._mapRelationsForList(this.members), "Members",  true);
+            this._buidList(this.memberofListNode, this._mapRelationsForList(this.member_of), "Member of", true);
         },
 
-        _buildLinkList: function(node, items){
-            arrayUtil.forEach(items, function(item){
-                var li = domConstruct.create("li", {
-                    innerHTML: "<a href='#'>" + item + "</a>"
-                }, node);
-                on(query("a", li), "click", function(){
-                    console.log("relation selected:" + this.innerHTML);
-                });
+        _mapLabelsForList: function(labels, type){
+            var filteredItems = arrayUtil.filter(labels, function(item){
+                return item.type == type;
             });
+            return arrayUtil.map(filteredItems, function(item){
+                return {"id": "", "mainlabel": item.label, "sublabel": item.language};
+            });
+        },
+
+        _mapNotesForList: function(notes, type){
+            var filteredItems = arrayUtil.filter(notes, function(item){
+                return item.type == type;
+            });
+            return arrayUtil.map(filteredItems, function(item){
+                return {"id": "", "mainlabel": item.note, "sublabel": item.language};
+            });
+        },
+
+        _mapRelationsForList: function(relations){
+            return arrayUtil.map(relations, function(item){
+                return {"id": item.id, "mainlabel": item.label, "sublabel": item.id};
+            });
+        },
+
+        _buidList: function(node, items, title, clickable){
+            if (items && items.length > 0) {
+
+                domConstruct.place("<h3>" + title + ":</h3>", node, "first");
+                var ul =  domConstruct.create("ul", {
+                    className: 'conceptlist'
+                }, node);
+
+                var scheme = this.schemeid;
+
+                var sortedItems = items.sort(function(a, b){
+                     var nameA = a.mainlabel.toLowerCase(), nameB = b.mainlabel.toLowerCase();
+                     if (nameA < nameB) //sort string ascending
+                      return -1;
+                     if (nameA > nameB)
+                      return 1;
+                     return 0; //default return value (no sorting)
+                });
+
+                arrayUtil.forEach(sortedItems, function (item) {
+                    var li = domConstruct.create("li", {
+                        innerHTML: item.mainlabel + " (<em>" + item.sublabel + "</em>)"
+                    }, ul);
+                    if (clickable){
+                        domClass.add(li, "clickable");
+                        on(li, "click", function () {
+                            topic.publish("concept.open", item.id, scheme);
+                        });
+                    }
+                });
+            }
         }
-
-
-
     });
 });

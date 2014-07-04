@@ -119,15 +119,14 @@ define([
                 conceptDialog.show();
             });
 
-            topic.subscribe("conceptOpen", lang.hitch(this, function(concept){
-                var schemeid = concept.scheme;
-                var cp = registry.byId(schemeid + "_" + concept.id);
+            topic.subscribe("concept.open", lang.hitch(this, function(conceptid, schemeid){
+                var cp = registry.byId(schemeid + "_" + conceptid);
                 if (cp){
                     tc.selectChild(cp);
                 }
                 else {
                     var thesaurus = self.thesauri.stores[schemeid];
-                    thesaurus.get(concept.id).then(function(item){
+                    thesaurus.get(conceptid).then(function(item){
                         console.log("treestore item: " + item);
                         console.log("create contentpane");
                         var concept = new ConceptDetail({
@@ -146,7 +145,6 @@ define([
                         });
                         cp = new ContentPane({
                             id: schemeid + "_" + item.id,
-//                            baseClass: "dijitContentPaneNoPadding", /*niet ok, scrollbars zijn weg*/
                             title: item.label,
                             closable: true,
                             style: "padding: 0",
