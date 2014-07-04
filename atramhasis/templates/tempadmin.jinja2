@@ -4,9 +4,14 @@
     <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/FilteredGrid.css') }}">
     <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/ConceptForm.css') }}">
     <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/ConceptDetail.css') }}">
+        <script src="https://login.persona.org/include.js"></script>
     <title>Atramhasis Admin</title>
 </head>
 <body class="claro">
+            <a id="signin" href="#">sign in</a>
+        <a id="signout" href="#">sign out</a>
+        <span id="user_info">User: <span id="user_id"> </span></span>
+
     <div id='appDiv'></div>
     <script data-dojo-config="async: 1, tlmSiblingOfDojo: 0, isDebug: 1" src="{{ request.static_path('atramhasis:static/admin/src/dojo/dojo.js') }}"></script>
 	<script type="text/javascript">
@@ -25,7 +30,12 @@
                 ]
             };
             require(config, ['app']);
+
+
+
         })();
 	</script>
+
+
 </body>
 </html>

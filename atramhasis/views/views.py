@@ -272,6 +272,7 @@ class AtramhasisAdminView(object):
             raise SkosRegistryNotFoundException()
 
     @view_config(route_name='admin', renderer='atramhasis:templates/tempadmin.jinja2')
+
     def admin_view(self):
         return {'admin': None}
 
