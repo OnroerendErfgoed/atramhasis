@@ -5,6 +5,7 @@ from pyramid.response import FileResponse
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPFound
 from pyramid.threadlocal import get_current_registry
+from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from skosprovider_sqlalchemy.models import Collection, Thing, Concept, LabelType, NoteType
@@ -268,22 +269,20 @@ class AtramhasisListView(object):
         self.db = request.db
         if not self.db:
             raise SkosRegistryNotFoundException()
+        self.localizer = request.localizer
+        self._ = TranslationStringFactory('atramhasis')
 
     @view_config(route_name='labeltypes')
     def labeltype_list_view(self):
-        try:
-            labeltypes = self.get_list(LabelType)
-        except NoResultFound:
-            raise NoResultFound
-        return [labeltype.name for labeltype in labeltypes]
+        labeltypes = self.get_list(LabelType)
+        return [{"key": labeltype.name, "label": self.localizer.translate(self._(labeltype.name))}
+                for labeltype in labeltypes]
 
     @view_config(route_name='notetypes')
     def notetype_list_view(self):
-        try:
-            notetypes = self.get_list(NoteType)
-        except NoResultFound:
-            raise NoResultFound
-        return [notetype.name for notetype in notetypes]
+        notetypes = self.get_list(NoteType)
+        return [{"key": notetype.name, "label": self.localizer.translate(self._(notetype.name))}
+                for notetype in notetypes]
 
     @tree_region.cache_on_arguments()
     def get_list(self, listtype):
