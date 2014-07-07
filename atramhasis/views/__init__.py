@@ -19,3 +19,13 @@ def invalidate_cache():
     keys = tree_cache_dictionary.keys()
     keys_to_delete = [key for key in keys]
     tree_region.delete_multi(keys_to_delete)
+
+
+list_cache_dictionary = {}
+
+list_region = make_region().configure(
+    'dogpile.cache.memory',
+    arguments={
+        "cache_dict": list_cache_dictionary
+    }
+)

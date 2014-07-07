@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-05-15 16:24+0200\n"
-"PO-Revision-Date: 2014-05-15 16:29+0100\n"
+"PO-Revision-Date: 2014-07-07 11:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -116,6 +116,28 @@ msgstr[1] "%(count)s occurences:"
 #: atramhasis/templates/search_result.jinja2:15
 msgid "export"
 msgstr "exporter au format"
+
+# Note types
+msgid "changeNote"
+msgstr "note de modification"
+
+msgid "definition"
+msgstr "définition"
+
+msgid "editorialNote"
+msgstr "note éditoriale"
+
+msgid "example"
+msgstr "exemple"
+
+msgid "historyNote"
+msgstr "note historique"
+
+msgid "scopeNote"
+msgstr "note d'application"
+
+msgid "note"
+msgstr "note"
 
 #~ msgid "type"
 #~ msgstr "type"
