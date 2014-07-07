@@ -1,6 +1,6 @@
 import unittest
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
-    ConceptNotFoundException, ValidationError
+    ConceptNotFoundException, DbNotFoundException, ValidationError
 
 
 class TestErrors(unittest.TestCase):
@@ -23,3 +23,8 @@ class TestErrors(unittest.TestCase):
         error = ValidationError('validation failed', {})
         self.assertIsNotNone(error)
         self.assertEqual("'validation failed'", str(error))
+
+    def test_db_error(self):
+        error = DbNotFoundException()
+        self.assertIsNotNone(error)
+        self.assertEqual("'No database found, please check your application setup'", str(error))

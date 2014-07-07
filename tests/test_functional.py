@@ -401,3 +401,19 @@ class RdfFunctionalTests(FunctionalTests):
         ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c.ttl')
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
+
+
+class ListFunctionalTests(FunctionalTests):
+
+    def test_labeltypes_list(self):
+        labeltypeslist_res = self.testapp.get('/labeltypes')
+        self.assertEqual('200 OK', labeltypeslist_res.status)
+        self.assertEqual('application/json', labeltypeslist_res.content_type)
+        self.assertIsNotNone(labeltypeslist_res.json)
+        self.assertEqual(3, len(labeltypeslist_res.json))
+
+    def test_notetypes_list(self):
+        labeltypeslist_res = self.testapp.get('/notetypes')
+        self.assertEqual('200 OK', labeltypeslist_res.status)
+        self.assertEqual('application/json', labeltypeslist_res.content_type)
+        self.assertIsNotNone(labeltypeslist_res.json)

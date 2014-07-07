@@ -7,7 +7,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.threadlocal import get_current_registry
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException,\
+    DbNotFoundException
 from skosprovider_sqlalchemy.models import Collection, Thing, Concept, LabelType, NoteType
 from atramhasis.service import AtramhasisService
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
@@ -266,9 +267,10 @@ class AtramhasisListView(object):
     '''
     def __init__(self, request):
         self.request = request
-        self.db = request.db
-        if not self.db:
-            raise SkosRegistryNotFoundException()
+        if hasattr(request, 'db') and request.db is not None:
+            self.db = request.db
+        else:
+            raise DbNotFoundException()
         self.localizer = request.localizer
         self._ = TranslationStringFactory('atramhasis')
 
@@ -286,11 +288,7 @@ class AtramhasisListView(object):
 
     @tree_region.cache_on_arguments()
     def get_list(self, listtype):
-        try:
-            typeslist = self.db.query(listtype).all()
-        except NoResultFound:
-            typeslist = []
-        return typeslist
+        return self.db.query(listtype).all()
 
 
 @view_defaults(accept='text/html')
