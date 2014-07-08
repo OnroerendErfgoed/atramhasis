@@ -49,7 +49,8 @@ requires = [
     'babel',
     'colander',
     'requests',
-    'dogpile.cache'
+    'dogpile.cache',
+    'six'
 ]
 
 setup(name='atramhasis',
