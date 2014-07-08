@@ -215,9 +215,10 @@ define([
             var currentUser=null;
               currentUser=cookie("_USER_");
              var auth_tkt = cookie("auth_tkt");
-                                var userinfo=new Toggler({node:'user_info'});
-                    var signout=new Toggler({node:'signout'});
-                    var signin=new Toggler({node:'signin'});
+             var userinfo=new Toggler({node:'user_info'});
+             var signout=new Toggler({node:'signout'});
+             var signin=new Toggler({node:'signin'});
+
             if(currentUser!=null)
             {
 
@@ -295,6 +296,7 @@ define([
                 );
 
               },
+
               onlogout: function() {
                 // A user has logged out! Here you need to:
                 // Tear down the user's session by redirecting the user or making a call to your backend.
@@ -315,7 +317,9 @@ define([
 
                 function(err)
                 {
-                    alert("Logout failure: " + err);
+                    if(currentUser!=null) {
+                        alert("Logout failure: " + err);
+                    }
                 }
 
                 );
