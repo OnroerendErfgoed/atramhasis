@@ -116,3 +116,24 @@ msgstr[1] ""
 msgid "export"
 msgstr ""
 
+#Note types
+msgid "changeNote"
+msgstr ""
+
+msgid "definition"
+msgstr ""
+
+msgid "editorialNote"
+msgstr ""
+
+msgid "example"
+msgstr ""
+
+msgid "historyNote"
+msgstr ""
+
+msgid "scopeNote"
+msgstr ""
+
+msgid "note"
+msgstr ""

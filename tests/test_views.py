@@ -4,14 +4,16 @@ import unittest
 
 from skosprovider.registry import Registry
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note
+from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note, LabelType, NoteType
 from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException,\
+    DbNotFoundException
 from atramhasis.views import tree_cache_dictionary
-from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, labels_to_string, get_definition
+from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView,\
+    labels_to_string, get_definition
 from fixtures.data import trees
 
 try:
@@ -101,6 +103,25 @@ def filter_by_mock_concept(**kwargs):
     b_concept.labels = b_labels
     filter_mock.all = Mock(return_value=[a_concept, b_concept])
     return filter_mock
+
+
+def list_db(request):
+    session_mock = Mock()
+    session_mock.query = Mock(side_effect=create_listquery_mock)
+    return session_mock
+
+
+def create_listquery_mock(some_class):
+    query_mock = Mock()
+    query_mock.all = get_all_list_mock()
+    return query_mock
+
+
+def get_all_list_mock():
+    lbl1 = LabelType(name="prefLabel", description="foo")
+    lbl2 = LabelType(name="altLabel", description="foo")
+    all_mock = Mock(return_value=[lbl1, lbl2])
+    return all_mock
 
 
 class TestAtramhasisView(unittest.TestCase):
@@ -479,3 +500,37 @@ class TestViewFunctions(unittest.TestCase):
                  Note(note='test2', language_id='nl', notetype_id='definition')]
         s = get_definition(notes)
         self.assertEqual('test2', s)
+
+
+class TestListViews(unittest.TestCase):
+
+    def setUp(self):
+        self.config = testing.setUp()
+        self.request = testing.DummyRequest()
+        self.request.db = list_db(self.request)
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_no_db(self):
+        error_raised = False
+        try:
+            AtramhasisListView(testing.DummyRequest())
+        except DbNotFoundException as e:
+            error_raised = True
+            self.assertIsNotNone(e.__str__())
+        self.assertTrue(error_raised)
+
+    def test_get_list(self):
+        request = self.request
+        atramhasisListView = AtramhasisListView(request)
+        labellist = atramhasisListView.get_list(LabelType)
+        self.assertIsNotNone(labellist)
+        self.assertIsInstance(labellist[0], LabelType)
+
+    def test_labeltype_list_view(self):
+        request = self.request
+        atramhasisListView = AtramhasisListView(request)
+        labellist = atramhasisListView.labeltype_list_view()
+        self.assertIsNotNone(labellist)
+        self.assertEqual(labellist[0].get('key'), 'prefLabel')

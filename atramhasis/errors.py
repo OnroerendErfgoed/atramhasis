@@ -32,3 +32,11 @@ class ValidationError(Exception):
 
     def __str__(self):
         return repr(self.value)
+
+
+class DbNotFoundException(Exception):
+    def __init__(self, value='No database found, please check your application setup'):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)

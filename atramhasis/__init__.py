@@ -27,6 +27,10 @@ def includeme(config):
     config.add_route('atramhasis.delete_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',
                      request_method="DELETE")
     config.add_route('locale', '/locale')
+
+    config.add_route('labeltypes', '/labeltypes', accept='application/json', request_method="GET")
+    config.add_route('notetypes', '/notetypes', accept='application/json', request_method="GET")
+
     config.add_route('admin', '/admin')
     config.add_route('scheme_tree_invalidate', pattern='/admin/tree/invalidate/{scheme_id}', accept='application/json')
     config.add_route('tree_invalidate', pattern='/admin/tree/invalidate', accept='application/json')
