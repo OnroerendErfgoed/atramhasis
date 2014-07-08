@@ -5,9 +5,11 @@ from pyramid.response import FileResponse
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPFound
 from pyramid.threadlocal import get_current_registry
+from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
-from skosprovider_sqlalchemy.models import Collection, Thing, Concept
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException,\
+    DbNotFoundException
+from skosprovider_sqlalchemy.models import Collection, Thing, Concept, LabelType, NoteType
 from atramhasis.service import AtramhasisService
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
 
@@ -256,6 +258,37 @@ class AtramhasisView(object):
     def results_tree_html(self):
         scheme_id = self.request.matchdict['scheme_id']
         return {'concept': None, 'conceptType': None, 'scheme_id': scheme_id}
+
+
+@view_defaults(accept='application/json', renderer='json')
+class AtramhasisListView(object):
+    '''
+    This object groups list views part for the user interface.
+    '''
+    def __init__(self, request):
+        self.request = request
+        if hasattr(request, 'db') and request.db is not None:
+            self.db = request.db
+        else:
+            raise DbNotFoundException()
+        self.localizer = request.localizer
+        self._ = TranslationStringFactory('atramhasis')
+
+    @view_config(route_name='labeltypes')
+    def labeltype_list_view(self):
+        labeltypes = self.get_list(LabelType)
+        return [{"key": labeltype.name, "label": self.localizer.translate(self._(labeltype.name))}
+                for labeltype in labeltypes]
+
+    @view_config(route_name='notetypes')
+    def notetype_list_view(self):
+        notetypes = self.get_list(NoteType)
+        return [{"key": notetype.name, "label": self.localizer.translate(self._(notetype.name))}
+                for notetype in notetypes]
+
+    @tree_region.cache_on_arguments()
+    def get_list(self, listtype):
+        return self.db.query(listtype).all()
 
 
 @view_defaults(accept='text/html')

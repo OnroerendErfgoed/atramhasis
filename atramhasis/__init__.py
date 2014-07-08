@@ -1,7 +1,7 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 from skosprovider_sqlalchemy.models import Base as SkosBase
-
+from atramhasis.renderers import json_renderer_verbose
 from .models import Base
 
 
@@ -10,6 +10,7 @@ def includeme(config):
     config.include('pyramid_jinja2')
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_renderer('csv', 'atramhasis.renderers.CSVRenderer')
+    config.add_renderer('skosrenderer_verbose', json_renderer_verbose)
     config.add_route('home', '/')
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
                      request_method="GET")
@@ -17,6 +18,8 @@ def includeme(config):
     config.add_route('scheme_root', pattern='/conceptschemes/{scheme_id}/c/', accept='text/html')
     config.add_route('scheme_tree', pattern='/conceptschemes/{scheme_id}/tree', accept='application/json')
     config.add_route('search_result_export', pattern='/conceptschemes/{scheme_id}/c.csv')
+    config.add_route('atramhasis.get_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',
+                     request_method="GET")
     config.add_route('atramhasis.add_concept', pattern='/conceptschemes/{scheme_id}/c', accept='application/json',
                      request_method="POST")
     config.add_route('atramhasis.edit_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',
@@ -24,6 +27,10 @@ def includeme(config):
     config.add_route('atramhasis.delete_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/json',
                      request_method="DELETE")
     config.add_route('locale', '/locale')
+
+    config.add_route('labeltypes', '/labeltypes', accept='application/json', request_method="GET")
+    config.add_route('notetypes', '/notetypes', accept='application/json', request_method="GET")
+
     config.add_route('admin', '/admin')
     config.add_route('scheme_tree_invalidate', pattern='/admin/tree/invalidate/{scheme_id}', accept='application/json')
     config.add_route('tree_invalidate', pattern='/admin/tree/invalidate', accept='application/json')

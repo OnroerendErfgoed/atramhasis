@@ -166,6 +166,20 @@ class RestFunctionalTests(FunctionalTests):
     def _get_default_headers(self):
         return {'Accept': 'application/json'}
 
+    def test_get_concept(self):
+        res = self.testapp.get('/conceptschemes/TREES/c/1', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['id'], 1)
+        self.assertEqual(res.json['type'], 'concept')
+
+    def test_get_concept_not_found(self):
+        res = self.testapp.get('/conceptschemes/TREES/c/89', headers=self._get_default_headers(), status=404,
+            expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+
     def test_add_concept(self):
         res = self.testapp.post_json('/conceptschemes/TREES/c', headers=self._get_default_headers(), params=json_value)
         self.assertEqual('201 Created', res.status)
@@ -387,3 +401,19 @@ class RdfFunctionalTests(FunctionalTests):
         ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c.ttl')
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
+
+
+class ListFunctionalTests(FunctionalTests):
+
+    def test_labeltypes_list(self):
+        labeltypeslist_res = self.testapp.get('/labeltypes')
+        self.assertEqual('200 OK', labeltypeslist_res.status)
+        self.assertEqual('application/json', labeltypeslist_res.content_type)
+        self.assertIsNotNone(labeltypeslist_res.json)
+        self.assertEqual(3, len(labeltypeslist_res.json))
+
+    def test_notetypes_list(self):
+        labeltypeslist_res = self.testapp.get('/notetypes')
+        self.assertEqual('200 OK', labeltypeslist_res.status)
+        self.assertEqual('application/json', labeltypeslist_res.content_type)
+        self.assertIsNotNone(labeltypeslist_res.json)

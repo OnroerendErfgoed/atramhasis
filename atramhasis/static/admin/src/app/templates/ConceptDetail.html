@@ -4,28 +4,39 @@
     </div>
 
     <h1 data-dojo-attach-point='nameNode'>${schemeid}: <i>${label}</i></h1>
-    <ul>
-        <li data-dojo-attach-point='idNode'>id: ${conceptid}</li>
-        <li data-dojo-attach-point='typeNode'>type: ${type}</li>
-        <li data-dojo-attach-point='uriNode'>uri: ${uri}</li>
-    </ul>
 
-    <h2>labels</h2>
-    <ul data-dojo-attach-point="labelListNode"></ul>
+    <div class="conceptProps">
+        <ul>
+            <li data-dojo-attach-point='idNode'>id: ${conceptid}</li>
+            <li data-dojo-attach-point='typeNode'>type: ${type}</li>
+            <li data-dojo-attach-point='uriNode'>uri: ${uri}</li>
+        </ul>
+    </div>
 
-    <h2>notes</h2>
-    <ul data-dojo-attach-point="notesListNode"></ul>
+    <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'labels', open:true">
+        <div data-dojo-attach-point="prefLabelListNode"></div>
+        <div data-dojo-attach-point="altLabelListNode"></div>
+        <div data-dojo-attach-point="hiddenLabelListNode"></div>
+    </div>
 
-    <h2>relations</h2>
-    <h4>broader</h4>
-    <ul data-dojo-attach-point="broaderListNode"></ul>
-    <h4>narrower</h4>
-    <ul data-dojo-attach-point="narrowerListNode"></ul>
-    <h4>related</h4>
-    <ul data-dojo-attach-point="relatedListNode"></ul>
-    <h4>members</h4>
-    <ul data-dojo-attach-point="membersListNode"></ul>
-    <h4>member of</h4>
-    <ul data-dojo-attach-point="memberofListNode"></ul>
+    <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'notes', open:true">
+        <div data-dojo-attach-point="changeNoteListNode"></div>
+        <div data-dojo-attach-point="definitionListNode"></div>
+        <div data-dojo-attach-point="editorialNoteListNode"></div>
+        <div data-dojo-attach-point="exampleListNode"></div>
+        <div data-dojo-attach-point="historyNoteListNode"></div>
+        <div data-dojo-attach-point="scopeNoteListNode"></div>
+        <div data-dojo-attach-point="noteListNode"></div>
+    </div>
+
+    <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'relations', open:true">
+        <div data-dojo-attach-point="memberofListNode"></div>
+        <div data-dojo-attach-point="broaderListNode"></div>
+        <div data-dojo-attach-point="narrowerListNode"></div>
+        <div data-dojo-attach-point="relatedListNode"></div>
+        <div data-dojo-attach-point="membersListNode"></div>
+        <div data-dojo-attach-point="memberofListNode"></div>
+    </div>
+
 
 </div>

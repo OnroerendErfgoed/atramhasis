@@ -55,6 +55,23 @@ class AtramhasisCrud(object):
                 e.asdict()
             )
 
+    @view_config(route_name='atramhasis.get_concept', permission='edit', renderer='skosrenderer_verbose')
+    def get_concept(self):
+        '''
+        Get an existing concept
+
+        :raises :class:`atramhasis.errors.ConceptNotFoundException`: If the concept can't be found
+        '''
+        c_id = self.request.matchdict['c_id']
+        try:
+            concept = self.db.query(Thing).filter_by(concept_id=c_id,
+                                                     conceptscheme_id=self.provider.conceptscheme_id).one()
+        except NoResultFound:
+            raise ConceptNotFoundException(c_id)
+
+        self.request.response.status = '200'
+        return concept
+
     @view_config(route_name='atramhasis.add_concept', permission='edit')
     def add_concept(self):
         '''

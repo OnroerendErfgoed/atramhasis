@@ -1,10 +1,11 @@
-.conceptDetail {
+.conceptDetail{
     color: #404245;
 }
 
 .actionBar{
-    background-color: #008CBA;
+    background-color: #333333;
     height: 20px;
+    border: none;
 }
 
 .actionBar ul{
@@ -26,19 +27,53 @@
     color: white;
     width: 60px;
     text-align: center;
-    background-color: #008CBA;
+    background-color: #0078A0;
+    border-left: 1px solid #008CBA;
 }
 
 .actionBar ul li a:hover {
-    background-color: #0078A0;
+    background-color: #008CBA;
+}
+
+.conceptProps {
+    height: 40px;
+    font-weight: bold;
+
+}
+
+.conceptProps ul {
+    list-style-type: none;
+    text-align: center;
+    overflow: auto;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.conceptProps ul li{
+    float: left;
+    width: 33%;
+    border-left: 1px solid #008CBA;
+    line-height: 40px;
 }
 
 .conceptDetail h1 {
     text-align: center;
-    border-bottom: 2px solid #0078A0;
+    border-bottom: 1px solid #b5bcc7;
+    background-color: #F2F2F2;
+    margin: 0;
+    padding: 10px;
 }
 
-.conceptDetail h2 {
-    padding-left: 10px;
-    border-bottom: 1px solid #0078A0;
+.conceptDetail h3{
+    margin: 0;
+}
+
+ul.conceptlist{
+    margin: 5px 0;
+}
+
+ul.conceptlist li.clickable{
+    cursor: pointer;
+    color: #0078A0;
 }
