@@ -226,7 +226,7 @@ define([
 
                 if(auth_tkt!=null)
                 {
-                    cookie("_USER","-deleted-",{expire:-1})
+                    cookie("_USER_","-deleted-",{expire:-1})
                     currentUser=null;
 
                     userinfo.hide();
