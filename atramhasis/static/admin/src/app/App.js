@@ -9,7 +9,7 @@ define([
     "dojo/dom",
     "dojo/request",
     "dijit/registry",
-    "dojo/json",
+    "dijit/form/FilteringSelect",
     "dijit/_Widget",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
@@ -38,7 +38,7 @@ define([
     dom,
     request,
     registry,
-    JSON,
+    FilteringSelect,
     _Widget,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
@@ -82,13 +82,21 @@ define([
             console.log('startup', arguments);
             var self = this;
 
-            var schemeCombo = new ComboBox({
+      /*      var schemeCombo = new ComboBox({
                 id: "schemeSelect",
                 name: "scheme",
                 store: new Memory({ data: this.thesauri.schemelist }),
                 searchAttr: "id",
                 placeHolder: 'select thesaurus'
-            }, "selectNode");
+            }, "selectNode");*/
+
+            var schemeFileteringSelect=new FilteringSelect({
+                id: "schemeSelect",
+                name: "scheme",
+                store: new Memory({ data: this.thesauri.schemelist }),
+                searchAttr: "id",
+                placeHolder: 'select thesaurus'
+            },"selectNode");
 
             var filteredGrid = new FilteredGrid({
                 id: "conceptGrid"
@@ -102,9 +110,8 @@ define([
                 style: "width: 500px"
             }).placeAt(document.body);
 
-            var addConceptButton = new Button({
-                label: "Add concept or collection"
-            }, "addConceptNode");
+
+
 
             var tc = registry.byId("center");
 
@@ -115,17 +122,39 @@ define([
             tc.addChild(cpwelcome);
             tc.startup();
 
-            on(schemeCombo, "change", function(e){
-                console.log("on schemeCombo ", e);
-                self.currentScheme = e;
-                filteredGrid.setScheme(e);
+
+             var addConceptButton = new Button({
+                label: "Add concept or collection",
+                disabled:"disabled"
+            }, "addConceptNode");
+            on(schemeFileteringSelect, "change", function(e){
+
+                if(e)
+                {
+                    console.log("on schemeCombo ", e);
+                    self.currentScheme = e;
+                    filteredGrid.setScheme(e);
+                    addConceptButton.setDisabled(false);
+                }
+                else
+                {
+                      filteredGrid.ResetConceptGrid();
+                      addConceptButton.setDisabled(true);
+                }
+
+
+
             });
 
-            on(addConceptButton, "click", function(){
+
+
+                  on(addConceptButton, "click", function(){
                 console.log("on addConceptButton " + self.currentScheme);
                 conceptDialog.content.init(self.currentScheme);
                 conceptDialog.show();
             });
+
+           schemeFileteringSelect.startup();
 
             topic.subscribe("concept.open", lang.hitch(this, function(conceptid, schemeid){
                 var cp = registry.byId(schemeid + "_" + conceptid);
