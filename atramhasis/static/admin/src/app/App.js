@@ -9,6 +9,7 @@ define([
     "dojo/dom",
     "dojo/request",
     "dijit/registry",
+    "dojo/json",
     "dijit/_Widget",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
@@ -37,6 +38,7 @@ define([
     dom,
     request,
     registry,
+    JSON,
     _Widget,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
@@ -271,12 +273,12 @@ define([
                 // 1. Send the assertion to your backend for verification and to create a session.
                 // 2. Update your UI.
 
-                request.post("../auth/login",{data: assertion,handleAs: "json",
+                request.post("../auth/login",{data: assertion,
                 // Wait 4 seconds for a response
 							timeout: 4000}).then
                 (function(data)
                 {
-
+                var convertedData=Json.parse(data);
                 currentUser = data.email;
                 dom.byId("user_id").innerHTML = currentUser;
                 var userinfo=new Toggler({node:'user_info'});
