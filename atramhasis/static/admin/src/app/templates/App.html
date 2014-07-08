@@ -2,7 +2,15 @@
 
     <div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:true, liveSplitters:true" id="appContainer">
 
-        <div id="appHeader" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top', splitter:false"><h1><a href="/admin">[atramhasis admin]</a></h1></div>
+        <div id="appHeader" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top', splitter:false">
+            <h1 style="float:right">
+
+
+                <a id="signout" href="#">sign out</a>
+                <span id="user_info">User: <span id="user_id"> </span></span>
+                 <a id="signin" href="#">sign in</a>
+            </h1>
+        </div>
 
         <div id="appMenu" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'leading'">
 
@@ -17,7 +25,5 @@
         </div>
 
         <div id="center" data-dojo-type="dijit/layout/TabContainer" data-dojo-props="splitter:true, region:'center', tabPosition:'bottom'"></div>
-
     </div>
-
 </div>
