@@ -299,13 +299,13 @@ class AtramhasisAdminView(object):
 
     def __init__(self, request):
         self.request = request
+        self.logged_in = request.authenticated_userid
         if hasattr(request, 'skos_registry') and request.skos_registry is not None:
             self.skos_registry = self.request.skos_registry
         else:
             raise SkosRegistryNotFoundException()
 
-    @view_config(route_name='admin', renderer='atramhasis:templates/tempadmin.jinja2')
-
+    @view_config(route_name='admin', renderer='atramhasis:templates/tempadmin.jinja2', permission='edit')
     def admin_view(self):
         return {'admin': None}
 

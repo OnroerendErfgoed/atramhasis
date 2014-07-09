@@ -214,119 +214,119 @@ define([
                     });
                 });
 
-            var currentUser=null;
-              currentUser=cookie("_USER_");
-             var auth_tkt = cookie("auth_tkt");
-             var userinfo=new Toggler({node:'user_info'});
-             var signout=new Toggler({node:'signout'});
-             var signin=new Toggler({node:'signin'});
+//            var currentUser=null;
+//              currentUser=cookie("_USER_");
+//             var auth_tkt = cookie("auth_tkt");
+//             var userinfo=new Toggler({node:'user_info'});
+//             var signout=new Toggler({node:'signout'});
+//             var signin=new Toggler({node:'signin'});
 
-            if(currentUser!=null)
-            {
-
-                if(auth_tkt!=null)
-                {
-                    cookie("_USER_","-deleted-",{expire:-1})
-                    currentUser=null;
-
-                    userinfo.hide();
-                    signout.hide();
-                    signin.show();
-
-                }
-                else
-                {
-                    userinfo.show();
-                    signout.show();
-                    signin.hide();
-
-                }
-
-            }
-             else
-                {
-                    userinfo.hide();
-                    signout.hide();
-                    signin.show();
-
-                }
-             var signInButton=dom.byId("signin");
-                        on(signInButton,"click",function()
-            {
-                   navigator.id.request();
-
-            });
-
-            var signOutButton=dom.byId("signout");
-
-            on(signOutButton,"click",function()
-            {
-                 navigator.id.request();
-
-            });
-
-
-              navigator.id.watch({
-              loggedInUser: currentUser,
-              onlogin: function(assertion) {
-                // A user has logged in! Here you need to:
-                // 1. Send the assertion to your backend for verification and to create a session.
-                // 2. Update your UI.
-
-                request.post("../auth/login",{data: assertion,
-                // Wait 4 seconds for a response
-							timeout: 4000}).then
-                (function(data)
-                {
-                var convertedData=Json.parse(data);
-                currentUser = data.email;
-                dom.byId("user_id").innerHTML = currentUser;
-                var userinfo=new Toggler({node:'user_info'});
-                var signout=new Toggler({node:'signout'});
-                var signin=new Toggler({node:'signin'});
-                userinfo.show();
-                signout.show();
-                signin.hide();
-
-                },
-                function(err)
-                {
-                    alert("Logout failure: " + err);
-                }
+//            if(currentUser!=null)
+//            {
+//
+//                if(auth_tkt!=null)
+//                {
+//                    cookie("_USER_","-deleted-",{expire:-1})
+//                    currentUser=null;
+//
+//                    userinfo.hide();
+//                    signout.hide();
+//                    signin.show();
+//
+//                }
+//                else
+//                {
+//                    userinfo.show();
+//                    signout.show();
+//                    signin.hide();
+//
+//                }
+//
+//            }
+//             else
+//                {
+//                    userinfo.hide();
+//                    signout.hide();
+//                    signin.show();
+//
+//                }
+//             var signInButton=dom.byId("signin");
+//                        on(signInButton,"click",function()
+//            {
+//                   navigator.id.request();
+//
+//            });
+//
+//            var signOutButton=dom.byId("signout");
+//
+//            on(signOutButton,"click",function()
+//            {
+//                 navigator.id.request();
+//
+//            });
 
 
-                );
-
-              },
-
-              onlogout: function() {
-                // A user has logged out! Here you need to:
-                // Tear down the user's session by redirecting the user or making a call to your backend.
-                // Also, make sure loggedInUser will get set to null on the next page load.
-                // (That's a literal JavaScript null. Not false, 0, or undefined. null.)
-                request.post( "../auth/logout").then
-                (function(data)
-                {
-                  var userinfo=new Toggler({node:'user_info'});
-                  var signout=new Toggler({node:'signout'});
-                  var signin=new Toggler({node:'signin'});
-                    currentUser = null;
-                    userinfo.hide();
-                    signout.hide();
-                    signin.show();
-
-                },
-
-                function(err)
-                {
-                    if(currentUser!=null) {
-                        alert("Logout failure: " + err);
-                    }
-                }
-
-                );
-              }
-            });
+//              navigator.id.watch({
+//              loggedInUser: currentUser,
+//              onlogin: function(assertion) {
+//                // A user has logged in! Here you need to:
+//                // 1. Send the assertion to your backend for verification and to create a session.
+//                // 2. Update your UI.
+//
+//                request.post("../auth/login",{data: assertion,
+//                // Wait 4 seconds for a response
+//							timeout: 4000}).then
+//                (function(data)
+//                {
+//                var convertedData=Json.parse(data);
+//                currentUser = data.email;
+//                dom.byId("user_id").innerHTML = currentUser;
+//                var userinfo=new Toggler({node:'user_info'});
+//                var signout=new Toggler({node:'signout'});
+//                var signin=new Toggler({node:'signin'});
+//                userinfo.show();
+//                signout.show();
+//                signin.hide();
+//
+//                },
+//                function(err)
+//                {
+//                    alert("Logout failure: " + err);
+//                }
+//
+//
+//                );
+//
+//              },
+//
+//              onlogout: function() {
+//                // A user has logged out! Here you need to:
+//                // Tear down the user's session by redirecting the user or making a call to your backend.
+//                // Also, make sure loggedInUser will get set to null on the next page load.
+//                // (That's a literal JavaScript null. Not false, 0, or undefined. null.)
+//                request.post( "../auth/logout").then
+//                (function(data)
+//                {
+//                  var userinfo=new Toggler({node:'user_info'});
+//                  var signout=new Toggler({node:'signout'});
+//                  var signin=new Toggler({node:'signin'});
+//                    currentUser = null;
+//                    userinfo.hide();
+//                    signout.hide();
+//                    signin.show();
+//
+//                },
+//
+//                function(err)
+//                {
+//                    if(currentUser!=null) {
+//                        alert("Logout failure: " + err);
+//                    }
+//                }
+//
+//                );
+//              }
+//            });
 
 
 

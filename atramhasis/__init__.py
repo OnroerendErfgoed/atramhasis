@@ -3,6 +3,9 @@ from sqlalchemy import engine_from_config
 from skosprovider_sqlalchemy.models import Base as SkosBase
 from atramhasis.renderers import json_renderer_verbose
 from .models import Base
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
+from .security import groupfinder, Root
 
 
 def includeme(config):
@@ -38,6 +41,23 @@ def includeme(config):
     config.add_route('atramhasis.rdf_export', pattern='/conceptschemes/{scheme_id}/c.rdf')
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
+
+    # Set up security
+    # config.add_route('login', '/auth/login', request_method="POST")
+    # config.add_route('logout', '/auth/logout', request_method="POST")
+    # config.set_authentication_policy(AuthTktAuthenticationPolicy(
+    #     'sosecret', callback=groupfinder, hashalg='sha512'))
+    # config.set_authorization_policy(ACLAuthorizationPolicy())
+    # config.set_root_factory(Root)
+    config.set_root_factory(Root)
+    # Security policies
+    authn_policy = AuthTktAuthenticationPolicy('sosecret', callback=groupfinder, hashalg='sha512')
+    authz_policy = ACLAuthorizationPolicy()
+    config.set_authentication_policy(authn_policy)
+    config.set_authorization_policy(authz_policy)
+    config.add_route('login', '/login')
+    config.add_route('logout', '/logout')
+    # end security
 
     config.scan()
 

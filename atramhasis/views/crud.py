@@ -17,9 +17,11 @@ class AtramhasisCrud(object):
     This object groups CRUD REST views part of the private user interface.
     '''
 
-    def __init__(self, request):
+    def __init__(self, context, request):
         self.request = request
         self.db = request.db
+        self.context = context
+        self.logged_in = request.authenticated_userid
         self.scheme_id = self.request.matchdict['scheme_id']
         if hasattr(request, 'skos_registry') and request.skos_registry is not None:
             self.skos_registry = self.request.skos_registry
@@ -55,7 +57,7 @@ class AtramhasisCrud(object):
                 e.asdict()
             )
 
-    @view_config(route_name='atramhasis.get_concept', permission='edit', renderer='skosrenderer_verbose')
+    @view_config(route_name='atramhasis.get_concept', permission='view', renderer='skosrenderer_verbose')
     def get_concept(self):
         '''
         Get an existing concept
