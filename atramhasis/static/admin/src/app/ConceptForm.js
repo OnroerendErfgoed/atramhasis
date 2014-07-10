@@ -10,6 +10,7 @@ define(
         'dijit/_WidgetsInTemplateMixin',
         'dojox/form/manager/_Mixin', 'dojox/form/manager/_NodeMixin', 'dojox/form/manager/_FormMixin', 'dojox/form/manager/_DisplayMixin',
         "dojo/text!./templates/ConceptForm.html",
+        "./form/FieldRepeater",
         'dijit/form/Select',
         'dijit/form/FilteringSelect',
         'dijit/form/ValidationTextBox', 'dojox/validate', 'dijit/form/NumberTextBox',
@@ -28,6 +29,7 @@ define(
         WidgetsInTemplateMixin,
         FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin,
         template,
+        FieldRepeater,
         Select, FilteringSelect,
         ValidationTextBox, Validate, NumberTextBox,
         Button,
@@ -52,9 +54,13 @@ define(
             postCreate:function () {
                 this.inherited(arguments);
 //                this.hide(['urlField']);
+                this.testList = new FieldRepeater({
+                    'name': 'test[]'
+                }, this.listContainerNode);
             },
 
             startup: function () {
+                this.inherited(arguments);
                 var labelStore = new Memory({
                     data: [
                         {name:"Preferred", id:"prefLabel"},

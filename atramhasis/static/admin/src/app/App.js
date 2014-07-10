@@ -216,9 +216,9 @@ define([
                     "related": [],
                     "labels": [
                         {
-                            "type": form.clabeltype,
-                            "language": form.clabellang,
-                            "label": form.clabel
+                            "type": "prefLabel",
+                            "language": "nl",
+                            "label": "test"
                         }
                     ],
                     "notes": [],
@@ -227,16 +227,22 @@ define([
                     ]
                 };
                 filteredGrid.conceptGrid.store.add(rowToAdd)
-                    .then(function(){
-                        filteredGrid.conceptGrid.refresh();
-                        console.log("row added");
-                        conceptDialog.content.show({
-                            spinnerNode: false,
-                            formNode: false,
-                            successNode: true
-                        });
-                        conceptDialog && conceptDialog.resize();
-                    });
+                    .then(
+                        function(){
+                            filteredGrid.conceptGrid.refresh();
+                            console.log("row added");
+                            conceptDialog.content.show({
+                                spinnerNode: false,
+                                formNode: false,
+                                successNode: true
+                            });
+                            conceptDialog && conceptDialog.resize();
+                        },
+                        function(error){
+                            console.log("An error occurred: " + error);
+                        }
+
+                    );
             });
 
         }
