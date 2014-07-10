@@ -55,6 +55,7 @@ define(
             },
 
             startup: function () {
+                this.inherited(arguments);
                 var labelStore = new Memory({
                     data: [
                         {name:"Preferred", id:"prefLabel"},
