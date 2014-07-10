@@ -11,49 +11,8 @@
                 </select>
             </li>
             <li>
-                <label for='clabels'>labels</label>
-                <button
-                    data-dojo-attach-event="click:showLabelDialog"
-                    data-dojo-type="dijit/form/Button"
-                    data-dojo-props="iconClass:'plusIcon', showLabel: false">Add label</button>
-                <div class="dijitHidden">
-                    <div data-dojo-type="dijit/Dialog" style="width:300px;" data-dojo-props="title:'Add label'" id="labeldialog">
-                        <p>
-                        <label for='clabel'>label:</label>
-                        <input type="text"
-                               name="clabel"
-                               placeHolder="[label]"
-                               id="clabel"
-                               data-dojo-type="dijit/form/TextBox"
-                               data-dojo-props="trim:true, propercase:true"
-                               data-dojo-attach-point='labelNameNode'/>
-                        </p>
-                        <p>
-                        <label for='clabeltype'>labeltype:</label>
-                        <select id="clabeltype" name="clabeltype" data-dojo-type='dijit/form/Select'>
-                            <option value="prefLabel" selected>Preferred</option>
-                            <option value="altLabel">Alternative</option>
-                            <option value="hiddenLabel">Hidden</option>
-                        </select>
-                        </p>
-                        <p>
-                        <label for='clabellang'>language:</label>
-                        <select id="clabellang" name="clabellang" data-dojo-type='dijit/form/Select'>
-                            <option value="nl" selected>nl</option>
-                            <option value="fr">fr</option>
-                            <option value="en">en</option>
-                        </select>
-                        </p>
-                        <div class="dijitDialogPaneActionBar">
-                            <button id="ok" data-dojo-type="dijit/form/Button"
-                                    data-dojo-attach-event="click:labelDialogOk">OK</button>
-                            <button id="cancel" data-dojo-type="dijit/form/Button"
-                                    data-dojo-attach-event="click:labelDialogCancel">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-                <ul id="clabels" data-dojo-attach-point="labelListNode"></ul>
-                <div data-dojo-attach-point="listContainerNode"></div>
+                <!--div data-dojo-attach-point="listContainerNode"></div-->
+                <div data-dojo-attach-point="labelContainerNode"></div>
             </li>
             <li>
                 <label for='cbroader'>broader</label>
