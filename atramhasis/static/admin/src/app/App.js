@@ -78,14 +78,6 @@ define([
             console.log('startup', arguments);
             var self = this;
 
-      /*      var schemeCombo = new ComboBox({
-                id: "schemeSelect",
-                name: "scheme",
-                store: new Memory({ data: this.thesauri.schemelist }),
-                searchAttr: "id",
-                placeHolder: 'select thesaurus'
-            }, "selectNode");*/
-
             var schemeFileteringSelect=new FilteringSelect({
                 id: "schemeSelect",
                 name: "scheme",
@@ -130,12 +122,12 @@ define([
                     console.log("on schemeCombo ", e);
                     self.currentScheme = e;
                     filteredGrid.setScheme(e);
-                    addConceptButton.setDisabled(false);
+                    addConceptButton.set('disabled',false);
                 }
                 else
                 {
                       filteredGrid.ResetConceptGrid();
-                      addConceptButton.setDisabled(true);
+                      addConceptButton.set('disabled',true);
                 }
 
 
