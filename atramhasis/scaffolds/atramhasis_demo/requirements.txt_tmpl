@@ -2,6 +2,7 @@
 # pyramid
 pyramid==1.5
 pyramid-tm==0.7
+pyramid_persona==1.5
 
 # skos
 skosprovider>=0.3.0

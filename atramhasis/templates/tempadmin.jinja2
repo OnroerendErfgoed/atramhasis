@@ -4,20 +4,10 @@
     <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/FilteredGrid.css') }}">
     <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/ConceptForm.css') }}">
     <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/ConceptDetail.css') }}">
-{#        <script src="https://login.persona.org/include.js"></script>#}
     <title>Atramhasis Admin</title>
 </head>
 <body class="claro">
 
-<div>
-    {% if view.logged_in %}
-        <a href="{{ request.route_path('logout') }}">Logout</a>
-    {% else %}
-    <a href="{{ request.route_path('login') }}">Log In</a>
-    {% endif %}
-
-
-</div>
     <div id='appDiv'></div>
     <script data-dojo-config="async: 1, tlmSiblingOfDojo: 0, isDebug: 1" src="{{ request.static_path('atramhasis:static/admin/src/dojo/dojo.js') }}"></script>
 	<script type="text/javascript">
@@ -32,7 +22,7 @@
                     'dgrid',
                     'put-selector',
                     'xstyle',
-                    { name: 'app', location: 'app', map: {} },
+                    { name: 'app', location: 'app', map: {} }
                 ]
             };
             require(config, ['app']);

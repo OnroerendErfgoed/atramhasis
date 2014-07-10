@@ -23,7 +23,8 @@ requires = [
     'alembic',
     'babel',
     'colander',
-    'atramhasis'
+    'atramhasis',
+    'pyramid_persona'
     ]
 
 setup(name='{{project}}',

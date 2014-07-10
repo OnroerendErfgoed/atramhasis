@@ -23,12 +23,11 @@ def main(global_config, **settings):
     config.include('atramhasis:db')
 
     # Set up security
-    config.add_route('login', '/auth/login', request_method="POST")
-    config.add_route('logout', '/auth/logout', request_method="POST")
-    config.set_authentication_policy(AuthTktAuthenticationPolicy(
-        'sosecret', callback=groupfinder, hashalg='sha512'))
-    config.set_authorization_policy(ACLAuthorizationPolicy())
+    config.include('pyramid_persona')
+    config.scan('pyramid_persona')
     config.set_root_factory(Root)
+    secret = config.get_settings().get('persona.secret', None)
+    config.set_authentication_policy(AuthTktAuthenticationPolicy(secret, callback=groupfinder, hashalg='sha512'))
 
     #Add skos support
     config.include('{{package}}.skos')
