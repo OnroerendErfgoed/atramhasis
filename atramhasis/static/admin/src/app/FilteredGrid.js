@@ -154,6 +154,16 @@ define([
             this.conceptGrid.set("store", this.conceptStore, this.conceptFilter);
         },
 
+        ResetConceptGrid:function()
+        {
+            this._resetFilters();
+
+            this.conceptStore =null;
+            this.conceptGrid.set("store", this.conceptStore, this.conceptFilter);
+
+        },
+
+
         _setTypeFilter: function(type){
             console.log("setting type filter: " + type);
             this.conceptFilter = {label: this.conceptFilter.label, type: type};
