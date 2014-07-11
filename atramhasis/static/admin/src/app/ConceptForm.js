@@ -10,7 +10,6 @@ define(
         'dijit/_WidgetsInTemplateMixin',
         'dojox/form/manager/_Mixin', 'dojox/form/manager/_NodeMixin', 'dojox/form/manager/_FormMixin', 'dojox/form/manager/_DisplayMixin',
         "dojo/text!./templates/ConceptForm.html",
-        "./form/FieldRepeater",
         "./form/LabelManager",
         'dijit/form/Select',
         'dijit/form/FilteringSelect',
@@ -30,7 +29,6 @@ define(
         WidgetsInTemplateMixin,
         FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin,
         template,
-        FieldRepeater,
         LabelManager,
         Select, FilteringSelect,
         ValidationTextBox, Validate, NumberTextBox,
@@ -54,9 +52,6 @@ define(
             },
             postCreate:function () {
                 this.inherited(arguments);
-//                this.testList = new FieldRepeater({
-//                    'name': 'test[]'
-//                }, this.listContainerNode);
                 this.labelManager = new LabelManager({
                     'name': 'lblMgr'
                 }, this.labelContainerNode);
