@@ -11,6 +11,7 @@ define(
         'dojox/form/manager/_Mixin', 'dojox/form/manager/_NodeMixin', 'dojox/form/manager/_FormMixin', 'dojox/form/manager/_DisplayMixin',
         "dojo/text!./templates/ConceptForm.html",
         "./form/LabelManager",
+        "./form/RelationManager",
         'dijit/form/Select',
         'dijit/form/FilteringSelect',
         'dijit/form/ValidationTextBox', 'dojox/validate', 'dijit/form/NumberTextBox',
@@ -30,6 +31,7 @@ define(
         FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin,
         template,
         LabelManager,
+        RelationManager,
         Select, FilteringSelect,
         ValidationTextBox, Validate, NumberTextBox,
         Button,
@@ -55,6 +57,9 @@ define(
                 this.labelManager = new LabelManager({
                     'name': 'lblMgr'
                 }, this.labelContainerNode);
+                this.relationManager = new RelationManager({
+                    'name': 'relMgr'
+                }, this.relationContainerNode);
             },
 
             startup: function () {
