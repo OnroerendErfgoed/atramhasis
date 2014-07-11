@@ -19,8 +19,8 @@ define(
         'dijit/form/TextBox',
         'dijit/form/ComboBox',
         'dijit/form/NumberSpinner',
-        'dijit/form/Button',
         'dojo/_base/lang',
+        "dgrid/OnDemandGrid",
         './EditLabelTemplate',
         'dijit/Dialog',
         "dgrid/Grid", "dgrid/Selection", "dgrid/Keyboard", "dgrid/editor"
@@ -44,8 +44,9 @@ define(
         TextBox,
         ComboBox,
         NumberSpinner,
-        Button,
+
         lang,
+        OnDemandGrid,
         EditLabelTemplate,
         Dialog,
         Grid, Selection, Keyboard, editor
@@ -57,6 +58,7 @@ define(
         ], {
 
             templateString: template,
+            widgetsInTemplate: true,
             dialog: null,
             scheme: null,
             labelgrid: null,
@@ -122,7 +124,27 @@ define(
             CreateAndShowAddEditLabel: function () {
 
 
-     /*           var labelTabForBoxes = new dojox.layout.TableContainer({cols: 3, spacing: 10,orientation:"vert"}, "LabelTabForBoxes");
+             var columns = [
+                {label:"Name", field:"name"},
+                {label:"Language", field:"language"},
+                {label:"Type", field:"type"}
+                ];
+
+                var testdata =
+                    [
+
+                        {name: "test1", language: "test2", type: "test3"}
+                    ];
+
+
+                var teststore=new  Memory({data: testdata});
+               var grid = new OnDemandGrid({
+                   columns: columns,
+                   store: teststore
+                    }, "gridlabel");
+
+              grid.startup();
+              var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10,orientation:"vert"}, "LabelTabForBoxes");
                 var TitleLAbel = new TextBox({title: "Title:"});
 
                  var labelStore = new Memory({
@@ -157,13 +179,25 @@ define(
                 });
                 langStoreComboBox.startup()
 
+                 var AddLabelButtonTotable = new Button
+                ({
+                         iconClass: 'plusIcon',
+                        showLabel: false,
+                        onClick: lang.hitch(this, function(evt) {
+
+                            console.log("Add label to tabel in add label dialog");
+                            alert("work");
+                            var grid2=grid;
+                        })
+                    }
+                );
+
                 labelTabForBoxes.addChild(TitleLAbel);
                 labelTabForBoxes.addChild(langStoreComboBox);
                 labelTabForBoxes.addChild(labelStoreComboBox);
+                labelTabForBoxes.addChild(AddLabelButtonTotable);
                 labelTabForBoxes.startup();
-                 registry.byId("labeldialog").show();*/
-
-
+                 registry.byId("labeldialog").show();
 
             },
 
@@ -198,7 +232,7 @@ define(
                 // this.schemeNodeLabel.innerHTML="Scheme: ";
                 // this.schemeNode.set("value",scheme);
 
-                var myTable = new dojox.layout.TableContainer({cols: 2, spacing: 10}, "myTable");
+                var myTable = new TableContainer({cols: 2, spacing: 10}, "myTable");
 
                 var schemebox = new TextBox({title: "Scheme:"});
                 schemebox.set('disabled', true);

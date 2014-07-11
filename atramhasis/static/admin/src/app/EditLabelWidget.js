@@ -5,14 +5,16 @@ define(
         'dojox/form/manager/_Mixin', 'dojox/form/manager/_NodeMixin', 'dojox/form/manager/_FormMixin', 'dojox/form/manager/_DisplayMixin',
         'dijit/form/ValidationTextBox', 'dojox/validate',
         'dijit/form/Button',
-        'dojo/text!./templates/EditLabelTemplate.html'
+        'dojo/text!./templates/EditLabelTemplate.html',
+        "dijit/registry",
+        'dijit/form/TextBox'
     ],
     function (
         declare,
         Form, WidgetsInTemplateMixin,
         FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin,
         ValidationTextBox, Validate,
-        Button,template
+        Button,template,registry,TextBox
     ) {
         return declare([Form, WidgetsInTemplateMixin, FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin], {
             templateString:template,
@@ -34,18 +36,25 @@ define(
                 }
                 this.dialog && this.dialog.resize();
             },
-            onSubmit:function () {
+            onSubmit:function (evt) {
+                evt.preventDefault();
                 this.inherited(arguments);
                 this.validate();
                 if (this.isValid()) {
                     alert(this.resources.submitYourForm);
                 }
                 return false;
-            }
+            },
 
              startup: function () {
                        this.inherited(arguments);
             },
+
+             init: function ()
+             {
+
+
+             }
 
         });
     }
