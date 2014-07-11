@@ -24,7 +24,8 @@ define([
 
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
-    "dijit/layout/BorderContainer"
+    "dijit/layout/BorderContainer",
+
 
 
 ], function(

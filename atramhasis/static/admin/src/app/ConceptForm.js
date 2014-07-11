@@ -20,7 +20,9 @@ define(
         'dijit/form/ComboBox',
         'dijit/form/NumberSpinner',
         'dojo/_base/lang',
-        "dgrid/OnDemandGrid",
+        'dgrid/Grid',
+        "dijit/form/Select",
+        "dojo/data/ObjectStore",
         './EditLabelTemplate',
         'dijit/Dialog',
         "dgrid/Grid", "dgrid/Selection", "dgrid/Keyboard", "dgrid/editor"
@@ -46,7 +48,9 @@ define(
         NumberSpinner,
 
         lang,
-        OnDemandGrid,
+        Grid,
+        Select,
+        ObjectStore,
         EditLabelTemplate,
         Dialog,
         Grid, Selection, Keyboard, editor
@@ -129,55 +133,47 @@ define(
                 {label:"Language", field:"language"},
                 {label:"Type", field:"type"}
                 ];
+               // var storedata= new Memory({});
 
-                var testdata =
-                    [
-
-                        {name: "test1", language: "test2", type: "test3"}
-                    ];
-
-
-                var teststore=new  Memory({data: testdata});
-               var grid = new OnDemandGrid({
-                   columns: columns,
-                   store: teststore
+               var grid = new Grid({
+                   columns: columns
                     }, "gridlabel");
 
               grid.startup();
+
               var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10,orientation:"vert"}, "LabelTabForBoxes");
                 var TitleLAbel = new TextBox({title: "Title:"});
 
-                 var labelStore = new Memory({
-                    data: [
-                        {name: "Preferred", id: "prefLabel"},
-                        {name: "Alternative", id: "altLabel"},
-                        {name: "Hidden", id: "hiddenLabel"}
-                    ]});
+                  var labelStoreComboBox = new Select(
+                      {
 
-                var langStore = new Memory({
-                    data: [
-                        {name: "Nl", id: "nl"},
-                        {name: "Fr", id: "fr"},
-                        {name: "En", id: "en"}
-                    ]
-                });
+                        id: "labelStoreComboBox",
+                        name: "labelStoreComboBox",
+                        title: "Type of label:",
+                        options:[
 
-               var labelStoreComboBox = new ComboBox({
-                    id: "labelStoreComboBox",
-                    name: "labelStoreComboBox",
-                    store: labelStore,
-                    searchAttr: "name",
-                    title: "Type of label:"
-                });
-                labelStoreComboBox.startup();
-                 var langStoreComboBox = new ComboBox({
+                            {label:"Preferred",value:"Preferred"},
+                            {label:"Alternative",value:"Alternative"},
+                            {label:"Hidden",value:"Hidden"},
+
+                        ],
+                       style:{ width: '100px' }
+                  });
+
+                 var langStoreComboBox = new Select({
+
                     id: "langStoreComboBox",
                     name: "langStoreComboBox",
-                    store: langStore,
-                    searchAttr: "name",
-                    title: "Language:"
-                });
-                langStoreComboBox.startup()
+                    title: "Language:",
+                    options:[
+
+                            {label:"Nl",value:"NL"},
+                            {label:"Fr",value:"Fr"},
+                            {label:"En",value:"En"}
+
+                        ],
+                     style:{ width: '80px' }
+                 });
 
                  var AddLabelButtonTotable = new Button
                 ({
@@ -186,8 +182,21 @@ define(
                         onClick: lang.hitch(this, function(evt) {
 
                             console.log("Add label to tabel in add label dialog");
-                            alert("work");
-                            var grid2=grid;
+
+                            var languageSelected=langStoreComboBox.get('value');
+                            var labelTypeSelected=labelStoreComboBox.get('value');
+                            var labelName=TitleLAbel.get('value');
+                             var dataToStore=[
+                                        {name:labelName,language:languageSelected,type:labelTypeSelected}
+                                        ];
+
+
+                            grid.renderArray(dataToStore);
+                            //grid.store.add(dataToStore);
+
+
+
+                            grid.resize();
                         })
                     }
                 );
@@ -197,8 +206,11 @@ define(
                 labelTabForBoxes.addChild(labelStoreComboBox);
                 labelTabForBoxes.addChild(AddLabelButtonTotable);
                 labelTabForBoxes.startup();
-                 registry.byId("labeldialog").show();
 
+
+
+                 registry.byId("labeldialog").show();
+                           grid.resize();
             },
 
             onSubmit: function (evt) {
