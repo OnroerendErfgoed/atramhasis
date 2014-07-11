@@ -10,6 +10,7 @@ define(
         'dijit/_WidgetsInTemplateMixin',
         'dojox/form/manager/_Mixin', 'dojox/form/manager/_NodeMixin', 'dojox/form/manager/_FormMixin', 'dojox/form/manager/_DisplayMixin',
         "dojo/text!./templates/ConceptForm.html",
+        "./form/LabelManager",
         'dijit/form/Select',
         'dijit/form/FilteringSelect',
         'dijit/form/ValidationTextBox', 'dojox/validate', 'dijit/form/NumberTextBox',
@@ -38,6 +39,7 @@ define(
         WidgetsInTemplateMixin,
         FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin,
         template,
+        LabelManager,
         Select, FilteringSelect,
         ValidationTextBox, Validate, NumberTextBox,
         Button,
@@ -55,7 +57,6 @@ define(
         Dialog,
         Grid, Selection, Keyboard, editor
     ) {
-        var myDialog;
         return declare([
             Form, _WidgetBase, WidgetsInTemplateMixin, _TemplatedMixin, FormMgrMixin,
             FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin
@@ -68,23 +69,39 @@ define(
             labelgrid: null,
             labels: [],
 
-            constructor: function (options) {
+            constructor:function (options) {
                 declare.safeMixin(this, options);
                 this.inherited(arguments)
             },
-            postCreate: function () {
+            postCreate:function () {
                 this.inherited(arguments);
-//                this.hide(['urlField']);
+                this.labelManager = new LabelManager({
+                    'name': 'lblMgr'
+                }, this.labelContainerNode);
             },
 
             startup: function () {
-                       this.inherited(arguments);
+                this.inherited(arguments);
+                var labelStore = new Memory({
+                    data: [
+                        {name:"Preferred", id:"prefLabel"},
+                        {name:"Alternative", id:"altLabel"},
+                        {name:"Hidden", id:"hiddenLabel"}
+                ]});
+
+               var langStore = new Memory({
+                    data: [
+                        {name:"Nl", id:"nl"},
+                        {name:"Fr", id:"fr"},
+                        {name:"En", id:"en"}
+                    ]
+                });
             },
 
-            showLabelDialog: function () {
+            showLabelDialog: function() {
                 registry.byId("labeldialog").show();
             },
-            labelDialogOk: function () {
+            labelDialogOk: function() {
                 var lblDialog = registry.byId("labeldialog");
                 var data = lblDialog.get('value');
                 if (this._createLabel(data.clabel, data.clabeltype, data.clabellang)) {
@@ -92,16 +109,16 @@ define(
                     lblDialog.hide();
                 }
             },
-            labelDialogCancel: function () {
+            labelDialogCancel: function() {
                 var lblDialog = registry.byId("labeldialog");
                 lblDialog.reset();
                 lblDialog.hide();
             },
 
-            _createLabel: function (label, type, lang) {
+            _createLabel: function(label, type, lang) {
                 console.log("saving label: " + label);
-                var found = arrayUtil.some(this.labels, function (item) {
-                    return item.label == label && item.type == type && item.language == lang;
+                var found = arrayUtil.some(this.labels, function(item){
+                    return item.label == label && item.type==type && item.language==lang;
                 });
                 if (found) {
                     alert('This label already exisits!');
@@ -115,105 +132,21 @@ define(
 
             },
 
-            _createLabelList: function () {
+            _createLabelList: function() {
                 var labelListNode = this.labelListNode;
                 query("li", labelListNode).forEach(domConstruct.destroy);
-                arrayUtil.forEach(this.labels, function (label) {
+                arrayUtil.forEach(this.labels, function(label){
                     domConstruct.create("li", {
                         innerHTML: "<b>" + label.label + "</b> (<em>" + label.language + "</em>): " + label.type
                     }, labelListNode);
                 });
             },
 
-            CreateAndShowAddEditLabel: function () {
-
-
-             var columns = [
-                {label:"Name", field:"name"},
-                {label:"Language", field:"language"},
-                {label:"Type", field:"type"}
-                ];
-               // var storedata= new Memory({});
-
-               var grid = new Grid({
-                   columns: columns
-                    }, "gridlabel");
-
-              grid.startup();
-
-              var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10,orientation:"vert"}, "LabelTabForBoxes");
-                var TitleLAbel = new TextBox({title: "Title:"});
-
-                  var labelStoreComboBox = new Select(
-                      {
-
-                        id: "labelStoreComboBox",
-                        name: "labelStoreComboBox",
-                        title: "Type of label:",
-                        options:[
-
-                            {label:"Preferred",value:"Preferred"},
-                            {label:"Alternative",value:"Alternative"},
-                            {label:"Hidden",value:"Hidden"},
-
-                        ],
-                       style:{ width: '100px' }
-                  });
-
-                 var langStoreComboBox = new Select({
-
-                    id: "langStoreComboBox",
-                    name: "langStoreComboBox",
-                    title: "Language:",
-                    options:[
-
-                            {label:"Nl",value:"NL"},
-                            {label:"Fr",value:"Fr"},
-                            {label:"En",value:"En"}
-
-                        ],
-                     style:{ width: '80px' }
-                 });
-
-                 var AddLabelButtonTotable = new Button
-                ({
-                         iconClass: 'plusIcon',
-                        showLabel: false,
-                        onClick: lang.hitch(this, function(evt) {
-
-                            console.log("Add label to tabel in add label dialog");
-
-                            var languageSelected=langStoreComboBox.get('value');
-                            var labelTypeSelected=labelStoreComboBox.get('value');
-                            var labelName=TitleLAbel.get('value');
-                             var dataToStore=[
-                                        {name:labelName,language:languageSelected,type:labelTypeSelected}
-                                        ];
-
-
-                            grid.renderArray(dataToStore);
-                            //grid.store.add(dataToStore);
-
-
-
-                            grid.resize();
-                        })
-                    }
-                );
-
-                labelTabForBoxes.addChild(TitleLAbel);
-                labelTabForBoxes.addChild(langStoreComboBox);
-                labelTabForBoxes.addChild(labelStoreComboBox);
-                labelTabForBoxes.addChild(AddLabelButtonTotable);
-                labelTabForBoxes.startup();
-
-
-
-                 registry.byId("labeldialog").show();
-                           grid.resize();
+            testt: function() {
+              alert('ok');
             },
 
-            onSubmit: function (evt) {
+            onSubmit:function (evt) {
                 evt.preventDefault();
                 this.inherited(arguments);
                 this.validate();
@@ -231,7 +164,6 @@ define(
 
                 return false;
             },
-            // Creation of the add label dialog
 
 
 

@@ -50,6 +50,23 @@
 
                     </div>
                 </div>
+        <ul>
+            <li data-dojo-attach-point='schemeNode'></li>
+            <li>
+                <label for='ctype'>Type</label>
+                <select id="ctype" name="ctype" data-dojo-type='dijit/form/Select'>
+                    <option value="concept" selected>Concept</option>
+                    <option value="collection">Collection</option>
+                </select>
+            </li>
+            <li>
+                <div data-dojo-attach-point="labelContainerNode"></div>
+            </li>
+            <li>
+                <label for='cbroader'>broader</label>
+                <input type="text" name="cbroader" id="cbroader" data-dojo-type="dijit/form/NumberTextBox" />
+            </li>
+            <li>
                 <button id='submit' data-dojo-type='dijit/form/Button' name='submit' type='submit'>submit</button>
             </div>
         </div>
