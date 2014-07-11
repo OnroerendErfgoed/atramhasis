@@ -57,9 +57,9 @@ define(
                 this.labelManager = new LabelManager({
                     'name': 'lblMgr'
                 }, this.labelContainerNode);
-                this.relationManager = new RelationManager({
-                    'name': 'relMgr'
-                }, this.relationContainerNode);
+                this.broaderManager = new RelationManager({
+                    'name': 'broaderMgr'
+                }, this.broaderContainerNode);
             },
 
             startup: function () {
@@ -72,6 +72,7 @@ define(
                 this.validate();
                 if (this.isValid()) {
                     var formObj = domForm.toObject(this.containerNode);
+                    formObj.broader = this.broaderManager.getRelations();
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }

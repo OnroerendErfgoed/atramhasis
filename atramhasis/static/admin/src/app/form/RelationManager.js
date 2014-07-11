@@ -53,6 +53,13 @@ function(
                     relationGridDialog.show();
                 }
             }, this.relationButton)
+        },
+
+        getRelations: function(){
+            var relations = [];
+//            relations.push(1);
+//            relations.push(4);
+            return relations;
         }
 	});
 });

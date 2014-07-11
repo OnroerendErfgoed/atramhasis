@@ -222,9 +222,7 @@ define([
                         }
                     ],
                     "notes": [],
-                    "broader": [
-                        form.cbroader
-                    ]
+                    "broader": form.broader
                 };
                 filteredGrid.conceptGrid.store.add(rowToAdd)
                     .then(
