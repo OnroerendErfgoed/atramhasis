@@ -10,6 +10,7 @@ define(
         'dijit/_WidgetsInTemplateMixin',
         'dojox/form/manager/_Mixin', 'dojox/form/manager/_NodeMixin', 'dojox/form/manager/_FormMixin', 'dojox/form/manager/_DisplayMixin',
         "dojo/text!./templates/ConceptForm.html",
+         "./form/LabelManager",
         'dijit/form/Select',
         'dijit/form/FilteringSelect',
         'dijit/form/ValidationTextBox', 'dojox/validate', 'dijit/form/NumberTextBox',
@@ -38,6 +39,7 @@ define(
         WidgetsInTemplateMixin,
         FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin,
         template,
+        LabelManager,
         Select, FilteringSelect,
         ValidationTextBox, Validate, NumberTextBox,
         Button,
@@ -72,14 +74,36 @@ define(
                 declare.safeMixin(this, options);
                 this.inherited(arguments)
             },
-            postCreate: function () {
+            postCreate:function () {
                 this.inherited(arguments);
-//                this.hide(['urlField']);
+                this.labelManager = new LabelManager({
+                    'name': 'lblMgr'
+                }, this.labelContainerNode);
             },
 
             startup: function () {
                        this.inherited(arguments);
             },
+
+            onSubmit:function (evt) {
+                evt.preventDefault();
+                this.inherited(arguments);
+                this.validate();
+                if (this.isValid()) {
+                    var formObj = domForm.toObject(this.containerNode);
+                    console.log(formObj);
+                    topic.publish("conceptform.submit", formObj);
+                }
+                this.show({
+                    spinnerNode: true,
+                    formNode: false,
+                    successNode: false
+                });
+                this.dialog && this.dialog.layout();
+
+                return false;
+            },
+
 
             showLabelDialog: function () {
                 registry.byId("labeldialog").show();
@@ -146,16 +170,13 @@ define(
 
                   var labelStoreComboBox = new Select(
                       {
-
                         id: "labelStoreComboBox",
                         name: "labelStoreComboBox",
                         title: "Type of label:",
                         options:[
-
                             {label:"Preferred",value:"Preferred"},
                             {label:"Alternative",value:"Alternative"},
-                            {label:"Hidden",value:"Hidden"},
-
+                            {label:"Hidden",value:"Hidden"}
                         ],
                        style:{ width: '100px' }
                   });
@@ -212,28 +233,6 @@ define(
                  registry.byId("labeldialog").show();
                            grid.resize();
             },
-
-            onSubmit: function (evt) {
-                evt.preventDefault();
-                this.inherited(arguments);
-                this.validate();
-                if (this.isValid()) {
-                    var formObj = domForm.toObject(this.containerNode);
-                    console.log(formObj);
-                    topic.publish("conceptform.submit", formObj);
-                }
-                this.show({
-                    spinnerNode: true,
-                    formNode: false,
-                    successNode: false
-                });
-                this.dialog && this.dialog.layout();
-
-                return false;
-            },
-            // Creation of the add label dialog
-
-
 
             init: function (scheme) {
                 console.log("init cdialog: " + scheme);
