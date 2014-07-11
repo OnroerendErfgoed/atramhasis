@@ -58,7 +58,8 @@ define(
                     'name': 'lblMgr'
                 }, this.labelContainerNode);
                 this.broaderManager = new RelationManager({
-                    'name': 'broaderMgr'
+                    'name': 'broaderMgr',
+                    'scheme': this.scheme
                 }, this.broaderContainerNode);
             },
 

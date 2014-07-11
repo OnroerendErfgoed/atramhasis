@@ -224,7 +224,7 @@ define([
                     "notes": [],
                     "broader": form.broader
                 };
-                filteredGrid.conceptGrid.store.add(rowToAdd)
+  /*              filteredGrid.conceptGrid.store.add(rowToAdd)
                     .then(
                         function(){
                             filteredGrid.conceptGrid.refresh();
@@ -240,7 +240,7 @@ define([
                             console.log("An error occurred: " + error);
                         }
 
-                    );
+                    );*/
             });
 
         }
