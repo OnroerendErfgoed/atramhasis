@@ -2,14 +2,12 @@
     <div data-dojo-attach-point="formNode" class="cFormDialog" >
         <input type="hidden" id="cscheme" name="cscheme" data-dojo-type="dijit/form/TextBox" />
 
-
             <div id='myTable'>
 
-
-                <div id="editLabelTemplateNode"></div>
-
             </div>
-                <div class="dijitHidden">
+
+                <div data-dojo-attach-point="labelContainerNode"></div>
+       <!--         <div class="dijitHidden">
                     <div data-dojo-type="dijit/Dialog" style="width:700px;" data-dojo-props="title:'Add label'" id="labeldialog">
 
                            <div id='LabelTabForBoxes'/>
@@ -17,7 +15,7 @@
 
 
                     </div>
-                </div>
+                </div>-->
                 <button id='submit' data-dojo-type='dijit/form/Button' name='submit' type='submit'>submit</button>
             </div>
         </div>
