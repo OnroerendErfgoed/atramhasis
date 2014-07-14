@@ -149,90 +149,7 @@ define(
                 });
             },
 
-            CreateAndShowAddEditLabel: function () {
 
-
-             var columns = [
-                {label:"Name", field:"name"},
-                {label:"Language", field:"language"},
-                {label:"Type", field:"type"}
-                ];
-               // var storedata= new Memory({});
-
-               var grid = new Grid({
-                   columns: columns
-                    }, "gridlabel");
-
-              grid.startup();
-
-              var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10,orientation:"vert"}, "LabelTabForBoxes");
-                var TitleLAbel = new TextBox({title: "Title:"});
-
-                  var labelStoreComboBox = new Select(
-                      {
-                        id: "labelStoreComboBox",
-                        name: "labelStoreComboBox",
-                        title: "Type of label:",
-                        options:[
-                            {label:"Preferred",value:"Preferred"},
-                            {label:"Alternative",value:"Alternative"},
-                            {label:"Hidden",value:"Hidden"}
-                        ],
-                       style:{ width: '100px' }
-                  });
-
-                 var langStoreComboBox = new Select({
-
-                    id: "langStoreComboBox",
-                    name: "langStoreComboBox",
-                    title: "Language:",
-                    options:[
-
-                            {label:"Nl",value:"NL"},
-                            {label:"Fr",value:"Fr"},
-                            {label:"En",value:"En"}
-
-                        ],
-                     style:{ width: '80px' }
-                 });
-
-                 var AddLabelButtonTotable = new Button
-                ({
-                         iconClass: 'plusIcon',
-                        showLabel: false,
-                        onClick: lang.hitch(this, function(evt) {
-
-                            console.log("Add label to tabel in add label dialog");
-
-                            var languageSelected=langStoreComboBox.get('value');
-                            var labelTypeSelected=labelStoreComboBox.get('value');
-                            var labelName=TitleLAbel.get('value');
-                             var dataToStore=[
-                                        {name:labelName,language:languageSelected,type:labelTypeSelected}
-                                        ];
-
-
-                            grid.renderArray(dataToStore);
-                            //grid.store.add(dataToStore);
-
-
-
-                            grid.resize();
-                        })
-                    }
-                );
-
-                labelTabForBoxes.addChild(TitleLAbel);
-                labelTabForBoxes.addChild(langStoreComboBox);
-                labelTabForBoxes.addChild(labelStoreComboBox);
-                labelTabForBoxes.addChild(AddLabelButtonTotable);
-                labelTabForBoxes.startup();
-
-
-
-                 registry.byId("labeldialog").show();
-                           grid.resize();
-            },
 
             init: function (scheme) {
                 console.log("init cdialog: " + scheme);
@@ -268,29 +185,10 @@ define(
                 });
 
                 typeComboBox.startup();
-
-                var AddLabelButton = new Button
-                ({
-                        label: "Add label:",
-                        iconClass: 'plusIcon',
-                        showLabel: false,
-                        onClick: lang.hitch(this, function(evt) {
-
-                            console.log("ShowLabel dialog");
-                            this.CreateAndShowAddEditLabel();
-
-
-
-                        })
-                    }
-                );
-
-                AddLabelButton.startup();
                 // Add the four text boxes to the TableContainer
                 myTable.addChild(schemebox);
                 myTable.addChild(typeComboBox);
                 myTable.addChild(broaderBox);
-                myTable.addChild(AddLabelButton);
                 myTable.startup();
                 this.show({
                     spinnerNode: false,
