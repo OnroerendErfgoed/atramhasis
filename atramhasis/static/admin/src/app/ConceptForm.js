@@ -59,6 +59,7 @@ define(
                 }, this.labelContainerNode);
                 this.broaderManager = new RelationManager({
                     'name': 'broaderMgr',
+                    'title': 'Broader:',
                     'scheme': this.scheme
                 }, this.broaderContainerNode);
             },
@@ -93,6 +94,7 @@ define(
                 this.scheme = scheme;
                 registry.byId("cscheme").set("value", scheme);
                 this.schemeNode.innerHTML = "Scheme: " + scheme;
+                this.broaderManager.scheme = scheme;
                 this.show({
                     spinnerNode: false,
                     formNode: true,
