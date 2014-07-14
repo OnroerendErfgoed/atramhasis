@@ -212,8 +212,6 @@ define([
 
                 var rowToAdd = {
                     "type": form.ctype,
-                    "narrower": [],
-                    "related": [],
                     "labels": [
                         {
                             "type": "prefLabel",
@@ -222,9 +220,11 @@ define([
                         }
                     ],
                     "notes": [],
-                    "broader": form.broader
+                    "broader": form.broader,
+                    "narrower": form.narrower,
+                    "related": form.related
                 };
-  /*              filteredGrid.conceptGrid.store.add(rowToAdd)
+                filteredGrid.conceptGrid.store.add(rowToAdd)
                     .then(
                         function(){
                             filteredGrid.conceptGrid.refresh();
@@ -240,7 +240,7 @@ define([
                             console.log("An error occurred: " + error);
                         }
 
-                    );*/
+                    );
             });
 
         }

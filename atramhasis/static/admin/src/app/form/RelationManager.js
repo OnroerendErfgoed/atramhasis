@@ -7,7 +7,6 @@ define([
         "dijit/Dialog",
 	    "dijit/_WidgetBase",
 	    "dijit/_TemplatedMixin",
-        "dijit/form/Form",
         "dijit/form/Button",
         "dojo/store/Memory",
         "dojo/store/Cache",
@@ -25,7 +24,7 @@ function(
     Dialog,
     WidgetBase,
     TemplatedMixin,
-    Form, Button,
+    Button,
     Memory, Cache, JsonRest,
     ObjectStoreModel, Tree,
     template
@@ -42,7 +41,7 @@ function(
 
         scheme: null,
 
-        relations: [],
+        _relations: null,
 
         buildRendering: function() {
             this.inherited(arguments);
@@ -51,6 +50,7 @@ function(
         postCreate: function() {
             this.inherited(arguments);
             var self = this;
+            this._relations = [];
 
             this.relationLabel.innerHTML = this.title;
 
@@ -65,13 +65,13 @@ function(
             }, this.relationButton)
         },
 
-        _addRelation: function(relId, path){
-            console.log("saving rel: " + relId + " - " + path);
-            var found = arrayUtil.some(this.relations, function(item){
+        _addRelation: function(relId, lbl, path){
+            console.log("saving rel: " + relId + " - " + lbl);
+            var found = arrayUtil.some(this._relations, function(item){
                 return item.id == relId;
             });
             if (!found) {
-                this.relations.push({id: relId, path: path});
+                this._relations.push({id: relId, label: lbl, path: path});
                 this._createRelationList();
                 return true;
             }
@@ -79,46 +79,64 @@ function(
         },
 
         _createRelationList: function() {
+            var self = this;
             var relListNode = this.relationListNode;
             query("li", relListNode).forEach(domConstruct.destroy);
-            arrayUtil.forEach(this.relations, function(rel){
-                domConstruct.create("li", {
-                    innerHTML: rel.id + "(" + rel.path + ")"
+            arrayUtil.forEach(this._relations, function(rel){
+                var li = domConstruct.create("li", {
+                    title: rel.path
                 }, relListNode);
+
+                var span = domConstruct.create("span", {
+                    innerHTML: rel.label + " <em>(" + rel.id + ")</em>"
+                }, li);
+
+                var btn = new Button({
+                    label: "remove this relation",
+                    showLabel :false,
+                    iconClass: 'minIcon',
+                    onClick: function(){
+                        self._removeRelationFromList(rel);
+                    }
+                }).placeAt(li);
             });
+        },
+
+        _removeRelationFromList: function(rel){
+            console.log("removing relation from list: " + rel.id);
+            var position = arrayUtil.indexOf(this._relations, rel);
+            this._relations.splice(position, 1);
+            this._createRelationList();
         },
 
         _createDialog: function() {
             var self = this;
 
-            var form = new Form();
+            var dlg = new Dialog({
+                style: "width: 300px",
+                title: "Choose a concept or collection",
+                doLayout: true
+            });
 
-            console.log("SCHEME in dialog: " + self.scheme);
             var myStore = new Cache(new JsonRest({
                 target:"/conceptschemes/" + self.scheme + "/tree",
                 getChildren: function(object){
                     return object.children || [];
-                },
-                mayHaveChildren: function(object){
-                    return (object.children && object.children.length>0)
                 }
             }), new Memory());
-
-            // Create the model
             var myModel = new ObjectStoreModel({
                 store: myStore,
-                query: {id: 0}
+                query: {id: 0},
+                mayHaveChildren: function(object){
+                    return (object.children && object.children.length > 0)
+                }
             });
-
-            // Create the Tree.
             var myTree = new Tree({
                 model: myModel,
                 getIconClass: function(/*dojo.store.Item*/ item, /*Boolean*/ opened){
-//                    console.log(item);
                     if (item.type=='collection'){
                         return (opened ? "dijitFolderOpened" : "dijitFolderClosed");
                     }else{
-                        //return myStore.getValue(item, "type") + "Icon";
                         return "dijitLeaf";
                     }
                 },
@@ -126,33 +144,40 @@ function(
                     return item.label;
                 },
                 dndParams: ["onDndDrop","itemCreator","onDndCancel","checkAcceptance", "checkItemAcceptance", "dragThreshold", "betweenThreshold", "singular"],
-                singular : true,
-                openOnClick: true
-            }).placeAt(form.containerNode);
+                singular : true
+            }).placeAt(dlg.containerNode);
+//            myTree.onOpen = function(){
+//                dlg.resize();
+//            };
+//            myTree.onClose = function(){
+//                dlg.resize();
+//            };
 
-            var addRelBtn = new Button({
-                label: "add",
-                type: "submit"
-            }).placeAt(form.containerNode);
+            var actionBar = domConstruct.create("div", {
+                class: "dijitDialogPaneActionBar",
+                width: "300px"
+            }, dlg.containerNode);
 
-            var dlg = new Dialog({
-                content: form,
-                title: "Choose concept"
-            });
-            form.startup();
-            form.onSubmit =function (evt) {
-                evt.preventDefault();
-                console.log("form submit");
+            var addBtn = new Button({
+                "label": "Add"
+            }).placeAt(actionBar);
+            var cancelBtn = new Button({
+                "label": "Cancel"
+            }).placeAt(actionBar);
+
+            addBtn.onClick = function () {
                 var sel = myTree.selectedItems[0];
-                this.reset();
                 if (sel){
-                    console.log("myTree.selectedItems " + sel.id);
                     var path = arrayUtil.map(myTree.get("path"), function(item){ return item.label; });
-                    self._addRelation(sel.concept_id, path);
-                    myTree.set('paths', []);//Deselect values from tree
+                    self._addRelation(sel.concept_id, sel.label, path);
                     dlg.hide();
                 }
-                return false;
+                else {
+                    alert("Nothing is selected");
+                }
+            };
+            cancelBtn.onClick = function () {
+                dlg.hide();
             };
 
             on(dlg, "hide", function(){
@@ -163,7 +188,11 @@ function(
         },
 
         getRelations: function(){
-            return arrayUtil.map(this.relations, function(item){ return item.id; });
+            return arrayUtil.map(this._relations, function(item){ return item.id; });
+        },
+
+        setRelations: function(relations){
+            console.log("todo");
         }
 	});
 });

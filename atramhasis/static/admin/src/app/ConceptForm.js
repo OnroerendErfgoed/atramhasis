@@ -47,6 +47,7 @@ define(
             widgetsInTemplate: true,
             dialog: null,
             scheme: null,
+            baseClass: "conceptForm",
 
             constructor:function (options) {
                 declare.safeMixin(this, options);
@@ -62,6 +63,16 @@ define(
                     'title': 'Broader:',
                     'scheme': this.scheme
                 }, this.broaderContainerNode);
+                this.narrowerManager = new RelationManager({
+                    'name': 'narrowerMgr',
+                    'title': 'Narrower:',
+                    'scheme': this.scheme
+                }, this.narrowerContainerNode);
+                this.relatedManager = new RelationManager({
+                    'name': 'relatedMgr',
+                    'title': 'Related:',
+                    'scheme': this.scheme
+                }, this.relatedContainerNode);
             },
 
             startup: function () {
@@ -75,6 +86,8 @@ define(
                 if (this.isValid()) {
                     var formObj = domForm.toObject(this.containerNode);
                     formObj.broader = this.broaderManager.getRelations();
+                    formObj.narrower = this.narrowerManager.getRelations();
+                    formObj.related = this.relatedManager.getRelations();
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
@@ -95,6 +108,8 @@ define(
                 registry.byId("cscheme").set("value", scheme);
                 this.schemeNode.innerHTML = "Scheme: " + scheme;
                 this.broaderManager.scheme = scheme;
+                this.narrowerManager.scheme = scheme;
+                this.relatedManager.scheme = scheme;
                 this.show({
                     spinnerNode: false,
                     formNode: true,
