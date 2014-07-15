@@ -87,6 +87,29 @@ define(
                     'title': 'Member of:',
                     'scheme': this.scheme
                 }, this.memberofContainerNode);
+                                var myTable = new TableContainer({cols: 2, spacing: 10},this.MyTable);
+                var schemebox = new TextBox({id:"schemebox",title: "Scheme:"});
+                schemebox.set('disabled', true);
+                 var typeStore = new Memory({
+                    data: [
+                        {name: "concept", id: "concept"},
+                        {name: "collection", id: "collection"}
+                    ]
+                });
+
+                var typeComboBox = new ComboBox({
+                    id: "typecombobox",
+                    name: "ctype",
+                    store: typeStore,
+                    searchAttr: "name",
+                    title: "Type:"
+                });
+
+                typeComboBox.startup();
+                // Add the 3 text boxes to the TableContainer
+                myTable.addChild(schemebox);
+                myTable.addChild(typeComboBox);
+                myTable.startup();
             },
 
             startup: function () {
@@ -142,33 +165,7 @@ define(
                 });
                 this.dialog && this.dialog.layout();
             },
-            onFirstInit:function()
-            {
 
-                var myTable = new TableContainer({cols: 2, spacing: 10},this.MyTable);
-                var schemebox = new TextBox({id:"schemebox",title: "Scheme:"});
-                schemebox.set('disabled', true);
-                 var typeStore = new Memory({
-                    data: [
-                        {name: "concept", id: "concept"},
-                        {name: "collection", id: "collection"}
-                    ]
-                });
-
-                var typeComboBox = new ComboBox({
-                    id: "typecombobox",
-                    name: "ctype",
-                    store: typeStore,
-                    searchAttr: "name",
-                    title: "Type:"
-                });
-
-                typeComboBox.startup();
-                // Add the 3 text boxes to the TableContainer
-                myTable.addChild(schemebox);
-                myTable.addChild(typeComboBox);
-                myTable.startup();
-            }
 
         });
     }

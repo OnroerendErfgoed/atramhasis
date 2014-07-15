@@ -102,11 +102,10 @@ define([
                 content:new ConceptForm(),
                 title:"Add concept",
                 style: "width: 500px"
+
+
             }).placeAt(document.body);
 
-
-            conceptDialog.content.onFirstInit();
-            conceptDialog.onCancel(conceptDialog.content.labelManager.Resset());
             var tc = registry.byId("center");
 
             var cpwelcome = new ContentPane({
@@ -121,6 +120,12 @@ define([
                 label: "Add concept or collection",
                 disabled:"disabled"
             }, "addConceptNode");
+
+              on(conceptDialog, "hide", function(){
+                    conceptDialog.content.labelManager.Resset()
+                });
+
+
             on(schemeFileteringSelect, "change", function(e){
 
                 if(e)
