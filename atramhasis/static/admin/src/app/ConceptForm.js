@@ -10,7 +10,8 @@ define(
         'dijit/_WidgetsInTemplateMixin',
         'dojox/form/manager/_Mixin', 'dojox/form/manager/_NodeMixin', 'dojox/form/manager/_FormMixin', 'dojox/form/manager/_DisplayMixin',
         "dojo/text!./templates/ConceptForm.html",
-         "./form/LabelManager",
+        "./form/LabelManager",
+        "./form/RelationManager",
         'dijit/form/Select',
         'dijit/form/FilteringSelect',
         'dijit/form/ValidationTextBox', 'dojox/validate', 'dijit/form/NumberTextBox',
@@ -40,6 +41,7 @@ define(
         FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin,
         template,
         LabelManager,
+        RelationManager,
         Select, FilteringSelect,
         ValidationTextBox, Validate, NumberTextBox,
         Button,
@@ -57,7 +59,6 @@ define(
         Dialog,
         Grid, Selection, Keyboard, editor
     ) {
-        var myDialog;
         return declare([
             Form, _WidgetBase, WidgetsInTemplateMixin, _TemplatedMixin, FormMgrMixin,
             FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin
@@ -67,8 +68,6 @@ define(
             widgetsInTemplate: true,
             dialog: null,
             scheme: null,
-            labelgrid: null,
-            labels: [],
 
             constructor: function (options) {
                 declare.safeMixin(this, options);
@@ -79,6 +78,21 @@ define(
                 this.labelManager = new LabelManager({
                     'name': 'lblMgr'
                 }, this.labelContainerNode);
+                this.broaderManager = new RelationManager({
+                    'name': 'broaderMgr',
+                    'title': 'Broader:',
+                    'scheme': this.scheme
+                }, this.broaderContainerNode);
+                this.narrowerManager = new RelationManager({
+                    'name': 'narrowerMgr',
+                    'title': 'Narrower:',
+                    'scheme': this.scheme
+                }, this.narrowerContainerNode);
+                this.relatedManager = new RelationManager({
+                    'name': 'relatedMgr',
+                    'title': 'Related:',
+                    'scheme': this.scheme
+                }, this.relatedContainerNode);
             },
 
             startup: function () {
@@ -91,6 +105,9 @@ define(
                 this.validate();
                 if (this.isValid()) {
                     var formObj = domForm.toObject(this.containerNode);
+                    formObj.broader = this.broaderManager.getRelations();
+                    formObj.narrower = this.narrowerManager.getRelations();
+                    formObj.related = this.relatedManager.getRelations();
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
@@ -104,54 +121,7 @@ define(
                 return false;
             },
 
-
-            showLabelDialog: function () {
-                registry.byId("labeldialog").show();
-            },
-            labelDialogOk: function () {
-                var lblDialog = registry.byId("labeldialog");
-                var data = lblDialog.get('value');
-                if (this._createLabel(data.clabel, data.clabeltype, data.clabellang)) {
-                    lblDialog.reset();
-                    lblDialog.hide();
-                }
-            },
-            labelDialogCancel: function () {
-                var lblDialog = registry.byId("labeldialog");
-                lblDialog.reset();
-                lblDialog.hide();
-            },
-
-            _createLabel: function (label, type, lang) {
-                console.log("saving label: " + label);
-                var found = arrayUtil.some(this.labels, function (item) {
-                    return item.label == label && item.type == type && item.language == lang;
-                });
-                if (found) {
-                    alert('This label already exisits!');
-                    return false;
-                } else {
-                    var newLabel = {"label": label, "type": type, "language": lang};
-                    this.labels.push(newLabel);
-                    this._createLabelList();
-                    return true;
-                }
-
-            },
-
-            _createLabelList: function () {
-                var labelListNode = this.labelListNode;
-                query("li", labelListNode).forEach(domConstruct.destroy);
-                arrayUtil.forEach(this.labels, function (label) {
-                    domConstruct.create("li", {
-                        innerHTML: "<b>" + label.label + "</b> (<em>" + label.language + "</em>): " + label.type
-                    }, labelListNode);
-                });
-            },
-
-
-
-            init: function (scheme) {
+            init: function(scheme) {
                 console.log("init cdialog: " + scheme);
                 this.reset();
                 this.scheme = scheme;
@@ -190,6 +160,10 @@ define(
                 myTable.addChild(typeComboBox);
                 myTable.addChild(broaderBox);
                 myTable.startup();
+                this.schemeNode.innerHTML = "Scheme: " + scheme;
+                this.broaderManager.scheme = scheme;
+                this.narrowerManager.scheme = scheme;
+                this.relatedManager.scheme = scheme;
                 this.show({
                     spinnerNode: false,
                     formNode: true,
@@ -199,6 +173,5 @@ define(
             }
 
         });
-
     }
 );

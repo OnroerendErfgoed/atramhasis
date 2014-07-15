@@ -205,8 +205,6 @@ define([
 
                 var rowToAdd = {
                     "type": form.ctype,
-                    "narrower": [],
-                    "related": [],
                     "labels": [
                         {
                             "type": "prefLabel",
@@ -215,9 +213,9 @@ define([
                         }
                     ],
                     "notes": [],
-                    "broader": [
-                        form.cbroader
-                    ]
+                    "broader": form.broader,
+                    "narrower": form.narrower,
+                    "related": form.related
                 };
                 filteredGrid.conceptGrid.store.add(rowToAdd)
                     .then(

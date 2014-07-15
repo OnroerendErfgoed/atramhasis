@@ -1,10 +1,3 @@
-.plusIcon {
-   background-image:  url('../../dijit/themes/claro/images/dnd.png');
-   background-repeat: no-repeat;
-   background-position: top left;
-   width: 20px;
-   height: 16px;
-}
 .cFormDialog li{
     padding: 5px;
 }

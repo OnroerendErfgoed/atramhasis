@@ -42,3 +42,21 @@ html, body {
     font-size: 14px;
     padding:10px;
 }
+
+.plusIcon {
+   background-image:  url('../../dijit/themes/claro/images/dnd.png');
+   background-repeat: no-repeat;
+   background-position: 0 0;
+   background-size: 100%;
+   width: 11px;
+   height: 11px;
+}
+
+.minIcon {
+   background-image:  url('../../dijit/themes/claro/images/dnd.png');
+   background-repeat: no-repeat;
+   background-position: 0 -71px;
+   background-size: 100%;
+   width: 11px;
+   height: 11px;
+}
