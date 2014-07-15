@@ -2,6 +2,7 @@ define([
     "dojo/_base/declare",
     "dojo/on",
     "dojo/topic",
+    "dojo/aspect",
     "dojo/_base/lang",
     "dojo/store/Memory",
     "dojo/dom",
@@ -28,7 +29,7 @@ define([
 
 
 ], function(
-    declare, on, topic, lang,
+    declare, on, topic, aspect, lang,
 
     Memory,
     dom,
@@ -90,6 +91,11 @@ define([
                 id: "conceptGrid"
             }, "filteredGridNode");
             filteredGrid.startup();
+
+            //resize dgrid after resizing contentpane - should be automatic
+            aspect.after(registry.byId("appMenu"), "resize", function() {
+                filteredGrid.conceptGrid.resize();
+            });
 
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
