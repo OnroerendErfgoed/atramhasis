@@ -128,8 +128,7 @@ define(
                 });
 
                 var typeComboBox = new ComboBox({
-                    id: "typecombobox",
-                    name: "typeComboBox",
+                    name: "ctype",
                     store: typeStore,
                     searchAttr: "name",
                     title: "Type:"
