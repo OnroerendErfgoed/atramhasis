@@ -88,7 +88,7 @@ define(
                     'title': 'Member of:',
                     'scheme': this.scheme
                 }, this.memberofContainerNode);
-                                var myTable = new TableContainer({cols: 2, spacing: 10},this.MyTable);
+                var myTable = new TableContainer({cols: 2, spacing: 10},this.MyTable);
                 var schemebox = new TextBox({id:"schemebox",title: "Scheme:"});
                 schemebox.set('disabled', true);
                  var typeStore = new Memory({
@@ -103,7 +103,26 @@ define(
                     name: "ctype",
                     store: typeStore,
                     searchAttr: "name",
-                    title: "Type:"
+                    title: "Type:",
+                    value: "concept"
+                });
+                var self = this;
+                typeComboBox.on("change", function(){
+                    var val = this.get('value');
+                    if (val == 'collection'){
+                        self.broaderManager.close();
+                        self.narrowerManager.close();
+                        self.relatedManager.close();
+                        self.membersManager.open();
+                        self.memberofManager.open();
+                    }
+                    else if (val == 'concept'){
+                        self.broaderManager.open();
+                        self.narrowerManager.open();
+                        self.relatedManager.open();
+                        self.membersManager.close();
+                        self.memberofManager.open();
+                    }
                 });
 
                 typeComboBox.startup();
@@ -166,50 +185,6 @@ define(
                 });
                 this.dialog && this.dialog.layout();
             }
-
-                var myTable = new TableContainer({cols: 2, spacing: 10},this.MyTable);
-                var schemebox = new TextBox({id:"schemebox",title: "Scheme:"});
-                schemebox.set('disabled', true);
-                 var typeStore = new Memory({
-                    data: [
-                        {name: "concept", id: "concept"},
-                        {name: "collection", id: "collection"}
-                    ]
-                });
-
-                var typeComboBox = new ComboBox({
-                    id: "typecombobox",
-                    name: "ctype",
-                    store: typeStore,
-                    searchAttr: "name",
-                    title: "Type:",
-                    value: "concept"
-                });
-                var self = this;
-                typeComboBox.on("change", function(){
-                    var val = this.get('value');
-                    if (val == 'collection'){
-                        self.broaderManager.close();
-                        self.narrowerManager.close();
-                        self.relatedManager.close();
-                        self.membersManager.open();
-                        self.memberofManager.open();
-                    }
-                    else if (val == 'concept'){
-                        self.broaderManager.open();
-                        self.narrowerManager.open();
-                        self.relatedManager.open();
-                        self.membersManager.close();
-                        self.memberofManager.open();
-                    }
-                });
-                typeComboBox.startup();
-                // Add the 3 text boxes to the TableContainer
-                myTable.addChild(schemebox);
-                myTable.addChild(typeComboBox);
-                myTable.startup();
-            }
-
-        });
-    }
-);
+        }
+    )}
+)
