@@ -14,6 +14,8 @@ define([
         "dojo/store/Memory",
         "dojo/store/Observable",
         "dgrid/editor",
+        "dojo/query",
+         "dojo/_base/array",
         "dojo/text!./templates/LabelManager.html"
 
 	 ],
@@ -22,7 +24,8 @@ function(
     Dialog,
     WidgetBase,
     TemplatedMixin,
-    Form, Button,Select,OnDemandGrid,TextBox,TableContainer,lang,domConstruct,Memory,Observable,editor,template
+    Form, Button,Select,OnDemandGrid,TextBox,TableContainer,lang,domConstruct,Memory,Observable,editor,query
+    ,arrayUtil,template
 ) {
 	return declare(
 		"app/form/LabelManager",
@@ -31,35 +34,24 @@ function(
         templateString: template,
 
         name: 'LabelManager',
+        grid:null,
+        LabelGridContent:null,
 
         buildRendering: function() {
             this.inherited(arguments);
         },
-
-         onSubmit:function (evt) {
-                evt.preventDefault();
-                this.inherited(arguments);
-                this.validate();
-                if (this.isValid()) {
-                    var formObj = domForm.toObject(this.containerNode);
-                    console.log(formObj);
-
-                }
-                this.show({
-                    spinnerNode: true,
-                    formNode: false,
-                    successNode: false
-                });
-                this.dialog && this.dialog.layout();
-
-                return false;
-            },
-
-
         postCreate: function() {
             this.inherited(arguments);
 
             var form = new Form();
+            var self = this;
+            form.onSubmit = function(evt){
+
+                evt.preventDefault();
+                LabelGridContent = grid.store.data;
+                self._createLabelList(grid.store.data);
+                labelGridDialog.hide();
+            }
 
             this.CreateEditLabelForm(form);
 
@@ -128,7 +120,7 @@ function(
 
                var observableStore=new Observable(gridStore);
 
-               var grid = new OnDemandGrid({
+                grid = new OnDemandGrid({
                    columns: columns,
                    store:observableStore,
                  selectionMode: "single", // for Selection; only select a single row at a time
@@ -206,9 +198,17 @@ function(
                 labelTabForBoxes.addChild(AddLabelButtonTotable);
                 labelTabForBoxes.startup();
                 grid.resize();
+            },
+
+            _createLabelList: function(labels) {
+                var labelListNode = this.labelListNode;
+                query("li", labelListNode).forEach(domConstruct.destroy);
+                arrayUtil.forEach(labels, function(label){
+                    domConstruct.create("li", {
+                        innerHTML: "<b>" + label.name + "</b> (<em>" + label.language + "</em>): " + label.type
+                    }, labelListNode);
+                });
             }
-
-
 
 
 	});
