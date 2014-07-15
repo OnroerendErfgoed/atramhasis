@@ -122,7 +122,7 @@ define([
             }, "addConceptNode");
 
               on(conceptDialog, "hide", function(){
-                    conceptDialog.content.labelManager.Resset()
+                    conceptDialog.content.labelManager.reset()
                 });
 
 

@@ -150,7 +150,7 @@ define(
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
-                  this.labelManager.Resset();
+                  this.labelManager.reset();
                 this.show({
                     spinnerNode: true,
                     formNode: false,
