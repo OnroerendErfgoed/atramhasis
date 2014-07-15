@@ -81,7 +81,7 @@ define(
             },
 
             startup: function () {
-                       this.inherited(arguments);
+                this.inherited(arguments);
             },
 
             onSubmit:function (evt) {
