@@ -181,7 +181,7 @@ def label_lang_rule(errors, node, request, labels):
 
 def concept_type_rule(errors, node_location, request, conceptscheme_id, members):
     for member_concept_id in members:
-        member_concept = request.db.query(DomainConcept).filter_by(concept_id=member_concept_id,
+        member_concept = request.db.query(Thing).filter_by(concept_id=member_concept_id,
                                                                    conceptscheme_id=conceptscheme_id).one()
         if member_concept.type != 'concept':
             errors.append(colander.Invalid(
@@ -192,7 +192,7 @@ def concept_type_rule(errors, node_location, request, conceptscheme_id, members)
 
 def collection_type_rule(errors, node_location, request, conceptscheme_id, members):
     for member_collection_id in members:
-        member_collection = request.db.query(DomainCollection).filter_by(concept_id=member_collection_id,
+        member_collection = request.db.query(Thing).filter_by(concept_id=member_collection_id,
                                                                          conceptscheme_id=conceptscheme_id).one()
         if member_collection.type != 'collection':
             errors.append(colander.Invalid(
@@ -262,7 +262,7 @@ def narrower_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
 
 def broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy):
     for broader_concept_id in broader:
-        broader_concept = request.db.query(DomainConcept).filter_by(concept_id=broader_concept_id,
+        broader_concept = request.db.query(Thing).filter_by(concept_id=broader_concept_id,
                                                                     conceptscheme_id=conceptscheme_id).one()
         if broader_concept is not None and broader_concept.type == 'concept':
             broader_concepts = [n.concept_id for n in broader_concept.broader_concepts]
