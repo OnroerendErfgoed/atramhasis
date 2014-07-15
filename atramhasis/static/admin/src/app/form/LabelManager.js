@@ -217,7 +217,7 @@ function(
                 });
             },
 
-            clearAll:function()
+            Resset:function()
             {
 
                var dataToStore=[];

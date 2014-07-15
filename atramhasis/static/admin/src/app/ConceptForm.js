@@ -107,7 +107,7 @@ define(
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
-                  this.labelManager.clearAll();
+                  this.labelManager.Resset();
                 this.show({
                     spinnerNode: true,
                     formNode: false,
@@ -133,6 +133,8 @@ define(
                 this.broaderManager.scheme = scheme;
                 this.narrowerManager.scheme = scheme;
                 this.relatedManager.scheme = scheme;
+                this.membersManager.scheme = scheme;
+                this.memberofManager.scheme = scheme;
                 this.show({
                     spinnerNode: false,
                     formNode: true,
@@ -140,7 +142,6 @@ define(
                 });
                 this.dialog && this.dialog.layout();
             },
-
             onFirstInit:function()
             {
 
@@ -156,7 +157,7 @@ define(
 
                 var typeComboBox = new ComboBox({
                     id: "typecombobox",
-                    name: "typeComboBox",
+                    name: "ctype",
                     store: typeStore,
                     searchAttr: "name",
                     title: "Type:"

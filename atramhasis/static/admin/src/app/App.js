@@ -106,7 +106,7 @@ define([
 
 
             conceptDialog.content.onFirstInit();
-            conceptDialog.onCancel(conceptDialog.content.labelManager.clearAll());
+            conceptDialog.onCancel(conceptDialog.content.labelManager.Resset());
             var tc = registry.byId("center");
 
             var cpwelcome = new ContentPane({
@@ -140,9 +140,7 @@ define([
 
             });
 
-
-
-                  on(addConceptButton, "click", function(){
+            on(addConceptButton, "click", function(){
                 console.log("on addConceptButton " + self.currentScheme);
                 conceptDialog.content.init(self.currentScheme);
                 conceptDialog.show();
