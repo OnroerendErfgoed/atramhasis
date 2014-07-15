@@ -193,8 +193,15 @@ function(
             return dlg
         },
 
+        reset: function(){
+            this._relations = [];
+            this._createRelationList();
+        },
+
         getRelations: function(){
-            return arrayUtil.map(this._relations, function(item){ return item.id; });
+            var rels =  arrayUtil.map(this._relations, function(item){ return item.id; });
+            this.reset();
+            return rels;
         },
 
         setRelations: function(relations){
