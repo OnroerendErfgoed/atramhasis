@@ -126,13 +126,19 @@ function(
             }), new Memory());
             var myModel = new ObjectStoreModel({
                 store: myStore,
-                query: {id: 0},
                 mayHaveChildren: function(object){
                     return (object.children && object.children.length > 0)
+                },
+                getRoot: function(onItem) {
+                    //create artificial scheme root to support trees with multiple root items
+                    var children = this.store.query(this.query);
+                    var root = { concept_id: '-1', type:'collection', label: self.scheme, id: '-1', children: children};
+                    onItem(root);
                 }
             });
             var myTree = new Tree({
                 model: myModel,
+                showRoot: false,
                 getIconClass: function(/*dojo.store.Item*/ item, /*Boolean*/ opened){
                     if (item.type=='collection'){
                         return (opened ? "dijitFolderOpened" : "dijitFolderClosed");
