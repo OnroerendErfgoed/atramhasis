@@ -135,10 +135,6 @@ define(
                 var schemebox = new TextBox({title: "Scheme:"});
                 schemebox.set('disabled', true);
                 schemebox.set('value', scheme);
-
-                var broaderBox = new NumberSpinner({title: "Broader:"});
-
-
                 var typeStore = new Memory({
                     data: [
                         {name: "concept", id: "concept"},
@@ -158,9 +154,7 @@ define(
                 // Add the four text boxes to the TableContainer
                 myTable.addChild(schemebox);
                 myTable.addChild(typeComboBox);
-                myTable.addChild(broaderBox);
                 myTable.startup();
-                this.schemeNode.innerHTML = "Scheme: " + scheme;
                 this.broaderManager.scheme = scheme;
                 this.narrowerManager.scheme = scheme;
                 this.relatedManager.scheme = scheme;
