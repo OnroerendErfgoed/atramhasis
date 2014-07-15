@@ -107,6 +107,7 @@ define(
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
+                  this.labelManager.clearAll();
                 this.show({
                     spinnerNode: true,
                     formNode: false,
@@ -121,17 +122,32 @@ define(
                 console.log("init cdialog: " + scheme);
                 this.reset();
                 this.scheme = scheme;
-                registry.byId("cscheme").set("value", scheme);
+                //registry.byId("cscheme").set("value", scheme);
                 /*this.schemeNode.innerHTML = "Scheme: " + scheme;*/
                 // this.schemeNodeLabel.innerHTML="Scheme: ";
                 // this.schemeNode.set("value",scheme);
 
-                var myTable = new TableContainer({cols: 2, spacing: 10}, "myTable");
-
-                var schemebox = new TextBox({title: "Scheme:"});
-                schemebox.set('disabled', true);
+                var schemebox=dijit.byId("schemebox");
                 schemebox.set('value', scheme);
-                var typeStore = new Memory({
+
+                this.broaderManager.scheme = scheme;
+                this.narrowerManager.scheme = scheme;
+                this.relatedManager.scheme = scheme;
+                this.show({
+                    spinnerNode: false,
+                    formNode: true,
+                    successNode: false
+                });
+                this.dialog && this.dialog.layout();
+            },
+
+            onFirstInit:function()
+            {
+
+                var myTable = new TableContainer({cols: 2, spacing: 10},this.MyTable);
+                var schemebox = new TextBox({id:"schemebox",title: "Scheme:"});
+                schemebox.set('disabled', true);
+                 var typeStore = new Memory({
                     data: [
                         {name: "concept", id: "concept"},
                         {name: "collection", id: "collection"}
@@ -139,28 +155,18 @@ define(
                 });
 
                 var typeComboBox = new ComboBox({
-                    name: "ctype",
+                    id: "typecombobox",
+                    name: "typeComboBox",
                     store: typeStore,
                     searchAttr: "name",
                     title: "Type:"
                 });
 
                 typeComboBox.startup();
-                // Add the four text boxes to the TableContainer
+                // Add the 3 text boxes to the TableContainer
                 myTable.addChild(schemebox);
                 myTable.addChild(typeComboBox);
                 myTable.startup();
-                this.broaderManager.scheme = scheme;
-                this.narrowerManager.scheme = scheme;
-                this.relatedManager.scheme = scheme;
-                this.membersManager.scheme = scheme;
-                this.memberofManager.scheme = scheme;
-                this.show({
-                    spinnerNode: false,
-                    formNode: true,
-                    successNode: false
-                });
-                this.dialog && this.dialog.layout();
             }
 
         });

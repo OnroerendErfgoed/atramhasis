@@ -105,8 +105,8 @@ define([
             }).placeAt(document.body);
 
 
-
-
+            conceptDialog.content.onFirstInit();
+            conceptDialog.onCancel(conceptDialog.content.labelManager.clearAll());
             var tc = registry.byId("center");
 
             var cpwelcome = new ContentPane({

@@ -35,7 +35,10 @@ function(
 
         name: 'LabelManager',
         grid:null,
+        TitleLAbel:null,
         LabelGridContent:null,
+        langStoreComboBox:null,
+        labelStoreComboBox:null,
 
         buildRendering: function() {
             this.inherited(arguments);
@@ -136,26 +139,29 @@ function(
                     });
 
               var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10,orientation:"vert"},tableBoxdiv);
-                var TitleLAbel = new TextBox({title: "Title:"});
+                TitleLAbel = new TextBox({id:"TitleLAbel",title: "Title:"});
 
-                  var labelStoreComboBox = new Select(
+                   labelStoreComboBox = new Select(
                       {
                         id: "labelStoreComboBox",
                         name: "labelStoreComboBox",
                         title: "Type of label:",
+                        placeHolder: 'Select a type',
                         options:[
                             {label:"Preferred",value:"Preferred"},
                             {label:"Alternative",value:"Alternative"},
                             {label:"Hidden",value:"Hidden"}
                         ],
                        style:{ width: '100px' }
+
                   });
 
-                 var langStoreComboBox = new Select({
+                  langStoreComboBox = new Select({
 
                     id: "langStoreComboBox",
                     name: "langStoreComboBox",
                     title: "Language:",
+                    placeHolder: 'Select a language',
                     options:[
 
                             {label:"Nl",value:"NL"},
@@ -164,6 +170,7 @@ function(
 
                         ],
                      style:{ width: '80px' }
+
                  });
 
                var AddLabelButtonTotable = new Button
@@ -208,7 +215,26 @@ function(
                         innerHTML: "<b>" + label.name + "</b> (<em>" + label.language + "</em>): " + label.type
                     }, labelListNode);
                 });
+            },
+
+            clearAll:function()
+            {
+
+               var dataToStore=[];
+               var gridStore=new Memory({
+                    data: []
+
+                });
+               TitleLAbel.set("value","");
+               langStoreComboBox.reset();
+               labelStoreComboBox.reset();
+               var observableStore=new Observable(gridStore);
+                grid.setStore(observableStore);
+                var labelListNode = this.labelListNode;
+                query("li", labelListNode).forEach(domConstruct.destroy);
+
             }
+
 
 
 	});
