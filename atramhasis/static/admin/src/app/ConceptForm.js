@@ -20,14 +20,7 @@ define(
         'dojox/layout/TableContainer',
         'dijit/form/TextBox',
         'dijit/form/ComboBox',
-        'dijit/form/NumberSpinner',
-        'dojo/_base/lang',
-        'dgrid/Grid',
-        "dijit/form/Select",
-        "dojo/data/ObjectStore",
-        './EditLabelTemplate',
-        'dijit/Dialog',
-        "dgrid/Grid", "dgrid/Selection", "dgrid/Keyboard", "dgrid/editor"
+
     ],
     function (
         declare, arrayUtil,
@@ -48,16 +41,8 @@ define(
         domForm,
         TableContainer,
         TextBox,
-        ComboBox,
-        NumberSpinner,
+        ComboBox
 
-        lang,
-        Grid,
-        Select,
-        ObjectStore,
-        EditLabelTemplate,
-        Dialog,
-        Grid, Selection, Keyboard, editor
     ) {
         return declare([
             Form, _WidgetBase, WidgetsInTemplateMixin, _TemplatedMixin, FormMgrMixin,
