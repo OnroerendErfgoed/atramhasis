@@ -19,8 +19,7 @@ define(
         'dojo/dom-form',
         'dojox/layout/TableContainer',
         'dijit/form/TextBox',
-        'dijit/form/ComboBox',
-
+        'dijit/form/ComboBox'
     ],
     function (
         declare, arrayUtil,
