@@ -214,7 +214,9 @@ define([
                     "notes": [],
                     "broader": form.broader,
                     "narrower": form.narrower,
-                    "related": form.related
+                    "related": form.related,
+                    "members": form.members,
+                    "member_of": form.member_of
                 };
                 filteredGrid.conceptGrid.store.add(rowToAdd)
                     .then(

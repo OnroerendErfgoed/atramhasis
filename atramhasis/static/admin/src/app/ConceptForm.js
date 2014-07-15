@@ -78,6 +78,16 @@ define(
                     'title': 'Related:',
                     'scheme': this.scheme
                 }, this.relatedContainerNode);
+                this.membersManager = new RelationManager({
+                    'name': 'membersMgr',
+                    'title': 'Members:',
+                    'scheme': this.scheme
+                }, this.membersContainerNode);
+                this.memberofManager = new RelationManager({
+                    'name': 'memberofMgr',
+                    'title': 'Member of:',
+                    'scheme': this.scheme
+                }, this.memberofContainerNode);
             },
 
             startup: function () {
@@ -93,6 +103,8 @@ define(
                     formObj.broader = this.broaderManager.getRelations();
                     formObj.narrower = this.narrowerManager.getRelations();
                     formObj.related = this.relatedManager.getRelations();
+                    formObj.members = this.membersManager.getRelations();
+                    formObj.memberof = this.memberofManager.getRelations();
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
@@ -142,6 +154,8 @@ define(
                 this.broaderManager.scheme = scheme;
                 this.narrowerManager.scheme = scheme;
                 this.relatedManager.scheme = scheme;
+                this.membersManager.scheme = scheme;
+                this.memberofManager.scheme = scheme;
                 this.show({
                     spinnerNode: false,
                     formNode: true,
