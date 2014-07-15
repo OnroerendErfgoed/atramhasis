@@ -4,6 +4,7 @@ define([
         "dojo/dom-construct",
         "dojo/query",
         "dojo/on",
+        "dojo/dom-style",
         "dijit/Dialog",
 	    "dijit/_WidgetBase",
 	    "dijit/_TemplatedMixin",
@@ -21,6 +22,7 @@ function(
     domConstruct,
     query,
     on,
+    domStyle,
     Dialog,
     WidgetBase,
     TemplatedMixin,
@@ -39,7 +41,7 @@ function(
 
         title: 'Relations:',
 
-        scheme: null,
+        _scheme: null,
 
         _relations: null,
 
@@ -119,7 +121,7 @@ function(
             });
 
             var myStore = new Cache(new JsonRest({
-                target:"/conceptschemes/" + self.scheme + "/tree",
+                target:"/conceptschemes/" + self._scheme + "/tree",
                 getChildren: function(object){
                     return object.children || [];
                 }
@@ -132,7 +134,7 @@ function(
                 getRoot: function(onItem) {
                     //create artificial scheme root to support trees with multiple root items
                     var children = this.store.query(this.query);
-                    var root = { concept_id: '-1', type:'collection', label: self.scheme, id: '-1', children: children};
+                    var root = { concept_id: '-1', type:'collection', label: self._scheme, id: '-1', children: children};
                     onItem(root);
                 }
             });
@@ -206,6 +208,21 @@ function(
 
         setRelations: function(relations){
             console.log("todo");
+        },
+
+        close: function(){
+            domStyle.set(this.domNode, "display", "none");
+            this.reset();
+        },
+
+        open: function(){
+            domStyle.set(this.domNode, "display", "block");
+        },
+
+        setScheme: function(scheme){
+            this.reset();
+            this._scheme = scheme;
+
         }
 	});
 });
