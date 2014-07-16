@@ -31,8 +31,8 @@ define([
                 grid: null,
                 titleLabel: null,
                 LabelGridContent: null,
-                langStoreComboBox: null,
-                labelStoreComboBox: null,
+                languageComboBox: null,
+                labelTypeComboBox: null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -129,6 +129,7 @@ define([
 
                     var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10, orientation: "vert"}, tableBoxDiv);
                     var titleLabel = new TextBox({id: "titleLabel", title: "Title:"});
+                    self.titleLabel=titleLabel;
                     var labelTypeComboBox = new Select(
                         {
                             id: "labelTypeComboBox",
@@ -141,6 +142,7 @@ define([
                                 {label: "Hidden", value: "hiddenLabel"}
                             ]
                         });
+                    self.labelTypeComboBox=labelTypeComboBox;
                     var langStoreComboBox = new Select
                     (
                         {
@@ -158,6 +160,7 @@ define([
 
                         }
                     );
+                    self.languageComboBox=langStoreComboBox;
                     var addLabelButtonToTable = new Button
                     (
                         {
@@ -212,9 +215,9 @@ define([
                         data: []
 
                     });
-                    this.titleLabel.set("value", "");
-                    this.langStoreComboBox.reset();
-                    this.labelStoreComboBox.reset();
+                    self.titleLabel.set("value", "");
+                    self.languageComboBox.reset();
+                    self.labelTypeComboBox.reset();
                     var observableStore = new Observable(gridStore);
                     this.grid.set("store", observableStore);
                     var labelListNode = this.labelListNode;
