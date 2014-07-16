@@ -201,9 +201,7 @@ function(
         },
 
         getRelations: function(){
-            var rels =  arrayUtil.map(this._relations, function(item){ return item.id; });
-            this.reset();
-            return rels;
+            return  arrayUtil.map(this._relations, function(item){ return item.id; });
         },
 
         setRelations: function(relations){
