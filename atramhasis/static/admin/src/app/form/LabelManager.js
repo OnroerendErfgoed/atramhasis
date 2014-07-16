@@ -1,8 +1,8 @@
 define([
         "dojo/_base/declare",
         "dijit/Dialog",
-	    "dijit/_WidgetBase",
-	    "dijit/_TemplatedMixin",
+        "dijit/_WidgetBase",
+        "dijit/_TemplatedMixin",
         "dijit/form/Form",
         "dijit/form/Button",
         "dijit/form/Select",
@@ -16,243 +16,209 @@ define([
         "dgrid/editor",
         "dojo/query",
         "dgrid/extensions/ColumnHider",
-         "dojo/_base/array",
+        "dojo/_base/array",
         "dojo/text!./templates/LabelManager.html"
 
-	 ],
-function(
-    declare,
-    Dialog,
-    WidgetBase,
-    TemplatedMixin,
-    Form, Button,Select,OnDemandGrid,TextBox,TableContainer,lang,domConstruct,Memory,Observable,editor,query,ColumnHider
-    ,arrayUtil,template
-) {
-	return declare(
-		"app/form/LabelManager",
-		[WidgetBase, TemplatedMixin],
-	{
-        templateString: template,
+    ],
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil, template) {
+        return declare(
+            "app/form/LabelManager",
+            [WidgetBase, TemplatedMixin],
+            {
+                templateString: template,
 
-        name: 'LabelManager',
-        grid:null,
-        TitleLAbel:null,
-        LabelGridContent:null,
-        langStoreComboBox:null,
-        labelStoreComboBox:null,
+                name: 'LabelManager',
+                grid: null,
+                titleLabel: null,
+                LabelGridContent: null,
+                langStoreComboBox: null,
+                labelStoreComboBox: null,
 
-        buildRendering: function() {
-            this.inherited(arguments);
-        },
-        postCreate: function() {
-            this.inherited(arguments);
+                buildRendering: function () {
+                    this.inherited(arguments);
+                },
+                postCreate: function () {
+                    this.inherited(arguments);
 
-            var form = new Form();
-            var self = this;
-            form.onSubmit = function(evt){
+                    var form = new Form();
+                    var self = this;
+                    //noinspection CommaExpressionJS
+                    form.onSubmit = function (evt) {
 
-                evt.preventDefault();
-                LabelGridContent = grid.store.data;
-                self._createLabelList(grid.store.data);
-                labelGridDialog.hide();
-            }
+                        evt.preventDefault();
+                        this.LabelGridContent = self.grid.store.data;
+                        self._createLabelList(self.grid.store.data);
+                        labelGridDialog.hide();
+                    };
 
-            this.CreateEditLabelForm(form);
+                    self._createEditLabelForm(form);
 
-            new Button({
-                label: "submit",
-                type:'submit'
-            }).placeAt(form.containerNode);
+                    new Button({
+                        label: "submit",
+                        type: 'submit'
+                    }).placeAt(form.containerNode);
 
-            var labelGridDialog = new Dialog({
-                content: form,
-                title: "Label Manager"
+                    var labelGridDialog = new Dialog({
+                        content: form,
+                        title: "Label Manager"
 
-
-            });
-
-
-
-            form.startup();
-
-            var myButton = new Button({
-                label: "Manage labels",
-                onClick: function(){
-                    console.log("click in labelMananger");
-                    labelGridDialog.show();
-                }
-            }, this.labelButton)
-        },
-
-           CreateEditLabelForm: function (form) {
-
-
-             var mainDiv=domConstruct.create("div");
-
-            domConstruct.place(mainDiv,form.containerNode);
-
-            var griddiv=domConstruct.create("div");
-
-             domConstruct.place(griddiv,mainDiv,"last");
-
-             var tableBoxdiv=domConstruct.create("div");
-             domConstruct.place(tableBoxdiv,mainDiv,"first");
-
-
-
-               var columns = [
-                {label:"Title", field:"label"},
-                {label:"Language", field:"language"},
-                {label:"Language", field:"languageValue",unhidable: true,hidden: true},
-                {label:"Type", field:"type"},
-                {label:"Type", field:"typeValue",unhidable: true,hidden: true},
-                editor({label:" ",field:'button',
-                    editorArgs:{label:"delete",onClick:function(event){
-                        var row=grid.row(event);
-                        var itemToDelete=row.data.id;
-                        grid.store.remove(itemToDelete);
-                        grid.resize();
-
-                    }
-                    }},
-                    Button)
-                ];
-
-               var dataToStore=[];
-               var gridStore=new Memory({
-                    data: []
-
-                });
-
-               var observableStore=new Observable(gridStore);
-
-                grid = new (declare([OnDemandGrid, ColumnHider]))({
-                   columns: columns,
-                   store:observableStore,
-                 selectionMode: "single" // for Selection; only select a single row at a time
-                    },griddiv);
-
-              grid.startup();
-              var row;
-               grid.on(".dgrid-row:click", function(event){
-                    row = grid.row(event);
 
                     });
 
-              var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10,orientation:"vert"},tableBoxdiv);
-                TitleLAbel = new TextBox({id:"TitleLAbel",title: "Title:"});
 
-                   labelStoreComboBox = new Select(
-                      {
-                        id: "labelStoreComboBox",
-                        name: "labelStoreComboBox",
-                        title: "Type of label:",
-                        placeHolder: 'Select a type',
-                        options:[
-                            {label:"Preferred",value:"prefLabel"},
-                            {label:"Alternative",value:"altLabel"},
-                            {label:"Hidden",value:"hiddenLabel"}
-                        ]
-                  });
+                    form.startup();
 
-                  langStoreComboBox = new Select({
+                    new Button({
+                        label: "Manage labels",
+                        onClick: function () {
+                            console.log("click in labelMananger");
+                            labelGridDialog.show();
+                        }
+                    }, this.labelButton);
+                },
 
-                    id: "langStoreComboBox",
-                    name: "langStoreComboBox",
-                    title: "Language:",
-                    placeHolder: 'Select a language',
-                    options:[
+                _createEditLabelForm: function (form) {
 
-                            {label:"NL",value:"nl"},
-                            {label:"Fr",value:"fr"},
-                            {label:"En",value:"en"}
 
-                        ],
-                     style:{ width: '80px' }
+                    var mainDiv = domConstruct.create("div");
 
-                 });
+                    domConstruct.place(mainDiv, form.containerNode);
 
-               var AddLabelButtonTotable = new Button
-               ({
-                       iconClass: 'plusIcon',
-                       showLabel: false,
-                       onClick: lang.hitch(this, function (evt) {
+                    var gridDiv = domConstruct.create("div");
 
-                           console.log("Add label to tabel in add label dialog");
+                    domConstruct.place(gridDiv, mainDiv, "last");
 
-                           var languageSelected = langStoreComboBox.get('displayedValue');
-                           var labelTypeSelected = labelStoreComboBox.get('displayedValue');
-                           var labelName = TitleLAbel.get('value');
+                    var tableBoxDiv = domConstruct.create("div");
+                    domConstruct.place(tableBoxDiv, mainDiv, "first");
 
-                          grid.store.add(  {label: labelName, language: languageSelected,languageValue:langStoreComboBox.get('value'),
 
-                                   type: labelTypeSelected,typeValue:labelStoreComboBox.get('value')});
+                    var columns;
+                    columns = [
+                        {label: "Title", field: "label"},
+                        {label: "Language", field: "language"},
+                        {label: "Language", field: "languageValue", unhidable: true, hidden: true},
+                        {label: "Type", field: "type"},
+                        {label: "Type", field: "typeValue", unhidable: true, hidden: true},
+                        editor({label: " ", field: 'button',
+                                editorArgs: {label: "delete", onClick: function (event) {
 
-                           grid.resize();
-                       })
-                   }
-               );
+                                    var row = grid.row(event);
+                                    var itemToDelete = row.data.id;
+                                    grid.store.remove(itemToDelete);
+                                    grid.resize();
+                                }
+                                }},
+                            Button)
+                    ];
+                    var gridStore = new Memory({
+                        data: []
 
-                labelTabForBoxes.addChild(TitleLAbel);
-                labelTabForBoxes.addChild(langStoreComboBox);
-                labelTabForBoxes.addChild(labelStoreComboBox);
-                labelTabForBoxes.addChild(AddLabelButtonTotable);
-                labelTabForBoxes.startup();
-                grid.resize();
-            },
+                    });
 
-            _createLabelList: function(labels) {
-                var labelListNode = this.labelListNode;
-                query("li", labelListNode).forEach(domConstruct.destroy);
-                arrayUtil.forEach(labels, function(label){
-                    domConstruct.create("li", {
-                        innerHTML: "<b>" + label.name + "</b> (<em>" + label.language + "</em>): " + label.type
-                    }, labelListNode);
-                });
-            },
+                    var observableStore = new Observable(gridStore);
 
-           
-            getLabels:function()
-            {
+                    this.grid = new (declare([OnDemandGrid, ColumnHider]))({
+                        columns: columns,
+                        store: observableStore,
+                        selectionMode: "single" // for Selection; only select a single row at a time
+                    }, gridDiv);
 
-                var labels=grid.store.data;
+                    var grid = this.grid;
+                    this.grid.startup();
 
-                var labelsToSend=[];
-                 arrayUtil.forEach(labels, function(label){
 
-                    var labelToSend=                        {
-                            "type":  label.typeValue,
+                    var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10, orientation: "vert"}, tableBoxDiv);
+                    var titleLabel = new TextBox({id: "titleLabel", title: "Title:"});
+                    var labelTypeComboBox = new Select(
+                        {
+                            id: "labelTypeComboBox",
+                            name: "labelTypeComboBox",
+                            title: "Type of label:",
+                            placeHolder: 'Select a type',
+                            options: [
+                                {label: "Preferred", value: "prefLabel"},
+                                {label: "Alternative", value: "altLabel"},
+                                {label: "Hidden", value: "hiddenLabel"}
+                            ]
+                        });
+                    var langStoreComboBox = new Select
+                    (
+                        {
+                            id: "langStoreComboBox",
+                            name: "langStoreComboBox",
+                            title: "Language:",
+                            placeHolder: 'Select a language',
+                            options: [
+                                {label: "NL", value: "nl"},
+                                {label: "Fr", value: "fr"},
+                                {label: "En", value: "en"}
+
+                            ],
+                            style: { width: '80px' }
+
+                        }
+                    );
+                    var addLabelButtonToTable = new Button
+                    (
+                        {
+                            iconClass: 'plusIcon',
+                            showLabel: false,
+                            onClick: lang.hitch(this, function () {
+
+                                console.log("Add label to tabel in add label dialog");
+
+                                grid.store.add({
+                                    label: titleLabel.get('value'),
+                                    language: langStoreComboBox.get('displayedValue'),
+                                    languageValue: langStoreComboBox.get('value'),
+                                    type: labelTypeComboBox.get('displayedValue'),
+                                    typeValue: labelTypeComboBox.get('value')});
+                                grid.resize();
+                            })
+                        }
+                    );
+                    labelTabForBoxes.addChild(titleLabel);
+                    labelTabForBoxes.addChild(langStoreComboBox);
+                    labelTabForBoxes.addChild(labelTypeComboBox);
+                    labelTabForBoxes.addChild(addLabelButtonToTable);
+                    labelTabForBoxes.startup();
+                    this.grid.resize();
+                },
+                _createLabelList: function (labels) {
+                    var labelListNode = this.labelListNode;
+                    query("li", labelListNode).forEach(domConstruct.destroy);
+                    arrayUtil.forEach(labels, function (label) {
+                        domConstruct.create("li", {
+                            innerHTML: "<b>" + label.name + "</b> (<em>" + label.language + "</em>): " + label.type
+                        }, labelListNode);
+                    });
+                },
+                getLabels: function () {
+                    var labels = this.grid.store.data;
+                    var labelsToSend = [];
+                    arrayUtil.forEach(labels, function (label) {
+
+                        var labelToSend = {
+                            "type": label.typeValue,
                             "language": label.languageValue,
                             "label": label.label
-                        }
+                        };
+                        labelsToSend.push(labelToSend);
+                    });
+                    return labelsToSend;
+                },
+                reset: function () {
+                    var gridStore = new Memory({
+                        data: []
 
-                    labelsToSend.push(labelToSend);
-                });
-
-
-                return labelsToSend;
-            },
-
-
-            reset:function()
-            {
-
-               var dataToStore=[];
-               var gridStore=new Memory({
-                    data: []
-
-                });
-               TitleLAbel.set("value","");
-               langStoreComboBox.reset();
-               labelStoreComboBox.reset();
-               var observableStore=new Observable(gridStore);
-                grid.set("store",observableStore);
-                var labelListNode = this.labelListNode;
-                query("li", labelListNode).forEach(domConstruct.destroy);
-
-            }
-
-
-
-	});
-});
+                    });
+                    this.titleLabel.set("value", "");
+                    this.langStoreComboBox.reset();
+                    this.labelStoreComboBox.reset();
+                    var observableStore = new Observable(gridStore);
+                    this.grid.set("store", observableStore);
+                    var labelListNode = this.labelListNode;
+                    query("li", labelListNode).forEach(domConstruct.destroy);
+                }
+            });
+    });
