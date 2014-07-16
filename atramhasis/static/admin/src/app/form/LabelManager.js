@@ -28,6 +28,7 @@ define([
                 templateString: template,
 
                 name: 'LabelManager',
+                title: 'Labels:',
                 grid: null,
                 titleLabel: null,
                 LabelGridContent: null,
@@ -61,8 +62,6 @@ define([
                     var labelGridDialog = new Dialog({
                         content: form,
                         title: "Label Manager"
-
-
                     });
 
 
