@@ -1,9 +1,7 @@
 <form data-dojo-attach-point='containerNode'>
     <div data-dojo-attach-point="formNode" class="cFormDialog" >
 
-            <div  data-dojo-attach-point="MyTable">
-
-            </div>
+            <div  data-dojo-attach-point="MyTable"></div>
 
             <div data-dojo-attach-point="labelContainerNode"></div>
             <div data-dojo-attach-point="broaderContainerNode"></div>
@@ -12,9 +10,10 @@
             <div data-dojo-attach-point="membersContainerNode"></div>
             <div data-dojo-attach-point="memberofContainerNode"></div>
 
-            <button id='submit' data-dojo-type='dijit/form/Button' name='submit' type='submit'>submit</button>
+            <div class="dijitDialogPaneActionBar">
+                <button data-dojo-type='dijit/form/Button' type='submit'>add</button>
+                <button data-dojo-type='dijit/form/Button' data-dojo-attach-event="onClick:onCancel">cancel</button>
             </div>
-        </div>
     </div>
 
     <div data-dojo-attach-point="spinnerNode" style="display:none">

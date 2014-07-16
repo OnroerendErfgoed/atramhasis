@@ -5,7 +5,6 @@ define([
     "dojo/aspect",
     "dojo/_base/lang",
     "dojo/store/Memory",
-    "dojox/collections/Dictionary",
     "dojo/dom",
     "dojo/request",
     "dijit/registry",
@@ -22,7 +21,6 @@ define([
     "./ConceptDetail",
     "./ThesaurusCollection",
     "./ConceptForm",
-
 //    "dojo/text!./templates/ConceptForm.html",
 
     "dijit/layout/ContentPane",
@@ -34,7 +32,6 @@ define([
     declare, on, topic, aspect, lang,
 
     Memory,
-    Dictionary,
     dom,
     request,
     registry,
@@ -100,14 +97,21 @@ define([
                 filteredGrid.conceptGrid.resize();
             });
 
+            var conceptForm  = new ConceptForm();
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
-                content:new ConceptForm(),
+                content: conceptForm,
                 title:"Add concept",
                 style: "width: 500px"
-
-
             }).placeAt(document.body);
+
+            on(conceptForm, "cancel", function(){
+                conceptDialog.hide();
+            });
+
+            on(conceptDialog, "hide", function(){
+                conceptForm.reset();
+            });
 
             var tc = registry.byId("center");
 
@@ -115,23 +119,19 @@ define([
                 title: "Welcome",
                 content: "[welcome]"
             });
-
-            var languageDictionary=new Dictionary();
-
-
-
             tc.addChild(cpwelcome);
             tc.startup();
 
-
-             var addConceptButton = new Button({
+            var addConceptButton = new Button({
                 label: "Add concept or collection",
                 disabled:"disabled"
             }, "addConceptNode");
 
-              on(conceptDialog, "hide", function(){
-                    conceptDialog.content.labelManager.reset()
-                });
+            on(addConceptButton, "click", function(){
+                console.log("on addConceptButton " + self.currentScheme);
+                conceptForm.init(self.currentScheme);
+                conceptDialog.show();
+            });
 
 
             on(schemeFileteringSelect, "change", function(e){
@@ -153,13 +153,7 @@ define([
 
             });
 
-            on(addConceptButton, "click", function(){
-                console.log("on addConceptButton " + self.currentScheme);
-                conceptDialog.content.init(self.currentScheme);
-                conceptDialog.show();
-            });
-
-           schemeFileteringSelect.startup();
+            schemeFileteringSelect.startup();
 
             topic.subscribe("concept.open", lang.hitch(this, function(conceptid, schemeid){
                 var cp = registry.byId(schemeid + "_" + conceptid);
@@ -228,7 +222,6 @@ define([
                     "related": form.related,
                     "members": form.members,
                     "member_of": form.member_of
-
                 };
                 filteredGrid.conceptGrid.store.add(rowToAdd)
                     .then(
@@ -248,17 +241,6 @@ define([
 
                     );
             });
-
-        },
-
-        //To delete after setting the get language service
-        createDictionaryFoLanguage:function()
-        {
-            var dictionary=new Dictionary();
-
-
-
-
 
         }
 

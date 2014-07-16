@@ -206,11 +206,12 @@ function(
                 query("li", labelListNode).forEach(domConstruct.destroy);
                 arrayUtil.forEach(labels, function(label){
                     domConstruct.create("li", {
-                        innerHTML: "<b>" + label.label + "</b> (<em>" + label.language + "</em>): " + label.type
+                        innerHTML: "<b>" + label.name + "</b> (<em>" + label.language + "</em>): " + label.type
                     }, labelListNode);
                 });
             },
 
+           
             getLabels:function()
             {
 
