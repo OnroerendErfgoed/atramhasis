@@ -133,7 +133,6 @@ define([
                 conceptDialog.show();
             });
 
-
             on(schemeFileteringSelect, "change", function(e){
 
                 if(e)
@@ -215,7 +214,7 @@ define([
 
                 var rowToAdd = {
                     "type": form.ctype,
-                    "labels":form.label,
+                    "labels": form.label,
                     "notes": [],
                     "broader": form.broader,
                     "narrower": form.narrower,
