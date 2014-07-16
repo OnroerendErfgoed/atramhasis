@@ -97,14 +97,21 @@ define([
                 filteredGrid.conceptGrid.resize();
             });
 
+            var conceptForm  = new ConceptForm();
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
-                content:new ConceptForm(),
+                content: conceptForm,
                 title:"Add concept",
                 style: "width: 500px"
-
-
             }).placeAt(document.body);
+
+            on(conceptForm, "cancel", function(){
+                conceptDialog.hide();
+            });
+
+            on(conceptDialog, "hide", function(){
+                conceptForm.reset();
+            });
 
             var tc = registry.byId("center");
 
@@ -115,16 +122,16 @@ define([
             tc.addChild(cpwelcome);
             tc.startup();
 
-
-             var addConceptButton = new Button({
+            var addConceptButton = new Button({
                 label: "Add concept or collection",
                 disabled:"disabled"
             }, "addConceptNode");
 
-              on(conceptDialog, "hide", function(){
-                    conceptDialog.content.labelManager.Resset()
-                });
-
+            on(addConceptButton, "click", function(){
+                console.log("on addConceptButton " + self.currentScheme);
+                conceptForm.init(self.currentScheme);
+                conceptDialog.show();
+            });
 
             on(schemeFileteringSelect, "change", function(e){
 
@@ -145,13 +152,7 @@ define([
 
             });
 
-            on(addConceptButton, "click", function(){
-                console.log("on addConceptButton " + self.currentScheme);
-                conceptDialog.content.init(self.currentScheme);
-                conceptDialog.show();
-            });
-
-           schemeFileteringSelect.startup();
+            schemeFileteringSelect.startup();
 
             topic.subscribe("concept.open", lang.hitch(this, function(conceptid, schemeid){
                 var cp = registry.byId(schemeid + "_" + conceptid);

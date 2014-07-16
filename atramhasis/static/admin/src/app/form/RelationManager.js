@@ -220,7 +220,6 @@ function(
         },
 
         setScheme: function(scheme){
-            this.reset();
             this._scheme = scheme;
 
         }

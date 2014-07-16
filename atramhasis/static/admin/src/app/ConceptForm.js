@@ -130,6 +130,10 @@ define(
                 myTable.addChild(schemebox);
                 myTable.addChild(typeComboBox);
                 myTable.startup();
+
+                on(this, "reset", function(){
+                    self._resetWidgets();
+                });
             },
 
             startup: function () {
@@ -150,7 +154,7 @@ define(
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
-                  this.labelManager.Resset();
+
                 this.show({
                     spinnerNode: true,
                     formNode: false,
@@ -161,8 +165,22 @@ define(
                 return false;
             },
 
+            onCancel: function(){
+                //hide implemented on dialog level
+            },
+
+            _resetWidgets: function(){
+                this.broaderManager.reset();
+                this.narrowerManager.reset();
+                this.relatedManager.reset();
+                this.membersManager.reset();
+                this.memberofManager.reset();
+                this.labelManager.reset();
+            },
+
             init: function(scheme) {
                 console.log("init cdialog: " + scheme);
+
                 this.reset();
                 this.scheme = scheme;
                 //registry.byId("cscheme").set("value", scheme);
@@ -187,4 +205,4 @@ define(
             }
         }
     )}
-)
+);
