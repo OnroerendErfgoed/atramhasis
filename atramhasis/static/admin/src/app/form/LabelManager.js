@@ -104,7 +104,7 @@ function(
                 {label:"Title", field:"label"},
                 {label:"Language", field:"language"},
                 {label:"Language", field:"languageValue",unhidable: true,hidden: true},
-                {label:"Type", field:"type",unhidable: true,hidden: true},
+                {label:"Type", field:"type"},
                 {label:"Type", field:"typeValue",unhidable: true,hidden: true},
                 editor({label:" ",field:'button',
                     editorArgs:{label:"delete",onClick:function(event){
