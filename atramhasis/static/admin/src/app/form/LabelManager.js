@@ -15,6 +15,7 @@ define([
         "dojo/store/Observable",
         "dgrid/editor",
         "dojo/query",
+        "dgrid/extensions/ColumnHider",
          "dojo/_base/array",
         "dojo/text!./templates/LabelManager.html"
 
@@ -24,7 +25,7 @@ function(
     Dialog,
     WidgetBase,
     TemplatedMixin,
-    Form, Button,Select,OnDemandGrid,TextBox,TableContainer,lang,domConstruct,Memory,Observable,editor,query
+    Form, Button,Select,OnDemandGrid,TextBox,TableContainer,lang,domConstruct,Memory,Observable,editor,query,ColumnHider
     ,arrayUtil,template
 ) {
 	return declare(
@@ -100,9 +101,11 @@ function(
 
 
                var columns = [
-                {label:"Title", field:"name"},
+                {label:"Title", field:"label"},
                 {label:"Language", field:"language"},
-                {label:"Type", field:"type"},
+                {label:"Language", field:"languageValue",unhidable: true,hidden: true},
+                {label:"Type", field:"type",unhidable: true,hidden: true},
+                {label:"Type", field:"typeValue",unhidable: true,hidden: true},
                 editor({label:" ",field:'button',
                     editorArgs:{label:"delete",onClick:function(event){
                         var row=grid.row(event);
@@ -123,12 +126,10 @@ function(
 
                var observableStore=new Observable(gridStore);
 
-                grid = new OnDemandGrid({
+                grid = new (declare([OnDemandGrid, ColumnHider]))({
                    columns: columns,
                    store:observableStore,
-                 selectionMode: "single", // for Selection; only select a single row at a time
-                    cellNavigation: false // for Keyboard; allow only row-level keyboard navigation
-
+                 selectionMode: "single" // for Selection; only select a single row at a time
                     },griddiv);
 
               grid.startup();
@@ -148,12 +149,10 @@ function(
                         title: "Type of label:",
                         placeHolder: 'Select a type',
                         options:[
-                            {label:"Preferred",value:"Preferred"},
-                            {label:"Alternative",value:"Alternative"},
-                            {label:"Hidden",value:"Hidden"}
-                        ],
-                       style:{ width: '100px' }
-
+                            {label:"Preferred",value:"prefLabel"},
+                            {label:"Alternative",value:"altLabel"},
+                            {label:"Hidden",value:"hiddenLabel"}
+                        ]
                   });
 
                   langStoreComboBox = new Select({
@@ -164,9 +163,9 @@ function(
                     placeHolder: 'Select a language',
                     options:[
 
-                            {label:"Nl",value:"NL"},
-                            {label:"Fr",value:"Fr"},
-                            {label:"En",value:"En"}
+                            {label:"NL",value:"nl"},
+                            {label:"Fr",value:"fr"},
+                            {label:"En",value:"en"}
 
                         ],
                      style:{ width: '80px' }
@@ -181,18 +180,13 @@ function(
 
                            console.log("Add label to tabel in add label dialog");
 
-                           var languageSelected = langStoreComboBox.get('value');
-                           var labelTypeSelected = labelStoreComboBox.get('value');
+                           var languageSelected = langStoreComboBox.get('displayedValue');
+                           var labelTypeSelected = labelStoreComboBox.get('displayedValue');
                            var labelName = TitleLAbel.get('value');
-                           var tempDataToStore = [
-                               {name: labelName, language: languageSelected, type: labelTypeSelected}
-                           ];
 
-                           //dataToStore[dataToStore.length]=tempDataToStore;
-                           //grid.renderArray(tempDataToStore);
+                          grid.store.add(  {label: labelName, language: languageSelected,languageValue:langStoreComboBox.get('value'),
 
-                          //gridStore.add(tempDataToStore);
-                          grid.store.add( {name: labelName, language: languageSelected, type: labelTypeSelected});
+                                   type: labelTypeSelected,typeValue:labelStoreComboBox.get('value')});
 
                            grid.resize();
                        })
@@ -212,10 +206,32 @@ function(
                 query("li", labelListNode).forEach(domConstruct.destroy);
                 arrayUtil.forEach(labels, function(label){
                     domConstruct.create("li", {
-                        innerHTML: "<b>" + label.name + "</b> (<em>" + label.language + "</em>): " + label.type
+                        innerHTML: "<b>" + label.label + "</b> (<em>" + label.language + "</em>): " + label.type
                     }, labelListNode);
                 });
             },
+
+            getLabels:function()
+            {
+
+                var labels=grid.store.data;
+
+                var labelsToSend=[];
+                 arrayUtil.forEach(labels, function(label){
+
+                    var labelToSend=                        {
+                            "type":  label.typeValue,
+                            "language": label.languageValue,
+                            "label": label.label
+                        }
+
+                    labelsToSend.push(labelToSend);
+                });
+
+
+                return labelsToSend;
+            },
+
 
             reset:function()
             {
@@ -229,7 +245,7 @@ function(
                langStoreComboBox.reset();
                labelStoreComboBox.reset();
                var observableStore=new Observable(gridStore);
-                grid.setStore(observableStore);
+                grid.set("store",observableStore);
                 var labelListNode = this.labelListNode;
                 query("li", labelListNode).forEach(domConstruct.destroy);
 

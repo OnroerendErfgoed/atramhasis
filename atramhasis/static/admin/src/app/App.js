@@ -5,6 +5,7 @@ define([
     "dojo/aspect",
     "dojo/_base/lang",
     "dojo/store/Memory",
+    "dojox/collections/Dictionary",
     "dojo/dom",
     "dojo/request",
     "dijit/registry",
@@ -21,6 +22,7 @@ define([
     "./ConceptDetail",
     "./ThesaurusCollection",
     "./ConceptForm",
+
 //    "dojo/text!./templates/ConceptForm.html",
 
     "dijit/layout/ContentPane",
@@ -32,6 +34,7 @@ define([
     declare, on, topic, aspect, lang,
 
     Memory,
+    Dictionary,
     dom,
     request,
     registry,
@@ -112,6 +115,11 @@ define([
                 title: "Welcome",
                 content: "[welcome]"
             });
+
+            var languageDictionary=new Dictionary();
+
+
+
             tc.addChild(cpwelcome);
             tc.startup();
 
@@ -213,19 +221,14 @@ define([
 
                 var rowToAdd = {
                     "type": form.ctype,
-                    "labels": [
-                        {
-                            "type": "prefLabel",
-                            "language": "nl",
-                            "label": "test"
-                        }
-                    ],
+                    "labels":form.label,
                     "notes": [],
                     "broader": form.broader,
                     "narrower": form.narrower,
                     "related": form.related,
                     "members": form.members,
                     "member_of": form.member_of
+
                 };
                 filteredGrid.conceptGrid.store.add(rowToAdd)
                     .then(
@@ -245,6 +248,17 @@ define([
 
                     );
             });
+
+        },
+
+        //To delete after setting the get language service
+        createDictionaryFoLanguage:function()
+        {
+            var dictionary=new Dictionary();
+
+
+
+
 
         }
 
