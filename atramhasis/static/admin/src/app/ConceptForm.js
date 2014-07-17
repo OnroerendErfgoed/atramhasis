@@ -66,7 +66,7 @@ define(
                 this.labelManager = new LabelManager({
                     'name': 'lblMgr'
                 }, this.labelContainerNode);
-                this.NoteManager=new NoteManager({
+                this.noteManager=new NoteManager({
                    'name':'noteMgr'
                 },this.noteContainerNode);
                 this.broaderManager = new RelationManager({
@@ -162,7 +162,7 @@ define(
                     formObj.members = this.membersManager.getRelations();
                     formObj.member_of = this.memberofManager.getRelations();
                     formObj.label = this.labelManager.getLabels();
-                    formObj.note = this.NoteManager.geNotes();
+                    formObj.note = this.noteManager.geNotes();
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
@@ -188,7 +188,7 @@ define(
                 this.membersManager.reset();
                 this.memberofManager.reset();
                 this.labelManager.reset();
-                this.NoteManager.reset();
+                this.noteManager.reset();
             },
 
             init: function(scheme, concept) {
@@ -220,6 +220,7 @@ define(
                     if (concept.narrower) this.narrowerManager.setRelations(concept.narrower);
                     if (concept.related) this.relatedManager.setRelations(concept.related);
                     if (concept.labels) this.labelManager.setLabels(concept.labels);
+                    if (concept.notes) this.noteManager.setNotes(concept.notes);
                     //todo: implement and add setNotes
                 }
 

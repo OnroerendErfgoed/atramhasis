@@ -29,6 +29,7 @@ define([
         labelComboBox: null,
         languageComboBox: null,
         noteGrid: null,
+        notes:null,
         postMixInProperties: function () {
             this.inherited(arguments);
         },
@@ -37,7 +38,7 @@ define([
             this.inherited(arguments);
         },
 
-        postCreate: function () {
+        postCreate: function (notes) {
             this.inherited(arguments);
             var self = this;
             this.noteLabel.innerHTML = this.title;
@@ -48,7 +49,12 @@ define([
                 iconClass: 'plusIcon',
                 onClick: function () {
                     var dlg = self._createDialog();
+                    if(self.notes)
+                    {
+                       self._setGrid(self.notes);
+                    }
                     dlg.show();
+                       self.noteGrid.resize();
                 }
             }, this.noteButton)
 
@@ -271,6 +277,22 @@ define([
         reset: function () {
             var noteListNode = this.NoteListNode;
             query("li", noteListNode).forEach(domConstruct.destroy);
+        },
+
+        setNotes:function(notes)
+        {
+            this._createNodeList(notes);
+            this.notes=notes;
+        },
+
+        _setGrid:function(notes)
+        {
+           var gridStore = new Memory({
+                data:notes
+
+            });
+              this.noteGrid.set("store",gridStore);
+
         }
     });
 });
