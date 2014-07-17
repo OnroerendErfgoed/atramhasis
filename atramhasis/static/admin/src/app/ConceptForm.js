@@ -52,6 +52,8 @@ define(
             widgetsInTemplate: true,
             dialog: null,
             scheme: null,
+            typeComboBox: null,
+            conceptId: null,
 
             constructor: function (options) {
                 declare.safeMixin(this, options);
@@ -124,6 +126,7 @@ define(
                         self.memberofManager.open();
                     }
                 });
+                this.typeComboBox = typeComboBox;
 
                 typeComboBox.startup();
                 // Add the 3 text boxes to the TableContainer
@@ -133,6 +136,7 @@ define(
 
                 on(this, "reset", function(){
                     self._resetWidgets();
+                    self.conceptId = null;
                 });
             },
 
@@ -146,6 +150,7 @@ define(
                 this.validate();
                 if (this.isValid()) {
                     var formObj = domForm.toObject(this.containerNode);
+                    formObj.concept_id = this.conceptId;
                     formObj.broader = this.broaderManager.getRelations();
                     formObj.narrower = this.narrowerManager.getRelations();
                     formObj.related = this.relatedManager.getRelations();
@@ -200,7 +205,15 @@ define(
 
                 if (concept){
                     console.log("editing existing concept: " + concept.label);
-                    //use setvalues of all form items and widgets
+                    this.conceptId = concept.id;
+                    this.typeComboBox.set("value", concept.type);
+                    if (concept.members) this.membersManager.setRelations(concept.members);
+                    if (concept.member_of) this.memberofManager.setRelations(concept.member_of);
+                    if (concept.broader) this.broaderManager.setRelations(concept.broader);
+                    if (concept.narrower) this.narrowerManager.setRelations(concept.narrower);
+                    if (concept.related) this.relatedManager.setRelations(concept.related);
+                    if (concept.labels) this.labelManager.setLabels(concept.labels);
+                    //todo: implement and add setNotes
                 }
 
                 this.show({

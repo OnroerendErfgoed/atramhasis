@@ -201,6 +201,12 @@ define([
                         return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
                     });
                 },
+
+                setLabels: function(labels){
+                    //todo: implement this
+                    console.log("set labels: " + labels);
+                },
+
                 reset: function () {
                     var gridStore = new Memory({
                         data: []
