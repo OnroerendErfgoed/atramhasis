@@ -197,18 +197,9 @@ define([
                     });
                 },
                 getLabels: function () {
-                    var labels = this.grid.store.data;
-                    var labelsToSend = [];
-                    arrayUtil.forEach(labels, function (label) {
-
-                        var labelToSend = {
-                            "type": label.typeValue,
-                            "language": label.languageValue,
-                            "label": label.label
-                        };
-                        labelsToSend.push(labelToSend);
+                    return  arrayUtil.map(this.grid.store.data, function(label){
+                        return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
                     });
-                    return labelsToSend;
                 },
                 reset: function () {
                     var gridStore = new Memory({
