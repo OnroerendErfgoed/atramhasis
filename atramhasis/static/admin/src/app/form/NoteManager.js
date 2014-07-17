@@ -20,15 +20,15 @@ define([
     "dojo/query",
     "dojo/_base/array",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor,lang,Memory,on,JsonRest,query,arrayUtil, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor, lang, Memory, on, JsonRest, query, arrayUtil, template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
         name: 'NoteManager',
         title: 'Notes:',
-        noteArea:null,
-        labelComboBox:null,
-        languageComboBox:null,
-        noteGrid:null,
+        noteArea: null,
+        labelComboBox: null,
+        languageComboBox: null,
+        noteGrid: null,
         postMixInProperties: function () {
             this.inherited(arguments);
         },
@@ -74,14 +74,14 @@ define([
             var tableBoxDiv = domConstruct.create("div");
             domConstruct.place(tableBoxDiv, mainDiv, "first");
             var labelTabForBoxes = new TableContainer({cols: 3, spacing: 10, orientation: "vert"}, tableBoxDiv);
-            var notetype=self._getNoteType();
+            var notetype = self._getNoteType();
             var labelComboBox = new Select(
                 {
                     id: "labelComboBox",
                     name: "labelTypeComboBox",
                     title: "Type of note:",
                     placeHolder: 'Select a type',
-                    options:notetype,
+                    options: notetype,
                     style: { width: '130px' }
                 });
 
@@ -108,32 +108,32 @@ define([
                 {
                     iconClass: 'plusIcon',
                     showLabel: false,
-                         onClick: lang.hitch(this, function () {
+                    onClick: lang.hitch(this, function () {
 
-                              console.log("Add note to note tabel in note dialog dialog");
+                        console.log("Add note to note tabel in note dialog dialog");
 
-                                noteGrid.store.add({
-                                    note:  self.noteArea.get('value'),
-                                    language:  self.languageComboBox.get('displayedValue'),
-                                    languageValue:self.languageComboBox.get('value'),
-                                    type:  self.labelComboBox.get('displayedValue'),
-                                    typeValue:  self.labelComboBox.get('value')});
-                                noteGrid.resize();
-                            })
-                    }
+                        noteGrid.store.add({
+                            note: self.noteArea.get('value'),
+                            language: self.languageComboBox.get('displayedValue'),
+                            languageValue: self.languageComboBox.get('value'),
+                            type: self.labelComboBox.get('displayedValue'),
+                            typeValue: self.labelComboBox.get('value')});
+                        noteGrid.resize();
+                    })
+                }
             );
 
             var noteArea = new Textarea({
                 name: "noteArea",
-                colspan:"3"
+                colspan: "3"
             });
             noteArea.startup();
             labelComboBox.startup();
             languageComboBox.startup();
 
-            self.noteArea=noteArea;
-            self.labelComboBox=labelComboBox;
-            self.languageComboBox=languageComboBox;
+            self.noteArea = noteArea;
+            self.labelComboBox = labelComboBox;
+            self.languageComboBox = languageComboBox;
 
 
             labelTabForBoxes.addChild(languageComboBox);
@@ -149,12 +149,12 @@ define([
 
             var gridDiv = domConstruct.create("div");
 
-            var noteGrid=self._createGrid(gridDiv);
+            var noteGrid = self._createGrid(gridDiv);
 
 
             domConstruct.place(gridDiv, mainDiv, "last");
 
-            self.noteGrid=noteGrid;
+            self.noteGrid = noteGrid;
             var actionBar = domConstruct.create("div", {
                 class: "dijitDialogPaneActionBar"
             }, dlg.containerNode);
@@ -175,10 +175,10 @@ define([
             cancelBtn.onClick = function () {
                 dlg.hide();
             };
-             on(dlg, "hide", function(){
-                  noteArea.destroy();
-                 languageComboBox.destroy();
-                 labelComboBox.destroy();
+            on(dlg, "hide", function () {
+                noteArea.destroy();
+                languageComboBox.destroy();
+                labelComboBox.destroy();
             });
             noteGrid.resize();
             return dlg;
@@ -222,15 +222,15 @@ define([
             return grid;
         },
 
-        _getNoteType:function(){
+        _getNoteType: function () {
 
 
-             var store = new JsonRest({
-               target: "/notetypes",
-                 sortParam: "sort"
-             });
-            var itemsToDisplay=[];
-              store.get().then(function(items){
+            var store = new JsonRest({
+                target: "/notetypes",
+                sortParam: "sort"
+            });
+            var itemsToDisplay = [];
+            store.get().then(function (items) {
 
                 arrayUtil.forEach(items, function (item) {
 
@@ -243,17 +243,30 @@ define([
                 })
 
             });
-                return itemsToDisplay;
+            return itemsToDisplay;
         },
 
-         _createNodeList: function (notes) {
-                    var labelListNode = this.NoteListNode;
-                    query("li", labelListNode).forEach(domConstruct.destroy);
-                    arrayUtil.forEach(notes, function (note) {
-                        domConstruct.create("li", {
-                            innerHTML: "<b>" + note.note + "</b> (<em>" + note.language + "</em>): " + note.type
-                        }, labelListNode);
-                    });
-          }
+        _createNodeList: function (notes) {
+            var labelListNode = this.NoteListNode;
+            query("li", labelListNode).forEach(domConstruct.destroy);
+            arrayUtil.forEach(notes, function (note) {
+                domConstruct.create("li", {
+                    innerHTML: "<b>" + note.note + "</b> (<em>" + note.language + "</em>): " + note.type
+                }, labelListNode);
+            });
+        },
+        geNotes: function () {
+            var notes = this.noteGrid.store.data;
+            var notesToSend = [];
+            arrayUtil.forEach(notes, function (note) {
+                var noteToSend = {
+                    "type": note.typeValue,
+                    "language": note.languageValue,
+                    "label": note.note
+                };
+                notesToSend.push(noteToSend);
+            });
+            return notesToSend;
+        }
     });
 });

@@ -215,7 +215,7 @@ define([
                 var rowToAdd = {
                     "type": form.ctype,
                     "labels": form.label,
-                    "notes": [],
+                    "notes": form.note,
                     "broader": form.broader,
                     "narrower": form.narrower,
                     "related": form.related,

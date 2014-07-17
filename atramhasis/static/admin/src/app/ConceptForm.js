@@ -157,6 +157,7 @@ define(
                     formObj.members = this.membersManager.getRelations();
                     formObj.memberof = this.memberofManager.getRelations();
                     formObj.label = this.labelManager.getLabels();
+                    formObj.note = this.NoteManager.geNotes();
                     console.log(formObj);
                     topic.publish("conceptform.submit", formObj);
                 }
