@@ -19,6 +19,7 @@ test_json = {
     "id": 4,
     "broader": [2, 11],
     "related": [5, 12],
+    "member_of": [999],
     "labels": [{
                    "label": "Belgium",
                    "type": "prefLabel",
@@ -44,6 +45,7 @@ json_collection = {
     "type": "collection",
     "label": "Stijlen en culturen",
     "members": [61, 60, 12],
+    "member_of": [999, 7],
     "notes": [{
                   "note": "een notitie",
                   "type": "note",
@@ -53,12 +55,16 @@ json_collection = {
 
 
 def filter_by_mock_concept(concept_id, conceptscheme_id):
-    concept = Concept(id=concept_id, concept_id=concept_id, conceptscheme_id=conceptscheme_id)
-    concept.type = 'concept'
     if concept_id in (7, 11, 12):
         raise NoResultFound()
     filter_mock = Mock()
-    filter_mock.one = Mock(return_value=concept)
+    if concept_id == 999:
+        thing = Collection(id=concept_id, concept_id=concept_id, conceptscheme_id=conceptscheme_id)
+        thing.type = 'collection'
+    else:
+        thing = Concept(id=concept_id, concept_id=concept_id, conceptscheme_id=conceptscheme_id)
+        thing.type = 'concept'
+    filter_mock.one = Mock(return_value=thing)
     return filter_mock
 
 
@@ -95,9 +101,10 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(3, len(result_concept.narrower_concepts))
         self.assertEqual(2, len(result_concept.broader_concepts))
         self.assertEqual(2, len(result_concept.related_concepts))
+        self.assertEqual(1, len(result_concept.member_of))
         self.assertEqual(2, len(result_concept.labels))
         self.assertEqual(1, len(result_concept.notes))
-        self.assertFalse(hasattr(result_concept, 'memebers'))
+        self.assertFalse(hasattr(result_concept, 'members'))
 
     def test_mapping_collections_filled(self):
         label = Label(label='test', labeltype_id='altLabel', language_id='nl')
@@ -108,6 +115,7 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(3, len(result_concept.narrower_concepts))
         self.assertEqual(2, len(result_concept.broader_concepts))
         self.assertEqual(2, len(result_concept.related_concepts))
+        self.assertEqual(1, len(result_concept.member_of))
         self.assertEqual(2, len(result_concept.labels))
         self.assertEqual(1, len(result_concept.notes))
 
@@ -117,13 +125,19 @@ class TestMappers(unittest.TestCase):
             self.assertIsNotNone(narrower_concept)
             if narrower_concept.concept_id == 7:
                 self.assertIsNone(narrower_concept.id)
-            else:
-                self.assertIsNotNone(narrower_concept.id)
+
+    def test_mapping_check_db_lookup_member_of(self):
+        result_concept = map_concept(self.concept, test_json, self.request.db)
+        for member_of in result_concept.member_of:
+            self.assertIsNotNone(member_of)
+            if member_of.concept_id == 7:
+                self.assertIsNone(member_of.id)
 
     def test_mapping_collection(self):
         result_collection = map_concept(self.collection, json_collection, self.request.db)
         self.assertIsNotNone(result_collection)
         self.assertEqual(3, len(result_collection.members))
+        self.assertEqual(2, len(result_collection.member_of))
         self.assertEqual(1, len(result_collection.labels))
         self.assertEqual(1, len(result_collection.notes))
         self.assertFalse(hasattr(result_collection, 'related_concepts'))
