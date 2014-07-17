@@ -277,6 +277,7 @@ define([
         reset: function () {
             var noteListNode = this.NoteListNode;
             query("li", noteListNode).forEach(domConstruct.destroy);
+            this.notes=null;
         },
 
         setNotes:function(notes)
