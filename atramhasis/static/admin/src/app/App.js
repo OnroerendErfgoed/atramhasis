@@ -230,7 +230,7 @@ define([
                     "member_of": form.member_of
                 };
                 if (form.concept_id){
-                    filteredGrid.conceptGrid.store.put(rowToAdd)
+                    filteredGrid.conceptGrid.store.put(rowToAdd, {id: form.concept_id})
                         .then(
                             function(){
                                 filteredGrid.conceptGrid.refresh();
