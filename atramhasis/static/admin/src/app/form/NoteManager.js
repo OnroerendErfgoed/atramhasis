@@ -18,12 +18,16 @@ define([
     "dojo/on",
     "dojo/store/JsonRest",
     "dojo/data/ItemFileReadStore",
+    "dojo/_base/array",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor,lang,Memory,on,JsonRest,ItemFileReadStore, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor,lang,Memory,on,JsonRest,ItemFileReadStore,arrayUtil, template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
         name: 'NoteManager',
         title: 'Notes:',
+        noteArea:null,
+        labelComboBox:null,
+        languageComboBox:null,
         postMixInProperties: function () {
             this.inherited(arguments);
         },
@@ -69,14 +73,15 @@ define([
             var tableBoxDiv = domConstruct.create("div");
             domConstruct.place(tableBoxDiv, mainDiv, "first");
             var labelTabForBoxes = new TableContainer({cols: 3, spacing: 10, orientation: "vert"}, tableBoxDiv);
-
+            var notetype=self._getNoteType();
             var labelComboBox = new Select(
                 {
                     id: "labelComboBox",
                     name: "labelTypeComboBox",
                     title: "Type of note:",
                     placeHolder: 'Select a type',
-                    store:self._getNoteType()
+                    options:notetype,
+                    style: { width: '130px' }
                 });
 
             var languageComboBox = new Select
@@ -102,13 +107,24 @@ define([
                 {
                     iconClass: 'plusIcon',
                     showLabel: false,
-                    onClick: lang.hitch(this, function () {
 
-                        console.log("Add note to note tabel in note dialog dialog");
-                        alert("ok");
 
-                    })
-                }
+
+                         onClick: lang.hitch(this, function () {
+
+                              console.log("Add note to note tabel in note dialog dialog");
+
+                                noteGrid.store.add({
+                                    note:  self.noteArea.get('value'),
+                                    language:  self.languageComboBox.get('displayedValue'),
+                                    languageValue:self.languageComboBox.get('value'),
+                                    type:  self.labelComboBox.get('displayedValue'),
+                                    typeValue:  self.labelComboBox.get('value')});
+                                noteGrid.resize();
+                            })
+
+                    }
+
             );
 
                         var noteArea = new Textarea({
@@ -118,6 +134,10 @@ define([
             noteArea.startup();
             labelComboBox.startup();
             languageComboBox.startup();
+
+            self.noteArea=noteArea;
+            self.labelComboBox=labelComboBox;
+            self.languageComboBox=languageComboBox;
 
 
             labelTabForBoxes.addChild(languageComboBox);
@@ -163,6 +183,7 @@ define([
                  languageComboBox.destroy();
                  labelComboBox.destroy();
             });
+            noteGrid.resize();
             return dlg;
 
         },
@@ -211,23 +232,21 @@ define([
                target: "/notetypes",
                  sortParam: "sort"
              });
-            var itemsToDisplay;
+            var itemsToDisplay=[];
               store.get().then(function(items){
 
-                  itemsToDisplay=items;
+                arrayUtil.forEach(items, function (item) {
+
+                    var labelToSend = {
+                        "label": item.label,
+                        "value": item.key
+
+                    }
+                    itemsToDisplay.push(labelToSend);
+                })
 
             });
-
-               var itemsToDisplaytoObject = {
-                    "identifier": "key",
-                    "label": "label",
-                    "items": itemsToDisplay
-                };
-
-           var StoreToDisplay = new ItemFileReadStore({
-                data: itemsToDisplaytoObject
-            });
-            return StoreToDisplay;
+                return itemsToDisplay;
         }
     });
 });
