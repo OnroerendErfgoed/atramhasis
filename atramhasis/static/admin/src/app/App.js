@@ -206,6 +206,11 @@ define([
 
             topic.subscribe("concept.edit",function(conceptid, schemeid){
                 console.log("concept.edit subscribe: " + conceptid + "(" + schemeid + ")");
+                var thesaurus = self.thesauri.stores[schemeid];
+                thesaurus.get(conceptid).then(function(item){
+                    conceptForm.init(schemeid, item);
+                    conceptDialog.show();
+               });
             });
 
             topic.subscribe("conceptform.submit", function(form){

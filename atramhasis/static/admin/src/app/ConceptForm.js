@@ -179,7 +179,7 @@ define(
                 this.labelManager.reset();
             },
 
-            init: function(scheme) {
+            init: function(scheme, concept) {
                 console.log("init cdialog: " + scheme);
 
                 this.reset();
@@ -197,6 +197,12 @@ define(
                 this.relatedManager.setScheme(scheme);
                 this.membersManager.setScheme(scheme);
                 this.memberofManager.setScheme(scheme);
+
+                if (concept){
+                    console.log("editing existing concept: " + concept.label);
+                    //use setvalues of all form items and widgets
+                }
+
                 this.show({
                     spinnerNode: false,
                     formNode: true,
