@@ -16,8 +16,10 @@ define([
     "dojo/_base/lang",
     "dojo/store/Memory",
     "dojo/on",
+    "dojo/store/JsonRest",
+    "dojo/data/ItemFileReadStore",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor,lang,Memory,on, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor,lang,Memory,on,JsonRest,ItemFileReadStore, template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
         name: 'NoteManager',
@@ -54,6 +56,7 @@ define([
         },
 
         _createDialog: function () {
+
             var self = this;
 
             var dlg = new Dialog({
@@ -66,17 +69,14 @@ define([
             var tableBoxDiv = domConstruct.create("div");
             domConstruct.place(tableBoxDiv, mainDiv, "first");
             var labelTabForBoxes = new TableContainer({cols: 3, spacing: 10, orientation: "vert"}, tableBoxDiv);
+
             var labelComboBox = new Select(
                 {
                     id: "labelComboBox",
                     name: "labelTypeComboBox",
                     title: "Type of note:",
                     placeHolder: 'Select a type',
-                    options: [
-                        {label: "Preferred", value: "prefLabel"},
-                        {label: "Alternative", value: "altLabel"},
-                        {label: "Hidden", value: "hiddenLabel"}
-                    ]
+                    store:self._getNoteType()
                 });
 
             var languageComboBox = new Select
@@ -207,10 +207,27 @@ define([
         _getNoteType:function(){
 
 
+             var store = new JsonRest({
+               target: "/notetypes",
+                 sortParam: "sort"
+             });
+            var itemsToDisplay;
+              store.get().then(function(items){
 
+                  itemsToDisplay=items;
 
+            });
+
+               var itemsToDisplaytoObject = {
+                    "identifier": "key",
+                    "label": "label",
+                    "items": itemsToDisplay
+                };
+
+           var StoreToDisplay = new ItemFileReadStore({
+                data: itemsToDisplaytoObject
+            });
+            return StoreToDisplay;
         }
-
-
     });
 });
