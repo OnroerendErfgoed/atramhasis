@@ -1,4 +1,4 @@
-from skosprovider_sqlalchemy.models import Label, Note, Concept, Thing
+from skosprovider_sqlalchemy.models import Label, Note, Concept, Thing, Collection
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -17,6 +17,17 @@ def map_concept(concept, concept_json, db_session):
         for n in notes:
             note = Note(note=n.get('note', ''), notetype_id=n.get('type', ''), language_id=n.get('language', ''))
             concept.notes.append(note)
+
+        concept.member_of.clear()
+        member_of = concept_json.get('member_of', [])
+        for memberof_id in member_of:
+            try:
+                memberof_collection = db_session.query(Collection)\
+                    .filter_by(concept_id=memberof_id, conceptscheme_id=concept.conceptscheme_id).one()
+            except NoResultFound:
+                memberof_collection = Collection(concept_id=memberof_id, conceptscheme_id=concept.conceptscheme_id)
+            concept.member_of.add(memberof_collection)
+
         if concept.type == 'concept':
             concept.related_concepts.clear()
             related = concept_json.get('related', [])
