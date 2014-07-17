@@ -54,6 +54,8 @@ define(
             widgetsInTemplate: true,
             dialog: null,
             scheme: null,
+            typeComboBox: null,
+            conceptId: null,
 
             constructor: function (options) {
                 declare.safeMixin(this, options);
@@ -129,6 +131,7 @@ define(
                         self.memberofManager.open();
                     }
                 });
+                this.typeComboBox = typeComboBox;
 
                 typeComboBox.startup();
                 // Add the 3 text boxes to the TableContainer
@@ -138,6 +141,7 @@ define(
 
                 on(this, "reset", function(){
                     self._resetWidgets();
+                    self.conceptId = null;
                 });
             },
 
@@ -151,11 +155,12 @@ define(
                 this.validate();
                 if (this.isValid()) {
                     var formObj = domForm.toObject(this.containerNode);
+                    formObj.concept_id = this.conceptId;
                     formObj.broader = this.broaderManager.getRelations();
                     formObj.narrower = this.narrowerManager.getRelations();
                     formObj.related = this.relatedManager.getRelations();
                     formObj.members = this.membersManager.getRelations();
-                    formObj.memberof = this.memberofManager.getRelations();
+                    formObj.member_of = this.memberofManager.getRelations();
                     formObj.label = this.labelManager.getLabels();
                     formObj.note = this.NoteManager.geNotes();
                     console.log(formObj);
@@ -186,7 +191,7 @@ define(
                 this.NoteManager.reset();
             },
 
-            init: function(scheme) {
+            init: function(scheme, concept) {
                 console.log("init cdialog: " + scheme);
 
                 this.reset();
@@ -204,6 +209,20 @@ define(
                 this.relatedManager.setScheme(scheme);
                 this.membersManager.setScheme(scheme);
                 this.memberofManager.setScheme(scheme);
+
+                if (concept){
+                    console.log("editing existing concept: " + concept.label);
+                    this.conceptId = concept.id;
+                    this.typeComboBox.set("value", concept.type);
+                    if (concept.members) this.membersManager.setRelations(concept.members);
+                    if (concept.member_of) this.memberofManager.setRelations(concept.member_of);
+                    if (concept.broader) this.broaderManager.setRelations(concept.broader);
+                    if (concept.narrower) this.narrowerManager.setRelations(concept.narrower);
+                    if (concept.related) this.relatedManager.setRelations(concept.related);
+                    if (concept.labels) this.labelManager.setLabels(concept.labels);
+                    //todo: implement and add setNotes
+                }
+
                 this.show({
                     spinnerNode: false,
                     formNode: true,

@@ -101,7 +101,6 @@ define([
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
                 content: conceptForm,
-                title:"Add concept",
                 style: "width: 500px"
             }).placeAt(document.body);
 
@@ -130,6 +129,7 @@ define([
             on(addConceptButton, "click", function(){
                 console.log("on addConceptButton " + self.currentScheme);
                 conceptForm.init(self.currentScheme);
+                conceptDialog.set("title", "Add concept or collection");
                 conceptDialog.show();
             });
 
@@ -206,6 +206,12 @@ define([
 
             topic.subscribe("concept.edit",function(conceptid, schemeid){
                 console.log("concept.edit subscribe: " + conceptid + "(" + schemeid + ")");
+                var thesaurus = self.thesauri.stores[schemeid];
+                thesaurus.get(conceptid).then(function(item){
+                    conceptForm.init(schemeid, item);
+                    conceptDialog.set("title", "Edit " + item.label);
+                    conceptDialog.show();
+               });
             });
 
             topic.subscribe("conceptform.submit", function(form){
@@ -213,6 +219,7 @@ define([
                 console.log(form);
 
                 var rowToAdd = {
+                    "id:" : form.concept_id,
                     "type": form.ctype,
                     "labels": form.label,
                     "notes": form.note,
@@ -222,23 +229,44 @@ define([
                     "members": form.members,
                     "member_of": form.member_of
                 };
-                filteredGrid.conceptGrid.store.add(rowToAdd)
-                    .then(
-                        function(){
-                            filteredGrid.conceptGrid.refresh();
-                            console.log("row added");
-                            conceptDialog.content.show({
-                                spinnerNode: false,
-                                formNode: false,
-                                successNode: true
-                            });
-                            conceptDialog && conceptDialog.resize();
-                        },
-                        function(error){
-                            console.log("An error occurred: " + error);
-                        }
+                if (form.concept_id){
+                    filteredGrid.conceptGrid.store.put(rowToAdd)
+                        .then(
+                            function(){
+                                filteredGrid.conceptGrid.refresh();
+                                console.log("row edited");
+                                conceptDialog.content.show({
+                                    spinnerNode: false,
+                                    formNode: false,
+                                    successNode: true
+                                });
+                                conceptDialog && conceptDialog.resize();
+                            },
+                            function(error){
+                                console.log("An error occurred: " + error);
+                            }
 
-                    );
+                        );
+                }
+                else {
+                    filteredGrid.conceptGrid.store.add(rowToAdd)
+                        .then(
+                            function(){
+                                filteredGrid.conceptGrid.refresh();
+                                console.log("row added");
+                                conceptDialog.content.show({
+                                    spinnerNode: false,
+                                    formNode: false,
+                                    successNode: true
+                                });
+                                conceptDialog && conceptDialog.resize();
+                            },
+                            function(error){
+                                console.log("An error occurred: " + error);
+                            }
+
+                        );
+                }
             });
 
         }
