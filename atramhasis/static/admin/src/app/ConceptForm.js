@@ -183,6 +183,7 @@ define(
                 this.membersManager.reset();
                 this.memberofManager.reset();
                 this.labelManager.reset();
+                this.NoteManager.reset();
             },
 
             init: function(scheme) {

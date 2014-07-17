@@ -267,6 +267,10 @@ define([
                 notesToSend.push(noteToSend);
             });
             return notesToSend;
+        },
+        reset: function () {
+            var noteListNode = this.NoteListNode;
+            query("li", noteListNode).forEach(domConstruct.destroy);
         }
     });
 });
