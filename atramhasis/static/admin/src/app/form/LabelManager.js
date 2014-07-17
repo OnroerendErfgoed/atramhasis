@@ -48,7 +48,7 @@ define([
 
                         evt.preventDefault();
                         this.LabelGridContent = self.grid.store.data;
-                        self._createLabelList(self.grid.store.data);
+                        self._createNodeList(self.grid.store.data);
                         labelGridDialog.hide();
                     };
 
@@ -186,7 +186,7 @@ define([
                     labelTabForBoxes.startup();
                     this.grid.resize();
                 },
-                _createLabelList: function (labels) {
+                _createNodeList: function (labels) {
                     var labelListNode = this.labelListNode;
                     query("li", labelListNode).forEach(domConstruct.destroy);
                     arrayUtil.forEach(labels, function (label) {

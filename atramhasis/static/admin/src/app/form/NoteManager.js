@@ -17,10 +17,10 @@ define([
     "dojo/store/Memory",
     "dojo/on",
     "dojo/store/JsonRest",
-    "dojo/data/ItemFileReadStore",
+    "dojo/query",
     "dojo/_base/array",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor,lang,Memory,on,JsonRest,ItemFileReadStore,arrayUtil, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor,lang,Memory,on,JsonRest,query,arrayUtil, template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
         name: 'NoteManager',
@@ -28,6 +28,7 @@ define([
         noteArea:null,
         labelComboBox:null,
         languageComboBox:null,
+        noteGrid:null,
         postMixInProperties: function () {
             this.inherited(arguments);
         },
@@ -107,9 +108,6 @@ define([
                 {
                     iconClass: 'plusIcon',
                     showLabel: false,
-
-
-
                          onClick: lang.hitch(this, function () {
 
                               console.log("Add note to note tabel in note dialog dialog");
@@ -122,12 +120,10 @@ define([
                                     typeValue:  self.labelComboBox.get('value')});
                                 noteGrid.resize();
                             })
-
                     }
-
             );
 
-                        var noteArea = new Textarea({
+            var noteArea = new Textarea({
                 name: "noteArea",
                 colspan:"3"
             });
@@ -158,7 +154,7 @@ define([
 
             domConstruct.place(gridDiv, mainDiv, "last");
 
-
+            self.noteGrid=noteGrid;
             var actionBar = domConstruct.create("div", {
                 class: "dijitDialogPaneActionBar"
             }, dlg.containerNode);
@@ -171,7 +167,8 @@ define([
             }).placeAt(actionBar);
 
             addBtn.onClick = function () {
-                alert("ok");
+
+                self._createNodeList(self.noteGrid.store.data);
 
                 dlg.hide();
             };
@@ -247,6 +244,16 @@ define([
 
             });
                 return itemsToDisplay;
-        }
+        },
+
+         _createNodeList: function (notes) {
+                    var labelListNode = this.NoteListNode;
+                    query("li", labelListNode).forEach(domConstruct.destroy);
+                    arrayUtil.forEach(notes, function (note) {
+                        domConstruct.create("li", {
+                            innerHTML: "<b>" + note.note + "</b> (<em>" + note.language + "</em>): " + note.type
+                        }, labelListNode);
+                    });
+          }
     });
 });
