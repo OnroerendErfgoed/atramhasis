@@ -58,6 +58,7 @@ define([
                             }
                             dlg.show();
                             self.labelGrid.resize();
+                            self.labelGrid.refresh();
                         }
                     }, this.labelButton)
 
@@ -122,6 +123,15 @@ define([
                                     type: self.labelTypeComboBox.get('displayedValue'),
                                     typeValue: self.labelTypeComboBox.get('value')});
                                 self.labelGrid.resize();
+                                self.labelGrid.refresh();
+
+                                if(self.languageComboBox.get('value')=="prefLabel");
+                                {
+
+
+
+                                }
+
                             })
                         }
                     );
@@ -169,7 +179,7 @@ define([
                         labelTypeComboBox.destroy();
                         langStoreComboBox.destroy();
                     });
-                    labelGrid.resize();
+
                     return dlg;
 
 
@@ -212,6 +222,7 @@ define([
                                     var itemToDelete = row.data.id;
                                     grid.store.remove(itemToDelete);
                                     grid.resize();
+                                    grid.refresh();
                                 }
                                 }},
                             Button)
@@ -230,7 +241,7 @@ define([
                     }, gridDiv);
 
                     grid.startup();
-                    grid.resize();
+
                     return grid;
                 },
 
@@ -252,11 +263,12 @@ define([
                     });
                     this.labelGrid.set("store", gridStore);
 
+
                 },
 
 
                 getLabels: function () {
-                    return  arrayUtil.map(this.grid.store.data, function (label) {
+                    return  arrayUtil.map(this.labelGrid.store.data, function (label) {
                         return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
                     });
                 },

@@ -55,6 +55,7 @@ define([
                     }
                     dlg.show();
                        self.noteGrid.resize();
+                                             self.noteGrid.refresh();
                 }
             }, this.noteButton)
 
@@ -120,6 +121,7 @@ define([
                             type: self.labelComboBox.get('displayedValue'),
                             typeValue: self.labelComboBox.get('value')});
                         noteGrid.resize();
+                        self.noteGrid.refresh();
                     })
                 }
             );
@@ -203,6 +205,7 @@ define([
                             var itemToDelete = row.data.id;
                             grid.store.remove(itemToDelete);
                             grid.resize();
+                            grid.refresh();
                         }
                         }},
                     Button)
