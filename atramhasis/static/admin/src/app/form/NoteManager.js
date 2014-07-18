@@ -90,7 +90,7 @@ define([
                     options: notetype,
                     style: { width: '130px' }
                 });
-
+            var languages=this._getLanguages();
             var languageComboBox = new Select
             (
                 {
@@ -98,12 +98,7 @@ define([
                     name: "languageComboBox",
                     title: "Language:",
                     placeHolder: 'Select a language',
-                    options: [
-                        {label: "NL", value: "nl"},
-                        {label: "Fr", value: "fr"},
-                        {label: "En", value: "en"}
-
-                    ],
+                    options:languages,
                     style: { width: '80px' }
 
                 }
@@ -175,6 +170,7 @@ define([
             addBtn.onClick = function () {
 
                 self._createNodeList(self.noteGrid.store.data);
+                self.notes=self.noteGrid.store.data;
 
                 dlg.hide();
             };
@@ -201,7 +197,7 @@ define([
                 {label: "Type", field: "type"},
                 {label: "Type", field: "typeValue", unhidable: true, hidden: true},
                 editor({label: " ", field: 'button',
-                        editorArgs: {label: "delete", onClick: function (event) {
+                        editorArgs: {label: "delete",showLabel :false, iconClass: 'minIcon', onClick: function (event) {
 
                             var row = grid.row(event);
                             var itemToDelete = row.data.id;
@@ -225,6 +221,7 @@ define([
             }, gridDiv);
 
             grid.startup();
+             grid.resize();
             return grid;
         },
 
@@ -251,7 +248,18 @@ define([
             });
             return itemsToDisplay;
         },
+                        _getLanguages:function()
+                {
+                   var languages= [
+                                {label: "NL", value: "nl"},
+                                {label: "Fr", value: "fr"},
+                                {label: "En", value: "en"}
 
+                            ];
+
+                    return languages;
+
+                },
         _createNodeList: function (notes) {
             var labelListNode = this.NoteListNode;
             query("li", labelListNode).forEach(domConstruct.destroy);
