@@ -128,7 +128,7 @@ define([
                                 if(self.languageComboBox.get('value')=="prefLabel");
                                 {
 
-
+                                        self.languageComboBox.removeOption(self.languageComboBox.get('value'));
 
                                 }
 
