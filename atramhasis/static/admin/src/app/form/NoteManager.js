@@ -134,6 +134,8 @@ define([
             labelComboBox.startup();
             languageComboBox.startup();
 
+            labelComboBox.reset();
+
             self.noteArea = noteArea;
             self.labelComboBox = labelComboBox;
             self.languageComboBox = languageComboBox;

@@ -35,6 +35,7 @@ define([
                 LabelGridContent: null,
                 languageComboBox: null,
                 labelTypeComboBox: null,
+                prefLanguage:null,
                 labels: null,
 
                 buildRendering: function () {
@@ -93,7 +94,7 @@ define([
 
                         });
                     var languages = this._getLanguages();
-
+                    self.prefLanguage=languages;
                     var langStoreComboBox = new Select
                     (
                         {
@@ -125,11 +126,11 @@ define([
                                 self.labelGrid.resize();
                                 self.labelGrid.refresh();
 
-                                if(self.languageComboBox.get('value')=="prefLabel");
+                                if(self.labelTypeComboBox.get('value')=="prefLabel")
                                 {
 
                                         self.languageComboBox.removeOption(self.languageComboBox.get('value'));
-
+                                        self.prefLanguage=self.languageComboBox.get("options");
                                 }
 
                             })
@@ -174,6 +175,25 @@ define([
                     cancelBtn.onClick = function () {
                         dlg.hide();
                     };
+
+                    on(self.labelTypeComboBox,"change",function()
+                        {
+                             if(self.labelTypeComboBox.get('value')=="prefLabel")
+                            {
+
+                                 self.languageComboBox.set("Options",self.prefLanguage);
+                                self.languageComboBox.reset();
+                            }
+                            else
+                            {
+                                 self.languageComboBox.set("Options",self._getLanguages());
+                                self.languageComboBox.reset();
+
+                            }
+                        }
+
+                    );
+
                     on(dlg, "hide", function () {
                         titleLabel.destroy();
                         labelTypeComboBox.destroy();
