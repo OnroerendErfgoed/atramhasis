@@ -14,10 +14,12 @@ define([
     "dijit/form/Button",
     "dijit/Menu",
     "dijit/MenuItem",
+    "dijit/ConfirmDialog",
     "dojo/store/Memory", "dojo/store/Cache",
     "dgrid/OnDemandGrid", "dgrid/Selection", "dgrid/Keyboard", "dgrid/editor"
 
-], function (declare, on, topic, lang, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox, TextBox, Button, Menu, MenuItem, Memory, Cache, OnDemandGrid, Selection, Keyboard, editor) {
+], function (declare, on, topic, lang, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox, TextBox, Button, Menu, MenuItem,
+             ConfirmDialog, Memory, Cache, OnDemandGrid, Selection, Keyboard, editor) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
 
@@ -104,7 +106,7 @@ define([
 
                     var cell = self.conceptGrid.cell(evt);
                     var gridId = self.conceptGrid.get("id");
-                    var pMenu = self._createGridContextMenu(gridId, cell.element, self);
+                    var pMenu = self._createGridContextMenu(gridId, cell.element, self,cell.row.data.id,cell.row.data.type,cell.row.data.label);
                     var args = {target: pMenu.selector};
                     pMenu._openMyself(args);
 
@@ -175,7 +177,7 @@ define([
             this.conceptGrid.set("query", this.conceptFilter);
         },
 
-        _createGridContextMenu: function (targetNodeId, selector, widget) {
+        _createGridContextMenu: function (targetNodeId, selector, widget,ConceptId,type,label) {
             var pMenu;
             var self = this;
             pMenu = new Menu({
@@ -192,7 +194,7 @@ define([
             pMenu.addChild(new MenuItem({
                 label: "Edit",
                 onClick: function () {
-                    widget._editConcept();
+                    widget._editConcept(ConceptId);
                 }
             }));
             pMenu.addChild(new MenuItem({
@@ -204,7 +206,7 @@ define([
             pMenu.addChild(new MenuItem({
                 label: "Delete",
                 onClick: function () {
-                    widget._deleteConcept();
+                    widget._deleteConcept(ConceptId,type,label);
                 }
             }));
 
@@ -224,24 +226,36 @@ define([
 
         },
 
-        _editConcept: function () {
-            alert('i was clicked');
+        _editConcept: function (ConceptId) {
+            topic.publish("concept.edit", ConceptId);
 
         },
 
         _createNewConcept: function () {
 
-            alert('i was clicked');
+         topic.publish("concept.create");
         },
 
-        _deleteConcept: function () {
+        _deleteConcept: function (conceptid,type,label) {
 
-            alert('i was clicked');
+             var myDialog = new ConfirmDialog({
+                    title: "Delete",
+                    content: "Are you sure you want to delete the "+type+" with the label "+label+" ?",
+                    style: "width: 200px"
+                });
+
+             on(myDialog, "execute", function(){
+                    topic.publish("concept.delete", conceptid);
+                });
+                on(myDialog, "cancel", function(){
+                    //do nothing, will be destroyed on hide
+                });
+                on(myDialog, "hide", function(){
+                    myDialog.destroyRecursive();
+                });
+                myDialog.show();
 
         }
-
-
-
     });
 
 });

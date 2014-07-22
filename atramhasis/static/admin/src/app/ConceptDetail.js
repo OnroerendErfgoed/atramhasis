@@ -65,7 +65,7 @@ define([
                     style: "width: 200px"
                 });
                 on(myDialog, "execute", function(){
-                    topic.publish("concept.delete", self.conceptid, self.schemeid);
+                    topic.publish("concept.delete", self.conceptid);
                 });
                 on(myDialog, "cancel", function(){
                     //do nothing, will be destroyed on hide
@@ -80,7 +80,7 @@ define([
 
             on(editLi, "click", function(evt){
                 evt.preventDefault();
-                topic.publish("concept.edit", self.conceptid, self.schemeid);
+                topic.publish("concept.edit", self.conceptid);
                 return false;
             });
 

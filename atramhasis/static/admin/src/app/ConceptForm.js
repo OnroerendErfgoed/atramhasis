@@ -20,7 +20,8 @@ define(
         'dojo/dom-form',
         'dojox/layout/TableContainer',
         'dijit/form/TextBox',
-        'dijit/form/ComboBox'
+        'dijit/form/ComboBox',
+         "dojo/topic"
     ],
     function (
         declare, arrayUtil,
@@ -42,7 +43,8 @@ define(
         domForm,
         TableContainer,
         TextBox,
-        ComboBox
+        ComboBox,
+        topic
 
     ) {
         return declare([

@@ -128,10 +128,8 @@ define([
             }, "addConceptNode");
 
             on(addConceptButton, "click", function(){
-                console.log("on addConceptButton " + self.currentScheme);
-                conceptForm.init(self.currentScheme);
-                conceptDialog.set("title", "Add concept or collection");
-                conceptDialog.show();
+
+                self._createConcept(conceptForm,conceptDialog,self.currentScheme);
             });
 
             on(schemeFileteringSelect, "change", function(e){
@@ -193,27 +191,35 @@ define([
 
             }));
 
-            topic.subscribe("concept.delete",function(conceptid, schemeid){
-                console.log("concept.delete subscribe: " + conceptid + "(" + schemeid + ")");
-                var thesaurus = self.thesauri.stores[schemeid];
+            topic.subscribe("concept.delete",function(conceptid){
+                console.log("concept.delete subscribe: " + conceptid + "(" + self.currentScheme + ")");
+                var thesaurus = self.thesauri.stores[self.currentScheme];
                 filteredGrid.conceptGrid.store.remove(conceptid)
                     .then(function(){
                         filteredGrid.conceptGrid.refresh();
-                        var cp = registry.byId(schemeid + "_" + conceptid);
+                        var cp = registry.byId(self.currentScheme + "_" + conceptid);
                         tc.removeChild(cp);
                         cp.destroyRecursive();
                      });
             });
 
-            topic.subscribe("concept.edit",function(conceptid, schemeid){
-                console.log("concept.edit subscribe: " + conceptid + "(" + schemeid + ")");
-                var thesaurus = self.thesauri.stores[schemeid];
+            topic.subscribe("concept.edit",function(conceptid){
+                console.log("concept.edit subscribe: " + conceptid + "(" + self.currentScheme + ")");
+                var thesaurus = self.thesauri.stores[self.currentScheme];
                 thesaurus.get(conceptid).then(function(item){
-                    conceptForm.init(schemeid, item);
+                    conceptForm.init(self.currentScheme, item);
                     conceptDialog.set("title", "Edit " + item.label);
                     conceptDialog.show();
                });
             });
+
+
+            topic.subscribe("concept.create",function()
+            {
+                console.log("concept.create subscribe: ask to create a concept/collection from grid concept menu");
+                self._createConcept(conceptForm,conceptDialog,self.currentScheme);
+            });
+
 
             topic.subscribe("conceptform.submit", function(form){
                 console.log("conceptform.submit subscribe");
@@ -270,9 +276,15 @@ define([
                 }
             });
 
+        },
+
+        _createConcept:function(conceptForm,conceptDialog,Scheme)
+        {
+                console.log("on addConceptButton " + Scheme);
+                conceptForm.init(Scheme);
+                conceptDialog.set("title", "Add concept or collection");
+                conceptDialog.show();
         }
-
-
 
     });
 });
