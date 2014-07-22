@@ -129,6 +129,7 @@ define([
 
             on(addConceptButton, "click", function(){
 
+              console.log("on addConceptButton " + self.currentScheme);
                 self._createConcept(conceptForm,conceptDialog,self.currentScheme);
             });
 
@@ -212,7 +213,21 @@ define([
                     conceptDialog.show();
                });
             });
+            topic.subscribe("concept.addNarrower",function(conceptid,type,label)
+                {
+                    console.log("concept.addNarrower subscribe: " + label + "(" + self.currentScheme + ")");
 
+                    var thesaurus = self.thesauri.stores[self.currentScheme];
+
+                     thesaurus.get(conceptid).then(function(item) {
+                         var broader=[{label:item.label,id:item.id,labels:item.labels,type:item.type,uri:item.uri}];
+                         conceptForm.init(self.currentScheme);
+                         conceptForm.addBroader(broader);
+                         conceptDialog.set("title", "Add concept or collection to the " + type + " " + label);
+                         conceptDialog.show();
+                     });
+                }
+            );
 
             topic.subscribe("concept.create",function()
             {
@@ -280,11 +295,11 @@ define([
 
         _createConcept:function(conceptForm,conceptDialog,Scheme)
         {
-                console.log("on addConceptButton " + Scheme);
                 conceptForm.init(Scheme);
                 conceptDialog.set("title", "Add concept or collection");
                 conceptDialog.show();
         }
+
 
     });
 });

@@ -177,7 +177,7 @@ define([
             this.conceptGrid.set("query", this.conceptFilter);
         },
 
-        _createGridContextMenu: function (targetNodeId, selector, widget,ConceptId,type,label) {
+        _createGridContextMenu: function (targetNodeId, selector, widget,conceptId,type,label) {
             var pMenu;
             var self = this;
             pMenu = new Menu({
@@ -187,14 +187,14 @@ define([
             pMenu.addChild(new MenuItem({
                 label: "Add narrower",
                 onClick: function () {
-                    widget._addNarrower();
+                    widget._addNarrower(conceptId,type,label);
                 }
             }));
 
             pMenu.addChild(new MenuItem({
                 label: "Edit",
                 onClick: function () {
-                    widget._editConcept(ConceptId);
+                    widget._editConcept(conceptId);
                 }
             }));
             pMenu.addChild(new MenuItem({
@@ -220,14 +220,14 @@ define([
         },
 
 
-        _addNarrower: function () {
+        _addNarrower: function (conceptId,type,label) {
 
-            alert('i was clicked');
+           topic.publish("concept.addNarrower",conceptId,type,label);
 
         },
 
-        _editConcept: function (ConceptId) {
-            topic.publish("concept.edit", ConceptId);
+        _editConcept: function (conceptId) {
+            topic.publish("concept.edit", conceptId);
 
         },
 
@@ -236,7 +236,7 @@ define([
          topic.publish("concept.create");
         },
 
-        _deleteConcept: function (conceptid,type,label) {
+        _deleteConcept: function (conceptId,type,label) {
 
              var myDialog = new ConfirmDialog({
                     title: "Delete",
@@ -245,7 +245,7 @@ define([
                 });
 
              on(myDialog, "execute", function(){
-                    topic.publish("concept.delete", conceptid);
+                    topic.publish("concept.delete", conceptId);
                 });
                 on(myDialog, "cancel", function(){
                     //do nothing, will be destroyed on hide

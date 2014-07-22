@@ -223,7 +223,6 @@ define(
                     if (concept.related) this.relatedManager.setRelations(concept.related);
                     if (concept.labels) this.labelManager.setLabels(concept.labels);
                     if (concept.notes) this.noteManager.setNotes(concept.notes);
-                    //todo: implement and add setNotes
                 }
 
                 this.show({
@@ -232,7 +231,16 @@ define(
                     successNode: false
                 });
                 this.dialog && this.dialog.layout();
+            },
+
+            addBroader:function(broader)
+            {
+                  console.log("add existing broader: " + broader.label);
+                 this.broaderManager.setRelations(broader);
+
+
             }
+
         }
     )}
 );
