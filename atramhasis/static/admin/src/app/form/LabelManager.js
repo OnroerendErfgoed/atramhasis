@@ -21,7 +21,7 @@ define([
         "dojo/text!./templates/LabelManager.html"
 
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil,on, template) {
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil, on, template) {
         return declare(
             "app/form/LabelManager",
             [WidgetBase, TemplatedMixin],
@@ -35,7 +35,7 @@ define([
                 LabelGridContent: null,
                 languageComboBox: null,
                 labelTypeComboBox: null,
-                prefLanguage:null,
+                prefLanguage: null,
                 labels: null,
 
                 buildRendering: function () {
@@ -94,7 +94,7 @@ define([
 
                         });
                     var languages = this._getLanguages();
-                    self.prefLanguage=languages;
+                    self.prefLanguage = languages;
                     var langStoreComboBox = new Select
                     (
                         {
@@ -126,11 +126,10 @@ define([
                                 self.labelGrid.resize();
                                 self.labelGrid.refresh();
 
-                                if(self.labelTypeComboBox.get('value')=="prefLabel")
-                                {
+                                if (self.labelTypeComboBox.get('value') == "prefLabel") {
 
-                                        self.languageComboBox.removeOption(self.languageComboBox.get('value'));
-                                        self.prefLanguage=self.languageComboBox.get("options");
+                                    self.languageComboBox.removeOption(self.languageComboBox.get('value'));
+                                    self.prefLanguage = self.languageComboBox.get("options");
                                 }
 
                             })
@@ -169,29 +168,25 @@ define([
                     addBtn.onClick = function () {
 
                         self._createNodeList(self.labelGrid.store.data);
-                         self.labels=self.labelGrid.store.data;
+                        self.labels = self.labelGrid.store.data;
                         dlg.hide();
                     };
                     cancelBtn.onClick = function () {
                         dlg.hide();
                     };
 
-                    on(self.labelTypeComboBox,"change",function()
-                        {
-                             if(self.labelTypeComboBox.get('value')=="prefLabel")
-                            {
+                    on(self.labelTypeComboBox, "change", function () {
+                            if (self.labelTypeComboBox.get('value') == "prefLabel") {
 
-                                 self.languageComboBox.set("Options",self.prefLanguage);
+                                self.languageComboBox.set("Options", self.prefLanguage);
                                 self.languageComboBox.reset();
                             }
-                            else
-                            {
-                                 self.languageComboBox.set("Options",self._getLanguages());
+                            else {
+                                self.languageComboBox.set("Options", self._getLanguages());
                                 self.languageComboBox.reset();
 
                             }
                         }
-
                     );
 
                     on(dlg, "hide", function () {
@@ -236,7 +231,7 @@ define([
                         {label: "Type", field: "type"},
                         {label: "Type", field: "typeValue", unhidable: true, hidden: true},
                         editor({label: " ", field: 'button',
-                                editorArgs: {label: "delete",showLabel :false, iconClass: 'minIcon', onClick: function (event) {
+                                editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
 
                                     var row = grid.row(event);
                                     var itemToDelete = row.data.id;
@@ -297,13 +292,13 @@ define([
                     //todo: implement this
                     console.log("set labels: " + labels);
                     this._createNodeList(labels);
-                    this.labels=labels;
+                    this.labels = labels;
                 },
 
                 reset: function () {
                     var labelListNode = this.labelListNode;
                     query("li", labelListNode).forEach(domConstruct.destroy);
-                    this.labels=null;
+                    this.labels = null;
                 }
             });
     });

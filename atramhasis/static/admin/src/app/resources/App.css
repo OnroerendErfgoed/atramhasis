@@ -9,24 +9,26 @@ html, body {
     margin: 0;
 }
 
-#appHeader{
+#appHeader {
     background-color: #333333;
     height: 45px;
     margin: 0;
     padding: 0;
 }
-#appHeader h1{
+
+#appHeader h1 {
     padding: 0 15px;
     line-height: 45px;
     margin: 0;
 }
-#appHeader h1 a{
+
+#appHeader h1 a {
     font-size: 17px;
     text-decoration: none;
     color: white;
 }
 
-#appMenu{
+#appMenu {
     width: 40%;
     background-color: #f2f2f2;
 }
@@ -34,29 +36,29 @@ html, body {
 #appContainer {
     width: 100%;
     height: 100%;
-    overflow:hidden;
+    overflow: hidden;
     border: none;
 }
 
-#select-wrapper{
+#select-wrapper {
     font-size: 14px;
-    padding:10px;
+    padding: 10px;
 }
 
 .plusIcon {
-   background-image:  url('../../dijit/themes/claro/images/dnd.png');
-   background-repeat: no-repeat;
-   background-position: 0 0;
-   background-size: 100%;
-   width: 11px;
-   height: 11px;
+    background-image: url('../../dijit/themes/claro/images/dnd.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 100%;
+    width: 11px;
+    height: 11px;
 }
 
 .minIcon {
-   background-image:  url('../../dijit/themes/claro/images/dnd.png');
-   background-repeat: no-repeat;
-   background-position: 0 -71px;
-   background-size: 100%;
-   width: 11px;
-   height: 11px;
+    background-image: url('../../dijit/themes/claro/images/dnd.png');
+    background-repeat: no-repeat;
+    background-position: 0 -71px;
+    background-size: 100%;
+    width: 11px;
+    height: 11px;
 }

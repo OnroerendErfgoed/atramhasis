@@ -2,10 +2,7 @@ define([
     'dojo/has', 'require',
     "dojo/store/Memory", "dojo/store/Cache", "dojo/store/JsonRest", "dojo/store/Observable",
     'dojo/_base/sniff'
-], function (
-        has, require,
-        Memory, Cache, JsonRest, Observable
-    ) {
+], function (has, require, Memory, Cache, JsonRest, Observable) {
     var app = window.app = {};
 
     if (has('host-browser')) {
@@ -16,6 +13,6 @@ define([
             app.main.startup();
         })
     } else {
-            console.log("server");
-        }
-    });
+        console.log("server");
+    }
+});

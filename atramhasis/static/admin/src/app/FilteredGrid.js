@@ -18,8 +18,7 @@ define([
     "dojo/store/Memory", "dojo/store/Cache",
     "dgrid/OnDemandGrid", "dgrid/Selection", "dgrid/Keyboard", "dgrid/editor"
 
-], function (declare, on, topic, lang, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox, TextBox, Button, Menu, MenuItem,
-             ConfirmDialog, Memory, Cache, OnDemandGrid, Selection, Keyboard, editor) {
+], function (declare, on, topic, lang, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox, TextBox, Button, Menu, MenuItem, ConfirmDialog, Memory, Cache, OnDemandGrid, Selection, Keyboard, editor) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
 
@@ -106,7 +105,7 @@ define([
 
                     var cell = self.conceptGrid.cell(evt);
                     var gridId = self.conceptGrid.get("id");
-                    var pMenu = self._createGridContextMenu(gridId, cell.element, self,cell.row.data.id,cell.row.data.type,cell.row.data.label);
+                    var pMenu = self._createGridContextMenu(gridId, cell.element, self, cell.row.data.id, cell.row.data.type, cell.row.data.label);
                     var args = {target: pMenu.selector};
                     pMenu._openMyself(args);
 
@@ -177,19 +176,33 @@ define([
             this.conceptGrid.set("query", this.conceptFilter);
         },
 
-        _createGridContextMenu: function (targetNodeId, selector, widget,conceptId,type,label) {
+        _createGridContextMenu: function (targetNodeId, selector, widget, conceptId, type, label) {
             var pMenu;
             var self = this;
             pMenu = new Menu({
                 targetNodeIds: [targetNodeId],
                 selector: selector
             });
-            pMenu.addChild(new MenuItem({
-                label: "Add narrower",
-                onClick: function () {
-                    widget._addNarrower(conceptId,type,label);
-                }
-            }));
+
+            if (type == "concept") {
+                pMenu.addChild(new MenuItem({
+                    label: "Add narrower",
+                    onClick: function () {
+                        widget._addNarrower(conceptId, type, label);
+                    }
+                }));
+            }
+
+            else if (type = "collection") {
+                pMenu.addChild(new MenuItem({
+                    label: "Add member of",
+                    onClick: function () {
+                        widget._addMemberOf(conceptId, type, label);
+                    }
+                }));
+
+            }
+
 
             pMenu.addChild(new MenuItem({
                 label: "Edit",
@@ -206,7 +219,7 @@ define([
             pMenu.addChild(new MenuItem({
                 label: "Delete",
                 onClick: function () {
-                    widget._deleteConcept(ConceptId,type,label);
+                    widget._deleteConcept(ConceptId, type, label);
                 }
             }));
 
@@ -220,9 +233,14 @@ define([
         },
 
 
-        _addNarrower: function (conceptId,type,label) {
+        _addNarrower: function (conceptId, type, label) {
 
-           topic.publish("concept.addNarrower",conceptId,type,label);
+            topic.publish("concept.addNarrower", conceptId, type, label);
+
+        },
+
+        _addMemberOf: function (conceptId, type, label) {
+            topic.publish("concept.addMemberOf", conceptId, type, label);
 
         },
 
@@ -233,27 +251,27 @@ define([
 
         _createNewConcept: function () {
 
-         topic.publish("concept.create");
+            topic.publish("concept.create");
         },
 
-        _deleteConcept: function (conceptId,type,label) {
+        _deleteConcept: function (conceptId, type, label) {
 
-             var myDialog = new ConfirmDialog({
-                    title: "Delete",
-                    content: "Are you sure you want to delete the "+type+" with the label "+label+" ?",
-                    style: "width: 200px"
-                });
+            var myDialog = new ConfirmDialog({
+                title: "Delete",
+                content: "Are you sure you want to delete the " + type + " with the label " + label + " ?",
+                style: "width: 200px"
+            });
 
-             on(myDialog, "execute", function(){
-                    topic.publish("concept.delete", conceptId);
-                });
-                on(myDialog, "cancel", function(){
-                    //do nothing, will be destroyed on hide
-                });
-                on(myDialog, "hide", function(){
-                    myDialog.destroyRecursive();
-                });
-                myDialog.show();
+            on(myDialog, "execute", function () {
+                topic.publish("concept.delete", conceptId);
+            });
+            on(myDialog, "cancel", function () {
+                //do nothing, will be destroyed on hide
+            });
+            on(myDialog, "hide", function () {
+                myDialog.destroyRecursive();
+            });
+            myDialog.show();
 
         }
     });

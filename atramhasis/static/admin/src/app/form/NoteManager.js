@@ -29,7 +29,7 @@ define([
         labelComboBox: null,
         languageComboBox: null,
         noteGrid: null,
-        notes:null,
+        notes: null,
         postMixInProperties: function () {
             this.inherited(arguments);
         },
@@ -49,13 +49,12 @@ define([
                 iconClass: 'plusIcon',
                 onClick: function () {
                     var dlg = self._createDialog();
-                    if(self.notes)
-                    {
-                       self._setGrid(self.notes);
+                    if (self.notes) {
+                        self._setGrid(self.notes);
                     }
                     dlg.show();
-                       self.noteGrid.resize();
-                                             self.noteGrid.refresh();
+                    self.noteGrid.resize();
+                    self.noteGrid.refresh();
                 }
             }, this.noteButton)
 
@@ -91,7 +90,7 @@ define([
                     options: notetype,
                     style: { width: '130px' }
                 });
-            var languages=this._getLanguages();
+            var languages = this._getLanguages();
             var languageComboBox = new Select
             (
                 {
@@ -99,7 +98,7 @@ define([
                     name: "languageComboBox",
                     title: "Language:",
                     placeHolder: 'Select a language',
-                    options:languages,
+                    options: languages,
                     style: { width: '80px' }
 
                 }
@@ -174,7 +173,7 @@ define([
             addBtn.onClick = function () {
 
                 self._createNodeList(self.noteGrid.store.data);
-                self.notes=self.noteGrid.store.data;
+                self.notes = self.noteGrid.store.data;
 
                 dlg.hide();
             };
@@ -201,7 +200,7 @@ define([
                 {label: "Type", field: "type"},
                 {label: "Type", field: "typeValue", unhidable: true, hidden: true},
                 editor({label: " ", field: 'button',
-                        editorArgs: {label: "delete",showLabel :false, iconClass: 'minIcon', onClick: function (event) {
+                        editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
 
                             var row = grid.row(event);
                             var itemToDelete = row.data.id;
@@ -226,7 +225,7 @@ define([
             }, gridDiv);
 
             grid.startup();
-             grid.resize();
+            grid.resize();
             return grid;
         },
 
@@ -253,18 +252,17 @@ define([
             });
             return itemsToDisplay;
         },
-                        _getLanguages:function()
-                {
-                   var languages= [
-                                {label: "NL", value: "nl"},
-                                {label: "Fr", value: "fr"},
-                                {label: "En", value: "en"}
+        _getLanguages: function () {
+            var languages = [
+                {label: "NL", value: "nl"},
+                {label: "Fr", value: "fr"},
+                {label: "En", value: "en"}
 
-                            ];
+            ];
 
-                    return languages;
+            return languages;
 
-                },
+        },
         _createNodeList: function (notes) {
             var labelListNode = this.NoteListNode;
             query("li", labelListNode).forEach(domConstruct.destroy);
@@ -290,22 +288,20 @@ define([
         reset: function () {
             var noteListNode = this.NoteListNode;
             query("li", noteListNode).forEach(domConstruct.destroy);
-            this.notes=null;
+            this.notes = null;
         },
 
-        setNotes:function(notes)
-        {
+        setNotes: function (notes) {
             this._createNodeList(notes);
-            this.notes=notes;
+            this.notes = notes;
         },
 
-        _setGrid:function(notes)
-        {
-           var gridStore = new Memory({
-                data:notes
+        _setGrid: function (notes) {
+            var gridStore = new Memory({
+                data: notes
 
             });
-              this.noteGrid.set("store",gridStore);
+            this.noteGrid.set("store", gridStore);
 
         }
     });

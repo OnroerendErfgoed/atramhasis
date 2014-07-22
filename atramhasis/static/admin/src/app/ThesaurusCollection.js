@@ -6,13 +6,8 @@ define(
         "dojo/request",
         "dojo/store/JsonRest"
     ],
-    function (
-        declare,
-        lang,
-        array,
-        request,
-        JsonRest) {
-        return declare( null,
+    function (declare, lang, array, request, JsonRest) {
+        return declare(null,
             {
 
                 schemelist: [],
@@ -23,14 +18,14 @@ define(
                     request.get(
                         '/conceptschemes',
                         {'handleAs': 'json'}
-                    ).then(lang.hitch(this,function(schemes) {
-                        array.forEach(schemes, lang.hitch(this, function(scheme) {
-                            this.schemelist.push({name:scheme.id, id:scheme.id});
-                            this.stores[scheme.id] = new JsonRest({
-                                'target': '/conceptschemes/' + scheme.id + '/c/'
-                            });
-                        }));
-                    }))
+                    ).then(lang.hitch(this, function (schemes) {
+                            array.forEach(schemes, lang.hitch(this, function (scheme) {
+                                this.schemelist.push({name: scheme.id, id: scheme.id});
+                                this.stores[scheme.id] = new JsonRest({
+                                    'target': '/conceptschemes/' + scheme.id + '/c/'
+                                });
+                            }));
+                        }))
                 }
 
             }
