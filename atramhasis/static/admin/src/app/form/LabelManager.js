@@ -18,10 +18,11 @@ define([
         "dgrid/extensions/ColumnHider",
         "dojo/_base/array",
         "dojo/on",
+        "./ConceptDetailList",
         "dojo/text!./templates/LabelManager.html"
 
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil, on, template) {
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil, on,ConceptDetailList, template) {
         return declare(
             "app/form/LabelManager",
             [WidgetBase, TemplatedMixin],

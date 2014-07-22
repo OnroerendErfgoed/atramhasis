@@ -3,7 +3,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dojo/_base/declare',
-    'dojo/text!/.templates/ConceptDetailList.html'
+    "dojo/text!./templates/ConceptDetailList.html"
 ], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, template) {
     return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
@@ -18,6 +18,7 @@ define([
 
         postCreate: function () {
             this.inherited(arguments);
+            alert("ok");
         },
 
         startup: function () {
