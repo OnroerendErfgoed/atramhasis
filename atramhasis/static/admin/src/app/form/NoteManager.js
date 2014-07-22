@@ -55,6 +55,7 @@ define([
                     dlg.show();
                     self.noteGrid.resize();
                     self.noteGrid.refresh();
+                    self.labelComboBox.reset();
                 }
             }, this.noteButton)
 
@@ -89,7 +90,10 @@ define([
                     placeHolder: 'Select a type',
                     options: notetype,
                     style: { width: '130px' }
+
                 });
+            labelComboBox.set("value",'Select a type');
+
             var languages = this._getLanguages();
             var languageComboBox = new Select
             (
