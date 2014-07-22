@@ -12,7 +12,6 @@ define([
     "dijit/_Widget",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
-
     "dojo/text!./templates/App.html",
 
     "dijit/form/ComboBox", "dijit/form/Button", "dijit/Dialog",
@@ -111,6 +110,8 @@ define([
             on(conceptDialog, "hide", function(){
                 conceptForm.reset();
             });
+
+
 
             var tc = registry.byId("center");
 
@@ -270,6 +271,8 @@ define([
             });
 
         }
+
+
 
     });
 });

@@ -17,11 +17,9 @@ define([
 ], function (
     declare, arrayUtil,
     domConstruct, domClass, on, topic,
-
     _WidgetBase,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
-
     ConfirmDialog,
 
     template
