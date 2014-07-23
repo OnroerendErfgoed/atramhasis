@@ -66,10 +66,7 @@ define([
                         }
                     }, this.labelButton);
 
-                    this.prefLabelList = new ConceptDetailList
-                    ({
-
-                    }, this.prefLabelListNode);
+                    this.prefLabelList = new ConceptDetailList ({ }, this.prefLabelListNode);
                     this.altLabelList = new ConceptDetailList({}, this.altLabelListNode);
                     this.hiddenLabelList = new ConceptDetailList({}, this.hiddenLabelListNode);
 
