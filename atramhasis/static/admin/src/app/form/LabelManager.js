@@ -22,7 +22,7 @@ define([
         "dojo/text!./templates/LabelManager.html"
 
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil, on,ConceptDetailList, template) {
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil, on, ConceptDetailList, template) {
         return declare(
             "app/form/LabelManager",
             [WidgetBase, TemplatedMixin],
@@ -62,7 +62,14 @@ define([
                             self.labelGrid.resize();
                             self.labelGrid.refresh();
                         }
-                    }, this.labelButton)
+                    }, this.labelButton);
+
+                    this.prefLabelList = new ConceptDetailList
+                    ({
+
+                    }, this.prefLabelListNode);
+                    this.altLabelList = new ConceptDetailList({}, this.altLabelListNode);
+                    this.hiddenLabelList = new ConceptDetailList({}, this.hiddenLabelListNode);
 
 
                 },
@@ -215,8 +222,8 @@ define([
                 _getLanguages: function () {
                     var languages = [
                         {label: "NL", value: "nl"},
-                        {label: "Fr", value: "fr"},
-                        {label: "En", value: "en"}
+                        {label: "FR", value: "fr"},
+                        {label: "EN", value: "en"}
 
                     ];
 
@@ -260,16 +267,17 @@ define([
 
                     return grid;
                 },
-
-
                 _createNodeList: function (labels) {
-                    var labelListNode = this.labelListNode;
-                    query("li", labelListNode).forEach(domConstruct.destroy);
-                    arrayUtil.forEach(labels, function (label) {
-                        domConstruct.create("li", {
-                            innerHTML: "<b>" + label.label + "</b> (<em>" + label.language + "</em>): " + label.type
-                        }, labelListNode);
-                    });
+
+
+                    var mapLabel = this.prefLabelList.mapLabelsForList(labels, "prefLabel");
+                    this.prefLabelList.buidList(mapLabel, "Preferred labels", false);
+                    mapLabel = this.altLabelList.mapLabelsForList(labels, "altLabel");
+                    this.altLabelList.buidList(mapLabel, "Alternate labels", false);
+                    mapLabel = this.hiddenLabelList.mapLabelsForList(labels, "hiddenLabel");
+                    this.hiddenLabelList.buidList(mapLabel, "Hidden labels", false);
+
+
                 },
 
                 _setGrid: function (labels) {
@@ -281,6 +289,35 @@ define([
 
 
                 },
+                _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
+
+                    var self=this;
+                    var filteredItems = arrayUtil.filter(labels, function (item) {
+                        return item.type == typevalue;
+                    });
+
+                    return arrayUtil.map(filteredItems, function (item) {
+                        return {label: item.label, language:self._getLanguageTodisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+                    });
+                },
+
+                _getLanguageTodisplay: function (language) {
+                    switch (language) {
+                        case "nl":
+                            return "NL";
+                            break;
+                        case "fr":
+                            return "FR";
+                            break;
+                        case "en":
+                            return "EN";
+                            break;
+                        default:
+                            return language;
+                            break;
+                    }
+
+                },
 
 
                 getLabels: function () {
@@ -290,15 +327,18 @@ define([
                 },
 
                 setLabels: function (labels) {
-                    //todo: implement this
                     console.log("set labels: " + labels);
-                    this._createNodeList(labels);
-                    this.labels = labels;
+
+                    this.labels = this._mapLabelToDisplayedLabel(labels, "prefLabel", "Preferred");
+                    this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "altLabel", "Alternative"));
+                    this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "hiddenLabel", "Hidden"));
+                    this._createNodeList(this.labels);
                 },
 
                 reset: function () {
-                    var labelListNode = this.labelListNode;
-                    query("li", labelListNode).forEach(domConstruct.destroy);
+                    this.prefLabelList.reset();
+                    this.altLabelList.reset();
+                    this.hiddenLabelList.reset();
                     this.labels = null;
                 }
             });
