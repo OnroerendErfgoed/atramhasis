@@ -38,6 +38,7 @@ define([
                 labelTypeComboBox: null,
                 prefLanguage: null,
                 labels: null,
+                tempLabels:null,//this variable is used to recover the labels if user delete a label and then press on the cancel button
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -57,6 +58,7 @@ define([
                             var dlg = self._createDialog();
                             if (self.labels) {
                                 self._setGrid(self.labels);
+                                self._setLanguageComboBox(self.labels);
                             }
                             dlg.show();
                             self.labelGrid.resize();
@@ -180,6 +182,7 @@ define([
                         dlg.hide();
                     };
                     cancelBtn.onClick = function () {
+                        self.labels=lang.clone(self.tempLabels);
                         dlg.hide();
                     };
 
@@ -231,6 +234,7 @@ define([
 
                 },
                 _createGrid: function (gridDiv) {
+                    var self=this;
                     var columns;
                     columns = [
                         {label: "Title", field: "label"},
@@ -246,6 +250,13 @@ define([
                                     grid.store.remove(itemToDelete);
                                     grid.resize();
                                     grid.refresh();
+                                    if(row.data.typeValue=="prefLabel")
+                                    {
+                                        self.prefLanguage.push({label:row.data.language,value:row.data.languageValue});
+                                        self.languageComboBox.set("Options", self.prefLanguage);
+                                        self.languageComboBox.reset();
+                                    }
+
                                 }
                                 }},
                             Button)
@@ -289,6 +300,23 @@ define([
 
 
                 },
+
+                _setLanguageComboBox:function(labels)
+                {
+                 var self=this;
+                 var filteredItems = arrayUtil.filter(labels, function (item) {
+                        return item.typeValue == "prefLabel";
+                    });
+
+                   arrayUtil.forEach(filteredItems,function(item)
+                       {
+                           self.languageComboBox.removeOption(item.languageValue);
+
+                       }
+                   );
+                    self.languageComboBox.reset();
+                },
+
                 _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
 
                     var self=this;
@@ -297,11 +325,11 @@ define([
                     });
 
                     return arrayUtil.map(filteredItems, function (item) {
-                        return {label: item.label, language:self._getLanguageTodisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+                        return {label: item.label, language:self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
                     });
                 },
 
-                _getLanguageTodisplay: function (language) {
+                _getLanguageToDisplay: function (language) {
                     switch (language) {
                         case "nl":
                             return "NL";
@@ -320,6 +348,7 @@ define([
                 },
 
 
+
                 getLabels: function () {
                     return  arrayUtil.map(this.labelGrid.store.data, function (label) {
                         return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
@@ -333,13 +362,16 @@ define([
                     this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "altLabel", "Alternative"));
                     this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "hiddenLabel", "Hidden"));
                     this._createNodeList(this.labels);
+                    this.tempLabels=lang.clone(this.labels);
                 },
+
 
                 reset: function () {
                     this.prefLabelList.reset();
                     this.altLabelList.reset();
                     this.hiddenLabelList.reset();
                     this.labels = null;
+                    this.tempLabels=null;
                 }
             });
     });
