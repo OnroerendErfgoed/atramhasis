@@ -51,14 +51,14 @@ define([
                     this.LabelLabel.innerHTML = this.title;
 
                     new Button({
-                        label: "Add Labels",
+                        label: "Save Labels",
                         showLabel: false,
                         iconClass: 'plusIcon',
                         onClick: function () {
                             var dlg = self._createDialog();
                             if (self.labels) {
                                 self._setGrid(self.labels);
-                                self._setLanguageComboBox(self.labels);
+                                //self._setLanguageComboBox(self.labels);
                             }
                             dlg.show();
                             self.labelGrid.resize();
@@ -240,23 +240,16 @@ define([
                         {label: "Type", field: "type"},
                         {label: "Type", field: "typeValue", unhidable: true, hidden: true},
                         editor({label: " ", field: 'button',
-                                editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
+                        editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
 
-                                    var row = grid.row(event);
-                                    var itemToDelete = row.data.id;
-                                    grid.store.remove(itemToDelete);
-                                    grid.resize();
-                                    grid.refresh();
-                                    if(row.data.typeValue=="prefLabel")
-                                    {
-                                        self.prefLanguage.push({label:row.data.language,value:row.data.languageValue});
-                                        self.languageComboBox.set("Options", self.prefLanguage);
-                                        self.languageComboBox.reset();
-                                    }
-
-                                }
-                                }},
-                            Button)
+                            var row = grid.row(event);
+                            var itemToDelete = row.data.id;
+                            grid.store.remove(itemToDelete);
+                            grid.resize();
+                            grid.refresh();
+                        }
+                        }},
+                        Button)
                     ];
                     var gridStore = new Memory({
                         data: []

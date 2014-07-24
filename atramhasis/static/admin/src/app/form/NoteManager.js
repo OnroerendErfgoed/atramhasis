@@ -21,7 +21,7 @@ define([
     "dojo/_base/array",
     "./ConceptDetailList",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor, lang, Memory, on, JsonRest, query, arrayUtil,ConceptDetailList, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor, lang, Memory, on, JsonRest, query, arrayUtil, ConceptDetailList, template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
         name: 'NoteManager',
@@ -31,7 +31,7 @@ define([
         languageComboBox: null,
         noteGrid: null,
         notes: null,
-        tempNotes:null,
+        tempNotes: null,
 
 
         postMixInProperties: function () {
@@ -46,10 +46,10 @@ define([
             var self = this;
             self.inherited(arguments);
 
-            self.changeNoteList = new ConceptDetailList ({ }, self.changeNoteListNode);
+            self.changeNoteList = new ConceptDetailList({ }, self.changeNoteListNode);
             self.definitionList = new ConceptDetailList({}, self.definitionListNode);
             self.editorialNoteList = new ConceptDetailList({}, self.editorialNoteListNode);
-            self.exampleList = new ConceptDetailList ({ }, self.exampleListNode);
+            self.exampleList = new ConceptDetailList({ }, self.exampleListNode);
             self.historyNoteList = new ConceptDetailList({}, self.historyNoteListNode);
             self.scopeNoteList = new ConceptDetailList({}, self.scopeNoteListNode);
             self.noteList = new ConceptDetailList({}, self.noteListNode);
@@ -87,7 +87,7 @@ define([
 
             var dlg = new Dialog({
                 style: "width: 600px",
-                title: "Add Notes",
+                title: "Save Notes",
                 doLayout: true
             });
             var mainDiv = domConstruct.create("div");
@@ -106,7 +106,7 @@ define([
                     style: { width: '130px' }
 
                 });
-            labelComboBox.set("value",'Select a type');
+            labelComboBox.set("value", 'Select a type');
 
             var languages = this._getLanguages();
             var languageComboBox = new Select
@@ -196,7 +196,7 @@ define([
                 dlg.hide();
             };
             cancelBtn.onClick = function () {
-                this.notes=lang.clone(this.tempNotes);
+                this.notes = lang.clone(this.tempNotes);
                 dlg.hide();
             };
             on(dlg, "hide", function () {
@@ -282,55 +282,54 @@ define([
             return languages;
 
         },
-     /*   _createNodeList: function (notes) {
-            var labelListNode = this.NoteListNode;
-            query("li", labelListNode).forEach(domConstruct.destroy);
-            arrayUtil.forEach(notes, function (note) {
-                domConstruct.create("li", {
-                    innerHTML: "<b>" + note.note + "</b> (<em>" + note.language + "</em>): " + note.type
-                }, labelListNode);
+        /*   _createNodeList: function (notes) {
+         var labelListNode = this.NoteListNode;
+         query("li", labelListNode).forEach(domConstruct.destroy);
+         arrayUtil.forEach(notes, function (note) {
+         domConstruct.create("li", {
+         innerHTML: "<b>" + note.note + "</b> (<em>" + note.language + "</em>): " + note.type
+         }, labelListNode);
+         });
+         },*/
+
+        _createNodeList: function (notes) {
+            this.definitionList.buidList(this.definitionList.mapLabelsForList(notes, "definition"), "Definition", false);
+            this.changeNoteList.buidList(this.changeNoteList.mapLabelsForList(notes, "changeNote"), "Change note", false);
+            this.editorialNoteList.buidList(this.editorialNoteList.mapLabelsForList(notes, "editorialNote"), "Editorial note", false);
+            this.exampleList.buidList(this.exampleList.mapLabelsForList(notes, "example"), "Example", false);
+            this.historyNoteList.buidList(this.historyNoteList.mapLabelsForList(notes, "historyNote"), "Historynote", false);
+            this.scopeNoteList.buidList(this.scopeNoteList.mapLabelsForList(notes, "scopeNote"), "Scopenote", false);
+            this.noteList.buidList(this.noteList.mapLabelsForList(notes, "note"), "Note", false);
+        },
+
+        _mapNoteToDisplayInGrid: function (notes, typevalue, typeToBeDisplayed) {
+
+            var self = this;
+            var filteredItems = arrayUtil.filter(notes, function (item) {
+                return item.type == typevalue;
             });
-        },*/
 
-        _createNodeList: function (notes)
-        {
-             this.definitionList.buidList(this.definitionList.mapLabelsForList(notes, "definition"), "Definition", false);
-             this.changeNoteList.buidList(this.changeNoteList.mapLabelsForList(notes, "changeNote"), "Change note", false);
-             this.editorialNoteList.buidList(this.editorialNoteList.mapLabelsForList(notes, "editorialNote"), "Editorial note", false);
-             this.exampleList.buidList(this.exampleList.mapLabelsForList(notes, "example"), "Example", false);
-             this.historyNoteList.buidList(this.historyNoteList.mapLabelsForList(notes, "historyNote"), "Historynote", false);
-             this.scopeNoteList.buidList(this.scopeNoteList.mapLabelsForList(notes, "scopeNote"), "Scopenote", false);
-             this.noteList.buidList(this.noteList.mapLabelsForList(notes, "note"), "Note", false);
-         },
+            return arrayUtil.map(filteredItems, function (item) {
+                return {label: item.note, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+            });
+        },
+        _getLanguageToDisplay: function (language) {
+            switch (language) {
+                case "nl":
+                    return "NL";
+                    break;
+                case "fr":
+                    return "FR";
+                    break;
+                case "en":
+                    return "EN";
+                    break;
+                default:
+                    return language;
+                    break;
+            }
 
-         _mapNoteToDisplayedNote: function (notes, typevalue, typeToBeDisplayed) {
-
-                    var self=this;
-                    var filteredItems = arrayUtil.filter(notes, function (item) {
-                        return item.type == typevalue;
-                    });
-
-                    return arrayUtil.map(filteredItems, function (item) {
-                        return {label: item.note, language:self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
-                    });
-                },
-                            _getLanguageToDisplay: function (language) {
-                    switch (language) {
-                        case "nl":
-                            return "NL";
-                            break;
-                        case "fr":
-                            return "FR";
-                            break;
-                        case "en":
-                            return "EN";
-                            break;
-                        default:
-                            return language;
-                            break;
-                    }
-
-                },
+        },
 
         geNotes: function () {
             var notes = this.noteGrid.store.data;
@@ -346,40 +345,33 @@ define([
             return notesToSend;
         },
         reset: function () {
-            var noteListNode = this.NoteListNode;
-            query("li", noteListNode).forEach(domConstruct.destroy);
             this.notes = null;
-            this.tempNotes=null;
-             this.changeNoteList.reset();
+            this.tempNotes = null;
+            this.changeNoteList.reset();
             this.definitionList.reset();
             this.editorialNoteList.reset();
             this.exampleList.reset();
             this.historyNoteList.reset();
             this.scopeNoteList.reset();
-            this.noteList = new ConceptDetailList({}, self.noteListNode);
+            this.noteList.reset();
         },
-
         setNotes: function (notes) {
-
-            this.notes = this._mapNoteToDisplayedNote(notes, "definition", "Definition");
-            this.notes.push.apply(this.notes, this._mapNoteToDisplayedNote(notes, "changeNote", "Change note"));
-            this.notes.push.apply(this.notes, this._mapNoteToDisplayedNote(notes, "editorialNote", "Editorial note"));
-            this.notes.push.apply(this.notes, this._mapNoteToDisplayedNote(notes, "example", "Example"));
-            this.notes.push.apply(this.notes, this._mapNoteToDisplayedNote(notes, "historyNote", "Historynote"));
-            this.notes.push.apply(this.notes, this._mapNoteToDisplayedNote(notes, "scopeNote", "Scopenote"));
-            this.notes.push.apply(this.notes, this._mapNoteToDisplayedNote(notes, "note", "Note"));
+            this.notes = this._mapNoteToDisplayInGrid(notes, "definition", "Definition");
+            this.notes.push.apply(this.notes, this._mapNoteToDisplayInGrid(notes, "changeNote", "Change note"));
+            this.notes.push.apply(this.notes, this._mapNoteToDisplayInGrid(notes, "editorialNote", "Editorial note"));
+            this.notes.push.apply(this.notes, this._mapNoteToDisplayInGrid(notes, "example", "Example"));
+            this.notes.push.apply(this.notes, this._mapNoteToDisplayInGrid(notes, "historyNote", "Historynote"));
+            this.notes.push.apply(this.notes, this._mapNoteToDisplayInGrid(notes, "scopeNote", "Scopenote"));
+            this.notes.push.apply(this.notes, this._mapNoteToDisplayInGrid(notes, "note", "Note"));
             this._createNodeList(this.notes);
-            this._createNodeList(notes);
-            this.tempNotes=lang.clone(this.notes);
+            this.tempNotes = lang.clone(this.notes);
         },
 
         _setGrid: function (notes) {
             var gridStore = new Memory({
                 data: notes
-
             });
             this.noteGrid.set("store", gridStore);
-
         }
     });
 });
