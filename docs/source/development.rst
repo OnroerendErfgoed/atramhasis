@@ -56,6 +56,8 @@ tox) will be installed.
     # install js dependencies using bower
     $ cd atramhasis/static/admin
     $ bower install
+    # run a local development server
+    $ pserve --reload development.ini
 
 Every pull request will be run through Travis-ci_. When providing a pull 
 request, please run the unit tests first and make sure they all pass. Please 
