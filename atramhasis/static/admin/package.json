@@ -1,0 +1,16 @@
+{
+	"name": "Atramhasis-build",
+	"version": "0.3.0",
+  	"description": "Node packages for building Atramhasis.",
+  	"repository": {
+		"type": "git",
+		"url": "https://github.com/OnroerendErfgoed/atramhasis.git"
+	},
+  	"devDependencies": {
+    	"grunt": "~0.4.1",
+    	"grunt-dojo": "~0.3.0",
+    	"grunt-contrib-copy": "~0.4.1",
+    	"grunt-contrib-clean": "~0.5.0",
+    	"load-grunt-tasks": "~0.1.0"
+  	}
+}
