@@ -79,7 +79,7 @@ define([
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
                 content: conceptForm,
-                style: "width: 500px"
+
             }).placeAt(document.body);
 
             on(conceptForm, "cancel", function () {

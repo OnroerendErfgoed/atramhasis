@@ -32,7 +32,7 @@ define([
         noteGrid: null,
         notes: null,
         tempNotes: null,
-
+        editNoteButton:null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -54,17 +54,15 @@ define([
             self.scopeNoteList = new ConceptDetailList({}, self.scopeNoteListNode);
             self.noteList = new ConceptDetailList({}, self.noteListNode);
 
-
-            self.noteLabel.innerHTML = this.title;
-
-            new Button({
+            self.editNoteButton= new Button({
                 label: "Add Notes",
-                showLabel: false,
+                showLabel: true,
                 iconClass: 'plusIcon',
                 onClick: function () {
                     var dlg = self._createDialog();
                     if (self.notes) {
                         self._setGrid(self.notes);
+
                     }
                     dlg.show();
                     self.noteGrid.resize();
@@ -95,14 +93,14 @@ define([
             var tableBoxDiv = domConstruct.create("div");
             domConstruct.place(tableBoxDiv, mainDiv, "first");
             var labelTabForBoxes = new TableContainer({cols: 3, spacing: 10, orientation: "vert"}, tableBoxDiv);
-            var notetype = self._getNoteType();
+            var noctypes = self._getNoteType();
             var labelComboBox = new Select(
                 {
                     id: "labelComboBox",
                     name: "labelTypeComboBox",
                     title: "Type of note:",
                     placeHolder: 'Select a type',
-                    options: notetype,
+                    options: noctypes,
                     style: { width: '130px' }
 
                 });
@@ -145,6 +143,7 @@ define([
 
             var noteArea = new Textarea({
                 name: "noteArea",
+                title: "Note:",
                 colspan: "3"
             });
             noteArea.startup();
@@ -182,7 +181,7 @@ define([
             }, dlg.containerNode);
 
             var addBtn = new Button({
-                "label": "Add"
+                "label": "Save"
             }).placeAt(actionBar);
             var cancelBtn = new Button({
                 "label": "Cancel"
@@ -264,7 +263,7 @@ define([
                         "label": item.label,
                         "value": item.key
 
-                    }
+                    };
                     itemsToDisplay.push(labelToSend);
                 })
 
@@ -282,15 +281,6 @@ define([
             return languages;
 
         },
-        /*   _createNodeList: function (notes) {
-         var labelListNode = this.NoteListNode;
-         query("li", labelListNode).forEach(domConstruct.destroy);
-         arrayUtil.forEach(notes, function (note) {
-         domConstruct.create("li", {
-         innerHTML: "<b>" + note.note + "</b> (<em>" + note.language + "</em>): " + note.type
-         }, labelListNode);
-         });
-         },*/
 
         _createNodeList: function (notes) {
             this.definitionList.buidList(this.definitionList.mapLabelsForList(notes, "definition"), "Definition", false);
@@ -332,17 +322,19 @@ define([
         },
 
         geNotes: function () {
-            var notes = this.noteGrid.store.data;
-            var notesToSend = [];
-            arrayUtil.forEach(notes, function (note) {
-                var noteToSend = {
-                    "type": note.typeValue,
-                    "language": note.languageValue,
-                    "label": note.note
-                };
-                notesToSend.push(noteToSend);
-            });
-            return notesToSend;
+            if(this.noteGrid) {
+                var notes = this.noteGrid.store.data;
+                var notesToSend = [];
+                arrayUtil.forEach(notes, function (note) {
+                    var noteToSend = {
+                        "type": note.typeValue,
+                        "language": note.languageValue,
+                        "label": note.note
+                    };
+                    notesToSend.push(noteToSend);
+                });
+                return notesToSend;
+            }
         },
         reset: function () {
             this.notes = null;
@@ -354,6 +346,8 @@ define([
             this.historyNoteList.reset();
             this.scopeNoteList.reset();
             this.noteList.reset();
+            this.editNoteButton.set("label","Add Notes");
+            this.editNoteButton.set("iconClass","plusIcon");
         },
         setNotes: function (notes) {
             this.notes = this._mapNoteToDisplayInGrid(notes, "definition", "Definition");
@@ -365,6 +359,13 @@ define([
             this.notes.push.apply(this.notes, this._mapNoteToDisplayInGrid(notes, "note", "Note"));
             this._createNodeList(this.notes);
             this.tempNotes = lang.clone(this.notes);
+        },
+
+        setEditButton:function()
+        {
+            this.editNoteButton.set("label","Edit Notes");
+             this.editNoteButton.set("iconClass","");
+
         },
 
         _setGrid: function (notes) {

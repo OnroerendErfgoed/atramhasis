@@ -39,6 +39,7 @@ define([
                 prefLanguage: null,
                 labels: null,
                 tempLabels:null,//this variable is used to recover the labels if user delete a label and then press on the cancel button
+                EditLabelButton:null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -48,17 +49,15 @@ define([
                     var self = this;
                     //noinspection CommaExpressionJS
 
-                    this.LabelLabel.innerHTML = this.title;
-
-                    new Button({
-                        label: "Save Labels",
-                        showLabel: false,
+                   self.EditLabelButton= new Button({
+                        label: "Add Labels",
+                        showLabel: true,
                         iconClass: 'plusIcon',
                         onClick: function () {
                             var dlg = self._createDialog();
                             if (self.labels) {
                                 self._setGrid(self.labels);
-                                //self._setLanguageComboBox(self.labels);
+                                self._setLanguageComboBox(self.labels);
                             }
                             dlg.show();
                             self.labelGrid.resize();
@@ -135,8 +134,19 @@ define([
 
                                 if (self.labelTypeComboBox.get('value') == "prefLabel") {
 
-                                    self.languageComboBox.removeOption(self.languageComboBox.get('value'));
+                                    self.languageComboBox.getOptions(self.languageComboBox.get('value')).disabled= true;
+                                    
                                     self.prefLanguage = self.languageComboBox.get("options");
+
+                                    if( self.prefLanguage.length==0)
+                                    {
+
+                                        self.labelTypeComboBox.getOptions(self.labelTypeComboBox.get('value')).disabled= true;
+                                         self.labelTypeComboBox.set("value","altLabel");
+                                        self.labelTypeComboBox.reset();
+
+
+                                    }
                                 }
 
                             })
@@ -166,7 +176,7 @@ define([
                     }, dlg.containerNode);
 
                     var addBtn = new Button({
-                        "label": "Add"
+                        "label": "Save"
                     }).placeAt(actionBar);
                     var cancelBtn = new Button({
                         "label": "Cancel"
@@ -247,6 +257,22 @@ define([
                             grid.store.remove(itemToDelete);
                             grid.resize();
                             grid.refresh();
+
+                            if (row.data.typeValue == "prefLabel")
+                            {
+
+                                self.prefLanguage.push({label: row.data.language, value: row.data.languageValue});
+                                self.languageComboBox.set("Options", self.prefLanguage);
+                                self.languageComboBox.reset();
+
+                                if( self.prefLanguage.length==1)
+                                {
+                                      self.labelTypeComboBox.getOptions(self.labelTypeComboBox.get('value')).disabled=false;
+
+                                      self.labelTypeComboBox.reset();
+                                }
+
+                            }
                         }
                         }},
                         Button)
@@ -355,13 +381,20 @@ define([
                     this.tempLabels=lang.clone(this.labels);
                 },
 
+                SetEditLabelButton:function()
+                {
+                  this.EditLabelButton.set("label","Edit labels");
+                  this.EditLabelButton.set("iconClass","");
 
+                },
                 reset: function () {
                     this.prefLabelList.reset();
                     this.altLabelList.reset();
                     this.hiddenLabelList.reset();
                     this.labels = null;
                     this.tempLabels=null;
+                    this.EditLabelButton.set("label","Add labels");
+                    this.EditLabelButton.set("iconClass","plusIcon");
                 }
             });
     });

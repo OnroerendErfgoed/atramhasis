@@ -29,7 +29,10 @@ define([
 
                 _scheme: null,
 
+
+
                 _relations: null,
+                EditRelationButton:null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -40,11 +43,9 @@ define([
                     var self = this;
                     this._relations = [];
 
-                    this.relationLabel.innerHTML = this.title;
-
-                    new Button({
-                        label: "Add relation",
-                        showLabel: false,
+                   self.EditRelationButton= new Button({
+                        label:"Add "+ self.title,
+                        showLabel: true,
                         iconClass: 'plusIcon',
                         onClick: function () {
                             var dlg = self._createDialog();
@@ -183,9 +184,12 @@ define([
                     return dlg
                 },
 
-                reset: function () {
+                reset: function (relationType) {
                     this._relations = [];
                     this._createRelationList();
+                    var lab="Add "+relationType;
+                    this.EditRelationButton.set("label",lab);
+                    this.EditRelationButton.set("iconClass","plusIcon");
                 },
 
                 getRelations: function () {
@@ -210,6 +214,12 @@ define([
 
                 setScheme: function (scheme) {
                     this._scheme = scheme;
+
+                },
+                setEditRelationButton:function(relationType)
+                {
+                    this.EditRelationButton.set("label","Edit "+relationType);
+                     this.EditRelationButton.set("iconClass","");
 
                 }
             });
