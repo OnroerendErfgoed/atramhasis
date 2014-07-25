@@ -75,3 +75,5 @@ atramhasis/static/admin/src/dijit/
 atramhasis/static/admin/src/dgrid/
 atramhasis/static/admin/src/put-selector/
 atramhasis/static/admin/src/xstyle/
+#atramhasis/static/admin/dist
+atramhasis/static/admin/node_modules
