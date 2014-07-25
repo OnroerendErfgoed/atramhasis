@@ -129,5 +129,5 @@ This will update the requirement files in the scaffolds.
 .. _tox: http://tox.readthedocs.org
 .. _npm: https://www.npmjs.org/
 .. _bower: http://bower.io/
-.. _grunt: http://GRUNT
-.. _waitress: http://WAITRESS
+.. _grunt: http://gruntjs.com
+.. _waitress: http://waitress.readthedocs.org
