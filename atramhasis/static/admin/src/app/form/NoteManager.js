@@ -133,8 +133,8 @@ define([
                             label: self.noteArea.get('value'),
                             language: self.languageComboBox.get('displayedValue'),
                             languageValue: self.languageComboBox.get('value'),
-                            type: self.labelComboBox.get('displayedValue'),
-                            typeValue: self.labelComboBox.get('value')});
+                            type:  self.labelComboBox.get('value'),
+                            typeDisplayed: self.labelComboBox.get('displayedValue')});
                         noteGrid.resize();
                         self.noteGrid.refresh();
                     })
@@ -215,8 +215,8 @@ define([
                 {label: "Note", field: "label"},
                 {label: "Language", field: "language"},
                 {label: "Language", field: "languageValue", unhidable: true, hidden: true},
-                {label: "Type", field: "type"},
-                {label: "Type", field: "typeValue", unhidable: true, hidden: true},
+                {label: "Type", field: "typeDisplayed"},
+                {label: "Type", field: "type", unhidable: true, hidden: true},
                 editor({label: " ", field: 'button',
                         editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
 
@@ -300,7 +300,7 @@ define([
             });
 
             return arrayUtil.map(filteredItems, function (item) {
-                return {label: item.note, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+                return {label: item.note, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type:item.type , typeDisplayed:typeToBeDisplayed};
             });
         },
         _getLanguageToDisplay: function (language) {
@@ -327,7 +327,7 @@ define([
                 var notesToSend = [];
                 arrayUtil.forEach(notes, function (note) {
                     var noteToSend = {
-                        "type": note.typeValue,
+                        "type": note.type,
                         "language": note.languageValue,
                         "label": note.label
                     };
@@ -338,7 +338,7 @@ define([
             else
             {
                 return  arrayUtil.map(this.notes, function (note) {
-                        return {"type": note.typeValue, "language": note.languageValue, "label": note.label};
+                        return {"type": note.type, "language": note.languageValue, "label": note.label};
                         });
 
             }

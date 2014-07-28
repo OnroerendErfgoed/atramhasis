@@ -95,6 +95,30 @@ define([
                 return false;
             });
 
+             self._CreateNodeLists();
+             topic.subscribe("conceptDetail.refresh",function (refreshedConcept)
+             {
+                 self._refreshConceptDetail(refreshedConcept);
+
+             });
+
+        },
+        _refreshConceptDetail:function(refreshedConcept)
+        {
+            var self=this;
+            self.labels=refreshedConcept.labels;
+            self.notes=refreshedConcept.notes;
+            self.broader=refreshedConcept.broader;
+            self.narrower=refreshedConcept.narrower;
+            self.related=refreshedConcept.related;
+            self.members=refreshedConcept.members;
+            self.member_of=refreshedConcept.member_of;
+            self._CreateNodeLists();
+        },
+
+        _CreateNodeLists:function()
+        {
+            var self=this;
             self.prefLabelList.buidList(self.prefLabelList.mapLabelsForList(self.labels, "prefLabel"), "Preferred labels", false);
             self.altLabelList.buidList(self.altLabelList.mapLabelsForList(self.labels, "altLabel"), "Alternate labels", false);
             self.hiddenLabelList.buidList( self.hiddenLabelList.mapLabelsForList(self.labels, "hiddenLabel"), "Hidden labels", false);
@@ -113,37 +137,10 @@ define([
             self.membersList.buidList(self.membersList.mapRelationsForList(self.members), "Members", true);
             self.memberofList.buidList(self.memberofList.mapRelationsForList(self.member_of), "Member of", true);
 
-      /*      this._buidList(this.prefLabelListNode, this._mapLabelsForList(this.labels, "prefLabel"), "Preferred labels", false);
-            this._buidList(this.altLabelListNode, this._mapLabelsForList(this.labels, "altLabel"), "Alternate labels", false);
-            this._buidList(this.hiddenLabelListNode, this._mapLabelsForList(this.labels, "hiddenLabel"), "Hidden labels", false);
-
-            this._buidList(this.definitionListNode, this._mapNotesForList(this.notes, "definition"), "Definition", false);
-            this._buidList(this.changeNoteListNode, this._mapNotesForList(this.notes, "changeNote"), "Change note", false);
-            this._buidList(this.editorialNoteListNode, this._mapNotesForList(this.notes, "editorialNote"), "Editorial note", false);
-            this._buidList(this.exampleListNode, this._mapNotesForList(this.notes, "example"), "Example", false);
-            this._buidList(this.historyNoteListNode, this._mapNotesForList(this.notes, "historyNote"), "Historynote", false);
-            this._buidList(this.scopeNoteListNode, this._mapNotesForList(this.notes, "scopeNote"), "Scopenote", false);
-            this._buidList(this.noteListNode, this._mapNotesForList(this.notes, "note"), "Note", false);
-
-            this._buidList(this.broaderListNode, this._mapRelationsForList(this.broader), "Broader", true);
-            this._buidList(this.narrowerListNode, this._mapRelationsForList(this.narrower), "Narrower", true);
-            this._buidList(this.relatedListNode, this._mapRelationsForList(this.related), "Related", true);
-            this._buidList(this.membersListNode, this._mapRelationsForList(this.members), "Members", true);
-            this._buidList(this.memberofListNode, this._mapRelationsForList(this.member_of), "Member of", true);*/
-
-             topic.subscribe("conceptDetail.refresh",function (refreshedConcept) {
+        }
 
 
-
-
-             });
-
-        },
-        _refreshConceptDetail:function()
-        {
-
-        },
-        _mapLabelsForList: function (labels, type) {
+ /*       _mapLabelsForList: function (labels, type) {
             var filteredItems = arrayUtil.filter(labels, function (item) {
                 return item.type == type;
             });
@@ -198,6 +195,6 @@ define([
                     }
                 });
             }
-        }
+        }*/
     });
 });

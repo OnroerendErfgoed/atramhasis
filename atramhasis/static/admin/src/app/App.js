@@ -83,6 +83,7 @@ define([
             }).placeAt(document.body);
 
             on(conceptForm, "cancel", function () {
+                conceptForm.reset();
                 conceptDialog.hide();
             });
 
@@ -257,12 +258,13 @@ define([
                             });
                             conceptDialog && conceptDialog.resize();
                             //refresh Concept Detail widget.
-                         self.thesauri.stores[schemeid].get(form.concept_id).then(function (item) {
+                         self.thesauri.stores[self.currentScheme].get(form.concept_id).then(function (item) {
                              topic.publish("conceptDetail.refresh", item);
                          });
                         },
                         function (error) {
-                            console.log("An error occurred: " + error);
+                            //console.log("An error occurred: " + error);
+                            alert(error);
                         }
                     );
                 }

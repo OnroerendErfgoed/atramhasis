@@ -365,13 +365,13 @@ define([
                     if(this.labelGrid)
                     {
                      return  arrayUtil.map(this.labelGrid.store.data, function (label) {
-                        return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
+                        return {"type": label.type, "language": label.languageValue, "label": label.label};
                         });
                     }
                     else
                     {
                         return  arrayUtil.map(this.labels, function (label) {
-                        return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
+                        return {"type": label.type, "language": label.languageValue, "label": label.label};
                         });
 
                     }
@@ -399,6 +399,7 @@ define([
                     this.hiddenLabelList.reset();
                     this.labels = null;
                     this.tempLabels = null;
+                    this.labelGrid=null;
                     this.EditLabelButton.set("label", "Add labels");
                     this.EditLabelButton.set("iconClass", "plusIcon");
                 }
