@@ -14,9 +14,10 @@ define([
         "dojo/store/JsonRest",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree",
+         "./ConceptDetailList",
         "dojo/text!./templates/RelationManager.html"
     ],
-    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory, Cache, JsonRest, ObjectStoreModel, Tree, template) {
+    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory, Cache, JsonRest, ObjectStoreModel, Tree,ConceptDetailList, template) {
         return declare(
             "app/form/RelationManager",
             [WidgetBase, TemplatedMixin],
@@ -42,7 +43,7 @@ define([
                     this.inherited(arguments);
                     var self = this;
                     this._relations = [];
-
+                   self.relationsList = new ConceptDetailList({ }, self.relationListNode);
                    self.EditRelationButton= new Button({
                         label:"Add "+ self.title,
                         showLabel: true,
@@ -52,6 +53,7 @@ define([
                             dlg.show();
                         }
                     }, this.relationButton)
+
                 },
 
                 _addRelation: function (relId, lbl, path) {
@@ -61,13 +63,13 @@ define([
                     });
                     if (!found) {
                         this._relations.push({id: relId, label: lbl, path: path});
-                        this._createRelationList();
+                        this._createNodeList();
                         return true;
                     }
                     return false;
                 },
 
-                _createRelationList: function () {
+         /*       _createRelationList: function () {
                     var self = this;
                     var relListNode = this.relationListNode;
                     query("li", relListNode).forEach(domConstruct.destroy);
@@ -89,6 +91,12 @@ define([
                             }
                         }).placeAt(li);
                     });
+                },*/
+
+                 _createNodeList: function () {
+                 var self=this;
+                 self.relationsList.buidList(self.relationsList.mapRelationsForList(self._relations), self.title, false);
+
                 },
 
                 _removeRelationFromList: function (rel) {
@@ -186,7 +194,7 @@ define([
 
                 reset: function (relationType) {
                     this._relations = [];
-                    this._createRelationList();
+                    this._createNodeList();
                     var lab="Add "+relationType;
                     this.EditRelationButton.set("label",lab);
                     this.EditRelationButton.set("iconClass","plusIcon");
@@ -200,7 +208,7 @@ define([
 
                 setRelations: function (relations) {
                     this._relations = relations;
-                    this._createRelationList();
+                    this._createNodeList();
                 },
 
                 close: function () {
