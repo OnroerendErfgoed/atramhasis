@@ -20,10 +20,9 @@ define(
         'dojo/dom-form',
         'dojox/layout/TableContainer',
         'dijit/form/TextBox',
-        'dijit/form/ComboBox',
-        "dojo/topic"
+        'dijit/form/ComboBox'
     ],
-    function (declare, arrayUtil, topic, on, domConstruct, query, Memory, registry, _WidgetBase, _TemplatedMixin, Form, CheckBox, WidgetsInTemplateMixin, FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin, template, LabelManager, NoteManager, RelationManager, Select, FilteringSelect, ValidationTextBox, Validate, NumberTextBox, Button, domForm, TableContainer, TextBox, ComboBox, topic) {
+    function (declare, arrayUtil, topic, on, domConstruct, query, Memory, registry, _WidgetBase, _TemplatedMixin, Form, CheckBox, WidgetsInTemplateMixin, FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin, template, LabelManager, NoteManager, RelationManager, Select, FilteringSelect, ValidationTextBox, Validate, NumberTextBox, Button, domForm, TableContainer, TextBox, ComboBox) {
         return declare([
                 Form, _WidgetBase, WidgetsInTemplateMixin, _TemplatedMixin, FormMgrMixin,
                 FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin

@@ -1,3 +1,10 @@
+0.3.0 (??-??-2014)
+------------------
+
+- First version of admin userinterface.
+- Added RDF download to the public version.
+  
+
 0.2.0 (16-05-2014)
 ------------------
 

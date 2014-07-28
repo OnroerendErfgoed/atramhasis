@@ -1,18 +1,14 @@
 define([
-    'dojo/has', 'require',
-    "dojo/store/Memory", "dojo/store/Cache", "dojo/store/JsonRest", "dojo/store/Observable",
-    'dojo/_base/sniff'
-], function (has, require, Memory, Cache, JsonRest, Observable) {
+	'./App',
+	'dojo/domReady!'
+], function (
+	App
+) {
+	'use strict';
+
     var app = window.app = {};
 
-    if (has('host-browser')) {
+	app.main = new App().placeAt("appDiv");
 
-        require([ './App', 'dojo/domReady!' ], function (App) {
-            app.main = new App().placeAt("appDiv");
-
-            app.main.startup();
-        })
-    } else {
-        console.log("server");
-    }
+	app.main.startup();
 });

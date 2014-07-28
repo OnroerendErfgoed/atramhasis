@@ -1,37 +1,25 @@
+{% if request.registry.settings['dojo.mode'] == 'dist' %}
+	{% set release_dir = 'atramhasis:static/admin/dist' %}
+{% else %}
+	{% set release_dir = 'atramhasis:static/admin/src' %}
+{% endif %}
 <html>
 <head>
-    <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/App.css') }}">
-    <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/FilteredGrid.css') }}">
-    <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/ConceptForm.css') }}">
-    <link rel="stylesheet" href="{{ request.static_path('atramhasis:static/admin/src/app/resources/ConceptDetail.css') }}">
+    <link rel="stylesheet" href="{{ request.static_path(release_dir + '/app/resources/App.css') }}">
     <title>Atramhasis Admin</title>
 </head>
 <body class="claro">
 
-    <div id='appDiv'></div>
-    <script data-dojo-config="async: 1, tlmSiblingOfDojo: 0, isDebug: 1" src="{{ request.static_path('atramhasis:static/admin/src/dojo/dojo.js') }}"></script>
+	<div id='appDiv'></div>
+
+    <script src="{{ request.static_path(release_dir + '/dojoConfig.js') }}"></script>
 	<script type="text/javascript">
-        (function () {
-            // let the loader know where to look for packages
-            var config = {
-                baseUrl: '{{ request.static_path("atramhasis:static/admin/src/") }}',
-                packages: [
-                    'dojo',
-                    'dijit',
-                    'dojox',
-                    'dgrid',
-                    'put-selector',
-                    'xstyle',
-                    { name: 'app', location: 'app', map: {} }
-                ]
-            };
-            require(config, ['app']);
-
-
-
-        })();
+		dojoConfig.baseUrl = '{{ request.static_path(release_dir) }}';
 	</script>
-
+    <script src="{{ request.static_path(release_dir + '/dojo/dojo.js') }}"></script>
+	<script type="text/javascript">
+		require(dojoConfig, ['app']);
+	</script>
 
 </body>
 </html>
