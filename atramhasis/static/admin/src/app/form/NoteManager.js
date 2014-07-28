@@ -195,7 +195,7 @@ define([
                 dlg.hide();
             };
             cancelBtn.onClick = function () {
-                this.notes = lang.clone(this.tempNotes);
+                self.notes = lang.clone(self.tempNotes);
                 dlg.hide();
             };
             on(dlg, "hide", function () {
@@ -329,11 +329,18 @@ define([
                     var noteToSend = {
                         "type": note.typeValue,
                         "language": note.languageValue,
-                        "label": note.note
+                        "label": note.label
                     };
                     notesToSend.push(noteToSend);
                 });
                 return notesToSend;
+            }
+            else
+            {
+                return  arrayUtil.map(this.notes, function (note) {
+                        return {"type": note.typeValue, "language": note.languageValue, "label": note.label};
+                        });
+
             }
         },
         reset: function () {

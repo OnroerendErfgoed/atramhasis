@@ -362,9 +362,20 @@ define([
 
                 },
                 getLabels: function () {
-                    return  arrayUtil.map(this.labelGrid.store.data, function (label) {
+                    if(this.labelGrid)
+                    {
+                     return  arrayUtil.map(this.labelGrid.store.data, function (label) {
                         return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
-                    });
+                        });
+                    }
+                    else
+                    {
+                        return  arrayUtil.map(this.labels, function (label) {
+                        return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
+                        });
+
+                    }
+
                 },
 
                 setLabels: function (labels) {
