@@ -127,8 +127,8 @@ define([
                                     label: self.titleLabel.get('value'),
                                     language: self.languageComboBox.get('displayedValue'),
                                     languageValue: self.languageComboBox.get('value'),
-                                    type: self.labelTypeComboBox.get('displayedValue'),
-                                    typeValue: self.labelTypeComboBox.get('value')});
+                                    type:self.labelTypeComboBox.get('value') ,
+                                    typeDisplayed: self.labelTypeComboBox.get('displayedValue')});
                                 self.labelGrid.resize();
                                 self.labelGrid.refresh();
 
@@ -225,8 +225,8 @@ define([
                         {label: "Title", field: "label"},
                         {label: "Language", field: "language"},
                         {label: "Language", field: "languageValue", unhidable: true, hidden: true},
-                        {label: "Type", field: "type"},
-                        {label: "Type", field: "typeValue", unhidable: true, hidden: true},
+                        {label: "Type", field: "typeDisplayed"},
+                        {label: "Type", field: "type", unhidable: true, hidden: true},
                         editor({label: " ", field: 'button',
                                 editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
 
@@ -236,7 +236,7 @@ define([
                                     grid.store.remove(itemToDelete);
                                     grid.resize();
                                     grid.refresh();
-                                   // self._checkPrefLabelRules(row.data.typeValue);
+                                   // self._checkPrefLabelRules(row.data.type);
                                 }
                                 }},
                             Button)
@@ -280,7 +280,7 @@ define([
                         return item.type == typevalue;
                     });
                     return arrayUtil.map(filteredItems, function (item) {
-                        return {label: item.label, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+                        return {label: item.label, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: item.type, typeDisplayed: typeToBeDisplayed};
                     });
                 },
                 _getLanguageToDisplay: function (language) {

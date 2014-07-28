@@ -5,16 +5,15 @@ define([
     "dojo/dom-class",
     "dojo/on",
     "dojo/topic",
-
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     "dijit/ConfirmDialog",
-
+     "dojo/topic",
+    "./form/ConceptDetailList",
     'dojo/text!./templates/ConceptDetail.html',
-
     "dijit/TitlePane"
-], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, ConfirmDialog, template) {
+], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, ConfirmDialog,topic,ConceptDetailList, template) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -36,7 +35,28 @@ define([
 
 
         postCreate: function () {
-            var self = this;
+
+
+
+           var self = this;
+
+           self.prefLabelList = new ConceptDetailList({ }, self.prefLabelListNode);
+           self.altLabelList = new ConceptDetailList({}, self.altLabelListNode);
+           self.hiddenLabelList = new ConceptDetailList({}, self.hiddenLabelListNode);
+           self.changeNoteList = new ConceptDetailList({ }, self.changeNoteListNode);
+           self.definitionList = new ConceptDetailList({}, self.definitionListNode);
+           self.editorialNoteList = new ConceptDetailList({}, self.editorialNoteListNode);
+           self.exampleList = new ConceptDetailList({ }, self.exampleListNode);
+           self.historyNoteList = new ConceptDetailList({}, self.historyNoteListNode);
+           self.scopeNoteList = new ConceptDetailList({}, self.scopeNoteListNode);
+           self.noteList = new ConceptDetailList({}, self.noteListNode);
+           self.memberofList = new ConceptDetailList({}, self.memberofListNode);
+           self.broaderList = new ConceptDetailList({}, self.broaderListNode);
+           self.narrowerList = new ConceptDetailList({}, self.narrowerListNode);
+           self.relatedList = new ConceptDetailList({}, self.relatedListNode);
+           self.membersList = new ConceptDetailList({}, self.membersListNode);
+           self.memberofList = new ConceptDetailList({}, self.memberofListNode);
+
 
             var actionNode = this.actionNode;
 
@@ -75,7 +95,25 @@ define([
                 return false;
             });
 
-            this._buidList(this.prefLabelListNode, this._mapLabelsForList(this.labels, "prefLabel"), "Preferred labels", false);
+            self.prefLabelList.buidList(self.prefLabelList.mapLabelsForList(self.labels, "prefLabel"), "Preferred labels", false);
+            self.altLabelList.buidList(self.altLabelList.mapLabelsForList(self.labels, "altLabel"), "Alternate labels", false);
+            self.hiddenLabelList.buidList( self.hiddenLabelList.mapLabelsForList(self.labels, "hiddenLabel"), "Hidden labels", false);
+
+            self.definitionList.buidList(self.definitionList.mapNotesForList(self.notes, "definition"), "Definition", false);
+            self.changeNoteList.buidList(self.changeNoteList.mapNotesForList(self.notes, "changeNote"), "Change note", false);
+            self.editorialNoteList.buidList(self.editorialNoteList.mapNotesForList(self.notes, "editorialNote"), "Editorial note", false);
+            self.exampleList.buidList( self.exampleList.mapNotesForList(self.notes, "example"), "Example", false);
+            self.historyNoteList.buidList(self.historyNoteList.mapNotesForList(self.notes, "historyNote"), "Historynote", false);
+            self.scopeNoteList.buidList(self.scopeNoteList.mapNotesForList(self.notes, "scopeNote"), "Scopenote", false);
+            self.noteList.buidList(self.noteList.mapNotesForList(self.notes, "note"), "Note", false);
+
+            self.broaderList.buidList(self.broaderList.mapRelationsForList(self.broader), "Broader", true);
+            self.narrowerList.buidList(self.narrowerList.mapRelationsForList(self.narrower), "Narrower", true);
+            self.relatedList.buidList(self.relatedList.mapRelationsForList(self.related), "Related", true);
+            self.membersList.buidList(self.membersList.mapRelationsForList(self.members), "Members", true);
+            self.memberofList.buidList(self.memberofList.mapRelationsForList(self.member_of), "Member of", true);
+
+      /*      this._buidList(this.prefLabelListNode, this._mapLabelsForList(this.labels, "prefLabel"), "Preferred labels", false);
             this._buidList(this.altLabelListNode, this._mapLabelsForList(this.labels, "altLabel"), "Alternate labels", false);
             this._buidList(this.hiddenLabelListNode, this._mapLabelsForList(this.labels, "hiddenLabel"), "Hidden labels", false);
 
@@ -91,9 +129,20 @@ define([
             this._buidList(this.narrowerListNode, this._mapRelationsForList(this.narrower), "Narrower", true);
             this._buidList(this.relatedListNode, this._mapRelationsForList(this.related), "Related", true);
             this._buidList(this.membersListNode, this._mapRelationsForList(this.members), "Members", true);
-            this._buidList(this.memberofListNode, this._mapRelationsForList(this.member_of), "Member of", true);
-        },
+            this._buidList(this.memberofListNode, this._mapRelationsForList(this.member_of), "Member of", true);*/
 
+             topic.subscribe("conceptDetail.refresh",function (refreshedConcept) {
+
+
+
+
+             });
+
+        },
+        _refreshConceptDetail:function()
+        {
+
+        },
         _mapLabelsForList: function (labels, type) {
             var filteredItems = arrayUtil.filter(labels, function (item) {
                 return item.type == type;

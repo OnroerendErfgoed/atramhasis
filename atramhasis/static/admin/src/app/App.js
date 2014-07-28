@@ -78,7 +78,7 @@ define([
             var conceptForm = new ConceptForm();
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
-                content: conceptForm,
+                content: conceptForm
 
             }).placeAt(document.body);
 
@@ -256,6 +256,10 @@ define([
                                 successNode: true
                             });
                             conceptDialog && conceptDialog.resize();
+                            //refresh Concept Detail widget.
+                         self.thesauri.stores[schemeid].get(form.concept_id).then(function (item) {
+                             topic.publish("conceptDetail.refresh", item);
+                         });
                         },
                         function (error) {
                             console.log("An error occurred: " + error);

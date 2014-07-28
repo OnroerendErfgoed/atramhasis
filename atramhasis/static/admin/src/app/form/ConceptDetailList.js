@@ -6,9 +6,10 @@ define([
     "dojo/_base/array",
     "dojo/dom-construct",
     "dojo/dom-class",
-     "dojo/topic",
+    "dojo/topic",
+    "dojo/on",
     "dojo/text!./templates/ConceptDetailList.html"
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare,arrayUtil,domConstruct,domClass,topic, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic,on, template) {
     return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
 
@@ -29,9 +30,9 @@ define([
             this.inherited(arguments);
         },
 
-       mapLabelsForList: function (labels, type) {
+        mapLabelsForList: function (labels, type) {
             var filteredItems = arrayUtil.filter(labels, function (item) {
-                return item.typeValue == type;
+                return item.type == type;
             });
             return arrayUtil.map(filteredItems, function (item) {
                 return {"id": "", "mainlabel": item.label, "sublabel": item.language};
@@ -56,7 +57,7 @@ define([
         buidList: function (items, title, clickable) {
 
             this.reset();
-            var node=this.ConceptListNode;
+            var node = this.ConceptListNode;
             if (items && items.length > 0) {
 
                 domConstruct.place("<h3>" + title + ":</h3>", node, "first");
@@ -88,8 +89,45 @@ define([
                 });
             }
         },
-        reset:function()
-        {
+        _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
+
+            var self = this;
+            var filteredItems = arrayUtil.filter(labels, function (item) {
+                return item.type == typevalue;
+            });
+            return arrayUtil.map(filteredItems, function (item) {
+                return {label: item.label, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+            });
+        },
+        _mapNoteToDisplayInGrid: function (notes, typevalue, typeToBeDisplayed) {
+
+            var self = this;
+            var filteredItems = arrayUtil.filter(notes, function (item) {
+                return item.type == typevalue;
+            });
+
+            return arrayUtil.map(filteredItems, function (item) {
+                return {label: item.note, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+            });
+        },
+        _getLanguageToDisplay: function (language) {
+            switch (language) {
+                case "nl":
+                    return "NL";
+                    break;
+                case "fr":
+                    return "FR";
+                    break;
+                case "en":
+                    return "EN";
+                    break;
+                default:
+                    return language;
+                    break;
+            }
+        },
+
+        reset: function () {
 
             domConstruct.empty(this.ConceptListNode);
 
