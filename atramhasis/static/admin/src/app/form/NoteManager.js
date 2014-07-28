@@ -188,8 +188,6 @@ define([
             addBtn.onClick = function () {
 
                 self._createNodeList(self.noteGrid.store.data);
-                self.notes = self.noteGrid.store.data;
-
                 dlg.hide();
             };
             cancelBtn.onClick = function () {
@@ -197,6 +195,7 @@ define([
                 dlg.hide();
             };
             on(dlg, "hide", function () {
+                self.notes = self.noteGrid.store.data;
                 noteArea.destroy();
                 languageComboBox.destroy();
                 labelComboBox.destroy();

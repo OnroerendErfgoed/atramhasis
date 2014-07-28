@@ -171,7 +171,6 @@ define([
                         dlg.hide();
                     };
                     cancelBtn.onClick = function () {
-                        self.labels = lang.clone(self.tempLabels);
                         dlg.hide();
                     };
 
@@ -183,6 +182,7 @@ define([
                     );
 
                     on(dlg, "hide", function () {
+                        self.labels = lang.clone(self.tempLabels);
                         titleLabel.destroy();
                         labelTypeComboBox.destroy();
                         langStoreComboBox.destroy();
