@@ -68,31 +68,6 @@ define([
                     }
                     return false;
                 },
-
-         /*       _createRelationList: function () {
-                    var self = this;
-                    var relListNode = this.relationListNode;
-                    query("li", relListNode).forEach(domConstruct.destroy);
-                    arrayUtil.forEach(this._relations, function (rel) {
-                        var li = domConstruct.create("li", {
-                            title: rel.path
-                        }, relListNode);
-
-                        var span = domConstruct.create("span", {
-                            innerHTML: rel.label + " <em>(" + rel.id + ")</em>"
-                        }, li);
-
-                        var btn = new Button({
-                            label: "remove this relation",
-                            showLabel: false,
-                            iconClass: 'minIcon',
-                            onClick: function () {
-                                self._removeRelationFromList(rel);
-                            }
-                        }).placeAt(li);
-                    });
-                },*/
-
                  _createNodeList: function () {
                  var self=this;
                  self.relationsList.buidList(self.relationsList.mapRelationsForList(self._relations), self.title, false);
@@ -149,13 +124,6 @@ define([
                         dndParams: ["onDndDrop", "itemCreator", "onDndCancel", "checkAcceptance", "checkItemAcceptance", "dragThreshold", "betweenThreshold", "singular"],
                         singular: true
                     }).placeAt(dlg.containerNode);
-//            myTree.onOpen = function(){
-//                dlg.resize();
-//            };
-//            myTree.onClose = function(){
-//                dlg.resize();
-//            };
-
                     var actionBar = domConstruct.create("div", {
                         class: "dijitDialogPaneActionBar",
                         width: "300px"

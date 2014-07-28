@@ -28,7 +28,6 @@ define(
                 Form, _WidgetBase, WidgetsInTemplateMixin, _TemplatedMixin, FormMgrMixin,
                 FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin
             ], {
-
                 templateString: template,
                 widgetsInTemplate: true,
                 dialog: null,
@@ -111,7 +110,6 @@ define(
                         }
                     });
                     this.typeComboBox = typeComboBox;
-
                     typeComboBox.startup();
                     // Add the 3 text boxes to the TableContainer
                     myTable.addChild(schemebox);
@@ -123,11 +121,9 @@ define(
                         self.conceptId = null;
                     });
                 },
-
                 startup: function () {
                     this.inherited(arguments);
                 },
-
                 onSubmit: function (evt) {
                     evt.preventDefault();
                     this.inherited(arguments);
@@ -145,7 +141,6 @@ define(
                         console.log(formObj);
                         topic.publish("conceptform.submit", formObj);
                     }
-
                     this.show({
                         spinnerNode: true,
                         formNode: false,
@@ -155,11 +150,9 @@ define(
 
                     return false;
                 },
-
                 onCancel: function () {
                     //hide implemented on dialog level
                 },
-
                 _resetWidgets: function () {
                     this.broaderManager.reset("Broader");
                     this.narrowerManager.reset("Narrower");
@@ -172,23 +165,15 @@ define(
 
                 init: function (scheme, concept) {
                     console.log("init cdialog: " + scheme);
-
                     this.reset();
                     this.scheme = scheme;
-                    //registry.byId("cscheme").set("value", scheme);
-                    /*this.schemeNode.innerHTML = "Scheme: " + scheme;*/
-                    // this.schemeNodeLabel.innerHTML="Scheme: ";
-                    // this.schemeNode.set("value",scheme);
-
                     var schemebox = dijit.byId("schemebox");
                     schemebox.set('value', scheme);
-
                     this.broaderManager.setScheme(scheme);
                     this.narrowerManager.setScheme(scheme);
                     this.relatedManager.setScheme(scheme);
                     this.membersManager.setScheme(scheme);
                     this.memberofManager.setScheme(scheme);
-
                     if (concept) {
                         console.log("editing existing concept: " + concept.label);
                         this.conceptId = concept.id;
@@ -199,7 +184,6 @@ define(
                                  this.membersManager.setEditRelationButton("Members");
                              }
                         }
-
                         if (concept.member_of)
                         {
                          this.memberofManager.setRelations(concept.member_of);
@@ -208,8 +192,6 @@ define(
                                 this.memberofManager.setEditRelationButton("Member of");
                             }
                         }
-
-
                         if (concept.broader)
                         {
                             this.broaderManager.setRelations(concept.broader);
@@ -244,10 +226,7 @@ define(
                                 this.noteManager.setEditButton();
                             }
                         }
-
-
                     }
-
                     this.show({
                         spinnerNode: false,
                         formNode: true,
@@ -255,21 +234,14 @@ define(
                     });
                     this.dialog && this.dialog.layout();
                 },
-
                 addBroader: function (broader) {
                     console.log("add existing broader: " + broader.label);
                     this.broaderManager.setRelations(broader);
-
-
                 },
-
                 addMemberOf: function (memberOf) {
                     console.log("add existing broader: " + memberOf.label);
                     this.memberofManager.setRelations(memberOf);
-
-
                 }
-
             }
         )
     }
