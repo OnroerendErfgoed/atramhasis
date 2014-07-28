@@ -168,6 +168,7 @@ define([
 
                         self._createNodeList(self.labelGrid.store.data);
                         self.labels = self.labelGrid.store.data;
+                        self.SetEditLabelButton();
                         dlg.hide();
                     };
                     cancelBtn.onClick = function () {

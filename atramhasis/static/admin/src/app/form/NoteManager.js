@@ -188,6 +188,8 @@ define([
             addBtn.onClick = function () {
 
                 self._createNodeList(self.noteGrid.store.data);
+                self.notes=self.noteGrid.store.data;
+                self.setEditNoteButton();
                 dlg.hide();
             };
             cancelBtn.onClick = function () {
@@ -362,7 +364,7 @@ define([
             this.tempNotes = lang.clone(this.notes);
         },
 
-        setEditButton:function()
+        setEditNoteButton:function()
         {
             this.editNoteButton.set("label","Edit Notes");
              this.editNoteButton.set("iconClass","");

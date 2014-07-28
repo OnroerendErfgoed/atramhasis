@@ -50,7 +50,6 @@ define([
            self.historyNoteList = new ConceptDetailList({}, self.historyNoteListNode);
            self.scopeNoteList = new ConceptDetailList({}, self.scopeNoteListNode);
            self.noteList = new ConceptDetailList({}, self.noteListNode);
-           self.memberofList = new ConceptDetailList({}, self.memberofListNode);
            self.broaderList = new ConceptDetailList({}, self.broaderListNode);
            self.narrowerList = new ConceptDetailList({}, self.narrowerListNode);
            self.relatedList = new ConceptDetailList({}, self.relatedListNode);

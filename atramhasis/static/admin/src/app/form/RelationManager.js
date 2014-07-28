@@ -143,6 +143,7 @@ define([
                                 return item.label;
                             });
                             self._addRelation(sel.concept_id, sel.label, path);
+                            self.setEditRelationButton();
                             dlg.hide();
                         }
                         else {
