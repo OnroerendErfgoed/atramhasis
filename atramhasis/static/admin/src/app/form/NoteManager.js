@@ -11,17 +11,15 @@ define([
     "dojox/layout/TableContainer",
     "dgrid/OnDemandGrid",
     "dgrid/extensions/ColumnHider",
-    "dojo/store/Observable",
     "dgrid/editor",
     "dojo/_base/lang",
     "dojo/store/Memory",
     "dojo/on",
     "dojo/store/JsonRest",
-    "dojo/query",
     "dojo/_base/array",
     "./ConceptDetailList",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, Observable, editor, lang, Memory, on, JsonRest, query, arrayUtil, ConceptDetailList, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, editor, lang, Memory, on, JsonRest, arrayUtil, ConceptDetailList, template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
         name: 'NoteManager',
@@ -233,12 +231,9 @@ define([
                 data: []
 
             });
-
-            var observableStore = new Observable(gridStore);
-
-            var grid = new (declare([OnDemandGrid, ColumnHider]))({
+           var grid = new (declare([OnDemandGrid, ColumnHider]))({
                 columns: columns,
-                store: observableStore,
+                store: gridStore,
                 selectionMode: "single" // for Selection; only select a single row at a time
             }, gridDiv);
 

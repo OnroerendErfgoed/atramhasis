@@ -3,7 +3,6 @@ define([
         "dijit/Dialog",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
-        "dijit/form/Form",
         "dijit/form/Button",
         "dijit/form/Select",
         "dgrid/OnDemandGrid",
@@ -12,9 +11,7 @@ define([
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/store/Memory",
-        "dojo/store/Observable",
         "dgrid/editor",
-        "dojo/query",
         "dgrid/extensions/ColumnHider",
         "dojo/_base/array",
         "dojo/on",
@@ -22,7 +19,7 @@ define([
         "dojo/text!./templates/LabelManager.html"
 
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil, on, ConceptDetailList, template) {
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, editor, ColumnHider, arrayUtil, on, ConceptDetailList, template) {
         return declare(
             "app/form/LabelManager",
             [WidgetBase, TemplatedMixin],
@@ -245,12 +242,9 @@ define([
                         data: []
 
                     });
-
-                    var observableStore = new Observable(gridStore);
-
                     var grid = new (declare([OnDemandGrid, ColumnHider]))({
                         columns: columns,
-                        store: observableStore,
+                        store: gridStore,
                         selectionMode: "single" // for Selection; only select a single row at a time
                     }, gridDiv);
 
