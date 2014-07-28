@@ -222,7 +222,7 @@ define(
                         {
                             this.noteManager.setNotes(concept.notes);
                             if(concept.notes.length>0) {
-                                this.noteManager.setEditButton();
+                                this.noteManager.setEditNoteButton();
                             }
                         }
                     }
