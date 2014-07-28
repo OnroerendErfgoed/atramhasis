@@ -3,6 +3,10 @@
 @import '../../dgrid/css/dgrid.css';
 @import '../../dgrid/css/skins/claro.css';
 
+@import 'FilteredGrid.css';
+@import 'ConceptForm.css';
+@import 'ConceptDetail.css';
+
 html, body {
     width: 100%;
     height: 100%;

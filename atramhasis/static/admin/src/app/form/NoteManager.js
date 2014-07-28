@@ -175,7 +175,7 @@ define([
 
             self.noteGrid = noteGrid;
             var actionBar = domConstruct.create("div", {
-                class: "dijitDialogPaneActionBar"
+                'class': "dijitDialogPaneActionBar"
             }, dlg.containerNode);
 
             var addBtn = new Button({

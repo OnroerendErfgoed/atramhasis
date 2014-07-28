@@ -125,7 +125,7 @@ define([
                         singular: true
                     }).placeAt(dlg.containerNode);
                     var actionBar = domConstruct.create("div", {
-                        class: "dijitDialogPaneActionBar",
+                        'class': "dijitDialogPaneActionBar",
                         width: "300px"
                     }, dlg.containerNode);
 
