@@ -1,43 +1,32 @@
-<form data-dojo-attach-point='containerNode'>
-    <div data-dojo-attach-point="formNode" class="cFormDialog">
 
-        <div data-dojo-attach-point="MyTable"></div>
+    <form data-dojo-attach-point='containerNode'>
+        <div style="width: 815px; max-height: 100%; overflow: auto;">
+        <div data-dojo-attach-point="formNode" class="cFormDialog">
+            <div data-dojo-attach-point="MyTable"></div>
+            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'labels', open:true">
+                <div data-dojo-attach-point="labelContainerNode"></div>
+            </div>
 
-
-
-
-
-
-    <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'labels', open:true">
-
-            <div data-dojo-attach-point="labelContainerNode"> </div>
-    </div>
-
-    <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'notes', open:true">
-             <div data-dojo-attach-point="noteContainerNode"></div>
-    </div>
-
-    <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'relations', open:true">
-        <div data-dojo-attach-point="broaderContainerNode"></div>
-        <div data-dojo-attach-point="narrowerContainerNode"></div>
-        <div data-dojo-attach-point="relatedContainerNode"></div>
-        <div data-dojo-attach-point="membersContainerNode"></div>
-        <div data-dojo-attach-point="memberofContainerNode"></div>
-    </div>
-
-
-
-        <div class="dijitDialogPaneActionBar">
-            <button data-dojo-type='dijit/form/Button' type='submit'>save</button>
-            <button data-dojo-type='dijit/form/Button' data-dojo-attach-event="onClick:onCancel">cancel</button>
+            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'notes', open:true">
+                <div data-dojo-attach-point="noteContainerNode"></div>
+            </div>
+            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'relations', open:true">
+                <div data-dojo-attach-point="broaderContainerNode"></div>
+                <div data-dojo-attach-point="narrowerContainerNode"></div>
+                <div data-dojo-attach-point="relatedContainerNode"></div>
+                <div data-dojo-attach-point="membersContainerNode"></div>
+                <div data-dojo-attach-point="memberofContainerNode"></div>
+            </div>
+            <div class="dijitDialogPaneActionBar" style="width: 795px;">
+                <button data-dojo-type='dijit/form/Button' type='submit'>save</button>
+                <button data-dojo-type='dijit/form/Button' data-dojo-attach-event="onClick:onCancel">cancel</button>
+            </div>
         </div>
-    </div>
-
-    <div data-dojo-attach-point="spinnerNode" style="display:none">
-        Please wait…
-    </div>
-
-    <div data-dojo-attach-point="successNode" style="display:none">
-        The concept or collection has been added to the thesaurus
-    </div>
-</form>
+        <div data-dojo-attach-point="spinnerNode" style="display:none">
+            Please wait…
+        </div>
+        <div data-dojo-attach-point="successNode" style="display:none">
+            The concept or collection has been added to the thesaurus
+        </div>
+            </div>
+    </form>
