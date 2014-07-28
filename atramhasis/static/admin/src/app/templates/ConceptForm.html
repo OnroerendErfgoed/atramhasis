@@ -1,6 +1,6 @@
 
-    <form data-dojo-attach-point='containerNode'>
-        <div style="max-width: 820px; max-height: 100%; overflow: auto;">
+    <form data-dojo-attach-point='containerNode' style="height:420px;width: 720px;overflow:scroll;">
+
         <div data-dojo-attach-point="formNode" class="cFormDialog">
             <div data-dojo-attach-point="MyTable"></div>
             <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'labels', open:true">
@@ -17,14 +17,12 @@
                 <div data-dojo-attach-point="membersContainerNode"></div>
                 <div data-dojo-attach-point="memberofContainerNode"></div>
             </div>
-            <div class="dijitDialogPaneActionBar" style="width: 795px;">
+            <div class="dijitDialogPaneActionBar" style="width: 700px">
                 <button data-dojo-type='dijit/form/Button' type='submit'>save</button>
                 <button data-dojo-type='dijit/form/Button' data-dojo-attach-event="onClick:onCancel">cancel</button>
             </div>
         </div>
-        <div data-dojo-attach-point="spinnerNode" style="display:none">
+        <div data-dojo-attach-point="spinnerNode" style="display:none;max-height:200px">
             Please wait…
         </div>
-
-            </div>
     </form>
