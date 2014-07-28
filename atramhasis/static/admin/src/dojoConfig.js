@@ -1,6 +1,6 @@
 /*jshint unused:false*/
 var dojoConfig = {
-	async: false,
+	async: true,
 	parseOnLoad: false,
 	tlmSiblingOfDojo: false,
 	isDebug: true,
