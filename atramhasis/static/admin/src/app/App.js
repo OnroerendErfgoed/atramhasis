@@ -78,8 +78,8 @@ define([
             var conceptForm = new ConceptForm();
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
-                content: conceptForm,
-                style: "width: 500px"
+                content: conceptForm
+
             }).placeAt(document.body);
 
             on(conceptForm, "cancel", function () {
@@ -249,16 +249,23 @@ define([
                         .then(
                         function () {
                             filteredGrid.conceptGrid.refresh();
-                            console.log("row edited");
-                            conceptDialog.content.show({
-                                spinnerNode: false,
-                                formNode: false,
-                                successNode: true
-                            });
-                            conceptDialog && conceptDialog.resize();
+
+                            alert(" The concept or collection has been added to the thesaurus");
+                            //refresh Concept Detail widget.
+
+                         self.thesauri.stores[self.currentScheme].get(form.concept_id).then(function (item) {
+                             topic.publish("conceptDetail.refresh", item);
+                         });
+                         conceptDialog.hide();
                         },
                         function (error) {
                             console.log("An error occurred: " + error);
+                        alert("Can't add the concept or collection to the database. Please check if business rules are respected");
+                        conceptDialog.content.show({
+                                spinnerNode: false,
+                                formNode: true,
+                                successNode: false
+                            });
                         }
                     );
                 }

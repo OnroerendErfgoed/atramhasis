@@ -27,7 +27,6 @@ define(
                 Form, _WidgetBase, WidgetsInTemplateMixin, _TemplatedMixin, FormMgrMixin,
                 FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin
             ], {
-
                 templateString: template,
                 widgetsInTemplate: true,
                 dialog: null,
@@ -49,28 +48,28 @@ define(
                     }, this.noteContainerNode);
                     this.broaderManager = new RelationManager({
                         'name': 'broaderMgr',
-                        'title': 'Broader:',
+                        'title': 'Broader',
                         'scheme': this.scheme
                     }, this.broaderContainerNode);
                     this.narrowerManager = new RelationManager({
                         'name': 'narrowerMgr',
-                        'title': 'Narrower:',
+                        'title': 'Narrower',
                         'scheme': this.scheme
                     }, this.narrowerContainerNode);
                     this.relatedManager = new RelationManager({
                         'name': 'relatedMgr',
-                        'title': 'Related:',
+                        'title': 'Related',
                         'scheme': this.scheme
                     }, this.relatedContainerNode);
                     this.membersManager = new RelationManager({
                         'name': 'membersMgr',
-                        'title': 'Members:',
+                        'title': 'Members',
                         'scheme': this.scheme,
                         'style': 'display: none'
                     }, this.membersContainerNode);
                     this.memberofManager = new RelationManager({
                         'name': 'memberofMgr',
-                        'title': 'Member of:',
+                        'title': 'Member of',
                         'scheme': this.scheme
                     }, this.memberofContainerNode);
                     var myTable = new TableContainer({cols: 2, spacing: 10}, this.MyTable);
@@ -110,7 +109,6 @@ define(
                         }
                     });
                     this.typeComboBox = typeComboBox;
-
                     typeComboBox.startup();
                     // Add the 3 text boxes to the TableContainer
                     myTable.addChild(schemebox);
@@ -122,11 +120,9 @@ define(
                         self.conceptId = null;
                     });
                 },
-
                 startup: function () {
                     this.inherited(arguments);
                 },
-
                 onSubmit: function (evt) {
                     evt.preventDefault();
                     this.inherited(arguments);
@@ -144,7 +140,6 @@ define(
                         console.log(formObj);
                         topic.publish("conceptform.submit", formObj);
                     }
-
                     this.show({
                         spinnerNode: true,
                         formNode: false,
@@ -154,53 +149,83 @@ define(
 
                     return false;
                 },
-
                 onCancel: function () {
                     //hide implemented on dialog level
                 },
-
                 _resetWidgets: function () {
-                    this.broaderManager.reset();
-                    this.narrowerManager.reset();
-                    this.relatedManager.reset();
-                    this.membersManager.reset();
-                    this.memberofManager.reset();
+                    this.broaderManager.reset("Broader");
+                    this.narrowerManager.reset("Narrower");
+                    this.relatedManager.reset("Related");
+                    this.membersManager.reset("Members");
+                    this.memberofManager.reset("Member of");
                     this.labelManager.reset();
                     this.noteManager.reset();
                 },
 
                 init: function (scheme, concept) {
                     console.log("init cdialog: " + scheme);
-
                     this.reset();
                     this.scheme = scheme;
-                    //registry.byId("cscheme").set("value", scheme);
-                    /*this.schemeNode.innerHTML = "Scheme: " + scheme;*/
-                    // this.schemeNodeLabel.innerHTML="Scheme: ";
-                    // this.schemeNode.set("value",scheme);
-
                     var schemebox = dijit.byId("schemebox");
                     schemebox.set('value', scheme);
-
                     this.broaderManager.setScheme(scheme);
                     this.narrowerManager.setScheme(scheme);
                     this.relatedManager.setScheme(scheme);
                     this.membersManager.setScheme(scheme);
                     this.memberofManager.setScheme(scheme);
-
                     if (concept) {
                         console.log("editing existing concept: " + concept.label);
                         this.conceptId = concept.id;
                         this.typeComboBox.set("value", concept.type);
-                        if (concept.members) this.membersManager.setRelations(concept.members);
-                        if (concept.member_of) this.memberofManager.setRelations(concept.member_of);
-                        if (concept.broader) this.broaderManager.setRelations(concept.broader);
-                        if (concept.narrower) this.narrowerManager.setRelations(concept.narrower);
-                        if (concept.related) this.relatedManager.setRelations(concept.related);
-                        if (concept.labels) this.labelManager.setLabels(concept.labels);
-                        if (concept.notes) this.noteManager.setNotes(concept.notes);
-                    }
+                        if (concept.members) {
+                            this.membersManager.setRelations(concept.members);
+                             if(concept.members.length>0) {
+                                 this.membersManager.setEditRelationButton("Members");
+                             }
+                        }
+                        if (concept.member_of)
+                        {
+                         this.memberofManager.setRelations(concept.member_of);
 
+                            if(concept.member_of.length>0) {
+                                this.memberofManager.setEditRelationButton("Member of");
+                            }
+                        }
+                        if (concept.broader)
+                        {
+                            this.broaderManager.setRelations(concept.broader);
+                             if(concept.broader.length>0) {
+                                 this.broaderManager.setEditRelationButton("Broader");
+                             }
+                        }
+                        if (concept.narrower)
+                        {
+                            this.narrowerManager.setRelations(concept.narrower);
+                             if(concept.narrower.length>0) {
+                                 this.narrowerManager.setEditRelationButton("Narrower");
+                             }
+                        }
+                        if (concept.related)
+                        {
+                            this.relatedManager.setRelations(concept.related);
+                             if(concept.related.length>0) {
+                                 this.relatedManager.setEditRelationButton("Related");
+                             }
+                        }
+                        if (concept.labels) {
+                            this.labelManager.setLabels(concept.labels);
+                                    if(concept.labels.length>0) {
+                                        this.labelManager.SetEditLabelButton();
+                                    }
+                        }
+                        if (concept.notes)
+                        {
+                            this.noteManager.setNotes(concept.notes);
+                            if(concept.notes.length>0) {
+                                this.noteManager.setEditNoteButton();
+                            }
+                        }
+                    }
                     this.show({
                         spinnerNode: false,
                         formNode: true,
@@ -208,21 +233,14 @@ define(
                     });
                     this.dialog && this.dialog.layout();
                 },
-
                 addBroader: function (broader) {
                     console.log("add existing broader: " + broader.label);
                     this.broaderManager.setRelations(broader);
-
-
                 },
-
                 addMemberOf: function (memberOf) {
                     console.log("add existing broader: " + memberOf.label);
                     this.memberofManager.setRelations(memberOf);
-
-
                 }
-
             }
         )
     }
