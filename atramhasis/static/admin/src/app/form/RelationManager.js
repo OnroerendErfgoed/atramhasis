@@ -14,9 +14,10 @@ define([
         "dojo/store/JsonRest",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree",
+         "./ConceptDetailList",
         "dojo/text!./templates/RelationManager.html"
     ],
-    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory, Cache, JsonRest, ObjectStoreModel, Tree, template) {
+    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory, Cache, JsonRest, ObjectStoreModel, Tree,ConceptDetailList, template) {
         return declare(
             "app/form/RelationManager",
             [WidgetBase, TemplatedMixin],
@@ -29,7 +30,10 @@ define([
 
                 _scheme: null,
 
+
+
                 _relations: null,
+                EditRelationButton:null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -39,18 +43,17 @@ define([
                     this.inherited(arguments);
                     var self = this;
                     this._relations = [];
-
-                    this.relationLabel.innerHTML = this.title;
-
-                    new Button({
-                        label: "Add relation",
-                        showLabel: false,
+                   self.relationsList = new ConceptDetailList({ }, self.relationListNode);
+                   self.EditRelationButton= new Button({
+                        label:"Add "+ self.title,
+                        showLabel: true,
                         iconClass: 'plusIcon',
                         onClick: function () {
                             var dlg = self._createDialog();
                             dlg.show();
                         }
                     }, this.relationButton)
+
                 },
 
                 _addRelation: function (relId, lbl, path) {
@@ -60,34 +63,15 @@ define([
                     });
                     if (!found) {
                         this._relations.push({id: relId, label: lbl, path: path});
-                        this._createRelationList();
+                        this._createNodeList();
                         return true;
                     }
                     return false;
                 },
+                 _createNodeList: function () {
+                 var self=this;
+                 self.relationsList.buidList(self.relationsList.mapRelationsForList(self._relations), self.title, false);
 
-                _createRelationList: function () {
-                    var self = this;
-                    var relListNode = this.relationListNode;
-                    query("li", relListNode).forEach(domConstruct.destroy);
-                    arrayUtil.forEach(this._relations, function (rel) {
-                        var li = domConstruct.create("li", {
-                            title: rel.path
-                        }, relListNode);
-
-                        var span = domConstruct.create("span", {
-                            innerHTML: rel.label + " <em>(" + rel.id + ")</em>"
-                        }, li);
-
-                        var btn = new Button({
-                            label: "remove this relation",
-                            showLabel: false,
-                            iconClass: 'minIcon',
-                            onClick: function () {
-                                self._removeRelationFromList(rel);
-                            }
-                        }).placeAt(li);
-                    });
                 },
 
                 _removeRelationFromList: function (rel) {
@@ -140,13 +124,6 @@ define([
                         dndParams: ["onDndDrop", "itemCreator", "onDndCancel", "checkAcceptance", "checkItemAcceptance", "dragThreshold", "betweenThreshold", "singular"],
                         singular: true
                     }).placeAt(dlg.containerNode);
-//            myTree.onOpen = function(){
-//                dlg.resize();
-//            };
-//            myTree.onClose = function(){
-//                dlg.resize();
-//            };
-
                     var actionBar = domConstruct.create("div", {
                         'class': "dijitDialogPaneActionBar",
                         width: "300px"
@@ -166,6 +143,7 @@ define([
                                 return item.label;
                             });
                             self._addRelation(sel.concept_id, sel.label, path);
+                            self.setEditRelationButton();
                             dlg.hide();
                         }
                         else {
@@ -183,9 +161,12 @@ define([
                     return dlg
                 },
 
-                reset: function () {
+                reset: function (relationType) {
                     this._relations = [];
-                    this._createRelationList();
+                    this._createNodeList();
+                    var lab="Add "+relationType;
+                    this.EditRelationButton.set("label",lab);
+                    this.EditRelationButton.set("iconClass","plusIcon");
                 },
 
                 getRelations: function () {
@@ -196,7 +177,7 @@ define([
 
                 setRelations: function (relations) {
                     this._relations = relations;
-                    this._createRelationList();
+                    this._createNodeList();
                 },
 
                 close: function () {
@@ -210,6 +191,12 @@ define([
 
                 setScheme: function (scheme) {
                     this._scheme = scheme;
+
+                },
+                setEditRelationButton:function(relationType)
+                {
+                    this.EditRelationButton.set("label","Edit "+relationType);
+                     this.EditRelationButton.set("iconClass","");
 
                 }
             });

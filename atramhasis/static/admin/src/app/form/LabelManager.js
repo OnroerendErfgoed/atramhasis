@@ -3,7 +3,6 @@ define([
         "dijit/Dialog",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
-        "dijit/form/Form",
         "dijit/form/Button",
         "dijit/form/Select",
         "dgrid/OnDemandGrid",
@@ -12,16 +11,15 @@ define([
         "dojo/_base/lang",
         "dojo/dom-construct",
         "dojo/store/Memory",
-        "dojo/store/Observable",
         "dgrid/editor",
-        "dojo/query",
         "dgrid/extensions/ColumnHider",
         "dojo/_base/array",
         "dojo/on",
+        "./ConceptDetailList",
         "dojo/text!./templates/LabelManager.html"
 
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Form, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, Observable, editor, query, ColumnHider, arrayUtil, on, template) {
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, editor, ColumnHider, arrayUtil, on, ConceptDetailList, template) {
         return declare(
             "app/form/LabelManager",
             [WidgetBase, TemplatedMixin],
@@ -37,6 +35,8 @@ define([
                 labelTypeComboBox: null,
                 prefLanguage: null,
                 labels: null,
+                tempLabels: null,//this variable is used to recover the labels if user delete a label and then press on the cancel button
+                EditLabelButton: null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -46,22 +46,25 @@ define([
                     var self = this;
                     //noinspection CommaExpressionJS
 
-                    this.LabelLabel.innerHTML = this.title;
-
-                    new Button({
+                    self.EditLabelButton = new Button({
                         label: "Add Labels",
-                        showLabel: false,
+                        showLabel: true,
                         iconClass: 'plusIcon',
                         onClick: function () {
                             var dlg = self._createDialog();
                             if (self.labels) {
                                 self._setGrid(self.labels);
+                               // self._setLanguageComboBox(self.labels);
                             }
                             dlg.show();
                             self.labelGrid.resize();
                             self.labelGrid.refresh();
                         }
-                    }, this.labelButton)
+                    }, this.labelButton);
+
+                    this.prefLabelList = new ConceptDetailList({ }, this.prefLabelListNode);
+                    this.altLabelList = new ConceptDetailList({}, this.altLabelListNode);
+                    this.hiddenLabelList = new ConceptDetailList({}, this.hiddenLabelListNode);
 
 
                 },
@@ -121,16 +124,12 @@ define([
                                     label: self.titleLabel.get('value'),
                                     language: self.languageComboBox.get('displayedValue'),
                                     languageValue: self.languageComboBox.get('value'),
-                                    type: self.labelTypeComboBox.get('displayedValue'),
-                                    typeValue: self.labelTypeComboBox.get('value')});
+                                    type:self.labelTypeComboBox.get('value') ,
+                                    typeDisplayed: self.labelTypeComboBox.get('displayedValue')});
                                 self.labelGrid.resize();
                                 self.labelGrid.refresh();
 
-                                if (self.labelTypeComboBox.get('value') == "prefLabel") {
-
-                                    self.languageComboBox.removeOption(self.languageComboBox.get('value'));
-                                    self.prefLanguage = self.languageComboBox.get("options");
-                                }
+                                //self._checkPrefLabelRules(self.labelTypeComboBox.get('value'));
 
                             })
                         }
@@ -159,7 +158,7 @@ define([
                     }, dlg.containerNode);
 
                     var addBtn = new Button({
-                        "label": "Add"
+                        "label": "Save"
                     }).placeAt(actionBar);
                     var cancelBtn = new Button({
                         "label": "Cancel"
@@ -169,6 +168,7 @@ define([
 
                         self._createNodeList(self.labelGrid.store.data);
                         self.labels = self.labelGrid.store.data;
+                        self.SetEditLabelButton();
                         dlg.hide();
                     };
                     cancelBtn.onClick = function () {
@@ -176,20 +176,14 @@ define([
                     };
 
                     on(self.labelTypeComboBox, "change", function () {
-                            if (self.labelTypeComboBox.get('value') == "prefLabel") {
 
-                                self.languageComboBox.set("Options", self.prefLanguage);
-                                self.languageComboBox.reset();
-                            }
-                            else {
-                                self.languageComboBox.set("Options", self._getLanguages());
-                                self.languageComboBox.reset();
+                         //   self._checkPrefLabelRules(self.labelTypeComboBox.get('value'));
 
-                            }
                         }
                     );
 
                     on(dlg, "hide", function () {
+                        self.labels = lang.clone(self.tempLabels);
                         titleLabel.destroy();
                         labelTypeComboBox.destroy();
                         langStoreComboBox.destroy();
@@ -213,9 +207,9 @@ define([
 
                 _getLanguages: function () {
                     var languages = [
-                        {label: "NL", value: "nl"},
-                        {label: "Fr", value: "fr"},
-                        {label: "En", value: "en"}
+                        {label: "NL", value: "nl", disabled: false},
+                        {label: "FR", value: "fr", disabled: false},
+                        {label: "EN", value: "en", disabled: false}
 
                     ];
 
@@ -223,21 +217,24 @@ define([
 
                 },
                 _createGrid: function (gridDiv) {
+                    var self = this;
                     var columns;
                     columns = [
                         {label: "Title", field: "label"},
                         {label: "Language", field: "language"},
                         {label: "Language", field: "languageValue", unhidable: true, hidden: true},
-                        {label: "Type", field: "type"},
-                        {label: "Type", field: "typeValue", unhidable: true, hidden: true},
+                        {label: "Type", field: "typeDisplayed"},
+                        {label: "Type", field: "type", unhidable: true, hidden: true},
                         editor({label: " ", field: 'button',
                                 editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
 
                                     var row = grid.row(event);
+                                    self.languageComboBox.getOptions(row.data.languageValue).disabled=false;
                                     var itemToDelete = row.data.id;
                                     grid.store.remove(itemToDelete);
                                     grid.resize();
                                     grid.refresh();
+                                   // self._checkPrefLabelRules(row.data.type);
                                 }
                                 }},
                             Button)
@@ -246,12 +243,9 @@ define([
                         data: []
 
                     });
-
-                    var observableStore = new Observable(gridStore);
-
                     var grid = new (declare([OnDemandGrid, ColumnHider]))({
                         columns: columns,
-                        store: observableStore,
+                        store: gridStore,
                         selectionMode: "single" // for Selection; only select a single row at a time
                     }, gridDiv);
 
@@ -259,46 +253,150 @@ define([
 
                     return grid;
                 },
-
-
                 _createNodeList: function (labels) {
-                    var labelListNode = this.labelListNode;
-                    query("li", labelListNode).forEach(domConstruct.destroy);
-                    arrayUtil.forEach(labels, function (label) {
-                        domConstruct.create("li", {
-                            innerHTML: "<b>" + label.label + "</b> (<em>" + label.language + "</em>): " + label.type
-                        }, labelListNode);
-                    });
+                    var mapLabel = this.prefLabelList.mapLabelsForList(labels, "prefLabel");
+                    this.prefLabelList.buidList(mapLabel, "Preferred labels", false);
+                    mapLabel = this.altLabelList.mapLabelsForList(labels, "altLabel");
+                    this.altLabelList.buidList(mapLabel, "Alternate labels", false);
+                    mapLabel = this.hiddenLabelList.mapLabelsForList(labels, "hiddenLabel");
+                    this.hiddenLabelList.buidList(mapLabel, "Hidden labels", false);
                 },
-
                 _setGrid: function (labels) {
                     var gridStore = new Memory({
                         data: labels
 
                     });
                     this.labelGrid.set("store", gridStore);
+                },
+                _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
 
-
+                    var self = this;
+                    var filteredItems = arrayUtil.filter(labels, function (item) {
+                        return item.type == typevalue;
+                    });
+                    return arrayUtil.map(filteredItems, function (item) {
+                        return {label: item.label, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: item.type, typeDisplayed: typeToBeDisplayed};
+                    });
+                },
+                _getLanguageToDisplay: function (language) {
+                    switch (language) {
+                        case "nl":
+                            return "NL";
+                            break;
+                        case "fr":
+                            return "FR";
+                            break;
+                        case "en":
+                            return "EN";
+                            break;
+                        default:
+                            return language;
+                            break;
+                    }
                 },
 
+                //not in use for the moment
+                _checkPrefLabelRules: function (value) {
+                    var self = this;
+                    if (value == "prefLabel") {
+                        var filteredPrefLabel = arrayUtil.filter(self.labelGrid.store.data, function (item) {
 
+                                return item.typeValue == "prefLabel";
+
+                            }
+                        );
+                        if (filteredPrefLabel.length > 0) {
+                            arrayUtil.forEach(filteredPrefLabel, function (item) {
+                                    self.languageComboBox.getOptions(item.languageValue).disabled = true;
+                                    self.languageComboBox.getOptions(item.languageValue).selected = false;
+                                }
+                            );
+                            var enabledLanguages=arrayUtil.filter(self.languageComboBox.get("options"),function(item)
+                            {
+                                return item.disabled==false;
+                            });
+                            if (enabledLanguages.length > 0) {
+                                if (self.labelTypeComboBox.get("value") == "prefLabel") {
+                                    self.languageComboBox.getOptions(enabledLanguages[0].value).selected = true;
+                                    self.languageComboBox.set("displayedValue", enabledLanguages[0].label);
+                                }
+                                if (enabledLanguages.length == 1) {
+                                    arrayUtil.forEach(self.labelTypeComboBox.get("options"), function (item) {
+                                            self.labelTypeComboBox.getOptions(item.value).disabled = false;
+                                        }
+                                    );
+                                }
+                            }
+                            else {
+                                self.labelTypeComboBox.getOptions("altLabel").selected = true;
+                                self.labelTypeComboBox.getOptions("prefLabel").selected = false;
+                                self.labelTypeComboBox.getOptions("prefLabel").disabled = true;
+                                self.labelTypeComboBox.set("displayedValue", self.labelTypeComboBox.getOptions("altLabel").label);
+                                arrayUtil.forEach(self.languageComboBox.get("options"), function (item) {
+                                        self.languageComboBox.getOptions(item.value).disabled = false;
+                                    }
+                                );
+                                self.languageComboBox.reset();
+                            }
+                        }
+                        else {
+                            self._resetLanguageComboBox();
+                        }
+                    }
+                    else {
+                        self._resetLanguageComboBox();
+                    }
+                },
+
+                _resetLanguageComboBox: function () {
+                    var self=this;
+                    arrayUtil.forEach(self.languageComboBox.get("options"), function (item) {
+                            self.languageComboBox.getOptions(item.value).disabled = false;
+                        }
+                    );
+
+                },
                 getLabels: function () {
-                    return  arrayUtil.map(this.labelGrid.store.data, function (label) {
-                        return {"type": label.typeValue, "language": label.languageValue, "label": label.label};
-                    });
+                    if(this.labelGrid)
+                    {
+                     return  arrayUtil.map(this.labelGrid.store.data, function (label) {
+                        return {"type": label.type, "language": label.languageValue, "label": label.label};
+                        });
+                    }
+                    else
+                    {
+                        return  arrayUtil.map(this.labels, function (label) {
+                        return {"type": label.type, "language": label.languageValue, "label": label.label};
+                        });
+
+                    }
+
                 },
 
                 setLabels: function (labels) {
-                    //todo: implement this
                     console.log("set labels: " + labels);
-                    this._createNodeList(labels);
-                    this.labels = labels;
+
+                    this.labels = this._mapLabelToDisplayedLabel(labels, "prefLabel", "Preferred");
+                    this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "altLabel", "Alternative"));
+                    this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "hiddenLabel", "Hidden"));
+                    this._createNodeList(this.labels);
+                    this.tempLabels = lang.clone(this.labels);
                 },
 
+                SetEditLabelButton: function () {
+                    this.EditLabelButton.set("label", "Edit labels");
+                    this.EditLabelButton.set("iconClass", "");
+
+                },
                 reset: function () {
-                    var labelListNode = this.labelListNode;
-                    query("li", labelListNode).forEach(domConstruct.destroy);
+                    this.prefLabelList.reset();
+                    this.altLabelList.reset();
+                    this.hiddenLabelList.reset();
                     this.labels = null;
+                    this.tempLabels = null;
+                    this.labelGrid=null;
+                    this.EditLabelButton.set("label", "Add labels");
+                    this.EditLabelButton.set("iconClass", "plusIcon");
                 }
             });
     });
