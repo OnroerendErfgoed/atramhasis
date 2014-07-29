@@ -325,7 +325,7 @@ define([
                     var noteToSend = {
                         "type": note.type,
                         "language": note.languageValue,
-                        "label": note.label
+                        "note": note.label
                     };
                     notesToSend.push(noteToSend);
                 });
@@ -334,7 +334,7 @@ define([
             else
             {
                 return  arrayUtil.map(this.notes, function (note) {
-                        return {"type": note.type, "language": note.languageValue, "label": note.label};
+                        return {"type": note.type, "language": note.languageValue, "note": note.label};
                         });
 
             }
