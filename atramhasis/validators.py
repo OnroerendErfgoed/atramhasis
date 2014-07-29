@@ -11,31 +11,25 @@ from atramhasis.errors import ValidationError
 
 class Label(colander.MappingSchema):
     label = colander.SchemaNode(
-        colander.String(),
-        missing=''
+        colander.String()
     )
     type = colander.SchemaNode(
-        colander.String(),
-        missing=''
+        colander.String()
     )
     language = colander.SchemaNode(
-        colander.String(),
-        missing=''
+        colander.String()
     )
 
 
 class Note(colander.MappingSchema):
     note = colander.SchemaNode(
-        colander.String(),
-        missing=''
+        colander.String()
     )
     type = colander.SchemaNode(
-        colander.String(),
-        missing=''
+        colander.String()
     )
     language = colander.SchemaNode(
-        colander.String(),
-        missing=''
+        colander.String()
     )
 
 

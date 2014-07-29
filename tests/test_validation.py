@@ -430,6 +430,36 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
 
+    def test_label_invalid(self):
+        error_raised = False
+        validated_concept = None
+        self.json_concept['labels'].append({
+            "note": "Belgium",
+            "type": "altLabel",
+            "language": "en"
+        })
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
+    def test_note_invalid(self):
+        error_raised = False
+        validated_concept = None
+        self.json_concept['notes'].append({
+            "label": "een notitie",
+            "type": "note",
+            "language": "nl"
+        })
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except colander.Invalid as e:
+            error_raised = True
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+
     def test_memberof_concept_type_collection(self):
         #A Collection/Concept can be a member_of a Collection
         error_raised = False
