@@ -9,11 +9,10 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     "dijit/ConfirmDialog",
-     "dojo/topic",
     "./form/ConceptDetailList",
     'dojo/text!./templates/ConceptDetail.html',
     "dijit/TitlePane"
-], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, ConfirmDialog,topic,ConceptDetailList, template) {
+], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, ConfirmDialog, ConceptDetailList, template) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
