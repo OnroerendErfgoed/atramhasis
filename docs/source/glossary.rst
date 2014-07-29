@@ -22,3 +22,14 @@ Glossary
 
    URN
     A URN is a specific form of a :term:`URI`.
+
+   Pyramid
+    This webframework was used to implement the server side components of
+    Atramhasis.
+
+   HTML
+    HyperText Markup Language is the markup language used to create webpage.
+
+   CSS
+    Cascading Style Sheet is a style specification used to add style and 
+    presentation to webpages.

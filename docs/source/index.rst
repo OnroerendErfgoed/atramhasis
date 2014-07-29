@@ -15,8 +15,8 @@ Contents:
    demo
    development
    services
+   customisation
    api
-   security
    changes
    glossary
 
