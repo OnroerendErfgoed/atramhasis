@@ -211,15 +211,16 @@ define([
                 }
             }));
             pMenu.addChild(new MenuItem({
-                label: "Add a new Concept or collection",
-                onClick: function () {
-                    widget._createNewConcept();
-                }
-            }));
-            pMenu.addChild(new MenuItem({
                 label: "Delete",
                 onClick: function () {
                     widget._deleteConcept(conceptId, type, label);
+                }
+            }));
+            pMenu.addChild(new dijit.MenuSeparator());
+            pMenu.addChild(new MenuItem({
+                label: "Add a new Concept or collection",
+                onClick: function () {
+                    widget._createNewConcept();
                 }
             }));
 
