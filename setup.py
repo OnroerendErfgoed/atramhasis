@@ -19,6 +19,10 @@ def copy_files_scaffolds(filename, output_dir):
 
 def dojo_build():
     print('-'*50)
+    print('==> check npm dependencies')
+    libs = str(subprocess.check_output(["npm", "list", "-g", "bower", "grunt-cli"]))
+    print('bower OK' if 'bower' in libs else 'bower KO, use npm \'install -g bower\' to install')
+    print('grunt-cli OK' if 'grunt-cli' in libs else 'grunt-cli KO, use npm \'install -g grunt-cli\' to install')
     print('==> running grunt build')
     subprocess.call(["grunt", "-v", "build"], cwd="atramhasis/static/admin")
     print('-'*50)
