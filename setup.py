@@ -1,5 +1,6 @@
 import os
 import distutils.file_util
+import subprocess
 
 from setuptools import setup, find_packages, distutils, Command
 
@@ -14,6 +15,13 @@ def copy_files_scaffolds(filename, output_dir):
     source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
     dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, filename + '_tmpl')
     distutils.file_util.copy_file(source_dir, dest_dir, update=True)
+
+
+def dojo_build():
+    print('-'*50)
+    print('==> running grunt build')
+    subprocess.call(["grunt", "-v", "build"], cwd="atramhasis/static/admin")
+    print('-'*50)
 
 
 class PrepareScaffold(Command):
@@ -31,6 +39,7 @@ class PrepareScaffold(Command):
         copy_files_scaffolds("requirements-dev.txt", "atramhasis_demo")
         copy_files_scaffolds("requirements.txt", "atramhasis_scaffold")
         copy_files_scaffolds("requirements-dev.txt", "atramhasis_scaffold")
+        dojo_build()
 
 
 requires = [
