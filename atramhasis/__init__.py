@@ -8,6 +8,7 @@ from .models import Base
 def includeme(config):
     """this function adds some configuration for the application"""
     config.include('pyramid_jinja2')
+    config.include('pyramid_tm')
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_renderer('csv', 'atramhasis.renderers.CSVRenderer')
     config.add_renderer('skosrenderer_verbose', json_renderer_verbose)
