@@ -129,6 +129,12 @@ define([
             self.scopeNoteList.buidList(self.scopeNoteList.mapNotesForList(self.notes, "scopeNote"), "Scopenote", false);
             self.noteList.buidList(self.noteList.mapNotesForList(self.notes, "note"), "Note", false);
 
+            self.broaderList.schemeid=self.schemeid;
+            self.narrowerList.schemeid=self.schemeid;
+            self.relatedList.schemeid=self.schemeid;
+            self.membersList.schemeid=self.schemeid;
+            self.memberofList.schemeid=self.schemeid;
+
             self.broaderList.buidList(self.broaderList.mapRelationsForList(self.broader), "Broader", true);
             self.narrowerList.buidList(self.narrowerList.mapRelationsForList(self.narrower), "Narrower", true);
             self.relatedList.buidList(self.relatedList.mapRelationsForList(self.related), "Related", true);
