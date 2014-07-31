@@ -219,7 +219,7 @@ define([
             pMenu.addChild(new MenuItem({
                 label: "Delete",
                 onClick: function () {
-                    widget._deleteConcept(ConceptId, type, label);
+                    widget._deleteConcept(conceptId, type, label);
                 }
             }));
 
