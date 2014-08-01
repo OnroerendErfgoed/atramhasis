@@ -57,3 +57,47 @@ You can configure persona.secret and persona.audience in development.ini:
     persona.audiences = http://localhost:6543
 
 The login and logout views, the groupfinder and rootfactory are implemented in the security.py file.
+
+.. _own_project:
+
+Creating your own project
+=========================
+
+To hold you custom templates, security module and configuration, you can use
+a scaffold we have provided. As always, we advise working in a virtual environment.
+
+.. code-block:: bash    
+    
+    $ mkvirtualenv my_thesaurus
+    $ pip install atramhasis
+    $ pcreate -s atramhasis_scaffold my_thesaurus
+    # Install dependencies
+    $ pip install -r requirements-dev.txt
+    # compile the Message Catalog Files
+    $ python setup.py compile_catalog
+
+This gives you a clean slate to start your customisations on. By default the
+scaffold comes with a simple SQLite database. This is more than enough for
+your first experiments and can even be used in production environment if your
+needs are modest. You can always instruct Atramhasis to use 
+some other database engine, as long as SQLAlchemy supports it. Configure the
+`sqlalchemy.url` configuration option in :file:`development.ini` to change
+the database. See the documentation of SQLAlchemy for more information about 
+this connection url. After settings this url, run :command:`alembic` to
+initialise and migrate the database to the latest version.
+
+.. code-block:: bash
+
+    # Create or update database based on 
+    # the configuration in development.ini
+    $ alembic upgrade head
+
+Your custom version of Atramhasis can now be run. Run the following command
+and point your browser to `http://localhost:6543` to see the result.
+
+.. code-block:: bash
+
+    $ pserve development.ini
+
+Of course, this does not do very much since your Atramhasis is now running,
+but does not contain any ConceptSchemes. You will need to configure this.
