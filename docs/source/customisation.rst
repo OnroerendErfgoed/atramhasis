@@ -100,4 +100,134 @@ and point your browser to `http://localhost:6543` to see the result.
     $ pserve development.ini
 
 Of course, this does not do very much since your Atramhasis is now running,
-but does not contain any ConceptSchemes. You will need to configure this.
+but does not contain any ConceptSchemes. You will need to configure this by 
+entering a database record for the ConceptScheme and writing a small piece
+of code.
+
+To enter the database record, you need to enter a record in the table 
+`conceptscheme`. In this table you need to register an id for the conceptscheme
+and a uri. The id is for internal database use and has no other meaning. The
+uri can be used externally. To register a new ConceptScheme in the sqlite 
+database that was created:
+
+.. code-block:: bash
+
+    $ sqlite3 my_thesaurus.sqlite
+
+.. code-block:: sql
+
+    INSERT INTO conceptscheme VALUES (1, 'urn:x-my-thesaurus:stuff')
+
+This take care of the first step. Now you also need to tell Atramhasis where
+to find your conceptscheme and how to handle it. To do this, you need to edit
+the file called :file:`my_thesaurus/skos/__init__.py`. In this file you need
+to register :class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
+instances. First you need to tell python where to such a provider by adding
+this code just below the logging configuration:
+
+.. code-block:: python
+
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
+Then you need to instantiate such a provider within the includeme function in
+this file. This provider needs a few arguments: an id for the provider, an id
+for the conceptscheme it's working with and a database session. The id for
+the provider is often a text string and will appear in certain url's and 
+might popup in the user interface from time to time. The database session
+can be claimed by calling `config.registry.dbmaker()`. Finally, you need to
+register this provider with the :class:`skosprovider.registry.Registry`.
+
+.. code-block:: python
+
+    STUFF = SQLAlchemyProvider(                                                 
+        {'id': 'STUFF', 'conceptscheme_id': 1},                                 
+        config.registry.dbmaker()                                               
+    )
+
+    skosregis.register_provider(STUFF)
+
+After having registered your provider, the file should loke more or less like 
+this:
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*- 
+
+    import logging
+    log = logging.getLogger(__name__)
+                 
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
+                                                           
+    def includeme(config):                                                 
+        STUFF = SQLAlchemyProvider(                                 
+            {'id': 'STUFF', 'conceptscheme_id': 1},
+            config.registry.dbmaker()
+        )
+        
+        skosregis = config.get_skos_registry()                                      
+        
+        skosregis.register_provider(STUFF)
+
+Now you can restart your server and then you front page will show you a new,
+but empty thesaurus. You can now start creating concepts and collections by
+going to the admin interface at `http://localhost:6543/admin`.
+
+You will notice that any concepts or collections you create wil get a 
+:term:`URI` similar to `urn:x-skosprovider:STUFF:1`. This is due to the fact
+that your :class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
+has a :class:`~skosprovider.uri.UriGenerator` that generates uris for the
+provider. By default, the provider configures a 
+:class:`~skosprovider.uri.DefaultUrnGenerator`, but it's expected that you
+will want to override this. 
+
+Suppose you have decided that your URI's should look like this: 
+`http://id.mydata.org/thesauri/stuff/[id]`. You can do this by registering
+a :class:`~skosprovider.uri.UriPatternGenerator` with your provider:
+
+.. code-block:: python
+
+    STUFF = SQLAlchemyProvider(                                 
+        {'id': 'STUFF', 'conceptscheme_id': 1},
+        config.registry.dbmaker(),
+        uri_generator=UriPatternGenerator(
+            'http://id.mydata.org/thesauri/stuff/%s'
+        )
+    )
+
+Don't forget to import the :class:`~skosprovider.uri.UriPatternGenerator` at the
+top of your file:
+
+.. code-block:: python
+
+    from skosprovider.uri import UriPatternGenerator
+
+Your final file should look similar to this:
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*- 
+
+    import logging
+    log = logging.getLogger(__name__)
+                 
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+    from skosprovider.uri import UriPatternGenerator
+
+                                                           
+    def includeme(config):                                                 
+        STUFF = SQLAlchemyProvider(                                 
+            {'id': 'STUFF', 'conceptscheme_id': 1},
+            config.registry.dbmaker(),
+            uri_generator=UriPatternGenerator(
+                'http://id.mydata.org/thesauri/stuff/%s'
+            )
+        )
+        
+        skosregis = config.get_skos_registry()                                      
+        
+        skosregis.register_provider(STUFF)
+
+If you need more complicated URI's, you can easily write you own generator
+with a small piece of python code. You just need to follow the interface
+provided by :class:`skosprovider.uri.UriGenerator`.
