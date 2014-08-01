@@ -5,11 +5,11 @@
 		<meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>atramhasis - {% block html_title %}Base{% endblock %}</title>
-		<link rel="stylesheet" href="{{request.application_url}}/static/css/foundation.css">
-		<link rel="stylesheet" href="{{request.application_url}}/static/css/jqtree.css">
-		<link rel="stylesheet" href="{{request.application_url}}/static/css/app.css">
-		<link rel="icon" type="image/x-icon" href="{{request.application_url}}/static/img/favicon.ico?v=0.2" />
-        <script src="{{request.application_url}}/static/js/vendor/modernizr.js"></script>
+		<link rel="stylesheet" href="{{request.static_path('atramhasis:static/css/foundation.css')}}" />
+		<link rel="stylesheet" href="{{request.static_path('atramhasis:static/css/jqtree.css')}}" />
+		<link rel="stylesheet" href="{{request.static_path('atramhasis:static/css/app.css')}}" />
+		<link rel="icon" type="image/x-icon" href="{{request.static_path('atramhasis:static/img/favicon.ico?v=0.2')}}" />
+        <script src="{{request.static_path('atramhasis:static/js/vendor/modernizr.js')}}"></script>
 	</head>
 	<body>
         <div class="row">
@@ -52,12 +52,12 @@
             </div>
         </footer>
 
-        <script src="{{request.application_url}}/static/js/vendor/jquery.js"></script>
-        <script src="{{request.application_url}}/static/js/vendor/jquery.cookie.js"></script>
-        <script src="{{request.application_url}}/static/js/vendor/tree.jquery.js"></script>
+        <script src="{{request.static_path('atramhasis:static/js/vendor/jquery.js')}}"></script>
+        <script src="{{request.static_path('atramhasis:static/js/vendor/jquery.cookie.js')}}"></script>
+        <script src="{{request.static_path('atramhasis:static/js/vendor/tree.jquery.js')}}"></script>
         <!-- Included JS Files (Compressed) -->
-        <script src="{{request.application_url}}/static/js/foundation.min.js"></script>
-		<script src="{{request.application_url}}/static/js/vendor/app.js"></script>
+        <script src="{{request.static_path('atramhasis:static/js/foundation.min.js')}}"></script>
+		<script src="{{request.static_path('atramhasis:static/js/vendor/app.js')}}"></script>
 		<script>
 		    $(document).foundation();
 		</script>

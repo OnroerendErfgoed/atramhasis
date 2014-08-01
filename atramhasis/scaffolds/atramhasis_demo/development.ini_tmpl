@@ -15,7 +15,7 @@ pyramid.includes =
     pyramid_debugtoolbar
     pyramid_tm
 jinja2.directories =
-	atramhasis:templates,
+	atramhasis:templates
     {{package}}:templates
 available_languages = en nl fr
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
