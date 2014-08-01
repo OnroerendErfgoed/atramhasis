@@ -70,9 +70,9 @@ a scaffold we have provided. As always, we advise working in a virtual environme
     
     $ mkvirtualenv my_thesaurus
     $ pip install atramhasis
+    $ pcreate -s atramhasis_scaffold my_thesaurus
     # Install dependencies
     $ pip install -r requirements-dev.txt
-    $ pcreate -s atramhasis_scaffold my_thesaurus
     # compile the Message Catalog Files
     $ python setup.py compile_catalog
 
