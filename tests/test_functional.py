@@ -100,6 +100,7 @@ class FunctionalTests(unittest.TestCase):
         self.config.add_route('login', '/auth/login')
         self.config.add_route('logout', '/auth/logout')
         includeme(self.config)
+        self.config.add_static_view('atramhasis/static', 'atramhasis:static')
 
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
