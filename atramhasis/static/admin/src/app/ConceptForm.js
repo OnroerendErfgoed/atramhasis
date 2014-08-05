@@ -179,38 +179,23 @@ define(
                         this.typeComboBox.set("value", concept.type);
                         if (concept.members) {
                             this.membersManager.setRelations(concept.members);
-                             if(concept.members.length>0) {
-                                 this.membersManager.setEditRelationButton("Members");
-                             }
                         }
                         if (concept.member_of)
                         {
                          this.memberofManager.setRelations(concept.member_of);
 
-                            if(concept.member_of.length>0) {
-                                this.memberofManager.setEditRelationButton("Member of");
-                            }
                         }
                         if (concept.broader)
                         {
                             this.broaderManager.setRelations(concept.broader);
-                             if(concept.broader.length>0) {
-                                 this.broaderManager.setEditRelationButton("Broader");
-                             }
                         }
                         if (concept.narrower)
                         {
                             this.narrowerManager.setRelations(concept.narrower);
-                             if(concept.narrower.length>0) {
-                                 this.narrowerManager.setEditRelationButton("Narrower");
-                             }
                         }
                         if (concept.related)
                         {
                             this.relatedManager.setRelations(concept.related);
-                             if(concept.related.length>0) {
-                                 this.relatedManager.setEditRelationButton("Related");
-                             }
                         }
                         if (concept.labels) {
                             this.labelManager.setLabels(concept.labels);

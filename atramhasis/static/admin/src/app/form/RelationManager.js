@@ -158,7 +158,7 @@ define([
                                 return item.label;
                             });
                             self._addRelation(sel.concept_id, sel.label, path);
-                            self.setEditRelationButton();
+
                             dlg.hide();
                         }
                         else {
@@ -206,12 +206,6 @@ define([
 
                 setScheme: function (scheme) {
                     this._scheme = scheme;
-
-                },
-                setEditRelationButton:function(relationType)
-                {
-                    this.EditRelationButton.set("label","Edit "+relationType);
-                     this.EditRelationButton.set("iconClass","");
 
                 }
             });
