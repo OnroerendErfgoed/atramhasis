@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+'''
+Module containing utility functions used by Atramhasis.
+'''
+
 from skosprovider.skos import Concept, Collection, Label, Note
 
 

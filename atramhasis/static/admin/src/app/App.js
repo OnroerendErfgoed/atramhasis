@@ -248,24 +248,19 @@ define([
                     filteredGrid.conceptGrid.store.put(rowToAdd, {id: form.concept_id})
                         .then(
                         function () {
+                            console.log("row edited");
+                            conceptDialog.hide();
+                            alert("The concept or collection has been saved");
                             filteredGrid.conceptGrid.refresh();
 
-                            alert(" The concept or collection has been added to the thesaurus");
                             //refresh Concept Detail widget.
-
-                         self.thesauri.stores[self.currentScheme].get(form.concept_id).then(function (item) {
-                             topic.publish("conceptDetail.refresh", item);
-                         });
-                         conceptDialog.hide();
+                            self.thesauri.stores[self.currentScheme].get(form.concept_id).then(function (item) {
+                                topic.publish("conceptDetail.refresh", item);
+                            });
                         },
                         function (error) {
                             console.log("An error occurred: " + error);
-                        alert("Can't add the concept or collection to the database. Please check if business rules are respected");
-                        conceptDialog.content.show({
-                                spinnerNode: false,
-                                formNode: true,
-                                successNode: false
-                            });
+                            alert("Can't add the concept or collection to the database. Please check if business rules are respected");
                         }
                     );
                 }
@@ -273,17 +268,15 @@ define([
                     filteredGrid.conceptGrid.store.add(rowToAdd)
                         .then(
                         function () {
-                            filteredGrid.conceptGrid.refresh();
                             console.log("row added");
-                            conceptDialog.content.show({
-                                spinnerNode: false,
-                                formNode: false,
-                                successNode: true
-                            });
-                            conceptDialog && conceptDialog.resize();
+                            conceptDialog.hide();
+                            alert("The concept or collection has been added to the thesaurus");
+
+                            filteredGrid.conceptGrid.refresh();
                         },
                         function (error) {
                             console.log("An error occurred: " + error);
+                            alert("Can't add the concept or collection to the database. Please check if business rules are respected");
                         }
                     );
                 }

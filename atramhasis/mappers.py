@@ -1,8 +1,24 @@
+# -*- coding: utf-8 -*-
+'''
+Module containing mapping functions used by Atramhasis.
+'''
+
 from skosprovider_sqlalchemy.models import Label, Note, Concept, Thing, Collection
 from sqlalchemy.orm.exc import NoResultFound
 
 
 def map_concept(concept, concept_json, db_session):
+    '''
+    Map a concept from json to the database.
+
+    :param skosprovider_sqlalchemy.models.Thing concept: A concept or 
+        collection as known to the database.
+    :param dict concept_json: A dict representing the json sent to our REST 
+        service.
+    :param session: A :class:`sqlalchemy.orm.session.Session`.
+    :returns: The :class:`skosprovider_sqlalchemy.models.Thing` enhanced 
+        with the information from the json object.
+    '''
     concept.type = concept_json.get('type', None)
     if concept.type in ('concept', 'collection'):
         for label in concept.labels:

@@ -35,6 +35,11 @@ application.
   :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` 
   interface with a `SQLAlchemy <http://www.sqlalchemy.org>`_ backend. This allows
   using a RDBMS for reading, but also writing, :term:`SKOS` concepts.
+* skosprovider_rdf_: An implemenation of the 
+  :class:`~skosprovider.providers.VocabularyProvider` interface with an :term:`RDF`
+  backend. Atramhasis uses this for exporting ConceptSchemes to RDF. It can 
+  also be used to get an existing :term:`SKOS` vocabulary defined in RDF into
+  Atramhasis.
 * pyramid_skosprovider_: A library that integrates pyramid_ and skosprovider_.
   This libraries creates a :class:`skosprovider.registry.Registry` and makes it
   accessible through the :class:`pyramid.request.Request`. Is also exposes a 
@@ -49,4 +54,5 @@ application.
 .. _jinja2: http://jinja.pocoo.org
 .. _skosprovider: http://skosprovider.readthedocs.org
 .. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
+.. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org
 .. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
