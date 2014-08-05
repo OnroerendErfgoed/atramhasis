@@ -12,12 +12,12 @@ class TestErrors(unittest.TestCase):
     def test_conceptsheme_notfound_error(self):
         error = ConceptSchemeNotFoundException('TREES')
         self.assertIsNotNone(error)
-        self.assertEqual("'No conteptscheme found with the given id TREES'", str(error))
+        self.assertEqual("'No conceptscheme found with the given id TREES'", str(error))
 
     def test_concept_notfound_error(self):
         error = ConceptNotFoundException('1')
         self.assertIsNotNone(error)
-        self.assertEqual("'No contept found with the given id 1'", str(error))
+        self.assertEqual("'No concept found with the given id 1'", str(error))
 
     def test_validation_error(self):
         error = ValidationError('validation failed', {})
