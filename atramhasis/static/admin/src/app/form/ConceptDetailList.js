@@ -9,8 +9,9 @@ define([
     "dojo/topic",
     "dojo/on",
     "dijit/form/Button",
+    "dojo/dom-construct",
     "dojo/text!./templates/ConceptDetailList.html"
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,Button, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,Button,domConstruct, template) {
     return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
 
@@ -56,7 +57,7 @@ define([
         },
 
         buidList: function (items, title, clickable, isEditRelation) {
-
+            var self=this;
             this.reset();
             var node = this.ConceptListNode;
             if (items && items.length > 0) {
@@ -94,7 +95,7 @@ define([
                             showLabel: false,
                             iconClass: 'minIcon',
                             onClick: function () {
-                                self._removeRelationFromList(rel);
+                                self._removeRelationFromList(li);
                             }
                         }).placeAt(li);
 
@@ -103,11 +104,8 @@ define([
                 });
             }
         },
-        _removeRelationFromList: function (rel) {
-            console.log("removing relation from list: " + rel.id);
-            var position = arrayUtil.indexOf(this._relations, rel);
-            this._relations.splice(position, 1);
-            this._createRelationList();
+        _removeRelationFromList: function (li) {
+              domConstruct.destroy(li);
         },
         _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
 
