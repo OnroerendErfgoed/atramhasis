@@ -4,6 +4,12 @@
 API Documentation
 =================
 
+Db
+------
+
+.. automodule:: atramhasis.db
+   :members:
+
 Errors
 ------
 

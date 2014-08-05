@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''
+Module that sets up SQLAlchemy.
+'''
 from .models import Base
 from skosprovider_sqlalchemy.models import Base as SkosBase
 
@@ -8,6 +11,13 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 
 def db(request):
+    '''
+    Generate a database session and register a cleanup handler.
+
+    :param pyramid.request.Request request: The request this db session will
+        be tied to.
+    :returns: A :class:`sqlalchemy.orm.session.Session`
+    '''
     session = request.registry.dbmaker()
 
     def cleanup(request):
@@ -18,6 +28,11 @@ def db(request):
 
 
 def includeme(config):
+    '''
+    Set up SQLAlchemy.
+
+    :param pyramid.config.Configurator config: Pyramid configuration.
+    '''
 
     # Setting up SQLAlchemy
     engine = engine_from_config(config.get_settings(), 'sqlalchemy.')
