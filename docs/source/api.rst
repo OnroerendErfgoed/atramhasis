@@ -10,6 +10,11 @@ Errors
 .. automodule:: atramhasis.errors
    :members:
 
+Service
+-------
+
+.. automodule:: atramhasis.service
+   :members:
 
 Utils
 -----
