@@ -8,8 +8,9 @@ define([
     "dojo/dom-class",
     "dojo/topic",
     "dojo/on",
+    "dijit/form/Button",
     "dojo/text!./templates/ConceptDetailList.html"
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic,on, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,Button, template) {
     return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
 
@@ -54,7 +55,7 @@ define([
             });
         },
 
-        buidList: function (items, title, clickable,isEditRelation) {
+        buidList: function (items, title, clickable, isEditRelation) {
 
             this.reset();
             var node = this.ConceptListNode;
@@ -86,28 +87,27 @@ define([
                             topic.publish("concept.open", item.id, scheme);
                         });
                     }
-                    if(isEditRelation){
+                    if (isEditRelation) {
 
-                         new Button
-            (
-                {
-                    iconClass: 'minIcon',
-                    showLabel: false,
-                    onClick: lang.hitch(this, function () {
-
-                        console.log("Delete relation ");
-
-
-                    })
-                }
-            );
+                        var btn = new Button({
+                            label: "remove this relation",
+                            showLabel: false,
+                            iconClass: 'minIcon',
+                            onClick: function () {
+                                self._removeRelationFromList(rel);
+                            }
+                        }).placeAt(li);
 
 
                     }
-
-
                 });
             }
+        },
+        _removeRelationFromList: function (rel) {
+            console.log("removing relation from list: " + rel.id);
+            var position = arrayUtil.indexOf(this._relations, rel);
+            this._relations.splice(position, 1);
+            this._createRelationList();
         },
         _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
 

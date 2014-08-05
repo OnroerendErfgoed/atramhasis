@@ -70,7 +70,7 @@ define([
                 },
                  _createNodeList: function () {
                  var self=this;
-                 self.relationsList.buidList(self.relationsList.mapRelationsForList(self._relations), self.title, false);
+                 self.relationsList.buidList(self.relationsList.mapRelationsForList(self._relations), self.title, false,true);
 
                 },
 
