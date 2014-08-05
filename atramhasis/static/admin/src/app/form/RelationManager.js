@@ -14,24 +14,19 @@ define([
         "dojo/store/JsonRest",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree",
+        "dojo/topic",
          "./ConceptDetailList",
         "dojo/text!./templates/RelationManager.html"
     ],
-    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory, Cache, JsonRest, ObjectStoreModel, Tree,ConceptDetailList, template) {
+    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory, Cache, JsonRest, ObjectStoreModel, Tree,Topic,ConceptDetailList, template) {
         return declare(
             "app/form/RelationManager",
             [WidgetBase, TemplatedMixin],
             {
-                templateString: template,
-
+               templateString: template,
                 name: 'RelationManager',
-
                 title: 'Relations:',
-
                 _scheme: null,
-
-
-
                 _relations: null,
                 EditRelationButton:null,
 
@@ -54,6 +49,11 @@ define([
                         }
                     }, this.relationButton)
 
+                Topic.subscribe("relation.delete", function (relationId) {
+
+                    self._removeRelation(relationId);
+
+                    });
                 },
 
                 _addRelation: function (relId, lbl, path) {
@@ -67,6 +67,21 @@ define([
                         return true;
                     }
                     return false;
+                },
+                _removeRelation: function (relationId) {
+                    var self=this;
+                    console.log("removing relation from list: " + relationId);
+                    arrayUtil.forEach(self._relations,function(rel)
+
+                        {
+                            if(rel.id==relationId)
+                            {
+                              var position = arrayUtil.indexOf(self._relations, rel);
+                              self._relations.splice(position, 1);
+                            }
+                        }
+
+                    )
                 },
                  _createNodeList: function () {
                  var self=this;

@@ -10,8 +10,9 @@ define([
     "dojo/on",
     "dijit/form/Button",
     "dojo/dom-construct",
+    "dojo/topic",
     "dojo/text!./templates/ConceptDetailList.html"
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,Button,domConstruct, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,Button,domConstruct,topic, template) {
     return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
 
@@ -95,7 +96,7 @@ define([
                             showLabel: false,
                             iconClass: 'minIcon',
                             onClick: function () {
-                                self._removeRelationFromList(li);
+                                self._removeRelationFromList(li,item.id);
                             }
                         }).placeAt(li);
 
@@ -104,8 +105,10 @@ define([
                 });
             }
         },
-        _removeRelationFromList: function (li) {
+        _removeRelationFromList: function (li,relId) {
               domConstruct.destroy(li);
+              topic.publish("relation.delete",relId);
+
         },
         _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
 
