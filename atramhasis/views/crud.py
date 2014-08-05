@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+'''
+Module containing views related to the REST service.
+'''
+
 import colander
 from pyramid.view import view_defaults, view_config
 from sqlalchemy import func
@@ -62,7 +67,7 @@ class AtramhasisCrud(object):
         '''
         Get an existing concept
 
-        :raises :class:`atramhasis.errors.ConceptNotFoundException`: If the concept can't be found
+        :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
         '''
         c_id = self.request.matchdict['c_id']
         try:
@@ -79,7 +84,7 @@ class AtramhasisCrud(object):
         '''
         Add a new concept to a conceptscheme
 
-        :raises :class:`atramhasis.errors.ValidationError`: If the provided json can't be validated
+        :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         '''
         validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
         cid = self.db.query(
@@ -110,8 +115,8 @@ class AtramhasisCrud(object):
         '''
         Edit an existing concept
 
-        :raises :class:`atramhasis.errors.ConceptNotFoundException`: If the concept can't be found
-        :raises :class:`atramhasis.errors.ValidationError`: If the provided json can't be validated
+        :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
+        :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         '''
         c_id = self.request.matchdict['c_id']
         validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
@@ -132,7 +137,7 @@ class AtramhasisCrud(object):
         '''
         Delete an existing concept
 
-        :raises :class:`atramhasis.errors.ConceptNotFoundException`: If the concept can't be found
+        :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
         '''
         c_id = self.request.matchdict['c_id']
         try:
