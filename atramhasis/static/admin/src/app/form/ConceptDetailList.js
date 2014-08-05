@@ -54,7 +54,7 @@ define([
             });
         },
 
-        buidList: function (items, title, clickable) {
+        buidList: function (items, title, clickable,isEditRelation) {
 
             this.reset();
             var node = this.ConceptListNode;
@@ -86,6 +86,26 @@ define([
                             topic.publish("concept.open", item.id, scheme);
                         });
                     }
+                    if(isEditRelation){
+
+                         new Button
+            (
+                {
+                    iconClass: 'minIcon',
+                    showLabel: false,
+                    onClick: lang.hitch(this, function () {
+
+                        console.log("Delete relation ");
+
+
+                    })
+                }
+            );
+
+
+                    }
+
+
                 });
             }
         },
