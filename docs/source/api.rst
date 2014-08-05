@@ -10,6 +10,12 @@ Errors
 .. automodule:: atramhasis.errors
    :members:
 
+Mappers
+-------
+
+.. automodule:: atramhasis.mappers
+   :members:
+
 Service
 -------
 
