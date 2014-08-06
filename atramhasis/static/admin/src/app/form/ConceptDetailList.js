@@ -10,9 +10,8 @@ define([
     "dojo/on",
     "dijit/form/Button",
     "dojo/dom-construct",
-    "dojo/topic",
     "dojo/text!./templates/ConceptDetailList.html"
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,Button,domConstruct,topic, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,Button,domConstruct, template) {
     return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
 
