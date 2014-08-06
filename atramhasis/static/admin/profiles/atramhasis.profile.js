@@ -75,7 +75,7 @@ var profile = {
 		'dojo-publish-privates': 0,
 
 		// This application is pure AMD, so get rid of the legacy loader.
-		'dojo-sync-loader': 1,
+		'dojo-sync-loader': 0,
 
 		// `dojo-xhr-factory` relies on `dojo-sync-loader`, which we have removed.
 		'dojo-xhr-factory': 0,
