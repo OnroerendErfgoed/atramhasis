@@ -16,7 +16,7 @@ sdata = [
         {'broader': [62], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'acheuleaan'}, {'type': 'altLabel', 'language': 'nl', 'label': 'Acheulien'}], 'type': 'concept', 'id': 64, 'related': []},
         {'broader': [62], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'ahrensburgiaan'}, {'type': 'altLabel', 'language': 'nl', 'label': 'Ahrensburgien'}], 'type': 'concept', 'id': 65, 'related': []},
         {'broader': [60], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'art deco'}], 'type': 'concept', 'id': 22, 'related': []},
-        {'broader': [60], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'art nouvea'}, {'type': 'altLabel', 'language': 'nl', 'label': 'Jugendstil'}], 'type': 'concept', 'id': 30, 'related': []},
+        {'broader': [60], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'art nouveau'}, {'type': 'altLabel', 'language': 'nl', 'label': 'Jugendstil'}], 'type': 'concept', 'id': 30, 'related': []},
         {'broader': [62], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'aurignaciaan'}, {'type': 'altLabel', 'language': 'nl', 'label': 'Aurignacien'}], 'type': 'concept', 'id': 66, 'related': []},
         {'broader': [60], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'barok'}], 'type': 'concept', 'id': 7, 'related': []},
         {'broader': [35], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'beaux-artsstijl'}], 'type': 'concept', 'id': 32, 'related': [12]},
