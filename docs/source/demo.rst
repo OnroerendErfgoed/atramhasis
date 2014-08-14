@@ -37,4 +37,16 @@ This creates a local demo package you can run with just a few more commands:
     # start server
     $ pserve development.ini
 
-The Atramhasis demo instance is now running on your localhost at port 6543.
+The Atramhasis demo instance is now running on your localhost at port 6543. To
+reach it, open your browser and surf to the address `<http://localhost:6543>`_.
+
+You will be greeted by the Atramhasis front page. From this page you can start
+searching and browsing the thesauri. You can also start editing the thesauri
+by surfing to `<http://localhost:6543/admin>`_. The demo instance requires that
+you login to access the admin module. We've provided a login mechanism using
+`Mozilla Persona <http://www.mozilla.org/en-US/persona/>`_ for the demo. If you 
+want to run Atramhasis in a production environment, you can easily replace the 
+security module by another one. This enables you to use the security mechanisms 
+(eg. LDAP, Active Directory, a custom users database, ...) that your 
+organisation requires. Please consult the documentation on :ref:`security` 
+customisation for further information on this topic.
