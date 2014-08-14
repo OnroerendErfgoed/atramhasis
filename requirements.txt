@@ -1,6 +1,6 @@
 
 # pyramid
-pyramid==1.5
+pyramid==1.5.1
 pyramid-tm==0.7
 
 # skos
@@ -10,7 +10,7 @@ skosprovider_sqlalchemy==0.2.0
 #-e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git#egg=skosprovider_sqlalchemy
 pyramid_skosprovider==0.3.0
 #-e git+https://github.com/koenedaele/pyramid_skosprovider.git#egg=pyramid_skosprovider
-skosprovider_rdf==0.1.1
+skosprovider_rdf==0.1.2
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_rdf#egg=skosprovider_rdf
 
 # sqlalchemy
