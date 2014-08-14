@@ -1,8 +1,14 @@
-0.3.0 (??-??-2014)
+0.3.0 (15-08-2014)
 ------------------
 
-- First version of admin userinterface.
-- Added RDF download to the public version.
+- Atramhasis now includes a working admin userinterface at `/admin`. Still needs
+  some polish when it comes to error handling and reporting about validation 
+  errors.
+- The admin module gets run through a dojo build to minimize page loads
+  and download times
+- Added RDF/XML en RDF/Turtle downloads to the public interface. Currently
+  only dumps a full conceptscheme, not individual concepts.
+- Added more docs.
   
 
 0.2.0 (16-05-2014)
@@ -22,7 +28,7 @@
 - Setup of the project: docs, unit testing, code coverage
 - Scaffolding for demo and deployment packages
 - Limited public user interface
-- Basis i18n abilities prsent
+- Basis i18n abilities present
 - Integration of pyramid_skosprovider_
 - Integration of skosprovider_
 - Integration of skosprovider_sqlalchemy_
