@@ -16,15 +16,72 @@ mdata = [
         {'broader': [32], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'amber'}, {'type': 'altLabel', 'language': 'nl', 'label': 'barnsteen'}], 'type': 'concept', 'id': 33, 'related': []},
         {'broader': [0], 'narrower': [39], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'beton'}, {'type': 'prefLabel', 'language': 'en', 'label': 'concrete'}, {'type': 'prefLabel', 'language': 'fr', 'label': 'béton'}], 'type': 'concept', 'id': 38, 'related': []},
         {'broader': [9], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'bladgoud'}], 'type': 'concept', 'id': 10, 'related': []},
-        {'broader': [21], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'bont'}], 'type': 'concept', 'id': 23, 'related': []},
+        {
+            'broader': [21],
+            'narrower': [],
+            'notes': [
+                {
+                    'type': 'definition',
+                    'language': 'nl',
+                    'note': 'Bont is een gelooide dierlijke huid, dicht bezet met haren. Het wordt voornamelijk gebruikt voor het maken van kleding.'
+                }
+            ], 
+            'labels': [
+                {'type': 'prefLabel', 'language': 'nl', 'label': 'bont'},
+                {'type': 'prefLabel', 'language': 'en', 'label': 'fur'}
+            ], 
+            'type': 'concept', 
+            'id': 23, 
+            'related': []
+        },
         {'broader': [21], 'narrower': [25, 26], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'botmateriaal'}], 'type': 'concept', 'id': 24, 'related': []},
-        {'broader': [13], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'brons'}], 'type': 'concept', 'id': 14, 'related': []},
-        {'broader': [0], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'cement'}], 'type': 'concept', 'id': 49, 'related': []},
+        {
+            'broader': [13],
+            'narrower': [],
+            'notes': [],
+            'labels': [
+                {'type': 'prefLabel', 'language': 'nl', 'label': 'brons'},
+                {'type': 'prefLabel', 'language': 'fr', 'label': 'bronze'},
+                {'type': 'prefLabel', 'language': 'en', 'label': 'bronze'},
+            ], 
+            'type': 'concept',
+            'id': 14,
+            'related': []
+        },
+        {
+            'broader': [0],
+            'narrower': [],
+            'notes': [
+                {
+                    'type': 'definition',
+                    'language': 'nl',
+                    'note': 'Cement is de benaming voor verschillende stoffen die een snel verhardend bindmiddel voor bouwwerken (mortel) opleveren.'
+                }
+            ],
+            'labels': [
+                {'type': 'prefLabel', 'language': 'nl', 'label': 'cement'}
+            ], 
+            'type': 'concept',
+            'id': 49,
+            'related': []
+        },
         {'broader': [24], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'dierlijk botmateriaal'}], 'type': 'concept', 'id': 25, 'related': []},
         {'broader': [38], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'gewapend beton'}, {'type': 'prefLabel', 'language': 'en', 'label': 'reinforced concrete'}, {'type': 'prefLabel', 'language': 'fr', 'label': 'béton armé'}], 'type': 'concept', 'id': 39, 'related': []},
         {'broader': [21], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'gewei'}], 'type': 'concept', 'id': 27, 'related': []},
         {'broader': [0], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'glas'}], 'type': 'concept', 'id': 7, 'related': []},
-        {'broader': [8], 'narrower': [10], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'goud'}], 'type': 'concept', 'id': 9, 'related': []},
+        {
+            'broader': [8],
+            'narrower': [10],
+            'notes': [],
+            'labels': [
+                {'type': 'prefLabel', 'language': 'nl', 'label': 'goud'},
+                {'type': 'prefLabel', 'language': 'en', 'label': 'gold'},
+                {'type': 'prefLabel', 'language': 'fr', 'label': 'or'}
+            ], 
+            'type': 'concept', 
+            'id': 9, 
+            'related': []
+        },
         {'broader': [21], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'hoorn/hoornpitten'}], 'type': 'concept', 'id': 28, 'related': []},
         {'broader': [32], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'hout'}], 'type': 'concept', 'id': 35, 'related': []},
         {'broader': [32], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'houtskool'}], 'type': 'concept', 'id': 36, 'related': []},
@@ -55,8 +112,36 @@ mdata = [
         {'broader': [1], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'steengoed'}], 'type': 'concept', 'id': 6, 'related': []},
         {'broader': [32], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'textiel'}], 'type': 'concept', 'id': 37, 'related': []},
         {'broader': [8], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'tin'}], 'type': 'concept', 'id': 18, 'related': []},
-        {'broader': [43], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'wommersomkwartsiet'}], 'type': 'concept', 'id': 45, 'related': []},
-        {'broader': [8], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'zilver'}], 'type': 'concept', 'id': 19, 'related': []}
+        {
+            'broader': [43],
+            'narrower': [],
+            'notes': [
+                {
+                    'type': 'defintion', 
+                    'language': 'nl',
+                    'note': 'Wommersomkwartsiet vertoont een textuur van hoekige kwartskorrels in een fijnkorrelig kwartscement ingebed. Deze gesteentesoort komt schijnbaar alleen voor in Wommersom, nabij Tienen. Het vertoont enige gelijkenis met silex en werd alsdusdanig ook gebruikt om prehistorische werktuigen te maken.'
+                }
+            ], 
+            'labels': [
+                {'type': 'prefLabel', 'language': 'nl', 'label': 'wommersomkwartsiet'},
+                {'type': 'prefLabel', 'language': 'fr', 'label': 'grès quartzite de Wommersom'}
+            ], 
+            'type': 'concept',
+            'id': 45,
+            'related': []
+        },
+        {
+            'broader': [8],
+            'narrower': [],
+            'notes': [],
+            'labels': [
+                {'type': 'prefLabel', 'language': 'nl', 'label': 'zilver'},
+                {'type': 'prefLabel', 'language': 'en', 'label': 'silver'},
+                {'type': 'prefLabel', 'language': 'fr', 'label': 'argent'},
+            ], 
+            'type': 'concept',
+            'id': 19, 
+            'related': []}
 ]
 
 materials = DictionaryProvider(
