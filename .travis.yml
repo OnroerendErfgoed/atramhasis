@@ -4,23 +4,26 @@ python:
  - "3.3"
  - "3.4"
 before_install:
-# - sudo apt-get update
-# - sudo apt-get install -y python-software-properties
-# - sudo add-apt-repository -y ppa:chris-lea/node.js
-# - sudo apt-get update
-# - sudo apt-get install nodejs
-# - sudo npm install -g bower grunt-cli
+ - sudo apt-get update
+ - sudo apt-get install -y python-software-properties
+ - sudo add-apt-repository -y ppa:chris-lea/node.js
+ - sudo apt-get update
+ - sudo apt-get install nodejs
+ - sudo npm install -g bower
+ - sudo npm install -g grunt-cli
 install:
-# - pip install -U setuptools
-# - python setup.py develop
-# - pip install -r requirements.txt #fix versions
-# - pip install -U pytest pytest-cov coveralls webtest #install test deps
-script:
-# - py.test --cov atramhasis --cov-report term-missing tests
+ - pip install -U setuptools
+ - python setup.py develop
+ - pip install -r requirements.txt #fix versions
+ - pip install -U pytest pytest-cov coveralls webtest #install test deps
+ - bower install
+before_script:
  - pwd
  - cd ./atramhasis/static/admin
  - pwd
  - ls
-# - grunt -v build
+ - grunt -v build
+script:
+ - py.test --cov atramhasis --cov-report term-missing tests
 after_success:
  - coveralls
