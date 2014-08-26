@@ -1,8 +1,10 @@
-language: python
+language: python, node_js
 python:
  - "2.7"
  - "3.3"
  - "3.4"
+node_js:
+  - "0.10"
 install:
  - pip install -U setuptools
  - python setup.py develop
