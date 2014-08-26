@@ -19,6 +19,7 @@ script:
  - py.test --cov atramhasis --cov-report term-missing tests
  - pwd
  - cd ./atramhasis/static/admin
- - grunt -v build
+ - pwd
+# - grunt -v build
 after_success:
  - coveralls
