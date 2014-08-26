@@ -3,16 +3,19 @@ python:
  - "2.7"
  - "3.3"
  - "3.4"
-node_js:
-  - "0.10"
+before_install:
+    sudo apt-get update
+    sudo apt-get install nodejs
+    sudo apt-get install npm
+    sudo npm install -g bower grunt-cli
 install:
  - pip install -U setuptools
  - python setup.py develop
  - pip install -r requirements.txt #fix versions
  - pip install -U pytest pytest-cov coveralls webtest #install test deps
 script:
-  py.test --cov atramhasis --cov-report term-missing tests
-  cd atramhasis\static\admin
-  grunt -v build
+    py.test --cov atramhasis --cov-report term-missing tests
+    cd atramhasis/static/admin
+    grunt -v build
 after_success:
-  coveralls
+    coveralls
