@@ -6,7 +6,7 @@ pyramid-tm==0.7
 # skos
 skosprovider==0.3.0
 #-e git+https://github.com/koenedaele/skosprovider.git#egg=skosprovider
-skosprovider_sqlalchemy==0.2.0
+skosprovider_sqlalchemy==0.2.1
 #-e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git#egg=skosprovider_sqlalchemy
 pyramid_skosprovider==0.3.0
 #-e git+https://github.com/koenedaele/pyramid_skosprovider.git#egg=pyramid_skosprovider
