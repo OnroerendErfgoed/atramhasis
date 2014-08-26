@@ -16,12 +16,10 @@ install:
  - python setup.py develop
  - pip install -r requirements.txt #fix versions
  - pip install -U pytest pytest-cov coveralls webtest #install test deps
+ - cd ./atramhasis/static/admin
  - bower install
 before_script:
- - pwd
  - cd ./atramhasis/static/admin
- - pwd
- - ls
  - grunt -v build
 script:
  - py.test --cov atramhasis --cov-report term-missing tests
