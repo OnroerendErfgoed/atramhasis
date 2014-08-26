@@ -67,6 +67,7 @@ requires = [
     'waitress',
     'skosprovider',
     'skosprovider_sqlalchemy',
+    'skosprovider_rdf',
     'pyramid_skosprovider',
     'pyramid_jinja2',
     'alembic',

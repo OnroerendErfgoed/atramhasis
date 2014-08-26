@@ -179,7 +179,14 @@ that your :class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
 has a :class:`~skosprovider.uri.UriGenerator` that generates uris for the
 provider. By default, the provider configures a 
 :class:`~skosprovider.uri.DefaultUrnGenerator`, but it's expected that you
-will want to override this. 
+will want to override this.
+
+.. warning::
+
+   The :class:`~skosprovider.uri.UriGenerator` that you configure only generates
+   URI's when creating new concepts or collections. When importing existing
+   vocabularies, please be sure to create the URI's before or during import 
+   (possbily by using a relevant generator yourself).
 
 Suppose you have decided that your URI's should look like this: 
 `http://id.mydata.org/thesauri/stuff/[id]`. You can do this by registering
