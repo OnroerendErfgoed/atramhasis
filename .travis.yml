@@ -18,6 +18,7 @@ install:
  - pip install -U pytest pytest-cov coveralls webtest #install test deps
  - (cd ./atramhasis/static/admin && bower install)
 before_script:
+ - grunt -version
  - (cd ./atramhasis/static/admin && grunt -v build)
 script:
  - py.test --cov atramhasis --cov-report term-missing tests
