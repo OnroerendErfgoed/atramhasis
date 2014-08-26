@@ -1,4 +1,4 @@
-language: python, node_js
+language: python
 python:
  - "2.7"
  - "3.3"
@@ -12,5 +12,7 @@ install:
  - pip install -U pytest pytest-cov coveralls webtest #install test deps
 script:
   py.test --cov atramhasis --cov-report term-missing tests
+  cd atramhasis\static\admin
+  grunt -v build
 after_success:
   coveralls
