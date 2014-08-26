@@ -185,8 +185,8 @@ will want to override this.
 
    The :class:`~skosprovider.uri.UriGenerator` that you configure only generates
    URI's when creating new concepts or collections. When importing existing
-   vocabularies, please be sure to create the URI's during importing (possbily
-   by using a relevant generator yourself).
+   vocabularies, please be sure to create the URI's before or during import 
+   (possbily by using a relevant generator yourself).
 
 Suppose you have decided that your URI's should look like this: 
 `http://id.mydata.org/thesauri/stuff/[id]`. You can do this by registering
