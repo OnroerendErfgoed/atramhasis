@@ -19,7 +19,7 @@ install:
  - (cd ./atramhasis/static/admin && bower install)
 before_script:
  - grunt -version
- - (cd ./atramhasis/static/admin && grunt -v build)
+ - (cd ./atramhasis/static/admin && ls && grunt -v build)
 script:
  - py.test --cov atramhasis --cov-report term-missing tests
 after_success:
