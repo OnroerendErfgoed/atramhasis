@@ -17,7 +17,7 @@ install:
  - pip install -r requirements.txt #fix versions
  - pip install -U pytest pytest-cov coveralls webtest #install test deps
  - (cd ./atramhasis/static/admin && bower install)
- - (cd ./atramhasis/static/admin && npm install)
+ - (cd ./atramhasis/static/admin && sudo npm install)
 before_script:
  - (cd ./atramhasis/static/admin && grunt -v build)
 script:
