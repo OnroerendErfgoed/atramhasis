@@ -34,6 +34,7 @@ def map_concept(concept, concept_json, db_session):
             note = Note(note=n.get('note', ''), notetype_id=n.get('type', ''), language_id=n.get('language', ''))
             concept.notes.append(note)
 
+        concept.broader_concepts.clear()
         concept.member_of.clear()
         member_of = concept_json.get('member_of', [])
         for memberof_id in member_of:
@@ -43,6 +44,15 @@ def map_concept(concept, concept_json, db_session):
             except NoResultFound:
                 memberof_collection = Collection(concept_id=memberof_id, conceptscheme_id=concept.conceptscheme_id)
             concept.member_of.add(memberof_collection)
+
+        broader = concept_json.get('broader', [])
+        for broader_id in broader:
+            try:
+                broader_concept = db_session.query(Concept).filter_by(concept_id=broader_id,
+                                                                      conceptscheme_id=concept.conceptscheme_id).one()
+            except NoResultFound:
+                broader_concept = Concept(concept_id=broader_id, conceptscheme_id=concept.conceptscheme_id)
+            concept.broader_concepts.add(broader_concept)
 
         if concept.type == 'concept':
             concept.related_concepts.clear()
@@ -54,15 +64,6 @@ def map_concept(concept, concept_json, db_session):
                 except NoResultFound:
                     related_concept = Concept(concept_id=related_id, conceptscheme_id=concept.conceptscheme_id)
                 concept.related_concepts.add(related_concept)
-            concept.broader_concepts.clear()
-            broader = concept_json.get('broader', [])
-            for broader_id in broader:
-                try:
-                    broader_concept = db_session.query(Concept).filter_by(concept_id=broader_id,
-                                                                          conceptscheme_id=concept.conceptscheme_id).one()
-                except NoResultFound:
-                    broader_concept = Concept(concept_id=broader_id, conceptscheme_id=concept.conceptscheme_id)
-                concept.broader_concepts.add(broader_concept)
             concept.narrower_concepts.clear()
             narrower = concept_json.get('narrower', [])
             for narrower_id in narrower:

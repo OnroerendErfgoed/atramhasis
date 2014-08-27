@@ -180,7 +180,7 @@ class AtramhasisView(object):
                         scheme_id, concept.concept_id, concept.uri, concept.type,
                         concept.label(self.request.locale_name).label,
                         labels_to_string(concept.labels, 'prefLabel'), labels_to_string(concept.labels, 'altLabel'),
-                        get_definition(concept.notes), '', [c.concept_id for c in concept.members], ''))
+                        get_definition(concept.notes), [c.concept_id for c in concept.broader_concepts], [c.concept_id for c in concept.members], ''))
         return {
             'header': header,
             'rows': rows,
@@ -212,15 +212,15 @@ class AtramhasisView(object):
                 .filter(
                 Concept.conceptscheme_id == conceptscheme_id,
                 ~Concept.broader_concepts.any(),
-                ~Collection.member_of.any()
+                ~Concept.member_of.any()
             ).all()
             tcl = self.request.db \
                 .query(Collection) \
                 .filter(
                 Collection.conceptscheme_id == conceptscheme_id,
-                ~Collection.member_of.any()
+                ~Collection.member_of.any(),
+                ~Collection.broader_concepts.any()
             ).all()
-
             scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
                           sorted(tcl, key=lambda child: child.label(locale).label.lower())
 
@@ -233,7 +233,7 @@ class AtramhasisView(object):
         if thing.type and thing.type == 'collection':
             cs = [member for member in thing.members] if hasattr(thing, 'members') else []
         else:
-            cs = [c for c in thing.narrower_concepts]
+            cs = [c for c in thing.narrower_concepts] + [c for c in thing.narrower_collections]
 
         sortedcs = sorted(cs, key=lambda child: child.label(locale).label.lower())
         children = [self.parse_thing(c, tree_id) for index, c in enumerate(sortedcs, 1)]

@@ -69,6 +69,10 @@
         {% endif %}
 
         {% if conceptType == 'Collection' %}
+            {% if concept.broader_concepts|length > 0 %}
+                <h4 class="subheader">{% trans %}broader{% endtrans %}:</h4>
+                {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+            {% endif %}
             <h4 class="subheader">{% trans %}members{% endtrans %}:</h4>
             {{ render_relaties_lijst(request, concept.members, scheme_id) }}
         {% endif %}
