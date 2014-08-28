@@ -64,8 +64,7 @@ def concept_adapter(obj, request):
         'labels': obj.labels,
         'notes': obj.notes,
         'broader': [map_relation(c) for c in obj.broader_concepts],
-        'narrower': [map_relation(c) for c in obj.narrower_concepts] +
-                    [map_relation(c) for c in obj.narrower_collections],
+        'narrower': [map_relation(c) for c in obj.narrower_concepts],
         'related': [map_relation(c) for c in obj.related_concepts],
         'member_of': [map_relation(c) for c in obj.member_of]
     }
