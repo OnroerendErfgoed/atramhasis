@@ -218,8 +218,7 @@ class AtramhasisView(object):
                 .query(Collection) \
                 .filter(
                 Collection.conceptscheme_id == conceptscheme_id,
-                ~Collection.member_of.any(),
-                ~Collection.broader_concepts.any()
+                ~Collection.member_of.any()
             ).all()
             scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
                           sorted(tcl, key=lambda child: child.label(locale).label.lower())
@@ -233,7 +232,7 @@ class AtramhasisView(object):
         if thing.type and thing.type == 'collection':
             cs = [member for member in thing.members] if hasattr(thing, 'members') else []
         else:
-            cs = [c for c in thing.narrower_concepts] + [c for c in thing.narrower_collections]
+            cs = [c for c in thing.narrower_concepts]
 
         sortedcs = sorted(cs, key=lambda child: child.label(locale).label.lower())
         children = [self.parse_thing(c, tree_id) for index, c in enumerate(sortedcs, 1)]

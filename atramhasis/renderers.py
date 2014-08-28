@@ -85,8 +85,7 @@ def collection_adapter(obj, request):
         'label': obj.label().label if obj.label() else None,
         'labels': obj.labels,
         'members': [map_relation(c) for c in obj.members],
-        'member_of': [map_relation(c) for c in obj.member_of],
-        'broader': [map_relation(c) for c in obj.broader_concepts]
+        'member_of': [map_relation(c) for c in obj.member_of]
     }
 
 

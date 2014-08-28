@@ -44,16 +44,6 @@ def map_concept(concept, concept_json, db_session):
                 memberof_collection = Collection(concept_id=memberof_id, conceptscheme_id=concept.conceptscheme_id)
             concept.member_of.add(memberof_collection)
 
-        concept.broader_concepts.clear()
-        broader = concept_json.get('broader', [])
-        for broader_id in broader:
-            try:
-                broader_concept = db_session.query(Concept).filter_by(concept_id=broader_id,
-                                                                      conceptscheme_id=concept.conceptscheme_id).one()
-            except NoResultFound:
-                broader_concept = Concept(concept_id=broader_id, conceptscheme_id=concept.conceptscheme_id)
-            concept.broader_concepts.add(broader_concept)
-
         if concept.type == 'concept':
             concept.related_concepts.clear()
             related = concept_json.get('related', [])
@@ -65,6 +55,16 @@ def map_concept(concept, concept_json, db_session):
                     related_concept = Concept(concept_id=related_id, conceptscheme_id=concept.conceptscheme_id)
                 concept.related_concepts.add(related_concept)
             concept.narrower_concepts.clear()
+
+            concept.broader_concepts.clear()
+            broader = concept_json.get('broader', [])
+            for broader_id in broader:
+                try:
+                    broader_concept = db_session.query(Concept).filter_by(concept_id=broader_id,
+                                                                          conceptscheme_id=concept.conceptscheme_id).one()
+                except NoResultFound:
+                    broader_concept = Concept(concept_id=broader_id, conceptscheme_id=concept.conceptscheme_id)
+                concept.broader_concepts.add(broader_concept)
             narrower = concept_json.get('narrower', [])
             for narrower_id in narrower:
                 try:
