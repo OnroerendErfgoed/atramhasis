@@ -94,7 +94,7 @@ define(
                     typeComboBox.on("change", function () {
                         var val = this.get('value');
                         if (val == 'collection') {
-                            self.broaderManager.close();
+                            self.broaderManager.open();
                             self.narrowerManager.close();
                             self.relatedManager.close();
                             self.membersManager.open();
@@ -173,6 +173,10 @@ define(
                     this.relatedManager.setScheme(scheme);
                     this.membersManager.setScheme(scheme);
                     this.memberofManager.setScheme(scheme);
+                    if (concept.broader)
+                        {
+                            this.broaderManager.setRelations(concept.broader);
+                        }
                     if (concept) {
                         console.log("editing existing concept: " + concept.label);
                         this.conceptId = concept.id;
@@ -184,10 +188,6 @@ define(
                         {
                          this.memberofManager.setRelations(concept.member_of);
 
-                        }
-                        if (concept.broader)
-                        {
-                            this.broaderManager.setRelations(concept.broader);
                         }
                         if (concept.narrower)
                         {

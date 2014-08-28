@@ -34,7 +34,6 @@ def map_concept(concept, concept_json, db_session):
             note = Note(note=n.get('note', ''), notetype_id=n.get('type', ''), language_id=n.get('language', ''))
             concept.notes.append(note)
 
-        concept.broader_concepts.clear()
         concept.member_of.clear()
         member_of = concept_json.get('member_of', [])
         for memberof_id in member_of:
@@ -45,6 +44,7 @@ def map_concept(concept, concept_json, db_session):
                 memberof_collection = Collection(concept_id=memberof_id, conceptscheme_id=concept.conceptscheme_id)
             concept.member_of.add(memberof_collection)
 
+        concept.broader_concepts.clear()
         broader = concept_json.get('broader', [])
         for broader_id in broader:
             try:
