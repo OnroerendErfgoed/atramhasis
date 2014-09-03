@@ -13,11 +13,6 @@ from pyramid.paster import (
 from pyramid.scripts.common import parse_vars
 from zope.sqlalchemy import ZopeTransactionExtension
 
-from fixtures.data import trees, geo
-from fixtures.styles_and_cultures import styles_and_cultures
-from fixtures.materials import materials
-
-
 def usage(argv):
     cmd = os.path.basename(argv[0])
     print('usage: %s <config_uri> [var=value]\n'
@@ -26,6 +21,9 @@ def usage(argv):
 
 
 def main(argv=sys.argv):
+    from fixtures.data import trees, geo
+    from fixtures.styles_and_cultures import styles_and_cultures
+    from fixtures.materials import materials
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]
