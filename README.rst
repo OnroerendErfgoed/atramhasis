@@ -10,5 +10,9 @@ Atramhasis
 .. image:: https://coveralls.io/repos/OnroerendErfgoed/atramhasis/badge.png?branch=master
         :target: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 
-Atramhasis aims to be an online SKOS editor. This webapplication will enable
-users to create SKOS vocabularies, concepts and collections.
+Atramhasis is an online SKOS editor. This webapplication enables
+users to create SKOS vocabularies consisting of Concepts and Collections. It 
+tries to stay close to the SKOS specification. This makes it suited for different
+types of vocabularies such as simple pick lists, authority files, flat lists and
+basic to relatively complex thesauri. Atramhasis is not suited for managing very
+large or complex thesauri such as the `AAT <http://vocab.getty.edu>`_. 
