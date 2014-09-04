@@ -13,6 +13,9 @@ pyramid_skosprovider==0.3.0
 skosprovider_rdf==0.1.3
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_rdf#egg=skosprovider_rdf
 
+#language-tags
+git+https://github.com/OnroerendErfgoed/language-tags.git
+
 # sqlalchemy
 sqlalchemy==0.9.7
 zope.sqlalchemy==0.7.4

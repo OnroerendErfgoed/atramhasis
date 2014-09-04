@@ -116,7 +116,7 @@ class TestValidation(unittest.TestCase):
         self.json_collection = {
             "id": 0,
             "labels": [{
-                           "language": "nl",
+                           "language": "nl-BE",
                            "label": "Stijlen en culturen",
                            "type": "prefLabel"
                        }],
@@ -421,7 +421,7 @@ class TestValidation(unittest.TestCase):
         self.json_concept['labels'].append({
             "label": "Belgium",
             "type": "altLabel",
-            "language": "en-FR"
+            "language": "eng"
         })
         try:
             validated_concept = self.concept_schema.deserialize(self.json_concept)
