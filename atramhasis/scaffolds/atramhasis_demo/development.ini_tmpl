@@ -22,6 +22,10 @@ sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 jinja2.i18n.domain = atramhasis
 
+# Run dojo from source (src) or distribution (dist)
+# If unspecified, defaults to src.
+dojo.mode = dist
+
 persona.secret = sosecret
 persona.audiences = http://localhost:6543
 

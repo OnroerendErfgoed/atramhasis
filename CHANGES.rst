@@ -3,7 +3,8 @@
 
 - Update to skosprovider_sqlalchemy_ 0.2.1.
 - Update to skosprovider_rdf_ 0.1.3 This fixes an issue with RDF having some
-  SKOS elements in the wrong namespace.
+  SKOS elements in the wrong namespace. Also added a missing dependency on
+  skosprovider_rdf_ to setup.py
 - Updated the Travis build file to run a basic dojo build and test for build
   failures.
 
