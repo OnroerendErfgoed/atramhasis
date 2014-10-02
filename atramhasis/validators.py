@@ -81,6 +81,7 @@ def concept_schema_validator(node, cstruct):
     m_validated = False
     o_validated = False
     errors = []
+    min_labels_rule(errors, node, cstruct)
     if 'labels' in cstruct:
         labels = copy.deepcopy(cstruct['labels'])
         label_type_rule(errors, node, request, labels)
@@ -151,6 +152,16 @@ def max_preflabels_rule(errors, node, labels):
                 preflabel_found.append(label['language'])
 
 
+def min_labels_rule(errors, node, cstruct):
+    if 'labels' in cstruct:
+        labels = copy.deepcopy(cstruct['labels'])
+        if len(labels) == 0:
+            errors.append(colander.Invalid(
+                node['labels'],
+                'A concept or collection should have at least one label'
+            ))
+
+
 def label_type_rule(errors, node, request, labels):
     label_types = request.db.query(LabelType).all()
     label_types = [label_type.name for label_type in label_types]
@@ -176,7 +187,7 @@ def label_lang_rule(errors, node, request, labels):
 def concept_type_rule(errors, node_location, request, conceptscheme_id, members):
     for member_concept_id in members:
         member_concept = request.db.query(Thing).filter_by(concept_id=member_concept_id,
-                                                                   conceptscheme_id=conceptscheme_id).one()
+                                                           conceptscheme_id=conceptscheme_id).one()
         if member_concept.type != 'concept':
             errors.append(colander.Invalid(
                 node_location,
@@ -187,7 +198,7 @@ def concept_type_rule(errors, node_location, request, conceptscheme_id, members)
 def collection_type_rule(errors, node_location, request, conceptscheme_id, members):
     for member_collection_id in members:
         member_collection = request.db.query(Thing).filter_by(concept_id=member_collection_id,
-                                                                         conceptscheme_id=conceptscheme_id).one()
+                                                              conceptscheme_id=conceptscheme_id).one()
         if member_collection.type != 'collection':
             errors.append(colander.Invalid(
                 node_location,
@@ -257,7 +268,7 @@ def narrower_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
 def broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy):
     for broader_concept_id in broader:
         broader_concept = request.db.query(Thing).filter_by(concept_id=broader_concept_id,
-                                                                    conceptscheme_id=conceptscheme_id).one()
+                                                            conceptscheme_id=conceptscheme_id).one()
         if broader_concept is not None and broader_concept.type == 'concept':
             broader_concepts = [n.concept_id for n in broader_concept.broader_concepts]
             for broader_id in broader_concepts:

@@ -555,3 +555,57 @@ class TestValidation(unittest.TestCase):
             error_raised = True
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
+
+    def test_min_labels_rule(self):
+        error_raised = False
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)
+
+    def test_min_labels_rule_empty_labels(self):
+        error_raised = False
+        validated_concept = None
+        self.json_concept['labels'] = []
+        error = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+        self.assertIsNotNone(error)
+        self.assertTrue(isinstance(error, ValidationError))
+        self.assertIn({'labels': 'A concept or collection should have at least one label'}, error.errors)
+
+    def test_min_labels_rule_no_labels(self):
+        error_raised = False
+        validated_concept = None
+        json_concept = {
+            "narrower": [8, 7, 9],
+            "type": "concept",
+            "id": 4,
+            "broader": [2],
+            "related": [5],
+            "notes": [{
+                          "note": "een notitie",
+                          "type": "note",
+                          "language": "nl"
+                      }],
+            "member_of": [666]
+        }
+        error = None
+        try:
+            validated_concept = self.concept_schema.deserialize(json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+        self.assertIsNotNone(error)
+        self.assertTrue(isinstance(error, ValidationError))
+        self.assertIn({'labels':'A concept or collection should have at least one label'}, error.errors)
