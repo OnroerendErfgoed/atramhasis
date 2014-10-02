@@ -132,7 +132,7 @@ class AtramhasisCrud(object):
         self.request.response.status = '200'
         return from_thing(concept)
 
-    @view_config(route_name='atramhasis.delete_concept', permission='edit')
+    @view_config(route_name='atramhasis.delete_concept', permission='delete')
     def delete_concept(self):
         '''
         Delete an existing concept
