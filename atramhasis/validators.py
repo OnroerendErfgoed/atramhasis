@@ -91,17 +91,17 @@ def concept_schema_validator(node, cstruct):
         related = copy.deepcopy(cstruct['related'])
         r_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['related'], request,
                                                                          conceptscheme_id, related)
-        concept_relations_rule(errors, node, related, concept_type)
+        concept_relations_rule(errors, node['related'], related, concept_type)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
         n_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['narrower'], request,
                                                                          conceptscheme_id, narrower)
-        concept_relations_rule(errors, node, narrower, concept_type)
+        concept_relations_rule(errors, node['narrower'], narrower, concept_type)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
         b_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['broader'], request,
                                                                          conceptscheme_id, broader)
-        concept_relations_rule(errors, node, broader, concept_type)
+        concept_relations_rule(errors, node['broader'], broader, concept_type)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
         m_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['members'], request,
@@ -118,7 +118,7 @@ def concept_schema_validator(node, cstruct):
         concept_type_rule(errors, node['related'], request, conceptscheme_id, related)
 
     if m_validated and o_validated:
-        members_only_in_collection_rule(errors, node, concept_type, members)
+        members_only_in_collection_rule(errors, node['members'], concept_type, members)
         collection_members_unique_rule(errors, node['members'], members)
         collection_type_rule(errors, node['member_of'], request, conceptscheme_id, member_of)
         memberof_hierarchy_rule(errors, node['member_of'], request, conceptscheme_id, cstruct)
