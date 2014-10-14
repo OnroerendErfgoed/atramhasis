@@ -1,3 +1,11 @@
+0.4.0 (???)
+-----------
+
+- Update to skosprovider_ 0.4.0
+- Implement a delete permission
+- Fix bug when submitting an empty concept
+
+
 0.3.1 (05-09-2014)
 ------------------
 
