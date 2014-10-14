@@ -3,7 +3,7 @@
 
 - Update to skosprovider_ 0.4.0
 - Implement a delete permission
-- Fix bug when submitting an empty concept
+- Add validation rule to have at least one label 
 
 
 0.3.1 (05-09-2014)
