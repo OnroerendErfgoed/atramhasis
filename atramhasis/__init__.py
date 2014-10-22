@@ -1,6 +1,4 @@
 from pyramid.config import Configurator
-from sqlalchemy import engine_from_config
-from skosprovider_sqlalchemy.models import Base as SkosBase
 from atramhasis.renderers import json_renderer_verbose
 from .models import Base
 
@@ -46,9 +44,6 @@ def includeme(config):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    Base.metadata.bind = engine
-    SkosBase.metadata.bind = engine
     config = Configurator(settings=settings)
     includeme(config)
 

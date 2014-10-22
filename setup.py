@@ -59,7 +59,6 @@ class PrepareScaffold(Command):
 
 requires = [
     'pyramid',
-    'pyramid_debugtoolbar',
     'pyramid_tm',
     'SQLAlchemy',
     'transaction',
