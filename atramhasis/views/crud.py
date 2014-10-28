@@ -102,6 +102,7 @@ class AtramhasisCrud(object):
         concept.uri = self.provider.uri_generator.generate(id=cid)
         map_concept(concept, validated_json_concept, self.request.db)
         self.db.add(concept)
+        self.db.flush()
 
         invalidate_scheme_cache(self.scheme_id)
 

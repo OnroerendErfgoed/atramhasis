@@ -5,7 +5,7 @@ import unittest
 
 import six
 from pyramid.config import Configurator
-from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language
+from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
@@ -17,6 +17,7 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.db import db
+from fixtures.styles_and_cultures import styles_and_cultures
 from fixtures.data import trees, geo
 from fixtures.materials import materials
 
@@ -110,18 +111,24 @@ class FunctionalTests(unittest.TestCase):
         self.config.registry.dbmaker = self.session_maker
         self.config.add_request_method(db, reify=True)
 
-        self.config.include('atramhasis.skos')
-
         with transaction.manager:
             local_session = self.session_maker()
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2), local_session)
+            import_provider(styles_and_cultures, ConceptScheme(id=3), local_session)
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
             local_session.add(Language('nl', 'Dutch'))
             local_session.add(Language('en', 'English'))
+            local_session.add(MatchType('broadMatch', ''))
+            local_session.add(MatchType('closeMatch', ''))
+            local_session.add(MatchType('exactMatch', ''))
+            local_session.add(MatchType('narrowMatch', ''))
+            local_session.add(MatchType('relatedMatch', ''))
+
+        self.config.include('atramhasis.skos')
 
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)
