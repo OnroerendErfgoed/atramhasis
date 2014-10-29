@@ -3,7 +3,7 @@
 Module containing mapping functions used by Atramhasis.
 '''
 
-from skosprovider_sqlalchemy.models import Label, Note, Concept, Thing, Collection
+from skosprovider_sqlalchemy.models import Label, Note, Concept, Thing, Collection, Match, MatchType
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -73,6 +73,18 @@ def map_concept(concept, concept_json, db_session):
                 except NoResultFound:
                     narrower_concept = Concept(concept_id=narrower_id, conceptscheme_id=concept.conceptscheme_id)
                 concept.narrower_concepts.add(narrower_concept)
+
+            matches = []
+            matchdict = concept_json.get('matches', {})
+            for type in matchdict:
+                matchtype = db_session.query(MatchType).filter_by(name=type).one()
+                for uri in matchdict[type]:
+                    match = Match()
+                    match.matchtype = matchtype
+                    match.uri = uri
+                    matches.append(match)
+            concept.matches = matches
+
         if concept.type == 'collection':
             concept.members.clear()
             members = concept_json.get('members', [])

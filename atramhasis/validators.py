@@ -48,6 +48,21 @@ class Concepts(colander.SequenceSchema):
     )
 
 
+class MatchList(colander.SequenceSchema):
+    match = colander.SchemaNode(
+        colander.String(),
+        missing=None
+    )
+
+
+class Matches(colander.MappingSchema):
+    broadMatch = MatchList(missing=[])
+    closeMatch = MatchList(missing=[])
+    exactMatch = MatchList(missing=[])
+    narrowMatch = MatchList(missing=[])
+    relatedMatch = MatchList(missing=[])
+
+
 class Concept(colander.MappingSchema):
     id = colander.SchemaNode(
         colander.Int(),
@@ -64,6 +79,7 @@ class Concept(colander.MappingSchema):
     related = Concepts(missing=[])
     members = Concepts(missing=[])
     member_of = Concepts(missing=[])
+    matches = Matches(missing={})
 
 
 def concept_schema_validator(node, cstruct):
