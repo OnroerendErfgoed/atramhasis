@@ -17,7 +17,6 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.db import db
-from fixtures.styles_and_cultures import styles_and_cultures
 from fixtures.data import trees, geo
 from fixtures.materials import materials
 
@@ -116,7 +115,7 @@ class FunctionalTests(unittest.TestCase):
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2), local_session)
-            import_provider(styles_and_cultures, ConceptScheme(id=3), local_session)
+            local_session.add(ConceptScheme(id=3))
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
