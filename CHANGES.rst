@@ -2,8 +2,8 @@
 -----------
 
 - Update to skosprovider_ 0.4.2.
-- Update to skosprovider_sqlalchemy_ 0.3.0.
-- Update to pyramid_skosprovider_ 0.4.0
+- Update to skosprovider_sqlalchemy_ 0.4.1.
+- Update to pyramid_skosprovider_ 0.4.0.
 - Implement a delete permission.
 - Add validation rule to have at least one label.
 - Default length of language id changed to 64 characters. This is not available
