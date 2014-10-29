@@ -95,12 +95,12 @@ class TestValidation(unittest.TestCase):
             conceptscheme_id=1
         )
         self.json_concept = {
-            "narrower": [8, 7, 9],
+            "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
             "label": "Belgium",
             "type": "concept",
             "id": 4,
-            "broader": [2],
-            "related": [5],
+            "broader": [{"id": 2}],
+            "related": [{"id": 5}],
             "labels": [{
                            "label": "Belgium",
                            "type": "prefLabel",
@@ -111,7 +111,7 @@ class TestValidation(unittest.TestCase):
                           "type": "note",
                           "language": "nl"
                       }],
-            "member_of": [666]
+            "member_of": [{"id": 666}]
         }
         self.json_collection = {
             "id": 0,
@@ -122,13 +122,13 @@ class TestValidation(unittest.TestCase):
                        }],
             "type": "collection",
             "label": "Stijlen en culturen",
-            "members": [61, 60],
+            "members": [{"id": 61}, {"id": 60}],
             "notes": [{
                           "note": "een notitie",
                           "type": "note",
                           "language": "nl"
                       }],
-            "member_of": [666]
+            "member_of": [{"id": 666}]
         }
 
     def tearDown(self):
@@ -195,7 +195,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNotNone(validated_concept)
 
     def test_related_concept_type_collection(self):
-        self.json_concept['related'].append(666)
+        self.json_concept['related'].append({"id": 666})
         error_raised = False
         error = None
         validated_concept = None
@@ -212,7 +212,7 @@ class TestValidation(unittest.TestCase):
     def test_collection_with_related(self):
         # Collections can not have related relations
         self.json_collection['related'] = []
-        self.json_collection['related'].append(2)
+        self.json_collection['related'].append({"id": 2})
         error_raised = False
         error = None
         validated_concept = None
@@ -237,7 +237,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNotNone(validated_concept)
 
     def test_narrower_concept_type_collection(self):
-        self.json_concept['narrower'].append(666)
+        self.json_concept['narrower'].append({"id": 666})
         error_raised = False
         error = None
         validated_concept = None
@@ -254,7 +254,7 @@ class TestValidation(unittest.TestCase):
     def test_collection_with_narrower(self):
         # Collections can not have narrower relations
         self.json_collection['narrower'] = []
-        self.json_collection['narrower'].append(2)
+        self.json_collection['narrower'].append({"id": 2})
         error_raised = False
         error = None
         validated_concept = None
@@ -279,7 +279,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNotNone(validated_concept)
 
     def test_broader_concept_type_collection(self):
-        self.json_concept['broader'].append(666)
+        self.json_concept['broader'].append({"id": 666})
         error_raised = False
         error = None
         validated_concept = None
@@ -296,7 +296,7 @@ class TestValidation(unittest.TestCase):
     def test_collection_with_broader(self):
         # Collections can not have broader relations
         self.json_collection['broader'] = []
-        self.json_collection['broader'].append(2)
+        self.json_collection['broader'].append({"id": 2})
         error_raised = False
         validated_concept = None
         try:
@@ -307,7 +307,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNone(validated_concept)
 
     def test_related_concept_different_conceptscheme(self):
-        self.json_concept['related'].append(777)
+        self.json_concept['related'].append({"id": 777})
         error_raised = False
         error = None
         validated_concept = None
@@ -323,7 +323,7 @@ class TestValidation(unittest.TestCase):
                                   ' should be within one scheme'}, error.errors)
 
     def test_narrower_concept_different_conceptscheme(self):
-        self.json_concept['narrower'].append(777)
+        self.json_concept['narrower'].append({"id": 777})
         error_raised = False
         error = None
         validated_concept = None
@@ -339,7 +339,7 @@ class TestValidation(unittest.TestCase):
                                    ' should be within one scheme'}, error.errors)
 
     def test_broader_concept_different_conceptscheme(self):
-        self.json_concept['broader'].append(777)
+        self.json_concept['broader'].append({"id": 777})
         error_raised = False
         error = None
         validated_concept = None
@@ -355,7 +355,7 @@ class TestValidation(unittest.TestCase):
                                   ' should be within one scheme'}, error.errors)
 
     def test_broader_concept_hierarchy(self):
-        self.json_concept['broader'].append(14)
+        self.json_concept['broader'].append({"id": 14})
         error_raised = False
         error = None
         validated_concept = None
@@ -371,7 +371,7 @@ class TestValidation(unittest.TestCase):
                                   'be a narrower concept of the concept being edited.'}, error.errors)
 
     def test_broader_concept_hierarchy_no_narrower(self):
-        self.json_concept['broader'].append(8)
+        self.json_concept['broader'].append({"id": 8})
         self.json_concept['narrower'] = []
         error_raised = False
         validated_concept = None
@@ -383,7 +383,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNotNone(validated_concept)
 
     def test_narrower_concept_hierarchy(self):
-        self.json_concept['narrower'].append(1)
+        self.json_concept['narrower'].append({"id": 1})
         error_raised = False
         error = None
         validated_concept = None
@@ -399,7 +399,7 @@ class TestValidation(unittest.TestCase):
                                    'be a broader concept of the concept being edited.'}, error.errors)
 
     def test_narrower_concept_hierarchy_no_broader(self):
-        self.json_concept['narrower'].append(1)
+        self.json_concept['narrower'].append({"id": 1})
         self.json_concept['broader'] = []
         error_raised = False
         validated_concept = None
@@ -427,7 +427,7 @@ class TestValidation(unittest.TestCase):
         error_raised = False
         error = None
         validated_collection = None
-        self.json_collection['members'].append(777)
+        self.json_collection['members'].append({"id": 777})
         try:
             validated_collection = self.concept_schema.deserialize(self.json_collection)
         except ValidationError as e:
@@ -541,7 +541,7 @@ class TestValidation(unittest.TestCase):
 
     def test_memberof_concept_type_concept(self):
         # Nothing can be a member_of a Concept
-        self.json_concept['member_of'].append(2)
+        self.json_concept['member_of'].append({"id": 2})
         error_raised = False
         error = None
         validated_concept = None
@@ -557,7 +557,7 @@ class TestValidation(unittest.TestCase):
 
     def test_members_collection_unique(self):
         # A Collection is a Set (every element of the Collection should be unique).
-        self.json_collection['members'].append(61)
+        self.json_collection['members'].append({"id": 61})
         error_raised = False
         error = None
         validated_concept = None
@@ -574,7 +574,7 @@ class TestValidation(unittest.TestCase):
     def test_concept_members(self):
         # A Concept does not have members.
         self.json_concept['members'] = []
-        self.json_concept['members'].append(2)
+        self.json_concept['members'].append({"id": 2})
         error_raised = False
         error = None
         validated_concept = None
@@ -590,7 +590,7 @@ class TestValidation(unittest.TestCase):
 
     def test_memberof_concept_hierarchy_simple(self):
         # The hierarchy should not contain loops
-        self.json_collection['members'].append(666)
+        self.json_collection['members'].append({"id": 666})
         error_raised = False
         error = None
         validated_concept = None
@@ -607,7 +607,7 @@ class TestValidation(unittest.TestCase):
 
     def test_memberof_concept_hierarchy_deep(self):
         # The hierarchy should not contain loops
-        self.json_collection['members'].append(62)
+        self.json_collection['members'].append({"id": 62})
         error_raised = False
         error = None
         validated_concept = None
@@ -624,7 +624,7 @@ class TestValidation(unittest.TestCase):
 
     def test_members_concept_hierarchy_simple(self):
         # The hierarchy should not contain loops
-        self.json_collection['member_of'].append(61)
+        self.json_collection['member_of'].append({"id": 61})
         error_raised = False
         error = None
         validated_concept = None
@@ -641,7 +641,7 @@ class TestValidation(unittest.TestCase):
 
     def test_members_concept_hierarchy_deep(self):
         # The hierarchy should not contain loops
-        self.json_collection['member_of'].append(667)
+        self.json_collection['member_of'].append({"id": 667})
         error_raised = False
         error = None
         validated_concept = None
@@ -686,17 +686,17 @@ class TestValidation(unittest.TestCase):
         error_raised = False
         validated_concept = None
         json_concept = {
-            "narrower": [8, 7, 9],
+            "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
             "type": "concept",
             "id": 4,
-            "broader": [2],
-            "related": [5],
+            "broader": [{"id": 2}],
+            "related": [{"id": 5}],
             "notes": [{
                           "note": "een notitie",
                           "type": "note",
                           "language": "nl"
                       }],
-            "member_of": [666]
+            "member_of": [{"id": 666}]
         }
         error = None
         try:

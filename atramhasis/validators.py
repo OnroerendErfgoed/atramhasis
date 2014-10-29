@@ -41,11 +41,14 @@ class Notes(colander.SequenceSchema):
     note = Note()
 
 
-class Concepts(colander.SequenceSchema):
-    concept = colander.SchemaNode(
-        colander.Int(),
-        missing=None
+class RelatedConcept(colander.MappingSchema):
+    id = colander.SchemaNode(
+        colander.Int()
     )
+
+
+class Concepts(colander.SequenceSchema):
+    concept = RelatedConcept()
 
 
 class MatchList(colander.SequenceSchema):
@@ -105,25 +108,30 @@ def concept_schema_validator(node, cstruct):
         max_preflabels_rule(errors, node, labels)
     if 'related' in cstruct:
         related = copy.deepcopy(cstruct['related'])
+        related = [m['id'] for m in related]
         r_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['related'], request,
                                                                          conceptscheme_id, related)
         concept_relations_rule(errors, node['related'], related, concept_type)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
+        narrower = [m['id'] for m in narrower]
         n_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['narrower'], request,
                                                                          conceptscheme_id, narrower)
         concept_relations_rule(errors, node['narrower'], narrower, concept_type)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
+        broader = [m['id'] for m in broader]
         b_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['broader'], request,
                                                                          conceptscheme_id, broader)
         concept_relations_rule(errors, node['broader'], broader, concept_type)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
+        members = [m['id'] for m in members]
         m_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['members'], request,
                                                                          conceptscheme_id, members)
     if 'member_of' in cstruct:
         member_of = copy.deepcopy(cstruct['member_of'])
+        member_of = [m['id'] for m in member_of]
         o_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['member_of'], request,
                                                                          conceptscheme_id, member_of)
     if r_validated and n_validated and b_validated:
@@ -241,8 +249,10 @@ def broader_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
     broader = []
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
+        broader = [m['id'] for m in broader]
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
+        narrower = [m['id'] for m in narrower]
         narrower_hierarchy = narrower
         narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy)
     for broader_concept_id in broader:
@@ -269,8 +279,10 @@ def narrower_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
     narrower = []
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
+        narrower = [m['id'] for m in narrower]
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
+        broader = [m['id'] for m in broader]
         broader_hierarchy = broader
         broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy)
     for narrower_concept_id in narrower:
@@ -313,8 +325,10 @@ def memberof_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
     memberof = []
     if 'member_of' in cstruct:
         memberof = copy.deepcopy(cstruct['member_of'])
+        memberof = [m['id'] for m in memberof]
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
+        members = [m['id'] for m in members]
         members_hierarchy = members
         members_hierarchy_build(request, conceptscheme_id, members, members_hierarchy)
     for memberof_concept_id in memberof:
@@ -341,8 +355,10 @@ def members_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
     members = []
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
+        members = [m['id'] for m in members]
     if 'member_of' in cstruct:
         member_of = copy.deepcopy(cstruct['member_of'])
+        member_of = [m['id'] for m in member_of]
         memberof_hierarchy = member_of
         memberof_hierarchy_build(request, conceptscheme_id, member_of, memberof_hierarchy)
     for member_concept_id in members:

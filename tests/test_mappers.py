@@ -13,13 +13,13 @@ from skosprovider_sqlalchemy.models import Concept, Label, Collection
 from atramhasis.mappers import map_concept
 
 test_json = {
-    "narrower": [8, 7, 9],
+    "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
     "label": "Belgium",
     "type": "concept",
     "id": 4,
-    "broader": [2, 11],
-    "related": [5, 12],
-    "member_of": [999],
+    "broader": [{"id": 2}, {"id": 11}],
+    "related": [{"id": 5}, {"id": 12}],
+    "member_of": [{"id": 999}],
     "labels": [{
                    "label": "Belgium",
                    "type": "prefLabel",
@@ -44,8 +44,8 @@ json_collection = {
                }],
     "type": "collection",
     "label": "Stijlen en culturen",
-    "members": [61, 60, 12],
-    "member_of": [999, 7],
+    "members": [{"id": 61}, {"id": 60}, {"id": 12}],
+    "member_of": [{"id": 999}, {"id": 7}],
     "notes": [{
                   "note": "een notitie",
                   "type": "note",

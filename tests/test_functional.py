@@ -40,7 +40,7 @@ json_value = {
 }
 
 json_value_relations = {
-    "broader": [12],
+    "broader": [{"id": 12}],
     "id": 13,
     "related": [],
     "type": "concept",
@@ -51,7 +51,7 @@ json_value_relations = {
                }],
     "label": "koperlegeringen",
     "notes": [],
-    "narrower": [15, 14]
+    "narrower": [{"id": 15}, {"id": 14}]
 }
 
 json_value_invalid = """{
@@ -77,7 +77,7 @@ json_collection_value = {
                }],
     "type": "collection",
     "label": "Test verzameling",
-    "members": [333, 7],
+    "members": [{"id": 333}, {"id": 7}],
     "notes": [{
                   "note": "een notitie",
                   "type": "note",
@@ -255,7 +255,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['type'], 'collection')
 
     def test_edit_collection(self):
-        json_collection_value['members'] = [7, 8]
+        json_collection_value['members'] = [{"id": 7}, {"id": 8}]
         res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers(),
                                     params=json_collection_value)
         self.assertEqual('200 OK', res.status)
