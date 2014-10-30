@@ -31,6 +31,7 @@ define([
         broader: [],
         members: [],
         member_of: [],
+        matches: [],
 
 
         postCreate: function () {
@@ -54,6 +55,11 @@ define([
            self.relatedList = new ConceptDetailList({}, self.relatedListNode);
            self.membersList = new ConceptDetailList({}, self.membersListNode);
            self.memberofList = new ConceptDetailList({}, self.memberofListNode);
+           self.broadMatchList = new ConceptDetailList({}, self.broadMatchListNode);
+           self.closeMatchList = new ConceptDetailList({}, self.closeMatchListNode);
+           self.exactMatchList = new ConceptDetailList({}, self.exactMatchListNode);
+           self.narrowMatchList = new ConceptDetailList({}, self.narrowMatchListNode);
+           self.relatedMatchList = new ConceptDetailList({}, self.relatedMatchListNode);
 
 
             var actionNode = this.actionNode;
@@ -111,6 +117,7 @@ define([
             self.related=refreshedConcept.related;
             self.members=refreshedConcept.members;
             self.member_of=refreshedConcept.member_of;
+            self.matches=refreshedConcept.matches;
             self._CreateNodeLists();
         },
 
@@ -140,6 +147,12 @@ define([
             self.relatedList.buidList(self.relatedList.mapRelationsForList(self.related), "Related", true);
             self.membersList.buidList(self.membersList.mapRelationsForList(self.members), "Members", true);
             self.memberofList.buidList(self.memberofList.mapRelationsForList(self.member_of), "Member of", true);
+
+            self.broadMatchList.buidList(self.broadMatchList.mapMatchesForList(self.matches, "broadMatch"), "BroadMatch", false);
+            self.closeMatchList.buidList(self.closeMatchList.mapMatchesForList(self.matches, "closeMatch"), "CloseMatch", false);
+            self.exactMatchList.buidList(self.exactMatchList.mapMatchesForList(self.matches, "exactMatch"), "ExactMatch", false);
+            self.narrowMatchList.buidList(self.narrowMatchList.mapMatchesForList(self.matches, "narrowMatch"), "NarrowMatch", false);
+            self.relatedMatchList.buidList(self.relatedMatchList.mapMatchesForList(self.matches, "relatedMatch"), "RelatedMatch", false);
 
         }
     });
