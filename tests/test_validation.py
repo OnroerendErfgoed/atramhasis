@@ -415,7 +415,7 @@ class TestValidation(unittest.TestCase):
         validated_collection = None
         try:
             validated_collection = self.concept_schema.deserialize(self.json_collection)
-        except ValidationError:
+        except ValidationError as e:
             error_raised = True
         self.assertFalse(error_raised)
         self.assertIsNotNone(validated_collection)
@@ -709,3 +709,78 @@ class TestValidation(unittest.TestCase):
         self.assertIsNotNone(error)
         self.assertTrue(isinstance(error, ValidationError))
         self.assertIn({'labels': 'A concept or collection should have at least one label'}, error.errors)
+
+    def test_concept_matches_rule(self):
+        error_raised = False
+        validated_concept = None
+        json_concept = {
+            "type": "collection",
+            "labels": [{
+                           "language": "nl",
+                           "label": "Stijlen en culturen",
+                           "type": "prefLabel"
+                       }],
+            "id": 4,
+            "members": [{"id": 666}],
+            "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:somewhere:93"]}
+        }
+        error = None
+        try:
+            validated_concept = self.concept_schema.deserialize(json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+        self.assertIsNotNone(error)
+        self.assertTrue(isinstance(error, ValidationError))
+        self.assertIn({'matches': 'Only concepts can have matches'}, error.errors)
+
+    def test_concept_matches_unique_rule(self):
+        error_raised = False
+        validated_concept = None
+        json_concept = {
+            "type": "concept",
+            "labels": [{
+                           "language": "nl",
+                           "label": "Stijlen en culturen",
+                           "type": "prefLabel"
+                       }],
+            "id": 4,
+            "member_of": [{"id": 666}],
+            "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:sample:666"]}
+        }
+        error = None
+        try:
+            validated_concept = self.concept_schema.deserialize(json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+        self.assertIsNotNone(error)
+        self.assertTrue(isinstance(error, ValidationError))
+        self.assertIn({'matches': 'All matches of a concept should be unique.'}, error.errors)
+
+    def test_concept_matches_unique_rule_pass(self):
+        error_raised = False
+        validated_concept = None
+        json_concept = {
+            "type": "concept",
+            "labels": [{
+                           "language": "nl",
+                           "label": "Stijlen en culturen",
+                           "type": "prefLabel"
+                       }],
+            "id": 4,
+            "member_of": [{"id": 666}],
+            "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:sample:93"]}
+        }
+        error = None
+        try:
+            validated_concept = self.concept_schema.deserialize(json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)

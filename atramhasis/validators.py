@@ -148,6 +148,11 @@ def concept_schema_validator(node, cstruct):
         memberof_hierarchy_rule(errors, node['member_of'], request, conceptscheme_id, cstruct)
         members_hierarchy_rule(errors, node['members'], request, conceptscheme_id, cstruct)
 
+    if 'matches' in cstruct:
+        matches = copy.deepcopy(cstruct['matches'])
+        concept_matches_rule(errors, node['matches'], matches, concept_type)
+        concept_matches_unique_rule(errors, node['matches'], matches)
+
     if len(errors) > 0:
         raise ValidationError(
             'Concept could not be validated',
@@ -378,3 +383,23 @@ def memberof_hierarchy_build(request, conceptscheme_id, member_of, memberof_hier
             for memberof_id in memberof_concepts:
                 memberof_hierarchy.append(memberof_id)
             memberof_hierarchy_build(request, conceptscheme_id, memberof_concepts, memberof_hierarchy)
+
+
+def concept_matches_rule(errors, node_location, matches, concept_type):
+    if matches is not None and len(matches) > 0 and concept_type != 'concept':
+        errors.append(colander.Invalid(
+            node_location,
+            'Only concepts can have matches'
+        ))
+
+
+def concept_matches_unique_rule(errors, node_location, matches):
+    if matches is not None:
+        uri_list = []
+        for matchtype in matches:
+            uri_list.extend([uri for uri in matches[matchtype]])
+        if len(uri_list) > len(set(uri_list)):
+            errors.append(colander.Invalid(
+                node_location,
+                'All matches of a concept should be unique.'
+            ))
