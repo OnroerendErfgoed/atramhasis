@@ -79,9 +79,13 @@ def map_concept(concept, concept_json, db_session):
             for type in matchdict:
                 matchtype = db_session.query(MatchType).filter_by(name=type).one()
                 for uri in matchdict[type]:
-                    match = Match()
-                    match.matchtype = matchtype
-                    match.uri = uri
+                    concept_id = concept_json.get('id', -1)
+                    try:
+                        match = db_session.query(Match).filter_by(uri=uri, matchtype_id=matchtype.name, concept_id=concept_id).one()
+                    except NoResultFound:
+                        match = Match()
+                        match.matchtype = matchtype
+                        match.uri = uri
                     matches.append(match)
             concept.matches = matches
 
