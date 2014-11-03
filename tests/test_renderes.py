@@ -1,5 +1,5 @@
 import unittest
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Match, MatchType
+from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Match, MatchType, Language
 
 
 class TestJsonRenderer(unittest.TestCase):
@@ -143,3 +143,11 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertRaises(KeyError, lambda: relation['members'])
         self.assertRaises(KeyError, lambda: relation['member_of'])
 
+    def test_language_adaptor(self):
+        from atramhasis.renderers import language_adaptor
+        l = Language(id='af', name='Afrikaans')
+        res = language_adaptor(l, None)
+        self.assertIsNotNone(res)
+        self.assertIsInstance(res, dict)
+        self.assertEqual(res['id'], 'af')
+        self.assertEqual(res['name'], 'Afrikaans')
