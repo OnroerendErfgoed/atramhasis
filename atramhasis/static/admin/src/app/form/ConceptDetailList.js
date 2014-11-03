@@ -55,6 +55,18 @@ define([
             });
         },
 
+        mapMatchesForList: function (matches, type) {
+            var filteredMatches = []
+            for(matchType in matches) {
+                if(matchType == type){
+                    filteredMatches = matches[type];
+                }
+            }
+            return arrayUtil.map(filteredMatches, function (item) {
+                return {"id": item, "mainlabel": item};
+            });
+        },
+
         buidList: function (items, title, clickable, isEditRelation) {
             var self=this;
             this.reset();
@@ -78,9 +90,15 @@ define([
                 });
 
                 arrayUtil.forEach(sortedItems, function (item) {
-                    var li = domConstruct.create("li", {
-                        innerHTML: item.mainlabel + " (<em>" + item.sublabel + "</em>)"
-                    }, ul);
+                    if(item.sublabel){
+                        var li = domConstruct.create("li", {
+                            innerHTML: item.mainlabel + " (<em>" + item.sublabel + "</em>)"
+                        }, ul);
+                    }else{
+                        var li = domConstruct.create("li", {
+                            innerHTML: item.mainlabel
+                        }, ul);
+                    }
                     if (clickable) {
                         domClass.add(li, "clickable");
                         on(li, "click", function () {

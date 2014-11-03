@@ -4,7 +4,7 @@ from pyramid.view import view_defaults, view_config, forbidden_view_config
 
 def groupfinder(userid, request):
     if userid:
-        return ['g:edit']
+        return ['g:admin']
 
 
 class Root(object):

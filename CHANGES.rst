@@ -1,3 +1,29 @@
+0.4.0 (???)
+-----------
+
+- Update to skosprovider_ 0.4.2.
+- Update to skosprovider_sqlalchemy_ 0.4.1.
+- Update to pyramid_skosprovider_ 0.4.0.
+- Implement a delete permission.
+- Add validation rule to have at least one label.
+- Default length of language id changed to 64 characters. This is not available
+  as an alembic migration. So only effective when creating a new database.
+  If you already have a database created from an older version of Atramhasis,
+  please modify accordingly. Modifying column length on SQLite is not possible
+  (see http://www.sqlite.org/omitted.html ).
+
+
+0.3.1 (05-09-2014)
+------------------
+
+- Update to skosprovider_sqlalchemy_ 0.2.1.
+- Update to skosprovider_rdf_ 0.1.3 This fixes an issue with RDF having some
+  SKOS elements in the wrong namespace. Also added a missing dependency on
+  skosprovider_rdf_ to setup.py
+- Updated the Travis build file to run a basic dojo build and test for build
+  failures.
+
+
 0.3.0 (15-08-2014)
 ------------------
 
@@ -35,4 +61,5 @@
 
 .. _skosprovider: http://skosprovider.readthedocs.org
 .. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
+.. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org
 .. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org

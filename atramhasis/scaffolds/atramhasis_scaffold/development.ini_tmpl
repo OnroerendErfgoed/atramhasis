@@ -18,6 +18,10 @@ jinja2.directories =
 	atramhasis:templates
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
+# Run dojo from source (src) or distribution (dist)
+# If unspecified, defaults to src.
+dojo.mode = dist
+
 jinja2.i18n.domain = atramhasis
 
 # By default, the toolbar only appears for clients from IP addresses

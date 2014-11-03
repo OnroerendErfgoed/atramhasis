@@ -117,7 +117,7 @@ mdata = [
             'narrower': [],
             'notes': [
                 {
-                    'type': 'defintion', 
+                    'type': 'definition',
                     'language': 'nl',
                     'note': 'Wommersomkwartsiet vertoont een textuur van hoekige kwartskorrels in een fijnkorrelig kwartscement ingebed. Deze gesteentesoort komt schijnbaar alleen voor in Wommersom, nabij Tienen. Het vertoont enige gelijkenis met silex en werd alsdusdanig ook gebruikt om prehistorische werktuigen te maken.'
                 }
