@@ -490,7 +490,8 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
         self.assertTrue(isinstance(error, ValidationError))
-        self.assertIn({'labels': 'Invalid language.'}, error.errors)
+        self.assertIn({'labels': 'Invalid language tag: Unknown code \'eng\', Missing language tag in \'eng\'.'},
+                      error.errors)
 
     def test_label_invalid(self):
         error_raised = False
