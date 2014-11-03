@@ -7,6 +7,7 @@ from skosprovider_sqlalchemy.models import (
     Thing, LabelType, Language)
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import ValidationError
+from language_tags import tags
 
 
 class Label(colander.MappingSchema):
@@ -203,14 +204,19 @@ def label_type_rule(errors, node, request, labels):
 
 
 def label_lang_rule(errors, node, request, labels):
-    languages = request.db.query(Language).all()
-    languages = [language.id for language in languages]
     for label in labels:
-        if label['language'] not in languages:
+        language_tag = label['language']
+        if not tags.check(language_tag):
             errors.append(colander.Invalid(
                 node['labels'],
-                'Invalid language.'
+                'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
             ))
+        else:
+            languages_present = request.db.query(Language).filter_by(id=language_tag).count()
+            if not languages_present:
+                descriptions = ', '.join(tags.description(language_tag))
+                language_item = Language(id=language_tag, name=descriptions)
+                request.db.add(language_item)
 
 
 def concept_type_rule(errors, node_location, request, conceptscheme_id, members):
