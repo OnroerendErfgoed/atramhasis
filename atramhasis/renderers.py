@@ -2,7 +2,7 @@ import csv
 import codecs
 from six import StringIO, text_type, PY2
 from pyramid.renderers import JSON
-from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note
+from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note, Match, MatchType, Language
 
 
 class UnicodeWriter:
@@ -56,6 +56,12 @@ def concept_adapter(obj, request):
     :param skosprovider_sqlalchemy.models.Concept obj: The concept to be rendered.
     :rtype: :class:`dict`
     '''
+    matches = {}
+    for match in obj.matches:
+        if match.matchtype.name in matches:
+            matches[match.matchtype.name].append(match.uri)
+        else:
+            matches[match.matchtype.name] = [match.uri]
     return {
         'id': obj.concept_id,
         'type': obj.type,
@@ -66,7 +72,8 @@ def concept_adapter(obj, request):
         'broader': [map_relation(c) for c in obj.broader_concepts],
         'narrower': [map_relation(c) for c in obj.narrower_concepts],
         'related': [map_relation(c) for c in obj.related_concepts],
-        'member_of': [map_relation(c) for c in obj.member_of]
+        'member_of': [map_relation(c) for c in obj.member_of],
+        'matches': matches
     }
 
 
@@ -126,7 +133,21 @@ def note_adapter(obj, request):
         'language': obj.language_id
     }
 
+
+def language_adaptor(obj, request):
+    '''
+    Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Language` to json.
+
+    :param skosprovider_sqlalchemy.models.Language obj: The language to be rendered.
+    :rtype: :class:`dict`
+    '''
+    return {
+        'id': obj.id,
+        'name': obj.name
+    }
+
 json_renderer_verbose.add_adapter(Concept, concept_adapter)
 json_renderer_verbose.add_adapter(Collection, collection_adapter)
 json_renderer_verbose.add_adapter(Label, label_adapter)
 json_renderer_verbose.add_adapter(Note, note_adapter)
+json_renderer_verbose.add_adapter(Language, language_adaptor)

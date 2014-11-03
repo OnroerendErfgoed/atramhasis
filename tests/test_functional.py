@@ -5,7 +5,7 @@ import unittest
 
 import six
 from pyramid.config import Configurator
-from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language
+from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
@@ -40,7 +40,7 @@ json_value = {
 }
 
 json_value_relations = {
-    "broader": [12],
+    "broader": [{"id": 12}],
     "id": 13,
     "related": [],
     "type": "concept",
@@ -51,7 +51,7 @@ json_value_relations = {
                }],
     "label": "koperlegeringen",
     "notes": [],
-    "narrower": [15, 14]
+    "narrower": [{"id": 15}, {"id": 14}]
 }
 
 json_value_invalid = """{
@@ -77,7 +77,7 @@ json_collection_value = {
                }],
     "type": "collection",
     "label": "Test verzameling",
-    "members": [333, 7],
+    "members": [{"id": 333}, {"id": 7}],
     "notes": [{
                   "note": "een notitie",
                   "type": "note",
@@ -110,18 +110,24 @@ class FunctionalTests(unittest.TestCase):
         self.config.registry.dbmaker = self.session_maker
         self.config.add_request_method(db, reify=True)
 
-        self.config.include('atramhasis.skos')
-
         with transaction.manager:
             local_session = self.session_maker()
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2), local_session)
+            local_session.add(ConceptScheme(id=3))
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
             local_session.add(Language('nl', 'Dutch'))
             local_session.add(Language('en', 'English'))
+            local_session.add(MatchType('broadMatch', ''))
+            local_session.add(MatchType('closeMatch', ''))
+            local_session.add(MatchType('exactMatch', ''))
+            local_session.add(MatchType('narrowMatch', ''))
+            local_session.add(MatchType('relatedMatch', ''))
+
+        self.config.include('atramhasis.skos')
 
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)
@@ -249,7 +255,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['type'], 'collection')
 
     def test_edit_collection(self):
-        json_collection_value['members'] = [7, 8]
+        json_collection_value['members'] = [{"id": 7}, {"id": 8}]
         res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers(),
                                     params=json_collection_value)
         self.assertEqual('200 OK', res.status)

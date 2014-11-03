@@ -1,5 +1,5 @@
 import unittest
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label
+from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Match, MatchType
 
 
 class TestJsonRenderer(unittest.TestCase):
@@ -27,6 +27,21 @@ class TestJsonRenderer(unittest.TestCase):
         labels.append(label2)
         labels.append(label3)
         self.concept.labels = labels
+
+        matches = []
+        match = Match()
+        match.matchtype = MatchType(name='closeMatch', description='test')
+        match.uri = 'urn:somethingelse:st1'
+        matches.append(match)
+        match2 = Match()
+        match2.matchtype = MatchType(name='closeMatch', description='test')
+        match2.uri = 'urn:somethingelse:st2'
+        matches.append(match2)
+        match3 = Match()
+        match3.matchtype = MatchType(name='exactMatch', description='test')
+        match3.uri = 'urn:something:thingy'
+        matches.append(match3)
+        self.concept.matches = matches
 
         self.collection = Collection()
         self.collection.type = 'collection'
@@ -77,6 +92,9 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(len(concept['broader']), 0)
         self.assertIsInstance(concept['related'], list)
         self.assertEqual(len(concept['related']), 0)
+        self.assertIsInstance(concept['matches'], dict)
+        self.assertEqual(len(concept['matches']['exactMatch']), 1)
+        self.assertEqual(len(concept['matches']['closeMatch']), 2)
 
     def test_collection_adapter(self):
         from atramhasis.renderers import collection_adapter

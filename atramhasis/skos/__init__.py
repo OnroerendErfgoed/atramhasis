@@ -11,22 +11,22 @@ log = logging.getLogger(__name__)
 def includeme(config):
     TREES = SQLAlchemyProvider(
         {'id': 'TREES', 'conceptscheme_id': 1},
-        config.registry.dbmaker()
+        config.registry.dbmaker
     )
 
     GEO = SQLAlchemyProvider(
         {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
-        config.registry.dbmaker()
+        config.registry.dbmaker
     )
 
     STYLES = SQLAlchemyProvider(
         {'id': 'STYLES', 'conceptscheme_id': 3},
-        config.registry.dbmaker()
+        config.registry.dbmaker
     )
 
     MATERIALS = SQLAlchemyProvider(
         {'id': 'MATERIALS', 'conceptscheme_id': 4},
-        config.registry.dbmaker(),
+        config.registry.dbmaker,
         uri_generator=UriPatternGenerator('urn:x-vioe:materials:%s')
     )
 

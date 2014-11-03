@@ -32,3 +32,23 @@
 		</ul>
     {% endif %}
 {% endmacro %}
+
+
+{% macro render_matches(matches) %}
+    {% set sorted_matches = {'broadMatch': [], 'closeMatch': [], 'exactMatch': [], 'narrowMatch': [], 'relatedMatch': []} %}
+    {%- for match in matches %}
+        {% if sorted_matches[match.matchtype.name].append(match.uri) %}{% endif %}
+    {%- endfor %}
+    {% if sorted_matches|length > 0 %}
+        {%- for matchtype in sorted_matches %}
+        {% if sorted_matches[matchtype]|length > 0 %}
+        <h4 class="subheader">{{ matchtype }}:</h4>
+		<ul class="concept">
+		    {%- for value in sorted_matches[matchtype] %}
+            <li><a href="{{ value }}">{{ value }}</a></li>
+		    {%- endfor %}
+		</ul>
+        {% endif %}
+        {%- endfor %}
+    {% endif %}
+{% endmacro %}

@@ -151,7 +151,8 @@ define([
                             related: item.related,
                             broader: item.broader,
                             members: item.members,
-                            member_of: item.member_of
+                            member_of: item.member_of,
+                            matches: item.matches
                         });
                         cp = new ContentPane({
                             id: schemeid + "_" + item.id,

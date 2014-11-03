@@ -1,5 +1,5 @@
 import unittest
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label
+from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, ConceptScheme
 from atramhasis.utils import from_thing
 
 from skosprovider.skos import(
@@ -10,12 +10,16 @@ from skosprovider.skos import(
 
 class TestFromThing(unittest.TestCase):
     def setUp(self):
+        conceptscheme = ConceptScheme()
+        conceptscheme.uri = 'urn:x-atramhasis-demo'
+        conceptscheme.id = 1
         self.concept = Concept()
         self.concept.type = 'concept'
         self.concept.id = 11
         self.concept.concept_id = 101
         self.concept.uri = 'urn:x-atramhasis-demo:TREES:101'
         self.concept.conceptscheme_id = 1
+        self.concept.conceptscheme = conceptscheme
 
         notes = []
         note = Note(note='test note', notetype_id='example', language_id='en')
@@ -39,6 +43,7 @@ class TestFromThing(unittest.TestCase):
         self.collection.concept_id = 102
         self.collection.uri = 'urn:x-atramhasis-demo:TREES:102'
         self.collection.conceptscheme_id = 1
+        self.collection.conceptscheme = conceptscheme
 
     def test_thing_to_concept(self):
         skosconcept = from_thing(self.concept)

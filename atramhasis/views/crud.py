@@ -102,6 +102,7 @@ class AtramhasisCrud(object):
         concept.uri = self.provider.uri_generator.generate(id=cid)
         map_concept(concept, validated_json_concept, self.request.db)
         self.db.add(concept)
+        self.db.flush()
 
         invalidate_scheme_cache(self.scheme_id)
 
@@ -132,7 +133,7 @@ class AtramhasisCrud(object):
         self.request.response.status = '200'
         return from_thing(concept)
 
-    @view_config(route_name='atramhasis.delete_concept', permission='edit')
+    @view_config(route_name='atramhasis.delete_concept', permission='delete')
     def delete_concept(self):
         '''
         Delete an existing concept

@@ -59,7 +59,6 @@ class PrepareScaffold(Command):
 
 requires = [
     'pyramid',
-    'pyramid_debugtoolbar',
     'pyramid_tm',
     'SQLAlchemy',
     'transaction',
@@ -69,6 +68,7 @@ requires = [
     'skosprovider_sqlalchemy',
     'skosprovider_rdf',
     'pyramid_skosprovider',
+    'language_tags',
     'pyramid_jinja2',
     'alembic',
     'babel',

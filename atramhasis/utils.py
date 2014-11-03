@@ -3,7 +3,7 @@
 Module containing utility functions used by Atramhasis.
 '''
 
-from skosprovider.skos import Concept, Collection, Label, Note
+from skosprovider.skos import Concept, Collection, Label, Note, ConceptScheme
 
 
 def from_thing(thing):
@@ -20,6 +20,7 @@ def from_thing(thing):
             return Collection(
                 id=thing.concept_id,
                 uri=thing.uri,
+                concept_scheme=ConceptScheme(thing.conceptscheme.uri),
                 labels=[
                     Label(l.label, l.labeltype_id, l.language_id)
                     for l in thing.labels
@@ -31,6 +32,7 @@ def from_thing(thing):
             return Concept(
                 id=thing.concept_id,
                 uri=thing.uri,
+                concept_scheme=ConceptScheme(thing.conceptscheme.uri),
                 labels=[
                     Label(l.label, l.labeltype_id, l.language_id)
                     for l in thing.labels
