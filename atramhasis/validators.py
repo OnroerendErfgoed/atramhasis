@@ -212,13 +212,12 @@ def label_lang_rule(errors, node, request, labels):
                 'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
             ))
         else:
-            languages = request.db.query(Language).all()
-            languages = [language.id for language in languages]
-            if language_tag not in languages:
+            languages_present = request.db.query(Language).filter_by(id=language_tag).count()
+            if not languages_present:
                 descriptions = ', '.join(tags.description(language_tag))
                 language_item = Language(id=language_tag, name=descriptions)
                 request.db.add(language_item)
-                request.db.commit()
+
 
 def concept_type_rule(errors, node_location, request, conceptscheme_id, members):
     for member_concept_id in members:

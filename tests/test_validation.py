@@ -11,11 +11,20 @@ except ImportError:
     from mock import Mock  # pragma: no cover
 import colander
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Collection, LabelType, Language
+from skosprovider_sqlalchemy.models import Concept, Collection, LabelType, Language, Thing
 from atramhasis.validators import (
     Concept as ConceptSchema,
     concept_schema_validator
 )
+
+
+def filter_by_mock_language(id):
+    filter_mock = Mock()
+    if id == 'af':
+        filter_mock.count = Mock(return_value=0)
+    else:
+        filter_mock.count = Mock(return_value=1)
+    return filter_mock
 
 
 def filter_by_mock_concept(concept_id, conceptscheme_id):
@@ -69,7 +78,10 @@ def list_all_languages():
 
 def create_query_mock(some_class):
     query_mock = Mock()
-    query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    if some_class in [Concept, Collection, Thing]:
+        query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    elif some_class == Language:
+        query_mock.filter_by = Mock(side_effect=filter_by_mock_language)
     if some_class == LabelType:
         query_mock.all = Mock(side_effect=list_all_types)
     if some_class == Language:
@@ -492,6 +504,21 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(isinstance(error, ValidationError))
         self.assertIn({'labels': 'Invalid language tag: Unknown code \'eng\', Missing language tag in \'eng\'.'},
                       error.errors)
+
+    def test_label_language_missing(self):
+        error_raised = False
+        validated_concept = None
+        self.json_concept['labels'].append({
+            "label": "Belgium",
+            "type": "altLabel",
+            "language": "af"
+        })
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)
 
     def test_label_invalid(self):
         error_raised = False
