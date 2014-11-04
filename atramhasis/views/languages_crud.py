@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import colander
 from pyramid.view import view_defaults, view_config
 from skosprovider_sqlalchemy.models import Language
 from sqlalchemy.orm.exc import NoResultFound
-from atramhasis.errors import LanguageNotFoundException
+from atramhasis.errors import LanguageNotFoundException, ValidationError
+from atramhasis.validators import LanguageTag, languagetag_validator
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
@@ -23,8 +25,20 @@ class LanguagesCrud(object):
             json_body['id'] = self.request.matchdict['l_id']
         return json_body
 
-    def _validate_language(self, json_concept):
-        return {'id': 'tst', 'name': 'test'}
+    def _validate_language(self, json_language, new):
+        language = LanguageTag(
+            validator=languagetag_validator
+        ).bind(
+            request=self.request,
+            new=new
+        )
+        try:
+            return language.deserialize(json_language)
+        except colander.Invalid as e:
+            raise ValidationError(
+                'Language could not be validated',
+                e.asdict()
+            )
 
     @view_config(route_name='atramhasis.list_languages', permission='edit')
     def list_languages(self):
@@ -60,7 +74,7 @@ class LanguagesCrud(object):
 
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         '''
-        validated_json_language = self._validate_language(self._get_json_body())
+        validated_json_language = self._validate_language(self._get_json_body(), True)
         language = Language(id=validated_json_language['id'], name=validated_json_language['name'])
         self.db.add(language)
         self.db.flush()
@@ -79,7 +93,7 @@ class LanguagesCrud(object):
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         '''
         l_id = self.request.matchdict['l_id']
-        validated_json_language = self._validate_language(self._get_json_body())
+        validated_json_language = self._validate_language(self._get_json_body(), False)
         try:
             language = self.db.query(Language).filter_by(id=l_id).one()
         except NoResultFound:

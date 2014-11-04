@@ -14,13 +14,13 @@ from pyramid import testing
 from skosprovider_sqlalchemy.models import Concept, Collection, LabelType, Language, Thing
 from atramhasis.validators import (
     Concept as ConceptSchema,
-    concept_schema_validator
-)
+    concept_schema_validator,
+    LanguageTag, languagetag_validator)
 
 
 def filter_by_mock_language(id):
     filter_mock = Mock()
-    if id == 'af':
+    if id in ['af', 'flup']:
         filter_mock.count = Mock(return_value=0)
     else:
         filter_mock.count = Mock(return_value=1)
@@ -105,6 +105,12 @@ class TestValidation(unittest.TestCase):
         ).bind(
             request=self.request,
             conceptscheme_id=1
+        )
+        self.language = LanguageTag(
+            validator=languagetag_validator
+        ).bind(
+            request=self.request,
+            new=True
         )
         self.json_concept = {
             "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
@@ -804,11 +810,79 @@ class TestValidation(unittest.TestCase):
             "member_of": [{"id": 666}],
             "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:sample:93"]}
         }
-        error = None
         try:
             validated_concept = self.concept_schema.deserialize(json_concept)
+        except ValidationError:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_concept)
+
+    def test_languages_pass(self):
+        error_raised = False
+        validated_language = None
+        json_language = {
+            "id": "af",
+            "name": "Afrikaans"
+        }
+        try:
+            validated_language = self.language.deserialize(json_language)
+        except ValidationError:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_language)
+
+    def test_languages_duplicate(self):
+        error_raised = False
+        validated_language = None
+        json_language = {
+            "id": "en",
+            "name": "English"
+        }
+        error = None
+        try:
+            validated_language = self.language.deserialize(json_language)
         except ValidationError as e:
             error_raised = True
             error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_language)
+        self.assertIsNotNone(error)
+        self.assertIn({'id': 'Duplicate language tag: en'}, error.errors)
+
+    def test_languages_edit_not_raise_duplicate(self):
+        error_raised = False
+        validated_language = None
+        json_language = {
+            "id": "en",
+            "name": "English"
+        }
+        language = LanguageTag(
+            validator=languagetag_validator
+        ).bind(
+            request=self.request,
+            new=False
+        )
+        try:
+            validated_language = language.deserialize(json_language)
+        except ValidationError:
+            error_raised = True
         self.assertFalse(error_raised)
-        self.assertIsNotNone(validated_concept)
+        self.assertIsNotNone(validated_language)
+
+    def test_languages_invalid(self):
+        error_raised = False
+        validated_language = None
+        json_language = {
+            "id": "flup",
+            "name": "test"
+        }
+        error = None
+        try:
+            validated_language = self.language.deserialize(json_language)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_language)
+        self.assertIsNotNone(error)
+        self.assertIn({"id": "Invalid language tag: Unknown code 'flup', Missing language tag in 'flup'."}, error.errors)
