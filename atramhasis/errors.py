@@ -28,6 +28,17 @@ class ConceptSchemeNotFoundException(HTTPNotFound):
         return repr(self.value)
 
 
+class LanguageNotFoundException(HTTPNotFound):
+    '''
+    A Language could not be found.
+    '''
+    def __init__(self, scheme_id):
+        self.value = 'No language found with the given id ' + scheme_id
+
+    def __str__(self):
+        return repr(self.value)
+
+
 class ConceptNotFoundException(HTTPNotFound):
     '''
     A Concept or Collection could not be found.

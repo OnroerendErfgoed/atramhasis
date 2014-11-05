@@ -7,6 +7,7 @@ from skosprovider_sqlalchemy.models import (
     Thing, LabelType, Language)
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import ValidationError
+from language_tags import tags
 
 
 class Label(colander.MappingSchema):
@@ -83,6 +84,15 @@ class Concept(colander.MappingSchema):
     members = Concepts(missing=[])
     member_of = Concepts(missing=[])
     matches = Matches(missing={})
+
+
+class LanguageTag(colander.MappingSchema):
+    id = colander.SchemaNode(
+        colander.String()
+    )
+    name = colander.SchemaNode(
+        colander.String()
+    )
 
 
 def concept_schema_validator(node, cstruct):
@@ -203,14 +213,19 @@ def label_type_rule(errors, node, request, labels):
 
 
 def label_lang_rule(errors, node, request, labels):
-    languages = request.db.query(Language).all()
-    languages = [language.id for language in languages]
     for label in labels:
-        if label['language'] not in languages:
+        language_tag = label['language']
+        if not tags.check(language_tag):
             errors.append(colander.Invalid(
                 node['labels'],
-                'Invalid language.'
+                'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
             ))
+        else:
+            languages_present = request.db.query(Language).filter_by(id=language_tag).count()
+            if not languages_present:
+                descriptions = ', '.join(tags.description(language_tag))
+                language_item = Language(id=language_tag, name=descriptions)
+                request.db.add(language_item)
 
 
 def concept_type_rule(errors, node_location, request, conceptscheme_id, members):
@@ -403,3 +418,37 @@ def concept_matches_unique_rule(errors, node_location, matches):
                 node_location,
                 'All matches of a concept should be unique.'
             ))
+
+
+def languagetag_validator(node, cstruct):
+    request = node.bindings['request']
+    new = node.bindings['new']
+    errors = []
+    language_tag = cstruct['id']
+
+    if new:
+        languagetag_checkduplicate(node['id'], language_tag, request, errors)
+    languagetag_isvalid_rule(node['id'], language_tag, errors)
+
+    if len(errors) > 0:
+        raise ValidationError(
+            'Language could not be validated',
+            [e.asdict() for e in errors]
+        )
+
+
+def languagetag_isvalid_rule(node, language_tag, errors):
+    if not tags.check(language_tag):
+        errors.append(colander.Invalid(
+            node,
+            'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
+        ))
+
+
+def languagetag_checkduplicate(node, language_tag, request, errors):
+    language_present = request.db.query(Language).filter_by(id=language_tag).count()
+    if language_present:
+        errors.append(colander.Invalid(
+            node,
+            'Duplicate language tag: %s' % language_tag)
+        )
