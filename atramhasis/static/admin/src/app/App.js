@@ -13,6 +13,7 @@ define([
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!./templates/App.html",
+    "dojo/_base/array",
 
     "dijit/form/ComboBox", "dijit/form/Button", "dijit/Dialog",
 
@@ -27,7 +28,7 @@ define([
     "dijit/layout/BorderContainer"
 
 
-], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox, Button, Dialog, FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ContentPane, TabContainer) {
+], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog, FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -234,16 +235,22 @@ define([
                 console.log("conceptform.submit subscribe");
                 console.log(form);
 
+                broader = array.map(form.broader, function(item){ return {"id": item}; });
+                narrower = array.map(form.narrower, function(item){ return {"id": item}; });
+                related = array.map(form.related, function(item){ return {"id": item}; });
+                members = array.map(form.members, function(item){ return {"id": item}; });
+                member_of = array.map(form.member_of, function(item){ return {"id": item}; });
+
                 var rowToAdd = {
                     "id:": form.concept_id,
                     "type": form.ctype,
                     "labels": form.label,
                     "notes": form.note,
-                    "broader": form.broader,
-                    "narrower": form.narrower,
-                    "related": form.related,
-                    "members": form.members,
-                    "member_of": form.member_of
+                    "broader": broader,
+                    "narrower": narrower,
+                    "related": related,
+                    "members": members,
+                    "member_of": member_of
                 };
                 if (form.concept_id) {
                     filteredGrid.conceptGrid.store.put(rowToAdd, {id: form.concept_id})
