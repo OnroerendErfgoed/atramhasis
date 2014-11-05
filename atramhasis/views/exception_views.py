@@ -3,9 +3,13 @@
 Module containing error views.
 '''
 
+import logging
+
 from pyramid.view import view_config, notfound_view_config
 
 from atramhasis.errors import SkosRegistryNotFoundException, ValidationError
+
+log = logging.getLogger(__name__)
 
 
 @notfound_view_config(renderer='json')
@@ -13,6 +17,7 @@ def failed_not_found(exc, request):
     '''
     View invoked when a resource could not be found.
     '''
+    log.error(exc.explanation)
     request.response.status_int = 404
     return {'message': exc.explanation}
 
@@ -22,6 +27,7 @@ def failed_skos(exc, request):
     '''
     View invoked when Atramhasis can't find a SKOS registry.
     '''
+    log.error(exc.value)
     request.response.status_int = 500
     return {'message': exc.value}
 
@@ -31,5 +37,18 @@ def failed_validation(exc, request):
     '''
     View invoked when bad data was submitted to Atramhasis.
     '''
+    log.error(exc.value)
+    log.error(exc.errors)
     request.response.status_int = 400
     return {'message': exc.value, 'errors': exc.errors}
+
+
+@view_config(context=Exception, renderer='json')
+def failed(exc, request):
+    '''
+    View invoked when bad data was submitted to Atramhasis.
+    '''
+    log.error(exc)
+    request.response.status_int = 500
+    return {'message': 'unexpected server error'}
+

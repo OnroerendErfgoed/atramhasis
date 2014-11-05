@@ -126,6 +126,7 @@ class FunctionalTests(unittest.TestCase):
             local_session.add(MatchType('exactMatch', ''))
             local_session.add(MatchType('narrowMatch', ''))
             local_session.add(MatchType('relatedMatch', ''))
+            local_session.add(Language(id='de', name='test'))
 
         self.config.include('atramhasis.skos')
 
@@ -183,7 +184,7 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_get_concept_not_found(self):
         res = self.testapp.get('/conceptschemes/TREES/c/89', headers=self._get_default_headers(), status=404,
-            expect_errors=True)
+                               expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
@@ -276,6 +277,97 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertEqual('urn:x-vioe:materials:51', res.json['uri'])
 
+    def test_general_exception_view(self):
+        self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
+                               params=json_collection_value)
+        res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/1', headers=self._get_default_headers(),
+                                    params=json_collection_value, expect_errors=True)
+        self.assertEqual('500 Internal Server Error', res.status)
+        self.assertIn("unexpected server error", res)
+
+    def test_get_languages(self):
+        res = self.testapp.get('/languages', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res)
+        self.assertEqual(len(res.json), 3)
+
+    def test_get_language(self):
+        res = self.testapp.get('/languages/de', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['name'], 'test')
+
+    def test_get_language_not_found(self):
+        res = self.testapp.get('/languages/jos', headers=self._get_default_headers(), expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {"message": "The resource could not be found."})
+
+    def test_add_language(self):
+        res = self.testapp.post_json('/languages', headers=self._get_default_headers(),
+                                     params={"id": "af", "name": "Afrikaans"})
+        self.assertEqual('201 Created', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['name'], 'Afrikaans')
+
+    def test_add_language_non_valid(self):
+        res = self.testapp.post_json('/languages', headers=self._get_default_headers(),
+                                     params={"id": "flup", "name": "flup"}, expect_errors=True)
+        self.assertEqual('400 Bad Request', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {
+            "errors": [{"id": "Invalid language tag: Unknown code 'flup', Missing language tag in 'flup'."}],
+            "message": "Language could not be validated"})
+
+    def test_add_language_non_valid_json(self):
+        res = self.testapp.post_json('/languages', headers=self._get_default_headers(),
+                                     params={"test": "flup", "name": "flup"}, expect_errors=True)
+        self.assertEqual('400 Bad Request', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {'errors': {'id': 'Required'}, 'message': 'Language could not be validated'})
+
+    def test_edit_language(self):
+        res = self.testapp.put_json('/languages/de', headers=self._get_default_headers(),
+                                    params={"id": "de", "name": "Duits"})
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['name'], 'Duits')
+
+    def test_edit_language_not_found(self):
+        res = self.testapp.put_json('/languages/jos', headers=self._get_default_headers(),
+                                    params={"id": "jos", "name": "Duits"}, expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {"message": "The resource could not be found."})
+
+    def test_edit_language_no_id(self):
+        res = self.testapp.put_json('/languages/de', headers=self._get_default_headers(),
+                                    params={"name": "Duits"})
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['name'], 'Duits')
+
+    def test_delete_language(self):
+        res = self.testapp.delete('/languages/de', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_delete_language_not_found(self):
+        res = self.testapp.delete('/languages/jos', headers=self._get_default_headers(), expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {"message": "The resource could not be found."})
+
 
 class TestCookieView(FunctionalTests):
     def _get_default_headers(self):
@@ -332,7 +424,6 @@ class SkosFunctionalTests(unittest.TestCase):
         self.config.add_request_method(db, reify=True)
 
         self.app = self.config.make_wsgi_app()
-        del self.app.request_extensions.descriptors['skos_registry']
         self.testapp = TestApp(self.app)
 
     def tearDown(self):
@@ -345,12 +436,14 @@ class SkosFunctionalTests(unittest.TestCase):
         return {'Accept': 'application/json'}
 
     def test_admin_no_skos_provider(self):
+        del self.app.request_extensions.descriptors['skos_registry']
         res = self.testapp.get('/admin', headers=self._get_default_headers(), expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)
 
     def test_crud_no_skos_provider(self):
+        del self.app.request_extensions.descriptors['skos_registry']
         res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_json_headers(),
                                      params=json_collection_value, expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
@@ -363,7 +456,7 @@ class CacheFunctionalTests(FunctionalTests):
         return {'Accept': 'application/json'}
 
     def test_create_cache(self):
-        #clear entire cache before start
+        # clear entire cache before start
         invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
         self.assertEqual('200 OK', invalidate_cache_response.status)
 
@@ -378,7 +471,7 @@ class CacheFunctionalTests(FunctionalTests):
         self.assertEqual(tree_response.json, cached_tree_response.json)
 
     def test_auto_invalidate_cache(self):
-        #clear entire cache before start
+        # clear entire cache before start
         invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
         self.assertEqual('200 OK', invalidate_cache_response.status)
 
@@ -398,7 +491,6 @@ class CacheFunctionalTests(FunctionalTests):
 
 
 class RdfFunctionalTests(FunctionalTests):
-
     def test_rdf_xml(self):
         rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c.rdf')
         self.assertEqual('200 OK', rdf_response.status)
@@ -411,7 +503,6 @@ class RdfFunctionalTests(FunctionalTests):
 
 
 class ListFunctionalTests(FunctionalTests):
-
     def test_labeltypes_list(self):
         labeltypeslist_res = self.testapp.get('/labeltypes')
         self.assertEqual('200 OK', labeltypeslist_res.status)
