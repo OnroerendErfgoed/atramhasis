@@ -54,6 +54,7 @@ define([
                             var dlg = self._createDialog();
                             if (self.labels) {
                                 self._setGrid(self.labels);
+                                self.tempLabels = lang.clone(self.labels);
                                // self._setLanguageComboBox(self.labels);
                             }
                             dlg.show();
@@ -172,6 +173,7 @@ define([
                         dlg.hide();
                     };
                     cancelBtn.onClick = function () {
+                        self.labels = lang.clone(self.tempLabels);
                         dlg.hide();
                     };
 
@@ -183,7 +185,6 @@ define([
                     );
 
                     on(dlg, "hide", function () {
-                        self.labels = lang.clone(self.tempLabels);
                         titleLabel.destroy();
                         labelTypeComboBox.destroy();
                         langStoreComboBox.destroy();
