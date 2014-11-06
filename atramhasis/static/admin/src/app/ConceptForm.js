@@ -13,6 +13,7 @@ define(
         "./form/LabelManager",
         "./form/NoteManager",
         "./form/RelationManager",
+        "./form/MatchesManager",
         'dijit/form/Select',
         'dijit/form/FilteringSelect',
         'dijit/form/ValidationTextBox', 'dojox/validate', 'dijit/form/NumberTextBox',
@@ -22,7 +23,7 @@ define(
         'dijit/form/TextBox',
         'dijit/form/ComboBox'
     ],
-    function (declare, arrayUtil, topic, on, domConstruct, query, Memory, registry, _WidgetBase, _TemplatedMixin, Form, CheckBox, WidgetsInTemplateMixin, FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin, template, LabelManager, NoteManager, RelationManager, Select, FilteringSelect, ValidationTextBox, Validate, NumberTextBox, Button, domForm, TableContainer, TextBox, ComboBox) {
+    function (declare, arrayUtil, topic, on, domConstruct, query, Memory, registry, _WidgetBase, _TemplatedMixin, Form, CheckBox, WidgetsInTemplateMixin, FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin, template, LabelManager, NoteManager, RelationManager, MatchesManager, Select, FilteringSelect, ValidationTextBox, Validate, NumberTextBox, Button, domForm, TableContainer, TextBox, ComboBox) {
         return declare([
                 Form, _WidgetBase, WidgetsInTemplateMixin, _TemplatedMixin, FormMgrMixin,
                 FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin
@@ -72,6 +73,9 @@ define(
                         'title': 'Member of',
                         'scheme': this.scheme
                     }, this.memberofContainerNode);
+                    this.matchesManager = new MatchesManager({
+                        'name': 'mtcMgr'
+                    }, this.matchesContainerNode);
                     var myTable = new TableContainer({cols: 2, spacing: 10}, this.MyTable);
                     var schemebox = new TextBox({id: "schemebox", title: "Scheme:"});
                     schemebox.set('disabled', true);
@@ -99,6 +103,7 @@ define(
                             self.relatedManager.close();
                             self.membersManager.open();
                             self.memberofManager.open();
+                            self.matchesManager.close();
                         }
                         else if (val == 'concept') {
                             self.broaderManager.open();
@@ -106,6 +111,7 @@ define(
                             self.relatedManager.open();
                             self.membersManager.close();
                             self.memberofManager.open();
+                            self.matchesManager.open();
                         }
                     });
                     this.typeComboBox = typeComboBox;
@@ -137,6 +143,7 @@ define(
                         formObj.member_of = this.memberofManager.getRelations();
                         formObj.label = this.labelManager.getLabels();
                         formObj.note = this.noteManager.geNotes();
+                        formObj.matches = this.matchesManager.getMatches();
                         console.log(formObj);
                         topic.publish("conceptform.submit", formObj);
                     }
@@ -160,6 +167,7 @@ define(
                     this.memberofManager.reset("Member of");
                     this.labelManager.reset();
                     this.noteManager.reset();
+                    this.matchesManager.reset();
                 },
 
                 init: function (scheme, concept) {
@@ -208,6 +216,13 @@ define(
                             this.noteManager.setNotes(concept.notes);
                             if(concept.notes.length>0) {
                                 this.noteManager.setEditNoteButton();
+                            }
+                        }
+                        if(concept.matches)
+                        {
+                            this.matchesManager.setMatches(concept.matches);
+                             if(concept.matches.length>0) {
+                                this.matchesManager.setEditMatchesButton();
                             }
                         }
                     }

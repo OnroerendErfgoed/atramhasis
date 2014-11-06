@@ -250,7 +250,8 @@ define([
                     "narrower": narrower,
                     "related": related,
                     "members": members,
-                    "member_of": member_of
+                    "member_of": member_of,
+                    "matches": form.matches
                 };
                 if (form.concept_id) {
                     filteredGrid.conceptGrid.store.put(rowToAdd, {id: form.concept_id})
