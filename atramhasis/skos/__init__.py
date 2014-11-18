@@ -2,8 +2,10 @@
 
 import logging
 from skosprovider.uri import UriPatternGenerator
+from skosprovider_heritagedata.providers import HeritagedataProvider
 
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+from skosprovider_getty.providers import AATProvider, TGNProvider
 
 log = logging.getLogger(__name__)
 
@@ -30,8 +32,32 @@ def includeme(config):
         uri_generator=UriPatternGenerator('urn:x-vioe:materials:%s')
     )
 
+    # use 'subject': ['external'] for read only external providers (only available in REST service)
+
+    AAT = AATProvider(
+        {'id': 'AAT', 'subject': ['external']},
+    )
+
+    TGN = TGNProvider(
+        {'id': 'TGN', 'subject': ['external']}
+    )
+
+    EH_PERIOD = HeritagedataProvider(
+        {'id': 'EH_PERIOD', 'subject': ['external']},
+        scheme_uri='http://purl.org/heritagedata/schemes/eh_period'
+    )
+
+    EH_MONUMENT_TYPE = HeritagedataProvider(
+        {'id': 'EH_MONUMENT_TYPE', 'subject': ['external']},
+        scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2'
+    )
+
     skosregis = config.get_skos_registry()
     skosregis.register_provider(TREES)
     skosregis.register_provider(GEO)
     skosregis.register_provider(STYLES)
     skosregis.register_provider(MATERIALS)
+    skosregis.register_provider(AAT)
+    skosregis.register_provider(TGN)
+    skosregis.register_provider(EH_PERIOD)
+    skosregis.register_provider(EH_MONUMENT_TYPE)

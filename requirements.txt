@@ -10,6 +10,10 @@ skosprovider==0.4.2
 pyramid_skosprovider==0.4.0
 skosprovider_rdf==0.1.3
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_rdf#egg=skosprovider_rdf
+#skosprovider_getty
+-e git+https://github.com/OnroerendErfgoed/skosprovider_getty#egg=skosprovider_getty
+#skosprovider_heritagedata
+-e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata#egg=skosprovider_heritagedata
 
 #language-tags
 git+https://github.com/OnroerendErfgoed/language-tags.git

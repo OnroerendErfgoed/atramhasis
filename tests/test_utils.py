@@ -1,11 +1,32 @@
 import unittest
+from pyramid.httpexceptions import HTTPForbidden
+from skosprovider.providers import DictionaryProvider
 from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, ConceptScheme
-from atramhasis.utils import from_thing
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+from atramhasis.utils import from_thing, internal_providers_only
 
 from skosprovider.skos import(
     Concept as SkosConcept,
     Collection as SkosCollection
 )
+
+species = {
+    'id': 3,
+    'uri': 'http://id.trees.org/3',
+    'labels': [
+        {'type': 'prefLabel', 'language': 'en', 'label': 'Trees by species'},
+        {'type': 'prefLabel', 'language': 'nl', 'label': 'Bomen per soort'}
+    ],
+    'type': 'collection',
+    'members': ['1', '2'],
+    'notes': [
+        {
+            'type': 'editorialNote',
+            'language': 'en',
+            'note': 'As seen in How to Recognise Different Types of Trees from Quite a Long Way Away.'
+        }
+    ]
+}
 
 
 class TestFromThing(unittest.TestCase):
@@ -58,3 +79,46 @@ class TestFromThing(unittest.TestCase):
         self.assertTrue(isinstance(skoscollection, SkosCollection))
         self.assertEqual(skoscollection.id, 102)
         self.assertEqual(skoscollection.uri, 'urn:x-atramhasis-demo:TREES:102')
+
+
+class DummyViewClassForTest(object):
+
+    def __init__(self):
+        self.provider = None
+        self.dummy = None
+
+    def all_providers(self, dummy):
+        self.dummy = dummy
+
+    @internal_providers_only
+    def internal_providers(self, dummy):
+        self.dummy = dummy
+
+
+class TestInternalProviderOnly(unittest.TestCase):
+
+    def setUp(self):
+        self.dummy = DummyViewClassForTest()
+
+    def test_all_providers(self):
+        self.dummy.provider = DictionaryProvider(list=[species], metadata={'id': 'Test'})
+        self.dummy.all_providers('ok')
+        self.assertEqual(self.dummy.dummy, 'ok')
+
+    def test_internal_providers(self):
+        self.dummy.provider = SQLAlchemyProvider(metadata={'id': 'Test', 'conceptscheme_id': 1},
+                                                 session_maker=None)
+        self.dummy.internal_providers('ok')
+        self.assertEqual(self.dummy.dummy, 'ok')
+
+    def test_external_providers(self):
+        self.dummy.provider = SQLAlchemyProvider(metadata={'id': 'Test', 'conceptscheme_id': 1,
+                                                           'subject': ['external']},
+                                                 session_maker=None)
+        self.assertRaises(HTTPForbidden, self.dummy.internal_providers, 'ok')
+        self.assertIsNone(self.dummy.dummy)
+
+    def test_no_sqlalchemyprovider(self):
+        self.dummy.provider = DictionaryProvider(list=[species], metadata={'id': 'Test'})
+        self.assertRaises(HTTPForbidden, self.dummy.internal_providers, 'ok')
+        self.assertIsNone(self.dummy.dummy)
