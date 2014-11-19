@@ -21,6 +21,7 @@ define([
     "./ConceptDetail",
     "./ThesaurusCollection",
     "./ConceptForm",
+    "./ImportForm",
 //    "dojo/text!./templates/ConceptForm.html",
 
     "dijit/layout/ContentPane",
@@ -28,7 +29,7 @@ define([
     "dijit/layout/BorderContainer"
 
 
-], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog, FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ContentPane, TabContainer) {
+], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog, FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -91,6 +92,25 @@ define([
                 conceptForm.reset();
             });
 
+            console.log("startup conceptDialog");
+
+            var importForm = new ImportForm({externalSchemelist: this.thesauri.externalSchemelist});
+
+            var importDialog = new Dialog({
+                id: 'importDialog',
+                content: importForm
+
+            }).placeAt(document.body);
+
+            on(importForm, "cancel", function () {
+                importDialog.hide();
+            });
+
+            on(importDialog, "hide", function () {
+                importForm.reset();
+            });
+
+            console.log("startup importDialog");
 
             var tc = registry.byId("center");
 
@@ -112,6 +132,17 @@ define([
                 self._createConcept(conceptForm, conceptDialog, self.currentScheme);
             });
 
+            var importConceptButton = new Button({
+                label: "Import concept or collection",
+                disabled: "disabled"
+            }, "importConceptNode");
+
+            on(importConceptButton, "click", function () {
+
+                console.log("on importConceptButton");
+                self._importConcept(importForm, importDialog);
+            });
+
             on(schemeFileteringSelect, "change", function (e) {
 
                 if (e) {
@@ -119,10 +150,12 @@ define([
                     self.currentScheme = e;
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
+                    importConceptButton.set('disabled', false);
                 }
                 else {
                     filteredGrid.ResetConceptGrid();
                     addConceptButton.set('disabled', true);
+                    importConceptButton.set('disabled', true);
                 }
 
 
@@ -297,6 +330,12 @@ define([
             conceptForm.init(Scheme);
             conceptDialog.set("title", "Add concept or collection");
             conceptDialog.show();
+        },
+
+        _importConcept: function (importForm, importDialog) {
+            importForm.init();
+            importDialog.set("title", "Import concept or collection");
+            importDialog.show();
         }
 
 
