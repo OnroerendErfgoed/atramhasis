@@ -20,10 +20,12 @@ define(
                         {'handleAs': 'json'}
                     ).then(lang.hitch(this, function (schemes) {
                             array.forEach(schemes, lang.hitch(this, function (scheme) {
-                                this.schemelist.push({name: scheme.id, id: scheme.id});
-                                this.stores[scheme.id] = new JsonRest({
-                                    'target': '/conceptschemes/' + scheme.id + '/c/'
-                                });
+                                if(array.indexOf(scheme.subject, 'external') == -1){
+                                    this.schemelist.push({name: scheme.id, id: scheme.id});
+                                    this.stores[scheme.id] = new JsonRest({
+                                        'target': '/conceptschemes/' + scheme.id + '/c/'
+                                    });
+                                }
                             }));
                         }))
                 }

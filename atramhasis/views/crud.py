@@ -161,3 +161,31 @@ class AtramhasisCrud(object):
 
         self.request.response.status = '200'
         return from_thing(concept)
+
+
+@view_defaults(accept='application/json', renderer='skosrenderer_verbose')
+class ConceptschemesView(object):
+    '''
+    This object groups conceptschemes REST views.
+    '''
+
+    def __init__(self, context, request):
+        self.request = request
+        self.db = request.db
+        self.context = context
+        self.logged_in = request.authenticated_userid
+        if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+            self.skos_registry = self.request.skos_registry
+        else:
+            raise SkosRegistryNotFoundException()
+
+    @view_config(route_name='atramhasis.conceptschemes', permission='view')
+    def get_conceptschemes(self):
+        return [
+            {
+                'id': p.get_vocabulary_id(),
+                'uri': p.concept_scheme.uri,
+                'label': p.concept_scheme.label().label if p.concept_scheme.label() else None,
+                'subject': p.metadata['subject'] if p.metadata['subject'] else []
+            } for p in self.skos_registry.get_providers()
+        ]
