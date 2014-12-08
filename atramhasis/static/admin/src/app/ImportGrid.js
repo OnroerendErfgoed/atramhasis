@@ -139,7 +139,7 @@ define([
             console.log("setting label filter: " + label);
             this.conceptFilter = {label: label, type: this.conceptFilter.type};
             this.conceptGrid.set("query", this.conceptFilter);
-        },
+        }
 
 
 

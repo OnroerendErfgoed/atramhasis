@@ -19,7 +19,7 @@ define(
         'dijit/form/TextBox',
         'dijit/form/ComboBox',
         "dojo/_base/lang",
-        "./ImportGrid",
+        "./ImportGrid"
     ],
     function (declare, arrayUtil, topic, on, domConstruct, query, Memory, registry, _WidgetBase, _TemplatedMixin, Form, CheckBox, WidgetsInTemplateMixin, FormMgrMixin, FormMgrNodeMixin, FormMgrFormMixin, FormMgrDisplayMixin, template, Select, FilteringSelect, ValidationTextBox, Validate, NumberTextBox, Button, domForm, TableContainer, TextBox, ComboBox, lang, ImportGrid) {
         return declare([
@@ -49,7 +49,7 @@ define(
                         name: "importschemecombobox",
                         store: new Memory({ data: this.externalSchemelist }),
                         searchAttr: "id",
-                        title: "select thesaurus:",
+                        title: "select thesaurus:"
                     });
 
                     on(schemebox, "change", lang.hitch(this, function (e) {
@@ -111,7 +111,7 @@ define(
                         formNode: true
                     });
                     this.dialog && this.dialog.layout();
-                },
+                }
             }
         )
     }
