@@ -7,7 +7,8 @@ pyramid-tm==0.7
 skosprovider==0.4.2
 #skosprovider_sqlalchemy==0.4.1
 -e git+https://github.com/koenedaele/skosprovider_sqlalchemy#egg=skosprovider_sqlalchemy
-pyramid_skosprovider==0.4.0
+#pyramid_skosprovider==0.4.0
+-e git+https://github.com/koenedaele/pyramid_skosprovider#egg=pyramid_skosprovider
 skosprovider_rdf==0.1.3
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_rdf#egg=skosprovider_rdf
 #skosprovider_getty
