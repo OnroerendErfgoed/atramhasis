@@ -7,6 +7,13 @@ from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider.skos import Concept, Collection, Label, Note, ConceptScheme
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
+matchtype_mappings = {
+    'closeMatch': 'close',
+    'exactMatch': 'exact',
+    'relatedMatch': 'related',
+    'broadMatch': 'broad',
+    'narrowMatch': 'narrow'
+}
 
 def from_thing(thing):
     '''
@@ -31,6 +38,12 @@ def from_thing(thing):
             member_of=[c.concept_id for c in thing.member_of]
         )
     else:
+        matches = {}
+        for match in thing.matches:
+            if matchtype_mappings[match.matchtype.name] in matches:
+                matches[matchtype_mappings[match.matchtype.name]].append(match.uri)
+            else:
+                matches[matchtype_mappings[match.matchtype.name]] = [match.uri]
         return Concept(
             id=thing.concept_id,
             uri=thing.uri,
@@ -47,6 +60,7 @@ def from_thing(thing):
             narrower=[c.concept_id for c in thing.narrower_concepts],
             related=[c.concept_id for c in thing.related_concepts],
             member_of=[c.concept_id for c in thing.member_of],
+            matches=matches,
         )
 
 
