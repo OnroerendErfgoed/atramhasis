@@ -36,8 +36,6 @@ def includeme(config):
     config.add_route('atramhasis.delete_language', pattern='/languages/{l_id}', accept='application/json',
                      request_method="DELETE")
     config.add_route('locale', '/locale')
-    config.add_route('atramhasis.conceptschemes', pattern='/conceptschemes', accept='application/json',
-                     request_method="GET")
     config.add_route('labeltypes', '/labeltypes', accept='application/json', request_method="GET")
     config.add_route('notetypes', '/notetypes', accept='application/json', request_method="GET")
 
