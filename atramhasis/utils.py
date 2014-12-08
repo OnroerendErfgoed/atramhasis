@@ -2,7 +2,7 @@
 '''
 Module containing utility functions used by Atramhasis.
 '''
-from pyramid.httpexceptions import HTTPForbidden
+from pyramid.httpexceptions import HTTPMethodNotAllowed
 
 from skosprovider.skos import Concept, Collection, Label, Note, ConceptScheme
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
@@ -64,6 +64,6 @@ def internal_providers_only(fn):
                 not 'external' in parent_object.provider.get_metadata()['subject']:
             return fn(parent_object, *args, **kw)
         else:
-            raise HTTPForbidden()
+            raise HTTPMethodNotAllowed()
 
     return advice

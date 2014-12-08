@@ -1,14 +1,16 @@
 import unittest
-from pyramid.httpexceptions import HTTPForbidden
+
+from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider.providers import DictionaryProvider
 from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, ConceptScheme
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-from atramhasis.utils import from_thing, internal_providers_only
-
 from skosprovider.skos import(
     Concept as SkosConcept,
     Collection as SkosCollection
 )
+
+from atramhasis.utils import from_thing, internal_providers_only
+
 
 species = {
     'id': 3,
@@ -115,10 +117,10 @@ class TestInternalProviderOnly(unittest.TestCase):
         self.dummy.provider = SQLAlchemyProvider(metadata={'id': 'Test', 'conceptscheme_id': 1,
                                                            'subject': ['external']},
                                                  session_maker=None)
-        self.assertRaises(HTTPForbidden, self.dummy.internal_providers, 'ok')
+        self.assertRaises(HTTPMethodNotAllowed, self.dummy.internal_providers, 'ok')
         self.assertIsNone(self.dummy.dummy)
 
     def test_no_sqlalchemyprovider(self):
         self.dummy.provider = DictionaryProvider(list=[species], metadata={'id': 'Test'})
-        self.assertRaises(HTTPForbidden, self.dummy.internal_providers, 'ok')
+        self.assertRaises(HTTPMethodNotAllowed, self.dummy.internal_providers, 'ok')
         self.assertIsNone(self.dummy.dummy)
