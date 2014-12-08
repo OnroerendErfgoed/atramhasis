@@ -5,6 +5,8 @@ import unittest
 
 import six
 from pyramid.config import Configurator
+import skosprovider
+from skosprovider.providers import DictionaryProvider
 from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
@@ -17,7 +19,7 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.db import db
-from fixtures.data import trees, geo
+from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials
 
 
@@ -85,6 +87,16 @@ json_collection_value = {
               }]
 }
 
+TEST = DictionaryProvider(
+    {
+        'id': 'TEST',
+        'default_language': 'nl',
+        'subject': ['biology']
+    },
+    [larch, chestnut, species],
+    concept_scheme=skosprovider.skos.ConceptScheme('http://id.trees.org')
+)
+
 
 class FunctionalTests(unittest.TestCase):
     @classmethod
@@ -129,6 +141,9 @@ class FunctionalTests(unittest.TestCase):
             local_session.add(Language(id='de', name='test'))
 
         self.config.include('atramhasis.skos')
+
+        skosregis = self.config.get_skos_registry()
+        skosregis.register_provider(TEST)
 
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)
@@ -182,8 +197,21 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['id'], 1)
         self.assertEqual(res.json['type'], 'concept')
 
+    def test_get_concept_dictprovider(self):
+        res = self.testapp.get('/conceptschemes/TEST/c/1', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['type'], 'concept')
+
     def test_get_concept_not_found(self):
         res = self.testapp.get('/conceptschemes/TREES/c/89', headers=self._get_default_headers(), status=404,
+                               expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_get_concept_dictprovider_not_found(self):
+        res = self.testapp.get('/conceptschemes/TEST/c/89', headers=self._get_default_headers(), status=404,
                                expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])

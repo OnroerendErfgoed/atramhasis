@@ -67,6 +67,8 @@ requires = [
     'skosprovider',
     'skosprovider_sqlalchemy',
     'skosprovider_rdf',
+    'skosprovider_getty',
+    'skosprovider_heritagedata',
     'pyramid_skosprovider',
     'language_tags',
     'pyramid_jinja2',
