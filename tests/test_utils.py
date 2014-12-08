@@ -2,7 +2,7 @@ import unittest
 
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider.providers import DictionaryProvider
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, ConceptScheme
+from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, ConceptScheme, Match, MatchType
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider.skos import(
     Concept as SkosConcept,
@@ -59,6 +59,19 @@ class TestFromThing(unittest.TestCase):
         labels.append(label2)
         labels.append(label3)
         self.concept.labels = labels
+
+        matches = []
+        match1 = Match()
+        match1.uri ='urn:test'
+        match1.concept = self.concept
+        match1.matchtype = MatchType(name='closeMatch', description='')
+        match2 = Match()
+        match2.uri ='urn:test'
+        match2.concept = self.concept
+        match2.matchtype = MatchType(name='closeMatch', description='')
+        matches.append(match1)
+        matches.append(match2)
+        self.matches = matches
 
         self.collection = Collection()
         self.collection.type = 'collection'
