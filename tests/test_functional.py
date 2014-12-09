@@ -7,7 +7,9 @@ import six
 from pyramid.config import Configurator
 import skosprovider
 from skosprovider.providers import DictionaryProvider
+from skosprovider.uri import UriPatternGenerator
 from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
@@ -140,9 +142,32 @@ class FunctionalTests(unittest.TestCase):
             local_session.add(MatchType('relatedMatch', ''))
             local_session.add(Language(id='de', name='test'))
 
-        self.config.include('atramhasis.skos')
+        TREES = SQLAlchemyProvider(
+            {'id': 'TREES', 'conceptscheme_id': 1},
+            self.config.registry.dbmaker
+        )
+
+        GEO = SQLAlchemyProvider(
+            {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
+            self.config.registry.dbmaker
+        )
+
+        STYLES = SQLAlchemyProvider(
+            {'id': 'STYLES', 'conceptscheme_id': 3},
+            self.config.registry.dbmaker
+        )
+
+        MATERIALS = SQLAlchemyProvider(
+            {'id': 'MATERIALS', 'conceptscheme_id': 4},
+            self.config.registry.dbmaker,
+            uri_generator=UriPatternGenerator('urn:x-vioe:materials:%s')
+        )
 
         skosregis = self.config.get_skos_registry()
+        skosregis.register_provider(TREES)
+        skosregis.register_provider(GEO)
+        skosregis.register_provider(STYLES)
+        skosregis.register_provider(MATERIALS)
         skosregis.register_provider(TEST)
 
         self.app = self.config.make_wsgi_app()
