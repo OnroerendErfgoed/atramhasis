@@ -10,7 +10,7 @@ from skosprovider_getty.providers import AATProvider, TGNProvider
 log = logging.getLogger(__name__)
 
 
-def includeme(config):
+def includeme(config):   # pragma: no cover
     TREES = SQLAlchemyProvider(
         {'id': 'TREES', 'conceptscheme_id': 1},
         config.registry.dbmaker

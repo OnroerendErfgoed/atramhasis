@@ -10,7 +10,6 @@ import transaction
 from skosprovider_sqlalchemy.models import Base as SkosBase, ConceptScheme
 
 from atramhasis.models import Base
-from atramhasis.skos import includeme
 from fixtures.data import geo
 from fixtures.materials import materials
 from fixtures.styles_and_cultures import styles_and_cultures
@@ -47,6 +46,10 @@ class TestSkos(unittest.TestCase):
     def test_include(self):
         self.config.include('pyramid_skosprovider')
         self.config.scan('pyramid_skosprovider')
-        includeme(self.config)
+        skosregis = self.config.get_skos_registry()
+        skosregis.register_provider(trees)
+        skosregis.register_provider(geo)
+        skosregis.register_provider(styles_and_cultures)
+        skosregis.register_provider(materials)
         self.assertIsNotNone(self.config.get_skos_registry())
 
