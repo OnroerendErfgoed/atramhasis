@@ -1,16 +1,19 @@
 import os
 import unittest
+
 from pyramid.paster import get_appsettings
 from skosprovider_sqlalchemy.utils import import_provider
-from sqlalchemy import engine_from_config, create_engine
+from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 import transaction
 from zope.sqlalchemy import ZopeTransactionExtension
-from atramhasis import main
 from skosprovider_sqlalchemy.models import Base, ConceptScheme
+
+from atramhasis import main
 from fixtures.data import trees, geo
 from fixtures.materials import materials
 from fixtures.styles_and_cultures import styles_and_cultures
+
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
