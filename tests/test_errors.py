@@ -1,4 +1,5 @@
 import unittest
+
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ConceptNotFoundException, DbNotFoundException, ValidationError, LanguageNotFoundException
 

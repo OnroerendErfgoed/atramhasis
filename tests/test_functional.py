@@ -21,6 +21,7 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.db import db
+from atramhasis.protected_resources import ProtectedResourceException, ProtectedResourceEvent
 from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials
 
@@ -135,6 +136,7 @@ class FunctionalTests(unittest.TestCase):
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
             local_session.add(Language('nl', 'Dutch'))
             local_session.add(Language('en', 'English'))
+
             local_session.add(MatchType('broadMatch', ''))
             local_session.add(MatchType('closeMatch', ''))
             local_session.add(MatchType('exactMatch', ''))
@@ -163,6 +165,8 @@ class FunctionalTests(unittest.TestCase):
             uri_generator=UriPatternGenerator('urn:x-vioe:materials:%s')
         )
 
+        self.config.add_subscriber(self.mock_event_handler, ProtectedResourceEvent)
+
         skosregis = self.config.get_skos_registry()
         skosregis.register_provider(TREES)
         skosregis.register_provider(GEO)
@@ -175,6 +179,13 @@ class FunctionalTests(unittest.TestCase):
 
     def tearDown(self):
         testing.tearDown()
+
+    @staticmethod
+    def mock_event_handler(event):
+        if event.uri == 'http://localhost/conceptschemes/GEOGRAPHY/c/9':
+            referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
+            raise ProtectedResourceException('resource {0} is still in use, preventing operation'.format(event.uri),
+                                             referenced_in)
 
 
 class HtmlFunctionalTests(FunctionalTests):
@@ -420,6 +431,17 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
         self.assertEqual(res.json, {"message": "The resource could not be found."})
+
+    def test_delete_protected_resource(self):
+        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/9', headers=self._get_default_headers(),
+                                  expect_errors=True)
+        self.assertEqual('409 Conflict', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {
+            "message": "resource http://localhost/conceptschemes/GEOGRAPHY/c/9 is still in use, preventing operation",
+            "referenced_in": ["urn:someobject", "http://test.test.org/object/2"]
+        })
 
 
 class TestCookieView(FunctionalTests):

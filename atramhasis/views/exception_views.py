@@ -8,6 +8,7 @@ import logging
 from pyramid.view import view_config, notfound_view_config
 
 from atramhasis.errors import SkosRegistryNotFoundException, ValidationError
+from atramhasis.protected_resources import ProtectedResourceException
 
 log = logging.getLogger(__name__)
 
@@ -41,6 +42,17 @@ def failed_validation(exc, request):
     log.error(exc.errors)
     request.response.status_int = 400
     return {'message': exc.value, 'errors': exc.errors}
+
+
+@view_config(context=ProtectedResourceException, renderer='json')
+def protected(exc, request):
+    '''
+    when a protected operation is called on a resource that is still referenced
+    '''
+    log.warn(exc.value)
+    log.warn(exc.referenced_in)
+    request.response.status_int = 409
+    return {'message': exc.value, 'referenced_in': exc.referenced_in}
 
 
 @view_config(context=Exception, renderer='json')

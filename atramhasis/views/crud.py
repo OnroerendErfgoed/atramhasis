@@ -13,6 +13,7 @@ from skosprovider_sqlalchemy.models import Concept, Thing, Collection
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept
+from atramhasis.protected_resources import protected_operation
 from atramhasis.utils import from_thing, internal_providers_only
 from atramhasis.views import invalidate_scheme_cache
 
@@ -142,6 +143,7 @@ class AtramhasisCrud(object):
         return from_thing(concept)
 
     @internal_providers_only
+    @protected_operation
     @view_config(route_name='atramhasis.delete_concept', permission='delete')
     def delete_concept(self):
         '''

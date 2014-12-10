@@ -34,13 +34,13 @@ def includeme(config):   # pragma: no cover
 
     # use 'subject': ['external'] for read only external providers (only available in REST service)
 
-    AAT = AATProvider(
-        {'id': 'AAT', 'subject': ['external']},
-    )
-
-    TGN = TGNProvider(
-        {'id': 'TGN', 'subject': ['external']}
-    )
+    # AAT = AATProvider(
+    #     {'id': 'AAT', 'subject': ['external']},
+    # )
+    #
+    # TGN = TGNProvider(
+    #     {'id': 'TGN', 'subject': ['external']}
+    # )
 
     EH_PERIOD = HeritagedataProvider(
         {'id': 'EH_PERIOD', 'subject': ['external']},
@@ -57,7 +57,7 @@ def includeme(config):   # pragma: no cover
     skosregis.register_provider(GEO)
     skosregis.register_provider(STYLES)
     skosregis.register_provider(MATERIALS)
-    skosregis.register_provider(AAT)
-    skosregis.register_provider(TGN)
+    #skosregis.register_provider(AAT)
+    #skosregis.register_provider(TGN)
     skosregis.register_provider(EH_PERIOD)
     skosregis.register_provider(EH_MONUMENT_TYPE)
