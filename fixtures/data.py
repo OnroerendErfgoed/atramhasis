@@ -18,7 +18,10 @@ larch = {
     ],
     'notes': [
         {'type': 'definition', 'language': 'en', 'note': 'A type of tree.'}
-    ]
+    ],
+    'matches': {
+        'close': ['http://id.python.org/different/types/of/trees/nr/1/the/larch']
+    }
 }
 
 chestnut = {
@@ -34,7 +37,10 @@ chestnut = {
             'type': 'definition', 'language': 'en',
             'note': 'A different type of tree.'
         }
-    ]
+    ],
+    'matches': {
+        'related': ['http://id.python.org/different/types/of/trees/nr/17/the/other/chestnut']
+    }
 }
 
 species = {
@@ -58,7 +64,12 @@ world = {
     'labels': [
         {'type': 'prefLabel', 'language': 'en', 'label': 'World'}
     ],
-    'narrower': [2, 3]
+    'narrower': [2, 3],
+    'matches': {
+        'close': ['urn:somethingelse:st1', 'urn:somethingelse:st2'],
+        'exact': ['urn:something:thingy'],
+        'related': ['urn:somethingelse:stuff']
+    }
 }
 
 geo = DictionaryProvider(

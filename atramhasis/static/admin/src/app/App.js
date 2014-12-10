@@ -13,6 +13,7 @@ define([
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!./templates/App.html",
+    "dojo/_base/array",
 
     "dijit/form/ComboBox", "dijit/form/Button", "dijit/Dialog",
 
@@ -20,6 +21,7 @@ define([
     "./ConceptDetail",
     "./ThesaurusCollection",
     "./ConceptForm",
+    "./ImportForm",
 //    "dojo/text!./templates/ConceptForm.html",
 
     "dijit/layout/ContentPane",
@@ -27,7 +29,7 @@ define([
     "dijit/layout/BorderContainer"
 
 
-], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox, Button, Dialog, FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ContentPane, TabContainer) {
+], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog, FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -90,6 +92,25 @@ define([
                 conceptForm.reset();
             });
 
+            console.log("startup conceptDialog");
+
+            var importForm = new ImportForm({externalSchemelist: this.thesauri.externalSchemelist});
+
+            var importDialog = new Dialog({
+                id: 'importDialog',
+                content: importForm
+
+            }).placeAt(document.body);
+
+            on(importForm, "cancel", function () {
+                importDialog.hide();
+            });
+
+            on(importDialog, "hide", function () {
+                importForm.reset();
+            });
+
+            console.log("startup importDialog");
 
             var tc = registry.byId("center");
 
@@ -111,6 +132,17 @@ define([
                 self._createConcept(conceptForm, conceptDialog, self.currentScheme);
             });
 
+            var importConceptButton = new Button({
+                label: "Import concept or collection",
+                disabled: "disabled"
+            }, "importConceptNode");
+
+            on(importConceptButton, "click", function () {
+
+                console.log("on importConceptButton");
+                self._importConcept(importForm, importDialog);
+            });
+
             on(schemeFileteringSelect, "change", function (e) {
 
                 if (e) {
@@ -118,10 +150,12 @@ define([
                     self.currentScheme = e;
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
+                    importConceptButton.set('disabled', false);
                 }
                 else {
                     filteredGrid.ResetConceptGrid();
                     addConceptButton.set('disabled', true);
+                    importConceptButton.set('disabled', true);
                 }
 
 
@@ -151,7 +185,8 @@ define([
                             related: item.related,
                             broader: item.broader,
                             members: item.members,
-                            member_of: item.member_of
+                            member_of: item.member_of,
+                            matches: item.matches
                         });
                         cp = new ContentPane({
                             id: schemeid + "_" + item.id,
@@ -233,16 +268,23 @@ define([
                 console.log("conceptform.submit subscribe");
                 console.log(form);
 
+                broader = array.map(form.broader, function(item){ return {"id": item}; });
+                narrower = array.map(form.narrower, function(item){ return {"id": item}; });
+                related = array.map(form.related, function(item){ return {"id": item}; });
+                members = array.map(form.members, function(item){ return {"id": item}; });
+                member_of = array.map(form.member_of, function(item){ return {"id": item}; });
+
                 var rowToAdd = {
                     "id:": form.concept_id,
                     "type": form.ctype,
                     "labels": form.label,
                     "notes": form.note,
-                    "broader": form.broader,
-                    "narrower": form.narrower,
-                    "related": form.related,
-                    "members": form.members,
-                    "member_of": form.member_of
+                    "broader": broader,
+                    "narrower": narrower,
+                    "related": related,
+                    "members": members,
+                    "member_of": member_of,
+                    "matches": form.matches
                 };
                 if (form.concept_id) {
                     filteredGrid.conceptGrid.store.put(rowToAdd, {id: form.concept_id})
@@ -288,6 +330,12 @@ define([
             conceptForm.init(Scheme);
             conceptDialog.set("title", "Add concept or collection");
             conceptDialog.show();
+        },
+
+        _importConcept: function (importForm, importDialog) {
+            importForm.init();
+            importDialog.set("title", "Import concept or collection");
+            importDialog.show();
         }
 
 

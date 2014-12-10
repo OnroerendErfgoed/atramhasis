@@ -59,7 +59,6 @@ class PrepareScaffold(Command):
 
 requires = [
     'pyramid',
-    'pyramid_debugtoolbar',
     'pyramid_tm',
     'SQLAlchemy',
     'transaction',
@@ -68,7 +67,10 @@ requires = [
     'skosprovider',
     'skosprovider_sqlalchemy',
     'skosprovider_rdf',
+    'skosprovider_getty',
+    'skosprovider_heritagedata',
     'pyramid_skosprovider',
+    'language_tags',
     'pyramid_jinja2',
     'alembic',
     'babel',
@@ -79,7 +81,7 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='0.3.1',
+      version='0.4.0',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
