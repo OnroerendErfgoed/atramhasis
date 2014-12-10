@@ -47,7 +47,7 @@ define([
                             var dlg = self._createDialog();
                             dlg.show();
                         }
-                    }, this.relationButton)
+                    }, this.relationButton);
 
                 Topic.subscribe("relation.delete", function (relationId) {
 
@@ -176,12 +176,9 @@ define([
                     return dlg
                 },
 
-                reset: function (relationType) {
+                reset: function () {
                     this._relations = [];
                     this._createNodeList();
-                    var lab="Add "+relationType;
-                    this.EditRelationButton.set("label",lab);
-                    this.EditRelationButton.set("iconClass","plusIcon");
                 },
 
                 getRelations: function () {
