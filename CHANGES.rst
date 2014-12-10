@@ -28,7 +28,9 @@
 - Add validation rule that a Concept must have at least one label.
 - Update to skosprovider_sqlalchemy_ 0.4.1.
 - Update to pyramid_skosprovider_ 0.4.0.
-- Update to skosprovider_rdf_ 0.3.0.
+- Update to skosprovider_rdf_ 0.3.0. This update adds support for dumping 
+  ConceptScheme in an RDF file and also handles *subordinate_arrays* and
+  *superordinates*.
 
 0.3.1 (05-09-2014)
 ------------------

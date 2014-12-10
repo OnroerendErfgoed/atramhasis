@@ -72,7 +72,7 @@ def internal_providers_only(fn):
 
     :param fn: the decorated function
     :return: around advice
-    :raises HTTPForbidden when provider is not internal
+    :raises pyramid.httpexceptions.HTTPMethodNotAllowed: when provider is not internal
     '''
     def advice(parent_object, *args, **kw):
 

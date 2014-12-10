@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+'''
+Thid module is used when blocking operations on a certain Concept or Collection
+that might be used in external applications.
+
+:versionadded: 0.4.0
+'''
 
 
 class ProtectedResourceEvent(object):
