@@ -9,6 +9,7 @@ define([
     "dojo/request",
     "dijit/registry",
     "dijit/form/FilteringSelect",
+    "dijit/MenuItem",
     "dijit/_Widget",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
@@ -29,7 +30,9 @@ define([
     "dijit/layout/BorderContainer"
 
 
-], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog, FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ContentPane, TabContainer) {
+], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, MenuItem,
+             _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
+             FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -120,6 +123,19 @@ define([
             });
             tc.addChild(cpwelcome);
             tc.startup();
+
+            //add "close all" option to tabs
+            var menuBtn = registry.byId("center_tablist_Menu");
+            if(menuBtn) {
+                menuBtn.addChild(new MenuItem({
+                    label: 'Close all',
+                    onClick: function (evt) {
+                        array.forEach(tc.getChildren(), function (tab) {
+                            if (tab.closable) tc.closeChild(tab);
+                        });
+                    }
+                }));
+            }
 
             var addConceptButton = new Button({
                 label: "Add concept or collection",
