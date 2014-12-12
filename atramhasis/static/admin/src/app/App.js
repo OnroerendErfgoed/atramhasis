@@ -115,7 +115,7 @@ define([
 //                importForm.reset();
 //            });
 
-            console.log("startup importDialog");
+//            console.log("startup importDialog");
 
             var tc = registry.byId("center");
 
@@ -168,12 +168,12 @@ define([
                     self.currentScheme = e;
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
-                    importConceptButton.set('disabled', false);
+//                    importConceptButton.set('disabled', false);
                 }
                 else {
                     filteredGrid.ResetConceptGrid();
                     addConceptButton.set('disabled', true);
-                    importConceptButton.set('disabled', true);
+//                    importConceptButton.set('disabled', true);
                 }
 
 
