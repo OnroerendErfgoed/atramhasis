@@ -56,14 +56,16 @@ define([
         },
 
         mapMatchesForList: function (matches, type) {
-            var filteredMatches = []
-            for(matchType in matches) {
-                if(matchType == type){
-                    filteredMatches = matches[type];
+            var filteredMatches = [];
+            arrayUtil.forEach(matches, function (match) {
+                console.log(match);
+                if(match.type == type){
+                    filteredMatches.push(match);
                 }
-            }
+            });
             return arrayUtil.map(filteredMatches, function (item) {
-                return {"id": item, "mainlabel": item};
+                var data = item.data;
+                return {"id": data.id, "mainlabel": data.label, "sublabel": data.uri};
             });
         },
 
