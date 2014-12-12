@@ -1,310 +1,313 @@
 define([
         "dojo/_base/declare",
+        "dojo/_base/array",
+        "dojo/dom-construct",
+        "dojo/query",
+        "dojo/on",
+        "dojo/dom-style",
+        "dojo/request/xhr",
         "dijit/Dialog",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "dijit/form/Button",
         "dijit/form/Select",
-        "dgrid/OnDemandGrid",
         "dijit/form/TextBox",
-        "dojox/layout/TableContainer",
-        "dojo/_base/lang",
-        "dojo/dom-construct",
         "dojo/store/Memory",
-        "dgrid/editor",
-        "dgrid/extensions/ColumnHider",
-        "dojo/_base/array",
-        "dojo/on",
-        "dojo/dom-style",
-        "./ConceptDetailList",
-        "dojo/text!./templates/MatchesManager.html"
-
+        "dojo/store/Cache",
+        "dojo/store/JsonRest",
+        "dijit/tree/ObjectStoreModel",
+        "dijit/Tree",
+        "dojo/topic",
+         "./ConceptDetailList",
+        "dojo/text!./templates/MatchesManager.html",
+        "dgrid/List",
+        "dgrid/Keyboard",
+        "dgrid/Selection",
+         "dgrid/extensions/DijitRegistry"
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, editor, ColumnHider, arrayUtil, on, domStyle, ConceptDetailList, template) {
+    function (declare, arrayUtil, domConstruct, query, on, domStyle, xhr, Dialog, WidgetBase, TemplatedMixin,
+              Button, Select, TextBox, Memory, Cache, JsonRest, ObjectStoreModel, Tree,topic,ConceptDetailList, template,
+              dgridList, dgridKeyboard, dgridSelection, DijitRegistry) {
         return declare(
-            "app/form/MatchesManager",
+            "app/form/RelationManager",
             [WidgetBase, TemplatedMixin],
             {
                 templateString: template,
-
                 name: 'MatchesManager',
                 title: 'Matches:',
-                matchesGrid: null,
-                matchUri: null,
-                matchTypeComboBox: null,
-                matches: null,
-                tempMatches: null,//this variable is used to recover the matches if user delete a match and then press on the cancel button
-                EditMatchesButton: null,
+                thesauri: null,
+                _matches: null,
+                _externalConceptList: null,
+                _matchesDialog: null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
                 },
+
                 postCreate: function () {
                     this.inherited(arguments);
-                    var self = this;
-                    //noinspection CommaExpressionJS
 
-                    self.EditMatchesButton = new Button({
-                        label: "Add Matches",
-                        showLabel: true,
-                        iconClass: 'plusIcon',
-                        onClick: function () {
-                            var dlg = self._createDialog();
-                            if (self.matches) {
-                                self._setGrid(self.matches);
-                                self.tempMatches = lang.clone(self.matches);
-                            }
-                            dlg.show();
-                            self.matchesGrid.resize();
-                            self.matchesGrid.refresh();
-                        }
-                    }, this.matchesButton);
-
+                    this._matches = [];
                     this.broadMatchList = new ConceptDetailList({}, this.broadMatchListNode);
                     this.closeMatchList = new ConceptDetailList({}, this.closeMatchListNode);
                     this.exactMatchList = new ConceptDetailList({}, this.exactMatchListNode);
                     this.narrowMatchList = new ConceptDetailList({}, this.narrowMatchListNode);
                     this.relatedMatchList = new ConceptDetailList({}, this.relatedMatchListNode);
 
+                    var self = this;
+                    new Button({
+                        label: "Add " + this.title,
+                        showLabel: true,
+                        iconClass: 'plusIcon',
+                        onClick: function () {
+                            if (!self._matchesDialog) {
+                                self._matchesDialog = self._createDialog();
+                            }
+                            self._matchesDialog.show();
+                        }
+                    }, this.matchesButton);
+
+                    self.broadMatchList.on("relation.delete", function(evt){
+                        self._removeMatch(evt.relation);
+                    });
+                    self.closeMatchList.on("relation.delete", function(evt){
+                        self._removeMatch(evt.relation);
+                    });
+                    self.exactMatchList.on("relation.delete", function(evt){
+                        self._removeMatch(evt.relation);
+                    });
+                    self.narrowMatchList.on("relation.delete", function(evt){
+                        self._removeMatch(evt.relation);
+                    });
+                    self.relatedMatchList.on("relation.delete", function(evt){
+                        self._removeMatch(evt.relation);
+                    });
+                },
+
+                _addMatch: function (match) {
+                    var found = arrayUtil.some(this._matches, function (item) {
+                        return item.data.id == match.data.id;
+                    });
+                    if (!found) {
+                        this._matches.push(match);
+                        this._createNodeList();
+                        return true;
+                    }
+                    return false;
+                },
+
+                _removeMatch: function (matchToDelete) {
+                    var self = this;
+                    arrayUtil.forEach(this._matches, function(match) {
+                        if(match.data.uri == matchToDelete.sublabel) {
+                          var position = arrayUtil.indexOf(self._matches, match);
+                          self._matches.splice(position, 1);
+                        }
+                    });
+                },
+
+                _createNodeList: function () {
+                    var matches = this._matches;
+
+                    this.broadMatchList.buildList(
+                        this.broadMatchList.mapMatchesForList(matches, "broadMatch"),
+                        "Broad matches", false, true
+                    );
+                    this.closeMatchList.buildList(
+                        this.closeMatchList.mapMatchesForList(matches, "closeMatch"),
+                        "Close matches", false, true
+                    );
+                    this.exactMatchList.buildList(
+                        this.exactMatchList.mapMatchesForList(matches, "exactMatch"),
+                        "Exact matches", false, true
+                    );
+                    this.narrowMatchList.buildList(
+                        this.narrowMatchList.mapMatchesForList(matches, "narrowMatch"),
+                        "Narrow matches", false, true
+                    );
+                    this.relatedMatchList.buildList(
+                        this.relatedMatchList.mapMatchesForList(matches, "relatedMatch"),
+                        "Reated matches", false, true
+                    );
                 },
 
                 _createDialog: function () {
                     var self = this;
+
                     var dlg = new Dialog({
                         style: "width: 600px",
-                        title: "Add Matches",
+                        title: "Choose a match",
                         doLayout: true
                     });
 
-                    var mainDiv = domConstruct.create("div");
-                    domConstruct.place(mainDiv, dlg.containerNode);
-                    var tableBoxDiv = domConstruct.create("div");
-                    domConstruct.place(tableBoxDiv, mainDiv, "first");
-                    var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10, orientation: "vert"}, tableBoxDiv);
+                    var extSchemeStore = new Memory({
+                        idProperty: "id",
+                        data: this.thesauri.externalSchemelist
+                    });
 
+                    var searchDiv = domConstruct.create("div", {}, dlg.containerNode);
 
-                    var matchType = this._getMatchType();
+                    domConstruct.create("p", {
+                        'innerHTML': "Select an external scheme and enter a label to search for a match:"
+                    }, searchDiv);
+                    var selectScheme = new Select({
+                        name: "extSchemeSelect",
+                        store: extSchemeStore,
+                        style: "width: 200px;",
+                        title: "Select external scheme",
+                        labelAttr: "name",
+                        maxHeight: -1 // tells _HasDropDown to fit menu within viewport
+                    }).placeAt(searchDiv);
 
-                    var matchTypeComboBox = new Select(
-                        {
-                            id: "TypeComboBox",
-                            name: "matchTypeComboBox",
-                            title: "Type of match:",
-                            placeHolder: 'Select a type',
-                            options: matchType,
-                            style: { width: '120px' }
+                    var textFilter = new TextBox({
+                        name: "matchFilter",
+                        placeHolder: "search for label",
+                        intermediateChanges: true
+                    }).placeAt(searchDiv);
 
-                        });
-
-                    var addMatchButtonToTable = new Button
-                    (
-                        {
-                            iconClass: 'plusIcon',
-                            showLabel: false,
-                            onClick: lang.hitch(this, function () {
-
-                                console.log("Add match to tabel in add match dialog");
-
-                                self.matchesGrid.store.add({
-                                    uri: self.matchUri.get('value'),
-                                    type:self.matchTypeComboBox.get('value') ,
-                                    typeDisplayed: self.matchTypeComboBox.get('displayedValue')});
-                                self.matchesGrid.resize();
-                                self.matchesGrid.refresh();
-                            })
+                    new Button({
+                        "label": "Search",
+                        onClick: function(){
+                            self._searchForConcepts(selectScheme.value, textFilter.value)
                         }
-                    );
+                    }).placeAt(searchDiv);
 
-                    var matchUri = new TextBox({id: "matchUri", title: "URI:"});
+                    var listHolder = domConstruct.create("div", {}, searchDiv);
+                    var list = new (declare([dgridList, dgridKeyboard, dgridSelection, DijitRegistry]))({
+                        selectionMode: "single",
+                        renderRow: function(object, options){
+                            return domConstruct.create("div", {
+                                innerHTML: object.label + " <em>(" + object.type + ", id: " + object.id + ")</em>"
+                            });
+                        }
+                    }, listHolder);
+                    list.renderArray([]);
+                    this._externalConceptList = list;
 
-                    self.matchUri = matchUri;
-                    self.matchTypeComboBox = matchTypeComboBox;
-
-                    labelTabForBoxes.addChild(matchUri);
-                    labelTabForBoxes.addChild(matchTypeComboBox);
-                    labelTabForBoxes.addChild(addMatchButtonToTable);
-                    labelTabForBoxes.startup();
-
-                    var gridDiv = domConstruct.create("div");
-                    var matchesGrid = this._createGrid(gridDiv);
-                    domConstruct.place(gridDiv, mainDiv, "last");
-
-                    self.matchesGrid = matchesGrid;
+                    var selectType = new Select({
+                        name: "typeSelect",
+                        options: [
+                            {label: "Broad", value: "broadMatch"},
+                            {label: "Close", value: "closeMatch"},
+                            {label: "Exact", value: "exactMatch"},
+                            {label: "Narrow", value: "narrowMatch"},
+                            {label: "Related", value: "relatedMatch"}
+                        ],
+                        style: "width: 200px;",
+                        title: "Select match type",
+                        maxHeight: -1, // tells _HasDropDown to fit menu within viewport
+                        onChange: function(value){
+                            console.log(value);
+                        }
+                    }).placeAt(searchDiv);
 
                     var actionBar = domConstruct.create("div", {
-                        'class': "dijitDialogPaneActionBar"
+                        'class': "dijitDialogPaneActionBar",
+                        width: "300px"
                     }, dlg.containerNode);
 
                     var addBtn = new Button({
-                        "label": "Save"
+                        "label": "Add"
                     }).placeAt(actionBar);
                     var cancelBtn = new Button({
                         "label": "Cancel"
                     }).placeAt(actionBar);
 
                     addBtn.onClick = function () {
-                        self._createNodeList(self.matchesGrid.store.data);
-                        self.matches = self.matchesGrid.store.data;
-                        self.setEditMatchesButton();
+                        var row = null;
+                        for(var id in list.selection){
+                            if(list.selection[id]){
+                                row = list.row(id);
+                            }
+                        }
+                        var match = {
+                            data: row.data,
+                            type: selectType.get('value')
+                        };
+                        self._addMatch(match);
                         dlg.hide();
                     };
+
                     cancelBtn.onClick = function () {
-                        self.matches = lang.clone(self.tempMatches);
                         dlg.hide();
                     };
 
                     on(dlg, "hide", function () {
-                        matchUri.destroy();
-                        matchTypeComboBox.destroy();
+                        selectType.reset();
+                        textFilter.reset();
+                        list.clearSelection();
                     });
 
-                    return dlg;
-
-
+                    return dlg
                 },
 
-                _getMatchType: function () {
-
-                    var Type = [
-                        {label: "Broad", value: "broadMatch"},
-                        {label: "Close", value: "closeMatch"},
-                        {label: "Exact", value: "exactMatch"},
-                        {label: "Narrow", value: "narrowMatch"},
-                        {label: "Related", value: "relatedMatch"}
-                    ];
-
-                    return Type;
-                },
-
-
-                _createGrid: function (gridDiv) {
-                    var self = this;
-                    var columns;
-                    columns = [
-                        {label: "URI", field: "uri"},
-                        {label: "Type", field: "typeDisplayed"},
-                        {label: "Type", field: "type", unhidable: true, hidden: true},
-                        editor({label: " ", field: 'button',
-                                editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
-                                    var row = grid.row(event);
-                                    var itemToDelete = row.data.id;
-                                    grid.store.remove(itemToDelete);
-                                    grid.resize();
-                                    grid.refresh();
-                                }
-                                }},
-                            Button)
-                    ];
-                    var gridStore = new Memory({
-                        data: []
-
-                    });
-                    var grid = new (declare([OnDemandGrid, ColumnHider]))({
-                        columns: columns,
-                        store: gridStore,
-                        selectionMode: "single" // for Selection; only select a single row at a time
-                    }, gridDiv);
-
-                    grid.startup();
-
-                    return grid;
-                },
-                _createNodeList: function (matches) {
-                    var matchObject = this._mapMatchesToMatchObject(matches);
-                    var mappedMatches = this.broadMatchList.mapMatchesForList(matchObject, "broadMatch");
-                    this.broadMatchList.buidList(mappedMatches, "Broad matches", false);
-                    mappedMatches = this.closeMatchList.mapMatchesForList(matchObject, "closeMatch");
-                    this.closeMatchList.buidList(mappedMatches, "Close matches", false);
-                    mappedMatches = this.exactMatchList.mapMatchesForList(matchObject, "exactMatch");
-                    this.exactMatchList.buidList(mappedMatches, "Exact matches", false);
-                    mappedMatches = this.narrowMatchList.mapMatchesForList(matchObject, "narrowMatch");
-                    this.narrowMatchList.buidList(mappedMatches, "Narrow matches", false);
-                    mappedMatches = this.relatedMatchList.mapMatchesForList(matchObject, "relatedMatch");
-                    this.relatedMatchList.buidList(mappedMatches, "Related matches", false);
-                },
-                _setGrid: function (matches) {
-                    var gridStore = new Memory({
-                        data: matches
-                    });
-                    this.matchesGrid.set("store", gridStore);
-                },
-                _mapMatchToDisplayedMatch: function (matches, typevalue, typeToBeDisplayed) {
-                    return arrayUtil.map(matches, function (item) {
-                        return {uri: item, type: typevalue, typeDisplayed: typeToBeDisplayed};
-                    });
+                reset: function () {
+                    this._matches = [];
+                    this._createNodeList();
                 },
 
                 getMatches: function () {
-                    if(this.matchesGrid)
-                    {
-                        return this._mapMatchesToMatchObject(this.matchesGrid.store.data);
-                    }
-                    else
-                    {
-                        return this._mapMatchesToMatchObject(this.matches);
-                    }
-
-                },
-
-                setMatches: function (matches) {
-                    console.log("set matches: " + matches);
-
-                    this.matches = []
-
-                    for(matchType in matches) {
-                        this.matches.push.apply(this.matches, this._mapMatchToDisplayedMatch(matches[matchType], matchType, this._mapMatchTypeToDisplayType(matchType)));
-                    }
-
-                    this._createNodeList(this.matches);
-                    this.tempMatches = lang.clone(this.matches);
-                },
-
-                _mapMatchTypeToDisplayType: function(matchType){
-                    var label;
-                    arrayUtil.forEach(this._getMatchType(), function(type, i) {
-                        if(type.value == matchType){
-                            label =  type.label;
-                        }
-                     });
-                     return label;
-                },
-
-                _mapMatchesToMatchObject: function(matches){
-                    var matchObject = {};
-                    arrayUtil.forEach(matches, function(match, i) {
-                        if(matchObject[match.type]){
-                            matchObject[match.type].push(match.uri);
-                        }else{
-                            matchObject[match.type] = [match.uri];
+                    var matches = {};
+                    var types = ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'];
+                    var self = this;
+                    arrayUtil.forEach(types, function(type) {
+                        var uris = self.getMatchesUris(type);
+                        if (uris.length > 0) {
+                            matches[type] = uris;
                         }
                     });
-                    return matchObject;
+                    console.log('matches:');
+                    console.log(matches);
+                    return matches;
                 },
 
-                setEditMatchesButton: function () {
-                    this.EditMatchesButton.set("label", "Edit matches");
-                    this.EditMatchesButton.set("iconClass", "");
+                getMatchesUris: function (type) {
+                    var filteredMatches = arrayUtil.filter(this._matches, function(match){
+                        return match.type == type;
+                    });
 
+                    return arrayUtil.map(filteredMatches, function (match) {
+                        return match.data.uri;
+                    });
                 },
-                reset: function () {
-                    this.broadMatchList.reset();
-                    this.closeMatchList.reset();
-                    this.exactMatchList.reset();
-                    this.narrowMatchList.reset();
-                    this.relatedMatchList.reset();
-                    this.matches = null;
-                    this.tempMatches = null;
-                    this.matchesGrid=null;
-                    this.EditMatchesButton.set("label", "Add matches");
-                    this.EditMatchesButton.set("iconClass", "plusIcon");
+
+                setRelations: function (relations) {
+                    this._matches = relations;
+                    this._createNodeList();
                 },
+
+                setMatches: function (groupedMatches) {
+                    var matchesUris = [];
+                    var types = ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'];
+                    arrayUtil.forEach(types, function(type) {
+                        if (groupedMatches[type]) {
+                            matchesUris.concat(matches[type]);
+                        }
+                    });
+                    console.log(matchesUris);
+                    //todo: fetch matches with uris
+                },
+
                 close: function () {
                     domStyle.set(this.domNode, "display", "none");
-                    this.reset();
                 },
 
                 open: function () {
                     domStyle.set(this.domNode, "display", "block");
+                },
+
+                _searchForConcepts: function (scheme, value) {
+                    var self = this;
+                    var url = "/conceptschemes/" + scheme + "/c?label=" + value + "&type=all&sort=+label";
+                    xhr.get(url, {
+                        handleAs: "json",
+                        headers: {'Accept' : 'application/json'}
+                    }).then(function(data){
+                        self._externalConceptList.refresh();
+                        self._externalConceptList.renderArray(data);
+                    }, function(err){
+                        console.error(err);
+                    });
                 }
             });
     });
