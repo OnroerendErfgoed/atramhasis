@@ -140,11 +140,6 @@ define([
                         doLayout: true
                     });
 
-                    var extSchemeStore = new Memory({
-                        idProperty: "id",
-                        data: this.thesauri.externalSchemelist
-                    });
-
                     var searchDiv = domConstruct.create("div", {}, dlg.containerNode);
 
                     domConstruct.create("p", {
@@ -152,10 +147,10 @@ define([
                     }, searchDiv);
                     var selectScheme = new Select({
                         name: "extSchemeSelect",
-                        store: extSchemeStore,
+                        store: this.thesauri.externalSchemeStore,
                         style: "width: 200px;",
                         title: "Select external scheme",
-                        labelAttr: "name",
+                        labelAttr: "label",
                         maxHeight: -1 // tells _HasDropDown to fit menu within viewport
                     }).placeAt(searchDiv);
 
