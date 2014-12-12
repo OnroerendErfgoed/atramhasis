@@ -68,7 +68,7 @@ define([
             });
         },
 
-        buidList: function (items, title, clickable, isEditRelation) {
+        buildList: function (items, title, clickable, isEditRelation) {
             var self=this;
             this.reset();
             var node = this.ConceptListNode;

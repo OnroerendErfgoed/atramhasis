@@ -279,13 +279,13 @@ define([
         },
 
         _createNodeList: function (notes) {
-            this.definitionList.buidList(this.definitionList.mapLabelsForList(notes, "definition"), "Definition", false);
-            this.changeNoteList.buidList(this.changeNoteList.mapLabelsForList(notes, "changeNote"), "Change note", false);
-            this.editorialNoteList.buidList(this.editorialNoteList.mapLabelsForList(notes, "editorialNote"), "Editorial note", false);
-            this.exampleList.buidList(this.exampleList.mapLabelsForList(notes, "example"), "Example", false);
-            this.historyNoteList.buidList(this.historyNoteList.mapLabelsForList(notes, "historyNote"), "Historynote", false);
-            this.scopeNoteList.buidList(this.scopeNoteList.mapLabelsForList(notes, "scopeNote"), "Scopenote", false);
-            this.noteList.buidList(this.noteList.mapLabelsForList(notes, "note"), "Note", false);
+            this.definitionList.buildList(this.definitionList.mapLabelsForList(notes, "definition"), "Definition", false);
+            this.changeNoteList.buildList(this.changeNoteList.mapLabelsForList(notes, "changeNote"), "Change note", false);
+            this.editorialNoteList.buildList(this.editorialNoteList.mapLabelsForList(notes, "editorialNote"), "Editorial note", false);
+            this.exampleList.buildList(this.exampleList.mapLabelsForList(notes, "example"), "Example", false);
+            this.historyNoteList.buildList(this.historyNoteList.mapLabelsForList(notes, "historyNote"), "Historynote", false);
+            this.scopeNoteList.buildList(this.scopeNoteList.mapLabelsForList(notes, "scopeNote"), "Scopenote", false);
+            this.noteList.buildList(this.noteList.mapLabelsForList(notes, "note"), "Note", false);
         },
 
         _mapNoteToDisplayInGrid: function (notes, typevalue, typeToBeDisplayed) {

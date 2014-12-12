@@ -124,17 +124,17 @@ define([
         _CreateNodeLists:function()
         {
             var self=this;
-            self.prefLabelList.buidList(self.prefLabelList.mapLabelsForList(self.labels, "prefLabel"), "Preferred labels", false);
-            self.altLabelList.buidList(self.altLabelList.mapLabelsForList(self.labels, "altLabel"), "Alternate labels", false);
-            self.hiddenLabelList.buidList( self.hiddenLabelList.mapLabelsForList(self.labels, "hiddenLabel"), "Hidden labels", false);
+            self.prefLabelList.buildList(self.prefLabelList.mapLabelsForList(self.labels, "prefLabel"), "Preferred labels", false);
+            self.altLabelList.buildList(self.altLabelList.mapLabelsForList(self.labels, "altLabel"), "Alternate labels", false);
+            self.hiddenLabelList.buildList( self.hiddenLabelList.mapLabelsForList(self.labels, "hiddenLabel"), "Hidden labels", false);
 
-            self.definitionList.buidList(self.definitionList.mapNotesForList(self.notes, "definition"), "Definition", false);
-            self.changeNoteList.buidList(self.changeNoteList.mapNotesForList(self.notes, "changeNote"), "Change note", false);
-            self.editorialNoteList.buidList(self.editorialNoteList.mapNotesForList(self.notes, "editorialNote"), "Editorial note", false);
-            self.exampleList.buidList( self.exampleList.mapNotesForList(self.notes, "example"), "Example", false);
-            self.historyNoteList.buidList(self.historyNoteList.mapNotesForList(self.notes, "historyNote"), "Historynote", false);
-            self.scopeNoteList.buidList(self.scopeNoteList.mapNotesForList(self.notes, "scopeNote"), "Scopenote", false);
-            self.noteList.buidList(self.noteList.mapNotesForList(self.notes, "note"), "Note", false);
+            self.definitionList.buildList(self.definitionList.mapNotesForList(self.notes, "definition"), "Definition", false);
+            self.changeNoteList.buildList(self.changeNoteList.mapNotesForList(self.notes, "changeNote"), "Change note", false);
+            self.editorialNoteList.buildList(self.editorialNoteList.mapNotesForList(self.notes, "editorialNote"), "Editorial note", false);
+            self.exampleList.buildList( self.exampleList.mapNotesForList(self.notes, "example"), "Example", false);
+            self.historyNoteList.buildList(self.historyNoteList.mapNotesForList(self.notes, "historyNote"), "Historynote", false);
+            self.scopeNoteList.buildList(self.scopeNoteList.mapNotesForList(self.notes, "scopeNote"), "Scopenote", false);
+            self.noteList.buildList(self.noteList.mapNotesForList(self.notes, "note"), "Note", false);
 
             self.broaderList.schemeid=self.schemeid;
             self.narrowerList.schemeid=self.schemeid;
@@ -142,17 +142,17 @@ define([
             self.membersList.schemeid=self.schemeid;
             self.memberofList.schemeid=self.schemeid;
 
-            self.broaderList.buidList(self.broaderList.mapRelationsForList(self.broader), "Broader", true);
-            self.narrowerList.buidList(self.narrowerList.mapRelationsForList(self.narrower), "Narrower", true);
-            self.relatedList.buidList(self.relatedList.mapRelationsForList(self.related), "Related", true);
-            self.membersList.buidList(self.membersList.mapRelationsForList(self.members), "Members", true);
-            self.memberofList.buidList(self.memberofList.mapRelationsForList(self.member_of), "Member of", true);
+            self.broaderList.buildList(self.broaderList.mapRelationsForList(self.broader), "Broader", true);
+            self.narrowerList.buildList(self.narrowerList.mapRelationsForList(self.narrower), "Narrower", true);
+            self.relatedList.buildList(self.relatedList.mapRelationsForList(self.related), "Related", true);
+            self.membersList.buildList(self.membersList.mapRelationsForList(self.members), "Members", true);
+            self.memberofList.buildList(self.memberofList.mapRelationsForList(self.member_of), "Member of", true);
 
-            self.broadMatchList.buidList(self.broadMatchList.mapMatchesForList(self.matches, "broadMatch"), "BroadMatch", false);
-            self.closeMatchList.buidList(self.closeMatchList.mapMatchesForList(self.matches, "closeMatch"), "CloseMatch", false);
-            self.exactMatchList.buidList(self.exactMatchList.mapMatchesForList(self.matches, "exactMatch"), "ExactMatch", false);
-            self.narrowMatchList.buidList(self.narrowMatchList.mapMatchesForList(self.matches, "narrowMatch"), "NarrowMatch", false);
-            self.relatedMatchList.buidList(self.relatedMatchList.mapMatchesForList(self.matches, "relatedMatch"), "RelatedMatch", false);
+            self.broadMatchList.buildList(self.broadMatchList.mapMatchesForList(self.matches, "broadMatch"), "BroadMatch", false);
+            self.closeMatchList.buildList(self.closeMatchList.mapMatchesForList(self.matches, "closeMatch"), "CloseMatch", false);
+            self.exactMatchList.buildList(self.exactMatchList.mapMatchesForList(self.matches, "exactMatch"), "ExactMatch", false);
+            self.narrowMatchList.buildList(self.narrowMatchList.mapMatchesForList(self.matches, "narrowMatch"), "NarrowMatch", false);
+            self.relatedMatchList.buildList(self.relatedMatchList.mapMatchesForList(self.matches, "relatedMatch"), "RelatedMatch", false);
 
         }
     });
