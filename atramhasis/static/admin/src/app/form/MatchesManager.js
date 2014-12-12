@@ -266,11 +266,6 @@ define([
                     });
                 },
 
-                setRelations: function (relations) {
-                    this._matches = relations;
-                    this._createNodeList();
-                },
-
                 setMatches: function (groupedMatches) {
                     var matchesUris = [];
                     var types = ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'];
