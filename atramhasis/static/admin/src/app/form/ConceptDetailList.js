@@ -58,13 +58,10 @@ define([
         },
 
         mapMatchesForList: function (matches, type) {
-            var filteredMatches = [];
-            arrayUtil.forEach(matches, function (match) {
-                console.log(match);
-                if(match.type == type){
-                    filteredMatches.push(match);
-                }
+            var filteredMatches = arrayUtil.filter(matches, function(match){
+                return match.type == type;
             });
+
             return arrayUtil.map(filteredMatches, function (item) {
                 var data = item.data;
                 return {"id": data.id, "mainlabel": data.label, "sublabel": data.uri};
