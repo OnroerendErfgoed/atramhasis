@@ -36,41 +36,37 @@ define([
 
         postCreate: function () {
 
+            this.prefLabelList = new ConceptDetailList({ }, this.prefLabelListNode);
+            this.altLabelList = new ConceptDetailList({}, this.altLabelListNode);
+            this.hiddenLabelList = new ConceptDetailList({}, this.hiddenLabelListNode);
+            this.changeNoteList = new ConceptDetailList({ }, this.changeNoteListNode);
+            this.definitionList = new ConceptDetailList({}, this.definitionListNode);
+            this.editorialNoteList = new ConceptDetailList({}, this.editorialNoteListNode);
+            this.exampleList = new ConceptDetailList({ }, this.exampleListNode);
+            this.historyNoteList = new ConceptDetailList({}, this.historyNoteListNode);
+            this.scopeNoteList = new ConceptDetailList({}, this.scopeNoteListNode);
+            this.noteList = new ConceptDetailList({}, this.noteListNode);
+            this.broaderList = new ConceptDetailList({}, this.broaderListNode);
+            this.narrowerList = new ConceptDetailList({}, this.narrowerListNode);
+            this.relatedList = new ConceptDetailList({}, this.relatedListNode);
+            this.membersList = new ConceptDetailList({}, this.membersListNode);
+            this.memberofList = new ConceptDetailList({}, this.memberofListNode);
+            this.broadMatchList = new ConceptDetailList({}, this.broadMatchListNode);
+            this.closeMatchList = new ConceptDetailList({}, this.closeMatchListNode);
+            this.exactMatchList = new ConceptDetailList({}, this.exactMatchListNode);
+            this.narrowMatchList = new ConceptDetailList({}, this.narrowMatchListNode);
+            this.relatedMatchList = new ConceptDetailList({}, this.relatedMatchListNode);
 
-
-           var self = this;
-
-           self.prefLabelList = new ConceptDetailList({ }, self.prefLabelListNode);
-           self.altLabelList = new ConceptDetailList({}, self.altLabelListNode);
-           self.hiddenLabelList = new ConceptDetailList({}, self.hiddenLabelListNode);
-           self.changeNoteList = new ConceptDetailList({ }, self.changeNoteListNode);
-           self.definitionList = new ConceptDetailList({}, self.definitionListNode);
-           self.editorialNoteList = new ConceptDetailList({}, self.editorialNoteListNode);
-           self.exampleList = new ConceptDetailList({ }, self.exampleListNode);
-           self.historyNoteList = new ConceptDetailList({}, self.historyNoteListNode);
-           self.scopeNoteList = new ConceptDetailList({}, self.scopeNoteListNode);
-           self.noteList = new ConceptDetailList({}, self.noteListNode);
-           self.broaderList = new ConceptDetailList({}, self.broaderListNode);
-           self.narrowerList = new ConceptDetailList({}, self.narrowerListNode);
-           self.relatedList = new ConceptDetailList({}, self.relatedListNode);
-           self.membersList = new ConceptDetailList({}, self.membersListNode);
-           self.memberofList = new ConceptDetailList({}, self.memberofListNode);
-           self.broadMatchList = new ConceptDetailList({}, self.broadMatchListNode);
-           self.closeMatchList = new ConceptDetailList({}, self.closeMatchListNode);
-           self.exactMatchList = new ConceptDetailList({}, self.exactMatchListNode);
-           self.narrowMatchList = new ConceptDetailList({}, self.narrowMatchListNode);
-           self.relatedMatchList = new ConceptDetailList({}, self.relatedMatchListNode);
-
+            this._CreateNodeLists();
 
             var actionNode = this.actionNode;
-
             var deleteLi = domConstruct.create("li", {
                 innerHTML: "<a href='#'>Delete</a>"
             }, actionNode);
             var editLi = domConstruct.create("li", {
                 innerHTML: "<a href='#'>Edit</a>"
             }, actionNode);
-
+            var self = this;
             on(deleteLi, "click", function (evt) {
                 evt.preventDefault();
 
@@ -99,60 +95,55 @@ define([
                 return false;
             });
 
-             self._CreateNodeLists();
-             topic.subscribe("conceptDetail.refresh",function (refreshedConcept)
-             {
-                 self._refreshConceptDetail(refreshedConcept);
-
-             });
+            topic.subscribe("conceptDetail.refresh", function (refreshedConcept) {
+                self._refreshConceptDetail(refreshedConcept);
+            });
 
         },
         _refreshConceptDetail:function(refreshedConcept)
         {
-            var self=this;
-            self.labels=refreshedConcept.labels;
-            self.notes=refreshedConcept.notes;
-            self.broader=refreshedConcept.broader;
-            self.narrower=refreshedConcept.narrower;
-            self.related=refreshedConcept.related;
-            self.members=refreshedConcept.members;
-            self.member_of=refreshedConcept.member_of;
-            self.matches=refreshedConcept.matches;
-            self._CreateNodeLists();
+            this.labels=refreshedConcept.labels;
+            this.notes=refreshedConcept.notes;
+            this.broader=refreshedConcept.broader;
+            this.narrower=refreshedConcept.narrower;
+            this.related=refreshedConcept.related;
+            this.members=refreshedConcept.members;
+            this.member_of=refreshedConcept.member_of;
+            this.matches=refreshedConcept.matches;
+            this._CreateNodeLists();
         },
 
         _CreateNodeLists:function()
         {
-            var self=this;
-            self.prefLabelList.buildList(self.prefLabelList.mapLabelsForList(self.labels, "prefLabel"), "Preferred labels", false);
-            self.altLabelList.buildList(self.altLabelList.mapLabelsForList(self.labels, "altLabel"), "Alternate labels", false);
-            self.hiddenLabelList.buildList( self.hiddenLabelList.mapLabelsForList(self.labels, "hiddenLabel"), "Hidden labels", false);
+            this.prefLabelList.buildList(this.prefLabelList.mapLabelsForList(this.labels, "prefLabel"), "Preferred labels", false);
+            this.altLabelList.buildList(this.altLabelList.mapLabelsForList(this.labels, "altLabel"), "Alternate labels", false);
+            this.hiddenLabelList.buildList( this.hiddenLabelList.mapLabelsForList(this.labels, "hiddenLabel"), "Hidden labels", false);
 
-            self.definitionList.buildList(self.definitionList.mapNotesForList(self.notes, "definition"), "Definition", false);
-            self.changeNoteList.buildList(self.changeNoteList.mapNotesForList(self.notes, "changeNote"), "Change note", false);
-            self.editorialNoteList.buildList(self.editorialNoteList.mapNotesForList(self.notes, "editorialNote"), "Editorial note", false);
-            self.exampleList.buildList( self.exampleList.mapNotesForList(self.notes, "example"), "Example", false);
-            self.historyNoteList.buildList(self.historyNoteList.mapNotesForList(self.notes, "historyNote"), "Historynote", false);
-            self.scopeNoteList.buildList(self.scopeNoteList.mapNotesForList(self.notes, "scopeNote"), "Scopenote", false);
-            self.noteList.buildList(self.noteList.mapNotesForList(self.notes, "note"), "Note", false);
+            this.definitionList.buildList(this.definitionList.mapNotesForList(this.notes, "definition"), "Definition", false);
+            this.changeNoteList.buildList(this.changeNoteList.mapNotesForList(this.notes, "changeNote"), "Change note", false);
+            this.editorialNoteList.buildList(this.editorialNoteList.mapNotesForList(this.notes, "editorialNote"), "Editorial note", false);
+            this.exampleList.buildList( this.exampleList.mapNotesForList(this.notes, "example"), "Example", false);
+            this.historyNoteList.buildList(this.historyNoteList.mapNotesForList(this.notes, "historyNote"), "Historynote", false);
+            this.scopeNoteList.buildList(this.scopeNoteList.mapNotesForList(this.notes, "scopeNote"), "Scopenote", false);
+            this.noteList.buildList(this.noteList.mapNotesForList(this.notes, "note"), "Note", false);
 
-            self.broaderList.schemeid=self.schemeid;
-            self.narrowerList.schemeid=self.schemeid;
-            self.relatedList.schemeid=self.schemeid;
-            self.membersList.schemeid=self.schemeid;
-            self.memberofList.schemeid=self.schemeid;
+            this.broaderList.schemeid=this.schemeid;
+            this.narrowerList.schemeid=this.schemeid;
+            this.relatedList.schemeid=this.schemeid;
+            this.membersList.schemeid=this.schemeid;
+            this.memberofList.schemeid=this.schemeid;
 
-            self.broaderList.buildList(self.broaderList.mapRelationsForList(self.broader), "Broader", true);
-            self.narrowerList.buildList(self.narrowerList.mapRelationsForList(self.narrower), "Narrower", true);
-            self.relatedList.buildList(self.relatedList.mapRelationsForList(self.related), "Related", true);
-            self.membersList.buildList(self.membersList.mapRelationsForList(self.members), "Members", true);
-            self.memberofList.buildList(self.memberofList.mapRelationsForList(self.member_of), "Member of", true);
+            this.broaderList.buildList(this.broaderList.mapRelationsForList(this.broader), "Broader", true);
+            this.narrowerList.buildList(this.narrowerList.mapRelationsForList(this.narrower), "Narrower", true);
+            this.relatedList.buildList(this.relatedList.mapRelationsForList(this.related), "Related", true);
+            this.membersList.buildList(this.membersList.mapRelationsForList(this.members), "Members", true);
+            this.memberofList.buildList(this.memberofList.mapRelationsForList(this.member_of), "Member of", true);
 
-            self.broadMatchList.buildList(self.broadMatchList.mapMatchesForList(self.matches, "broadMatch"), "BroadMatch", false);
-            self.closeMatchList.buildList(self.closeMatchList.mapMatchesForList(self.matches, "closeMatch"), "CloseMatch", false);
-            self.exactMatchList.buildList(self.exactMatchList.mapMatchesForList(self.matches, "exactMatch"), "ExactMatch", false);
-            self.narrowMatchList.buildList(self.narrowMatchList.mapMatchesForList(self.matches, "narrowMatch"), "NarrowMatch", false);
-            self.relatedMatchList.buildList(self.relatedMatchList.mapMatchesForList(self.matches, "relatedMatch"), "RelatedMatch", false);
+            this.broadMatchList.buildList(this.broadMatchList.mapMatchesForList(this.matches, "broadMatch"), "BroadMatch", false);
+            this.closeMatchList.buildList(this.closeMatchList.mapMatchesForList(this.matches, "closeMatch"), "CloseMatch", false);
+            this.exactMatchList.buildList(this.exactMatchList.mapMatchesForList(this.matches, "exactMatch"), "ExactMatch", false);
+            this.narrowMatchList.buildList(this.narrowMatchList.mapMatchesForList(this.matches, "narrowMatch"), "NarrowMatch", false);
+            this.relatedMatchList.buildList(this.relatedMatchList.mapMatchesForList(this.matches, "relatedMatch"), "RelatedMatch", false);
 
         }
     });
