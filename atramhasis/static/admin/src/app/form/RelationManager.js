@@ -14,11 +14,11 @@ define([
         "dojo/store/JsonRest",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree",
-        "dojo/topic",
          "./ConceptDetailList",
         "dojo/text!./templates/RelationManager.html"
     ],
-    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory, Cache, JsonRest, ObjectStoreModel, Tree,Topic,ConceptDetailList, template) {
+    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory,
+              Cache, JsonRest, ObjectStoreModel, Tree,ConceptDetailList, template) {
         return declare(
             "app/form/RelationManager",
             [WidgetBase, TemplatedMixin],
@@ -49,10 +49,9 @@ define([
                         }
                     }, this.relationButton);
 
-                Topic.subscribe("relation.delete", function (relationId) {
 
-                    self._removeRelation(relationId);
-
+                    self.relationsList.on("relation.delete", function(evt){
+                        self._removeRelation(evt.relation.id);
                     });
                 },
 

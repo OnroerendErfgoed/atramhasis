@@ -8,10 +8,12 @@ define([
     "dojo/dom-class",
     "dojo/topic",
     "dojo/on",
+    "dojo/Evented",
     "dijit/form/Button",
     "dojo/text!./templates/ConceptDetailList.html"
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on, Button, template) {
-    return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,
+             Evented, Button, template) {
+    return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, Evented], {
         templateString: template,
 
         postMixInProperties: function () {
@@ -108,26 +110,24 @@ define([
                         });
                     }
                     if (isEditRelation) {
-
                         var btn = new Button({
                             label: "remove this relation",
                             showLabel: false,
                             iconClass: 'minIcon',
                             onClick: function () {
-                                self._removeRelationFromList(li,item.id);
+                                self._removeRelationFromList(li, item);
                             }
                         }).placeAt(li);
-
-
                     }
                 });
             }
         },
-        _removeRelationFromList: function (li,relId) {
-              domConstruct.destroy(li);
-              topic.publish("relation.delete",relId);
 
+        _removeRelationFromList: function (li,item) {
+            domConstruct.destroy(li);
+            this.emit("relation.delete", {relation: item});
         },
+
         _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
 
             var self = this;
