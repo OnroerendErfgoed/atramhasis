@@ -80,7 +80,9 @@ define([
                 filteredGrid.conceptGrid.resize();
             });
 
-            var conceptForm = new ConceptForm();
+            var conceptForm = new ConceptForm({
+                 thesauri: this.thesauri
+            });
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
                 content: conceptForm
