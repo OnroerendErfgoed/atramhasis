@@ -12,7 +12,8 @@ define([
     "./form/ConceptDetailList",
     'dojo/text!./templates/ConceptDetail.html',
     "dijit/TitlePane"
-], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, ConfirmDialog, ConceptDetailList, template) {
+], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin,
+             _WidgetsInTemplateMixin, ConfirmDialog, ConceptDetailList, template) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -31,11 +32,14 @@ define([
         broader: [],
         members: [],
         member_of: [],
-        matches: [],
+        matches: null,
+        matchUris: [],
+        externalSchemeService: null,
 
 
         postCreate: function () {
 
+            this.matches = [];
             this.prefLabelList = new ConceptDetailList({ }, this.prefLabelListNode);
             this.altLabelList = new ConceptDetailList({}, this.altLabelListNode);
             this.hiddenLabelList = new ConceptDetailList({}, this.hiddenLabelListNode);
@@ -109,7 +113,7 @@ define([
             this.related=refreshedConcept.related;
             this.members=refreshedConcept.members;
             this.member_of=refreshedConcept.member_of;
-            this.matches=refreshedConcept.matches;
+            this.matchUris=refreshedConcept.matches;
             this._CreateNodeLists();
         },
 
@@ -139,12 +143,46 @@ define([
             this.membersList.buildList(this.membersList.mapRelationsForList(this.members), "Members", true);
             this.memberofList.buildList(this.memberofList.mapRelationsForList(this.member_of), "Member of", true);
 
-            this.broadMatchList.buildList(this.broadMatchList.mapMatchesForList(this.matches, "broadMatch"), "BroadMatch", false);
-            this.closeMatchList.buildList(this.closeMatchList.mapMatchesForList(this.matches, "closeMatch"), "CloseMatch", false);
-            this.exactMatchList.buildList(this.exactMatchList.mapMatchesForList(this.matches, "exactMatch"), "ExactMatch", false);
-            this.narrowMatchList.buildList(this.narrowMatchList.mapMatchesForList(this.matches, "narrowMatch"), "NarrowMatch", false);
-            this.relatedMatchList.buildList(this.relatedMatchList.mapMatchesForList(this.matches, "relatedMatch"), "RelatedMatch", false);
+            this._createMatchesLists();
+        },
 
+        _createMatchesLists: function () {
+            this.matches = [];
+            var types = ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'];
+            var self = this;
+            arrayUtil.forEach(types, function(type) {
+                if (self.matchUris && self.matchUris[type]) {
+                    arrayUtil.forEach(self.matchUris[type], function(uri) {
+                         var matchPromise = null;
+                        try {
+                            matchPromise = self.externalSchemeService.getMatch(uri, type);
+                            matchPromise.then(function (match) {
+                                self.matches.push(match);
+                                if (type == 'broadMatch') {
+                                    self.broadMatchList.buildList(self.broadMatchList.mapMatchesForList(self.matches, "broadMatch"), "Broad Matches", false);
+                                }
+                                else if (type == 'closeMatch') {
+                                    self.closeMatchList.buildList(self.closeMatchList.mapMatchesForList(self.matches, "closeMatch"), "Close Matches", false);
+                                }
+                                else if (type == 'exactMatch') {
+                                    self.exactMatchList.buildList(self.exactMatchList.mapMatchesForList(self.matches, "exactMatch"), "Exact Matches", false);
+                                }
+                                else if (type == 'narrowMatch') {
+                                    self.narrowMatchList.buildList(self.narrowMatchList.mapMatchesForList(self.matches, "narrowMatch"), "Narrow Matches", false);
+                                }
+                                else if (type == 'relatedMatch') {
+                                    self.relatedMatchList.buildList(self.relatedList.mapMatchesForList(self.matches, "relatedMatch"), "Related Matches", false);
+                                }
+                            }, function (err) {
+                                // Do something when the process errors out
+                                console.error(err);
+                            });
+                        } catch(err) {
+                            console.error(err);
+                        }
+                    });
+                }
+            });
         }
     });
 });

@@ -23,7 +23,7 @@ define([
         "dgrid/List",
         "dgrid/Keyboard",
         "dgrid/Selection",
-         "dgrid/extensions/DijitRegistry"
+        "dgrid/extensions/DijitRegistry"
     ],
     function (declare, arrayUtil, domConstruct, query, on, domStyle, xhr, Dialog, WidgetBase, TemplatedMixin,
               Button, Select, TextBox, Memory, Cache, JsonRest, ObjectStoreModel, Tree,topic,ConceptDetailList, template,
@@ -39,6 +39,7 @@ define([
                 _matches: null,
                 _externalConceptList: null,
                 _matchesDialog: null,
+                externalSchemeService: null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -97,12 +98,8 @@ define([
                 },
 
                 _removeMatch: function (matchToDelete) {
-                    var self = this;
-                    arrayUtil.forEach(this._matches, function(match) {
-                        if(match.data.uri == matchToDelete.sublabel) {
-                          var position = arrayUtil.indexOf(self._matches, match);
-                          self._matches.splice(position, 1);
-                        }
+                    this._matches = arrayUtil.filter(this._matches, function(match) {
+                        return match.data.uri != matchToDelete.sublabel;
                     });
                 },
 
@@ -127,7 +124,7 @@ define([
                     );
                     this.relatedMatchList.buildList(
                         this.relatedMatchList.mapMatchesForList(matches, "relatedMatch"),
-                        "Reated matches", false, true
+                        "Related matches", false, true
                     );
                 },
 
@@ -190,10 +187,7 @@ define([
                         ],
                         style: "width: 200px;",
                         title: "Select match type",
-                        maxHeight: -1, // tells _HasDropDown to fit menu within viewport
-                        onChange: function(value){
-                            console.log(value);
-                        }
+                        maxHeight: -1 // tells _HasDropDown to fit menu within viewport
                     }).placeAt(searchDiv);
 
                     var actionBar = domConstruct.create("div", {
@@ -251,8 +245,6 @@ define([
                             matches[type] = uris;
                         }
                     });
-                    console.log('matches:');
-                    console.log(matches);
                     return matches;
                 },
 
@@ -266,16 +258,18 @@ define([
                     });
                 },
 
-                setMatches: function (groupedMatches) {
-                    var matchesUris = [];
+                setMatchUris: function (matchesUris) {
                     var types = ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'];
+                    var self = this;
                     arrayUtil.forEach(types, function(type) {
-                        if (groupedMatches[type]) {
-                            matchesUris.concat(matches[type]);
+                        if (matchesUris[type]) {
+                            arrayUtil.forEach(matchesUris[type], function(uri) {
+                                self.externalSchemeService.getMatch(uri, type).then(function (match){
+                                    self._addMatch(match);
+                                });
+                            });
                         }
                     });
-                    console.log(matchesUris);
-                    //todo: fetch matches with uris
                 },
 
                 close: function () {

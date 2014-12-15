@@ -23,8 +23,7 @@ define([
     "./ThesaurusCollection",
     "./ConceptForm",
     "./ImportForm",
-//    "dojo/text!./templates/ConceptForm.html",
-
+    "./ExternalSchemeService",
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
@@ -32,12 +31,14 @@ define([
 
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
-             FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ContentPane, TabContainer) {
+             FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ExternalSchemeService,
+             ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
         thesauri: null,
         currentScheme: null,
+        externalSchemeService: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -62,6 +63,10 @@ define([
             console.log('startup', arguments);
             var self = this;
 
+            this.externalSchemeService = new ExternalSchemeService({
+                thesauri: this.thesauri
+            });
+
             var schemeFileteringSelect = new FilteringSelect({
                 id: "schemeSelect",
                 name: "scheme",
@@ -81,7 +86,9 @@ define([
             });
 
             var conceptForm = new ConceptForm({
-                 thesauri: this.thesauri
+                thesauri: this.thesauri,
+                externalSchemeService: this.externalSchemeService
+
             });
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
@@ -204,7 +211,8 @@ define([
                             broader: item.broader,
                             members: item.members,
                             member_of: item.member_of,
-                            matches: item.matches
+                            matchUris: item.matches,
+                            externalSchemeService: self.externalSchemeService
                         });
                         cp = new ContentPane({
                             id: schemeid + "_" + item.id,

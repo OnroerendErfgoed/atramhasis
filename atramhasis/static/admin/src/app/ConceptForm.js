@@ -35,6 +35,7 @@ define(
                 typeComboBox: null,
                 conceptId: null,
                 thesauri: null,
+                externalSchemeService: null,
 
                 constructor: function (options) {
                     declare.safeMixin(this, options);
@@ -78,7 +79,8 @@ define(
                         'name': 'matchesMgr',
                         'title': 'Match',
                         'scheme': this.scheme,
-                        'thesauri': this.thesauri
+                        'thesauri': this.thesauri,
+                        'externalSchemeService': this.externalSchemeService
                     }, this.matchesContainerNode);
                     var myTable = new TableContainer({cols: 2, spacing: 10}, this.MyTable);
                     var schemebox = new TextBox({id: "schemebox", title: "Scheme:"});
@@ -224,10 +226,7 @@ define(
                         }
                         if(concept.matches)
                         {
-                            this.matchesManager.setMatches(concept.matches);
-                             if(concept.matches.length>0) {
-                                this.matchesManager.setEditMatchesButton();
-                            }
+                            this.matchesManager.setMatchUris(concept.matches);
                         }
                     }
                     this.show({
