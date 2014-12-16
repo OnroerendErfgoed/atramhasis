@@ -174,8 +174,12 @@ define([
             this.externalSchemeForm.startup();
 
             on(this.externalSchemeForm, 'select', function (evt) {
-                console.log(evt.concept);
-                //todo open prefilled concept form
+                if (evt.concept && evt.concept.uri){
+                    self._importConcept(conceptForm, conceptDialog, evt.concept.uri);
+                }
+                else {
+                    console.error('No valid URI.');
+                }
             });
 
             on(schemeFileteringSelect, "change", function (e) {
@@ -365,10 +369,24 @@ define([
             conceptDialog.show();
         },
 
-        _importConcept: function (importForm, importDialog) {
-            importForm.init();
-            importDialog.set("title", "Import concept or collection");
-            importDialog.show();
+        _importConcept: function (conceptForm, conceptDialog, concepturi) {
+            var scheme = this.currentScheme;
+            this.externalSchemeService.getConcept(concepturi).then(function(concept) {
+                var clone = {
+                    label: concept.label,
+                    labels: concept.labels,
+                    type: concept.type,
+                    notes: concept.notes,
+                    matches: {
+                        exactMatch: [concepturi]
+                    }
+                };
+                conceptForm.init(scheme, clone);
+                conceptDialog.set("title", "Import concept or collection");
+                conceptDialog.show();
+            }, function(err){
+                console.error(err);
+            });
         }
 
 
