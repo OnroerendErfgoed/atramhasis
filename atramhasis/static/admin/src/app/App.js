@@ -24,6 +24,7 @@ define([
     "./ConceptForm",
     "./ExternalSchemeService",
     "./ExternalSchemeForm",
+    "dGrowl",
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
@@ -32,7 +33,7 @@ define([
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
-             ExternalSchemeForm, ContentPane, TabContainer) {
+             ExternalSchemeForm, dGrowl, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -40,6 +41,7 @@ define([
         currentScheme: null,
         externalSchemeService: null,
         externalSchemeForm: null,
+        notificationController: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -57,6 +59,14 @@ define([
             this.inherited(arguments);
             console.log('postCreate', arguments);
             this.thesauri = new ThesaurusCollection();
+
+            this.notificationController = new dGrowl({
+                'channels':[
+                    {'name':'info','pos':3},
+                    {'name':'error', 'pos':1},
+                    {'name':'warn', 'pos':2}
+                ]
+            });
         },
 
         startup: function () {
@@ -339,6 +349,8 @@ define([
                     );
                 }
             });
+
+            this.notificationController.addNotification("Atramhasis is up and running",{'channel':'info'});
 
         },
 
