@@ -53,6 +53,18 @@ define([
 
         getScheme: function (schemeUrl) {
             return this.thesauri.externalSchemeStore.query({uri: schemeUrl})[0];
+        },
+
+        searchConcepts: function (scheme, text) {
+            var url = "/conceptschemes/" + scheme + "/c?label=" + text + "&type=all&sort=+label";
+            return xhr.get(url, {
+                handleAs: "json",
+                headers: {'Accept' : 'application/json'}
+            })
+        },
+
+        getExternalSchemeStore: function () {
+            return this.thesauri.externalSchemeStore;
         }
     });
 });
