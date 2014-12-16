@@ -24,6 +24,7 @@ define([
     "./ConceptForm",
     "./ImportForm",
     "./ExternalSchemeService",
+    "./ExternalSchemeForm",
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
@@ -32,13 +33,14 @@ define([
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ExternalSchemeService,
-             ContentPane, TabContainer) {
+             ExternalSchemeForm, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
         thesauri: null,
         currentScheme: null,
         externalSchemeService: null,
+        externalSchemeForm: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -157,33 +159,38 @@ define([
                 self._createConcept(conceptForm, conceptDialog, self.currentScheme);
             });
 
-//            var importConceptButton = new Button({
-//                label: "Import concept or collection",
-//                disabled: "disabled"
-//            }, "importConceptNode");
-//
-//            on(importConceptButton, "click", function () {
-//
-//                console.log("on importConceptButton");
-//                self._importConcept(importForm, importDialog);
-//            });
+            var importConceptButton = new Button ({
+                label: "Import concept or collection",
+                disabled: "disabled"
+            }, "importConceptNode");
+
+            on(importConceptButton, "click", function () {
+                self.externalSchemeForm.showDialog();
+            });
+
+            this.externalSchemeForm = new ExternalSchemeForm({
+                externalSchemeService: this.externalSchemeService
+            });
+            this.externalSchemeForm.startup();
+
+            on(this.externalSchemeForm, 'select', function (evt) {
+                console.log(evt.concept);
+                //todo open prefilled concept form
+            });
 
             on(schemeFileteringSelect, "change", function (e) {
-
                 if (e) {
                     console.log("on schemeCombo ", e);
                     self.currentScheme = e;
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
-//                    importConceptButton.set('disabled', false);
+                    importConceptButton.set('disabled', false);
                 }
                 else {
                     filteredGrid.ResetConceptGrid();
                     addConceptButton.set('disabled', true);
-//                    importConceptButton.set('disabled', true);
+                    importConceptButton.set('disabled', true);
                 }
-
-
             });
 
             schemeFileteringSelect.startup();
