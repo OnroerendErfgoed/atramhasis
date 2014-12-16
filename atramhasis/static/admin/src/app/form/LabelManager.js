@@ -256,11 +256,11 @@ define([
                 },
                 _createNodeList: function (labels) {
                     var mapLabel = this.prefLabelList.mapLabelsForList(labels, "prefLabel");
-                    this.prefLabelList.buidList(mapLabel, "Preferred labels", false);
+                    this.prefLabelList.buildList(mapLabel, "Preferred labels", false);
                     mapLabel = this.altLabelList.mapLabelsForList(labels, "altLabel");
-                    this.altLabelList.buidList(mapLabel, "Alternate labels", false);
+                    this.altLabelList.buildList(mapLabel, "Alternate labels", false);
                     mapLabel = this.hiddenLabelList.mapLabelsForList(labels, "hiddenLabel");
-                    this.hiddenLabelList.buidList(mapLabel, "Hidden labels", false);
+                    this.hiddenLabelList.buildList(mapLabel, "Hidden labels", false);
                 },
                 _setGrid: function (labels) {
                     var gridStore = new Memory({
