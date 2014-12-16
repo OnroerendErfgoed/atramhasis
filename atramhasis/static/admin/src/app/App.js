@@ -22,7 +22,6 @@ define([
     "./ConceptDetail",
     "./ThesaurusCollection",
     "./ConceptForm",
-    "./ImportForm",
     "./ExternalSchemeService",
     "./ExternalSchemeForm",
     "dijit/layout/ContentPane",
@@ -32,7 +31,7 @@ define([
 
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
-             FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ExternalSchemeService,
+             FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
              ExternalSchemeForm, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
@@ -105,26 +104,6 @@ define([
             on(conceptDialog, "hide", function () {
                 conceptForm.reset();
             });
-
-            console.log("startup conceptDialog");
-
-//            var importForm = new ImportForm({externalSchemeStore: this.thesauri.externalSchemeStore});
-//
-//            var importDialog = new Dialog({
-//                id: 'importDialog',
-//                content: importForm
-//
-//            }).placeAt(document.body);
-
-//            on(importForm, "cancel", function () {
-//                importDialog.hide();
-//            });
-//
-//            on(importDialog, "hide", function () {
-//                importForm.reset();
-//            });
-
-//            console.log("startup importDialog");
 
             var tc = registry.byId("center");
 
