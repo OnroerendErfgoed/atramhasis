@@ -22,8 +22,8 @@ define([
     "./ConceptDetail",
     "./ThesaurusCollection",
     "./ConceptForm",
-    "./ImportForm",
     "./ExternalSchemeService",
+    "./ExternalSchemeForm",
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
@@ -31,14 +31,15 @@ define([
 
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
-             FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ImportForm, ExternalSchemeService,
-             ContentPane, TabContainer) {
+             FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
+             ExternalSchemeForm, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
         thesauri: null,
         currentScheme: null,
         externalSchemeService: null,
+        externalSchemeForm: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -104,26 +105,6 @@ define([
                 conceptForm.reset();
             });
 
-            console.log("startup conceptDialog");
-
-//            var importForm = new ImportForm({externalSchemeStore: this.thesauri.externalSchemeStore});
-//
-//            var importDialog = new Dialog({
-//                id: 'importDialog',
-//                content: importForm
-//
-//            }).placeAt(document.body);
-
-//            on(importForm, "cancel", function () {
-//                importDialog.hide();
-//            });
-//
-//            on(importDialog, "hide", function () {
-//                importForm.reset();
-//            });
-
-//            console.log("startup importDialog");
-
             var tc = registry.byId("center");
 
             var cpwelcome = new ContentPane({
@@ -157,33 +138,42 @@ define([
                 self._createConcept(conceptForm, conceptDialog, self.currentScheme);
             });
 
-//            var importConceptButton = new Button({
-//                label: "Import concept or collection",
-//                disabled: "disabled"
-//            }, "importConceptNode");
-//
-//            on(importConceptButton, "click", function () {
-//
-//                console.log("on importConceptButton");
-//                self._importConcept(importForm, importDialog);
-//            });
+            var importConceptButton = new Button ({
+                label: "Import concept or collection",
+                disabled: "disabled"
+            }, "importConceptNode");
+
+            on(importConceptButton, "click", function () {
+                self.externalSchemeForm.showDialog();
+            });
+
+            this.externalSchemeForm = new ExternalSchemeForm({
+                externalSchemeService: this.externalSchemeService
+            });
+            this.externalSchemeForm.startup();
+
+            on(this.externalSchemeForm, 'select', function (evt) {
+                if (evt.concept && evt.concept.uri){
+                    self._importConcept(conceptForm, conceptDialog, evt.concept.uri);
+                }
+                else {
+                    console.error('No valid URI.');
+                }
+            });
 
             on(schemeFileteringSelect, "change", function (e) {
-
                 if (e) {
                     console.log("on schemeCombo ", e);
                     self.currentScheme = e;
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
-//                    importConceptButton.set('disabled', false);
+                    importConceptButton.set('disabled', false);
                 }
                 else {
                     filteredGrid.ResetConceptGrid();
                     addConceptButton.set('disabled', true);
-//                    importConceptButton.set('disabled', true);
+                    importConceptButton.set('disabled', true);
                 }
-
-
             });
 
             schemeFileteringSelect.startup();
@@ -358,10 +348,24 @@ define([
             conceptDialog.show();
         },
 
-        _importConcept: function (importForm, importDialog) {
-            importForm.init();
-            importDialog.set("title", "Import concept or collection");
-            importDialog.show();
+        _importConcept: function (conceptForm, conceptDialog, concepturi) {
+            var scheme = this.currentScheme;
+            this.externalSchemeService.getConcept(concepturi).then(function(concept) {
+                var clone = {
+                    label: concept.label,
+                    labels: concept.labels,
+                    type: concept.type,
+                    notes: concept.notes,
+                    matches: {
+                        exactMatch: [concepturi]
+                    }
+                };
+                conceptForm.init(scheme, clone);
+                conceptDialog.set("title", "Import concept or collection");
+                conceptDialog.show();
+            }, function(err){
+                console.error(err);
+            });
         }
 
 
