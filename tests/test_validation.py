@@ -782,7 +782,7 @@ class TestValidation(unittest.TestCase):
                        }],
             "id": 4,
             "member_of": [{"id": 666}],
-            "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:sample:666"]}
+            "matches": {"exact": ["urn:sample:666"], "broad": ["urn:sample:666"]}
         }
         error = None
         try:

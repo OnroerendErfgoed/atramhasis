@@ -60,11 +60,11 @@ class MatchList(colander.SequenceSchema):
 
 
 class Matches(colander.MappingSchema):
-    broadMatch = MatchList(missing=[])
-    closeMatch = MatchList(missing=[])
-    exactMatch = MatchList(missing=[])
-    narrowMatch = MatchList(missing=[])
-    relatedMatch = MatchList(missing=[])
+    broad = MatchList(missing=[])
+    close = MatchList(missing=[])
+    exact = MatchList(missing=[])
+    narrow = MatchList(missing=[])
+    related = MatchList(missing=[])
 
 
 class Concept(colander.MappingSchema):

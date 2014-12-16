@@ -34,15 +34,15 @@ def upgrade():
                          column('description', sa.Text),
                          ),
                    [
-                       {'name': 'closeMatch',
+                       {'name': 'close',
                         'description': 'Indicates that two concepts are sufficiently similar that they can be used interchangeably in some information retrieval applications.'},
-                       {'name': 'exactMatch',
+                       {'name': 'exact',
                         'description': 'Indicates that there is a high degree of confidence that two concepts can be used interchangeably across a wide range of information retrieval applications.'},
-                       {'name': 'broadMatch',
+                       {'name': 'broad',
                         'description': 'Indicates that one concept has a broader match with another one.'},
-                       {'name': 'narrowMatch',
+                       {'name': 'narrow',
                         'description': 'Indicates that one concept has a narrower match with another one.'},
-                       {'name': 'relatedMatch',
+                       {'name': 'related',
                         'description': 'Indicates that there is an associative mapping between two concepts.'},
                    ]
     )
