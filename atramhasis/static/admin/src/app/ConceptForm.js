@@ -153,11 +153,6 @@ define(
                         console.log(formObj);
                         topic.publish("conceptform.submit", formObj);
                     }
-                    this.show({
-                        spinnerNode: true,
-                        formNode: false,
-                        successNode: false
-                    });
                     this.dialog && this.dialog.layout();
 
                     return false;
@@ -229,11 +224,6 @@ define(
                             this.matchesManager.setMatchUris(concept.matches);
                         }
                     }
-                    this.show({
-                        spinnerNode: false,
-                        formNode: true,
-                        successNode: false
-                    });
                     this.dialog && this.dialog.layout();
                 },
                 addBroader: function (broader) {
