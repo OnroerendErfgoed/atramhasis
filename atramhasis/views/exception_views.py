@@ -55,6 +55,17 @@ def protected(exc, request):
     return {'message': exc.value, 'referenced_in': exc.referenced_in}
 
 
+@view_config(context=ReferenceError, renderer='json')
+def reference_error(exc, request):
+    '''
+    View invoked when ReferenceError was raised.
+    '''
+    log.error(exc)
+    log.error(exc.message)
+    request.response.status_int = 503
+    return {'message': exc.message}
+
+
 @view_config(context=Exception, renderer='json')
 def failed(exc, request):
     '''
