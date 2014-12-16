@@ -67,3 +67,9 @@ html, body {
     width: 11px;
     height: 11px;
 }
+
+.dGrowl-channel-warn .dGrowl-notification {
+	background-color: rgb(250, 217, 95);
+    border: 1px solid #b97422;
+}
+
