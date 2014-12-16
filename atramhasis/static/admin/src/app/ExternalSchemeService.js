@@ -30,10 +30,7 @@ define([
             if (!scheme) throw  "Malformed external scheme URI";
             var url = "/conceptschemes/" + scheme.id + "/c/" + id;
 
-            var call = xhr.get(url, {
-                handleAs: "json",
-                headers: {'Accept' : 'application/json'}
-            });
+            var call = this.getConcept(uri);
 
             return call.then(function(concept) {
                 var match = {
@@ -48,6 +45,23 @@ define([
             }, function(err){
                 console.error(err);
                 throw err;
+            });
+        },
+
+        getConcept: function (uri) {
+            var pathArray =  uri.split('/');
+            var id = pathArray.pop();
+            var testUrl = pathArray.pop(); //remove 'concept' from url
+            if (!testUrl) throw  "Malformed URI";
+
+            var schemeUrl = pathArray.join('/');
+            var scheme = this.getScheme(schemeUrl);
+            if (!scheme) throw  "Malformed external scheme URI";
+            var url = "/conceptschemes/" + scheme.id + "/c/" + id;
+
+            return xhr.get(url, {
+                handleAs: "json",
+                headers: {'Accept' : 'application/json'}
             });
         },
 
