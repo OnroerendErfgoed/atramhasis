@@ -7,6 +7,7 @@ define([
     "dojo/store/Memory",
     "dojo/dom",
     "dojo/request",
+    "dojo/json",
     "dijit/registry",
     "dijit/form/FilteringSelect",
     "dijit/MenuItem",
@@ -24,15 +25,16 @@ define([
     "./ConceptForm",
     "./ExternalSchemeService",
     "./ExternalSchemeForm",
+    "dGrowl",
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
 
 
-], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, MenuItem,
+], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
-             ExternalSchemeForm, ContentPane, TabContainer) {
+             ExternalSchemeForm, dGrowl, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -40,6 +42,7 @@ define([
         currentScheme: null,
         externalSchemeService: null,
         externalSchemeForm: null,
+        notificationController: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -57,6 +60,14 @@ define([
             this.inherited(arguments);
             console.log('postCreate', arguments);
             this.thesauri = new ThesaurusCollection();
+
+            this.notificationController = new dGrowl({
+                'channels':[
+                    {'name':'info','pos':3},
+                    {'name':'error', 'pos':1},
+                    {'name':'warn', 'pos':2}
+                ]
+            });
         },
 
         startup: function () {
@@ -308,7 +319,8 @@ define([
                         function () {
                             console.log("row edited");
                             conceptDialog.hide();
-                            alert("The concept or collection has been saved");
+                            var message = "The " + rowToAdd.type + " has been saved";
+                            topic.publish('dGrowl', message, {'title': "Success", 'sticky': false, 'channel':'info'});
                             filteredGrid.conceptGrid.refresh();
 
                             //refresh Concept Detail widget.
@@ -317,8 +329,7 @@ define([
                             });
                         },
                         function (error) {
-                            console.log("An error occurred: " + error);
-                            alert("Can't add the concept or collection to the database. Please check if business rules are respected");
+                            self._handleSaveErrors(error);
                         }
                     );
                 }
@@ -326,19 +337,19 @@ define([
                     filteredGrid.conceptGrid.store.add(rowToAdd)
                         .then(
                         function () {
-                            console.log("row added");
                             conceptDialog.hide();
-                            alert("The concept or collection has been added to the thesaurus");
-
+                            var message = "The " + rowToAdd.type + " has been saved";
+                            topic.publish('dGrowl', message, {'title': "Success", 'sticky': false, 'channel':'info'});
                             filteredGrid.conceptGrid.refresh();
                         },
                         function (error) {
-                            console.log("An error occurred: " + error);
-                            alert("Can't add the concept or collection to the database. Please check if business rules are respected");
+                            self._handleSaveErrors(error);
                         }
                     );
                 }
             });
+
+            this.notificationController.addNotification("Atramhasis is up and running",{'channel':'info'});
 
         },
 
@@ -366,6 +377,21 @@ define([
             }, function(err){
                 console.error(err);
             });
+        },
+
+        _handleSaveErrors: function(error) {
+            var errorJson = JSON.parse(error.responseText);
+            var message = "";
+            array.forEach(errorJson.errors, function (errorObj) {
+                for (prop in errorObj) {
+                    message += "-<em>";
+                    message += prop;
+                    message += "</em>: ";
+                    message += errorObj[prop];
+                    message += "<br>";
+                }
+            });
+            topic.publish('dGrowl', message, {'title': errorJson.message, 'sticky': true, 'channel':'error'});
         }
 
 
