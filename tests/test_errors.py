@@ -1,6 +1,7 @@
 import unittest
+
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
-    ConceptNotFoundException, DbNotFoundException, ValidationError
+    ConceptNotFoundException, DbNotFoundException, ValidationError, LanguageNotFoundException
 
 
 class TestErrors(unittest.TestCase):
@@ -28,3 +29,8 @@ class TestErrors(unittest.TestCase):
         error = DbNotFoundException()
         self.assertIsNotNone(error)
         self.assertEqual("'No database found, please check your application setup'", str(error))
+
+    def test_language_notfound_exception(self):
+        error = LanguageNotFoundException("af")
+        self.assertIsNotNone(error)
+        self.assertEqual("'No language found with the given id af'", str(error))

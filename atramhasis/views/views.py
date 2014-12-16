@@ -71,7 +71,8 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
-        conceptschemes = [x.get_metadata() for x in self.skos_registry.get_providers()]
+        conceptschemes = [x.get_metadata() for x in self.skos_registry.get_providers()
+                          if not 'external' in x.get_metadata()['subject']]
         return {'conceptschemes': conceptschemes}
 
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')

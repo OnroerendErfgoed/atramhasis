@@ -5,6 +5,7 @@ Module containing views related to the REST service.
 
 import colander
 from pyramid.view import view_defaults, view_config
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
 from skosprovider_sqlalchemy.models import Concept, Thing, Collection
@@ -12,11 +13,12 @@ from skosprovider_sqlalchemy.models import Concept, Thing, Collection
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept
-from atramhasis.utils import from_thing
+from atramhasis.protected_resources import protected_operation
+from atramhasis.utils import from_thing, internal_providers_only
 from atramhasis.views import invalidate_scheme_cache
 
 
-@view_defaults(accept='application/json', renderer='skosjson')
+@view_defaults(accept='application/json', renderer='skosrenderer_verbose')
 class AtramhasisCrud(object):
     '''
     This object groups CRUD REST views part of the private user interface.
@@ -62,7 +64,7 @@ class AtramhasisCrud(object):
                 e.asdict()
             )
 
-    @view_config(route_name='atramhasis.get_concept', permission='view', renderer='skosrenderer_verbose')
+    @view_config(route_name='atramhasis.get_concept', permission='view')
     def get_concept(self):
         '''
         Get an existing concept
@@ -70,15 +72,21 @@ class AtramhasisCrud(object):
         :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
         '''
         c_id = self.request.matchdict['c_id']
-        try:
-            concept = self.db.query(Thing).filter_by(concept_id=c_id,
-                                                     conceptscheme_id=self.provider.conceptscheme_id).one()
-        except NoResultFound:
-            raise ConceptNotFoundException(c_id)
+        if isinstance(self.provider, SQLAlchemyProvider):
+            try:
+                concept = self.db.query(Thing).filter_by(concept_id=c_id,
+                                                         conceptscheme_id=self.provider.conceptscheme_id).one()
+            except NoResultFound:
+                raise ConceptNotFoundException(c_id)
+        else:
+            concept = self.provider.get_by_id(c_id)
+            if not concept:
+                raise ConceptNotFoundException(c_id)
 
         self.request.response.status = '200'
         return concept
 
+    @internal_providers_only
     @view_config(route_name='atramhasis.add_concept', permission='edit')
     def add_concept(self):
         '''
@@ -102,6 +110,7 @@ class AtramhasisCrud(object):
         concept.uri = self.provider.uri_generator.generate(id=cid)
         map_concept(concept, validated_json_concept, self.request.db)
         self.db.add(concept)
+        self.db.flush()
 
         invalidate_scheme_cache(self.scheme_id)
 
@@ -110,6 +119,7 @@ class AtramhasisCrud(object):
             'skosprovider.c', scheme_id=self.scheme_id, c_id=concept.concept_id)
         return from_thing(concept)
 
+    @internal_providers_only
     @view_config(route_name='atramhasis.edit_concept', permission='edit')
     def edit_concept(self):
         '''
@@ -132,7 +142,9 @@ class AtramhasisCrud(object):
         self.request.response.status = '200'
         return from_thing(concept)
 
-    @view_config(route_name='atramhasis.delete_concept', permission='edit')
+    @internal_providers_only
+    @protected_operation
+    @view_config(route_name='atramhasis.delete_concept', permission='delete')
     def delete_concept(self):
         '''
         Delete an existing concept

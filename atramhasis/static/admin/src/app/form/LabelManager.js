@@ -54,6 +54,7 @@ define([
                             var dlg = self._createDialog();
                             if (self.labels) {
                                 self._setGrid(self.labels);
+                                self.tempLabels = lang.clone(self.labels);
                                // self._setLanguageComboBox(self.labels);
                             }
                             dlg.show();
@@ -172,6 +173,7 @@ define([
                         dlg.hide();
                     };
                     cancelBtn.onClick = function () {
+                        self.labels = lang.clone(self.tempLabels);
                         dlg.hide();
                     };
 
@@ -183,7 +185,6 @@ define([
                     );
 
                     on(dlg, "hide", function () {
-                        self.labels = lang.clone(self.tempLabels);
                         titleLabel.destroy();
                         labelTypeComboBox.destroy();
                         langStoreComboBox.destroy();
@@ -255,11 +256,11 @@ define([
                 },
                 _createNodeList: function (labels) {
                     var mapLabel = this.prefLabelList.mapLabelsForList(labels, "prefLabel");
-                    this.prefLabelList.buidList(mapLabel, "Preferred labels", false);
+                    this.prefLabelList.buildList(mapLabel, "Preferred labels", false);
                     mapLabel = this.altLabelList.mapLabelsForList(labels, "altLabel");
-                    this.altLabelList.buidList(mapLabel, "Alternate labels", false);
+                    this.altLabelList.buildList(mapLabel, "Alternate labels", false);
                     mapLabel = this.hiddenLabelList.mapLabelsForList(labels, "hiddenLabel");
-                    this.hiddenLabelList.buidList(mapLabel, "Hidden labels", false);
+                    this.hiddenLabelList.buildList(mapLabel, "Hidden labels", false);
                 },
                 _setGrid: function (labels) {
                     var gridStore = new Memory({

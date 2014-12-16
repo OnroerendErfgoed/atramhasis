@@ -33,3 +33,6 @@ Glossary
    CSS
     Cascading Style Sheet is a style specification used to add style and 
     presentation to webpages.
+
+   SOA
+    `Service Oriented Architecture <http://en.wikipedia.org/wiki/Service-oriented_architecture>`__.
