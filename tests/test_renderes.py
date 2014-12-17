@@ -93,8 +93,8 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertIsInstance(concept['related'], list)
         self.assertEqual(len(concept['related']), 0)
         self.assertIsInstance(concept['matches'], dict)
-        self.assertEqual(len(concept['matches']['exactMatch']), 1)
-        self.assertEqual(len(concept['matches']['closeMatch']), 2)
+        self.assertEqual(len(concept['matches']['exact']), 1)
+        self.assertEqual(len(concept['matches']['close']), 2)
 
     def test_collection_adapter(self):
         from atramhasis.renderers import collection_adapter

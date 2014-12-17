@@ -66,11 +66,11 @@ def concept_adapter(obj, request):
     :rtype: :class:`dict`
     '''
     matches = {}
-    for match in obj.matches:
-        if match.matchtype.name in matches:
-            matches[match.matchtype.name].append(match.uri)
-        else:
-            matches[match.matchtype.name] = [match.uri]
+    for m in obj.matches:
+        key = m.matchtype.name[:m.matchtype.name.find('Match')]
+        if not key in matches:
+            matches[key] = []
+        matches[key].append(m.uri)
     return {
         'id': obj.concept_id,
         'type': obj.type,
