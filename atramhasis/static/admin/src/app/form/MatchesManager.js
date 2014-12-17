@@ -132,8 +132,8 @@ define([
                     var self = this;
 
                     var dlg = new Dialog({
-                        class: "externalForm",
-                        title: "Choose a match"
+                        'class': "externalForm",
+                        'title': "Choose a match"
                     });
 
                     var searchDiv = domConstruct.create("div", {}, dlg.containerNode);
@@ -185,7 +185,10 @@ define([
                         maxHeight: -1 // tells _HasDropDown to fit menu within viewport
                     }).placeAt(searchDiv);
 
-                    var label = domConstruct.create("label", {for:selectType.get("id"), innerHTML:"Select the type of match:"});
+                    var label = domConstruct.create("label", {
+                        'for': selectType.get("id"),
+                        'innerHTML': "Select the type of match:"
+                    });
                     domConstruct.place(label, selectType.domNode, "before");
 
                     var actionBar = domConstruct.create("div", {
