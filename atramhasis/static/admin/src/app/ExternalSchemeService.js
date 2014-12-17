@@ -11,6 +11,14 @@ define([
 
         thesauri: null,
 
+        matchTypes: [
+            {label: "Broad", value: "broad"},
+            {label: "Close", value: "close"},
+            {label: "Exact", value: "exact"},
+            {label: "Narrow", value: "narrow"},
+            {label: "Related", value: "related"}
+        ],
+
         postCreate: function () {
             this.inherited(arguments);
         },

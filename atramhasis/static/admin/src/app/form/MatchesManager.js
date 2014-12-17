@@ -107,23 +107,23 @@ define([
                     var matches = this._matches;
 
                     this.broadMatchList.buildList(
-                        this.broadMatchList.mapMatchesForList(matches, "broadMatch"),
+                        this.broadMatchList.mapMatchesForList(matches, "broad"),
                         "Broad matches", false, true
                     );
                     this.closeMatchList.buildList(
-                        this.closeMatchList.mapMatchesForList(matches, "closeMatch"),
+                        this.closeMatchList.mapMatchesForList(matches, "close"),
                         "Close matches", false, true
                     );
                     this.exactMatchList.buildList(
-                        this.exactMatchList.mapMatchesForList(matches, "exactMatch"),
+                        this.exactMatchList.mapMatchesForList(matches, "exact"),
                         "Exact matches", false, true
                     );
                     this.narrowMatchList.buildList(
-                        this.narrowMatchList.mapMatchesForList(matches, "narrowMatch"),
+                        this.narrowMatchList.mapMatchesForList(matches, "narrow"),
                         "Narrow matches", false, true
                     );
                     this.relatedMatchList.buildList(
-                        this.relatedMatchList.mapMatchesForList(matches, "relatedMatch"),
+                        this.relatedMatchList.mapMatchesForList(matches, "related"),
                         "Related matches", false, true
                     );
                 },
@@ -132,8 +132,8 @@ define([
                     var self = this;
 
                     var dlg = new Dialog({
-                        class: "externalForm",
-                        title: "Choose a match"
+                        'class': "externalForm",
+                        'title': "Choose a match"
                     });
 
                     var searchDiv = domConstruct.create("div", {}, dlg.containerNode);
@@ -179,19 +179,16 @@ define([
 
                     var selectType = new Select({
                         name: "typeSelect",
-                        options: [
-                            {label: "Broad", value: "broadMatch"},
-                            {label: "Close", value: "closeMatch"},
-                            {label: "Exact", value: "exactMatch"},
-                            {label: "Narrow", value: "narrowMatch"},
-                            {label: "Related", value: "relatedMatch"}
-                        ],
+                        options: this.externalSchemeService.matchTypes,
                         style: "width: 200px;",
                         title: "Select match type",
                         maxHeight: -1 // tells _HasDropDown to fit menu within viewport
                     }).placeAt(searchDiv);
 
-                    var label = domConstruct.create("label", {for:selectType.get("id"), innerHTML:"Select the type of match:"});
+                    var label = domConstruct.create("label", {
+                        'for': selectType.get("id"),
+                        'innerHTML': "Select the type of match:"
+                    });
                     domConstruct.place(label, selectType.domNode, "before");
 
                     var actionBar = domConstruct.create("div", {
@@ -241,9 +238,10 @@ define([
 
                 getMatches: function () {
                     var matches = {};
-                    var types = ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'];
+                    var types = this.externalSchemeService.matchTypes;
                     var self = this;
-                    arrayUtil.forEach(types, function(type) {
+                    arrayUtil.forEach(types, function(typeObj) {
+                        var type = typeObj.value;
                         var uris = self.getMatchesUris(type);
                         if (uris.length > 0) {
                             matches[type] = uris;
@@ -263,9 +261,10 @@ define([
                 },
 
                 setMatchUris: function (matchesUris) {
-                    var types = ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'];
+                    var types = this.externalSchemeService.matchTypes;
                     var self = this;
-                    arrayUtil.forEach(types, function(type) {
+                    arrayUtil.forEach(types, function(typeObj) {
+                        var type = typeObj.value;
                         if (matchesUris[type]) {
                             arrayUtil.forEach(matchesUris[type], function(uri) {
                                 self.externalSchemeService.getMatch(uri, type).then(function (match){
