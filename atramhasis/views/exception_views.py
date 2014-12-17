@@ -9,6 +9,7 @@ from pyramid.view import view_config, notfound_view_config
 
 from atramhasis.errors import SkosRegistryNotFoundException, ValidationError
 from atramhasis.protected_resources import ProtectedResourceException
+from skosprovider.exceptions import ProviderUnavailableException
 
 log = logging.getLogger(__name__)
 
@@ -55,10 +56,10 @@ def protected(exc, request):
     return {'message': exc.value, 'referenced_in': exc.referenced_in}
 
 
-@view_config(context=ReferenceError, renderer='json')
-def reference_error(exc, request):
+@view_config(context=ProviderUnavailableException, renderer='json')
+def provider_unavailable(exc, request):
     '''
-    View invoked when ReferenceError was raised.
+    View invoked when ProviderUnavailableException was raised.
     '''
     log.error(exc)
     log.error(exc.message)

@@ -6,6 +6,7 @@ import unittest
 import six
 from pyramid.config import Configurator
 import skosprovider
+from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.providers import DictionaryProvider
 from skosprovider.uri import UriPatternGenerator
 from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType
@@ -166,6 +167,7 @@ class FunctionalTests(unittest.TestCase):
         )
 
         self.config.add_subscriber(self.mock_event_handler, ProtectedResourceEvent)
+        self.config.add_subscriber(self.mock_event_handler_provider_unavailable, ProtectedResourceEvent)
 
         skosregis = self.config.get_skos_registry()
         skosregis.register_provider(TREES)
@@ -186,6 +188,11 @@ class FunctionalTests(unittest.TestCase):
             referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
             raise ProtectedResourceException('resource {0} is still in use, preventing operation'.format(event.uri),
                                              referenced_in)
+
+    @staticmethod
+    def mock_event_handler_provider_unavailable(event):
+        if event.uri == 'http://localhost/conceptschemes/GEOGRAPHY/c/55':
+            raise ProviderUnavailableException('test msg')
 
 
 class HtmlFunctionalTests(FunctionalTests):
@@ -348,6 +355,12 @@ class RestFunctionalTests(FunctionalTests):
                                     params=json_collection_value, expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertIn("unexpected server error", res)
+
+    def test_provider_unavailable_view(self):
+        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/55', headers=self._get_default_headers()
+                                  , expect_errors=True)
+        self.assertEqual('503 Service Unavailable', res.status)
+        self.assertIn("test msg", res)
 
     def test_get_languages(self):
         res = self.testapp.get('/languages', headers=self._get_default_headers())
