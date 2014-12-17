@@ -41,9 +41,8 @@ define([
             var self = this;
 
             var dlg = new Dialog({
-                style: "width: 600px",
-                title: "Choose an external concept",
-                doLayout: true
+                class: "externalForm",
+                title: "Choose an external concept"
             });
 
             var searchDiv = domConstruct.create("div", {}, dlg.containerNode);
