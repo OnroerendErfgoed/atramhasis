@@ -25,6 +25,7 @@ define([
     "./ConceptForm",
     "./ExternalSchemeService",
     "./ExternalSchemeForm",
+    "./LanguageManager",
     "dGrowl",
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
@@ -34,7 +35,7 @@ define([
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
-             ExternalSchemeForm, dGrowl, ContentPane, TabContainer) {
+             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -43,6 +44,7 @@ define([
         externalSchemeService: null,
         externalSchemeForm: null,
         notificationController: null,
+        languageManager: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -157,6 +159,11 @@ define([
             on(importConceptButton, "click", function () {
                 self.externalSchemeForm.showDialog();
             });
+
+            var manageLanguagesButton = new Button ({
+                label: "Manage languages"
+            }, "languageConceptNode");
+            this._setupLanguageManager(manageLanguagesButton);
 
             this.externalSchemeForm = new ExternalSchemeForm({
                 externalSchemeService: this.externalSchemeService
@@ -392,6 +399,17 @@ define([
                 }
             });
             topic.publish('dGrowl', message, {'title': errorJson.message, 'sticky': true, 'channel':'error'});
+        },
+
+        _setupLanguageManager: function (button) {
+            var languageManager = new LanguageManager({});
+
+            on(button, "click", function () {
+                languageManager.showDialog();
+            });
+
+            this.languageManager = languageManager;
+
         }
 
 
