@@ -409,6 +409,7 @@ define([
             });
 
             this.languageManager = languageManager;
+            languageManager.startup();
 
         }
 
