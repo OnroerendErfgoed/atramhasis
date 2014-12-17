@@ -77,7 +77,8 @@ def map_concept(concept, concept_json, db_session):
             matches = []
             matchdict = concept_json.get('matches', {})
             for type in matchdict:
-                matchtype = db_session.query(MatchType).filter_by(name=type).one()
+                db_type = type + "Match"
+                matchtype = db_session.query(MatchType).filter_by(name=db_type).one()
                 for uri in matchdict[type]:
                     concept_id = concept_json.get('id', -1)
                     try:

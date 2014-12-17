@@ -174,7 +174,7 @@ class TestMappers(unittest.TestCase):
         self.assertFalse(hasattr(result_collection, 'related_concepts'))
 
     def test_mapping_matches(self):
-        test_json["matches"] = {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:somewhere:93"]}
+        test_json["matches"] = {"exact": ["urn:sample:666"], "broad": ["urn:somewhere:93"]}
         result_concept = map_concept(self.concept, test_json, self.request.db)
         self.assertIsNotNone(result_concept)
         self.assertTrue(hasattr(result_concept, 'matches'))
@@ -182,7 +182,7 @@ class TestMappers(unittest.TestCase):
         self.assertIn(result_concept.matches[0].uri, ["urn:sample:666", "urn:somewhere:93"])
 
     def test_mapping_matches_new_concept(self):
-        test_json["matches"] = {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:somewhere:93"]}
+        test_json["matches"] = {"exact": ["urn:sample:666"], "broad": ["urn:somewhere:93"]}
         del test_json["id"]
         result_concept = map_concept(self.concept, test_json, self.request.db)
         self.assertIsNotNone(result_concept)
