@@ -67,39 +67,26 @@ class LanguagesCrud(object):
         self.request.response.status = '200'
         return language
 
-    @view_config(route_name='atramhasis.add_language', permission='edit')
-    def add_language(self):
-        '''
-        Add a new language
-
-        :raises atramhasis.errors.ValidationError: If the provided json can't be validated
-        '''
-        validated_json_language = self._validate_language(self._get_json_body(), True)
-        language = Language(id=validated_json_language['id'], name=validated_json_language['name'])
-        self.db.add(language)
-        self.db.flush()
-        self.request.response.status = '201'
-        self.request.response.location = self.request.route_path(
-            'atramhasis.get_language',  l_id=language.id)
-        return {'id': language.id, 'name': language.name}
-
-
     @view_config(route_name='atramhasis.edit_language', permission='edit')
     def edit_language(self):
         '''
-        Edit an existing language
+        Edit an existing language or create when not found
 
-        :raises atramhasis.errors.LanguageNotFoundException: If the language can't be found
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         '''
         l_id = self.request.matchdict['l_id']
-        validated_json_language = self._validate_language(self._get_json_body(), False)
+        json_body = self._get_json_body()
+        json_body['id'] = l_id
+
         try:
             language = self.db.query(Language).filter_by(id=l_id).one()
+            validated_json_language = self._validate_language(json_body, False)
+            language.name = validated_json_language['name']
         except NoResultFound:
-            raise LanguageNotFoundException(l_id)
-        language.name = validated_json_language['name']
-
+            validated_json_language = self._validate_language(json_body, True)
+            language = Language(id=validated_json_language['id'], name=validated_json_language['name'])
+            self.db.add(language)
+        self.db.flush()
         self.request.response.status = '200'
         return {'id': language.id, 'name': language.name}
 
