@@ -29,8 +29,6 @@ def includeme(config):
                      request_method="GET")
     config.add_route('atramhasis.get_language', pattern='/languages/{l_id}', accept='application/json',
                      request_method="GET")
-    config.add_route('atramhasis.add_language', pattern='/languages', accept='application/json',
-                     request_method="POST")
     config.add_route('atramhasis.edit_language', pattern='/languages/{l_id}', accept='application/json',
                      request_method="PUT")
     config.add_route('atramhasis.delete_language', pattern='/languages/{l_id}', accept='application/json',

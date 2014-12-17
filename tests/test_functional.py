@@ -371,16 +371,16 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json, {"message": "The resource could not be found."})
 
     def test_add_language(self):
-        res = self.testapp.post_json('/languages', headers=self._get_default_headers(),
-                                     params={"id": "af", "name": "Afrikaans"})
-        self.assertEqual('201 Created', res.status)
+        res = self.testapp.put_json('/languages/af', headers=self._get_default_headers(),
+                                    params={"id": "af", "name": "Afrikaans"})
+        self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['name'], 'Afrikaans')
 
     def test_add_language_non_valid(self):
-        res = self.testapp.post_json('/languages', headers=self._get_default_headers(),
-                                     params={"id": "flup", "name": "flup"}, expect_errors=True)
+        res = self.testapp.put_json('/languages/flup', headers=self._get_default_headers(),
+                                    params={"id": "flup", "name": "flup"}, expect_errors=True)
         self.assertEqual('400 Bad Request', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
@@ -389,12 +389,12 @@ class RestFunctionalTests(FunctionalTests):
             "message": "Language could not be validated"})
 
     def test_add_language_non_valid_json(self):
-        res = self.testapp.post_json('/languages', headers=self._get_default_headers(),
-                                     params={"test": "flup", "name": "flup"}, expect_errors=True)
+        res = self.testapp.put_json('/languages/af', headers=self._get_default_headers(),
+                                    params={"test": "flup"}, expect_errors=True)
         self.assertEqual('400 Bad Request', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
-        self.assertEqual(res.json, {'errors': {'id': 'Required'}, 'message': 'Language could not be validated'})
+        self.assertEqual(res.json, {'errors': {'name': 'Required'}, 'message': 'Language could not be validated'})
 
     def test_edit_language(self):
         res = self.testapp.put_json('/languages/de', headers=self._get_default_headers(),
@@ -404,13 +404,15 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['name'], 'Duits')
 
-    def test_edit_language_not_found(self):
-        res = self.testapp.put_json('/languages/jos', headers=self._get_default_headers(),
-                                    params={"id": "jos", "name": "Duits"}, expect_errors=True)
-        self.assertEqual('404 Not Found', res.status)
+    def test_edit_language_invalid_language_tag(self):
+        res = self.testapp.put_json('/languages/joss', headers=self._get_default_headers(),
+                                    params={"id": "joss", "name": "Duits"}, expect_errors=True)
+        self.assertEqual('400 Bad Request', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
-        self.assertEqual(res.json, {"message": "The resource could not be found."})
+        self.assertEqual(res.json, {
+            'errors': [{'id': "Invalid language tag: Unknown code 'joss', Missing language tag in 'joss'."}]
+            , "message": "Language could not be validated"})
 
     def test_edit_language_no_id(self):
         res = self.testapp.put_json('/languages/de', headers=self._get_default_headers(),
