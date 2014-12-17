@@ -148,9 +148,10 @@ define([
 
         _createMatchesLists: function () {
             this.matches = [];
-            var types = ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'];
+            var types = this.externalSchemeService.matchTypes;
             var self = this;
-            arrayUtil.forEach(types, function(type) {
+            arrayUtil.forEach(types, function(typeObj) {
+                var type = typeObj.value;
                 if (self.matchUris && self.matchUris[type]) {
                     arrayUtil.forEach(self.matchUris[type], function(uri) {
                          var matchPromise = null;
@@ -158,20 +159,20 @@ define([
                             matchPromise = self.externalSchemeService.getMatch(uri, type);
                             matchPromise.then(function (match) {
                                 self.matches.push(match);
-                                if (type == 'broadMatch') {
-                                    self.broadMatchList.buildList(self.broadMatchList.mapMatchesForList(self.matches, "broadMatch"), "Broad Matches", false);
+                                if (type == 'broad') {
+                                    self.broadMatchList.buildList(self.broadMatchList.mapMatchesForList(self.matches, type), "Broad Matches", false);
                                 }
-                                else if (type == 'closeMatch') {
-                                    self.closeMatchList.buildList(self.closeMatchList.mapMatchesForList(self.matches, "closeMatch"), "Close Matches", false);
+                                else if (type == 'close') {
+                                    self.closeMatchList.buildList(self.closeMatchList.mapMatchesForList(self.matches, type), "Close Matches", false);
                                 }
-                                else if (type == 'exactMatch') {
-                                    self.exactMatchList.buildList(self.exactMatchList.mapMatchesForList(self.matches, "exactMatch"), "Exact Matches", false);
+                                else if (type == 'exact') {
+                                    self.exactMatchList.buildList(self.exactMatchList.mapMatchesForList(self.matches, type), "Exact Matches", false);
                                 }
-                                else if (type == 'narrowMatch') {
-                                    self.narrowMatchList.buildList(self.narrowMatchList.mapMatchesForList(self.matches, "narrowMatch"), "Narrow Matches", false);
+                                else if (type == 'narrow') {
+                                    self.narrowMatchList.buildList(self.narrowMatchList.mapMatchesForList(self.matches, type), "Narrow Matches", false);
                                 }
-                                else if (type == 'relatedMatch') {
-                                    self.relatedMatchList.buildList(self.relatedList.mapMatchesForList(self.matches, "relatedMatch"), "Related Matches", false);
+                                else if (type == 'related') {
+                                    self.relatedMatchList.buildList(self.relatedList.mapMatchesForList(self.matches, type), "Related Matches", false);
                                 }
                             }, function (err) {
                                 // Do something when the process errors out
