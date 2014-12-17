@@ -368,7 +368,7 @@ define([
                     type: concept.type,
                     notes: concept.notes,
                     matches: {
-                        exactMatch: [concepturi]
+                        exact: [concepturi]
                     }
                 };
                 conceptForm.init(scheme, clone);
