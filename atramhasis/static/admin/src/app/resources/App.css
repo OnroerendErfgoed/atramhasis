@@ -7,6 +7,7 @@
 @import 'FilteredGrid.css';
 @import 'ConceptForm.css';
 @import 'ConceptDetail.css';
+@import 'ExternalSchemeForm.css';
 
 html, body {
     width: 100%;

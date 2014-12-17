@@ -132,9 +132,8 @@ define([
                     var self = this;
 
                     var dlg = new Dialog({
-                        style: "width: 600px",
-                        title: "Choose a match",
-                        doLayout: true
+                        class: "externalForm",
+                        title: "Choose a match"
                     });
 
                     var searchDiv = domConstruct.create("div", {}, dlg.containerNode);
@@ -176,6 +175,8 @@ define([
                     list.renderArray([]);
                     this._externalConceptList = list;
 
+
+
                     var selectType = new Select({
                         name: "typeSelect",
                         options: [
@@ -189,6 +190,9 @@ define([
                         title: "Select match type",
                         maxHeight: -1 // tells _HasDropDown to fit menu within viewport
                     }).placeAt(searchDiv);
+
+                    var label = domConstruct.create("label", {for:selectType.get("id"), innerHTML:"Select the type of match:"});
+                    domConstruct.place(label, selectType.domNode, "before");
 
                     var actionBar = domConstruct.create("div", {
                         'class': "dijitDialogPaneActionBar",
