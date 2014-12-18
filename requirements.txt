@@ -42,4 +42,4 @@ dogpile.cache==0.5.3
 
 # other
 six==1.6.1
-requests==2.2.1
+requests==2.5.0
