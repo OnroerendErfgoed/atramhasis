@@ -6,6 +6,7 @@ Module containing error views.
 import logging
 
 from pyramid.view import view_config, notfound_view_config
+from sqlalchemy.exc import IntegrityError
 
 from atramhasis.errors import SkosRegistryNotFoundException, ValidationError
 from atramhasis.protected_resources import ProtectedResourceException
@@ -65,6 +66,16 @@ def provider_unavailable(exc, request):
     log.error(exc.message)
     request.response.status_int = 503
     return {'message': exc.message}
+
+
+@view_config(context=IntegrityError, renderer='json')
+def data_integrity(exc, request):
+    '''
+    View invoked when IntegrityError was raised.
+    '''
+    log.error(exc)
+    request.response.status_int = 409
+    return {'message': 'this operation violates the data integrity and could not be executed '}
 
 
 @view_config(context=Exception, renderer='json')
