@@ -1,7 +1,12 @@
 import unittest
-
+from sqlalchemy.exc import IntegrityError
+try:
+    from unittest.mock import Mock, MagicMock
+except ImportError:
+    from mock import Mock, MagicMock  # pragma: no cover
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ConceptNotFoundException, DbNotFoundException, ValidationError, LanguageNotFoundException
+from atramhasis.views.exception_views import data_integrity
 
 
 class TestErrors(unittest.TestCase):
@@ -34,3 +39,10 @@ class TestErrors(unittest.TestCase):
         error = LanguageNotFoundException("af")
         self.assertIsNotNone(error)
         self.assertEqual("'No language found with the given id af'", str(error))
+
+
+class TestErrorsViews(unittest.TestCase):
+    def test_integrity(self):
+        error = IntegrityError(orig=MagicMock(), statement='', params={})
+        res = data_integrity(error, MagicMock())
+        self.assertEqual({'message': 'this operation violates the data integrity and could not be executed '}, res)
