@@ -81,6 +81,8 @@ define([
                 thesauri: this.thesauri
             });
 
+            this.languageManager = new LanguageManager({});
+
             var schemeFileteringSelect = new FilteringSelect({
                 id: "schemeSelect",
                 name: "scheme",
@@ -101,8 +103,8 @@ define([
 
             var conceptForm = new ConceptForm({
                 thesauri: this.thesauri,
-                externalSchemeService: this.externalSchemeService
-
+                externalSchemeService: this.externalSchemeService,
+                languageStore: this.languageManager.languageStore
             });
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
@@ -402,14 +404,12 @@ define([
         },
 
         _setupLanguageManager: function (button) {
-            var languageManager = new LanguageManager({});
+            var languageManager = this.languageManager;
+            languageManager.startup();
 
             on(button, "click", function () {
                 languageManager.showDialog();
             });
-
-            this.languageManager = languageManager;
-            languageManager.startup();
 
             on(languageManager, 'change', function (evt) {
                 topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': false, 'channel':'info'});

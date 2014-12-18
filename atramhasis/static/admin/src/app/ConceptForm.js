@@ -36,6 +36,7 @@ define(
                 conceptId: null,
                 thesauri: null,
                 externalSchemeService: null,
+                languageStore: null,
 
                 constructor: function (options) {
                     declare.safeMixin(this, options);
@@ -44,10 +45,12 @@ define(
                 postCreate: function () {
                     this.inherited(arguments);
                     this.labelManager = new LabelManager({
-                        'name': 'lblMgr'
+                        'name': 'lblMgr',
+                        'languageStore': this.languageStore
                     }, this.labelContainerNode);
                     this.noteManager = new NoteManager({
-                        'name': 'noteMgr'
+                        'name': 'noteMgr',
+                        'languageStore': this.languageStore
                     }, this.noteContainerNode);
                     this.broaderManager = new RelationManager({
                         'name': 'broaderMgr',
