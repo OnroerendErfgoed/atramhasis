@@ -45,6 +45,18 @@ application.
   accessible through the :class:`pyramid.request.Request`. Is also exposes a 
   set of readonly :ref:`REST services <pyramidskosprovider:services>` on the 
   registered providers.
+* skosprovider_getty_:
+  An implemenation of the 
+  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` 
+  against the Linked Open Data vocabularies published by the Getty Research 
+  Institute at `http://vocab.getty.edu <http://vocab.getty.edu>`_ such as the
+  `Art and Architecture Thesaurus (AAT)` and the 
+  `Thesaurus of Geographic Names (TGN)`.
+* skosprovider_heritagedata_:
+  An implementation of the
+  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` against
+  the vocabularies published by EH, RCAHMS and RCAHMW at 
+  `heritagedata.org <http://heritagedata.org>`_.
 
 .. _skos_spec: http://www.w3.org/TR/skos-reference/
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
@@ -56,3 +68,5 @@ application.
 .. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
 .. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org
 .. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
+.. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
+.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
