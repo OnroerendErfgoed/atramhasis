@@ -247,7 +247,11 @@ define([
                         var cp = registry.byId(self.currentScheme + "_" + conceptid);
                         tc.removeChild(cp);
                         cp.destroyRecursive();
-                    });
+                    },
+                    function (error) {
+                        self._handleRemoveErrors(error);
+                    }
+                );
             });
 
             topic.subscribe("concept.edit", function (conceptid) {
@@ -399,6 +403,17 @@ define([
                     message += errorObj[prop];
                     message += "<br>";
                 }
+            });
+            topic.publish('dGrowl', message, {'title': errorJson.message, 'sticky': true, 'channel':'error'});
+        },
+
+        _handleRemoveErrors: function(error) {
+            var errorJson = JSON.parse(error.responseText);
+            var message = "Used in:";
+            array.forEach(errorJson.referenced_in, function (reference) {
+                message += "-";
+                message += reference;
+                message += "<br>";
             });
             topic.publish('dGrowl', message, {'title': errorJson.message, 'sticky': true, 'channel':'error'});
         },

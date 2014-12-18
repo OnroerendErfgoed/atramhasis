@@ -74,3 +74,11 @@ html, body {
     border: 1px solid #b97422;
 }
 
+.dGrowl-notification {
+	width: 250px;
+}
+
+.dGrowl-channel {
+	width: 280px;
+}
+
