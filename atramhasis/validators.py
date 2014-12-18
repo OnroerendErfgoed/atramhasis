@@ -7,6 +7,7 @@ from skosprovider_sqlalchemy.models import (
     Thing, LabelType, Language)
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import ValidationError
+from language_tags import tags
 
 
 class Label(colander.MappingSchema):
@@ -41,11 +42,29 @@ class Notes(colander.SequenceSchema):
     note = Note()
 
 
+class RelatedConcept(colander.MappingSchema):
+    id = colander.SchemaNode(
+        colander.Int()
+    )
+
+
 class Concepts(colander.SequenceSchema):
-    concept = colander.SchemaNode(
-        colander.Int(),
+    concept = RelatedConcept()
+
+
+class MatchList(colander.SequenceSchema):
+    match = colander.SchemaNode(
+        colander.String(),
         missing=None
     )
+
+
+class Matches(colander.MappingSchema):
+    broad = MatchList(missing=[])
+    close = MatchList(missing=[])
+    exact = MatchList(missing=[])
+    narrow = MatchList(missing=[])
+    related = MatchList(missing=[])
 
 
 class Concept(colander.MappingSchema):
@@ -64,6 +83,16 @@ class Concept(colander.MappingSchema):
     related = Concepts(missing=[])
     members = Concepts(missing=[])
     member_of = Concepts(missing=[])
+    matches = Matches(missing={})
+
+
+class LanguageTag(colander.MappingSchema):
+    id = colander.SchemaNode(
+        colander.String()
+    )
+    name = colander.SchemaNode(
+        colander.String()
+    )
 
 
 def concept_schema_validator(node, cstruct):
@@ -81,6 +110,7 @@ def concept_schema_validator(node, cstruct):
     m_validated = False
     o_validated = False
     errors = []
+    min_labels_rule(errors, node, cstruct)
     if 'labels' in cstruct:
         labels = copy.deepcopy(cstruct['labels'])
         label_type_rule(errors, node, request, labels)
@@ -88,25 +118,30 @@ def concept_schema_validator(node, cstruct):
         max_preflabels_rule(errors, node, labels)
     if 'related' in cstruct:
         related = copy.deepcopy(cstruct['related'])
+        related = [m['id'] for m in related]
         r_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['related'], request,
                                                                          conceptscheme_id, related)
-        concept_relations_rule(errors, node, related, concept_type)
+        concept_relations_rule(errors, node['related'], related, concept_type)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
+        narrower = [m['id'] for m in narrower]
         n_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['narrower'], request,
                                                                          conceptscheme_id, narrower)
-        concept_relations_rule(errors, node, narrower, concept_type)
+        concept_relations_rule(errors, node['narrower'], narrower, concept_type)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
+        broader = [m['id'] for m in broader]
         b_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['broader'], request,
                                                                          conceptscheme_id, broader)
-        concept_relations_rule(errors, node, broader, concept_type)
+        concept_relations_rule(errors, node['broader'], broader, concept_type)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
+        members = [m['id'] for m in members]
         m_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['members'], request,
                                                                          conceptscheme_id, members)
     if 'member_of' in cstruct:
         member_of = copy.deepcopy(cstruct['member_of'])
+        member_of = [m['id'] for m in member_of]
         o_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['member_of'], request,
                                                                          conceptscheme_id, member_of)
     if r_validated and n_validated and b_validated:
@@ -117,11 +152,16 @@ def concept_schema_validator(node, cstruct):
         concept_type_rule(errors, node['related'], request, conceptscheme_id, related)
 
     if m_validated and o_validated:
-        members_only_in_collection_rule(errors, node, concept_type, members)
+        members_only_in_collection_rule(errors, node['members'], concept_type, members)
         collection_members_unique_rule(errors, node['members'], members)
         collection_type_rule(errors, node['member_of'], request, conceptscheme_id, member_of)
         memberof_hierarchy_rule(errors, node['member_of'], request, conceptscheme_id, cstruct)
         members_hierarchy_rule(errors, node['members'], request, conceptscheme_id, cstruct)
+
+    if 'matches' in cstruct:
+        matches = copy.deepcopy(cstruct['matches'])
+        concept_matches_rule(errors, node['matches'], matches, concept_type)
+        concept_matches_unique_rule(errors, node['matches'], matches)
 
     if len(errors) > 0:
         raise ValidationError(
@@ -151,6 +191,16 @@ def max_preflabels_rule(errors, node, labels):
                 preflabel_found.append(label['language'])
 
 
+def min_labels_rule(errors, node, cstruct):
+    if 'labels' in cstruct:
+        labels = copy.deepcopy(cstruct['labels'])
+        if len(labels) == 0:
+            errors.append(colander.Invalid(
+                node['labels'],
+                'A concept or collection should have at least one label'
+            ))
+
+
 def label_type_rule(errors, node, request, labels):
     label_types = request.db.query(LabelType).all()
     label_types = [label_type.name for label_type in label_types]
@@ -163,20 +213,25 @@ def label_type_rule(errors, node, request, labels):
 
 
 def label_lang_rule(errors, node, request, labels):
-    languages = request.db.query(Language).all()
-    languages = [language.id for language in languages]
     for label in labels:
-        if label['language'] not in languages:
+        language_tag = label['language']
+        if not tags.check(language_tag):
             errors.append(colander.Invalid(
                 node['labels'],
-                'Invalid language.'
+                'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
             ))
+        else:
+            languages_present = request.db.query(Language).filter_by(id=language_tag).count()
+            if not languages_present:
+                descriptions = ', '.join(tags.description(language_tag))
+                language_item = Language(id=language_tag, name=descriptions)
+                request.db.add(language_item)
 
 
 def concept_type_rule(errors, node_location, request, conceptscheme_id, members):
     for member_concept_id in members:
         member_concept = request.db.query(Thing).filter_by(concept_id=member_concept_id,
-                                                                   conceptscheme_id=conceptscheme_id).one()
+                                                           conceptscheme_id=conceptscheme_id).one()
         if member_concept.type != 'concept':
             errors.append(colander.Invalid(
                 node_location,
@@ -187,7 +242,7 @@ def concept_type_rule(errors, node_location, request, conceptscheme_id, members)
 def collection_type_rule(errors, node_location, request, conceptscheme_id, members):
     for member_collection_id in members:
         member_collection = request.db.query(Thing).filter_by(concept_id=member_collection_id,
-                                                                         conceptscheme_id=conceptscheme_id).one()
+                                                              conceptscheme_id=conceptscheme_id).one()
         if member_collection.type != 'collection':
             errors.append(colander.Invalid(
                 node_location,
@@ -214,8 +269,10 @@ def broader_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
     broader = []
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
+        broader = [m['id'] for m in broader]
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
+        narrower = [m['id'] for m in narrower]
         narrower_hierarchy = narrower
         narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy)
     for broader_concept_id in broader:
@@ -242,8 +299,10 @@ def narrower_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
     narrower = []
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
+        narrower = [m['id'] for m in narrower]
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
+        broader = [m['id'] for m in broader]
         broader_hierarchy = broader
         broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy)
     for narrower_concept_id in narrower:
@@ -257,7 +316,7 @@ def narrower_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
 def broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy):
     for broader_concept_id in broader:
         broader_concept = request.db.query(Thing).filter_by(concept_id=broader_concept_id,
-                                                                    conceptscheme_id=conceptscheme_id).one()
+                                                            conceptscheme_id=conceptscheme_id).one()
         if broader_concept is not None and broader_concept.type == 'concept':
             broader_concepts = [n.concept_id for n in broader_concept.broader_concepts]
             for broader_id in broader_concepts:
@@ -286,8 +345,10 @@ def memberof_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
     memberof = []
     if 'member_of' in cstruct:
         memberof = copy.deepcopy(cstruct['member_of'])
+        memberof = [m['id'] for m in memberof]
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
+        members = [m['id'] for m in members]
         members_hierarchy = members
         members_hierarchy_build(request, conceptscheme_id, members, members_hierarchy)
     for memberof_concept_id in memberof:
@@ -314,8 +375,10 @@ def members_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
     members = []
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
+        members = [m['id'] for m in members]
     if 'member_of' in cstruct:
         member_of = copy.deepcopy(cstruct['member_of'])
+        member_of = [m['id'] for m in member_of]
         memberof_hierarchy = member_of
         memberof_hierarchy_build(request, conceptscheme_id, member_of, memberof_hierarchy)
     for member_concept_id in members:
@@ -335,3 +398,57 @@ def memberof_hierarchy_build(request, conceptscheme_id, member_of, memberof_hier
             for memberof_id in memberof_concepts:
                 memberof_hierarchy.append(memberof_id)
             memberof_hierarchy_build(request, conceptscheme_id, memberof_concepts, memberof_hierarchy)
+
+
+def concept_matches_rule(errors, node_location, matches, concept_type):
+    if matches is not None and len(matches) > 0 and concept_type != 'concept':
+        errors.append(colander.Invalid(
+            node_location,
+            'Only concepts can have matches'
+        ))
+
+
+def concept_matches_unique_rule(errors, node_location, matches):
+    if matches is not None:
+        uri_list = []
+        for matchtype in matches:
+            uri_list.extend([uri for uri in matches[matchtype]])
+        if len(uri_list) > len(set(uri_list)):
+            errors.append(colander.Invalid(
+                node_location,
+                'All matches of a concept should be unique.'
+            ))
+
+
+def languagetag_validator(node, cstruct):
+    request = node.bindings['request']
+    new = node.bindings['new']
+    errors = []
+    language_tag = cstruct['id']
+
+    if new:
+        languagetag_checkduplicate(node['id'], language_tag, request, errors)
+    languagetag_isvalid_rule(node['id'], language_tag, errors)
+
+    if len(errors) > 0:
+        raise ValidationError(
+            'Language could not be validated',
+            [e.asdict() for e in errors]
+        )
+
+
+def languagetag_isvalid_rule(node, language_tag, errors):
+    if not tags.check(language_tag):
+        errors.append(colander.Invalid(
+            node,
+            'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
+        ))
+
+
+def languagetag_checkduplicate(node, language_tag, request, errors):
+    language_present = request.db.query(Language).filter_by(id=language_tag).count()
+    if language_present:
+        errors.append(colander.Invalid(
+            node,
+            'Duplicate language tag: %s' % language_tag)
+        )

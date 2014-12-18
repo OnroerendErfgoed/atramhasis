@@ -104,19 +104,14 @@ define([
                 });
             labelComboBox.set("value", 'Select a type');
 
-            var languages = this._getLanguages();
-            var languageComboBox = new Select
-            (
-                {
-                    id: "languageComboBox",
-                    name: "languageComboBox",
-                    title: "Language:",
-                    placeHolder: 'Select a language',
-                    options: languages,
-                    style: { width: '80px' }
-
-                }
-            );
+            var languageComboBox = new Select({
+                id: "languageComboBox",
+                name: "languageComboBox",
+                title: "Language:",
+                store: this.languageStore,
+                style: { width: '80px' },
+                labelAttr: "name"
+            });
 
             var addLabelButtonToTable = new Button
             (
@@ -266,26 +261,15 @@ define([
             });
             return itemsToDisplay;
         },
-        _getLanguages: function () {
-            var languages = [
-                {label: "NL", value: "nl"},
-                {label: "FR", value: "fr"},
-                {label: "EN", value: "en"}
-
-            ];
-
-            return languages;
-
-        },
 
         _createNodeList: function (notes) {
-            this.definitionList.buidList(this.definitionList.mapLabelsForList(notes, "definition"), "Definition", false);
-            this.changeNoteList.buidList(this.changeNoteList.mapLabelsForList(notes, "changeNote"), "Change note", false);
-            this.editorialNoteList.buidList(this.editorialNoteList.mapLabelsForList(notes, "editorialNote"), "Editorial note", false);
-            this.exampleList.buidList(this.exampleList.mapLabelsForList(notes, "example"), "Example", false);
-            this.historyNoteList.buidList(this.historyNoteList.mapLabelsForList(notes, "historyNote"), "Historynote", false);
-            this.scopeNoteList.buidList(this.scopeNoteList.mapLabelsForList(notes, "scopeNote"), "Scopenote", false);
-            this.noteList.buidList(this.noteList.mapLabelsForList(notes, "note"), "Note", false);
+            this.definitionList.buildList(this.definitionList.mapLabelsForList(notes, "definition"), "Definition", false);
+            this.changeNoteList.buildList(this.changeNoteList.mapLabelsForList(notes, "changeNote"), "Change note", false);
+            this.editorialNoteList.buildList(this.editorialNoteList.mapLabelsForList(notes, "editorialNote"), "Editorial note", false);
+            this.exampleList.buildList(this.exampleList.mapLabelsForList(notes, "example"), "Example", false);
+            this.historyNoteList.buildList(this.historyNoteList.mapLabelsForList(notes, "historyNote"), "Historynote", false);
+            this.scopeNoteList.buildList(this.scopeNoteList.mapLabelsForList(notes, "scopeNote"), "Scopenote", false);
+            this.noteList.buildList(this.noteList.mapLabelsForList(notes, "note"), "Note", false);
         },
 
         _mapNoteToDisplayInGrid: function (notes, typevalue, typeToBeDisplayed) {

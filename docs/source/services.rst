@@ -120,6 +120,8 @@ Write Services
     :statuscode 400: The concept or collection could not be added because
         the submitted json was invalid due to eg. validation errors.
     :statuscode 404: The conceptscheme `scheme_id` does not exist.
+    :statuscode 405: The concept or collection could not be added because
+        the conceptscheme `scheme_id` is a readonly conceptscheme.
 
 .. http:put:: /conceptschemes/{scheme_id}/c/{c_id}
 
@@ -196,6 +198,8 @@ Write Services
         the submitted json was invalid due to eg. validation errors.
     :statuscode 404: The conceptscheme `scheme_id` or 
         the concept or collection `c_id` does not exist.
+    :statuscode 405: The concept or collection could not be edited because
+        the conceptscheme `scheme_id` is a readonly conceptscheme.
 
 .. http:delete:: /conceptschemes/{scheme_id}/c/{c_id}
 
@@ -252,3 +256,9 @@ Write Services
         the submitted json was invalid due to eg. validation errors.
     :statuscode 404: The conceptscheme `scheme_id` or 
         the concept or collection `c_id` does not exist.
+    :statuscode 405: The concept or collection could not be deleted because
+        the conceptscheme `scheme_id` is a readonly conceptscheme.
+    :statuscode 409: The concept or collection could not be deleted because
+        Atramhasis has determined that it's still being used somewhere else. The
+        response body will contain a message and a list of :term:`URI`'s that
+        are using this concept.

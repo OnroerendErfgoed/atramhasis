@@ -8,10 +8,12 @@ define([
     "dojo/dom-class",
     "dojo/topic",
     "dojo/on",
+    "dojo/Evented",
     "dijit/form/Button",
     "dojo/text!./templates/ConceptDetailList.html"
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on, Button, template) {
-    return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,
+             Evented, Button, template) {
+    return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, Evented], {
         templateString: template,
 
         postMixInProperties: function () {
@@ -55,7 +57,18 @@ define([
             });
         },
 
-        buidList: function (items, title, clickable, isEditRelation) {
+        mapMatchesForList: function (matches, type) {
+            var filteredMatches = arrayUtil.filter(matches, function(match){
+                return match.type == type;
+            });
+
+            return arrayUtil.map(filteredMatches, function (item) {
+                var data = item.data;
+                return {"id": data.id, "mainlabel": data.label, "sublabel": data.uri};
+            });
+        },
+
+        buildList: function (items, title, clickable, isEditRelation) {
             var self=this;
             this.reset();
             var node = this.ConceptListNode;
@@ -78,9 +91,15 @@ define([
                 });
 
                 arrayUtil.forEach(sortedItems, function (item) {
-                    var li = domConstruct.create("li", {
-                        innerHTML: item.mainlabel + " (<em>" + item.sublabel + "</em>)"
-                    }, ul);
+                    if(item.sublabel){
+                        var li = domConstruct.create("li", {
+                            innerHTML: item.mainlabel + " (<em>" + item.sublabel + "</em>)"
+                        }, ul);
+                    }else{
+                        var li = domConstruct.create("li", {
+                            innerHTML: item.mainlabel
+                        }, ul);
+                    }
                     if (clickable) {
                         domClass.add(li, "clickable");
                         on(li, "click", function () {
@@ -88,26 +107,24 @@ define([
                         });
                     }
                     if (isEditRelation) {
-
                         var btn = new Button({
                             label: "remove this relation",
                             showLabel: false,
                             iconClass: 'minIcon',
                             onClick: function () {
-                                self._removeRelationFromList(li,item.id);
+                                self._removeRelationFromList(li, item);
                             }
                         }).placeAt(li);
-
-
                     }
                 });
             }
         },
-        _removeRelationFromList: function (li,relId) {
-              domConstruct.destroy(li);
-              topic.publish("relation.delete",relId);
 
+        _removeRelationFromList: function (li,item) {
+            domConstruct.destroy(li);
+            this.emit("relation.delete", {relation: item});
         },
+
         _mapLabelToDisplayedLabel: function (labels, typevalue, typeToBeDisplayed) {
 
             var self = this;

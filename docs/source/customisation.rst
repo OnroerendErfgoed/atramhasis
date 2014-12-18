@@ -60,6 +60,59 @@ The login and logout views, the groupfinder and rootfactory are implemented in t
 
 .. _own_project:
 
+Foreign Keys
+============
+
+Atramhasis will often function as a central part of a :term:`SOA` in an 
+organisation. :class:`~skosprovider.skos.Concept` and maybe 
+:class:`~skosprovider.skos.Collection` objects will be used by other applications. 
+One of the riskier aspects of this is that someone might delete a concept in a 
+certain scheme that is still being used by another application. Even worse, the 
+user approving the delete might not even have a clue that the concept is being 
+used by some external application. While in the decentralised world that is the
+world wide web, we can never be sure that nobody is using our concept any more, 
+we can take some steps to at least control what happens within other applications
+that are within our control.
+
+Of course, within the framework that is Atramhasis it's very difficult to know
+how or where your own resources might be and how they might be using concepts
+from Atramhasis. We have therefor provided the necessary hooks for you that can
+help you deal with the sort of situation. But the actual implementation is left
+up to you.
+
+We have added a decorator :func:`~atramhasis.protected_resources.protected_operation`. 
+When you add this decorator to a view, this view will emit a 
+:class:`~atramhasis.protected_resources.ProtectedResourceEvent`. By default we
+have added this decorator the :meth:`~atramhasis.views.AtramhasisCrud.delete_concept` 
+view.
+
+In you own code, you can subscribe to this 
+:class:`~atramhasis.protected_resources.ProtectedResourceEvent` through the
+usual :func:`pyramid.events.subscriber`. In this event handler you are then 
+free to implement whatever check you need to do. If you find that the resource 
+in question is being used somewhere and this operation
+should thus not be allowed to proceed, you simply need to raise a 
+:class:`atramhasis.protected_resources.ProtectedResourceException`. Into this
+exception you can also pass a list of :term:`URI` that might provide the
+user with some feedback as to where this concept might be used.
+
+For example, a sample event handler that would make it impossible to delete
+concepts with a URI of less than 5 characters:
+
+.. code-block:: python
+
+    from pyramid.events import subscriber
+    from atramhasis.protected_resources import ProtectedResourceEvent
+
+    @subscriber(ProtectedResourceEvent)
+    def never_delete_a_short_uri(event):
+        if len(event.uri) < 5:
+            raise ProtectedResourceException(
+                'resource {0} has a URI shorter than 5 characters, preventing this operation'.format(event.uri),
+                []
+            )
+
+
 Creating your own project
 =========================
 

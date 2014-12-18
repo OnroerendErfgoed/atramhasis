@@ -9,17 +9,17 @@ try:
 except ImportError:
     from mock import Mock  # pragma: no cover
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Label, Collection
+from skosprovider_sqlalchemy.models import Concept, Label, Collection, MatchType, Match, Thing
 from atramhasis.mappers import map_concept
 
 test_json = {
-    "narrower": [8, 7, 9],
+    "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
     "label": "Belgium",
     "type": "concept",
     "id": 4,
-    "broader": [2, 11],
-    "related": [5, 12],
-    "member_of": [999],
+    "broader": [{"id": 2}, {"id": 11}],
+    "related": [{"id": 5}, {"id": 12}],
+    "member_of": [{"id": 999}],
     "labels": [{
                    "label": "Belgium",
                    "type": "prefLabel",
@@ -44,8 +44,8 @@ json_collection = {
                }],
     "type": "collection",
     "label": "Stijlen en culturen",
-    "members": [61, 60, 12],
-    "member_of": [999, 7],
+    "members": [{"id": 61}, {"id": 60}, {"id": 12}],
+    "member_of": [{"id": 999}, {"id": 7}],
     "notes": [{
                   "note": "een notitie",
                   "type": "note",
@@ -68,9 +68,40 @@ def filter_by_mock_concept(concept_id, conceptscheme_id):
     return filter_mock
 
 
+def filter_by_mock_matchtype(name):
+    filter_mock = Mock()
+    if name in ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch']:
+        matchtype = MatchType(name, 'test')
+    else:
+        raise NoResultFound()
+    filter_mock.one = Mock(return_value=matchtype)
+    return filter_mock
+
+
+def filter_by_mock_match(uri, matchtype_id, concept_id):
+    filter_mock = Mock()
+    if concept_id == -1:
+        raise NoResultFound()
+    else:
+        match = Match()
+        match.uri = uri
+        match.concept_id = concept_id
+        if matchtype_id in ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch']:
+            match.matchtype = MatchType(matchtype_id, 'test')
+        else:
+            raise NoResultFound()
+    filter_mock.one = Mock(return_value=match)
+    return filter_mock
+
+
 def create_query_mock(some_class):
     query_mock = Mock()
-    query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    if some_class in [Thing, Concept, Collection]:
+        query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    elif some_class == MatchType:
+        query_mock.filter_by = Mock(side_effect=filter_by_mock_matchtype)
+    elif some_class == Match:
+        query_mock.filter_by = Mock(side_effect=filter_by_mock_match)
     return query_mock
 
 
@@ -141,3 +172,20 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_collection.labels))
         self.assertEqual(1, len(result_collection.notes))
         self.assertFalse(hasattr(result_collection, 'related_concepts'))
+
+    def test_mapping_matches(self):
+        test_json["matches"] = {"exact": ["urn:sample:666"], "broad": ["urn:somewhere:93"]}
+        result_concept = map_concept(self.concept, test_json, self.request.db)
+        self.assertIsNotNone(result_concept)
+        self.assertTrue(hasattr(result_concept, 'matches'))
+        self.assertEqual(2, len(result_concept.matches))
+        self.assertIn(result_concept.matches[0].uri, ["urn:sample:666", "urn:somewhere:93"])
+
+    def test_mapping_matches_new_concept(self):
+        test_json["matches"] = {"exact": ["urn:sample:666"], "broad": ["urn:somewhere:93"]}
+        del test_json["id"]
+        result_concept = map_concept(self.concept, test_json, self.request.db)
+        self.assertIsNotNone(result_concept)
+        self.assertTrue(hasattr(result_concept, 'matches'))
+        self.assertEqual(2, len(result_concept.matches))
+        self.assertIn(result_concept.matches[0].uri, ["urn:sample:666", "urn:somewhere:93"])

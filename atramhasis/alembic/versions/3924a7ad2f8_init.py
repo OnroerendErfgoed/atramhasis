@@ -22,7 +22,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('name')
     )
     op.create_table('language',
-    sa.Column('id', sa.String(length=10), nullable=False),
+    sa.Column('id', sa.String(length=64), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )

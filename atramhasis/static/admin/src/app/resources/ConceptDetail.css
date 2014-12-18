@@ -48,13 +48,14 @@
     width: 100%;
     margin: 0;
     padding: 0;
+    background-color: #CEE6FA;
 }
 
 .conceptProps ul li {
     float: left;
-    width: 33%;
-    border-left: 1px solid #008CBA;
+    border-left: 1px solid #ffffff;
     line-height: 40px;
+    padding: 0 15px;
 }
 
 .conceptDetail h1 {

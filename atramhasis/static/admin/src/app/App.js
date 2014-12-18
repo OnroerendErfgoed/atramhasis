@@ -7,12 +7,15 @@ define([
     "dojo/store/Memory",
     "dojo/dom",
     "dojo/request",
+    "dojo/json",
     "dijit/registry",
     "dijit/form/FilteringSelect",
+    "dijit/MenuItem",
     "dijit/_Widget",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!./templates/App.html",
+    "dojo/_base/array",
 
     "dijit/form/ComboBox", "dijit/form/Button", "dijit/Dialog",
 
@@ -20,19 +23,28 @@ define([
     "./ConceptDetail",
     "./ThesaurusCollection",
     "./ConceptForm",
-//    "dojo/text!./templates/ConceptForm.html",
-
+    "./ExternalSchemeService",
+    "./ExternalSchemeForm",
+    "./LanguageManager",
+    "dGrowl",
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
 
 
-], function (declare, on, topic, aspect, lang, Memory, dom, request, registry, FilteringSelect, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox, Button, Dialog, FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ContentPane, TabContainer) {
+], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, registry, FilteringSelect, MenuItem,
+             _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
+             FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
+             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
         thesauri: null,
         currentScheme: null,
+        externalSchemeService: null,
+        externalSchemeForm: null,
+        notificationController: null,
+        languageManager: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -50,12 +62,26 @@ define([
             this.inherited(arguments);
             console.log('postCreate', arguments);
             this.thesauri = new ThesaurusCollection();
+
+            this.notificationController = new dGrowl({
+                'channels':[
+                    {'name':'info','pos':3},
+                    {'name':'error', 'pos':1},
+                    {'name':'warn', 'pos':2}
+                ]
+            });
         },
 
         startup: function () {
             this.inherited(arguments);
             console.log('startup', arguments);
             var self = this;
+
+            this.externalSchemeService = new ExternalSchemeService({
+                thesauri: this.thesauri
+            });
+
+            this.languageManager = new LanguageManager({});
 
             var schemeFileteringSelect = new FilteringSelect({
                 id: "schemeSelect",
@@ -75,7 +101,11 @@ define([
                 filteredGrid.conceptGrid.resize();
             });
 
-            var conceptForm = new ConceptForm();
+            var conceptForm = new ConceptForm({
+                thesauri: this.thesauri,
+                externalSchemeService: this.externalSchemeService,
+                languageStore: this.languageManager.languageStore
+            });
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
                 content: conceptForm
@@ -90,7 +120,6 @@ define([
                 conceptForm.reset();
             });
 
-
             var tc = registry.byId("center");
 
             var cpwelcome = new ContentPane({
@@ -99,6 +128,19 @@ define([
             });
             tc.addChild(cpwelcome);
             tc.startup();
+
+            //add "close all" option to tabs
+            var menuBtn = registry.byId("center_tablist_Menu");
+            if(menuBtn) {
+                menuBtn.addChild(new MenuItem({
+                    label: 'Close all',
+                    onClick: function (evt) {
+                        array.forEach(tc.getChildren(), function (tab) {
+                            if (tab.closable) tc.closeChild(tab);
+                        });
+                    }
+                }));
+            }
 
             var addConceptButton = new Button({
                 label: "Add concept or collection",
@@ -111,20 +153,47 @@ define([
                 self._createConcept(conceptForm, conceptDialog, self.currentScheme);
             });
 
-            on(schemeFileteringSelect, "change", function (e) {
+            var importConceptButton = new Button ({
+                label: "Import concept or collection",
+                disabled: "disabled"
+            }, "importConceptNode");
 
+            on(importConceptButton, "click", function () {
+                self.externalSchemeForm.showDialog();
+            });
+
+            var manageLanguagesButton = new Button ({
+                label: "Manage languages"
+            }, "languageConceptNode");
+            this._setupLanguageManager(manageLanguagesButton);
+
+            this.externalSchemeForm = new ExternalSchemeForm({
+                externalSchemeService: this.externalSchemeService
+            });
+            this.externalSchemeForm.startup();
+
+            on(this.externalSchemeForm, 'select', function (evt) {
+                if (evt.concept && evt.concept.uri){
+                    self._importConcept(conceptForm, conceptDialog, evt.concept.uri);
+                }
+                else {
+                    console.error('No valid URI.');
+                }
+            });
+
+            on(schemeFileteringSelect, "change", function (e) {
                 if (e) {
                     console.log("on schemeCombo ", e);
                     self.currentScheme = e;
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
+                    importConceptButton.set('disabled', false);
                 }
                 else {
                     filteredGrid.ResetConceptGrid();
                     addConceptButton.set('disabled', true);
+                    importConceptButton.set('disabled', true);
                 }
-
-
             });
 
             schemeFileteringSelect.startup();
@@ -151,7 +220,9 @@ define([
                             related: item.related,
                             broader: item.broader,
                             members: item.members,
-                            member_of: item.member_of
+                            member_of: item.member_of,
+                            matchUris: item.matches,
+                            externalSchemeService: self.externalSchemeService
                         });
                         cp = new ContentPane({
                             id: schemeid + "_" + item.id,
@@ -233,16 +304,23 @@ define([
                 console.log("conceptform.submit subscribe");
                 console.log(form);
 
+                broader = array.map(form.broader, function(item){ return {"id": item}; });
+                narrower = array.map(form.narrower, function(item){ return {"id": item}; });
+                related = array.map(form.related, function(item){ return {"id": item}; });
+                members = array.map(form.members, function(item){ return {"id": item}; });
+                member_of = array.map(form.member_of, function(item){ return {"id": item}; });
+
                 var rowToAdd = {
                     "id:": form.concept_id,
                     "type": form.ctype,
                     "labels": form.label,
                     "notes": form.note,
-                    "broader": form.broader,
-                    "narrower": form.narrower,
-                    "related": form.related,
-                    "members": form.members,
-                    "member_of": form.member_of
+                    "broader": broader,
+                    "narrower": narrower,
+                    "related": related,
+                    "members": members,
+                    "member_of": member_of,
+                    "matches": form.matches
                 };
                 if (form.concept_id) {
                     filteredGrid.conceptGrid.store.put(rowToAdd, {id: form.concept_id})
@@ -250,7 +328,8 @@ define([
                         function () {
                             console.log("row edited");
                             conceptDialog.hide();
-                            alert("The concept or collection has been saved");
+                            var message = "The " + rowToAdd.type + " has been saved";
+                            topic.publish('dGrowl', message, {'title': "Success", 'sticky': false, 'channel':'info'});
                             filteredGrid.conceptGrid.refresh();
 
                             //refresh Concept Detail widget.
@@ -259,8 +338,7 @@ define([
                             });
                         },
                         function (error) {
-                            console.log("An error occurred: " + error);
-                            alert("Can't add the concept or collection to the database. Please check if business rules are respected");
+                            self._handleSaveErrors(error);
                         }
                     );
                 }
@@ -268,19 +346,19 @@ define([
                     filteredGrid.conceptGrid.store.add(rowToAdd)
                         .then(
                         function () {
-                            console.log("row added");
                             conceptDialog.hide();
-                            alert("The concept or collection has been added to the thesaurus");
-
+                            var message = "The " + rowToAdd.type + " has been saved";
+                            topic.publish('dGrowl', message, {'title': "Success", 'sticky': false, 'channel':'info'});
                             filteredGrid.conceptGrid.refresh();
                         },
                         function (error) {
-                            console.log("An error occurred: " + error);
-                            alert("Can't add the concept or collection to the database. Please check if business rules are respected");
+                            self._handleSaveErrors(error);
                         }
                     );
                 }
             });
+
+            this.notificationController.addNotification("Atramhasis is up and running",{'channel':'info'});
 
         },
 
@@ -288,6 +366,58 @@ define([
             conceptForm.init(Scheme);
             conceptDialog.set("title", "Add concept or collection");
             conceptDialog.show();
+        },
+
+        _importConcept: function (conceptForm, conceptDialog, concepturi) {
+            var scheme = this.currentScheme;
+            this.externalSchemeService.getConcept(concepturi).then(function(concept) {
+                var clone = {
+                    label: concept.label,
+                    labels: concept.labels,
+                    type: concept.type,
+                    notes: concept.notes,
+                    matches: {
+                        exact: [concepturi]
+                    }
+                };
+                conceptForm.init(scheme, clone);
+                conceptDialog.set("title", "Import concept or collection");
+                conceptDialog.show();
+            }, function(err){
+                console.error(err);
+            });
+        },
+
+        _handleSaveErrors: function(error) {
+            var errorJson = JSON.parse(error.responseText);
+            var message = "";
+            array.forEach(errorJson.errors, function (errorObj) {
+                for (prop in errorObj) {
+                    message += "-<em>";
+                    message += prop;
+                    message += "</em>: ";
+                    message += errorObj[prop];
+                    message += "<br>";
+                }
+            });
+            topic.publish('dGrowl', message, {'title': errorJson.message, 'sticky': true, 'channel':'error'});
+        },
+
+        _setupLanguageManager: function (button) {
+            var languageManager = this.languageManager;
+            languageManager.startup();
+
+            on(button, "click", function () {
+                languageManager.showDialog();
+            });
+
+            on(languageManager, 'change', function (evt) {
+                topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': false, 'channel':'info'});
+            });
+            on(languageManager, 'error', function (evt) {
+                topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': true, 'channel':'error'});
+            });
+
         }
 
 

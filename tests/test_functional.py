@@ -5,7 +5,12 @@ import unittest
 
 import six
 from pyramid.config import Configurator
-from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language
+import skosprovider
+from skosprovider.exceptions import ProviderUnavailableException
+from skosprovider.providers import DictionaryProvider
+from skosprovider.uri import UriPatternGenerator
+from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
@@ -17,7 +22,8 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.db import db
-from fixtures.data import trees, geo
+from atramhasis.protected_resources import ProtectedResourceException, ProtectedResourceEvent
+from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials
 
 
@@ -40,7 +46,7 @@ json_value = {
 }
 
 json_value_relations = {
-    "broader": [12],
+    "broader": [{"id": 12}],
     "id": 13,
     "related": [],
     "type": "concept",
@@ -51,7 +57,7 @@ json_value_relations = {
                }],
     "label": "koperlegeringen",
     "notes": [],
-    "narrower": [15, 14]
+    "narrower": [{"id": 15}, {"id": 14}]
 }
 
 json_value_invalid = """{
@@ -77,13 +83,23 @@ json_collection_value = {
                }],
     "type": "collection",
     "label": "Test verzameling",
-    "members": [333, 7],
+    "members": [{"id": 333}, {"id": 7}],
     "notes": [{
                   "note": "een notitie",
                   "type": "note",
                   "language": "nl"
               }]
 }
+
+TEST = DictionaryProvider(
+    {
+        'id': 'TEST',
+        'default_language': 'nl',
+        'subject': ['biology']
+    },
+    [larch, chestnut, species],
+    concept_scheme=skosprovider.skos.ConceptScheme('http://id.trees.org')
+)
 
 
 class FunctionalTests(unittest.TestCase):
@@ -110,24 +126,73 @@ class FunctionalTests(unittest.TestCase):
         self.config.registry.dbmaker = self.session_maker
         self.config.add_request_method(db, reify=True)
 
-        self.config.include('atramhasis.skos')
-
         with transaction.manager:
             local_session = self.session_maker()
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2), local_session)
+            local_session.add(ConceptScheme(id=3))
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
             local_session.add(Language('nl', 'Dutch'))
             local_session.add(Language('en', 'English'))
 
+            local_session.add(MatchType('broadMatch', ''))
+            local_session.add(MatchType('closeMatch', ''))
+            local_session.add(MatchType('exactMatch', ''))
+            local_session.add(MatchType('narrowMatch', ''))
+            local_session.add(MatchType('relatedMatch', ''))
+            local_session.add(Language(id='de', name='test'))
+
+        TREES = SQLAlchemyProvider(
+            {'id': 'TREES', 'conceptscheme_id': 1},
+            self.config.registry.dbmaker
+        )
+
+        GEO = SQLAlchemyProvider(
+            {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
+            self.config.registry.dbmaker
+        )
+
+        STYLES = SQLAlchemyProvider(
+            {'id': 'STYLES', 'conceptscheme_id': 3},
+            self.config.registry.dbmaker
+        )
+
+        MATERIALS = SQLAlchemyProvider(
+            {'id': 'MATERIALS', 'conceptscheme_id': 4},
+            self.config.registry.dbmaker,
+            uri_generator=UriPatternGenerator('urn:x-vioe:materials:%s')
+        )
+
+        self.config.add_subscriber(self.mock_event_handler, ProtectedResourceEvent)
+        self.config.add_subscriber(self.mock_event_handler_provider_unavailable, ProtectedResourceEvent)
+
+        skosregis = self.config.get_skos_registry()
+        skosregis.register_provider(TREES)
+        skosregis.register_provider(GEO)
+        skosregis.register_provider(STYLES)
+        skosregis.register_provider(MATERIALS)
+        skosregis.register_provider(TEST)
+
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)
 
     def tearDown(self):
         testing.tearDown()
+
+    @staticmethod
+    def mock_event_handler(event):
+        if event.uri == 'http://localhost/conceptschemes/GEOGRAPHY/c/9':
+            referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
+            raise ProtectedResourceException('resource {0} is still in use, preventing operation'.format(event.uri),
+                                             referenced_in)
+
+    @staticmethod
+    def mock_event_handler_provider_unavailable(event):
+        if event.uri == 'http://localhost/conceptschemes/GEOGRAPHY/c/55':
+            raise ProviderUnavailableException('test msg')
 
 
 class HtmlFunctionalTests(FunctionalTests):
@@ -175,9 +240,22 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['id'], 1)
         self.assertEqual(res.json['type'], 'concept')
 
+    def test_get_concept_dictprovider(self):
+        res = self.testapp.get('/conceptschemes/TEST/c/1', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['type'], 'concept')
+
     def test_get_concept_not_found(self):
         res = self.testapp.get('/conceptschemes/TREES/c/89', headers=self._get_default_headers(), status=404,
-            expect_errors=True)
+                               expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_get_concept_dictprovider_not_found(self):
+        res = self.testapp.get('/conceptschemes/TEST/c/89', headers=self._get_default_headers(), status=404,
+                               expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
@@ -249,7 +327,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['type'], 'collection')
 
     def test_edit_collection(self):
-        json_collection_value['members'] = [7, 8]
+        json_collection_value['members'] = [{"id": 7}, {"id": 8}]
         res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers(),
                                     params=json_collection_value)
         self.assertEqual('200 OK', res.status)
@@ -269,6 +347,116 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertEqual('urn:x-vioe:materials:51', res.json['uri'])
+
+    def test_general_exception_view(self):
+        self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
+                               params=json_collection_value)
+        res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/1', headers=self._get_default_headers(),
+                                    params=json_collection_value, expect_errors=True)
+        self.assertEqual('500 Internal Server Error', res.status)
+        self.assertIn("unexpected server error", res)
+
+    def test_provider_unavailable_view(self):
+        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/55', headers=self._get_default_headers()
+                                  , expect_errors=True)
+        self.assertEqual('503 Service Unavailable', res.status)
+        self.assertIn("test msg", res)
+
+    def test_get_languages(self):
+        res = self.testapp.get('/languages', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res)
+        self.assertEqual(len(res.json), 3)
+
+    def test_get_language(self):
+        res = self.testapp.get('/languages/de', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['name'], 'test')
+
+    def test_get_language_not_found(self):
+        res = self.testapp.get('/languages/jos', headers=self._get_default_headers(), expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {"message": "The resource could not be found."})
+
+    def test_add_language(self):
+        res = self.testapp.put_json('/languages/af', headers=self._get_default_headers(),
+                                    params={"id": "af", "name": "Afrikaans"})
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['name'], 'Afrikaans')
+
+    def test_add_language_non_valid(self):
+        res = self.testapp.put_json('/languages/flup', headers=self._get_default_headers(),
+                                    params={"id": "flup", "name": "flup"}, expect_errors=True)
+        self.assertEqual('400 Bad Request', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {
+            "errors": [{"id": "Invalid language tag: Unknown code 'flup', Missing language tag in 'flup'."}],
+            "message": "Language could not be validated"})
+
+    def test_add_language_non_valid_json(self):
+        res = self.testapp.put_json('/languages/af', headers=self._get_default_headers(),
+                                    params={"test": "flup"}, expect_errors=True)
+        self.assertEqual('400 Bad Request', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {'errors': {'name': 'Required'}, 'message': 'Language could not be validated'})
+
+    def test_edit_language(self):
+        res = self.testapp.put_json('/languages/de', headers=self._get_default_headers(),
+                                    params={"id": "de", "name": "Duits"})
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['name'], 'Duits')
+
+    def test_edit_language_invalid_language_tag(self):
+        res = self.testapp.put_json('/languages/joss', headers=self._get_default_headers(),
+                                    params={"id": "joss", "name": "Duits"}, expect_errors=True)
+        self.assertEqual('400 Bad Request', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {
+            'errors': [{'id': "Invalid language tag: Unknown code 'joss', Missing language tag in 'joss'."}]
+            , "message": "Language could not be validated"})
+
+    def test_edit_language_no_id(self):
+        res = self.testapp.put_json('/languages/de', headers=self._get_default_headers(),
+                                    params={"name": "Duits"})
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+        self.assertEqual(res.json['name'], 'Duits')
+
+    def test_delete_language(self):
+        res = self.testapp.delete('/languages/de', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_delete_language_not_found(self):
+        res = self.testapp.delete('/languages/jos', headers=self._get_default_headers(), expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {"message": "The resource could not be found."})
+
+    def test_delete_protected_resource(self):
+        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/9', headers=self._get_default_headers(),
+                                  expect_errors=True)
+        self.assertEqual('409 Conflict', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {
+            "message": "resource http://localhost/conceptschemes/GEOGRAPHY/c/9 is still in use, preventing operation",
+            "referenced_in": ["urn:someobject", "http://test.test.org/object/2"]
+        })
 
 
 class TestCookieView(FunctionalTests):
@@ -326,7 +514,6 @@ class SkosFunctionalTests(unittest.TestCase):
         self.config.add_request_method(db, reify=True)
 
         self.app = self.config.make_wsgi_app()
-        del self.app.request_extensions.descriptors['skos_registry']
         self.testapp = TestApp(self.app)
 
     def tearDown(self):
@@ -339,12 +526,14 @@ class SkosFunctionalTests(unittest.TestCase):
         return {'Accept': 'application/json'}
 
     def test_admin_no_skos_provider(self):
+        del self.app.request_extensions.descriptors['skos_registry']
         res = self.testapp.get('/admin', headers=self._get_default_headers(), expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)
 
     def test_crud_no_skos_provider(self):
+        del self.app.request_extensions.descriptors['skos_registry']
         res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_json_headers(),
                                      params=json_collection_value, expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
@@ -357,7 +546,7 @@ class CacheFunctionalTests(FunctionalTests):
         return {'Accept': 'application/json'}
 
     def test_create_cache(self):
-        #clear entire cache before start
+        # clear entire cache before start
         invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
         self.assertEqual('200 OK', invalidate_cache_response.status)
 
@@ -372,7 +561,7 @@ class CacheFunctionalTests(FunctionalTests):
         self.assertEqual(tree_response.json, cached_tree_response.json)
 
     def test_auto_invalidate_cache(self):
-        #clear entire cache before start
+        # clear entire cache before start
         invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
         self.assertEqual('200 OK', invalidate_cache_response.status)
 
@@ -392,7 +581,6 @@ class CacheFunctionalTests(FunctionalTests):
 
 
 class RdfFunctionalTests(FunctionalTests):
-
     def test_rdf_xml(self):
         rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c.rdf')
         self.assertEqual('200 OK', rdf_response.status)
@@ -405,7 +593,6 @@ class RdfFunctionalTests(FunctionalTests):
 
 
 class ListFunctionalTests(FunctionalTests):
-
     def test_labeltypes_list(self):
         labeltypeslist_res = self.testapp.get('/labeltypes')
         self.assertEqual('200 OK', labeltypeslist_res.status)
