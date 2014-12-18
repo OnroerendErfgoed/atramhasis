@@ -152,7 +152,9 @@ define(
                         formObj.member_of = this.memberofManager.getRelations();
                         formObj.label = this.labelManager.getLabels();
                         formObj.note = this.noteManager.geNotes();
-                        formObj.matches = this.matchesManager.getMatches();
+                        if (this.matchesManager.getMatches()){
+                            formObj.matches = this.matchesManager.getMatches();
+                        }
                         console.log(formObj);
                         topic.publish("conceptform.submit", formObj);
                     }

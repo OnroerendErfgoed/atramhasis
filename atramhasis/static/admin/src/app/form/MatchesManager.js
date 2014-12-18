@@ -238,16 +238,23 @@ define([
 
                 getMatches: function () {
                     var matches = {};
+                    var hasMatches = false;
                     var types = this.externalSchemeService.matchTypes;
                     var self = this;
                     arrayUtil.forEach(types, function(typeObj) {
                         var type = typeObj.value;
                         var uris = self.getMatchesUris(type);
                         if (uris.length > 0) {
+                            hasMatches = true;
                             matches[type] = uris;
                         }
                     });
-                    return matches;
+                    if (hasMatches){
+                        return matches;
+                    }
+                    else {
+                        return null
+                    }
                 },
 
                 getMatchesUris: function (type) {
