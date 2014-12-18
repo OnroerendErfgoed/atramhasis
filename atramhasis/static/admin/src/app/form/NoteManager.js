@@ -104,19 +104,14 @@ define([
                 });
             labelComboBox.set("value", 'Select a type');
 
-            var languages = this._getLanguages();
-            var languageComboBox = new Select
-            (
-                {
-                    id: "languageComboBox",
-                    name: "languageComboBox",
-                    title: "Language:",
-                    placeHolder: 'Select a language',
-                    options: languages,
-                    style: { width: '80px' }
-
-                }
-            );
+            var languageComboBox = new Select({
+                id: "languageComboBox",
+                name: "languageComboBox",
+                title: "Language:",
+                store: this.languageStore,
+                style: { width: '80px' },
+                labelAttr: "name"
+            });
 
             var addLabelButtonToTable = new Button
             (
@@ -265,17 +260,6 @@ define([
 
             });
             return itemsToDisplay;
-        },
-        _getLanguages: function () {
-            var languages = [
-                {label: "NL", value: "nl"},
-                {label: "FR", value: "fr"},
-                {label: "EN", value: "en"}
-
-            ];
-
-            return languages;
-
         },
 
         _createNodeList: function (notes) {

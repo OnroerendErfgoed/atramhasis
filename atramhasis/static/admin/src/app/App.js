@@ -25,6 +25,7 @@ define([
     "./ConceptForm",
     "./ExternalSchemeService",
     "./ExternalSchemeForm",
+    "./LanguageManager",
     "dGrowl",
     "dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
@@ -34,7 +35,7 @@ define([
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
-             ExternalSchemeForm, dGrowl, ContentPane, TabContainer) {
+             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, TabContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -43,6 +44,7 @@ define([
         externalSchemeService: null,
         externalSchemeForm: null,
         notificationController: null,
+        languageManager: null,
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -79,6 +81,8 @@ define([
                 thesauri: this.thesauri
             });
 
+            this.languageManager = new LanguageManager({});
+
             var schemeFileteringSelect = new FilteringSelect({
                 id: "schemeSelect",
                 name: "scheme",
@@ -99,8 +103,8 @@ define([
 
             var conceptForm = new ConceptForm({
                 thesauri: this.thesauri,
-                externalSchemeService: this.externalSchemeService
-
+                externalSchemeService: this.externalSchemeService,
+                languageStore: this.languageManager.languageStore
             });
             var conceptDialog = new Dialog({
                 id: 'conceptDialog',
@@ -157,6 +161,11 @@ define([
             on(importConceptButton, "click", function () {
                 self.externalSchemeForm.showDialog();
             });
+
+            var manageLanguagesButton = new Button ({
+                label: "Manage languages"
+            }, "languageConceptNode");
+            this._setupLanguageManager(manageLanguagesButton);
 
             this.externalSchemeForm = new ExternalSchemeForm({
                 externalSchemeService: this.externalSchemeService
@@ -392,6 +401,23 @@ define([
                 }
             });
             topic.publish('dGrowl', message, {'title': errorJson.message, 'sticky': true, 'channel':'error'});
+        },
+
+        _setupLanguageManager: function (button) {
+            var languageManager = this.languageManager;
+            languageManager.startup();
+
+            on(button, "click", function () {
+                languageManager.showDialog();
+            });
+
+            on(languageManager, 'change', function (evt) {
+                topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': false, 'channel':'info'});
+            });
+            on(languageManager, 'error', function (evt) {
+                topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': true, 'channel':'error'});
+            });
+
         }
 
 

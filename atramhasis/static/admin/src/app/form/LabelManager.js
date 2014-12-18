@@ -37,6 +37,7 @@ define([
                 labels: null,
                 tempLabels: null,//this variable is used to recover the labels if user delete a label and then press on the cancel button
                 EditLabelButton: null,
+                languageStore: null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -97,20 +98,15 @@ define([
                             style: { width: '120px' }
 
                         });
-                    var languages = this._getLanguages();
-                    self.prefLanguage = languages;
-                    var langStoreComboBox = new Select
-                    (
-                        {
-                            id: "langStoreComboBox",
-                            name: "langStoreComboBox",
-                            title: "Language:",
-                            placeHolder: 'Select a language',
-                            options: languages,
-                            style: { width: '80px' }
 
-                        }
-                    );
+                    var langStoreComboBox = new Select({
+                        id: "langStoreComboBox",
+                        name: "langStoreComboBox",
+                        title: "Language:",
+                        store: this.languageStore,
+                        style: { width: '80px' },
+                        labelAttr: "name"
+                    });
 
                     var addLabelButtonToTable = new Button
                     (
@@ -206,17 +202,6 @@ define([
                     return Type;
                 },
 
-                _getLanguages: function () {
-                    var languages = [
-                        {label: "NL", value: "nl", disabled: false},
-                        {label: "FR", value: "fr", disabled: false},
-                        {label: "EN", value: "en", disabled: false}
-
-                    ];
-
-                    return languages;
-
-                },
                 _createGrid: function (gridDiv) {
                     var self = this;
                     var columns;
