@@ -411,6 +411,13 @@ define([
             this.languageManager = languageManager;
             languageManager.startup();
 
+            on(languageManager, 'change', function (evt) {
+                topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': false, 'channel':'info'});
+            });
+            on(languageManager, 'error', function (evt) {
+                topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': true, 'channel':'error'});
+            });
+
         }
 
 

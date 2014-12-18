@@ -2,8 +2,12 @@ define([
     'dijit/_WidgetBase',
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/dom-construct',
     'dojo/on',
+    'dojo/when',
+    'dojo/Evented',
+    'dojo/json',
     'dojo/store/Memory',
     'dojo/store/JsonRest',
     'dojo/store/Cache',
@@ -15,12 +19,12 @@ define([
     'dgrid/Keyboard',
     'dgrid/Selection',
     'dgrid/extensions/DijitRegistry'
-], function (WidgetBase, declare, lang, domConstruct, on,
+], function (WidgetBase, declare, lang, array, domConstruct, on, when, Evented, JSON,
              Memory, JsonRest, Cache, Observable,
              Dialog, Button, TextBox,
              OnDemandGrid, dgridKeyboard, dgridSelection, DijitRegistry
     ) {
-    return declare([WidgetBase], {
+    return declare([WidgetBase, Evented], {
 
         languageStore: null,
 
@@ -106,7 +110,7 @@ define([
             }, dlg.containerNode);
 
             var deleteBtn = new Button({
-                "label": "Delete row"
+                "label": "Delete language"
             }).placeAt(actionBar);
 
             deleteBtn.onClick = lang.hitch(this, function () {
@@ -147,15 +151,55 @@ define([
         },
 
         _addLanguage: function (name, id) {
-            this.languageStore.add({name : name, id : id});
+            var self = this;
+            when(this.languageStore.add({name : name, id : id})).then(
+                function (lang) {
+                    var message = 'New language added: ' + lang.name;
+                    self._handleChange(message);
+                },
+                function (error) {
+                    self._handleError(error);
+                }
+            );
         },
 
         _deleteLanguage: function (id) {
-            this.languageStore.remove(id);
+            var self = this;
+            when(this.languageStore.remove(id)).then(
+                function () {
+                    var message = 'Language removed: ' + id;
+                    self._handleChange(message);
+                },
+                function (error) {
+                    self._handleError(error);
+                }
+            );
         },
 
         _handleError: function (error) {
+            var errorObj = JSON.parse(error.responseText);
+            var message = "";
+            array.forEach(errorObj.errors, function (errorObj) {
+                for (prop in errorObj) {
+                    message += "-<em>";
+                    message += prop;
+                    message += "</em>: ";
+                    message += errorObj[prop];
+                    message += "<br>";
+                }
+            });
 
+            this.emit('error', {
+                'title': errorObj.message,
+                'message': message
+            });
+        },
+
+        _handleChange: function (message) {
+            this.emit('change', {
+                'title': 'Languages',
+                'message': message
+            });
         },
 
         reset: function () {
