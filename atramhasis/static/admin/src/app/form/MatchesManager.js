@@ -267,16 +267,20 @@ define([
                     });
                 },
 
-                setMatchUris: function (matchesUris) {
+                setMatchUris: function (matchesUris, importscheme) {
                     var types = this.externalSchemeService.matchTypes;
                     var self = this;
                     arrayUtil.forEach(types, function(typeObj) {
                         var type = typeObj.value;
                         if (matchesUris[type]) {
                             arrayUtil.forEach(matchesUris[type], function(uri) {
-                                self.externalSchemeService.getMatch(uri, type).then(function (match){
-                                    self._addMatch(match);
-                                });
+                                try {
+                                    self.externalSchemeService.getMatch(uri, type, importscheme).then(function (match){
+                                        self._addMatch(match);
+                                    });
+                                } catch(err) {
+                                    topic.publish('dGrowl', err, {'title': "Error when setting match", 'sticky': true, 'channel':'error'});
+                                }
                             });
                         }
                     });

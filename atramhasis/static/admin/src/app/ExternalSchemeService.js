@@ -27,19 +27,17 @@ define([
             this.inherited(arguments);
         },
 
-        getMatch: function (uri, type) {
+        getMatch: function (uri, type, importscheme) {
             var pathArray =  uri.split('/');
             var id = pathArray.pop();
             var testUrl = pathArray.pop(); //remove 'concept' from url
             if (!testUrl) throw  "Malformed URI";
 
             var schemeUrl = pathArray.join('/');
-            var scheme = this.getScheme(schemeUrl);
+            var scheme = importscheme ? importscheme : this.getScheme(schemeUrl);
             if (!scheme) throw  "Malformed external scheme URI";
-            var url = "/conceptschemes/" + scheme.id + "/c/" + id;
 
-            var call = this.getConcept(uri);
-
+            var call = this.getConcept(scheme, uri);
             return call.then(function(concept) {
                 var match = {
                     type: type,
@@ -56,16 +54,11 @@ define([
             });
         },
 
-        getConcept: function (uri) {
+        getConcept: function (scheme, uri) {
             var pathArray =  uri.split('/');
             var id = pathArray.pop();
-            var testUrl = pathArray.pop(); //remove 'concept' from url
-            if (!testUrl) throw  "Malformed URI";
-
-            var schemeUrl = pathArray.join('/');
-            var scheme = this.getScheme(schemeUrl);
-            if (!scheme) throw  "Malformed external scheme URI";
-            var url = "/conceptschemes/" + scheme.id + "/c/" + id;
+            if (!scheme || !id) throw  "Malformed external scheme URI";
+            var url = "/conceptschemes/" + scheme + "/c/" + id;
 
             return xhr.get(url, {
                 handleAs: "json",
