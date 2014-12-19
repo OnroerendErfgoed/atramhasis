@@ -3,5 +3,7 @@
 {% block html_title %}Concept schemes{% endblock %}
 
 {% block content %}
-    content
+                                {% for item in conceptschemes %}
+                              {{ item }}
+                                {% endfor %}
 {% endblock %}
