@@ -285,7 +285,7 @@ def broader_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
 
 def narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy):
     for narrower_concept_id in narrower:
-        narrower_concept = request.db.query(DomainConcept).filter_by(concept_id=narrower_concept_id,
+        narrower_concept = request.db.query(Thing).filter_by(concept_id=narrower_concept_id,
                                                                      conceptscheme_id=conceptscheme_id).one()
         if narrower_concept is not None and narrower_concept.type == 'concept':
             narrower_concepts = [n.concept_id for n in narrower_concept.narrower_concepts]
