@@ -14,11 +14,11 @@ define([
         "dojo/store/JsonRest",
         "dijit/tree/ObjectStoreModel",
         "dijit/Tree",
-        "dojo/topic",
          "./ConceptDetailList",
         "dojo/text!./templates/RelationManager.html"
     ],
-    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory, Cache, JsonRest, ObjectStoreModel, Tree,Topic,ConceptDetailList, template) {
+    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory,
+              Cache, JsonRest, ObjectStoreModel, Tree,ConceptDetailList, template) {
         return declare(
             "app/form/RelationManager",
             [WidgetBase, TemplatedMixin],
@@ -47,12 +47,11 @@ define([
                             var dlg = self._createDialog();
                             dlg.show();
                         }
-                    }, this.relationButton)
+                    }, this.relationButton);
 
-                Topic.subscribe("relation.delete", function (relationId) {
 
-                    self._removeRelation(relationId);
-
+                    self.relationsList.on("relation.delete", function(evt){
+                        self._removeRelation(evt.relation.id);
                     });
                 },
 
@@ -85,7 +84,7 @@ define([
                 },
                  _createNodeList: function () {
                  var self=this;
-                 self.relationsList.buidList(self.relationsList.mapRelationsForList(self._relations), self.title, false,true);
+                 self.relationsList.buildList(self.relationsList.mapRelationsForList(self._relations), self.title, false,true);
 
                 },
 
@@ -176,12 +175,9 @@ define([
                     return dlg
                 },
 
-                reset: function (relationType) {
+                reset: function () {
                     this._relations = [];
                     this._createNodeList();
-                    var lab="Add "+relationType;
-                    this.EditRelationButton.set("label",lab);
-                    this.EditRelationButton.set("iconClass","plusIcon");
                 },
 
                 getRelations: function () {

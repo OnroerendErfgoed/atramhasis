@@ -22,6 +22,12 @@ Mappers
 .. automodule:: atramhasis.mappers
    :members:
 
+Protected Resources
+===================
+
+.. automodule:: atramhasis.protected_resources
+   :members:
+
 Service
 =======
 

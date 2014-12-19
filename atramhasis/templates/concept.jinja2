@@ -4,7 +4,8 @@
 
 {% from "macros.jinja2" import
     render_relaties_lijst,
-    render_labels
+    render_labels,
+    render_matches
 %}
 
 {% block content %}
@@ -76,6 +77,11 @@
         {% if concept.member_of|length > 0 %}
         <h4 class="subheader">{% trans %}member_of{% endtrans %}:</h4>
         {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
+        {% endif %}
+
+        {% if concept.matches|length > 0 %}
+        <h2 class="concept">{% trans %}matches{% endtrans %}</h2>
+        {{ render_matches(concept.matches) }}
         {% endif %}
 
     {% endif %}

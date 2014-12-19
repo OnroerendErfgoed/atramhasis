@@ -1,8 +1,17 @@
 import csv
 import codecs
+
 from six import StringIO, text_type, PY2
 from pyramid.renderers import JSON
-from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note
+from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note, Language
+from pyramid_skosprovider.utils import concept_adapter as skos_concept_adapter
+from pyramid_skosprovider.utils import collection_adapter as skos_collection_adapter
+from pyramid_skosprovider.utils import label_adapter as skos_label_adapter
+from pyramid_skosprovider.utils import note_adapter as skos_note_adapter
+from skosprovider.skos import Concept as SkosConcept
+from skosprovider.skos import Collection as SkosCollection
+from skosprovider.skos import Label as SkosLabel
+from skosprovider.skos import Note as SkosNote
 
 
 class UnicodeWriter:
@@ -56,6 +65,12 @@ def concept_adapter(obj, request):
     :param skosprovider_sqlalchemy.models.Concept obj: The concept to be rendered.
     :rtype: :class:`dict`
     '''
+    matches = {}
+    for m in obj.matches:
+        key = m.matchtype.name[:m.matchtype.name.find('Match')]
+        if not key in matches:
+            matches[key] = []
+        matches[key].append(m.uri)
     return {
         'id': obj.concept_id,
         'type': obj.type,
@@ -66,7 +81,8 @@ def concept_adapter(obj, request):
         'broader': [map_relation(c) for c in obj.broader_concepts],
         'narrower': [map_relation(c) for c in obj.narrower_concepts],
         'related': [map_relation(c) for c in obj.related_concepts],
-        'member_of': [map_relation(c) for c in obj.member_of]
+        'member_of': [map_relation(c) for c in obj.member_of],
+        'matches': matches
     }
 
 
@@ -126,7 +142,25 @@ def note_adapter(obj, request):
         'language': obj.language_id
     }
 
+
+def language_adaptor(obj, request):
+    '''
+    Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Language` to json.
+
+    :param skosprovider_sqlalchemy.models.Language obj: The language to be rendered.
+    :rtype: :class:`dict`
+    '''
+    return {
+        'id': obj.id,
+        'name': obj.name
+    }
+
 json_renderer_verbose.add_adapter(Concept, concept_adapter)
 json_renderer_verbose.add_adapter(Collection, collection_adapter)
 json_renderer_verbose.add_adapter(Label, label_adapter)
 json_renderer_verbose.add_adapter(Note, note_adapter)
+json_renderer_verbose.add_adapter(Language, language_adaptor)
+json_renderer_verbose.add_adapter(SkosConcept, skos_concept_adapter)
+json_renderer_verbose.add_adapter(SkosCollection, skos_collection_adapter)
+json_renderer_verbose.add_adapter(SkosLabel, skos_label_adapter)
+json_renderer_verbose.add_adapter(SkosNote, skos_note_adapter)

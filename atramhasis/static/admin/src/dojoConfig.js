@@ -11,6 +11,7 @@ var dojoConfig = {
 		'put-selector',
 		'xstyle',
 		'dgrid',
-		'app'
+		'app',
+        'dGrowl'
 	]
 };

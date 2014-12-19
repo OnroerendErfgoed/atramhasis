@@ -2,10 +2,12 @@
 @import '../../dijit/themes/claro/claro.css';
 @import '../../dgrid/css/dgrid.css';
 @import '../../dgrid/css/skins/claro.css';
+@import '../../dGrowl/dGrowl.css';
 
 @import 'FilteredGrid.css';
 @import 'ConceptForm.css';
 @import 'ConceptDetail.css';
+@import 'ExternalSchemeForm.css';
 
 html, body {
     width: 100%;
@@ -66,3 +68,17 @@ html, body {
     width: 11px;
     height: 11px;
 }
+
+.dGrowl-channel-warn .dGrowl-notification {
+	background-color: rgb(250, 217, 95);
+    border: 1px solid #b97422;
+}
+
+.dGrowl-notification {
+	width: 250px;
+}
+
+.dGrowl-channel {
+	width: 280px;
+}
+
