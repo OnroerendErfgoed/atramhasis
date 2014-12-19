@@ -5,7 +5,7 @@
 {% block content %}
     <div class="row">
         <div class="large-12 columns">
-            <h1 class="concept">Schemes</h1>
+            <h1 class="concept">{% trans %}select_scheme{% endtrans %}</h1>
                 <ul>
                 {% for item in conceptschemes %}
                   <li><a href='{{ item.uri }}'>{{ item.id }}</a></li>
