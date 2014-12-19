@@ -55,7 +55,7 @@ species = {
 }
 
 trees = DictionaryProvider(
-    {'id': 'TREES', 'default_language': 'nl'},
+    {'id': 'TREES', 'default_language': 'nl', 'conceptscheme_id': 1},
     [larch, chestnut, species]
 )
 
