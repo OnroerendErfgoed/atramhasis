@@ -90,6 +90,29 @@ class AtramhasisView(object):
 
         return {'conceptschemes': conceptschemes}
 
+    @view_config(route_name='conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
+    def conceptscheme_view(self):
+        '''
+        This view displays conceptscheme details.
+
+        :param request: A :class:`pyramid.request.Request`
+        '''
+        scheme_id = self.request.matchdict['scheme_id']
+        provider = self.request.skos_registry.get_provider(scheme_id)
+        conceptScheme = provider.concept_scheme
+        title = conceptScheme.label().label if (conceptScheme.label()) else scheme_id
+
+        scheme = {
+            'scheme_id': scheme_id,
+            'title': title,
+            'uri': conceptScheme.uri,
+            'labels': conceptScheme.labels,
+            'notes': conceptScheme.notes,
+            'top_concepts':  provider.get_top_concepts()
+        }
+
+        return {'conceptscheme': scheme}
+
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
         '''

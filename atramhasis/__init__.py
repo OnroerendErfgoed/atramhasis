@@ -14,7 +14,8 @@ def includeme(config):
     config.include('pyramid_rewrite')
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')
-    config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html')
+    config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html', request_method="GET")
+    config.add_route('conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='text/html', request_method="GET")
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
                      request_method="GET")
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
