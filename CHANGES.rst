@@ -37,6 +37,7 @@
 - Update to skosprovider_rdf_ 0.3.0. This update adds support for dumping 
   ConceptScheme in an RDF file and also handles *subordinate_arrays* and
   *superordinates*.
+- Update to language_tag_ 0.3.0.
 
 0.3.1 (05-09-2014)
 ------------------
