@@ -3,7 +3,14 @@
 {% block html_title %}Concept schemes{% endblock %}
 
 {% block content %}
-                                {% for item in conceptschemes %}
-                              {{ item }}
-                                {% endfor %}
+    <div class="row">
+        <div class="large-12 columns">
+            <h1 class="concept">Schemes</h1>
+                <ul>
+                {% for item in conceptschemes %}
+                  <li><a href='{{ item.uri }}'>{{ item.id }}</a></li>
+                {% endfor %}
+                </ul>
+        </div>
+    </div>
 {% endblock %}
