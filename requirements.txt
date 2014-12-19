@@ -2,12 +2,12 @@
 # pyramid
 pyramid==1.5.1
 pyramid-tm==0.7
+pyramid_rewrite==0.2
 
 # skos
 skosprovider==0.5.0
 skosprovider_sqlalchemy==0.4.1
-#pyramid_skosprovider==0.4.0
--e git+https://github.com/koenedaele/pyramid_skosprovider#egg=pyramid_skosprovider
+pyramid_skosprovider==0.5.0
 #skosprovider_rdf==0.3.0
 -e git+https://github.com/OnroerendErfgoed/skosprovider_rdf#egg=skosprovider_rdf
 #skosprovider_getty

@@ -85,7 +85,7 @@ class AtramhasisView(object):
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'uri': self.request.db.query(ConceptScheme).filter_by(id=x.get_metadata()['conceptscheme_id']).one().uri}
-            for x in self.skos_registry.get_providers()
+            for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
         ]
 
         return {'conceptschemes': conceptschemes}
