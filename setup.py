@@ -77,7 +77,8 @@ requires = [
     'colander',
     'requests',
     'dogpile.cache',
-    'six'
+    'six',
+    'pyramid_rewrite'
 ]
 
 setup(name='atramhasis',

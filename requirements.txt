@@ -2,6 +2,7 @@
 # pyramid
 pyramid==1.5.1
 pyramid-tm==0.7
+pyramid_rewrite==0.2
 
 # skos
 skosprovider==0.5.0
