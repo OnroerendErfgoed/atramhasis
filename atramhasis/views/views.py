@@ -99,16 +99,16 @@ class AtramhasisView(object):
         '''
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
-        conceptscheme_id = provider.get_metadata()['conceptscheme_id']
-        conceptScheme = self.request.db.query(ConceptScheme).filter_by(id=conceptscheme_id).one()
+        conceptScheme = provider.concept_scheme
+        title = conceptScheme.label().label if (conceptScheme.label()) else scheme_id
 
         scheme = {
             'scheme_id': scheme_id,
-            'title': conceptScheme.label() or scheme_id,
+            'title': title,
             'uri': conceptScheme.uri,
             'labels': conceptScheme.labels,
             'notes': conceptScheme.notes,
-            'topConcepts':  provider.get_top_concepts()
+            'top_concepts':  provider.get_top_concepts()
         }
 
         return {'conceptscheme': scheme}

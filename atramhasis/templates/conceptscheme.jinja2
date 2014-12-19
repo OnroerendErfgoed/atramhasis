@@ -2,11 +2,47 @@
 
 {% block html_title %}Concept schemes{% endblock %}
 
+{% from "macros.jinja2" import
+    render_labels
+%}
+
 {% block content %}
     <div class="row">
         <div class="large-12 columns">
             <h1 class="concept">{{ conceptscheme.title }}</h1>
+            <ul>
+                <li>id: {{ conceptscheme.scheme_id }}</li>
+                {% if conceptscheme.uri %}
+                <li>uri: <a href="{{ conceptscheme.uri }}">{{ conceptscheme.uri }}</a></li>
+                {% endif %}
+            </ul>
 
+            {% if conceptscheme.labels %}
+            <h2 class="concept">{% trans %}labels{% endtrans %}</h2>
+            <ul>
+                {%- for label in conceptscheme.labels %}
+                    <li>{{ label.type }} <em class="language">({{ label.language }})</em>: {{ label.label }}</li>
+                {%- endfor %}
+            </ul>
+            {% endif %}
+
+            {% if conceptscheme.notes %}
+            <h2 class="concept">{% trans %}notes{% endtrans %}</h2>
+            <ul>
+                {%- for note in conceptscheme.notes %}
+                    <li>{{ note.notetype_id }} <em class="language">({{ note.language }})</em>: {{ note.note}}</li>
+                {%- endfor %}
+            </ul>
+            {% endif %}
+
+            {% if conceptscheme.top_concepts %}
+            <h2 class="concept">top {% trans %}type_concept{% endtrans %}</h2>
+            <ul>
+                {%- for concept in conceptscheme.top_concepts %}
+                    <li>{{ concept.label }} (<a href = {{ concept.uri }}>{{ concept.uri }}</a>)</li>
+                {%- endfor %}
+            </ul>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
