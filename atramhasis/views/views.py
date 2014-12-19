@@ -74,6 +74,16 @@ class AtramhasisView(object):
         conceptschemes = [x.get_metadata() for x in self.skos_registry.get_providers()]
         return {'conceptschemes': conceptschemes}
 
+    @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
+    def conceptschemes_view(self):
+        '''
+        This view displays a list of available conceptschemes.
+
+        :param request: A :class:`pyramid.request.Request`
+        '''
+        conceptschemes = [x.get_metadata() for x in self.skos_registry.get_providers()]
+        return {'conceptschemes': conceptschemes}
+
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
         '''
