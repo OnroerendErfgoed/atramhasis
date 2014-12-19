@@ -179,7 +179,7 @@ define([
                                 console.error(err);
                             });
                         } catch(err) {
-                            console.error(err);
+                            topic.publish('dGrowl', err, {'title': "Error when looking up match", 'sticky': true, 'channel':'error'});
                         }
                     });
                 }

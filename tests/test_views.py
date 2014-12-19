@@ -4,15 +4,15 @@ import unittest
 
 from skosprovider.registry import Registry
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note, LabelType, NoteType
+from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note, LabelType, NoteType, ConceptScheme
 from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException,\
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException, \
     DbNotFoundException
 from atramhasis.views import tree_cache_dictionary
-from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView,\
+from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView, \
     labels_to_string, get_definition
 from fixtures.data import trees
 
@@ -41,7 +41,10 @@ def db(request):
 
 def create_query_mock(some_class):
     query_mock = Mock()
-    query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    if some_class == Concept or some_class == Collection or some_class == Thing:
+        query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
+    elif some_class == ConceptScheme:
+        query_mock.filter_by = Mock(side_effect=filter_by_mock_conceptscheme)
     query_mock.all = get_all_mock()
     query_mock.options = Mock(side_effect=options_mock)
     return query_mock
@@ -70,6 +73,15 @@ def get_all_mock():
     b_concept.labels = b_labels
     all_mock = Mock(return_value=[a_concept, b_concept])
     return all_mock
+
+
+def filter_by_mock_conceptscheme(**kwargs):
+    filter_mock = Mock()
+    concept_scheme = ConceptScheme()
+    concept_scheme.id = 1
+    concept_scheme.uri = "urn:test:test"
+    filter_mock.one = Mock(return_value=concept_scheme)
+    return filter_mock
 
 
 def filter_by_mock_concept(**kwargs):
@@ -172,6 +184,36 @@ class TestFavicoView(unittest.TestCase):
         self.assertIn('image/x-icon', response.headers['Content-Type'])
         self.assertIsNotNone(response.body)
 
+
+class TestConceptSchemeView(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+        self.request = testing.DummyRequest()
+        self.request.db = db(self.request)
+        self.request.skos_registry = self.regis
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_conceptschemes_view(self):
+        atramhasisview = AtramhasisView(self.request)
+        res = atramhasisview.conceptschemes_view()
+        self.assertEqual({'conceptschemes': [{'id': u'TREES', 'uri': 'urn:test:test'}]}, res)
+
+    def test_conceptscheme_view(self):
+        self.request.matchdict['scheme_id'] = 'TREES'
+        atramhasisview = AtramhasisView(self.request)
+        res = atramhasisview.conceptscheme_view()
+        self.assertIsNotNone(res)
+        self.assertIsNotNone(res['conceptscheme'])
+        self.assertEqual(res['conceptscheme']['title'], 'TREES')
+        self.assertEqual(res['conceptscheme']['scheme_id'], 'TREES')
+        self.assertEqual(res['conceptscheme']['uri'], 'urn:x-skosprovider:trees')
+        self.assertIsNotNone(res['conceptscheme']['labels'])
+        self.assertIsNotNone(res['conceptscheme']['notes'])
+        self.assertIsNotNone(res['conceptscheme']['top_concepts'])
 
 class TestConceptView(unittest.TestCase):
     def setUp(self):
@@ -489,7 +531,6 @@ class TestAdminView(unittest.TestCase):
 
 
 class TestViewFunctions(unittest.TestCase):
-
     def test_labels_to_string(self):
         labels = [Label(label='De Paardekastanje', language_id='nl'), Label(label='la châtaigne', language_id='fr')]
         s = labels_to_string(labels, 'prefLabel')
@@ -503,7 +544,6 @@ class TestViewFunctions(unittest.TestCase):
 
 
 class TestListViews(unittest.TestCase):
-
     def setUp(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()

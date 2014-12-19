@@ -18,15 +18,20 @@ define(
                 constructor: function (/*Object*/ args) {
                     declare.safeMixin(this, args);
                     request.get(
-                        '/conceptschemes',
-                        {'handleAs': 'json'}
+                        '/conceptschemes',{
+                            'handleAs': 'json',
+                            'headers': {
+                                "Accept": "application/json"
+                            }
+                        }
                     ).then(lang.hitch(this, function (schemes) {
                             var externalSchemelist = [];
                             array.forEach(schemes, lang.hitch(this, function (scheme) {
                                 if(array.indexOf(scheme.subject, 'external') == -1){
                                     this.schemelist.push({name: scheme.id, id: scheme.id});
                                     this.stores[scheme.id] = new JsonRest({
-                                        'target': '/conceptschemes/' + scheme.id + '/c/'
+                                        'target': '/conceptschemes/' + scheme.id + '/c/',
+                                        'accepts': 'application/json'
                                     });
                                 }else{
                                     externalSchemelist.push(scheme);

@@ -22,6 +22,8 @@ define([
 
         _dialog: null,
 
+        _selectedScheme: null,
+
         postCreate: function () {
             this.inherited(arguments);
         },
@@ -70,9 +72,11 @@ define([
                 onClick: function(){
                     self.externalSchemeService.searchConcepts(selectScheme.value, textFilter.value).then(
                         function(data){
+                            self._selectedScheme = selectScheme.value;
                             self._externalConceptList.refresh();
                             self._externalConceptList.renderArray(data);
                         }, function(err){
+                            self._selectedScheme = null;
                             console.error(err);
                         }
                     );
@@ -113,7 +117,7 @@ define([
                 }
 
                 if (row) {
-                    self.emit('select', {concept:  row.data});
+                    self.emit('select', {concept: row.data, scheme: self._selectedScheme});
                     dlg.hide();
                 }
                 else {

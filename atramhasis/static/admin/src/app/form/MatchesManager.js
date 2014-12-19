@@ -274,9 +274,13 @@ define([
                         var type = typeObj.value;
                         if (matchesUris[type]) {
                             arrayUtil.forEach(matchesUris[type], function(uri) {
-                                self.externalSchemeService.getMatch(uri, type).then(function (match){
-                                    self._addMatch(match);
-                                });
+                                try {
+                                    self.externalSchemeService.getMatch(uri, type).then(function (match){
+                                        self._addMatch(match);
+                                    });
+                                } catch(err) {
+                                    topic.publish('dGrowl', err, {'title': "Error when setting match", 'sticky': true, 'channel':'error'});
+                                }
                             });
                         }
                     });

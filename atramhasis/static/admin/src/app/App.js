@@ -173,8 +173,8 @@ define([
             this.externalSchemeForm.startup();
 
             on(this.externalSchemeForm, 'select', function (evt) {
-                if (evt.concept && evt.concept.uri){
-                    self._importConcept(conceptForm, conceptDialog, evt.concept.uri);
+                if (evt.concept && evt.concept.uri && evt.scheme){
+                    self._importConcept(conceptForm, conceptDialog, evt.concept.uri, evt.scheme);
                 }
                 else {
                     console.error('No valid URI.');
@@ -372,24 +372,28 @@ define([
             conceptDialog.show();
         },
 
-        _importConcept: function (conceptForm, conceptDialog, concepturi) {
+        _importConcept: function (conceptForm, conceptDialog, concepturi, importscheme) {
             var scheme = this.currentScheme;
-            this.externalSchemeService.getConcept(concepturi).then(function(concept) {
-                var clone = {
-                    label: concept.label,
-                    labels: concept.labels,
-                    type: concept.type,
-                    notes: concept.notes,
-                    matches: {
-                        exact: [concepturi]
-                    }
-                };
-                conceptForm.init(scheme, clone);
-                conceptDialog.set("title", "Import concept or collection");
-                conceptDialog.show();
-            }, function(err){
-                console.error(err);
-            });
+            try {
+                this.externalSchemeService.getConcept(importscheme, concepturi).then(function(concept) {
+                    var clone = {
+                        label: concept.label,
+                        labels: concept.labels,
+                        type: concept.type,
+                        notes: concept.notes,
+                        matches: {
+                            exact: [concepturi]
+                        }
+                    };
+                    conceptForm.init(scheme, clone);
+                    conceptDialog.set("title", "Import concept or collection");
+                    conceptDialog.show();
+                }, function(err){
+                    console.error(err);
+                });
+            } catch(err) {
+                topic.publish('dGrowl', "", {'title': err, 'sticky': true, 'channel':'error'});
+            }
         },
 
         _handleSaveErrors: function(error) {
