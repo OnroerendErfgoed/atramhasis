@@ -1,5 +1,5 @@
-0.4.0 (???)
------------
+0.4.0 (??-12-2014)
+------------------
 
 - Update to skosprovider_ 0.5.0. Among other things, this makes it possible
   to handle relations between Concepts and Collections using the 
@@ -22,8 +22,14 @@
   external ConceptSchemes through properties such as *skos:exactMatch* and
   *skos:closeMatch*.
 - Ability to import Concepts and Collections from external providers. This 
-  makes it possible to import Concepts from eg. the AAT (via skosprovider_getty_) 
-  or any other SKOS vocabulary for which a skosprovider_ has been written.
+  makes it possible to import Concepts from eg. the AAT (via skosprovider_getty_),
+  Flanders Heritage Thesauri (via skosprovider_oe_),
+  English Heritage Thesauri (via skosprovider_heritagedata_) or any other 
+  SKOS vocabulary for which a skosprovider_ has been written. Currently only 
+  the concept or collection itself can be imported, without its relations to 
+  other concepts or collections.
+- Add the ability to have a delete of a concept or collection fail if it is 
+  being used in other systems.
 - Implement a delete permission.
 - Add validation rule that a Concept must have at least one label.
 - Update to skosprovider_sqlalchemy_ 0.4.1.
@@ -82,5 +88,7 @@
 .. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
 .. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org
 .. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
+.. _skosprovider_oe: https://github.com/koenedaele/skosprovider_oe
+.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
 .. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
 .. _language_tag: http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
