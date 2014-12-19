@@ -82,6 +82,7 @@ def concept_adapter(obj, request):
         'narrower': [map_relation(c) for c in obj.narrower_concepts],
         'related': [map_relation(c) for c in obj.related_concepts],
         'member_of': [map_relation(c) for c in obj.member_of],
+        'subordinate_arrays': [map_relation(c) for c in obj.narrower_collections],
         'matches': matches
     }
 
@@ -100,7 +101,8 @@ def collection_adapter(obj, request):
         'label': obj.label().label if obj.label() else None,
         'labels': obj.labels,
         'members': [map_relation(c) for c in obj.members],
-        'member_of': [map_relation(c) for c in obj.member_of]
+        'member_of': [map_relation(c) for c in obj.member_of],
+        'superordinates': [map_relation(c) for c in obj.broader_concepts]
     }
 
 

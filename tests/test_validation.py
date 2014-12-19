@@ -886,3 +886,116 @@ class TestValidation(unittest.TestCase):
         self.assertIsNone(validated_language)
         self.assertIsNotNone(error)
         self.assertIn({"id": "Invalid language tag: Unknown code 'flup', Missing language tag in 'flup'."}, error.errors)
+
+    def test_subordinate_arrays(self):
+        error_raised = False
+        validated_json = None
+        self.json_concept['subordinate_arrays'] = [{"id": 667}]
+        try:
+            validated_json = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_json)
+
+    def test_subordinate_arrays_no_concept(self):
+        error_raised = False
+        validated_json = None
+        error = None
+        self.json_collection['subordinate_arrays'] = [{"id": 666}]
+        try:
+            validated_json = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_json)
+        self.assertIsNotNone(error)
+        self.assertIn({'subordinate_arrays': 'Only concept can have subordinate arrays.'}, error.errors)
+
+    def test_subordinate_arrays_no_collection(self):
+        error_raised = False
+        validated_json = None
+        error = None
+        self.json_concept['subordinate_arrays'] = [{"id": 7}]
+        try:
+            validated_json = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_json)
+        self.assertIsNotNone(error)
+        self.assertIn({'subordinate_arrays': 'A subordinate array should always be a collection'}, error.errors)
+
+    def test_subordinate_arrays_hierarchy(self):
+        error_raised = False
+        validated_json = None
+        error = None
+        self.json_concept['subordinate_arrays'] = [{"id": 666}]
+        try:
+            validated_json = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_json)
+        self.assertIsNotNone(error)
+        self.assertIn({'subordinate_arrays': 'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.'}, error.errors)
+
+    def test_superordinates(self):
+        error_raised = False
+        validated_json = None
+        self.json_collection['superordinates'] = [{"id": 7}]
+        try:
+            validated_json = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError:
+            error_raised = True
+        self.assertFalse(error_raised)
+        self.assertIsNotNone(validated_json)
+
+    def test_superordinates_no_concept(self):
+        error_raised = False
+        validated_json = None
+        error = None
+        self.json_collection['superordinates'] = [{"id": 666}]
+        try:
+            validated_json = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_json)
+        self.assertIsNotNone(error)
+        self.assertIn({'superordinates': 'A superordinate should always be a concept'}, error.errors)
+
+    def test_superordinates_no_collection(self):
+        error_raised = False
+        validated_json = None
+        error = None
+        self.json_concept['superordinates'] = [{"id": 7}]
+        try:
+            validated_json = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_json)
+        self.assertIsNotNone(error)
+        self.assertIn({'superordinates': 'Only collection can have superordinates.'}, error.errors)
+
+    def test_superordinates_hierarchy(self):
+        error_raised = False
+        validated_json = None
+        error = None
+        self.json_collection['superordinates'] = [{"id": 61}]
+        try:
+            validated_json = self.concept_schema.deserialize(self.json_collection)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_json)
+        self.assertIsNotNone(error)
+        self.assertIn({'superordinates': 'The superordinates of a collection must not itself be a member of the collection being edited.'}, error.errors)
+
