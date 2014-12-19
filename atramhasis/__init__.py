@@ -11,7 +11,8 @@ def includeme(config):
     config.add_renderer('csv', 'atramhasis.renderers.CSVRenderer')
     config.add_renderer('skosrenderer_verbose', json_renderer_verbose)
     config.add_route('home', '/')
-    config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html')
+    config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html', request_method="GET")
+    config.add_route('conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='text/html', request_method="GET")
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
                      request_method="GET")
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
