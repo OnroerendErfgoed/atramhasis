@@ -176,7 +176,7 @@ define(
                     this.matchesManager.reset();
                 },
 
-                init: function (scheme, concept, importscheme) {
+                init: function (scheme, concept) {
                     console.log("init cdialog: " + scheme);
                     this.reset();
                     this.scheme = scheme;
@@ -226,7 +226,7 @@ define(
                         }
                         if(concept.matches)
                         {
-                            this.matchesManager.setMatchUris(concept.matches, importscheme);
+                            this.matchesManager.setMatchUris(concept.matches);
                         }
                     }
                     this.dialog && this.dialog.layout();
