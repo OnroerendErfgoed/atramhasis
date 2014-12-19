@@ -37,7 +37,7 @@
 - Update to skosprovider_rdf_ 0.3.0. This update adds support for dumping 
   ConceptScheme in an RDF file and also handles *subordinate_arrays* and
   *superordinates*.
-- Update to language_tag_ 0.3.0.
+- Update to language_tags_ 0.3.0.
 
 0.3.1 (05-09-2014)
 ------------------
@@ -92,4 +92,4 @@
 .. _skosprovider_oe: https://github.com/koenedaele/skosprovider_oe
 .. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
 .. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
-.. _language_tag: http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+.. _language_tags: http://language-tags.readthedocs.org
