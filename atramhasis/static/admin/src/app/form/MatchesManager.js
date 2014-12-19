@@ -267,7 +267,7 @@ define([
                     });
                 },
 
-                setMatchUris: function (matchesUris, importscheme) {
+                setMatchUris: function (matchesUris) {
                     var types = this.externalSchemeService.matchTypes;
                     var self = this;
                     arrayUtil.forEach(types, function(typeObj) {
@@ -275,7 +275,7 @@ define([
                         if (matchesUris[type]) {
                             arrayUtil.forEach(matchesUris[type], function(uri) {
                                 try {
-                                    self.externalSchemeService.getMatch(uri, type, importscheme).then(function (match){
+                                    self.externalSchemeService.getMatch(uri, type).then(function (match){
                                         self._addMatch(match);
                                     });
                                 } catch(err) {

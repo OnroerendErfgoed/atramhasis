@@ -27,27 +27,28 @@ define([
             this.inherited(arguments);
         },
 
-        getMatch: function (uri, type, importscheme) {
-            var pathArray =  uri.split('/');
-            var id = pathArray.pop();
-            var testUrl = pathArray.pop(); //remove 'concept' from url
-            if (!testUrl) throw  "Malformed URI";
-
-            var schemeUrl = pathArray.join('/');
-            var scheme = importscheme ? importscheme : this.getScheme(schemeUrl);
-            if (!scheme) throw  "Malformed external scheme URI";
-
-            var call = this.getConcept(scheme, uri);
-            return call.then(function(concept) {
-                var match = {
-                    type: type,
-                    data: {
-                        id: id,
-                        label: concept.labels[0].label,
-                        uri: uri
-                    }
-                };
-                return match;
+        getMatch: function (uri, type) {
+            var self = this;
+            return xhr.get('/uris/' + uri, {
+                handleAs: "json",
+                headers: {'Accept' : 'application/json'}
+            }).then(function(data){
+                var id = data.id;
+                var scheme = data.concept_scheme.id;
+                var call = self.getConcept(scheme, uri);
+                return call.then(function(concept) {
+                    return {
+                        type: type,
+                        data: {
+                            id: id,
+                            label: concept.labels[0].label,
+                            uri: uri
+                        }
+                    };
+                }, function(err){
+                    console.error(err);
+                    throw err;
+                });
             }, function(err){
                 console.error(err);
                 throw err;

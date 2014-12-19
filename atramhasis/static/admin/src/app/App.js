@@ -385,7 +385,7 @@ define([
                             exact: [concepturi]
                         }
                     };
-                    conceptForm.init(scheme, clone, importscheme);
+                    conceptForm.init(scheme, clone);
                     conceptDialog.set("title", "Import concept or collection");
                     conceptDialog.show();
                 }, function(err){
