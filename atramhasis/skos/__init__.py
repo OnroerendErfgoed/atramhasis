@@ -52,6 +52,11 @@ def includeme(config):   # pragma: no cover
         scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2'
     )
 
+    EH_MATERIALS = HeritagedataProvider(
+        {'id': 'EH_MATERIALS', 'subject': ['external']},
+        scheme_uri='http://purl.org/heritagedata/schemes/eh_tbm'
+    )
+
     skosregis = config.get_skos_registry()
     skosregis.register_provider(TREES)
     skosregis.register_provider(GEO)
@@ -61,3 +66,4 @@ def includeme(config):   # pragma: no cover
     skosregis.register_provider(TGN)
     skosregis.register_provider(EH_PERIOD)
     skosregis.register_provider(EH_MONUMENT_TYPE)
+    skosregis.register_provider(EH_MATERIALS)

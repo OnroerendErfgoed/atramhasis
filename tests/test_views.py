@@ -198,11 +198,22 @@ class TestConceptSchemeView(unittest.TestCase):
         testing.tearDown()
 
     def test_conceptschemes_view(self):
-        self.request.matchdict['scheme_id'] = 'TREES'
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.conceptschemes_view()
         self.assertEqual({'conceptschemes': [{'id': u'TREES', 'uri': 'urn:test:test'}]}, res)
 
+    def test_conceptscheme_view(self):
+        self.request.matchdict['scheme_id'] = 'TREES'
+        atramhasisview = AtramhasisView(self.request)
+        res = atramhasisview.conceptscheme_view()
+        self.assertIsNotNone(res)
+        self.assertIsNotNone(res['conceptscheme'])
+        self.assertEqual(res['conceptscheme']['title'], 'TREES')
+        self.assertEqual(res['conceptscheme']['scheme_id'], 'TREES')
+        self.assertEqual(res['conceptscheme']['uri'], 'urn:x-skosprovider:trees')
+        self.assertIsNotNone(res['conceptscheme']['labels'])
+        self.assertIsNotNone(res['conceptscheme']['notes'])
+        self.assertIsNotNone(res['conceptscheme']['top_concepts'])
 
 class TestConceptView(unittest.TestCase):
     def setUp(self):
