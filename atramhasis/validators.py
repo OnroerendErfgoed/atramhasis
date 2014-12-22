@@ -83,6 +83,8 @@ class Concept(colander.MappingSchema):
     related = Concepts(missing=[])
     members = Concepts(missing=[])
     member_of = Concepts(missing=[])
+    subordinate_arrays = Concepts(missing=[])
+    superordinates = Concepts(missing=[])
     matches = Matches(missing={})
 
 
@@ -162,6 +164,20 @@ def concept_schema_validator(node, cstruct):
         matches = copy.deepcopy(cstruct['matches'])
         concept_matches_rule(errors, node['matches'], matches, concept_type)
         concept_matches_unique_rule(errors, node['matches'], matches)
+
+    if 'subordinate_arrays' in cstruct:
+        subordinate_arrays = copy.deepcopy(cstruct['subordinate_arrays'])
+        subordinate_arrays = [m['id'] for m in subordinate_arrays]
+        subordinate_arrays_only_in_concept_rule(errors, node['subordinate_arrays'], concept_type, subordinate_arrays)
+        subordinate_arrays_type_rule(errors, node['subordinate_arrays'], request, conceptscheme_id, subordinate_arrays)
+        subordinate_arrays_hierarchy_rule(errors, node['subordinate_arrays'], request, conceptscheme_id, cstruct)
+
+    if 'superordinates' in cstruct:
+        superordinates = copy.deepcopy(cstruct['superordinates'])
+        superordinates = [m['id'] for m in superordinates]
+        superordinates_only_in_concept_rule(errors, node['superordinates'], concept_type, superordinates)
+        superordinates_type_rule(errors, node['superordinates'], request, conceptscheme_id, superordinates)
+        superordinates_hierarchy_rule(errors, node['superordinates'], request, conceptscheme_id, cstruct)
 
     if len(errors) > 0:
         raise ValidationError(
@@ -286,7 +302,7 @@ def broader_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
 def narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy):
     for narrower_concept_id in narrower:
         narrower_concept = request.db.query(Thing).filter_by(concept_id=narrower_concept_id,
-                                                                     conceptscheme_id=conceptscheme_id).one()
+                                                             conceptscheme_id=conceptscheme_id).one()
         if narrower_concept is not None and narrower_concept.type == 'concept':
             narrower_concepts = [n.concept_id for n in narrower_concept.narrower_concepts]
             for narrower_id in narrower_concepts:
@@ -361,8 +377,11 @@ def memberof_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
 
 def members_hierarchy_build(request, conceptscheme_id, members, members_hierarchy):
     for members_concept_id in members:
-        members_concept = request.db.query(Thing).filter_by(concept_id=members_concept_id,
-                                                            conceptscheme_id=conceptscheme_id).one()
+        try:
+            members_concept = request.db.query(Thing).filter_by(concept_id=members_concept_id,
+                                                                conceptscheme_id=conceptscheme_id).one()
+        except NoResultFound:
+            members_concept = None
         if members_concept is not None and members_concept.type == 'collection':
             members_concepts = [n.concept_id for n in members_concept.members]
             for members_id in members_concepts:
@@ -452,3 +471,79 @@ def languagetag_checkduplicate(node, language_tag, request, errors):
             node,
             'Duplicate language tag: %s' % language_tag)
         )
+
+
+def subordinate_arrays_only_in_concept_rule(errors, node, concept_type, subordinate_arrays):
+    if concept_type != 'concept' and len(subordinate_arrays) > 0:
+        errors.append(colander.Invalid(
+            node,
+            'Only concept can have subordinate arrays.'
+        ))
+
+
+def subordinate_arrays_type_rule(errors, node_location, request, conceptscheme_id, subordinate_arrays):
+    for subordinate_id in subordinate_arrays:
+        subordinate = request.db.query(Thing).filter_by(concept_id=subordinate_id,
+                                                        conceptscheme_id=conceptscheme_id).one()
+        if subordinate.type != 'collection':
+            errors.append(colander.Invalid(
+                node_location,
+                'A subordinate array should always be a collection'
+            ))
+
+
+def subordinate_arrays_hierarchy_rule(errors, node_location, request, conceptscheme_id, cstruct):
+    member_of_hierarchy = []
+    subordinate_arrays = []
+    if 'subordinate_arrays' in cstruct:
+        subordinate_arrays = copy.deepcopy(cstruct['subordinate_arrays'])
+        subordinate_arrays = [m['id'] for m in subordinate_arrays]
+    if 'member_of' in cstruct:
+        member_of = copy.deepcopy(cstruct['member_of'])
+        member_of = [m['id'] for m in member_of]
+        member_of_hierarchy = member_of
+        members_hierarchy_build(request, conceptscheme_id, member_of, member_of_hierarchy)
+    for subordinate_array_id in subordinate_arrays:
+        if subordinate_array_id in member_of_hierarchy:
+            errors.append(colander.Invalid(
+                node_location,
+                'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.'
+            ))
+
+
+def superordinates_only_in_concept_rule(errors, node, concept_type, superordinates):
+    if concept_type != 'collection' and len(superordinates) > 0:
+        errors.append(colander.Invalid(
+            node,
+            'Only collection can have superordinates.'
+        ))
+
+
+def superordinates_type_rule(errors, node_location, request, conceptscheme_id, superordinates):
+    for superordinate_id in superordinates:
+        superordinate = request.db.query(Thing).filter_by(concept_id=superordinate_id,
+                                                          conceptscheme_id=conceptscheme_id).one()
+        if superordinate.type != 'concept':
+            errors.append(colander.Invalid(
+                node_location,
+                'A superordinate should always be a concept'
+            ))
+
+
+def superordinates_hierarchy_rule(errors, node_location, request, conceptscheme_id, cstruct):
+    members_hierarchy = []
+    superordinates = []
+    if 'superordinates' in cstruct:
+        superordinates = copy.deepcopy(cstruct['superordinates'])
+        superordinates = [m['id'] for m in superordinates]
+    if 'members' in cstruct:
+        members = copy.deepcopy(cstruct['members'])
+        members = [m['id'] for m in members]
+        members_hierarchy = members
+        members_hierarchy_build(request, conceptscheme_id, members, members_hierarchy)
+    for superordinates_id in superordinates:
+        if superordinates_id in members_hierarchy:
+            errors.append(colander.Invalid(
+                node_location,
+                'The superordinates of a collection must not itself be a member of the collection being edited.'
+            ))

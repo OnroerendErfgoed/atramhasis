@@ -8,12 +8,10 @@ pyramid_rewrite==0.2
 skosprovider==0.5.0
 skosprovider_sqlalchemy==0.4.1
 pyramid_skosprovider==0.5.0
-#skosprovider_rdf==0.3.0
--e git+https://github.com/OnroerendErfgoed/skosprovider_rdf#egg=skosprovider_rdf
+skosprovider_rdf==0.3.0
 #skosprovider_getty
 -e git+https://github.com/OnroerendErfgoed/skosprovider_getty#egg=skosprovider_getty
-#skosprovider_heritagedata
--e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata#egg=skosprovider_heritagedata
+skosprovider_heritagedata==0.2.0
 
 #language-tags
 language-tags==0.3.0
