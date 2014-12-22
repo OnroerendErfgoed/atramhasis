@@ -78,6 +78,16 @@ define(
                         'title': 'Member of',
                         'scheme': this.scheme
                     }, this.memberofContainerNode);
+                    this.subordinateArraysManager = new RelationManager({
+                        'name': 'subordinateArraysMgr',
+                        'title': 'Subordinate Arrays',
+                        'scheme': this.scheme
+                    }, this.subordinateArraysContainerNode);
+                    this.superordinatesManager = new RelationManager({
+                        'name': 'superordinatesMgr',
+                        'title': 'Superordinates',
+                        'scheme': this.scheme
+                    }, this.superordinatesContainerNode);
                     this.matchesManager = new MatchesManager({
                         'name': 'matchesMgr',
                         'title': 'Match',
@@ -113,6 +123,8 @@ define(
                             self.membersManager.open();
                             self.memberofManager.open();
                             self.matchesManager.close();
+                            self.subordinateArraysManager.close();
+                            self.superordinatesManager.open();
                         }
                         else if (val == 'concept') {
                             self.broaderManager.open();
@@ -121,6 +133,8 @@ define(
                             self.membersManager.close();
                             self.memberofManager.open();
                             self.matchesManager.open();
+                            self.subordinateArraysManager.open();
+                            self.superordinatesManager.close();
                         }
                     });
                     this.typeComboBox = typeComboBox;
@@ -150,6 +164,8 @@ define(
                         formObj.related = this.relatedManager.getRelations();
                         formObj.members = this.membersManager.getRelations();
                         formObj.member_of = this.memberofManager.getRelations();
+                        formObj.subordinate_arrays = this.subordinateArraysManager.getRelations();
+                        formObj.superordinates = this.superordinatesManager.getRelations();
                         formObj.label = this.labelManager.getLabels();
                         formObj.note = this.noteManager.geNotes();
                         if (this.matchesManager.getMatches()){
@@ -171,6 +187,8 @@ define(
                     this.relatedManager.reset("Related");
                     this.membersManager.reset("Members");
                     this.memberofManager.reset("Member of");
+                    this.subordinateArraysManager.reset("Subordinate Arrays");
+                    this.superordinatesManager.reset("Superordinates");
                     this.labelManager.reset();
                     this.noteManager.reset();
                     this.matchesManager.reset();
@@ -187,6 +205,8 @@ define(
                     this.relatedManager.setScheme(scheme);
                     this.membersManager.setScheme(scheme);
                     this.memberofManager.setScheme(scheme);
+                    this.subordinateArraysManager.setScheme(scheme);
+                    this.superordinatesManager.setScheme(scheme);
                     if (concept) {
                         console.log("editing existing concept: " + concept.label);
                         this.conceptId = concept.id;
@@ -210,6 +230,14 @@ define(
                         if (concept.related)
                         {
                             this.relatedManager.setRelations(concept.related);
+                        }
+                        if (concept.subordinate_arrays)
+                        {
+                            this.subordinateArraysManager.setRelations(concept.subordinate_arrays);
+                        }
+                        if (concept.superordinates)
+                        {
+                            this.superordinatesManager.setRelations(concept.superordinates);
                         }
                         if (concept.labels) {
                             this.labelManager.setLabels(concept.labels);
