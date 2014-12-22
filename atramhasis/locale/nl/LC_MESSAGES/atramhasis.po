@@ -94,6 +94,12 @@ msgstr "leden"
 msgid "member_of"
 msgstr "lid van"
 
+msgid "subordinate_arrays"
+msgstr "subordinate arrays"
+
+msgid "superordinates"
+msgstr "superordinates"
+
 #: atramhasis/templates/macros.jinja2:22
 msgid "prefLabel"
 msgstr "geprefereerde labels"
