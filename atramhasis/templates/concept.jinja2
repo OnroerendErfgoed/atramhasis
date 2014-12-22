@@ -58,20 +58,32 @@
             {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
             {% endif %}
 
-            {% if concept.narrower_concepts|length + concept.narrower_collections|length > 0 %}
+            {% if concept.narrower_concepts|length > 0 %}
             <h4 class="subheader">{% trans %}narrower{% endtrans %}:</h4>
-            {{ render_relaties_lijst(request, concept.narrower_concepts|list + concept.narrower_collections|list, scheme_id) }}
+            {{ render_relaties_lijst(request, concept.narrower_concepts, scheme_id) }}
             {% endif %}
 
             {% if concept.related_concepts|length > 0 %}
             <h4 class="subheader">{% trans %}related{% endtrans %}:</h4>
             {{ render_relaties_lijst(request, concept.related_concepts, scheme_id) }}
             {% endif %}
+
+            {% if concept.narrower_collections|length > 0 %}
+            <h4 class="subheader">{% trans %}subordinate_arrays{% endtrans %}:</h4>
+            {{ render_relaties_lijst(request, concept.narrower_collections, scheme_id) }}
+            {% endif %}
         {% endif %}
 
         {% if conceptType == 'Collection' %}
+            {% if concept.members|length > 0 %}
             <h4 class="subheader">{% trans %}members{% endtrans %}:</h4>
             {{ render_relaties_lijst(request, concept.members, scheme_id) }}
+            {% endif %}
+
+            {% if concept.broader_concepts|length > 0 %}
+            <h4 class="subheader">{% trans %}superordinates{% endtrans %}:</h4>
+            {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+            {% endif %}
         {% endif %}
 
         {% if concept.member_of|length > 0 %}

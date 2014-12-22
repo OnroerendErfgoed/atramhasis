@@ -94,6 +94,12 @@ msgstr "membres"
 msgid "member_of"
 msgstr "membre de"
 
+msgid "subordinate_arrays"
+msgstr "subordinate arrays"
+
+msgid "superordinates"
+msgstr "superordinates"
+
 #: atramhasis/templates/macros.jinja2:22
 msgid "prefLabel"
 msgstr "libellés principal"
