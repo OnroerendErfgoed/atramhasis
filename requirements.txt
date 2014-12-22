@@ -9,8 +9,7 @@ skosprovider==0.5.0
 skosprovider_sqlalchemy==0.4.1
 pyramid_skosprovider==0.5.0
 skosprovider_rdf==0.3.0
-#skosprovider_getty
--e git+https://github.com/OnroerendErfgoed/skosprovider_getty#egg=skosprovider_getty
+skosprovider_getty==0.2.0
 skosprovider_heritagedata==0.2.0
 
 #language-tags
