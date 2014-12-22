@@ -206,8 +206,8 @@ define([
                 else {
                     var thesaurus = self.thesauri.stores[schemeid];
                     thesaurus.get(conceptid).then(function (item) {
-                        console.log("treestore item: " + item);
                         console.log("create contentpane");
+                        console.log(item);
                         var concept = new ConceptDetail({
                             conceptid: item.id,
                             label: item.label,
@@ -221,6 +221,8 @@ define([
                             broader: item.broader,
                             members: item.members,
                             member_of: item.member_of,
+                            subordinate_arrays: item.subordinate_arrays,
+                            superordinates: item.superordinates,
                             matchUris: item.matches,
                             externalSchemeService: self.externalSchemeService
                         });
@@ -308,11 +310,13 @@ define([
                 console.log("conceptform.submit subscribe");
                 console.log(form);
 
-                broader = array.map(form.broader, function(item){ return {"id": item}; });
-                narrower = array.map(form.narrower, function(item){ return {"id": item}; });
-                related = array.map(form.related, function(item){ return {"id": item}; });
-                members = array.map(form.members, function(item){ return {"id": item}; });
-                member_of = array.map(form.member_of, function(item){ return {"id": item}; });
+                var broader = array.map(form.broader, function(item){ return {"id": item}; });
+                var narrower = array.map(form.narrower, function(item){ return {"id": item}; });
+                var related = array.map(form.related, function(item){ return {"id": item}; });
+                var members = array.map(form.members, function(item){ return {"id": item}; });
+                var member_of = array.map(form.member_of, function(item){ return {"id": item}; });
+                var subordinate_arrays = array.map(form.subordinate_arrays, function(item){ return {"id": item}; });
+                var superordinates = array.map(form.superordinates, function(item){ return {"id": item}; });
 
                 var rowToAdd = {
                     "id:": form.concept_id,
@@ -324,6 +328,8 @@ define([
                     "related": related,
                     "members": members,
                     "member_of": member_of,
+                    "subordinate_arrays": subordinate_arrays,
+                    "superordinates": superordinates,
                     "matches": form.matches
                 };
                 if (form.concept_id) {
