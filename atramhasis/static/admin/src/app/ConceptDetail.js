@@ -32,6 +32,8 @@ define([
         broader: [],
         members: [],
         member_of: [],
+        subordinate_arrays: [],
+        superordinates: [],
         matches: null,
         matchUris: [],
         externalSchemeService: null,
@@ -55,6 +57,8 @@ define([
             this.relatedList = new ConceptDetailList({}, this.relatedListNode);
             this.membersList = new ConceptDetailList({}, this.membersListNode);
             this.memberofList = new ConceptDetailList({}, this.memberofListNode);
+            this.subordinateArraysList = new ConceptDetailList({}, this.subordinateArraysListNode);
+            this.superordinatesList = new ConceptDetailList({}, this.superordinatesListNode);
             this.broadMatchList = new ConceptDetailList({}, this.broadMatchListNode);
             this.closeMatchList = new ConceptDetailList({}, this.closeMatchListNode);
             this.exactMatchList = new ConceptDetailList({}, this.exactMatchListNode);
@@ -113,6 +117,8 @@ define([
             this.related=refreshedConcept.related;
             this.members=refreshedConcept.members;
             this.member_of=refreshedConcept.member_of;
+            this.subordinate_arrays=refreshedConcept.subordinate_arrays;
+            this.superordinates=refreshedConcept.superordinates;
             this.matchUris=refreshedConcept.matches;
             this._CreateNodeLists();
         },
@@ -136,12 +142,16 @@ define([
             this.relatedList.schemeid=this.schemeid;
             this.membersList.schemeid=this.schemeid;
             this.memberofList.schemeid=this.schemeid;
+            this.subordinateArraysList.schemeid=this.schemeid;
+            this.superordinatesList.schemeid=this.schemeid;
 
             this.broaderList.buildList(this.broaderList.mapRelationsForList(this.broader), "Broader", true);
             this.narrowerList.buildList(this.narrowerList.mapRelationsForList(this.narrower), "Narrower", true);
             this.relatedList.buildList(this.relatedList.mapRelationsForList(this.related), "Related", true);
             this.membersList.buildList(this.membersList.mapRelationsForList(this.members), "Members", true);
             this.memberofList.buildList(this.memberofList.mapRelationsForList(this.member_of), "Member of", true);
+            this.subordinateArraysList.buildList(this.subordinateArraysList.mapRelationsForList(this.subordinate_arrays), "Subordinate Arrays", true);
+            this.superordinatesList.buildList(this.superordinatesList.mapRelationsForList(this.superordinates), "Superordinates", true);
 
             this._createMatchesLists();
         },
