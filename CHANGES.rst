@@ -10,7 +10,7 @@
 - Add possibility to edit language tags. It's now possible to use the admin
   interface to add, edit and delete languages in Atramhasis. 
 - When the REST service receives labels or notes in currently unavailable 
-  languages, it will validate those through language_tag_. It the languages 
+  languages, it will validate those through language_tags_. It the languages 
   are valid according to the IANA registry, they will be added to the languages 
   available in the application.
 - Default length of language id changed to 64 characters. This is not available

@@ -4,14 +4,25 @@
 Services
 ========
 
+Atramhasis can be used fully with a :term:`SOA`. While we provide a public and
+and a administrators interface out of the box, you can also write your own client
+side code that interacts with the Atramhasis services, either for reading 
+information or writing it.
+
 Read Services
 =============
 
 The basic read services are being provided by 
-:ref:`Pyramid Skosprovider <pyramidskosprovider:services>`.
+:ref:`Pyramid Skosprovider <pyramidskosprovider:services>`. These allow you to
+read conceptschemes, search for concepts and collections and integrate the
+Atramhasis backend into other applications. Maintain you thesaurus in one 
+database and use it in several other applications.
 
 Write Services
 ==============
+
+The Atramhasis write services allow you to add concepts and collections, edit
+them and delete them.
 
 .. http:post:: /conceptschemes/{scheme_id}/c
 

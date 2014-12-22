@@ -1,5 +1,6 @@
 .. _introduction:
 
+============
 Introduction
 ============
 
@@ -11,7 +12,7 @@ Atramhasis is being developed by the `Flanders Heritage Agency`_, an agency of
 the Flemish Government that deals with Archaeology, Monuments and Landscapes.
 
 Technology
-----------
+==========
 
 Atramhasis is a python_ webapplication that is being developed within the 
 pyramid_ framework. Other major technologies used are sqlalchemy_ as the ORM 
