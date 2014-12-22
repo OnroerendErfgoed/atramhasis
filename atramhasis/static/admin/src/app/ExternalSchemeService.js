@@ -41,7 +41,7 @@ define([
                         type: type,
                         data: {
                             id: id,
-                            label: concept.labels[0].label,
+                            label: self._getPrefLabel(concept.labels, 'en'),
                             uri: uri
                         }
                     };
@@ -81,6 +81,25 @@ define([
 
         getExternalSchemeStore: function () {
             return this.thesauri.externalSchemeStore;
+        },
+
+        _getPrefLabel: function (labels, lang) {
+            var prefLabels = array.filter(labels, function(label) {
+                return label.type == 'prefLabel';
+            });
+            if (prefLabels.length == 0) {
+                return labels[0].label;
+            }
+            
+            var correctlangLabels = array.filter(labels, function(label) {
+                return label.language == lang;
+            });
+            if (correctlangLabels.length == 0) {
+                return prefLabels[0].label;
+            } 
+            else {
+                return correctlangLabels[0].label;
+            }     
         }
     });
 });
