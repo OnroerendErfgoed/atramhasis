@@ -257,6 +257,7 @@ class AtramhasisView(object):
                 .query(Collection) \
                 .filter(
                 Collection.conceptscheme_id == conceptscheme_id,
+                ~Collection.broader_concepts.any(),
                 ~Collection.member_of.any()
             ).all()
 
