@@ -86,7 +86,8 @@ define(
                     this.superordinatesManager = new RelationManager({
                         'name': 'superordinatesMgr',
                         'title': 'Superordinates',
-                        'scheme': this.scheme
+                        'scheme': this.scheme,
+                        'style': 'display: none'
                     }, this.superordinatesContainerNode);
                     this.matchesManager = new MatchesManager({
                         'name': 'matchesMgr',
