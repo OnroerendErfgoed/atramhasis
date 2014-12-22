@@ -274,6 +274,7 @@ class AtramhasisView(object):
             cs = [member for member in thing.members] if hasattr(thing, 'members') else []
         else:
             cs = [c for c in thing.narrower_concepts]
+            cs = cs + [c for c in thing.narrower_collections]
 
         sortedcs = sorted(cs, key=lambda child: child.label(locale).label.lower())
         children = [self.parse_thing(c, tree_id) for index, c in enumerate(sortedcs, 1)]
