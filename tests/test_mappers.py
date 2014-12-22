@@ -58,7 +58,7 @@ def filter_by_mock_concept(concept_id, conceptscheme_id):
     if concept_id in (7, 11, 12):
         raise NoResultFound()
     filter_mock = Mock()
-    if concept_id == 999:
+    if concept_id in (999, 19):
         thing = Collection(id=concept_id, concept_id=concept_id, conceptscheme_id=conceptscheme_id)
         thing.type = 'collection'
     else:
@@ -189,3 +189,27 @@ class TestMappers(unittest.TestCase):
         self.assertTrue(hasattr(result_concept, 'matches'))
         self.assertEqual(2, len(result_concept.matches))
         self.assertIn(result_concept.matches[0].uri, ["urn:sample:666", "urn:somewhere:93"])
+
+    def test_mapping_subordinate_arrays(self):
+        test_json["subordinate_arrays"] = [{"id": 19}]
+        result_concept = map_concept(self.concept, test_json, self.request.db)
+        self.assertIsNotNone(result_concept)
+        self.assertTrue(hasattr(result_concept, 'narrower_collections'))
+        self.assertEqual(1, len(result_concept.narrower_collections))
+        self.assertEqual([c for c in result_concept.narrower_collections][0].concept_id, 19)
+
+    def test_mapping_subordinate_arrays_no_result(self):
+        test_json["subordinate_arrays"] = [{"id": 11}]
+        result_concept = map_concept(self.concept, test_json, self.request.db)
+        self.assertIsNotNone(result_concept)
+        self.assertTrue(hasattr(result_concept, 'narrower_collections'))
+        self.assertEqual(1, len(result_concept.narrower_collections))
+        self.assertEqual([c for c in result_concept.narrower_collections][0].concept_id, 11)
+
+    def test_mapping_superordinates(self):
+        json_collection["superordinates"] = [{"id": 12}]
+        result_collection = map_concept(self.collection, json_collection, self.request.db)
+        self.assertIsNotNone(result_collection)
+        self.assertTrue(hasattr(result_collection, 'broader_concepts'))
+        self.assertEqual(1, len(result_collection.broader_concepts))
+        self.assertEqual([c for c in result_collection.broader_concepts][0].concept_id, 12)

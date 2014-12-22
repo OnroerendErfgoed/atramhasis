@@ -90,6 +90,16 @@ def map_concept(concept, concept_json, db_session):
                     matches.append(match)
             concept.matches = matches
 
+            concept.narrower_collections.clear()
+            narrower_collections = concept_json.get('subordinate_arrays', [])
+            for narrower in narrower_collections:
+                try:
+                    narrower_collection = db_session.query(Collection)\
+                        .filter_by(concept_id=narrower['id'], conceptscheme_id=concept.conceptscheme_id).one()
+                except NoResultFound:
+                    narrower_collection = Collection(concept_id=narrower['id'], conceptscheme_id=concept.conceptscheme_id)
+                concept.narrower_collections.add(narrower_collection)
+
         if concept.type == 'collection':
             concept.members.clear()
             members = concept_json.get('members', [])
@@ -100,4 +110,15 @@ def map_concept(concept, concept_json, db_session):
                 except NoResultFound:
                     member_concept = Concept(concept_id=member['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.members.add(member_concept)
+
+            concept.broader_concepts.clear()
+            broader_concepts = concept_json.get('superordinates', [])
+            for broader in broader_concepts:
+                try:
+                    broader_concept = db_session.query(Concept)\
+                        .filter_by(concept_id=broader['id'], conceptscheme_id=concept.conceptscheme_id).one()
+                except NoResultFound:
+                    broader_concept = Concept(concept_id=broader['id'], conceptscheme_id=concept.conceptscheme_id)
+                concept.broader_concepts.add(broader_concept)
+
     return concept
