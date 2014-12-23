@@ -95,14 +95,14 @@ msgid "member_of"
 msgstr "membre de"
 
 msgid "subordinate_arrays"
-msgstr "subordinate arrays"
+msgstr "Collections assujetties"
 
 msgid "superordinates"
-msgstr "superordinates"
+msgstr "Eléments parents"
 
 #: atramhasis/templates/macros.jinja2:22
 msgid "prefLabel"
-msgstr "libellés principal"
+msgstr "libellés principaux"
 
 #: atramhasis/templates/macros.jinja2:24
 msgid "altLabel"
@@ -110,7 +110,7 @@ msgstr "libellés alternatifs"
 
 #: atramhasis/templates/macros.jinja2:26
 msgid "hiddenLabel"
-msgstr "libellés masqué"
+msgstr "libellés masqués"
 
 #: atramhasis/templates/search_result.jinja2:8
 #, python-format
