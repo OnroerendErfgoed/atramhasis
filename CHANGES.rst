@@ -1,4 +1,4 @@
-0.4.0 (??-12-2014)
+0.4.0 (23-12-2014)
 ------------------
 
 - Update to skosprovider_ 0.5.0. Among other things, this makes it possible
@@ -38,6 +38,7 @@
   ConceptScheme in an RDF file and also handles *subordinate_arrays* and
   *superordinates*.
 - Update to language_tags_ 0.3.0.
+
 
 0.3.1 (05-09-2014)
 ------------------
@@ -84,6 +85,7 @@
 - Integration of pyramid_skosprovider_
 - Integration of skosprovider_
 - Integration of skosprovider_sqlalchemy_
+
 
 .. _skosprovider: http://skosprovider.readthedocs.org
 .. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
