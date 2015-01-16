@@ -581,13 +581,33 @@ class CacheFunctionalTests(FunctionalTests):
 
 
 class RdfFunctionalTests(FunctionalTests):
-    def test_rdf_xml(self):
-        rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c.rdf')
+    def test_rdf_full_xml(self):
+        rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c.rdf', headers={'Accept': 'application/rdf+xml'})
         self.assertEqual('200 OK', rdf_response.status)
         self.assertEqual('application/rdf+xml', rdf_response.content_type)
 
-    def test_rdf_turtle(self):
-        ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c.ttl')
+    def test_rdf_full_turtle(self):
+        ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c.ttl', headers={'Accept': 'text/turtle'})
+        self.assertEqual('200 OK', ttl_response.status)
+        self.assertEqual('text/turtle', ttl_response.content_type)
+
+    def test_rdf_conceptscheme_xml(self):
+        rdf_response = self.testapp.get('/conceptschemes/MATERIALS.rdf', headers={'Accept': 'application/rdf+xml'})
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('application/rdf+xml', rdf_response.content_type)
+
+    def test_rdf_conceptscheme_turtle(self):
+        ttl_response = self.testapp.get('/conceptschemes/MATERIALS.ttl', headers={'Accept': 'text/turtle'})
+        self.assertEqual('200 OK', ttl_response.status)
+        self.assertEqual('text/turtle', ttl_response.content_type)
+
+    def test_rdf_individual_xml(self):
+        rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c/1.rdf', headers={'Accept': 'application/rdf+xml'})
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('application/rdf+xml', rdf_response.content_type)
+
+    def test_rdf_individual_turtle(self):
+        ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c/1.ttl', headers={'Accept': 'text/turtle'})
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 
