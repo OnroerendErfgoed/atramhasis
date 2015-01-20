@@ -41,21 +41,21 @@ def includeme(config):   # pragma: no cover
     TGN = TGNProvider(
         {'id': 'TGN', 'subject': ['external']}
     )
-
-    EH_PERIOD = HeritagedataProvider(
-        {'id': 'EH_PERIOD', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_period'
-    )
-
-    EH_MONUMENT_TYPE = HeritagedataProvider(
-        {'id': 'EH_MONUMENT_TYPE', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2'
-    )
-
-    EH_MATERIALS = HeritagedataProvider(
-        {'id': 'EH_MATERIALS', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_tbm'
-    )
+    #
+    # EH_PERIOD = HeritagedataProvider(
+    #     {'id': 'EH_PERIOD', 'subject': ['external']},
+    #     scheme_uri='http://purl.org/heritagedata/schemes/eh_period'
+    # )
+    #
+    # EH_MONUMENT_TYPE = HeritagedataProvider(
+    #     {'id': 'EH_MONUMENT_TYPE', 'subject': ['external']},
+    #     scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2'
+    # )
+    #
+    # EH_MATERIALS = HeritagedataProvider(
+    #     {'id': 'EH_MATERIALS', 'subject': ['external']},
+    #     scheme_uri='http://purl.org/heritagedata/schemes/eh_tbm'
+    # )
 
     skosregis = config.get_skos_registry()
     skosregis.register_provider(TREES)
@@ -64,6 +64,6 @@ def includeme(config):   # pragma: no cover
     skosregis.register_provider(MATERIALS)
     skosregis.register_provider(AAT)
     skosregis.register_provider(TGN)
-    skosregis.register_provider(EH_PERIOD)
-    skosregis.register_provider(EH_MONUMENT_TYPE)
-    skosregis.register_provider(EH_MATERIALS)
+    # skosregis.register_provider(EH_PERIOD)
+    # skosregis.register_provider(EH_MONUMENT_TYPE)
+    # skosregis.register_provider(EH_MATERIALS)
