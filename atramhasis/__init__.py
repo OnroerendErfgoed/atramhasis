@@ -15,6 +15,13 @@ def includeme(config):
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')
 
+    config.add_route('atramhasis.rdf_full_export_ext', pattern='/conceptschemes/{scheme_id}/c.rdf')
+    config.add_route('atramhasis.rdf_full_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c.ttl')
+    config.add_route('atramhasis.rdf_conceptscheme_export_ext', pattern='/conceptschemes/{scheme_id}.rdf')
+    config.add_route('atramhasis.rdf_conceptscheme_export_turtle_ext', pattern='/conceptschemes/{scheme_id}.ttl')
+    config.add_route('atramhasis.rdf_individual_export_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.rdf')
+    config.add_route('atramhasis.rdf_individual_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.ttl')
+
     config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html', request_method="GET")
     config.add_route('conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='text/html', request_method="GET")
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
@@ -48,17 +55,11 @@ def includeme(config):
     config.add_route('tree_invalidate', pattern='/admin/tree/invalidate', accept='application/json')
 
     config.add_route('atramhasis.rdf_full_export_turtle', pattern='/conceptschemes/{scheme_id}/c', accept='text/turtle')
-    config.add_route('atramhasis.rdf_full_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c.ttl')
     config.add_route('atramhasis.rdf_full_export', pattern='/conceptschemes/{scheme_id}/c', accept='application/rdf+xml')
-    config.add_route('atramhasis.rdf_full_export_ext', pattern='/conceptschemes/{scheme_id}/c.rdf')
     config.add_route('atramhasis.rdf_conceptscheme_export', pattern='/conceptschemes/{scheme_id}', accept='application/rdf+xml')
-    config.add_route('atramhasis.rdf_conceptscheme_export_ext', pattern='/conceptschemes/{scheme_id}.rdf')
     config.add_route('atramhasis.rdf_conceptscheme_export_turtle', pattern='/conceptschemes/{scheme_id}', accept='text/turtle')
-    config.add_route('atramhasis.rdf_conceptscheme_export_turtle_ext', pattern='/conceptschemes/{scheme_id}.ttl')
     config.add_route('atramhasis.rdf_individual_export', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/rdf+xml')
-    config.add_route('atramhasis.rdf_individual_export_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.rdf')
     config.add_route('atramhasis.rdf_individual_export_turtle', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/turtle')
-    config.add_route('atramhasis.rdf_individual_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.ttl')
 
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
