@@ -369,6 +369,22 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res)
         self.assertEqual(len(res.json), 3)
 
+    def test_get_languages_sort(self):
+        res = self.testapp.get('/languages', headers=self._get_default_headers(),
+                               params={"sort": "id"})
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res)
+        self.assertEqual(len(res.json), 3)
+
+    def test_get_languages_sort_desc(self):
+        res = self.testapp.get('/languages', headers=self._get_default_headers(),
+                               params={"sort": "-id"})
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res)
+        self.assertEqual(len(res.json), 3)
+
     def test_get_language(self):
         res = self.testapp.get('/languages/de', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)

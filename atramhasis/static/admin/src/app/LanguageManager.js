@@ -42,6 +42,7 @@ define([
             this.languageStore = Observable( Cache( JsonRest({
                 'target': '/languages',
                 'idProperty': 'id',
+                'sortParam': 'sort',
                 'accepts': 'application/json'
             }), Memory()));
         },
@@ -141,8 +142,8 @@ define([
             return new (declare([OnDemandGrid, dgridKeyboard, dgridSelection, DijitRegistry]))({
                 sort: "id",
                 columns: [
-                    {label:'Id', field:'id', sortable: false},
-                    {label:'Name', field:'name', sortable: false}
+                    {label:'Id', field:'id', sortable: true},
+                    {label:'Name', field:'name', sortable: true}
                 ],
                 store: store,
                 getBeforePut: false,

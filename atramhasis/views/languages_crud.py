@@ -2,6 +2,7 @@
 import colander
 from pyramid.view import view_defaults, view_config
 from skosprovider_sqlalchemy.models import Language
+from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.errors import LanguageNotFoundException, ValidationError
 from atramhasis.validators import LanguageTag, languagetag_validator
@@ -47,7 +48,17 @@ class LanguagesCrud(object):
 
         :return: list of languages
         '''
-        languages = self.db.query(Language).all()
+        if 'sort' in self.request.params:
+            sort = self.request.params['sort']
+            sort_desc = (sort[0:1] == '-')
+            sort = sort[1:] if sort[0:1] in ['-', '+'] else sort
+            sort = sort.strip()
+            if sort_desc:
+                languages = self.db.query(Language).order_by(desc(sort)).all()
+            else:
+                languages = self.db.query(Language).order_by(sort).all()
+        else:
+            languages = self.db.query(Language).all()
         return languages
 
     @view_config(route_name='atramhasis.get_language', permission='edit')

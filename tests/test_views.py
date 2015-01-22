@@ -215,6 +215,7 @@ class TestConceptSchemeView(unittest.TestCase):
         self.assertIsNotNone(res['conceptscheme']['notes'])
         self.assertIsNotNone(res['conceptscheme']['top_concepts'])
 
+
 class TestConceptView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
