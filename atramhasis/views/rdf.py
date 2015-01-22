@@ -26,49 +26,58 @@ class AtramhasisRDF(object):
             raise ConceptSchemeNotFoundException(self.scheme_id)   # pragma: no cover
 
     @view_config(route_name='atramhasis.rdf_full_export')
+    @view_config(route_name='atramhasis.rdf_full_export_ext')
     def rdf_full_export(self):
         graph = utils.rdf_dumper(self.provider)
+
         response = Response(content_type='application/rdf+xml')
         response.body = graph.serialize(format='xml')
-        response.content_disposition = 'attachment; filename="skos.xml"'
+        response.content_disposition = 'attachment; filename="%s-full.rdf"' % (str(self.scheme_id),)
         return response
 
     @view_config(route_name='atramhasis.rdf_full_export_turtle', accept='text/turtle')
+    @view_config(route_name='atramhasis.rdf_full_export_turtle_ext', accept='text/turtle')
     def rdf_full_export_turtle(self):
         graph = utils.rdf_dumper(self.provider)
         response = Response(content_type='text/turtle')
         response.body = graph.serialize(format='turtle')
-        response.content_disposition = 'attachment; filename="skos.ttl"'
+        response.content_disposition = 'attachment; filename="%s-full.ttl"' % (str(self.scheme_id),)
         return response
 
-    @view_config(route_name='atramhasis.rdf_conceptscheme_export')
+    @view_config(route_name='atramhasis.rdf_conceptscheme_export')#, accept='application/rdf+xml')
+    @view_config(route_name='atramhasis.rdf_conceptscheme_export_ext')#, accept='application/rdf+xml')
     def rdf_conceptscheme_export(self):
         graph = utils.rdf_conceptscheme_dumper(self.provider)
         response = Response(content_type='application/rdf+xml')
         response.body = graph.serialize(format='xml')
-        response.content_disposition = 'attachment; filename="skos.xml"'
+        response.content_disposition = 'attachment; filename="%s.rdf"' % (str(self.scheme_id),)
         return response
 
     @view_config(route_name='atramhasis.rdf_conceptscheme_export_turtle', accept='text/turtle')
+    @view_config(route_name='atramhasis.rdf_conceptscheme_export_turtle_ext')
     def rdf_conceptscheme_export_turtle(self):
         graph = utils.rdf_conceptscheme_dumper(self.provider)
+
         response = Response(content_type='text/turtle')
         response.body = graph.serialize(format='turtle')
-        response.content_disposition = 'attachment; filename="skos.ttl"'
+        response.content_disposition = 'attachment; filename="%s.ttl"' % (str(self.scheme_id),)
         return response
 
-    @view_config(route_name='atramhasis.rdf_individual_export')
+    @view_config(route_name='atramhasis.rdf_individual_export', accept='application/rdf+xml')
+    @view_config(route_name='atramhasis.rdf_individual_export_ext', accept='application/rdf+xml')
     def rdf_individual_export(self):
-        graph = utils.rdf_dumper(self.provider, [self.c_id])
+        print (self.c_id)
+        graph = utils.rdf_c_dumper(self.provider, self.c_id)
         response = Response(content_type='application/rdf+xml')
         response.body = graph.serialize(format='xml')
-        response.content_disposition = 'attachment; filename="skos.xml"'
+        response.content_disposition = 'attachment; filename="%s.rdf"' % (str(self.c_id),)
         return response
 
     @view_config(route_name='atramhasis.rdf_individual_export_turtle', accept='text/turtle')
+    @view_config(route_name='atramhasis.rdf_individual_export_turtle_ext', accept='text/turtle')
     def rdf_individual_export_turtle(self):
-        graph = utils.rdf_dumper(self.provider, [self.c_id])
+        graph = utils.rdf_c_dumper(self.provider, self.c_id)
         response = Response(content_type='text/turtle')
         response.body = graph.serialize(format='turtle')
-        response.content_disposition = 'attachment; filename="skos.ttl"'
+        response.content_disposition = 'attachment; filename="%s.ttl"' % (str(self.c_id),)
         return response
