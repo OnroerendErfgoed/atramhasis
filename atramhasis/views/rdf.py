@@ -57,7 +57,6 @@ class AtramhasisRDF(object):
     @view_config(route_name='atramhasis.rdf_conceptscheme_export_turtle_ext')
     def rdf_conceptscheme_export_turtle(self):
         graph = utils.rdf_conceptscheme_dumper(self.provider)
-
         response = Response(content_type='text/turtle')
         response.body = graph.serialize(format='turtle')
         response.content_disposition = 'attachment; filename="%s.ttl"' % (str(self.scheme_id),)
@@ -66,7 +65,6 @@ class AtramhasisRDF(object):
     @view_config(route_name='atramhasis.rdf_individual_export', accept='application/rdf+xml')
     @view_config(route_name='atramhasis.rdf_individual_export_ext', accept='application/rdf+xml')
     def rdf_individual_export(self):
-        print (self.c_id)
         graph = utils.rdf_c_dumper(self.provider, self.c_id)
         response = Response(content_type='application/rdf+xml')
         response.body = graph.serialize(format='xml')
