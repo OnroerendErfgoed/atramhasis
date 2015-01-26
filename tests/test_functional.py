@@ -21,7 +21,7 @@ from pyramid.paster import get_appsettings
 from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
-from atramhasis.db import db
+from atramhasis.data import db
 from atramhasis.protected_resources import ProtectedResourceException, ProtectedResourceEvent
 from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials

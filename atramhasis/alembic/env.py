@@ -6,7 +6,7 @@ except ImportError:
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
-from atramhasis.models import Base
+from atramhasis.data.models import Base
 from skosprovider_sqlalchemy.models import Base as SkosBase
 from sqlalchemy.schema import MetaData
 from os import path

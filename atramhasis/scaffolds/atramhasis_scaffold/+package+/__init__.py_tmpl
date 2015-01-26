@@ -1,7 +1,7 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 
-from atramhasis.models import Base
+from atramhasis.data.models import Base
 
 
 def main(global_config, **settings):

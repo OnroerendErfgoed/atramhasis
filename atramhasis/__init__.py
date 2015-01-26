@@ -1,6 +1,6 @@
 from pyramid.config import Configurator
+
 from atramhasis.renderers import json_renderer_verbose
-from .models import Base
 
 
 def includeme(config):
@@ -67,7 +67,7 @@ def main(global_config, **settings):
 
     config.add_translation_dirs('atramhasis:locale/')
 
-    config.include('atramhasis:db')
+    config.include('atramhasis.data:db')
 
     # if standalone include skos sample data
     test_mode = settings.get('atramhasis.test_mode')

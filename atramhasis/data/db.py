@@ -2,6 +2,7 @@
 '''
 Module that sets up SQLAlchemy.
 '''
+from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager
 from .models import Base
 from skosprovider_sqlalchemy.models import Base as SkosBase
 
@@ -10,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from zope.sqlalchemy import ZopeTransactionExtension
 
 
-def db(request):
+def data_managers(request):
     '''
     Generate a database session and register a cleanup handler.
 
@@ -19,12 +20,14 @@ def db(request):
     :returns: A :class:`sqlalchemy.orm.session.Session`
     '''
     session = request.registry.dbmaker()
+    skos_manager = SkosManager(session)
+    conceptscheme_manager = ConceptSchemeManager(session)
 
     def cleanup(request):
         session.close()
     request.add_finished_callback(cleanup)
 
-    return session
+    return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager}
 
 
 def includeme(config):
@@ -43,4 +46,4 @@ def includeme(config):
         extension=ZopeTransactionExtension()
     )
     config.registry.dbmaker = session_maker
-    config.add_request_method(db, reify=True)
+    config.add_request_method(data_managers, reify=True)
