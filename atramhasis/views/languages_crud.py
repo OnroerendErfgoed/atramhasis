@@ -2,8 +2,8 @@
 import colander
 from pyramid.view import view_defaults, view_config
 from skosprovider_sqlalchemy.models import Language
-from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
+
 from atramhasis.errors import LanguageNotFoundException, ValidationError
 from atramhasis.validators import LanguageTag, languagetag_validator
 

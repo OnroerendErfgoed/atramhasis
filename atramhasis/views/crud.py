@@ -26,7 +26,7 @@ class AtramhasisCrud(object):
 
     def __init__(self, context, request):
         self.request = request
-        self.db = request.db
+        self.skos_manager = self.request.data_managers['skos_manager']
         self.context = context
         self.logged_in = request.authenticated_userid
         self.scheme_id = self.request.matchdict['scheme_id']
@@ -131,8 +131,7 @@ class AtramhasisCrud(object):
         c_id = self.request.matchdict['c_id']
         validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
         try:
-            concept = self.db.query(Thing).filter_by(concept_id=c_id,
-                                                     conceptscheme_id=self.provider.conceptscheme_id).one()
+            concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
         map_concept(concept, validated_json_concept, self.request.db)
@@ -153,11 +152,10 @@ class AtramhasisCrud(object):
         '''
         c_id = self.request.matchdict['c_id']
         try:
-            concept = self.db.query(Thing).filter_by(concept_id=c_id,
-                                                     conceptscheme_id=self.provider.conceptscheme_id).one()
+            concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
-        self.db.delete(concept)
+        self.skos_manager.delete_thing(concept)
 
         invalidate_scheme_cache(self.scheme_id)
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language
+from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language, MatchType, Match
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 from atramhasis.data.data_transfer_objects import ResultDTO
@@ -113,6 +113,13 @@ class SkosManager(DataManager):
             .filter_by(concept_id=concept_id, conceptscheme_id=conceptscheme_id) \
             .one()
 
+    def delete_thing(self, thing):
+        '''
+
+        :param thing: the thing to delete
+        '''
+        self.session.delete(thing)
+
     def get_by_list_type(self, list_type):
         '''
 
@@ -120,6 +127,13 @@ class SkosManager(DataManager):
         :return: all results for the specific list type
         '''
         return self.session.query(list_type).all()
+
+    def get_match_type(self, match_type):
+        return self.session.query(MatchType).filter_by(name=match_type).one()
+
+    def get_match(self, uri, matchtype_id, concept_id):
+        return self.session.query(Match).filter_by(uri=uri, matchtype_id=matchtype_id,
+                                                   concept_id=concept_id).one()
 
 
 class LanguagesManager(DataManager):

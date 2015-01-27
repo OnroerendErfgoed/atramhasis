@@ -7,7 +7,7 @@ from skosprovider_sqlalchemy.models import Label, Note, Concept, Thing, Collecti
 from sqlalchemy.orm.exc import NoResultFound
 
 
-def map_concept(concept, concept_json, db_session):
+def map_concept(concept, concept_json, skos_manager):
     '''
     Map a concept from json to the database.
 
@@ -15,7 +15,7 @@ def map_concept(concept, concept_json, db_session):
         collection as known to the database.
     :param dict concept_json: A dict representing the json sent to our REST 
         service.
-    :param session: A :class:`sqlalchemy.orm.session.Session`.
+    :param skos_manager: A skos_manager to acces db operations
     :returns: The :class:`skosprovider_sqlalchemy.models.Thing` enhanced 
         with the information from the json object.
     '''
@@ -38,8 +38,9 @@ def map_concept(concept, concept_json, db_session):
         member_of = concept_json.get('member_of', [])
         for memberof in member_of:
             try:
-                memberof_collection = db_session.query(Collection)\
-                    .filter_by(concept_id=memberof['id'], conceptscheme_id=concept.conceptscheme_id).one()
+                memberof_collection = skos_manager.get_thing(
+                    concept_id=memberof['id'],
+                    conceptscheme_id=concept.conceptscheme_id)
             except NoResultFound:
                 memberof_collection = Collection(concept_id=memberof['id'], conceptscheme_id=concept.conceptscheme_id)
             concept.member_of.add(memberof_collection)
@@ -49,8 +50,9 @@ def map_concept(concept, concept_json, db_session):
             related = concept_json.get('related', [])
             for related in related:
                 try:
-                    related_concept = db_session.query(Concept).filter_by(concept_id=related['id'],
-                                                                          conceptscheme_id=concept.conceptscheme_id).one()
+                    related_concept = skos_manager.get_thing(
+                        concept_id=related['id'],
+                        conceptscheme_id=concept.conceptscheme_id)
                 except NoResultFound:
                     related_concept = Concept(concept_id=related['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.related_concepts.add(related_concept)
@@ -60,16 +62,18 @@ def map_concept(concept, concept_json, db_session):
             broader = concept_json.get('broader', [])
             for broader in broader:
                 try:
-                    broader_concept = db_session.query(Concept).filter_by(concept_id=broader['id'],
-                                                                          conceptscheme_id=concept.conceptscheme_id).one()
+                    broader_concept = skos_manager.get_thing(
+                        concept_id=broader['id'],
+                        conceptscheme_id=concept.conceptscheme_id)
                 except NoResultFound:
                     broader_concept = Concept(concept_id=broader['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.broader_concepts.add(broader_concept)
             narrower = concept_json.get('narrower', [])
             for narrower in narrower:
                 try:
-                    narrower_concept = db_session.query(Concept).filter_by(concept_id=narrower['id'],
-                                                                           conceptscheme_id=concept.conceptscheme_id).one()
+                    narrower_concept = skos_manager.get_thing(
+                        concept_id=narrower['id'],
+                        conceptscheme_id=concept.conceptscheme_id)
                 except NoResultFound:
                     narrower_concept = Concept(concept_id=narrower['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.narrower_concepts.add(narrower_concept)
@@ -78,11 +82,12 @@ def map_concept(concept, concept_json, db_session):
             matchdict = concept_json.get('matches', {})
             for type in matchdict:
                 db_type = type + "Match"
-                matchtype = db_session.query(MatchType).filter_by(name=db_type).one()
+                matchtype = skos_manager.get_match_type(db_type)
                 for uri in matchdict[type]:
                     concept_id = concept_json.get('id', -1)
                     try:
-                        match = db_session.query(Match).filter_by(uri=uri, matchtype_id=matchtype.name, concept_id=concept_id).one()
+                        match = skos_manager.get_match(uri=uri, matchtype_id=matchtype.name,
+                                                       concept_id=concept_id)
                     except NoResultFound:
                         match = Match()
                         match.matchtype = matchtype
@@ -94,10 +99,12 @@ def map_concept(concept, concept_json, db_session):
             narrower_collections = concept_json.get('subordinate_arrays', [])
             for narrower in narrower_collections:
                 try:
-                    narrower_collection = db_session.query(Collection)\
-                        .filter_by(concept_id=narrower['id'], conceptscheme_id=concept.conceptscheme_id).one()
+                    narrower_collection = skos_manager.get_thing(
+                        concept_id=narrower['id'],
+                        conceptscheme_id=concept.conceptscheme_id)
                 except NoResultFound:
-                    narrower_collection = Collection(concept_id=narrower['id'], conceptscheme_id=concept.conceptscheme_id)
+                    narrower_collection = Collection(concept_id=narrower['id'],
+                                                     conceptscheme_id=concept.conceptscheme_id)
                 concept.narrower_collections.add(narrower_collection)
 
         if concept.type == 'collection':
@@ -105,8 +112,9 @@ def map_concept(concept, concept_json, db_session):
             members = concept_json.get('members', [])
             for member in members:
                 try:
-                    member_concept = db_session.query(Thing).filter_by(concept_id=member['id'],
-                                                                           conceptscheme_id=concept.conceptscheme_id).one()
+                    member_concept = skos_manager.get_thing(
+                        concept_id=member['id'],
+                        conceptscheme_id=concept.conceptscheme_id)
                 except NoResultFound:
                     member_concept = Concept(concept_id=member['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.members.add(member_concept)
@@ -115,8 +123,9 @@ def map_concept(concept, concept_json, db_session):
             broader_concepts = concept_json.get('superordinates', [])
             for broader in broader_concepts:
                 try:
-                    broader_concept = db_session.query(Concept)\
-                        .filter_by(concept_id=broader['id'], conceptscheme_id=concept.conceptscheme_id).one()
+                    broader_concept = skos_manager.get_thing(
+                        concept_id=broader['id'],
+                        conceptscheme_id=concept.conceptscheme_id)
                 except NoResultFound:
                     broader_concept = Concept(concept_id=broader['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.broader_concepts.add(broader_concept)
