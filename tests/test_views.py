@@ -4,17 +4,18 @@ import unittest
 
 from skosprovider.registry import Registry
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note, LabelType, NoteType, ConceptScheme
+from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note, LabelType, ConceptScheme
 from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException, \
-    DbNotFoundException
+from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.views import tree_cache_dictionary
 from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView, \
     labels_to_string, get_definition
 from fixtures.data import trees
+
 
 try:
     from unittest.mock import Mock
@@ -33,10 +34,12 @@ def provider(some_id):
     return provider_mock
 
 
-def db(request):
+def data_managers(request):
     session_mock = Mock()
     session_mock.query = Mock(side_effect=create_query_mock)
-    return session_mock
+    skos_manager = SkosManager(session_mock)
+    conceptscheme_manager = ConceptSchemeManager(session_mock)
+    return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager}
 
 
 def create_query_mock(some_class):
@@ -120,7 +123,9 @@ def filter_by_mock_concept(**kwargs):
 def list_db(request):
     session_mock = Mock()
     session_mock.query = Mock(side_effect=create_listquery_mock)
-    return session_mock
+    skos_manager = SkosManager(session_mock)
+    conceptscheme_manager = ConceptSchemeManager(session_mock)
+    return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager}
 
 
 def create_listquery_mock(some_class):
@@ -137,11 +142,19 @@ def get_all_list_mock():
 
 
 class TestAtramhasisView(unittest.TestCase):
+
+    def setUp(self):
+        self.config = testing.setUp()
+        self.request = testing.DummyRequest()
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
+
+    def tearDown(self):
+        testing.tearDown()
+
     def test_no_registry(self):
         error_raised = False
-        request = testing.DummyRequest()
         try:
-            AtramhasisView(request)
+            AtramhasisView(self.request)
         except SkosRegistryNotFoundException as e:
             error_raised = True
             self.assertIsNotNone(e.__str__())
@@ -153,14 +166,15 @@ class TestHomeView(unittest.TestCase):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
+        self.request = testing.DummyRequest()
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
 
     def tearDown(self):
         testing.tearDown()
 
     def test_passing_view(self):
-        request = testing.DummyRequest()
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.home_view()
         self.assertIsNotNone(info['conceptschemes'][0])
         self.assertEqual(info['conceptschemes'][0]['id'], 'TREES')
@@ -171,14 +185,15 @@ class TestFavicoView(unittest.TestCase):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
+        self.request = testing.DummyRequest()
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
 
     def tearDown(self):
         testing.tearDown()
 
     def test_passing_view(self):
-        request = testing.DummyRequest()
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         response = atramhasisview.favicon_view()
         self.assertEqual(response.status_int, 200)
         self.assertIn('image/x-icon', response.headers['Content-Type'])
@@ -191,7 +206,7 @@ class TestConceptSchemeView(unittest.TestCase):
         self.regis = Registry()
         self.regis.register_provider(trees)
         self.request = testing.DummyRequest()
-        self.request.db = db(self.request)
+        self.request.data_managers = data_managers(self.request)
         self.request.skos_registry = self.regis
 
     def tearDown(self):
@@ -222,7 +237,7 @@ class TestConceptView(unittest.TestCase):
         self.request = testing.DummyRequest()
         self.regis = Registry()
         self.regis.register_provider(provider(1))
-        self.request.db = db(self.request)
+        self.request.data_managers = data_managers(self.request)
 
     def tearDown(self):
         testing.tearDown()
@@ -292,18 +307,19 @@ class TestSearchResultView(unittest.TestCase):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
+        self.request = testing.DummyRequest()
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
 
     def tearDown(self):
         testing.tearDown()
 
     def test_find_by_label(self):
-        request = testing.DummyRequest()
-        request.matchdict['scheme_id'] = 'TREES'
-        request.params = MultiDict()
-        request.params.add('label', 'De Paardekastanje')
-        request.params.add('_LOCALE_', 'nl')
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.matchdict['scheme_id'] = 'TREES'
+        self.request.params = MultiDict()
+        self.request.params.add('label', 'De Paardekastanje')
+        self.request.params.add('_LOCALE_', 'nl')
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.search_result()
         self.assertIsNotNone(info['concepts'])
         concept = info['concepts'][0]
@@ -312,13 +328,12 @@ class TestSearchResultView(unittest.TestCase):
         self.assertEqual(info['scheme_id'], 'TREES')
 
     def test_find_by_concept(self):
-        request = testing.DummyRequest()
-        request.matchdict['scheme_id'] = 'TREES'
-        request.params = MultiDict()
-        request.params.add('ctype', 'concept')
-        request.params.add('_LOCALE_', 'nl')
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.matchdict['scheme_id'] = 'TREES'
+        self.request.params = MultiDict()
+        self.request.params.add('ctype', 'concept')
+        self.request.params.add('_LOCALE_', 'nl')
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.search_result()
         self.assertIsNotNone(info['concepts'])
         concept = info['concepts'][0]
@@ -326,21 +341,19 @@ class TestSearchResultView(unittest.TestCase):
         self.assertEqual(info['scheme_id'], 'TREES')
 
     def test_no_querystring(self):
-        request = testing.DummyRequest()
-        request.matchdict['scheme_id'] = 'TREES'
-        request.params = MultiDict()
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.matchdict['scheme_id'] = 'TREES'
+        self.request.params = MultiDict()
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.search_result()
         self.assertIsNotNone(info['concepts'])
         self.assertEqual(len(info['concepts']), 3)
 
     def test_no_schema(self):
-        request = testing.DummyRequest()
-        request.matchdict['scheme_id'] = 'GG'
-        request.params = MultiDict()
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.matchdict['scheme_id'] = 'GG'
+        self.request.params = MultiDict()
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.search_result()
         self.assertEqual(info.status_int, 404)
 
@@ -352,7 +365,7 @@ class TestCsvView(unittest.TestCase):
         self.regis = Registry()
         self.regis.register_provider(provider(1))
         self.request.skos_registry = self.regis
-        self.request.db = db(self.request)
+        self.request.data_managers = data_managers(self.request)
 
     def tearDown(self):
         testing.tearDown()
@@ -398,57 +411,54 @@ class TestLocaleView(unittest.TestCase):
         config = testing.setUp()
         config.add_route('home', 'foo')
         config.add_settings(settings)
+        self.request = testing.DummyRequest()
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
 
     def tearDown(self):
         testing.tearDown()
 
     def test_default_locale(self):
         config_default_lang = settings.get('pyramid.default_locale_name')
-        request = testing.DummyRequest()
-        request.referer = None
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.referer = None
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
         self.assertTrue((res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + config_default_lang))
 
     def test_unsupported_lang(self):
         config_default_lang = settings.get('pyramid.default_locale_name')
-        request = testing.DummyRequest()
-        request.GET['language'] = 'XX'
-        request.referer = None
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.GET['language'] = 'XX'
+        self.request.referer = None
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
         self.assertTrue((res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + config_default_lang))
 
     def test_locale(self):
         testlang = 'it'
-        request = testing.DummyRequest()
-        request.GET['language'] = testlang
-        request.referer = None
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.GET['language'] = testlang
+        self.request.referer = None
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
         self.assertTrue((res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + testlang))
 
     def test_locale_uppercase(self):
         testlang = 'it'
-        request = testing.DummyRequest()
-        request.GET['language'] = testlang.upper()
-        request.referer = None
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.GET['language'] = testlang.upper()
+        self.request.referer = None
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
         self.assertTrue((res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + testlang))
 
     def test_referer(self):
         testlang = 'it'
         testurl = 'http://www.foo.bar'
-        request = testing.DummyRequest()
-        request.GET['language'] = testlang.upper()
-        request.referer = testurl
-        request.skos_registry = self.regis
-        atramhasisview = AtramhasisView(request)
+        self.request.GET['language'] = testlang.upper()
+        self.request.referer = testurl
+        self.request.skos_registry = self.regis
+        atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
         self.assertEqual(res.status, '302 Found')
         self.assertEqual(res.location, testurl)
@@ -459,15 +469,16 @@ class TestHtmlTreeView(unittest.TestCase):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
+        self.request = testing.DummyRequest()
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
 
     def tearDown(self):
         testing.tearDown()
 
     def test_passing_view(self):
-        request = testing.DummyRequest()
-        request.skos_registry = self.regis
-        request.matchdict['scheme_id'] = 'TREES'
-        atramhasisview = AtramhasisView(request)
+        self.request.skos_registry = self.regis
+        self.request.matchdict['scheme_id'] = 'TREES'
+        atramhasisview = AtramhasisView(self.request)
         response = atramhasisview.results_tree_html()
         self.assertEqual(response['conceptType'], None)
         self.assertEqual(response['concept'], None)
@@ -548,19 +559,10 @@ class TestListViews(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
-        self.request.db = list_db(self.request)
+        self.request.data_managers = list_db(self.request)
 
     def tearDown(self):
         testing.tearDown()
-
-    def test_no_db(self):
-        error_raised = False
-        try:
-            AtramhasisListView(testing.DummyRequest())
-        except DbNotFoundException as e:
-            error_raised = True
-            self.assertIsNotNone(e.__str__())
-        self.assertTrue(error_raised)
 
     def test_get_list(self):
         request = self.request

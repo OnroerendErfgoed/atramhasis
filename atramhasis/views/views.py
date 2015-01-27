@@ -7,10 +7,9 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.threadlocal import get_current_registry
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException,\
-    DbNotFoundException
-from skosprovider_sqlalchemy.models import Collection, Thing, Concept, LabelType, NoteType, ConceptScheme
-from atramhasis.service import AtramhasisService
+from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteType
+
+from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
 
 
@@ -35,6 +34,8 @@ class AtramhasisView(object):
 
     def __init__(self, request):
         self.request = request
+        self.skos_manager = self.request.data_managers['skos_manager']
+        self.conceptscheme_manager = self.request.data_managers['conceptscheme_manager']
         if hasattr(request, 'skos_registry') and request.skos_registry is not None:
             self.skos_registry = self.request.skos_registry
         else:
@@ -84,7 +85,7 @@ class AtramhasisView(object):
         '''
         conceptschemes = [
             {'id': x.get_metadata()['id'],
-             'uri': self.request.db.query(ConceptScheme).filter_by(id=x.get_metadata()['conceptscheme_id']).one().uri}
+             'uri': self.conceptscheme_manager.get(x.get_metadata()['conceptscheme_id']).uri}
             for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
         ]
 
@@ -127,9 +128,7 @@ class AtramhasisView(object):
         if not provider:
             raise ConceptSchemeNotFoundException(scheme_id)
         try:
-            c = self.request.db.query(Thing) \
-                .filter_by(concept_id=c_id, conceptscheme_id=provider.conceptscheme_id) \
-                .one()
+            c = self.skos_manager.get_thing(c_id, provider.conceptscheme_id)
             if isinstance(c, Concept):
                 concept_type = "Concept"
             elif isinstance(c, Collection):
@@ -197,14 +196,13 @@ class AtramhasisView(object):
         label = self._read_request_param('label')
         ctype = self._read_request_param('ctype')
         provider = self.skos_registry.get_provider(scheme_id)
-        service = AtramhasisService(self.request.db, provider.conceptscheme_id)
         if provider:
             if label is not None:
-                concepts = service.find({'label': label, 'type': ctype}, language=self.request.locale_name)
+                concepts = self.conceptscheme_manager.find(provider.conceptscheme_id, {'label': label, 'type': ctype})
             elif (label is None) and (ctype is not None):
-                concepts = service.find({'type': ctype}, language=self.request.locale_name)
+                concepts = self.conceptscheme_manager.find(provider.conceptscheme_id, {'type': ctype})
             else:
-                concepts = service.get_all(language=self.request.locale_name)
+                concepts = self.conceptscheme_manager.get_all(provider.conceptscheme_id)
             for concept in concepts:
                 if concept.type == 'concept':
                     rows.append((
@@ -246,20 +244,8 @@ class AtramhasisView(object):
         if provider:
             conceptscheme_id = provider.conceptscheme_id
 
-            tco = self.request.db \
-                .query(Concept) \
-                .filter(
-                Concept.conceptscheme_id == conceptscheme_id,
-                ~Concept.broader_concepts.any(),
-                ~Collection.member_of.any()
-            ).all()
-            tcl = self.request.db \
-                .query(Collection) \
-                .filter(
-                Collection.conceptscheme_id == conceptscheme_id,
-                ~Collection.broader_concepts.any(),
-                ~Collection.member_of.any()
-            ).all()
+            tco = self.conceptscheme_manager.get_concepts_for_scheme_tree(conceptscheme_id)
+            tcl = self.conceptscheme_manager.get_collections_for_scheme_tree(conceptscheme_id)
 
             scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
                           sorted(tcl, key=lambda child: child.label(locale).label.lower())
@@ -308,10 +294,7 @@ class AtramhasisListView(object):
     '''
     def __init__(self, request):
         self.request = request
-        if hasattr(request, 'db') and request.db is not None:
-            self.db = request.db
-        else:
-            raise DbNotFoundException()
+        self.skos_manager = self.request.data_managers['skos_manager']
         self.localizer = request.localizer
         self._ = TranslationStringFactory('atramhasis')
 
@@ -329,7 +312,7 @@ class AtramhasisListView(object):
 
     @tree_region.cache_on_arguments()
     def get_list(self, listtype):
-        return self.db.query(listtype).all()
+        return self.skos_manager.get_by_list_type(listtype)
 
 
 @view_defaults(accept='text/html')

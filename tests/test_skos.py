@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 import transaction
 from skosprovider_sqlalchemy.models import Base as SkosBase, ConceptScheme
 
-from atramhasis.models import Base
+from atramhasis.data.models import Base
 from fixtures.data import geo
 from fixtures.materials import materials
 from fixtures.styles_and_cultures import styles_and_cultures

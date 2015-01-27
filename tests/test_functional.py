@@ -21,7 +21,7 @@ from pyramid.paster import get_appsettings
 from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
-from atramhasis.db import db
+from atramhasis.data.db import data_managers
 from atramhasis.protected_resources import ProtectedResourceException, ProtectedResourceEvent
 from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials
@@ -124,7 +124,7 @@ class FunctionalTests(unittest.TestCase):
         Base.metadata.bind = self.engine
 
         self.config.registry.dbmaker = self.session_maker
-        self.config.add_request_method(db, reify=True)
+        self.config.add_request_method(data_managers, reify=True)
 
         with transaction.manager:
             local_session = self.session_maker()
@@ -320,7 +320,7 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_add_collection(self):
         res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
-                                     params=json_collection_value)
+                                     params=json_collection_value, expect_errors=True)
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
@@ -527,7 +527,7 @@ class SkosFunctionalTests(unittest.TestCase):
         Base.metadata.bind = self.engine
 
         self.config.registry.dbmaker = self.session_maker
-        self.config.add_request_method(db, reify=True)
+        self.config.add_request_method(data_managers, reify=True)
 
         self.app = self.config.make_wsgi_app()
         self.testapp = TestApp(self.app)

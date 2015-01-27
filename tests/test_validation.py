@@ -2,6 +2,7 @@
 import unittest
 
 from sqlalchemy.orm.exc import NoResultFound
+from atramhasis.data.datamanagers import SkosManager, LanguagesManager, ConceptSchemeManager
 from atramhasis.errors import ValidationError
 
 
@@ -89,7 +90,7 @@ def create_query_mock(some_class):
     return query_mock
 
 
-def db(request):
+def session_maker():
     session_mock = Mock()
     session_mock.query = Mock(side_effect=create_query_mock)
     return session_mock
@@ -99,7 +100,10 @@ class TestValidation(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
-        self.request.db = db(self.request)
+        session = session_maker()
+        self.request.data_managers = {'skos_manager': SkosManager(session),
+                                      'conceptscheme_manager': ConceptSchemeManager(session),
+                                      'languages_manager': LanguagesManager(session)}
         self.concept_schema = ConceptSchema(
             validator=concept_schema_validator
         ).bind(
@@ -885,7 +889,8 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_language)
         self.assertIsNotNone(error)
-        self.assertIn({"id": "Invalid language tag: Unknown code 'flup', Missing language tag in 'flup'."}, error.errors)
+        self.assertIn({"id": "Invalid language tag: Unknown code 'flup', Missing language tag in 'flup'."},
+                      error.errors)
 
     def test_subordinate_arrays(self):
         error_raised = False
@@ -941,7 +946,9 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_json)
         self.assertIsNotNone(error)
-        self.assertIn({'subordinate_arrays': 'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.'}, error.errors)
+        self.assertIn({
+                          'subordinate_arrays': 'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.'},
+                      error.errors)
 
     def test_superordinates(self):
         error_raised = False
@@ -997,5 +1004,7 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_json)
         self.assertIsNotNone(error)
-        self.assertIn({'superordinates': 'The superordinates of a collection must not itself be a member of the collection being edited.'}, error.errors)
+        self.assertIn({
+                          'superordinates': 'The superordinates of a collection must not itself be a member of the collection being edited.'},
+                      error.errors)
 
