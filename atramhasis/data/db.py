@@ -2,7 +2,7 @@
 '''
 Module that sets up SQLAlchemy.
 '''
-from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager
+from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, LanguagesManager
 from .models import Base
 from skosprovider_sqlalchemy.models import Base as SkosBase
 
@@ -22,12 +22,14 @@ def data_managers(request):
     session = request.registry.dbmaker()
     skos_manager = SkosManager(session)
     conceptscheme_manager = ConceptSchemeManager(session)
+    languages_manager = LanguagesManager(session)
 
     def cleanup(request):
         session.close()
     request.add_finished_callback(cleanup)
 
-    return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager}
+    return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager,
+            'languages_manager': languages_manager}
 
 
 def includeme(config):

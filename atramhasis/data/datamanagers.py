@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection
+from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language
+from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 from atramhasis.data.data_transfer_objects import ResultDTO
 
@@ -119,3 +120,48 @@ class SkosManager(DataManager):
         :return: all results for the specific list type
         '''
         return self.session.query(list_type).all()
+
+
+class LanguagesManager(DataManager):
+    def __init__(self, session):
+        self.session = session
+
+    def get(self, language_id):
+        return self.session.query(Language).filter_by(id=language_id).one()
+
+    def save(self, language):
+        '''
+
+        :param language: language to save
+        :return: saved language
+        '''
+        self.session.add(language)
+        self.session.flush()
+        return language
+
+    def delete(self, language):
+        '''
+
+        :param language: the language to delete
+        '''
+        self.session.delete(language)
+
+    def get_all(self):
+        '''
+
+        :return: list of all languages
+        '''
+        return self.session.query(Language).all()
+
+    def get_all_sorted(self, sort_coll, sort_desc):
+        '''
+
+        :param sort_coll: sort on this column
+        :param sort_desc: descending or not
+        :return: sorted list of languages
+        '''
+        if sort_desc:
+            languages = self.session.query(Language).order_by(desc(sort_coll)).all()
+        else:
+            languages = self.session.query(Language).order_by(sort_coll).all()
+        return languages

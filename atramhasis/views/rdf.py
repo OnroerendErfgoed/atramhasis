@@ -10,7 +10,6 @@ class AtramhasisRDF(object):
 
     def __init__(self, request):
         self.request = request
-        self.db = request.db
         self.scheme_id = self.request.matchdict['scheme_id']
         if 'c_id' in self.request.matchdict.keys():
             self.c_id = self.request.matchdict['c_id']
