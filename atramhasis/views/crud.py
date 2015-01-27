@@ -74,8 +74,7 @@ class AtramhasisCrud(object):
         c_id = self.request.matchdict['c_id']
         if isinstance(self.provider, SQLAlchemyProvider):
             try:
-                concept = self.db.query(Thing).filter_by(concept_id=c_id,
-                                                         conceptscheme_id=self.provider.conceptscheme_id).one()
+                concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
             except NoResultFound:
                 raise ConceptNotFoundException(c_id)
         else:
@@ -95,9 +94,7 @@ class AtramhasisCrud(object):
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         '''
         validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
-        cid = self.db.query(
-            func.max(Thing.concept_id)
-        ).filter_by(conceptscheme_id=self.provider.conceptscheme_id).first()[0]
+        cid = self.skos_manager.get_next_cid(self.provider.conceptscheme_id)
         if not cid:
             cid = 0
         cid += 1
@@ -107,10 +104,9 @@ class AtramhasisCrud(object):
             concept = Collection()
         concept.concept_id = cid
         concept.conceptscheme_id = self.provider.conceptscheme_id
-        concept.uri = self.provider.uri_generator.generate(id=cid)
-        map_concept(concept, validated_json_concept, self.request.db)
-        self.db.add(concept)
-        self.db.flush()
+        concept.uri = self.provider.uri_generator.generate(id=concept.concept_id)
+        map_concept(concept, validated_json_concept, self.skos_manager)
+        concept = self.skos_manager.save(concept)
 
         invalidate_scheme_cache(self.scheme_id)
 
@@ -134,7 +130,7 @@ class AtramhasisCrud(object):
             concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
-        map_concept(concept, validated_json_concept, self.request.db)
+        map_concept(concept, validated_json_concept, self.skos_manager)
 
         invalidate_scheme_cache(self.scheme_id)
 

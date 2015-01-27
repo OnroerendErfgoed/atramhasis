@@ -1,27 +1,19 @@
 # -*- coding: utf-8 -*-
-from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language, MatchType, Match
-from sqlalchemy import desc
+from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language, MatchType, Match, \
+    LabelType
+from sqlalchemy import desc, func
 from sqlalchemy.orm import joinedload
-from atramhasis.data.data_transfer_objects import ResultDTO
 
 
 class DataManager(object):
-    @staticmethod
-    def process_ranged_query(query, result_range):
-        total = query.count()
-        if result_range is not None:
-            data = query \
-                .offset(result_range.start) \
-                .limit(result_range.get_page_size()) \
-                .all()
-        else:
-            data = query.all()
-        return ResultDTO(data, total)
+
+    def __init__(self, session):
+        self.session = session
 
 
 class ConceptSchemeManager(DataManager):
     def __init__(self, session):
-        self.session = session
+        super(ConceptSchemeManager, self).__init__(session)
 
     def get(self, conceptscheme_id):
         '''
@@ -100,7 +92,7 @@ class ConceptSchemeManager(DataManager):
 
 class SkosManager(DataManager):
     def __init__(self, session):
-        self.session = session
+        super(SkosManager, self).__init__(session)
 
     def get_thing(self, concept_id, conceptscheme_id):
         '''
@@ -112,6 +104,16 @@ class SkosManager(DataManager):
         return self.session.query(Thing) \
             .filter_by(concept_id=concept_id, conceptscheme_id=conceptscheme_id) \
             .one()
+
+    def save(self, thing):
+        '''
+
+        :param thing: thing to save
+        :return: saved thing
+        '''
+        self.session.add(thing)
+        self.session.flush()
+        return thing
 
     def delete_thing(self, thing):
         '''
@@ -135,10 +137,18 @@ class SkosManager(DataManager):
         return self.session.query(Match).filter_by(uri=uri, matchtype_id=matchtype_id,
                                                    concept_id=concept_id).one()
 
+    def get_all_label_types(self):
+        return self.session.query(LabelType).all()
+
+    def get_next_cid(self, conceptscheme_id):
+        return self.session.query(
+            func.max(Thing.concept_id)
+        ).filter_by(conceptscheme_id=conceptscheme_id).first()[0]
+
 
 class LanguagesManager(DataManager):
     def __init__(self, session):
-        self.session = session
+        super(LanguagesManager, self).__init__(session)
 
     def get(self, language_id):
         return self.session.query(Language).filter_by(id=language_id).one()
@@ -179,3 +189,6 @@ class LanguagesManager(DataManager):
         else:
             languages = self.session.query(Language).order_by(sort_coll).all()
         return languages
+
+    def count_languages(self, language_tag):
+        return self.session.query(Language).filter_by(id=language_tag).count()

@@ -99,6 +99,8 @@ class LanguageTag(colander.MappingSchema):
 
 def concept_schema_validator(node, cstruct):
     request = node.bindings['request']
+    skos_manager = request.data_managers['skos_manager']
+    languages_manager = request.data_managers['languages_manager']
     conceptscheme_id = node.bindings['conceptscheme_id']
     concept_type = cstruct['type']
     narrower = None
@@ -115,50 +117,50 @@ def concept_schema_validator(node, cstruct):
     min_labels_rule(errors, node, cstruct)
     if 'labels' in cstruct:
         labels = copy.deepcopy(cstruct['labels'])
-        label_type_rule(errors, node, request, labels)
-        label_lang_rule(errors, node, request, labels)
+        label_type_rule(errors, node, skos_manager, labels)
+        label_lang_rule(errors, node, languages_manager, labels)
         max_preflabels_rule(errors, node, labels)
     if 'related' in cstruct:
         related = copy.deepcopy(cstruct['related'])
         related = [m['id'] for m in related]
-        r_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['related'], request,
+        r_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['related'], skos_manager,
                                                                          conceptscheme_id, related)
         concept_relations_rule(errors, node['related'], related, concept_type)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
         narrower = [m['id'] for m in narrower]
-        n_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['narrower'], request,
+        n_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['narrower'], skos_manager,
                                                                          conceptscheme_id, narrower)
         concept_relations_rule(errors, node['narrower'], narrower, concept_type)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
         broader = [m['id'] for m in broader]
-        b_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['broader'], request,
+        b_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['broader'], skos_manager,
                                                                          conceptscheme_id, broader)
         concept_relations_rule(errors, node['broader'], broader, concept_type)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
         members = [m['id'] for m in members]
-        m_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['members'], request,
+        m_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['members'], skos_manager,
                                                                          conceptscheme_id, members)
     if 'member_of' in cstruct:
         member_of = copy.deepcopy(cstruct['member_of'])
         member_of = [m['id'] for m in member_of]
-        o_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['member_of'], request,
+        o_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['member_of'], skos_manager,
                                                                          conceptscheme_id, member_of)
     if r_validated and n_validated and b_validated:
-        concept_type_rule(errors, node['narrower'], request, conceptscheme_id, narrower)
-        narrower_hierarchy_rule(errors, node['narrower'], request, conceptscheme_id, cstruct)
-        concept_type_rule(errors, node['broader'], request, conceptscheme_id, broader)
-        broader_hierarchy_rule(errors, node['broader'], request, conceptscheme_id, cstruct)
-        concept_type_rule(errors, node['related'], request, conceptscheme_id, related)
+        concept_type_rule(errors, node['narrower'], skos_manager, conceptscheme_id, narrower)
+        narrower_hierarchy_rule(errors, node['narrower'], skos_manager, conceptscheme_id, cstruct)
+        concept_type_rule(errors, node['broader'], skos_manager, conceptscheme_id, broader)
+        broader_hierarchy_rule(errors, node['broader'], skos_manager, conceptscheme_id, cstruct)
+        concept_type_rule(errors, node['related'], skos_manager, conceptscheme_id, related)
 
     if m_validated and o_validated:
         members_only_in_collection_rule(errors, node['members'], concept_type, members)
         collection_members_unique_rule(errors, node['members'], members)
-        collection_type_rule(errors, node['member_of'], request, conceptscheme_id, member_of)
-        memberof_hierarchy_rule(errors, node['member_of'], request, conceptscheme_id, cstruct)
-        members_hierarchy_rule(errors, node['members'], request, conceptscheme_id, cstruct)
+        collection_type_rule(errors, node['member_of'], skos_manager, conceptscheme_id, member_of)
+        memberof_hierarchy_rule(errors, node['member_of'], skos_manager, conceptscheme_id, cstruct)
+        members_hierarchy_rule(errors, node['members'], skos_manager, conceptscheme_id, cstruct)
 
     if 'matches' in cstruct:
         matches = copy.deepcopy(cstruct['matches'])
@@ -169,15 +171,15 @@ def concept_schema_validator(node, cstruct):
         subordinate_arrays = copy.deepcopy(cstruct['subordinate_arrays'])
         subordinate_arrays = [m['id'] for m in subordinate_arrays]
         subordinate_arrays_only_in_concept_rule(errors, node['subordinate_arrays'], concept_type, subordinate_arrays)
-        subordinate_arrays_type_rule(errors, node['subordinate_arrays'], request, conceptscheme_id, subordinate_arrays)
-        subordinate_arrays_hierarchy_rule(errors, node['subordinate_arrays'], request, conceptscheme_id, cstruct)
+        subordinate_arrays_type_rule(errors, node['subordinate_arrays'], skos_manager, conceptscheme_id, subordinate_arrays)
+        subordinate_arrays_hierarchy_rule(errors, node['subordinate_arrays'], skos_manager, conceptscheme_id, cstruct)
 
     if 'superordinates' in cstruct:
         superordinates = copy.deepcopy(cstruct['superordinates'])
         superordinates = [m['id'] for m in superordinates]
         superordinates_only_in_concept_rule(errors, node['superordinates'], concept_type, superordinates)
-        superordinates_type_rule(errors, node['superordinates'], request, conceptscheme_id, superordinates)
-        superordinates_hierarchy_rule(errors, node['superordinates'], request, conceptscheme_id, cstruct)
+        superordinates_type_rule(errors, node['superordinates'], skos_manager, conceptscheme_id, superordinates)
+        superordinates_hierarchy_rule(errors, node['superordinates'], skos_manager, conceptscheme_id, cstruct)
 
     if len(errors) > 0:
         raise ValidationError(
@@ -217,8 +219,8 @@ def min_labels_rule(errors, node, cstruct):
             ))
 
 
-def label_type_rule(errors, node, request, labels):
-    label_types = request.db.query(LabelType).all()
+def label_type_rule(errors, node, skos_manager, labels):
+    label_types = skos_manager.get_all_label_types()
     label_types = [label_type.name for label_type in label_types]
     for label in labels:
         if label['type'] not in label_types:
@@ -228,7 +230,7 @@ def label_type_rule(errors, node, request, labels):
             ))
 
 
-def label_lang_rule(errors, node, request, labels):
+def label_lang_rule(errors, node, languages_manager, labels):
     for label in labels:
         language_tag = label['language']
         if not tags.check(language_tag):
@@ -237,17 +239,16 @@ def label_lang_rule(errors, node, request, labels):
                 'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
             ))
         else:
-            languages_present = request.db.query(Language).filter_by(id=language_tag).count()
+            languages_present = languages_manager.count_languages(language_tag)
             if not languages_present:
                 descriptions = ', '.join(tags.description(language_tag))
                 language_item = Language(id=language_tag, name=descriptions)
-                request.db.add(language_item)
+                languages_manager.save(language_item)
 
 
-def concept_type_rule(errors, node_location, request, conceptscheme_id, members):
+def concept_type_rule(errors, node_location, skos_manager, conceptscheme_id, members):
     for member_concept_id in members:
-        member_concept = request.db.query(Thing).filter_by(concept_id=member_concept_id,
-                                                           conceptscheme_id=conceptscheme_id).one()
+        member_concept = skos_manager.get_thing(member_concept_id, conceptscheme_id)
         if member_concept.type != 'concept':
             errors.append(colander.Invalid(
                 node_location,
@@ -255,10 +256,9 @@ def concept_type_rule(errors, node_location, request, conceptscheme_id, members)
             ))
 
 
-def collection_type_rule(errors, node_location, request, conceptscheme_id, members):
+def collection_type_rule(errors, node_location, skos_manager, conceptscheme_id, members):
     for member_collection_id in members:
-        member_collection = request.db.query(Thing).filter_by(concept_id=member_collection_id,
-                                                              conceptscheme_id=conceptscheme_id).one()
+        member_collection = skos_manager.get_thing(member_collection_id, conceptscheme_id)
         if member_collection.type != 'collection':
             errors.append(colander.Invalid(
                 node_location,
@@ -266,11 +266,10 @@ def collection_type_rule(errors, node_location, request, conceptscheme_id, membe
             ))
 
 
-def concept_exists_andnot_different_conceptscheme_rule(errors, node_location, request, conceptscheme_id, members):
+def concept_exists_andnot_different_conceptscheme_rule(errors, node_location, skos_manager, conceptscheme_id, members):
     for member_concept_id in members:
         try:
-            stored_concept = request.db.query(Thing).filter_by(concept_id=member_concept_id,
-                                                               conceptscheme_id=conceptscheme_id).one()
+            skos_manager.get_thing(member_concept_id, conceptscheme_id)
         except NoResultFound:
             errors.append(colander.Invalid(
                 node_location,
@@ -280,7 +279,7 @@ def concept_exists_andnot_different_conceptscheme_rule(errors, node_location, re
     return True
 
 
-def broader_hierarchy_rule(errors, node_location, request, conceptscheme_id, cstruct):
+def broader_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
     narrower_hierarchy = []
     broader = []
     if 'broader' in cstruct:
@@ -290,7 +289,7 @@ def broader_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
         narrower = copy.deepcopy(cstruct['narrower'])
         narrower = [m['id'] for m in narrower]
         narrower_hierarchy = narrower
-        narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy)
+        narrower_hierarchy_build(skos_manager, conceptscheme_id, narrower, narrower_hierarchy)
     for broader_concept_id in broader:
         if broader_concept_id in narrower_hierarchy:
             errors.append(colander.Invalid(
@@ -299,18 +298,17 @@ def broader_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
             ))
 
 
-def narrower_hierarchy_build(request, conceptscheme_id, narrower, narrower_hierarchy):
+def narrower_hierarchy_build(skos_manager, conceptscheme_id, narrower, narrower_hierarchy):
     for narrower_concept_id in narrower:
-        narrower_concept = request.db.query(Thing).filter_by(concept_id=narrower_concept_id,
-                                                             conceptscheme_id=conceptscheme_id).one()
+        narrower_concept = skos_manager.get_thing(narrower_concept_id, conceptscheme_id)
         if narrower_concept is not None and narrower_concept.type == 'concept':
             narrower_concepts = [n.concept_id for n in narrower_concept.narrower_concepts]
             for narrower_id in narrower_concepts:
                 narrower_hierarchy.append(narrower_id)
-            narrower_hierarchy_build(request, conceptscheme_id, narrower_concepts, narrower_hierarchy)
+            narrower_hierarchy_build(skos_manager, conceptscheme_id, narrower_concepts, narrower_hierarchy)
 
 
-def narrower_hierarchy_rule(errors, node_location, request, conceptscheme_id, cstruct):
+def narrower_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
     broader_hierarchy = []
     narrower = []
     if 'narrower' in cstruct:
@@ -320,7 +318,7 @@ def narrower_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
         broader = copy.deepcopy(cstruct['broader'])
         broader = [m['id'] for m in broader]
         broader_hierarchy = broader
-        broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy)
+        broader_hierarchy_build(skos_manager, conceptscheme_id, broader, broader_hierarchy)
     for narrower_concept_id in narrower:
         if narrower_concept_id in broader_hierarchy:
             errors.append(colander.Invalid(
@@ -329,15 +327,14 @@ def narrower_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
             ))
 
 
-def broader_hierarchy_build(request, conceptscheme_id, broader, broader_hierarchy):
+def broader_hierarchy_build(skos_manager, conceptscheme_id, broader, broader_hierarchy):
     for broader_concept_id in broader:
-        broader_concept = request.db.query(Thing).filter_by(concept_id=broader_concept_id,
-                                                            conceptscheme_id=conceptscheme_id).one()
+        broader_concept = skos_manager.get_thing(broader_concept_id, conceptscheme_id)
         if broader_concept is not None and broader_concept.type == 'concept':
             broader_concepts = [n.concept_id for n in broader_concept.broader_concepts]
             for broader_id in broader_concepts:
                 broader_hierarchy.append(broader_id)
-            broader_hierarchy_build(request, conceptscheme_id, broader_concepts, broader_hierarchy)
+            broader_hierarchy_build(skos_manager, conceptscheme_id, broader_concepts, broader_hierarchy)
 
 
 def collection_members_unique_rule(errors, node_location, members):
@@ -356,7 +353,7 @@ def members_only_in_collection_rule(errors, node, concept_type, members):
         ))
 
 
-def memberof_hierarchy_rule(errors, node_location, request, conceptscheme_id, cstruct):
+def memberof_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
     members_hierarchy = []
     memberof = []
     if 'member_of' in cstruct:
@@ -366,7 +363,7 @@ def memberof_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
         members = copy.deepcopy(cstruct['members'])
         members = [m['id'] for m in members]
         members_hierarchy = members
-        members_hierarchy_build(request, conceptscheme_id, members, members_hierarchy)
+        members_hierarchy_build(skos_manager, conceptscheme_id, members, members_hierarchy)
     for memberof_concept_id in memberof:
         if memberof_concept_id in members_hierarchy:
             errors.append(colander.Invalid(
@@ -375,21 +372,20 @@ def memberof_hierarchy_rule(errors, node_location, request, conceptscheme_id, cs
             ))
 
 
-def members_hierarchy_build(request, conceptscheme_id, members, members_hierarchy):
+def members_hierarchy_build(skos_manager, conceptscheme_id, members, members_hierarchy):
     for members_concept_id in members:
         try:
-            members_concept = request.db.query(Thing).filter_by(concept_id=members_concept_id,
-                                                                conceptscheme_id=conceptscheme_id).one()
+            members_concept = skos_manager.get_thing(members_concept_id, conceptscheme_id)
         except NoResultFound:
             members_concept = None
         if members_concept is not None and members_concept.type == 'collection':
             members_concepts = [n.concept_id for n in members_concept.members]
             for members_id in members_concepts:
                 members_hierarchy.append(members_id)
-            members_hierarchy_build(request, conceptscheme_id, members_concepts, members_hierarchy)
+            members_hierarchy_build(skos_manager, conceptscheme_id, members_concepts, members_hierarchy)
 
 
-def members_hierarchy_rule(errors, node_location, request, conceptscheme_id, cstruct):
+def members_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
     memberof_hierarchy = []
     members = []
     if 'members' in cstruct:
@@ -399,7 +395,7 @@ def members_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
         member_of = copy.deepcopy(cstruct['member_of'])
         member_of = [m['id'] for m in member_of]
         memberof_hierarchy = member_of
-        memberof_hierarchy_build(request, conceptscheme_id, member_of, memberof_hierarchy)
+        memberof_hierarchy_build(skos_manager, conceptscheme_id, member_of, memberof_hierarchy)
     for member_concept_id in members:
         if member_concept_id in memberof_hierarchy:
             errors.append(colander.Invalid(
@@ -408,15 +404,14 @@ def members_hierarchy_rule(errors, node_location, request, conceptscheme_id, cst
             ))
 
 
-def memberof_hierarchy_build(request, conceptscheme_id, member_of, memberof_hierarchy):
+def memberof_hierarchy_build(skos_manager, conceptscheme_id, member_of, memberof_hierarchy):
     for memberof_concept_id in member_of:
-        memberof_concept = request.db.query(Thing).filter_by(concept_id=memberof_concept_id,
-                                                             conceptscheme_id=conceptscheme_id).one()
+        memberof_concept = skos_manager.get_thing(memberof_concept_id, conceptscheme_id)
         if memberof_concept is not None:
             memberof_concepts = [n.concept_id for n in memberof_concept.member_of]
             for memberof_id in memberof_concepts:
                 memberof_hierarchy.append(memberof_id)
-            memberof_hierarchy_build(request, conceptscheme_id, memberof_concepts, memberof_hierarchy)
+            memberof_hierarchy_build(skos_manager, conceptscheme_id, memberof_concepts, memberof_hierarchy)
 
 
 def concept_matches_rule(errors, node_location, matches, concept_type):
@@ -441,12 +436,13 @@ def concept_matches_unique_rule(errors, node_location, matches):
 
 def languagetag_validator(node, cstruct):
     request = node.bindings['request']
+    languages_manager = request.data_managers['languages_manager']
     new = node.bindings['new']
     errors = []
     language_tag = cstruct['id']
 
     if new:
-        languagetag_checkduplicate(node['id'], language_tag, request, errors)
+        languagetag_checkduplicate(node['id'], language_tag, languages_manager, errors)
     languagetag_isvalid_rule(node['id'], language_tag, errors)
 
     if len(errors) > 0:
@@ -464,8 +460,8 @@ def languagetag_isvalid_rule(node, language_tag, errors):
         ))
 
 
-def languagetag_checkduplicate(node, language_tag, request, errors):
-    language_present = request.db.query(Language).filter_by(id=language_tag).count()
+def languagetag_checkduplicate(node, language_tag, languages_manager, errors):
+    language_present = languages_manager.count_languages(language_tag)
     if language_present:
         errors.append(colander.Invalid(
             node,
@@ -481,10 +477,9 @@ def subordinate_arrays_only_in_concept_rule(errors, node, concept_type, subordin
         ))
 
 
-def subordinate_arrays_type_rule(errors, node_location, request, conceptscheme_id, subordinate_arrays):
+def subordinate_arrays_type_rule(errors, node_location, skos_manager, conceptscheme_id, subordinate_arrays):
     for subordinate_id in subordinate_arrays:
-        subordinate = request.db.query(Thing).filter_by(concept_id=subordinate_id,
-                                                        conceptscheme_id=conceptscheme_id).one()
+        subordinate = skos_manager.get_thing(subordinate_id, conceptscheme_id)
         if subordinate.type != 'collection':
             errors.append(colander.Invalid(
                 node_location,
@@ -492,7 +487,7 @@ def subordinate_arrays_type_rule(errors, node_location, request, conceptscheme_i
             ))
 
 
-def subordinate_arrays_hierarchy_rule(errors, node_location, request, conceptscheme_id, cstruct):
+def subordinate_arrays_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
     member_of_hierarchy = []
     subordinate_arrays = []
     if 'subordinate_arrays' in cstruct:
@@ -502,7 +497,7 @@ def subordinate_arrays_hierarchy_rule(errors, node_location, request, conceptsch
         member_of = copy.deepcopy(cstruct['member_of'])
         member_of = [m['id'] for m in member_of]
         member_of_hierarchy = member_of
-        members_hierarchy_build(request, conceptscheme_id, member_of, member_of_hierarchy)
+        members_hierarchy_build(skos_manager, conceptscheme_id, member_of, member_of_hierarchy)
     for subordinate_array_id in subordinate_arrays:
         if subordinate_array_id in member_of_hierarchy:
             errors.append(colander.Invalid(
@@ -519,10 +514,9 @@ def superordinates_only_in_concept_rule(errors, node, concept_type, superordinat
         ))
 
 
-def superordinates_type_rule(errors, node_location, request, conceptscheme_id, superordinates):
+def superordinates_type_rule(errors, node_location, skos_manager, conceptscheme_id, superordinates):
     for superordinate_id in superordinates:
-        superordinate = request.db.query(Thing).filter_by(concept_id=superordinate_id,
-                                                          conceptscheme_id=conceptscheme_id).one()
+        superordinate = skos_manager.get_thing(superordinate_id, conceptscheme_id)
         if superordinate.type != 'concept':
             errors.append(colander.Invalid(
                 node_location,
@@ -530,7 +524,7 @@ def superordinates_type_rule(errors, node_location, request, conceptscheme_id, s
             ))
 
 
-def superordinates_hierarchy_rule(errors, node_location, request, conceptscheme_id, cstruct):
+def superordinates_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
     members_hierarchy = []
     superordinates = []
     if 'superordinates' in cstruct:
@@ -540,7 +534,7 @@ def superordinates_hierarchy_rule(errors, node_location, request, conceptscheme_
         members = copy.deepcopy(cstruct['members'])
         members = [m['id'] for m in members]
         members_hierarchy = members
-        members_hierarchy_build(request, conceptscheme_id, members, members_hierarchy)
+        members_hierarchy_build(skos_manager, conceptscheme_id, members, members_hierarchy)
     for superordinates_id in superordinates:
         if superordinates_id in members_hierarchy:
             errors.append(colander.Invalid(
