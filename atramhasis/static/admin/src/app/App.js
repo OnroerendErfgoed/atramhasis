@@ -387,10 +387,12 @@ define([
                         labels: concept.labels,
                         type: concept.type,
                         notes: concept.notes,
-                        matches: {
+                    };
+                    if(concept.type != 'collection'){
+                        clone.matches = {
                             exact: [concepturi]
                         }
-                    };
+                    }
                     conceptForm.init(scheme, clone);
                     conceptDialog.set("title", "Import concept or collection");
                     conceptDialog.show();
