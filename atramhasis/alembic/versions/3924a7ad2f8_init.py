@@ -40,7 +40,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('label', sa.String(length=512), nullable=False),
     sa.Column('labeltype_id', sa.String(length=20), nullable=False),
-    sa.Column('language_id', sa.String(length=10), nullable=True),
+    sa.Column('language_id', sa.String(length=64), nullable=True),
     sa.ForeignKeyConstraint(['labeltype_id'], ['labeltype.name'], ),
     sa.ForeignKeyConstraint(['language_id'], ['language.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -51,7 +51,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('note', sa.Text(), nullable=False),
     sa.Column('notetype_id', sa.String(length=20), nullable=False),
-    sa.Column('language_id', sa.String(length=10), nullable=True),
+    sa.Column('language_id', sa.String(length=64), nullable=True),
     sa.ForeignKeyConstraint(['language_id'], ['language.id'], ),
     sa.ForeignKeyConstraint(['notetype_id'], ['notetype.name'], ),
     sa.PrimaryKeyConstraint('id')
