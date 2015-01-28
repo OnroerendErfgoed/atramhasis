@@ -31,6 +31,7 @@ class AtramhasisRDF(object):
         return response
 
     @view_config(route_name='atramhasis.rdf_full_export_turtle')
+    @view_config(route_name='atramhasis.rdf_full_export_turtle_x')
     @view_config(route_name='atramhasis.rdf_full_export_turtle_ext')
     def rdf_full_export_turtle(self):
         graph = utils.rdf_dumper(self.provider)
@@ -49,6 +50,7 @@ class AtramhasisRDF(object):
         return response
 
     @view_config(route_name='atramhasis.rdf_conceptscheme_export_turtle')
+    @view_config(route_name='atramhasis.rdf_conceptscheme_export_turtle_x')
     @view_config(route_name='atramhasis.rdf_conceptscheme_export_turtle_ext')
     def rdf_conceptscheme_export_turtle(self):
         graph = utils.rdf_conceptscheme_dumper(self.provider)
@@ -67,6 +69,7 @@ class AtramhasisRDF(object):
         return response
 
     @view_config(route_name='atramhasis.rdf_individual_export_turtle')
+    @view_config(route_name='atramhasis.rdf_individual_export_turtle_x')
     @view_config(route_name='atramhasis.rdf_individual_export_turtle_ext')
     def rdf_individual_export_turtle(self):
         graph = utils.rdf_c_dumper(self.provider, self.c_id)

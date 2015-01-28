@@ -55,11 +55,22 @@ def includeme(config):
     config.add_route('tree_invalidate', pattern='/admin/tree/invalidate', accept='application/json')
 
     config.add_route('atramhasis.rdf_full_export_turtle', pattern='/conceptschemes/{scheme_id}/c', accept='text/turtle')
-    config.add_route('atramhasis.rdf_full_export', pattern='/conceptschemes/{scheme_id}/c', accept='application/rdf+xml')
-    config.add_route('atramhasis.rdf_conceptscheme_export', pattern='/conceptschemes/{scheme_id}', accept='application/rdf+xml')
-    config.add_route('atramhasis.rdf_conceptscheme_export_turtle', pattern='/conceptschemes/{scheme_id}', accept='text/turtle')
-    config.add_route('atramhasis.rdf_individual_export', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='application/rdf+xml')
-    config.add_route('atramhasis.rdf_individual_export_turtle', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/turtle')
+    config.add_route('atramhasis.rdf_full_export_turtle_x', pattern='/conceptschemes/{scheme_id}/c',
+                     accept='application/x-turtle')
+    config.add_route('atramhasis.rdf_full_export', pattern='/conceptschemes/{scheme_id}/c',
+                     accept='application/rdf+xml')
+    config.add_route('atramhasis.rdf_conceptscheme_export', pattern='/conceptschemes/{scheme_id}',
+                     accept='application/rdf+xml')
+    config.add_route('atramhasis.rdf_conceptscheme_export_turtle', pattern='/conceptschemes/{scheme_id}',
+                     accept='text/turtle')
+    config.add_route('atramhasis.rdf_conceptscheme_export_turtle_x', pattern='/conceptschemes/{scheme_id}',
+                     accept='application/x-turtle')
+    config.add_route('atramhasis.rdf_individual_export', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
+                     accept='application/rdf+xml')
+    config.add_route('atramhasis.rdf_individual_export_turtle', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
+                     accept='text/turtle')
+    config.add_route('atramhasis.rdf_individual_export_turtle_x', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
+                     accept='application/x-turtle')
 
     config.include('pyramid_skosprovider')
     config.scan('pyramid_skosprovider')
@@ -79,7 +90,7 @@ def main(global_config, **settings):
 
     # if standalone include skos sample data
     test_mode = settings.get('atramhasis.test_mode')
-    if not test_mode == 'true':   # pragma: no cover
+    if not test_mode == 'true':  # pragma: no cover
         config.include('.skos')
 
     return config.make_wsgi_app()
