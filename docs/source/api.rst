@@ -4,66 +4,76 @@
 API Documentation
 =================
 
-Db
-==
+atramhasis.data
+===============
 
-.. automodule:: atramhasis.db
+atramhasis.data.datamanagers
+----------------------------
+
+.. automodule:: atramhasis.data.datamanagers
    :members:
 
-Errors
-======
+
+atramhasis.data.db
+------------------
+
+.. automodule:: atramhasis.data.db
+   :members:
+
+atramhasis.errors
+=================
 
 .. automodule:: atramhasis.errors
    :members:
 
-Mappers
-=======
+atramhasis.mappers
+==================
 
 .. automodule:: atramhasis.mappers
    :members:
 
-Protected Resources
-===================
+atramhasis.protected_resources
+==============================
 
 .. automodule:: atramhasis.protected_resources
    :members:
 
-Service
-=======
+atramhasis.service
+==================
 
 .. automodule:: atramhasis.service
    :members:
 
-Utils
-=====
+atramhasis.utils
+================
 
 .. automodule:: atramhasis.utils
    :members:
 
-Validators
-==========
+atramhasis.validators
+=====================
 
 .. automodule:: atramhasis.validators
    :members:
 
 
-Views
-=====
+atramhasis.views
+================
 
-General
--------
+atramhasis.views.views
+----------------------
 
 .. automodule:: atramhasis.views.views
    :members:
 
-Crud
-----
+atramhasis.views.crud
+---------------------
 
 .. automodule:: atramhasis.views.crud
    :members:
 
-Exception views
----------------
+atramhasis.views.exception_views
+--------------------------------
 
 .. automodule:: atramhasis.views.exception_views
    :members:
