@@ -267,8 +267,6 @@ define([
                 });
             });
             topic.subscribe("concept.addNarrower", function (conceptid, type, label) {
-                    console.log("concept.addMemberOf subscribe: " + label + " " + conceptid + " " + label + " (" + self.currentScheme + ")");
-
                     var thesaurus = self.thesauri.stores[self.currentScheme];
 
                     thesaurus.get(conceptid).then(function (item) {
@@ -277,7 +275,8 @@ define([
                         ];
                         conceptForm.init(self.currentScheme);
                         conceptForm.addBroader(broader);
-                        conceptDialog.set("title", "Add concept or collection to the " + type + " " + label);
+                        conceptForm.setType('concept');
+                        conceptDialog.set("title", "Add narrower concept to '" + label + "'");
                         conceptDialog.show();
                     });
                 }

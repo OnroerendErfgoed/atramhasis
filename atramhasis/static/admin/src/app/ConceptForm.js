@@ -193,6 +193,8 @@ define(
                     this.labelManager.reset();
                     this.noteManager.reset();
                     this.matchesManager.reset();
+                    this.typeComboBox.reset();
+                    this.typeComboBox.set('disabled', false);
                 },
 
                 init: function (scheme, concept) {
@@ -261,12 +263,15 @@ define(
                     this.dialog && this.dialog.layout();
                 },
                 addBroader: function (broader) {
-                    console.log("add existing broader: " + broader.label);
                     this.broaderManager.setRelations(broader);
                 },
                 addMemberOf: function (memberOf) {
-                    console.log("add existing broader: " + memberOf.label);
                     this.memberofManager.setRelations(memberOf);
+                },
+
+                setType: function (type) {
+                    this.typeComboBox.set("value", type);
+                    this.typeComboBox.set('disabled', true);
                 }
             }
         )
