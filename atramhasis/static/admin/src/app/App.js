@@ -8,6 +8,7 @@ define([
     "dojo/dom",
     "dojo/request",
     "dojo/json",
+    "dojo/string",
     "dijit/registry",
     "dijit/form/FilteringSelect",
     "dijit/MenuItem",
@@ -32,7 +33,7 @@ define([
     "dijit/layout/BorderContainer"
 
 
-], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, registry, FilteringSelect, MenuItem,
+], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, string, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
              ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, TabContainer) {
@@ -228,7 +229,7 @@ define([
                         });
                         cp = new ContentPane({
                             id: schemeid + "_" + item.id,
-                            title: item.label,
+                            title: string.escape(item.label),
                             closable: true,
                             style: "padding: 0",
                             content: concept
