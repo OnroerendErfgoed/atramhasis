@@ -1,0 +1,9 @@
+@import url("foundation.min.css");
+
+#tree1 {
+    display: none;
+}
+
+.header {
+    display: none;
+}
