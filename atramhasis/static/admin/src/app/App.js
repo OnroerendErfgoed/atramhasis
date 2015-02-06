@@ -298,9 +298,7 @@ define([
             });
 
 
-            topic.subscribe("concept.addMemberOf", function (conceptid, type, label) {
-                    console.log("concept.addMemberOf subscribe: " + label + " " + conceptid + " " + label + " (" + self.currentScheme + ")");
-
+            topic.subscribe("concept.addMemberOf", function (conceptid, label) {
                     var thesaurus = self.thesauri.stores[self.currentScheme];
 
                     thesaurus.get(conceptid).then(function (item) {
@@ -309,7 +307,7 @@ define([
                         ];
                         conceptForm.init(self.currentScheme);
                         conceptForm.addMemberOf(MemberOf);
-                        conceptDialog.set("title", "Add concept or collection to the " + type + " " + label);
+                        conceptDialog.set("title", "Add member to '" + label + "'");
                         conceptDialog.show();
                     });
                 }

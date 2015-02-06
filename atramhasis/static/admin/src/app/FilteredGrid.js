@@ -204,12 +204,11 @@ define([
                 pMenu.addChild(new MenuItem({
                     label: "Add member",
                     onClick: function () {
-                        widget._addMemberOf(conceptId, type, label);
+                        topic.publish("concept.addMemberOf", conceptId, label);
                     }
                 }));
 
             }
-
 
             pMenu.addChild(new MenuItem({
                 label: "Edit",
@@ -237,11 +236,6 @@ define([
             var args = {target: pMenu.selector};
             pMenu._openMyself(args);
 
-
-        },
-
-        _addMemberOf: function (conceptId, type, label) {
-            topic.publish("concept.addMemberOf", conceptId, type, label);
 
         },
 
