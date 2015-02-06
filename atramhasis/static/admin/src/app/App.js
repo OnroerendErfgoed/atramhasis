@@ -266,7 +266,7 @@ define([
                     conceptDialog.show();
                 });
             });
-            topic.subscribe("concept.addNarrower", function (conceptid, type, label) {
+            topic.subscribe("concept.addNarrower", function (conceptid, label) {
                     var thesaurus = self.thesauri.stores[self.currentScheme];
 
                     thesaurus.get(conceptid).then(function (item) {
@@ -281,6 +281,10 @@ define([
                     });
                 }
             );
+
+            topic.subscribe("concept.addSubordinateArray", function (conceptid, label) {
+              console.log("addSubordinateArray ", conceptid);
+            });
 
 
             topic.subscribe("concept.addMemberOf", function (conceptid, type, label) {

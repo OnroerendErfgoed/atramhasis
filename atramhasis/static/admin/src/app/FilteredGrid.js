@@ -177,7 +177,6 @@ define([
         },
 
         _createGridContextMenu: function (targetNodeId, selector, widget, conceptId, type, label) {
-          console.log(conceptId);
             var pMenu;
             var self = this;
             pMenu = new Menu({
@@ -189,13 +188,14 @@ define([
                 pMenu.addChild(new MenuItem({
                     label: "Add narrower concept",
                     onClick: function () {
-                        topic.publish("concept.addNarrower", conceptId, type, label);
+                        topic.publish("concept.addNarrower", conceptId, label);
                     }
                 }));
                 pMenu.addChild(new MenuItem({
                     label: "Add subordinate array",
                     onClick: function () {
                         console.log('add sub array');
+                        topic.publish("concept.addSubordinateArray", conceptId, label);
                     }
                 }));
             }
