@@ -185,8 +185,7 @@ define([
                                     self.relatedMatchList.buildList(self.relatedList.mapMatchesForList(self.matches, type), "Related Matches", false);
                                 }
                             }, function (err) {
-                                // Do something when the process errors out
-                                console.error(err);
+                                topic.publish('dGrowl', err, {'title': "Error when looking up match", 'sticky': true, 'channel':'error'});
                             });
                         } catch(err) {
                             topic.publish('dGrowl', err, {'title': "Error when looking up match", 'sticky': true, 'channel':'error'});
