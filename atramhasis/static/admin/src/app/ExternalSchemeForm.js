@@ -4,6 +4,7 @@ define([
     'dojo/Evented',
     'dojo/dom-construct',
     'dojo/on',
+    'dojo/string',
     'dijit/Dialog',
     'dijit/form/Select',
     'dijit/form/TextBox',
@@ -12,7 +13,7 @@ define([
     'dgrid/Keyboard',
     'dgrid/Selection',
     'dgrid/extensions/DijitRegistry'    
-], function (declare, WidgetBase, Evented, domConstruct, on, Dialog, Select, TextBox, Button,
+], function (declare, WidgetBase, Evented, domConstruct, on, string, Dialog, Select, TextBox, Button,
     dgridList, dgridKeyboard, dgridSelection, DijitRegistry) {
     return declare([WidgetBase, Evented], {
 
@@ -88,7 +89,9 @@ define([
                 selectionMode: "single",
                 renderRow: function(object, options){
                     return domConstruct.create("div", {
-                        innerHTML: object.label + " <em>(" + object.type + ", id: " + object.id + ")</em>"
+                        innerHTML: string.escape(object.label.toString()) + " <em>("
+                          + string.escape(object.type.toString()) + ", id: "
+                          + string.escape(object.id.toString()) + ")</em>"
                     });
                 }
             }, listHolder);
