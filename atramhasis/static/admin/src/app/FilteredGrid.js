@@ -186,23 +186,29 @@ define([
 
             if (type == "concept") {
                 pMenu.addChild(new MenuItem({
-                    label: "Add narrower",
+                    label: "Add narrower concept",
                     onClick: function () {
-                        widget._addNarrower(conceptId, type, label);
+                        topic.publish("concept.addNarrower", conceptId, label);
+                    }
+                }));
+                pMenu.addChild(new MenuItem({
+                    label: "Add subordinate array",
+                    onClick: function () {
+                        console.log('add sub array');
+                        topic.publish("concept.addSubordinateArray", conceptId, label);
                     }
                 }));
             }
 
             else if (type = "collection") {
                 pMenu.addChild(new MenuItem({
-                    label: "Add member of",
+                    label: "Add member",
                     onClick: function () {
-                        widget._addMemberOf(conceptId, type, label);
+                        topic.publish("concept.addMemberOf", conceptId, label);
                     }
                 }));
 
             }
-
 
             pMenu.addChild(new MenuItem({
                 label: "Edit",
@@ -230,18 +236,6 @@ define([
             var args = {target: pMenu.selector};
             pMenu._openMyself(args);
 
-
-        },
-
-
-        _addNarrower: function (conceptId, type, label) {
-
-            topic.publish("concept.addNarrower", conceptId, type, label);
-
-        },
-
-        _addMemberOf: function (conceptId, type, label) {
-            topic.publish("concept.addMemberOf", conceptId, type, label);
 
         },
 
