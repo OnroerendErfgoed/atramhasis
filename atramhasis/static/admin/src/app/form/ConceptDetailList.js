@@ -65,7 +65,7 @@ define([
 
             return arrayUtil.map(filteredMatches, function (item) {
                 var data = item.data;
-                return {"id": data.id, "mainlabel": data.label, "sublabel": data.uri};
+                return {"id": data.id, "mainlabel": data.label, "uri": data.uri};
             });
         },
 
@@ -96,11 +96,19 @@ define([
                         var li = domConstruct.create("li", {
                             innerHTML: string.escape(item.mainlabel.toString()) + " (<em>" + string.escape(item.sublabel.toString()) + "</em>)"
                         }, ul);
-                    }else{
+                    }
+                    else if (item.uri) {
+                      var li = domConstruct.create("li", {
+                            innerHTML: string.escape(item.mainlabel.toString())
+                              + " (<em><a href='" + string.escape(item.uri) + "' target='_blank'>" + string.escape(item.uri.toString()) + "</a></em>)"
+                        }, ul);
+                    }
+                    else{
                         var li = domConstruct.create("li", {
                             innerHTML: string.escape(item.mainlabel.toString())
                         }, ul);
                     }
+
                     if (clickable) {
                         domClass.add(li, "clickable");
                         on(li, "click", function () {
