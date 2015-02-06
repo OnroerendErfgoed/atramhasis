@@ -103,6 +103,11 @@ define([
                 width: "300px"
             }, dlg.containerNode);
 
+
+            var previewBtn = new Button({
+                "label": "Preview concept"
+            }).placeAt(actionBar);
+
             var addBtn = new Button({
                 "label": "Import"
             }).placeAt(actionBar);
@@ -111,7 +116,23 @@ define([
                 "label": "Cancel"
             }).placeAt(actionBar);
 
-            addBtn.onClick = function () {
+          previewBtn.onClick = function () {
+                var row = null;
+                for(var id in list.selection){
+                    if(list.selection[id]){
+                        row = list.row(id);
+                    }
+                }
+
+                if (row && row.data && row.data.uri) {
+                    window.open(row.data.uri);
+                }
+                else {
+                    console.info('No concept selected.');
+                }
+          };
+
+          addBtn.onClick = function () {
                 var row = null;
                 for(var id in list.selection){
                     if(list.selection[id]){
