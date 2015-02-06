@@ -1,9 +1,18 @@
 @import url("foundation.min.css");
 
-#tree1 {
+.treecontainer {
     display: none;
 }
 
 .header {
     display: none;
 }
+
+h1.concept {
+    margin-top: 20px;
+}
+
+#pDebug {
+    display: none;
+}
+
