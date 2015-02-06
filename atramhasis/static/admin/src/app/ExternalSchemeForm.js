@@ -89,9 +89,9 @@ define([
                 selectionMode: "single",
                 renderRow: function(object, options){
                     return domConstruct.create("div", {
-                        innerHTML: string.escape(object.label) + " <em>("
-                          + string.escape(object.type) + ", id: "
-                          + string.escape(object.id) + ")</em>"
+                        innerHTML: string.escape(object.label.toString()) + " <em>("
+                          + string.escape(object.type.toString()) + ", id: "
+                          + string.escape(object.id.toString()) + ")</em>"
                     });
                 }
             }, listHolder);
