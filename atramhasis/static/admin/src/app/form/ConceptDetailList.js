@@ -9,10 +9,11 @@ define([
     "dojo/topic",
     "dojo/on",
     "dojo/Evented",
+     "dojo/string",
     "dijit/form/Button",
     "dojo/text!./templates/ConceptDetailList.html"
 ], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, arrayUtil, domConstruct, domClass, topic, on,
-             Evented, Button, template) {
+             Evented, string, Button, template) {
     return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, Evented], {
         templateString: template,
 
@@ -93,11 +94,11 @@ define([
                 arrayUtil.forEach(sortedItems, function (item) {
                     if(item.sublabel){
                         var li = domConstruct.create("li", {
-                            innerHTML: item.mainlabel + " (<em>" + item.sublabel + "</em>)"
+                            innerHTML: string.escape(item.mainlabel.toString()) + " (<em>" + string.escape(item.sublabel.toString()) + "</em>)"
                         }, ul);
                     }else{
                         var li = domConstruct.create("li", {
-                            innerHTML: item.mainlabel
+                            innerHTML: string.escape(item.mainlabel.toString())
                         }, ul);
                     }
                     if (clickable) {

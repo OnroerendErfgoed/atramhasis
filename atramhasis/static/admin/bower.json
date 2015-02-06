@@ -15,10 +15,10 @@
     "tests"
   ],
   "dependencies": {
-    "dijit": "~1.10.0",
-    "dojo": "~1.10.0",
-    "dojox": "~1.10.0",
-    "util": "dojo-util#~1.10.0",
+    "dijit": "~1.10.4",
+    "dojo": "~1.10.4",
+    "dojox": "~1.10.4",
+    "util": "dojo-util#~1.10.4",
     "put-selector": "~0.3.5",
     "xstyle": "~0.2.1",
     "dgrid": "~0.3.15",
