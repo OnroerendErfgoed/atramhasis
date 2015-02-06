@@ -283,7 +283,18 @@ define([
             );
 
             topic.subscribe("concept.addSubordinateArray", function (conceptid, label) {
-              console.log("addSubordinateArray ", conceptid);
+                var thesaurus = self.thesauri.stores[self.currentScheme];
+
+                thesaurus.get(conceptid).then(function (item) {
+                    var superordinate = [
+                        {label: item.label, id: item.id, labels: item.labels, type: item.type, uri: item.uri}
+                    ];
+                    conceptForm.init(self.currentScheme);
+                    conceptForm.addSuperordinate(superordinate);
+                    conceptForm.setType('collection');
+                    conceptDialog.set("title", "Add subordinate array to '" + label + "'");
+                    conceptDialog.show();
+                });
             });
 
 

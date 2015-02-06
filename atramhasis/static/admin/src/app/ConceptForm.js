@@ -194,7 +194,6 @@ define(
                     this.noteManager.reset();
                     this.matchesManager.reset();
                     this.typeComboBox.reset();
-                    this.typeComboBox.set('disabled', false);
                 },
 
                 init: function (scheme, concept) {
@@ -268,10 +267,12 @@ define(
                 addMemberOf: function (memberOf) {
                     this.memberofManager.setRelations(memberOf);
                 },
+                addSuperordinate: function (superordinate) {
+                    this.superordinatesManager.setRelations(superordinate);
+                },
 
                 setType: function (type) {
                     this.typeComboBox.set("value", type);
-                    this.typeComboBox.set('disabled', true);
                 }
             }
         )
