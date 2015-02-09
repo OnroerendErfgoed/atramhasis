@@ -68,6 +68,18 @@ define([
                         }
                     }, this.matchesButton);
 
+                    new Button({
+                        label: "Merge current match(es)",
+                        showLabel: true,
+                        onClick: function () {
+                            console.log("merge ", self._matches);
+                            if (self._matches.length == 0) {
+                                topic.publish('dGrowl', "Nothing to merge", {'title': "Warning", 'sticky': false, 'channel':'warn'});
+                                return false;
+                            }
+                        }
+                    }, this.mergeButton);
+
                     self.broadMatchList.on("relation.delete", function(evt){
                         self._removeMatch(evt.relation);
                     });
