@@ -35,6 +35,18 @@
     background-color: #008CBA;
 }
 
+.actionBar ul li.disabled a:link, .actionBar ul li.disabled a:visited {
+    line-height: 20px;
+    display: block;
+    text-decoration: none;
+    color: #7d7d7d;
+    width: 60px;
+    text-align: center;
+    background-color: #bbbbbb;
+    border-left: 1px solid #4f4f4f;
+    cursor: default;
+}
+
 .conceptProps {
     height: 40px;
     font-weight: bold;

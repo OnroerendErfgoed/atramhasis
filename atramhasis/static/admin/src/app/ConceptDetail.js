@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     "dojo/_base/array",
     "dojo/dom-construct",
+    "dojo/dom-attr",
     "dojo/dom-class",
     "dojo/on",
     "dojo/topic",
@@ -18,7 +19,7 @@ define([
     "dgrid/Keyboard",
     "dgrid/Selection",
     "dgrid/extensions/DijitRegistry"
-], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin,
+], function (declare, arrayUtil, domConstruct, domAttr, domClass, on, topic, _WidgetBase, _TemplatedMixin,
              _WidgetsInTemplateMixin, ConfirmDialog, Dialog, Button, ConceptDetailList, template, TitlePane,
              dgridList, dgridKeyboard, dgridSelection, DijitRegistry) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -45,6 +46,7 @@ define([
         matchUris: [],
         externalSchemeService: null,
         _mergeDialog: null,
+        _mergeButton: null,
 
 
         postCreate: function () {
@@ -86,6 +88,17 @@ define([
                 var mergeLi = domConstruct.create("li", {
                   innerHTML: "<a href='#'>Merge</a>"
                 }, actionNode);
+                this._mergeButton = mergeLi;
+
+                //set disabled when no matches are defined
+                domClass.add(this._mergeButton, "disabled");
+                var types = this.externalSchemeService.matchTypes;
+                arrayUtil.forEach(types, function(typeObj) {
+                    var type = typeObj.value;
+                    if (this.matchUris && this.matchUris[type]) {
+                      domClass.remove(this._mergeButton, "disabled");
+                    }
+                }, this);
             }
 
             var self = this;
@@ -121,8 +134,12 @@ define([
                 on(mergeLi, "click", function (evt) {
                   evt.preventDefault();
 
+                  if (domClass.contains(mergeLi, "disabled")) {
+                    return false;
+                  }
+
                   if (self.matches.length == 0) {
-                    topic.publish('dGrowl', "Nothing to merge", {'title': "Warning", 'sticky': false, 'channel': 'warn'});
+                    topic.publish('dGrowl', "No matches to merge (or matches are still loading)", {'title': "Warning", 'sticky': false, 'channel': 'warn'});
                     return false;
                   }
                   else {
@@ -226,7 +243,7 @@ define([
                         }
                     });
                 }
-            });
+            }, this);
         },
 
         _createMergeDialog: function() {
