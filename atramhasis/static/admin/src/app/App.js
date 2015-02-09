@@ -386,7 +386,7 @@ define([
                         label: concept.label,
                         labels: concept.labels,
                         type: concept.type,
-                        notes: concept.notes,
+                        notes: concept.notes
                     };
                     if(concept.type != 'collection'){
                         clone.matches = {

@@ -1,3 +1,22 @@
+0.5.0 (??-??-2015)
+------------------
+
+- A conceptscheme, concept or collection can now be export to RDF through 
+  skosprovider_rdf_ 0.3.1. These are individuals export endpoints that can
+  be reached in one of two ways. Either by hitting a url like 
+  http://localhost:6543/conceptschemes/GEOGRAPHY/c/335 with a supported RDF mimetype
+  (``application/rdf+xml``, ``application/x-turtle``, ``text-turle``). Or by
+  using an RDF syntax specific suffix (.rdf or .ttl).
+- Allow sorting the languages in the admin interface.
+- When importing, allow the user to request more information on a concept or
+  collection, before actually importing it.
+- Reorganised and extended the right click menu on the grid in the admin 
+  interface.
+- Allow looking up a *skos:match* from within the admin interface.
+- Some issues with the length of language ids were solved.
+- Fixed some issues when importing a collection instead of a concept.
+- Some code cleanup and reorganisation.
+
 0.4.0 (23-12-2014)
 ------------------
 

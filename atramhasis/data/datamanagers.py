@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+'''
+This module adds DataManagers for Atramhasis. These are service layer objects
+that abstract all interactions with the database away from the views.
+
+:versionadded: 0.4.1
+'''
 from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language, MatchType, Match, \
     LabelType
 from sqlalchemy import desc, func
@@ -6,12 +12,19 @@ from sqlalchemy.orm import joinedload
 
 
 class DataManager(object):
+    '''
+    A DataManager abstracts all interactions with the database for a certain model.
+    '''
 
     def __init__(self, session):
         self.session = session
 
 
 class ConceptSchemeManager(DataManager):
+    '''
+    A :class:`DataManager` for 
+    :class:`ConceptSchemes <skosprovider_sqlalchemy.models.ConceptScheme>.`
+    '''
     def __init__(self, session):
         super(ConceptSchemeManager, self).__init__(session)
 
@@ -91,6 +104,10 @@ class ConceptSchemeManager(DataManager):
 
 
 class SkosManager(DataManager):
+    '''
+    A :class:`DataManager` for 
+    :class:`Concepts and Collections <skosprovider_sqlalchemy.models.Thing>.`
+    '''
     def __init__(self, session):
         super(SkosManager, self).__init__(session)
 
@@ -147,6 +164,10 @@ class SkosManager(DataManager):
 
 
 class LanguagesManager(DataManager):
+    '''
+    A :class:`DataManager` for 
+    :class:`Languages <skosprovider_sqlalchemy.models.Language>.`
+    '''
     def __init__(self, session):
         super(LanguagesManager, self).__init__(session)
 

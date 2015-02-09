@@ -1,7 +1,7 @@
 
 # pyramid
-pyramid==1.5.1
-pyramid-tm==0.7
+pyramid==1.5.2
+pyramid-tm==0.10
 pyramid_rewrite==0.2
 
 # skos
@@ -23,12 +23,12 @@ transaction==1.4.3
 psycopg2
 
 # jinja2
-jinja2==2.7.2
+jinja2==2.7.3
 pyramid-jinja2==2.3.3
 Babel==1.3
 
 # alembic
-alembic==0.6.5
+alembic==0.7.4
 
 # colander
 colander==1.0
@@ -38,4 +38,4 @@ dogpile.cache==0.5.6
 
 # other
 six==1.6.1
-requests==2.5.0
+requests==2.5.1
