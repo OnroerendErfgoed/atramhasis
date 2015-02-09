@@ -11,7 +11,14 @@
 		<link rel="stylesheet" href="{{request.static_path('atramhasis:static/css/app.css')}}" />
 		{% endblock %}
 		<link rel="icon" type="image/x-icon" href="{{request.static_path('atramhasis:static/img/favicon.ico')}}" />
-        <script src="{{request.static_path('atramhasis:static/js/vendor/modernizr.js')}}"></script>
+		<script src="{{request.static_path('atramhasis:static/js/vendor/modernizr.js')}}"></script>
+		{% block ga %}
+			{% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
+			{% from 'macros.jinja2' import ga_tracker %}
+			{% if ga_key %}
+				{{ ga_tracker(ga_key) }}
+			{% endif %}
+		{% endblock %}
 	</head>
 	<body>
         <div class="row">
