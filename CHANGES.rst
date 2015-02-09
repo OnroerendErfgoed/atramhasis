@@ -1,4 +1,4 @@
-0.5.0 (??-??-2015)
+0.4.1 (??-??-2015)
 ------------------
 
 - A conceptscheme, concept or collection can now be export to RDF through 
@@ -15,6 +15,8 @@
 - Allow looking up a *skos:match* from within the admin interface.
 - Some issues with the length of language ids were solved.
 - Fixed some issues when importing a collection instead of a concept.
+- Made it easy to add a Google Analytics tracker.
+- Updated some dependencies.
 - Some code cleanup and reorganisation.
 
 0.4.0 (23-12-2014)
