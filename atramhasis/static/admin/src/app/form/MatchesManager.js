@@ -39,6 +39,7 @@ define([
                 _matches: null,
                 _externalConceptList: null,
                 _matchesDialog: null,
+                _mergeDialog: null,
                 externalSchemeService: null,
 
                 buildRendering: function () {
@@ -62,7 +63,7 @@ define([
                         iconClass: 'plusIcon',
                         onClick: function () {
                             if (!self._matchesDialog) {
-                                self._matchesDialog = self._createDialog();
+                                self._matchesDialog = self._createAddDialog();
                             }
                             self._matchesDialog.show();
                         }
@@ -76,6 +77,12 @@ define([
                             if (self._matches.length == 0) {
                                 topic.publish('dGrowl', "Nothing to merge", {'title': "Warning", 'sticky': false, 'channel':'warn'});
                                 return false;
+                            }
+                            else {
+                                if (!self._mergeDialog) {
+                                    self._mergeDialog = self._createMergeDialog();
+                                }
+                                self._mergeDialog.show();
                             }
                         }
                     }, this.mergeButton);
@@ -140,7 +147,7 @@ define([
                     );
                 },
 
-                _createDialog: function () {
+                _createAddDialog: function () {
                     var self = this;
 
                     var dlg = new Dialog({
@@ -239,6 +246,19 @@ define([
                         textFilter.reset();
                         list.clearSelection();
                     });
+
+                    return dlg
+                },
+
+                _createMergeDialog: function() {
+
+                    var self = this;
+
+                    var dlg = new Dialog({
+                        'class': "externalForm",
+                        'title': "Choose one or more matches"
+                    });
+
 
                     return dlg
                 },
