@@ -287,14 +287,30 @@ define([
 
             //behavior
             dlg.setMatches = function (matches) {
-                console.log("setMatches ", matches);
                 list.renderArray(matches);
             };
 
             mergeBtn.onClick = function () {
-                console.log('merge');
-                //implement merge
-                dlg.hide();
+                var rows = [];
+                for (var id in list.selection) {
+                    if (list.selection[id]) {
+                        var row = list.row(id);
+                        console.log("row 1 ", row);
+                        rows.push(row);
+                    }
+                }
+                if (rows.length == 0) {
+                  topic.publish('dGrowl', "No matches selected", {'title': "Warning", 'sticky': false, 'channel': 'warn'});
+                }
+                else {
+                  arrayUtil.forEach(rows, function (row) {
+                      var object = row.data;
+                      console.log('record ', object);
+                  }, this);
+
+                  dlg.hide();
+                }
+
             };
 
             cancelBtn.onClick = function () {
