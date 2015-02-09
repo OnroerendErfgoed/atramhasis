@@ -252,6 +252,7 @@ class AtramhasisView(object):
 
         return scheme_tree
 
+    @tree_region.cache_on_arguments()
     def parse_thing(self, thing, parent_tree_id):
         tree_id = self.create_treeid(parent_tree_id, thing.concept_id)
         locale = self.request.locale_name
