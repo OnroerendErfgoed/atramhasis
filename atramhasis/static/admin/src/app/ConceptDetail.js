@@ -82,9 +82,11 @@ define([
             var editLi = domConstruct.create("li", {
                 innerHTML: "<a href='#'>Edit</a>"
             }, actionNode);
-            var mergeLi = domConstruct.create("li", {
-                innerHTML: "<a href='#'>Merge</a>"
-            }, actionNode);
+            if (this.type == 'concept') {
+                var mergeLi = domConstruct.create("li", {
+                  innerHTML: "<a href='#'>Merge</a>"
+                }, actionNode);
+            }
 
             var self = this;
             on(deleteLi, "click", function (evt) {
@@ -115,22 +117,25 @@ define([
                 return false;
             });
 
-            on(mergeLi, "click", function (evt) {
-                evt.preventDefault();
-                console.log("merge ", self.matches);
-                if (self.matches.length == 0) {
-                    topic.publish('dGrowl', "Nothing to merge", {'title': "Warning", 'sticky': false, 'channel':'warn'});
+            if (this.type == 'concept') {
+                on(mergeLi, "click", function (evt) {
+                  evt.preventDefault();
+
+                  if (self.matches.length == 0) {
+                    topic.publish('dGrowl', "Nothing to merge", {'title': "Warning", 'sticky': false, 'channel': 'warn'});
                     return false;
-                }
-                else {
+                  }
+                  else {
                     if (!self._mergeDialog) {
-                        self._mergeDialog = self._createMergeDialog();
+                      self._mergeDialog = self._createMergeDialog();
                     }
                     self._mergeDialog.setMatches(self.matches);
                     self._mergeDialog.show();
-                }
-                return false;
-            });
+                  }
+
+                  return false;
+                });
+            }
 
             topic.subscribe("conceptDetail.refresh", function (refreshedConcept) {
                 self._refreshConceptDetail(refreshedConcept);
