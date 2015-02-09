@@ -9,11 +9,18 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     "dijit/ConfirmDialog",
+    "dijit/Dialog",
+    "dijit/form/Button",
     "./form/ConceptDetailList",
     'dojo/text!./templates/ConceptDetail.html',
-    "dijit/TitlePane"
+    "dijit/TitlePane",
+    "dgrid/List",
+    "dgrid/Keyboard",
+    "dgrid/Selection",
+    "dgrid/extensions/DijitRegistry"
 ], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin,
-             _WidgetsInTemplateMixin, ConfirmDialog, ConceptDetailList, template) {
+             _WidgetsInTemplateMixin, ConfirmDialog, Dialog, Button, ConceptDetailList, template, TitlePane,
+             dgridList, dgridKeyboard, dgridSelection, DijitRegistry) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -37,6 +44,7 @@ define([
         matches: null,
         matchUris: [],
         externalSchemeService: null,
+        _mergeDialog: null,
 
 
         postCreate: function () {
@@ -74,6 +82,10 @@ define([
             var editLi = domConstruct.create("li", {
                 innerHTML: "<a href='#'>Edit</a>"
             }, actionNode);
+            var mergeLi = domConstruct.create("li", {
+                innerHTML: "<a href='#'>Merge</a>"
+            }, actionNode);
+
             var self = this;
             on(deleteLi, "click", function (evt) {
                 evt.preventDefault();
@@ -100,6 +112,23 @@ define([
             on(editLi, "click", function (evt) {
                 evt.preventDefault();
                 topic.publish("concept.edit", self.conceptid);
+                return false;
+            });
+
+            on(mergeLi, "click", function (evt) {
+                evt.preventDefault();
+                console.log("merge ", self.matches);
+                if (self.matches.length == 0) {
+                    topic.publish('dGrowl', "Nothing to merge", {'title': "Warning", 'sticky': false, 'channel':'warn'});
+                    return false;
+                }
+                else {
+                    if (!self._mergeDialog) {
+                        self._mergeDialog = self._createMergeDialog();
+                    }
+                    self._mergeDialog.setMatches(self.matches);
+                    self._mergeDialog.show();
+                }
                 return false;
             });
 
@@ -193,6 +222,70 @@ define([
                     });
                 }
             });
+        },
+
+        _createMergeDialog: function() {
+
+            var self = this;
+
+            var dlg = new Dialog({
+                'class': "externalForm",
+                'title': "Choose one or more matches"
+            });
+
+            //layout
+            var matchDiv = domConstruct.create("div", {}, dlg.containerNode);
+
+            domConstruct.create("p", {
+                'innerHTML': "Select one or more matches to merge (hold ctrl or shift to select multiple items):"
+            }, matchDiv);
+
+            var listHolder = domConstruct.create("div", {}, matchDiv);
+            var list = new (declare([dgridList, dgridKeyboard, dgridSelection, DijitRegistry]))({
+                renderRow: function(object){
+                    return domConstruct.create("div", {
+                        innerHTML: object.data.label + " (" + object.type + " match, uri: <em>" + object.data.uri + "</em>)"
+                    });
+                }
+            }, listHolder);
+            list.renderArray([]);
+
+            var actionBar = domConstruct.create("div", {
+                'class': "dijitDialogPaneActionBar",
+                width: "300px"
+            }, dlg.containerNode);
+
+            var mergeBtn = new Button({
+                "label": "Merge"
+            }).placeAt(actionBar);
+
+            var cancelBtn = new Button({
+                "label": "Cancel"
+            }).placeAt(actionBar);
+
+            //behavior
+            dlg.setMatches = function (matches) {
+                console.log("setMatches ", matches);
+                list.renderArray(matches);
+            };
+
+            mergeBtn.onClick = function () {
+                console.log('merge');
+                //implement merge
+                dlg.hide();
+            };
+
+            cancelBtn.onClick = function () {
+                dlg.hide();
+            };
+
+            on(dlg, "hide", function () {
+                //reset stuff
+                list.refresh();
+            });
+
+            return dlg
         }
+
     });
 });

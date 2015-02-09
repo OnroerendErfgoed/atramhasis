@@ -39,7 +39,6 @@ define([
                 _matches: null,
                 _externalConceptList: null,
                 _matchesDialog: null,
-                _mergeDialog: null,
                 externalSchemeService: null,
 
                 buildRendering: function () {
@@ -68,25 +67,6 @@ define([
                             self._matchesDialog.show();
                         }
                     }, this.matchesButton);
-
-                    new Button({
-                        label: "Merge current match(es)",
-                        showLabel: true,
-                        onClick: function () {
-                            console.log("merge ", self._matches);
-                            if (self._matches.length == 0) {
-                                topic.publish('dGrowl', "Nothing to merge", {'title': "Warning", 'sticky': false, 'channel':'warn'});
-                                return false;
-                            }
-                            else {
-                                if (!self._mergeDialog) {
-                                    self._mergeDialog = self._createMergeDialog();
-                                }
-                                self._mergeDialog.setMatches(self._matches);
-                                self._mergeDialog.show();
-                            }
-                        }
-                    }, this.mergeButton);
 
                     self.broadMatchList.on("relation.delete", function(evt){
                         self._removeMatch(evt.relation);
@@ -246,69 +226,6 @@ define([
                         selectType.reset();
                         textFilter.reset();
                         list.clearSelection();
-                    });
-
-                    return dlg
-                },
-
-                _createMergeDialog: function() {
-
-                    var self = this;
-
-                    var dlg = new Dialog({
-                        'class': "externalForm",
-                        'title': "Choose one or more matches"
-                    });
-
-                    //layout
-                    var matchDiv = domConstruct.create("div", {}, dlg.containerNode);
-
-                    domConstruct.create("p", {
-                        'innerHTML': "Select one or more matches to merge (hold ctrl or shift to select multiple items):"
-                    }, matchDiv);
-
-                    var listHolder = domConstruct.create("div", {}, matchDiv);
-                    var list = new (declare([dgridList, dgridKeyboard, dgridSelection, DijitRegistry]))({
-                        renderRow: function(object){
-                            return domConstruct.create("div", {
-                                innerHTML: object.data.label + " (" + object.type + " match, uri: <em>" + object.data.uri + "</em>)"
-                            });
-                        }
-                    }, listHolder);
-                    list.renderArray([]);
-
-                    var actionBar = domConstruct.create("div", {
-                        'class': "dijitDialogPaneActionBar",
-                        width: "300px"
-                    }, dlg.containerNode);
-
-                    var mergeBtn = new Button({
-                        "label": "Merge"
-                    }).placeAt(actionBar);
-
-                    var cancelBtn = new Button({
-                        "label": "Cancel"
-                    }).placeAt(actionBar);
-
-                    //behavior
-                    dlg.setMatches = function (matches) {
-                        console.log("setMatches ", matches);
-                        list.renderArray(matches);
-                    };
-
-                    mergeBtn.onClick = function () {
-                        console.log('merge');
-                        //implement merge
-                        dlg.hide();
-                    };
-
-                    cancelBtn.onClick = function () {
-                        dlg.hide();
-                    };
-
-                    on(dlg, "hide", function () {
-                        //reset stuff
-                        list.refresh();
                     });
 
                     return dlg
