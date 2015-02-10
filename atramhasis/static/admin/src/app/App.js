@@ -319,7 +319,7 @@ define([
                 var superordinates = array.map(form.superordinates, function(item){ return {"id": item}; });
 
                 var rowToAdd = {
-                    "id:": form.concept_id,
+//                    "id:": form.concept_id,
                     "type": form.ctype,
                     "labels": form.label,
                     "notes": form.note,
