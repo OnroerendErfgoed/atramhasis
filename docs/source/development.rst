@@ -1,13 +1,61 @@
 .. _development:
 
+===========
 Development
 ===========
 
-General installation
---------------------
+Technology
+==========
 
-As with the demo site, we recommend installing Atramhasis in a virtual 
-environment.
+Atramhasis is a python_ webapplication that is being developed within the 
+pyramid_ framework. Other major technologies used are sqlalchemy_ as the ORM 
+and jinja2_ as the templating framework.
+
+Client side the main technologies being used are Zurb Foundation and Dojo toolkit.
+
+While Atramhasis is an editor for creating and editing :term:`SKOS` vocabularies,
+it uses other libraries that are more geared towards using a vocabulary in an
+application.
+
+* skosprovider_: This library defines a 
+  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>`. This 
+  is an abstraction of usefull functionalities an application integrating 
+  :term:`SKOS` needs. Different libraries can implement this interface for 
+  different datasources. This allows decoupling the interface from the concrete
+  implementation. Out of the box this comes with a simple 
+  :class:`DictionaryProvider <skosprovider.providers.DictionaryProvider>` that
+  serves a vocabulary based on a simple python :class:`dict` as datasource.
+* skosprovider_sqlalchemy_: An implementation of the 
+  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` 
+  interface with a `SQLAlchemy <http://www.sqlalchemy.org>`_ backend. This allows
+  using a RDBMS for reading, but also writing, :term:`SKOS` concepts.
+* skosprovider_rdf_: An implemenation of the 
+  :class:`~skosprovider.providers.VocabularyProvider` interface with an :term:`RDF`
+  backend. Atramhasis uses this for exporting ConceptSchemes to RDF. It can 
+  also be used to get an existing :term:`SKOS` vocabulary defined in RDF into
+  Atramhasis.
+* pyramid_skosprovider_: A library that integrates pyramid_ and skosprovider_.
+  This libraries creates a :class:`skosprovider.registry.Registry` and makes it
+  accessible through the :class:`pyramid.request.Request`. Is also exposes a 
+  set of readonly :ref:`REST services <pyramidskosprovider:services>` on the 
+  registered providers.
+* skosprovider_getty_:
+  An implemenation of the 
+  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` 
+  against the Linked Open Data vocabularies published by the Getty Research 
+  Institute at `http://vocab.getty.edu <http://vocab.getty.edu>`_ such as the
+  `Art and Architecture Thesaurus (AAT)` and the 
+  `Thesaurus of Geographic Names (TGN)`.
+* skosprovider_heritagedata_:
+  An implementation of the
+  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` against
+  the vocabularies published by EH, RCAHMS and RCAHMW at 
+  `heritagedata.org <http://heritagedata.org>`_.
+
+General installation
+====================
+
+We recommend installing Atramhasis in a virtual environment.
 
 .. code-block:: bash    
     
@@ -44,7 +92,7 @@ production environment.
 
 
 Admin development
------------------
+=================
 
 To work on the admin part, you'll need `npm`_ and `bower`_ installed. Consult
 your operating system documentation on how to install these. The following
@@ -77,7 +125,7 @@ This will create a build a place the resulting files in
 this build by setting `dojo.mode` in :file:`development.ini` to `dist`.
 
 Contributing
-------------
+============
 
 Atramhasis is being developed as open source software by the 
 `Flanders Heritage Agency`_. All development is done on the agency's 
@@ -111,7 +159,7 @@ and this build doesn't function, please correct the issue at hand or let us
 know why it's not working.
 
 Distribution
-------------
+============
 
 For building a distribution use the prepare command before the distribution command.
 This will update the requirement files in the scaffolds.
@@ -131,3 +179,13 @@ This will update the requirement files in the scaffolds.
 .. _bower: http://bower.io/
 .. _grunt: http://gruntjs.com
 .. _waitress: http://waitress.readthedocs.org
+.. _python: https://wwww.python.org
+.. _pyramid: http://www.pylonsproject.org/
+.. _sqlalchemy: http://www.sqlalchemy.org
+.. _jinja2: http://jinja.pocoo.org
+.. _skosprovider: http://skosprovider.readthedocs.org
+.. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
+.. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org
+.. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
+.. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
+.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
