@@ -264,6 +264,7 @@ define([
 
             var listHolder = domConstruct.create("div", {}, matchDiv);
             var list = new (declare([dgridList, dgridKeyboard, dgridSelection, DijitRegistry]))({
+                selectionMode: "single",
                 renderRow: function(object){
                     return domConstruct.create("div", {
                         innerHTML: object.data.label + " (" + object.type + " match, uri: <em>" + object.data.uri + "</em>)"
@@ -305,8 +306,8 @@ define([
                 else {
                   arrayUtil.forEach(rows, function (row) {
                       var object = row.data;
-                      console.log('record ', object);
-                  }, this);
+                      topic.publish('concept.merge', {'id': this.conceptid, 'match': object, 'schemeid': this.schemeid} );
+                  }, self);
 
                   dlg.hide();
                 }
