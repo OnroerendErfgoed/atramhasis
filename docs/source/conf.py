@@ -270,5 +270,6 @@ intersphinx_mapping = {
     'skosprovider': ('http://skosprovider.readthedocs.org/en/latest', None),
     'pyramidskosprovider': ('http://pyramid-skosprovider.readthedocs.org/en/latest', None),
     'skosprovidersqlalchemy': ('http://skosprovider-sqlalchemy.readthedocs.org/en/latest', None),
-    'pyramid': ('http://docs.pylonsproject.org/projects/pyramid/en/latest', None)
+    'pyramid': ('http://docs.pylonsproject.org/projects/pyramid/en/latest', None),
+    'colander': ('http://docs.pylonsproject.org/projects/colander/en/latest', None)
 }
