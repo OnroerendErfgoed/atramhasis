@@ -261,24 +261,8 @@ define([
                         return item.type == typevalue;
                     });
                     return arrayUtil.map(filteredItems, function (item) {
-                        return {label: item.label, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: item.type, typeDisplayed: typeToBeDisplayed};
+                        return {label: item.label, language: item.language, languageValue: item.language, type: item.type, typeDisplayed: typeToBeDisplayed};
                     });
-                },
-                _getLanguageToDisplay: function (language) {
-                    switch (language) {
-                        case "nl":
-                            return "NL";
-                            break;
-                        case "fr":
-                            return "FR";
-                            break;
-                        case "en":
-                            return "EN";
-                            break;
-                        default:
-                            return language;
-                            break;
-                    }
                 },
 
                 //not in use for the moment
