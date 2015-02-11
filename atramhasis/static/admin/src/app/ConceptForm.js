@@ -196,8 +196,6 @@ define(
                 },
 
                 init: function (scheme, concept) {
-                    //close corresponding concept detail tab
-                    topic.publish("concept.close", concept.id, scheme);
                     this.reset();
                     this.scheme = scheme;
                     var schemebox = dijit.byId("schemebox");
@@ -210,6 +208,8 @@ define(
                     this.subordinateArraysManager.setScheme(scheme);
                     this.superordinatesManager.setScheme(scheme);
                     if (concept) {
+                        //close corresponding concept detail tab
+                        topic.publish("concept.close", concept.id, scheme);
                         console.log("editing existing concept: " + concept.label);
                         this.conceptId = concept.id;
                         this.typeComboBox.set("value", concept.type);
