@@ -15,10 +15,15 @@ define([
     "dijit/Menu",
     "dijit/MenuItem",
     "dijit/ConfirmDialog",
-    "dojo/store/Memory", "dojo/store/Cache",
+    "dojo/store/JsonRest",
+    "dojo/store/Memory",
+    "dojo/store/Cache",
+    "dojo/store/Observable",
     "dgrid/OnDemandGrid", "dgrid/Selection", "dgrid/Keyboard", "dgrid/editor"
 
-], function (declare, on, topic, lang, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox, TextBox, Button, Menu, MenuItem, ConfirmDialog, Memory, Cache, OnDemandGrid, Selection, Keyboard, editor) {
+], function (declare, on, topic, lang, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, ComboBox,
+             TextBox, Button, Menu, MenuItem, ConfirmDialog, JsonRest, Memory, Cache, Observable,
+             OnDemandGrid, Selection, Keyboard, editor) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
 
@@ -31,14 +36,6 @@ define([
         conceptGrid: null,
         conceptFilter: {label: "", type: "all"},
         isResettingFilters: true,
-
-        postMixInProperties: function () {
-            this.inherited(arguments);
-        },
-
-        buildRendering: function () {
-            this.inherited(arguments);
-        },
 
         postCreate: function () {
             this.inherited(arguments);
@@ -54,8 +51,6 @@ define([
         startup: function () {
             this.inherited(arguments);
             var self = this;
-            console.log("startup grid");
-
             var timeoutId;
 
             this.typeCombo = new ComboBox({
@@ -73,8 +68,6 @@ define([
                 intermediateChanges: true
             }, "filterNode");
 
-            var self = this;
-
             var columns = [
                 {label: "ID", field: "id"},
                 {label: "label", field: "label"},
@@ -89,41 +82,30 @@ define([
                 selectionMode: "single",
                 minRowsPerPage: 20,
                 maxRowsPerPage: 100
-
             }, "gridNode");
 
-            on(this.conceptGrid, "dgrid-select", lang.hitch(this, function (evt) {
-                var row = evt.rows[0];
+            on(this.conceptGrid, ".dgrid-row:click", lang.hitch(this, function (evt) {
+                var row = this.conceptGrid.row(evt);
                 row.scheme = this.conceptScheme;
-                console.log("row selected: " + row.id);
                 topic.publish("concept.open", row.id, row.scheme);
             }));
 
-            this.conceptGrid.on(".dgrid-row:contextmenu", function (evt) {
-                    evt.preventDefault();
-
-
-                    var cell = self.conceptGrid.cell(evt);
-                    var gridId = self.conceptGrid.get("id");
-                    var pMenu = self._createGridContextMenu(gridId, cell.element, self, cell.row.data.id, cell.row.data.type, cell.row.data.label);
-                    var args = {target: pMenu.selector};
-                    pMenu._openMyself(args);
-
-                }
-            );
-
+            this.conceptGrid.on(".dgrid-row:contextmenu", lang.hitch(this, function (evt) {
+                evt.preventDefault(); // prevent default browser context menu
+                var cell = this.conceptGrid.cell(evt);
+                var gridId = this.conceptGrid.get("id");
+                var pMenu = this._createGridContextMenu(gridId, cell.element, this, cell.row.data.id, cell.row.data.type, cell.row.data.label);
+                pMenu._scheduleOpen(this, null, { x: evt.pageX, y: evt.pageY });
+            }));
 
             on(this.typeCombo, "change", lang.hitch(this, function (evt) {
                 if (evt != "") {
-                    console.log("on ", evt);
                     this._setTypeFilter(evt);
                 }
-
             }));
 
             this.textFilter.watch("value", (lang.hitch(this, function (name, oldValue, newValue) {
                 if (this.isResettingFilters) return false;
-                console.log("typing text: " + newValue);
                 if (timeoutId) {
                     clearTimeout(timeoutId);
                     timeoutId = null;
@@ -136,7 +118,6 @@ define([
         },
 
         _resetFilters: function () {
-            console.log("grid _reset");
             this.isResettingFilters = true;
             this.typeCombo.reset();
             this.textFilter.reset();
@@ -145,44 +126,36 @@ define([
         },
 
         setScheme: function (schemeid) {
-            console.log("grid setScheme: " + schemeid);
             this._resetFilters();
             this.conceptScheme = schemeid;
-            this.conceptStore = Cache(dojo.store.JsonRest({
-                target: "/conceptschemes/" + schemeid + "/c",
-                sortParam: "sort"
-            }), Memory());
+            this.conceptStore = new Observable( Cache( JsonRest({
+                'target': "/conceptschemes/" + schemeid + "/c",
+                'idProperty': 'id',
+                'sortParam': 'sort',
+                'accepts': 'application/json'
+            }), Memory()));
             this.conceptGrid.set("store", this.conceptStore, this.conceptFilter);
         },
 
         ResetConceptGrid: function () {
             this._resetFilters();
-
             this.conceptStore = null;
             this.conceptGrid.set("store", this.conceptStore, this.conceptFilter);
 
         },
 
-
         _setTypeFilter: function (type) {
-            console.log("setting type filter: " + type);
             this.conceptFilter = {label: this.conceptFilter.label, type: type};
             this.conceptGrid.set("query", this.conceptFilter);
         },
 
         _setTextFilter: function (label) {
-            console.log("setting label filter: " + label);
             this.conceptFilter = {label: label, type: this.conceptFilter.type};
             this.conceptGrid.set("query", this.conceptFilter);
         },
 
         _createGridContextMenu: function (targetNodeId, selector, widget, conceptId, type, label) {
-            var pMenu;
-            var self = this;
-            pMenu = new Menu({
-                targetNodeIds: [targetNodeId],
-                selector: selector
-            });
+            var pMenu = new Menu({});
 
             if (type == "concept") {
                 pMenu.addChild(new MenuItem({
@@ -207,7 +180,6 @@ define([
                         topic.publish("concept.addMemberOf", conceptId, label);
                     }
                 }));
-
             }
 
             pMenu.addChild(new MenuItem({
@@ -216,12 +188,14 @@ define([
                     widget._editConcept(conceptId);
                 }
             }));
+
             pMenu.addChild(new MenuItem({
                 label: "Delete",
                 onClick: function () {
                     widget._deleteConcept(conceptId, type, label);
                 }
             }));
+
             pMenu.addChild(new dijit.MenuSeparator());
             pMenu.addChild(new MenuItem({
                 label: "Add a new Concept or collection",
@@ -230,22 +204,23 @@ define([
                 }
             }));
 
-
-            pMenu.startup();
-            return pMenu;
-            var args = {target: pMenu.selector};
-            pMenu._openMyself(args);
+          return pMenu;
+        },
 
 
+        _addNarrower: function (conceptId, type, label) {
+            topic.publish("concept.addNarrower", conceptId, type, label);
+        },
+
+        _addMemberOf: function (conceptId, type, label) {
+            topic.publish("concept.addMemberOf", conceptId, type, label);
         },
 
         _editConcept: function (conceptId) {
             topic.publish("concept.edit", conceptId);
-
         },
 
         _createNewConcept: function () {
-
             topic.publish("concept.create");
         },
 

@@ -11,6 +11,11 @@ Glossary
     general specification for Knowledge Organisation Systems (thesauri, word 
     lists, authority files, ...) that is commonly serialised as :term:`RDF`.
 
+   SKOS-THES
+    The `ISO 25964 SKOS extension <http://pub.tenforce.com/schemas/iso25964/skos-thes/>`_
+    defines mappings between the ISO 25964 standard and the :term:`SKOS` 
+    specification.
+
    RDF
     `Resource Description Framework <http://www.w3.org/RDF/>`__. A very flexible 
     model for data definition organised around `triples`. These triples forms a 
@@ -36,3 +41,7 @@ Glossary
 
    SOA
     `Service Oriented Architecture <http://en.wikipedia.org/wiki/Service-oriented_architecture>`__.
+
+   REST
+    REST or `REpresentational State Transfer` is a way of data exchange that
+    is very complimentary to the operations of the HTTP protcol.

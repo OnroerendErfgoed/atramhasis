@@ -141,7 +141,7 @@ define([
                 return item.type == typevalue;
             });
             return arrayUtil.map(filteredItems, function (item) {
-                return {label: item.label, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+                return {label: item.label, language: item.language, languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
             });
         },
         _mapNoteToDisplayInGrid: function (notes, typevalue, typeToBeDisplayed) {
@@ -152,24 +152,8 @@ define([
             });
 
             return arrayUtil.map(filteredItems, function (item) {
-                return {label: item.note, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
+                return {label: item.note, language: item.language, languageValue: item.language, type: typeToBeDisplayed, typeValue: item.type};
             });
-        },
-        _getLanguageToDisplay: function (language) {
-            switch (language) {
-                case "nl":
-                    return "NL";
-                    break;
-                case "fr":
-                    return "FR";
-                    break;
-                case "en":
-                    return "EN";
-                    break;
-                default:
-                    return language;
-                    break;
-            }
         },
 
         reset: function () {
