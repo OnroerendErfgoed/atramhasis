@@ -281,13 +281,13 @@ def label_lang_rule(errors, node, languages_manager, labels):
                 languages_manager.save(language_item)
 
 
-def concept_type_rule(errors, node_location, skos_manager, conceptscheme_id, members):
-    for member_concept_id in members:
-        member_concept = skos_manager.get_thing(member_concept_id, conceptscheme_id)
-        if member_concept.type != 'concept':
+def concept_type_rule(errors, node_location, skos_manager, conceptscheme_id, items):
+    for item_concept_id in items:
+        item_concept = skos_manager.get_thing(item_concept_id, conceptscheme_id)
+        if item_concept.type != 'concept':
             errors.append(colander.Invalid(
                 node_location,
-                'A member should always be a concept, not a collection'
+                'A narrower, broader or related concept should always be a concept, not a collection'
             ))
 
 
