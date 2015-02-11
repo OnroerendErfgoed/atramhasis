@@ -1,3 +1,11 @@
-.cFormDialog li {
+.formContainer .cFormDialog {
+    height: 400px;
+    overflow: auto;
+}
+.formContainer .cFormDialog li {
     padding: 5px;
+}
+
+.claro .formContainer .dijitDialogPaneActionBar {
+    margin: 0;
 }
