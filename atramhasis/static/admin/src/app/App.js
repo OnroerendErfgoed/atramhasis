@@ -507,7 +507,7 @@ define([
             var mergedNotes = currentNotes;
             array.forEach(notesToMerge, function(noteToMerge) {
                 if (!this._containsNote(currentNotes, noteToMerge)) {
-                    console.log("merge me ", noteToMerge) ;
+                    mergedNotes.push(noteToMerge);
                 }
             }, this);
 
