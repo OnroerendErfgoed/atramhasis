@@ -6,68 +6,35 @@ Introduction
 
 Atramhasis is an online SKOS editor. It allows a user to create and edit an
 online thesaurus or vocabulary adhering to the 
-`SKOS specification <skos_spec_>`_.
+`SKOS specification <skos_spec_>`_ through a simple web interface. This allows
+any user with access to a web browser to consult the thesauri and if so wanted,
+to edit them.
+
+Atramhasis is also intended to be one of the focal points in a 
+:term:`Service Oriented Architecture <SOA>`. It exposes as much of it's 
+functionalities as possible through :term:`REST` services. Both reading from
+and writing to concept schemes is possible with Atramhasis.
+
+Atramhasis tries to stick as closely as possible to the :term:`SKOS` 
+specification. Where this was not possible, we tried to follow other standards
+such as :term:`SKOS-THES`.
 
 Atramhasis is being developed by the `Flanders Heritage Agency`_, an agency of
 the Flemish Government that deals with Archaeology, Monuments and Landscapes.
+As such, we mainly intend to use it with vocabularies and thesauri that are
+related to cultural heritage. We generally construct our own thesauri, specific
+to our own applications, but while always keeping an eye on other thesauri
+in the larger field of cultural heritage such as the 
+`Art and Architecture Thesaurus`_ (AAT).
 
-Technology
-==========
-
-Atramhasis is a python_ webapplication that is being developed within the 
-pyramid_ framework. Other major technologies used are sqlalchemy_ as the ORM 
-and jinja2_ as the templating framework.
-
-Client side the main technologies being used are Zurb Foundation and Dojo toolkit.
-
-While Atramhasis is an editor for creating and editing :term:`SKOS` vocabularies,
-it uses other libraries that are more geared towards using a vocabulary in an
-application.
-
-* skosprovider_: This library defines a 
-  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>`. This 
-  is an abstraction of usefull functionalities an application integrating 
-  :term:`SKOS` needs. Different libraries can implement this interface for 
-  different datasources. This allows decoupling the interface from the concrete
-  implementation. Out of the box this comes with a simple 
-  :class:`DictionaryProvider <skosprovider.providers.DictionaryProvider>` that
-  serves a vocabulary based on a simple python :class:`dict` as datasource.
-* skosprovider_sqlalchemy_: An implementation of the 
-  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` 
-  interface with a `SQLAlchemy <http://www.sqlalchemy.org>`_ backend. This allows
-  using a RDBMS for reading, but also writing, :term:`SKOS` concepts.
-* skosprovider_rdf_: An implemenation of the 
-  :class:`~skosprovider.providers.VocabularyProvider` interface with an :term:`RDF`
-  backend. Atramhasis uses this for exporting ConceptSchemes to RDF. It can 
-  also be used to get an existing :term:`SKOS` vocabulary defined in RDF into
-  Atramhasis.
-* pyramid_skosprovider_: A library that integrates pyramid_ and skosprovider_.
-  This libraries creates a :class:`skosprovider.registry.Registry` and makes it
-  accessible through the :class:`pyramid.request.Request`. Is also exposes a 
-  set of readonly :ref:`REST services <pyramidskosprovider:services>` on the 
-  registered providers.
-* skosprovider_getty_:
-  An implemenation of the 
-  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` 
-  against the Linked Open Data vocabularies published by the Getty Research 
-  Institute at `http://vocab.getty.edu <http://vocab.getty.edu>`_ such as the
-  `Art and Architecture Thesaurus (AAT)` and the 
-  `Thesaurus of Geographic Names (TGN)`.
-* skosprovider_heritagedata_:
-  An implementation of the
-  :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` against
-  the vocabularies published by EH, RCAHMS and RCAHMW at 
-  `heritagedata.org <http://heritagedata.org>`_.
+If you have questions about the project, want to help out, want to report a
+bug or just want to have a conversation with us, please get in touch. For 
+general conversations, you can use our 
+`Google Group <https://groups.google.com/d/forum/atramhasis>`_. If you have 
+encoutered a bug in Atramhasis or it's documenation, or if you want to ask
+us to consider implementing a feature, feel free to use our 
+`issue tracker <http://github.com/OnroerendErfgoed/Atramhasis/issues>`_.
 
 .. _skos_spec: http://www.w3.org/TR/skos-reference/
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
-.. _python: https://wwww.python.org
-.. _pyramid: http://www.pylonsproject.org/
-.. _sqlalchemy: http://www.sqlalchemy.org
-.. _jinja2: http://jinja.pocoo.org
-.. _skosprovider: http://skosprovider.readthedocs.org
-.. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
-.. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org
-.. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
-.. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
-.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
+.. _Art and Architecture Thesaurus: http://vocab.getty.edu/aat

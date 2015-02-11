@@ -172,7 +172,6 @@ define(
                         if (this.matchesManager.getMatches()){
                             formObj.matches = this.matchesManager.getMatches();
                         }
-                        console.log(formObj);
                         topic.publish("conceptform.submit", formObj);
                     }
                     this.dialog && this.dialog.layout();
@@ -197,7 +196,6 @@ define(
                 },
 
                 init: function (scheme, concept) {
-                    console.log("init cdialog: " + scheme);
                     this.reset();
                     this.scheme = scheme;
                     var schemebox = dijit.byId("schemebox");

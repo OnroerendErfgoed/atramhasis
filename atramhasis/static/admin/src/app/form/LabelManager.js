@@ -114,9 +114,6 @@ define([
                             iconClass: 'plusIcon',
                             showLabel: false,
                             onClick: lang.hitch(this, function () {
-
-                                console.log("Add label to tabel in add label dialog");
-
                                 self.labelGrid.store.add({
                                     label: self.titleLabel.get('value'),
                                     language: self.languageComboBox.get('displayedValue'),
@@ -204,6 +201,11 @@ define([
 
                 _createGrid: function (gridDiv) {
                     var self = this;
+
+                    var gridStore = new Memory({
+                        data: []
+                    });
+
                     var columns;
                     columns = [
                         {label: "Title", field: "label"},
@@ -211,28 +213,42 @@ define([
                         {label: "Language", field: "languageValue", unhidable: true, hidden: true},
                         {label: "Type", field: "typeDisplayed"},
                         {label: "Type", field: "type", unhidable: true, hidden: true},
-                        editor({label: " ", field: 'button',
-                                editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
-
-                                    var row = grid.row(event);
-                                    self.languageComboBox.getOptions(row.data.languageValue).disabled=false;
-                                    var itemToDelete = row.data.id;
-                                    grid.store.remove(itemToDelete);
-                                    grid.resize();
-                                    grid.refresh();
-                                   // self._checkPrefLabelRules(row.data.type);
-                                }
-                                }},
-                            Button)
+                        {
+                            label: ' ',
+                            field: 'complexCell',
+                            renderCell: function (object, value, node, options) {
+                                return new Button({
+                                    label: "remove",
+                                    onClick: function () {
+                                        //re-add fitlered data, removing items directly is not possible without id's
+                                        grid.store.data = arrayUtil.filter(grid.store.data, function (item) {
+                                            return !(object.label == item.label
+                                              && object.language == item.language
+                                              && object.type == item.type)
+                                        });
+                                        grid.refresh();
+                                    }
+                                }).domNode;
+                            }
+                        }
+//                        editor({label: " ", field: 'button',
+//                                editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
+//                                    console.log('deleting ', event, grid.row(event));
+//                                    var row = grid.row(event);
+//                                    self.languageComboBox.getOptions(row.data.languageValue).disabled=false;
+//                                    var itemToDelete = row.data.id;
+//                                    grid.store.remove(itemToDelete);
+//                                    grid.resize();
+//                                    grid.refresh();
+//                                   // self._checkPrefLabelRules(row.data.type);
+//                                }
+//                                }},
+//                            Button)
                     ];
-                    var gridStore = new Memory({
-                        data: []
 
-                    });
                     var grid = new (declare([OnDemandGrid, ColumnHider]))({
                         columns: columns,
-                        store: gridStore,
-                        selectionMode: "single" // for Selection; only select a single row at a time
+                        store: gridStore
                     }, gridDiv);
 
                     grid.startup();
@@ -261,24 +277,8 @@ define([
                         return item.type == typevalue;
                     });
                     return arrayUtil.map(filteredItems, function (item) {
-                        return {label: item.label, language: self._getLanguageToDisplay(item.language), languageValue: item.language, type: item.type, typeDisplayed: typeToBeDisplayed};
+                        return {label: item.label, language: item.language, languageValue: item.language, type: item.type, typeDisplayed: typeToBeDisplayed};
                     });
-                },
-                _getLanguageToDisplay: function (language) {
-                    switch (language) {
-                        case "nl":
-                            return "NL";
-                            break;
-                        case "fr":
-                            return "FR";
-                            break;
-                        case "en":
-                            return "EN";
-                            break;
-                        default:
-                            return language;
-                            break;
-                    }
                 },
 
                 //not in use for the moment
@@ -360,8 +360,6 @@ define([
                 },
 
                 setLabels: function (labels) {
-                    console.log("set labels: " + labels);
-
                     this.labels = this._mapLabelToDisplayedLabel(labels, "prefLabel", "Preferred");
                     this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "altLabel", "Alternative"));
                     this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "hiddenLabel", "Hidden"));
