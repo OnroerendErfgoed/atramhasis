@@ -475,7 +475,6 @@ define([
             array.forEach(labelsToMerge, function(labelToMerge) {
                 if (!this._containsLabel(currentLabels, labelToMerge)) {
                     mergedLabels.push(this._verifyPrefLabel(mergedLabels, labelToMerge));
-                    mergedLabels.push(labelToMerge);
                 }
             }, this);
 
