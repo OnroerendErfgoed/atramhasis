@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     "dojo/_base/array",
     "dojo/dom-construct",
+    "dojo/dom-attr",
     "dojo/dom-class",
     "dojo/on",
     "dojo/topic",
@@ -9,11 +10,18 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     "dijit/ConfirmDialog",
+    "dijit/Dialog",
+    "dijit/form/Button",
     "./form/ConceptDetailList",
     'dojo/text!./templates/ConceptDetail.html',
-    "dijit/TitlePane"
-], function (declare, arrayUtil, domConstruct, domClass, on, topic, _WidgetBase, _TemplatedMixin,
-             _WidgetsInTemplateMixin, ConfirmDialog, ConceptDetailList, template) {
+    "dijit/TitlePane",
+    "dgrid/List",
+    "dgrid/Keyboard",
+    "dgrid/Selection",
+    "dgrid/extensions/DijitRegistry"
+], function (declare, arrayUtil, domConstruct, domAttr, domClass, on, topic, _WidgetBase, _TemplatedMixin,
+             _WidgetsInTemplateMixin, ConfirmDialog, Dialog, Button, ConceptDetailList, template, TitlePane,
+             dgridList, dgridKeyboard, dgridSelection, DijitRegistry) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -37,6 +45,8 @@ define([
         matches: null,
         matchUris: [],
         externalSchemeService: null,
+        _mergeDialog: null,
+        _mergeButton: null,
 
 
         postCreate: function () {
@@ -74,6 +84,23 @@ define([
             var editLi = domConstruct.create("li", {
                 innerHTML: "<a href='#'>Edit</a>"
             }, actionNode);
+            if (this.type == 'concept') {
+                var mergeLi = domConstruct.create("li", {
+                  innerHTML: "<a href='#'>Merge</a>"
+                }, actionNode);
+                this._mergeButton = mergeLi;
+
+                //set disabled when no matches are defined
+                domClass.add(this._mergeButton, "disabled");
+                var types = this.externalSchemeService.matchTypes;
+                arrayUtil.forEach(types, function(typeObj) {
+                    var type = typeObj.value;
+                    if (this.matchUris && this.matchUris[type]) {
+                      domClass.remove(this._mergeButton, "disabled");
+                    }
+                }, this);
+            }
+
             var self = this;
             on(deleteLi, "click", function (evt) {
                 evt.preventDefault();
@@ -102,6 +129,30 @@ define([
                 topic.publish("concept.edit", self.conceptid);
                 return false;
             });
+
+            if (this.type == 'concept') {
+                on(mergeLi, "click", function (evt) {
+                  evt.preventDefault();
+
+                  if (domClass.contains(mergeLi, "disabled")) {
+                    return false;
+                  }
+
+                  if (self.matches.length == 0) {
+                    topic.publish('dGrowl', "No matches to merge (or matches are still loading)", {'title': "Warning", 'sticky': false, 'channel': 'warn'});
+                    return false;
+                  }
+                  else {
+                    if (!self._mergeDialog) {
+                      self._mergeDialog = self._createMergeDialog();
+                    }
+                    self._mergeDialog.setMatches(self.matches);
+                    self._mergeDialog.show();
+                  }
+
+                  return false;
+                });
+            }
 
             topic.subscribe("conceptDetail.refresh", function (refreshedConcept) {
                 self._refreshConceptDetail(refreshedConcept);
@@ -192,7 +243,88 @@ define([
                         }
                     });
                 }
+            }, this);
+        },
+
+        _createMergeDialog: function() {
+
+            var self = this;
+
+            var dlg = new Dialog({
+                'class': "externalForm",
+                'title': "Choose one or more matches"
             });
+
+            //layout
+            var matchDiv = domConstruct.create("div", {}, dlg.containerNode);
+
+            domConstruct.create("p", {
+                'innerHTML': "Select one or more matches to merge (hold ctrl or shift to select multiple items):"
+            }, matchDiv);
+
+            var listHolder = domConstruct.create("div", {}, matchDiv);
+            var list = new (declare([dgridList, dgridKeyboard, dgridSelection, DijitRegistry]))({
+                selectionMode: "single",
+                renderRow: function(object){
+                    return domConstruct.create("div", {
+                        innerHTML: object.data.label + " (" + object.type + " match, uri: <em>" + object.data.uri + "</em>)"
+                    });
+                }
+            }, listHolder);
+            list.renderArray([]);
+
+            var actionBar = domConstruct.create("div", {
+                'class': "dijitDialogPaneActionBar",
+                width: "300px"
+            }, dlg.containerNode);
+
+            var mergeBtn = new Button({
+                "label": "Merge"
+            }).placeAt(actionBar);
+
+            var cancelBtn = new Button({
+                "label": "Cancel"
+            }).placeAt(actionBar);
+
+            //behavior
+            dlg.setMatches = function (matches) {
+                list.renderArray(matches);
+            };
+
+            mergeBtn.onClick = function () {
+                var rows = [];
+                for (var id in list.selection) {
+                    if (list.selection[id]) {
+                        var row = list.row(id);
+                        console.log("row 1 ", row);
+                        rows.push(row);
+                    }
+                }
+                if (rows.length == 0) {
+                  topic.publish('dGrowl', "No matches selected", {'title': "Warning", 'sticky': false, 'channel': 'warn'});
+                }
+                else {
+                  arrayUtil.forEach(rows, function (row) {
+                      var object = row.data;
+                      topic.publish('concept.merge', {'id': this.conceptid, 'match': object, 'schemeid': this.schemeid} );
+                  }, self);
+
+                  dlg.hide();
+                }
+
+            };
+
+            cancelBtn.onClick = function () {
+                dlg.hide();
+            };
+
+            on(dlg, "hide", function () {
+                //reset stuff
+                list.refresh();
+            });
+
+            return dlg
         }
+
     });
 });

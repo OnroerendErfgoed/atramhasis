@@ -62,7 +62,7 @@ define([
                         iconClass: 'plusIcon',
                         onClick: function () {
                             if (!self._matchesDialog) {
-                                self._matchesDialog = self._createDialog();
+                                self._matchesDialog = self._createAddDialog();
                             }
                             self._matchesDialog.show();
                         }
@@ -128,7 +128,7 @@ define([
                     );
                 },
 
-                _createDialog: function () {
+                _createAddDialog: function () {
                     var self = this;
 
                     var dlg = new Dialog({

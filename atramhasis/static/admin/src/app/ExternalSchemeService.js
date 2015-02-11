@@ -55,6 +55,30 @@ define([
             });
         },
 
+        getMergeMatch: function (uri) {
+            var self = this;
+            return xhr.get('/uris/' + uri, {
+                handleAs: "json",
+                headers: {'Accept' : 'application/json'}
+            }).then(function(data){
+                var id = data.id;
+                var scheme = data.concept_scheme.id;
+                var call = self.getConcept(scheme, uri);
+                return call.then(function(concept) {
+                    return {
+                        labels: concept.labels,
+                        notes: concept.notes
+                    };
+                }, function(err){
+                    console.error(err);
+                    throw err;
+                });
+            }, function(err){
+                console.error(err);
+                throw err;
+            });
+        },
+
         getConcept: function (scheme, uri) {
             var pathArray =  uri.split('/');
             var id = pathArray.pop();

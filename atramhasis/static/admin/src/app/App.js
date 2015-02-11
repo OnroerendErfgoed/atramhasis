@@ -255,6 +255,29 @@ define([
                     conceptDialog.show();
                 });
             });
+
+            topic.subscribe("concept.merge", function (options) {
+                var conceptid = options.id;
+                var schemeid = options.schemeid;
+                var uri = options.match.data.uri;
+
+                self.externalSchemeService.getMergeMatch(uri).then( function (match) {
+                    var labelsToMerge = match.labels;
+                    var notesToMerge = match.notes;
+                    var thesaurus = self.thesauri.stores[schemeid];
+                    thesaurus.get(conceptid).then(lang.hitch(self, function (concept) {
+                        //add notes and labels to existing concept
+                        concept.labels = this._mergeLabels(concept.labels, labelsToMerge);
+                        concept.notes = this._mergeNotes(concept.notes, notesToMerge);
+                        conceptForm.init(schemeid, concept);
+                        conceptDialog.set("title", "Edit " + concept.label);
+                        conceptDialog.show();
+                    }));
+                }, function (err) {
+                    topic.publish('dGrowl', err, {'title': "Error when looking up match", 'sticky': true, 'channel':'error'});
+                });
+            });
+
             topic.subscribe("concept.addNarrower", function (conceptid, label) {
                     var thesaurus = self.thesauri.stores[self.currentScheme];
 
@@ -445,8 +468,59 @@ define([
                 topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': true, 'channel':'error'});
             });
 
+        },
+
+        _mergeLabels: function (currentLabels, labelsToMerge) {
+            var mergedLabels = currentLabels;
+            array.forEach(labelsToMerge, function(labelToMerge) {
+                if (!this._containsLabel(currentLabels, labelToMerge)) {
+                    mergedLabels.push(this._verifyPrefLabel(mergedLabels, labelToMerge));
+                    mergedLabels.push(labelToMerge);
+                }
+            }, this);
+
+            return mergedLabels;
+        },
+
+        _containsLabel: function (labels, labelToSearch) {
+            return array.some(labels, function(label) {
+                return label.label    == labelToSearch.label
+                    && label.language == labelToSearch.language
+                    && label.type     == labelToSearch.type;
+            })
+        },
+
+        _verifyPrefLabel: function (labels, labelToMerge) {
+            if (labelToMerge.type == 'prefLabel' && this._containsPrefLabelOfSameLanguage(labels, labelToMerge)) {
+              labelToMerge.type = 'altLabel';
+            }
+            return labelToMerge;
+        },
+
+        _containsPrefLabelOfSameLanguage: function (labels, labelToSearch) {
+            return array.some(labels, function(label) {
+                return label.type     == 'prefLabel'
+                    && label.language == labelToSearch.language;
+            })
+        },
+
+        _mergeNotes: function (currentNotes, notesToMerge) {
+            var mergedNotes = currentNotes;
+            array.forEach(notesToMerge, function(noteToMerge) {
+                if (!this._containsNote(currentNotes, noteToMerge)) {
+                    console.log("merge me ", noteToMerge) ;
+                }
+            }, this);
+
+            return mergedNotes;
+        },
+
+        _containsNote: function (notes, noteToSearch) {
+            return array.some(notes, function(note) {
+                return note.note    == noteToSearch.note
+                    && note.language == noteToSearch.language
+                    && note.type     == noteToSearch.type;
+            })
         }
-
-
     });
 });
