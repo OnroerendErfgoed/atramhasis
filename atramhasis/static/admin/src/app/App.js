@@ -230,6 +230,13 @@ define([
 
             }));
 
+            topic.subscribe("concept.close", lang.hitch(this, function (conceptid, schemeid) {
+                var cp = registry.byId(schemeid + "_" + conceptid);
+                if (cp) {
+                    tc.closeChild(cp);
+                }
+            }));
+
             topic.subscribe("concept.delete", function (conceptid) {
                 console.log("concept.delete subscribe: " + conceptid + "(" + self.currentScheme + ")");
                 var thesaurus = self.thesauri.stores[self.currentScheme];
@@ -365,10 +372,8 @@ define([
                             topic.publish('dGrowl', message, {'title': "Success", 'sticky': false, 'channel':'info'});
                             filteredGrid.conceptGrid.refresh();
 
-                            //refresh Concept Detail widget.
-                            self.thesauri.stores[self.currentScheme].get(form.concept_id).then(function (item) {
-                                topic.publish("conceptDetail.refresh", item);
-                            });
+                            //open Concept Detail widget.
+                            topic.publish("concept.open", form.concept_id, self.currentScheme);
                         },
                         function (error) {
                             self._handleSaveErrors(error);

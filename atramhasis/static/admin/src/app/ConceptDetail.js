@@ -154,10 +154,6 @@ define([
                 });
             }
 
-            topic.subscribe("conceptDetail.refresh", function (refreshedConcept) {
-                self._refreshConceptDetail(refreshedConcept);
-            });
-
         },
         _refreshConceptDetail:function(refreshedConcept)
         {

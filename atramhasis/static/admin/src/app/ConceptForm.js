@@ -196,6 +196,8 @@ define(
                 },
 
                 init: function (scheme, concept) {
+                    //close corresponding concept detail tab
+                    topic.publish("concept.close", concept.id, scheme);
                     this.reset();
                     this.scheme = scheme;
                     var schemebox = dijit.byId("schemebox");
