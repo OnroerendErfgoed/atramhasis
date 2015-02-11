@@ -84,21 +84,19 @@ define([
                 maxRowsPerPage: 100
             }, "gridNode");
 
-            on(this.conceptGrid, "dgrid-select", lang.hitch(this, function (evt) {
-                var row = evt.rows[0];
+            on(this.conceptGrid, ".dgrid-row:click", lang.hitch(this, function (evt) {
+                var row = this.conceptGrid.row(evt);
                 row.scheme = this.conceptScheme;
                 topic.publish("concept.open", row.id, row.scheme);
             }));
 
-            this.conceptGrid.on(".dgrid-row:contextmenu", function (evt) {
-                    evt.preventDefault();
-                    var cell = self.conceptGrid.cell(evt);
-                    var gridId = self.conceptGrid.get("id");
-                    var pMenu = self._createGridContextMenu(gridId, cell.element, self, cell.row.data.id, cell.row.data.type, cell.row.data.label);
-                    var args = {target: pMenu.selector};
-                    pMenu._openMyself(args);
-                }
-            );
+            this.conceptGrid.on(".dgrid-row:contextmenu", lang.hitch(this, function (evt) {
+                evt.preventDefault(); // prevent default browser context menu
+                var cell = this.conceptGrid.cell(evt);
+                var gridId = this.conceptGrid.get("id");
+                var pMenu = this._createGridContextMenu(gridId, cell.element, this, cell.row.data.id, cell.row.data.type, cell.row.data.label);
+                pMenu._scheduleOpen(this, null, { x: evt.pageX, y: evt.pageY });
+            }));
 
             on(this.typeCombo, "change", lang.hitch(this, function (evt) {
                 if (evt != "") {
@@ -157,12 +155,7 @@ define([
         },
 
         _createGridContextMenu: function (targetNodeId, selector, widget, conceptId, type, label) {
-            var pMenu;
-            var self = this;
-            pMenu = new Menu({
-                targetNodeIds: [targetNodeId],
-                selector: selector
-            });
+            var pMenu = new Menu({});
 
             if (type == "concept") {
                 pMenu.addChild(new MenuItem({
@@ -203,10 +196,6 @@ define([
                     widget._createNewConcept();
                 }
             }));
-
-            pMenu.startup();
-            var args = {target: pMenu.selector};
-            pMenu._openMyself(args);
 
           return pMenu;
         },
