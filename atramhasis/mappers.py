@@ -21,14 +21,12 @@ def map_concept(concept, concept_json, skos_manager):
     '''
     concept.type = concept_json.get('type', None)
     if concept.type in ('concept', 'collection'):
-        for label in concept.labels:
-            concept.labels.remove(label)
+        concept.labels[:] = []
         labels = concept_json.get('labels', [])
         for l in labels:
             label = Label(label=l.get('label', ''), labeltype_id=l.get('type', ''), language_id=l.get('language', ''))
             concept.labels.append(label)
-        for note in concept.notes:
-            concept.notes.remove(note)
+        concept.notes[:] = []
         notes = concept_json.get('notes', [])
         for n in notes:
             note = Note(note=n.get('note', ''), notetype_id=n.get('type', ''), language_id=n.get('language', ''))
