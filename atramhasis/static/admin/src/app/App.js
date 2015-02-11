@@ -48,19 +48,14 @@ define([
 
         postMixInProperties: function () {
             this.inherited(arguments);
-
-            console.log('postMixInProperties', arguments);
         },
 
         buildRendering: function () {
             this.inherited(arguments);
-
-            console.log('buildRendering', arguments);
         },
 
         postCreate: function () {
             this.inherited(arguments);
-            console.log('postCreate', arguments);
             this.thesauri = new ThesaurusCollection();
 
             this.notificationController = new dGrowl({
@@ -74,7 +69,6 @@ define([
 
         startup: function () {
             this.inherited(arguments);
-            console.log('startup', arguments);
             var self = this;
 
             this.externalSchemeService = new ExternalSchemeService({
@@ -148,8 +142,6 @@ define([
             }, "addConceptNode");
 
             on(addConceptButton, "click", function () {
-
-                console.log("on addConceptButton " + self.currentScheme);
                 self._createConcept(conceptForm, conceptDialog, self.currentScheme);
             });
 
@@ -177,13 +169,12 @@ define([
                     self._importConcept(conceptForm, conceptDialog, evt.concept.uri, evt.scheme);
                 }
                 else {
-                    console.error('No valid URI.');
+                    topic.publish('dGrowl', '', {'title': 'No valid URI', 'sticky': true, 'channel':'error'});
                 }
             });
 
             on(schemeFileteringSelect, "change", function (e) {
                 if (e) {
-                    console.log("on schemeCombo ", e);
                     self.currentScheme = e;
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
@@ -206,8 +197,6 @@ define([
                 else {
                     var thesaurus = self.thesauri.stores[schemeid];
                     thesaurus.get(conceptid).then(function (item) {
-                        console.log("create contentpane");
-                        console.log(item);
                         var concept = new ConceptDetail({
                             conceptid: item.id,
                             label: item.label,
@@ -266,7 +255,7 @@ define([
                 });
             });
             topic.subscribe("concept.addNarrower", function (conceptid, type, label) {
-                    console.log("concept.addMemberOf subscribe: " + label + " " + conceptid + " " + label + " (" + self.currentScheme + ")");
+                    console.log("concept.addNarrower subscribe: " + label + " " + conceptid + " " + label + " (" + self.currentScheme + ")");
 
                     var thesaurus = self.thesauri.stores[self.currentScheme];
 
@@ -307,8 +296,7 @@ define([
 
 
             topic.subscribe("conceptform.submit", function (form) {
-                console.log("conceptform.submit subscribe");
-                console.log(form);
+                console.log("conceptform.submit subscribe ", form);
 
                 var broader = array.map(form.broader, function(item){ return {"id": item}; });
                 var narrower = array.map(form.narrower, function(item){ return {"id": item}; });
@@ -336,7 +324,6 @@ define([
                     filteredGrid.conceptGrid.store.put(rowToAdd, {id: form.concept_id})
                         .then(
                         function () {
-                            console.log("row edited");
                             conceptDialog.hide();
                             var message = "The " + rowToAdd.type + " has been saved";
                             topic.publish('dGrowl', message, {'title': "Success", 'sticky': false, 'channel':'info'});
@@ -397,7 +384,7 @@ define([
                     conceptDialog.set("title", "Import concept or collection");
                     conceptDialog.show();
                 }, function(err){
-                    console.error(err);
+                    topic.publish('dGrowl', "", {'title': err, 'sticky': true, 'channel':'error'});
                 });
             } catch(err) {
                 topic.publish('dGrowl', "", {'title': err, 'sticky': true, 'channel':'error'});
