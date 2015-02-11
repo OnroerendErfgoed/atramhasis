@@ -229,7 +229,8 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
         self.assertTrue(isinstance(error, ValidationError))
-        self.assertIn({'related': 'A member should always be a concept, not a collection'}, error.errors)
+        self.assertIn({'related': 'A narrower, broader or related concept'
+                                  ' should always be a concept, not a collection'}, error.errors)
 
     def test_collection_with_related(self):
         # Collections can not have related relations
@@ -271,7 +272,8 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
         self.assertTrue(isinstance(error, ValidationError))
-        self.assertIn({'narrower': 'A member should always be a concept, not a collection'}, error.errors)
+        self.assertIn({'narrower': 'A narrower, broader or related concept'
+                                   ' should always be a concept, not a collection'}, error.errors)
 
     def test_collection_with_narrower(self):
         # Collections can not have narrower relations
@@ -313,7 +315,8 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
         self.assertTrue(isinstance(error, ValidationError))
-        self.assertIn({'broader': 'A member should always be a concept, not a collection'}, error.errors)
+        self.assertIn({'broader': 'A narrower, broader or related concept should always be'
+                                  ' a concept, not a collection'}, error.errors)
 
     def test_collection_with_broader(self):
         # Collections can not have broader relations
