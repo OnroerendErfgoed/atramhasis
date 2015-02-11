@@ -12,6 +12,6 @@ var dojoConfig = {
 		'xstyle',
 		'dgrid',
 		'app',
-        'dGrowl'
+    'dGrowl'
 	]
 };
