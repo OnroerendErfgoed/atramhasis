@@ -172,7 +172,6 @@ define(
                         if (this.matchesManager.getMatches()){
                             formObj.matches = this.matchesManager.getMatches();
                         }
-                        console.log(formObj);
                         topic.publish("conceptform.submit", formObj);
                     }
                     this.dialog && this.dialog.layout();
@@ -196,7 +195,6 @@ define(
                 },
 
                 init: function (scheme, concept) {
-                    console.log("init cdialog: " + scheme);
                     this.reset();
                     this.scheme = scheme;
                     var schemebox = dijit.byId("schemebox");
@@ -261,11 +259,9 @@ define(
                     this.dialog && this.dialog.layout();
                 },
                 addBroader: function (broader) {
-                    console.log("add existing broader: " + broader.label);
                     this.broaderManager.setRelations(broader);
                 },
                 addMemberOf: function (memberOf) {
-                    console.log("add existing broader: " + memberOf.label);
                     this.memberofManager.setRelations(memberOf);
                 }
             }

@@ -114,9 +114,6 @@ define([
                             iconClass: 'plusIcon',
                             showLabel: false,
                             onClick: lang.hitch(this, function () {
-
-                                console.log("Add label to tabel in add label dialog");
-
                                 self.labelGrid.store.add({
                                     label: self.titleLabel.get('value'),
                                     language: self.languageComboBox.get('displayedValue'),
@@ -363,8 +360,6 @@ define([
                 },
 
                 setLabels: function (labels) {
-                    console.log("set labels: " + labels);
-
                     this.labels = this._mapLabelToDisplayedLabel(labels, "prefLabel", "Preferred");
                     this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "altLabel", "Alternative"));
                     this.labels.push.apply(this.labels, this._mapLabelToDisplayedLabel(labels, "hiddenLabel", "Hidden"));
