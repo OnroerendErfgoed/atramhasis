@@ -227,7 +227,9 @@ Run the commands to prepare your application
     $ initialize_atramhasis_db production.ini
     $ python setup.py compile_catalog
 
-Close the remote console!
+.. note::
+
+    Close the remote console!
 
 Run the app
 -----------
