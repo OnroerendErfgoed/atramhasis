@@ -65,7 +65,7 @@ class AtramhasisView(object):
         )
         return response
 
-    @view_config(route_name='home', renderer='atramhasis:templates/atramhasis.jinja2')
+    @view_config(route_name='home', renderer='atramhasis:templates/home.jinja2')
     def home_view(self):
         '''
         This view displays the homepage.
@@ -327,7 +327,7 @@ class AtramhasisAdminView(object):
         else:
             raise SkosRegistryNotFoundException()
 
-    @view_config(route_name='admin', renderer='atramhasis:templates/tempadmin.jinja2', permission='edit')
+    @view_config(route_name='admin', renderer='atramhasis:templates/admin.jinja2', permission='edit')
     def admin_view(self):
         return {'admin': None}
 
