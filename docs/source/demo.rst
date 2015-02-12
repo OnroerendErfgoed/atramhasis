@@ -62,7 +62,7 @@ This section will tell you how to deploy an Atramhasis demo (or your own impleme
 We'll use `Heroku <https://www.heroku.com/>`_, since this provider allows for a free Python instance
 (dyno) with a limited Postgresql database.
 
-Create an account on Heroku and make sure you have Hertoku Toolbelt installed. Prepare your local Heroku `setup <https://devcenter.heroku.com/articles/getting-started-with-python#set-up>`_
+Create an account on Heroku and make sure you have Heroku Toolbelt installed. Prepare your local Heroku `setup <https://devcenter.heroku.com/articles/getting-started-with-python#set-up>`_
 
 
 .. note::
