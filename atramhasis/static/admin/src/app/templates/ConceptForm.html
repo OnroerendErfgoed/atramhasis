@@ -1,5 +1,5 @@
 
-    <form data-dojo-attach-point='containerNode' style="height:420px;width: 720px;overflow:scroll;">
+    <form data-dojo-attach-point='containerNode' class="formContainer">
 
         <div data-dojo-attach-point="formNode" class="cFormDialog">
             <div data-dojo-attach-point="MyTable"></div>
@@ -7,10 +7,10 @@
                 <div data-dojo-attach-point="labelContainerNode"></div>
             </div>
 
-            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'notes', open:true">
+            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'notes', open:false">
                 <div data-dojo-attach-point="noteContainerNode"></div>
             </div>
-            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'relations', open:true">
+            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'relations', open:false">
                 <div data-dojo-attach-point="broaderContainerNode"></div>
                 <div data-dojo-attach-point="narrowerContainerNode"></div>
                 <div data-dojo-attach-point="relatedContainerNode"></div>
@@ -19,12 +19,12 @@
                 <div data-dojo-attach-point="subordinateArraysContainerNode"></div>
                 <div data-dojo-attach-point="superordinatesContainerNode"></div>
             </div>
-            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'matches', open:true">
+            <div data-dojo-type="dijit/TitlePane" data-dojo-props="title: 'matches', open:false">
                 <div data-dojo-attach-point="matchesContainerNode"></div>
             </div>
-            <div class="dijitDialogPaneActionBar" style="width: 700px">
-                <button data-dojo-type='dijit/form/Button' type='submit'>save</button>
-                <button data-dojo-type='dijit/form/Button' data-dojo-attach-event="onClick:onCancel">cancel</button>
-            </div>
+        </div>
+        <div class="dijitDialogPaneActionBar">
+            <button data-dojo-type='dijit/form/Button' type='submit'>save</button>
+            <button data-dojo-type='dijit/form/Button' data-dojo-attach-event="onClick:onCancel">cancel</button>
         </div>
     </form>

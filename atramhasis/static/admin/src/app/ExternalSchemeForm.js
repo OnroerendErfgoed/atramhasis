@@ -4,6 +4,7 @@ define([
     'dojo/Evented',
     'dojo/dom-construct',
     'dojo/on',
+    'dojo/string',
     'dijit/Dialog',
     'dijit/form/Select',
     'dijit/form/TextBox',
@@ -12,7 +13,7 @@ define([
     'dgrid/Keyboard',
     'dgrid/Selection',
     'dgrid/extensions/DijitRegistry'    
-], function (declare, WidgetBase, Evented, domConstruct, on, Dialog, Select, TextBox, Button,
+], function (declare, WidgetBase, Evented, domConstruct, on, string, Dialog, Select, TextBox, Button,
     dgridList, dgridKeyboard, dgridSelection, DijitRegistry) {
     return declare([WidgetBase, Evented], {
 
@@ -88,7 +89,9 @@ define([
                 selectionMode: "single",
                 renderRow: function(object, options){
                     return domConstruct.create("div", {
-                        innerHTML: object.label + " <em>(" + object.type + ", id: " + object.id + ")</em>"
+                        innerHTML: string.escape(object.label.toString()) + " <em>("
+                          + string.escape(object.type.toString()) + ", id: "
+                          + string.escape(object.id.toString()) + ")</em>"
                     });
                 }
             }, listHolder);
@@ -100,6 +103,11 @@ define([
                 width: "300px"
             }, dlg.containerNode);
 
+
+            var previewBtn = new Button({
+                "label": "Preview concept"
+            }).placeAt(actionBar);
+
             var addBtn = new Button({
                 "label": "Import"
             }).placeAt(actionBar);
@@ -108,7 +116,23 @@ define([
                 "label": "Cancel"
             }).placeAt(actionBar);
 
-            addBtn.onClick = function () {
+          previewBtn.onClick = function () {
+                var row = null;
+                for(var id in list.selection){
+                    if(list.selection[id]){
+                        row = list.row(id);
+                    }
+                }
+
+                if (row && row.data && row.data.uri) {
+                    window.open(row.data.uri);
+                }
+                else {
+                    console.info('No concept selected.');
+                }
+          };
+
+          addBtn.onClick = function () {
                 var row = null;
                 for(var id in list.selection){
                     if(list.selection[id]){

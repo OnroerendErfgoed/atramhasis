@@ -192,6 +192,7 @@ define(
                     this.labelManager.reset();
                     this.noteManager.reset();
                     this.matchesManager.reset();
+                    this.typeComboBox.reset();
                 },
 
                 init: function (scheme, concept) {
@@ -207,6 +208,8 @@ define(
                     this.subordinateArraysManager.setScheme(scheme);
                     this.superordinatesManager.setScheme(scheme);
                     if (concept) {
+                        //close corresponding concept detail tab
+                        topic.publish("concept.close", concept.id, scheme);
                         console.log("editing existing concept: " + concept.label);
                         this.conceptId = concept.id;
                         this.typeComboBox.set("value", concept.type);
@@ -263,6 +266,13 @@ define(
                 },
                 addMemberOf: function (memberOf) {
                     this.memberofManager.setRelations(memberOf);
+                },
+                addSuperordinate: function (superordinate) {
+                    this.superordinatesManager.setRelations(superordinate);
+                },
+
+                setType: function (type) {
+                    this.typeComboBox.set("value", type);
                 }
             }
         )

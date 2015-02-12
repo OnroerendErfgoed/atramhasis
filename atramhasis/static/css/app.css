@@ -1,3 +1,6 @@
+@import url("foundation.min.css");
+@import url("jqtree.css");
+
 /* override jqtree css */
 ul.jqtree-tree li.jqtree-folder .jqtree-title {
     margin-left: 5px;

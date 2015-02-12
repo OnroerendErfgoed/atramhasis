@@ -8,6 +8,7 @@ define([
     "dojo/dom",
     "dojo/request",
     "dojo/json",
+    "dojo/string",
     "dijit/registry",
     "dijit/form/FilteringSelect",
     "dijit/MenuItem",
@@ -32,7 +33,7 @@ define([
     "dijit/layout/BorderContainer"
 
 
-], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, registry, FilteringSelect, MenuItem,
+], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, string, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
              ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, TabContainer) {
@@ -217,7 +218,7 @@ define([
                         });
                         cp = new ContentPane({
                             id: schemeid + "_" + item.id,
-                            title: item.label,
+                            title: string.escape(item.label),
                             closable: true,
                             style: "padding: 0",
                             content: concept
@@ -227,6 +228,13 @@ define([
                     });
                 }
 
+            }));
+
+            topic.subscribe("concept.close", lang.hitch(this, function (conceptid, schemeid) {
+                var cp = registry.byId(schemeid + "_" + conceptid);
+                if (cp) {
+                    tc.closeChild(cp);
+                }
             }));
 
             topic.subscribe("concept.delete", function (conceptid) {
@@ -254,9 +262,30 @@ define([
                     conceptDialog.show();
                 });
             });
-            topic.subscribe("concept.addNarrower", function (conceptid, type, label) {
-                    console.log("concept.addNarrower subscribe: " + label + " " + conceptid + " " + label + " (" + self.currentScheme + ")");
 
+            topic.subscribe("concept.merge", function (options) {
+                var conceptid = options.id;
+                var schemeid = options.schemeid;
+                var uri = options.match.data.uri;
+
+                self.externalSchemeService.getMergeMatch(uri).then( function (match) {
+                    var labelsToMerge = match.labels;
+                    var notesToMerge = match.notes;
+                    var thesaurus = self.thesauri.stores[schemeid];
+                    thesaurus.get(conceptid).then(lang.hitch(self, function (concept) {
+                        //add notes and labels to existing concept
+                        concept.labels = this._mergeLabels(concept.labels, labelsToMerge);
+                        concept.notes = this._mergeNotes(concept.notes, notesToMerge);
+                        conceptForm.init(schemeid, concept);
+                        conceptDialog.set("title", "Edit " + concept.label);
+                        conceptDialog.show();
+                    }));
+                }, function (err) {
+                    topic.publish('dGrowl', err, {'title': "Error when looking up match", 'sticky': true, 'channel':'error'});
+                });
+            });
+
+            topic.subscribe("concept.addNarrower", function (conceptid, label) {
                     var thesaurus = self.thesauri.stores[self.currentScheme];
 
                     thesaurus.get(conceptid).then(function (item) {
@@ -265,16 +294,30 @@ define([
                         ];
                         conceptForm.init(self.currentScheme);
                         conceptForm.addBroader(broader);
-                        conceptDialog.set("title", "Add concept or collection to the " + type + " " + label);
+                        conceptForm.setType('concept');
+                        conceptDialog.set("title", "Add narrower concept to '" + label + "'");
                         conceptDialog.show();
                     });
                 }
             );
 
+            topic.subscribe("concept.addSubordinateArray", function (conceptid, label) {
+                var thesaurus = self.thesauri.stores[self.currentScheme];
 
-            topic.subscribe("concept.addMemberOf", function (conceptid, type, label) {
-                    console.log("concept.addMemberOf subscribe: " + label + " " + conceptid + " " + label + " (" + self.currentScheme + ")");
+                thesaurus.get(conceptid).then(function (item) {
+                    var superordinate = [
+                        {label: item.label, id: item.id, labels: item.labels, type: item.type, uri: item.uri}
+                    ];
+                    conceptForm.init(self.currentScheme);
+                    conceptForm.addSuperordinate(superordinate);
+                    conceptForm.setType('collection');
+                    conceptDialog.set("title", "Add subordinate array to '" + label + "'");
+                    conceptDialog.show();
+                });
+            });
 
+
+            topic.subscribe("concept.addMemberOf", function (conceptid, label) {
                     var thesaurus = self.thesauri.stores[self.currentScheme];
 
                     thesaurus.get(conceptid).then(function (item) {
@@ -283,7 +326,7 @@ define([
                         ];
                         conceptForm.init(self.currentScheme);
                         conceptForm.addMemberOf(MemberOf);
-                        conceptDialog.set("title", "Add concept or collection to the " + type + " " + label);
+                        conceptDialog.set("title", "Add member to '" + label + "'");
                         conceptDialog.show();
                     });
                 }
@@ -329,10 +372,8 @@ define([
                             topic.publish('dGrowl', message, {'title': "Success", 'sticky': false, 'channel':'info'});
                             filteredGrid.conceptGrid.refresh();
 
-                            //refresh Concept Detail widget.
-                            self.thesauri.stores[self.currentScheme].get(form.concept_id).then(function (item) {
-                                topic.publish("conceptDetail.refresh", item);
-                            });
+                            //open Concept Detail widget.
+                            topic.publish("concept.open", form.concept_id, self.currentScheme);
                         },
                         function (error) {
                             self._handleSaveErrors(error);
@@ -432,8 +473,58 @@ define([
                 topic.publish('dGrowl', evt.message, {'title': evt.title, 'sticky': true, 'channel':'error'});
             });
 
+        },
+
+        _mergeLabels: function (currentLabels, labelsToMerge) {
+            var mergedLabels = currentLabels;
+            array.forEach(labelsToMerge, function(labelToMerge) {
+                if (!this._containsLabel(currentLabels, labelToMerge)) {
+                    mergedLabels.push(this._verifyPrefLabel(mergedLabels, labelToMerge));
+                }
+            }, this);
+
+            return mergedLabels;
+        },
+
+        _containsLabel: function (labels, labelToSearch) {
+            return array.some(labels, function(label) {
+                return label.label    == labelToSearch.label
+                    && label.language == labelToSearch.language
+                    && label.type     == labelToSearch.type;
+            })
+        },
+
+        _verifyPrefLabel: function (labels, labelToMerge) {
+            if (labelToMerge.type == 'prefLabel' && this._containsPrefLabelOfSameLanguage(labels, labelToMerge)) {
+              labelToMerge.type = 'altLabel';
+            }
+            return labelToMerge;
+        },
+
+        _containsPrefLabelOfSameLanguage: function (labels, labelToSearch) {
+            return array.some(labels, function(label) {
+                return label.type     == 'prefLabel'
+                    && label.language == labelToSearch.language;
+            })
+        },
+
+        _mergeNotes: function (currentNotes, notesToMerge) {
+            var mergedNotes = currentNotes;
+            array.forEach(notesToMerge, function(noteToMerge) {
+                if (!this._containsNote(currentNotes, noteToMerge)) {
+                    mergedNotes.push(noteToMerge);
+                }
+            }, this);
+
+            return mergedNotes;
+        },
+
+        _containsNote: function (notes, noteToSearch) {
+            return array.some(notes, function(note) {
+                return note.note    == noteToSearch.note
+                    && note.language == noteToSearch.language
+                    && note.type     == noteToSearch.type;
+            })
         }
-
-
     });
 });
