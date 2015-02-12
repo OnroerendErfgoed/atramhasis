@@ -301,19 +301,16 @@ class AtramhasisListView(object):
 
     @view_config(route_name='labeltypes')
     def labeltype_list_view(self):
-        labeltypes = self.get_list(LabelType)
-        return [{"key": labeltype.name, "label": self.localizer.translate(self._(labeltype.name))}
-                for labeltype in labeltypes]
+        return self.get_list(LabelType)
 
     @view_config(route_name='notetypes')
     def notetype_list_view(self):
-        notetypes = self.get_list(NoteType)
-        return [{"key": notetype.name, "label": self.localizer.translate(self._(notetype.name))}
-                for notetype in notetypes]
+        return self.get_list(NoteType)
 
     @tree_region.cache_on_arguments()
     def get_list(self, listtype):
-        return self.skos_manager.get_by_list_type(listtype)
+        return [{"key": ltype.name, "label": self.localizer.translate(self._(ltype.name))}
+                for ltype in self.skos_manager.get_by_list_type(listtype)]
 
 
 @view_defaults(accept='text/html')

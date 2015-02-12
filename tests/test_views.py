@@ -569,7 +569,7 @@ class TestListViews(unittest.TestCase):
         atramhasisListView = AtramhasisListView(request)
         labellist = atramhasisListView.get_list(LabelType)
         self.assertIsNotNone(labellist)
-        self.assertIsInstance(labellist[0], LabelType)
+        self.assertIsNotNone(labellist[0])
 
     def test_labeltype_list_view(self):
         request = self.request

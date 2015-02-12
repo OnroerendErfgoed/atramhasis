@@ -7,17 +7,24 @@
   http://localhost:6543/conceptschemes/GEOGRAPHY/c/335 with a supported RDF mimetype
   (``application/rdf+xml``, ``application/x-turtle``, ``text-turle``). Or by
   using an RDF syntax specific suffix (.rdf or .ttl).
-- Allow sorting the languages in the admin interface.
 - When importing, allow the user to request more information on a concept or
   collection, before actually importing it.
+- Allow merging a concept with other concepts it matches. This allows a user to
+  compare a local concept with an external one it matches and import any notes
+  or labels that are present in the external concept, but not the local one.
+- Allow sorting the languages in the admin interface.
 - Reorganised and extended the right click menu on the grid in the admin 
   interface.
 - Allow looking up a *skos:match* from within the admin interface.
 - Some issues with the length of language ids were solved.
 - Fixed some issues when importing a collection instead of a concept.
 - Made it easy to add a Google Analytics tracker.
+- Added instructions on how to deploy a demo site on heroku_. These work just as
+  well for deploying an actual live site to heroku_.
+- Lots of small updates and tweaks to the documentation.
 - Updated some dependencies.
-- Some code cleanup and reorganisation.
+- Some code cleanup and reorganisation. Several smaller bugs in the admin 
+  interface were fixed.
 
 0.4.0 (23-12-2014)
 ------------------
@@ -116,3 +123,4 @@
 .. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
 .. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
 .. _language_tags: http://language-tags.readthedocs.org
+.. _heroku: https://www.heroku.com
