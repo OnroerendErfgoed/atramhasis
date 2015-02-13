@@ -124,6 +124,32 @@ This will create a build a place the resulting files in
 :file:`atramhasis/static/admin/dist`. The web application can be told to use
 this build by setting `dojo.mode` in :file:`development.ini` to `dist`.
 
+Frontend development
+====================
+
+When updating the frontend templates, you might want to add extra translations.
+This can be done by placing {% trans %} tags in the templates
+
+.. code-block:: html
+
+    <h2>{% trans %}welcome_to{% endtrans %}</h2>
+
+To update the message catalogs, do as follows:
+
+.. code-block:: bash
+
+    $ python setup.py extract_messages
+    $ python setup.py update_catalog -l fr -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/fr/LC_MESSAGES/atramhasis.po
+    $ python setup.py update_catalog -l nl -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/nl/LC_MESSAGES/atramhasis.po
+    $ python setup.py update_catalog -l en -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/en/LC_MESSAGES/atramhasis.po
+
+Update the catalogs accordingly and run:
+
+.. code-block:: bash
+
+    python setup.py compile_catalog
+
+
 Contributing
 ============
 
