@@ -1,12 +1,14 @@
 <div class="row">
 	<div class="large-12 columns">
-		<h2>{% trans %}Welcome to Atramhasis {% endtrans %}</h2>
-		<p>Atramhasis is an open-source, web-based <a href="http://www.w3.org/2004/02/skos/">SKOS</a> editor. You can use this webapplication to browse SKOS vocabularies, thesauri, authority files, word lists, ... through the public interface. Atramhasis also comes with an <a href="{{request.route_path('admin')}}">admin interface</a> you can use to add, update and remove concepts to your vocabularies.</p>
-		<p>{% trans %}You can find more information about this project at{% endtrans %}
+		<h2>{% trans %}welcome_to{% endtrans %}</h2>
+
+        <p>{% trans admin_route=request.route_path('admin') %}atramhasis_expl{% endtrans %}</p>
+
+		<p>{% trans %}more_information{% endtrans %}
 		<ul>
-			<li><a href="https://groups.google.com/d/forum/atramhasis">{% trans %}Our discussion forum{% endtrans %}</a></li>
-			<li><a href="https://atramhasis.readthedocs.org">{% trans %}Our online documentation{% endtrans %}</a></li>
-			<li><a href="https://github.com/OnroerendErfgoed/atramhasis">{% trans %}Our issue tracker{% endtrans %}</a></li>
+			<li><a href="https://groups.google.com/d/forum/atramhasis">{% trans %}discussion_forum{% endtrans %}</a></li>
+			<li><a href="https://atramhasis.readthedocs.org">{% trans %}online_documentation{% endtrans %}</a></li>
+			<li><a href="https://github.com/OnroerendErfgoed/atramhasis">{% trans %}issue_tracker{% endtrans %}</a></li>
 		</ul>
 		</p>
 	</div>
