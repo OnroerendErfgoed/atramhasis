@@ -66,3 +66,12 @@
 	</script>
 	<!-- End Google Analytics -->
 {% endmacro %}
+
+{% macro get_conceptscheme_label(conceptscheme, language) %}
+	{% set label = conceptscheme.label(language) %}
+	{% if label %}
+		{{ label.label }}
+	{% else %}
+		{{ conceptscheme.uri }}
+	{% endif %}
+{% endmacro %}
