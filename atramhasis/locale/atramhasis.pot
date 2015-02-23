@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.4.1-dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-23 13:43+0100\n"
+"POT-Creation-Date: 2015-02-23 21:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+
+#: atramhasis/templates/browse_schemes_sidebar.jinja2:7
+msgid "browse"
+msgstr ""
 
 #: atramhasis/templates/concept.jinja2:29
 msgid "concept"
@@ -72,12 +76,12 @@ msgid "matches"
 msgstr ""
 
 #: atramhasis/templates/conceptscheme.jinja2:45
-#: atramhasis/templates/search_form.jinja2:34
+#: atramhasis/templates/search_form.jinja2:39
 msgid "type_concept"
 msgstr ""
 
 #: atramhasis/templates/conceptschemes.jinja2:12
-#: atramhasis/templates/search_form.jinja2:8
+#: atramhasis/templates/search_form.jinja2:11
 msgid "select_scheme"
 msgstr ""
 
@@ -93,36 +97,36 @@ msgstr ""
 msgid "hiddenLabel"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:3
+#: atramhasis/templates/search_form.jinja2:7
 msgid "search"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:21
+#: atramhasis/templates/search_form.jinja2:26
 msgid "open"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:22
-#: atramhasis/templates/search_form.jinja2:23
+#: atramhasis/templates/search_form.jinja2:27
+#: atramhasis/templates/search_form.jinja2:28
 msgid "export"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:29
+#: atramhasis/templates/search_form.jinja2:34
 msgid "select_type"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:33
+#: atramhasis/templates/search_form.jinja2:38
 msgid "type_all"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:35
+#: atramhasis/templates/search_form.jinja2:40
 msgid "type_collection"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:41
+#: atramhasis/templates/search_form.jinja2:46
 msgid "search_for"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:47
+#: atramhasis/templates/search_form.jinja2:54
 msgid "submit"
 msgstr ""
 
