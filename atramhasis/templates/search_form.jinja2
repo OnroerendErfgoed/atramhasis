@@ -1,51 +1,59 @@
+{% from "macros.jinja2" import
+	get_conceptscheme_label
+%}
+
 <div class="row">
 	<div class="large-12 columns">
-		<h5 class="title"> {% trans %}search{% endtrans %} </h5>
-		<div class="content">
-			<form id="search-form" action="#" method="get">
-				<div class="row collapse">
-					<div class="large-3 columns">
-						<label class="inline">{% trans %}select_scheme{% endtrans %}:</label>
-					</div>
-					<div class="large-9 columns">
-						<select id="scheme">
-							{% for item in conceptschemes %}
-							<option value="{{ request.route_path('search_result', scheme_id=item.id) }}">{{ item.id }}</option>
-							{% endfor %}
-						</select>
-					</div>
+		<h2 class="title"> {% trans %}search{% endtrans %} </h2>
+		<form id="search-form" action="#" method="get">
+			<div class="row collapse">
+				<div class="medium-3 columns">
+					<label for="scheme" class="inline">{% trans %}select_scheme{% endtrans %}:</label>
 				</div>
+				<div class="medium-9 columns">
+					<select id="scheme">
+						{% for item in conceptschemes %}
+						<option value="{{ request.route_path('search_result', scheme_id=item.id) }}">
+							{{ get_conceptscheme_label(item.conceptscheme, request.locale_name) }}
+						</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
 
-				<div class="row collapse">
-					<ul class="inline-list right">
-						<li><a id="schemerootlink" href="#">{% trans %}open{% endtrans %}</a></li>
-						<li><a id="exportrdflink" href="#">{% trans %}export{% endtrans %} rdf</a></li>
-						<li><a id="exportttllink" href="#">{% trans %}export{% endtrans %} ttl</a></li>
-					</ul>
-				</div>
+			<div class="row collapse">
+				<ul class="inline-list right">
+					<li><a id="schemerootlink" href="#">{% trans %}open{% endtrans %}</a></li>
+					<li><a id="exportrdflink" href="#">{% trans %}export{% endtrans %} rdf</a></li>
+					<li><a id="exportttllink" href="#">{% trans %}export{% endtrans %} ttl</a></li>
+				</ul>
+			</div>
 
-				<div class="row collapse">
-					<div class="large-3 columns">
-						<label class="inline">{% trans %}select_type{% endtrans %}:</label>
-					</div>
-					<div class="large-9 columns">
-						<select id="ctype"  name="ctype" >
-							<option value="all" selected>{% trans %}type_all{% endtrans %}</option>
-							<option value="concept">{% trans %}type_concept{% endtrans %}</option>
-							<option value="collection">{% trans %}type_collection{% endtrans %}</option>
-						</select>
-					</div>
-				</div>                    
-				<div class="row collapse">
-					<div class="large-3 columns">
-						<label class="inline">{% trans %}search_for{% endtrans %}:</label>
-					</div>
-					<div class="large-9 columns">
-						<input type="text" name="label" id="label" placeholder="<label>">
-					</div>
+			<div class="row collapse">
+				<div class="medium-3 columns">
+					<label for="ctype" class="inline">{% trans %}select_type{% endtrans %}:</label>
 				</div>
-				<button type="submit" class="radius button">{% trans %}submit{% endtrans %}</button>
-			</form>
-		</div>
+				<div class="medium-9 columns">
+					<select id="ctype"  name="ctype" >
+						<option value="all" selected>{% trans %}type_all{% endtrans %}</option>
+						<option value="concept">{% trans %}type_concept{% endtrans %}</option>
+						<option value="collection">{% trans %}type_collection{% endtrans %}</option>
+					</select>
+				</div>
+			</div>                    
+			<div class="row collapse">
+				<div class="medium-3 columns">
+					<label for="label" class="inline">{% trans %}search_for{% endtrans %}:</label>
+				</div>
+				<div class="medium-9 columns">
+					<input type="text" name="label" id="label" placeholder="<label>">
+				</div>
+			</div>
+			<div class="row collapse">
+				<div class="medium-9 medium-offset-3 columns">
+					<button type="submit" class="radius button">{% trans %}submit{% endtrans %}</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
