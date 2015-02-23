@@ -149,6 +149,32 @@ Update the catalogs accordingly and run:
 
     python setup.py compile_catalog
 
+You might also want to add a new translation. Suppose you want to add a German
+translation.
+
+.. code-block:: bash
+
+   $ python setup.py init_catalog -l de -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/de/LC_MESSAGES/atramhasis.po
+
+Edit :file:`atramhasis/locale/do/LC_MESSAGES/atramhasis.po` and add the necessary
+translations. Just as with updating the catalogs, you need to recompile them.
+
+.. code-block:: bash
+
+    python setup.py compile_catalog
+
+At this moment, Atramhasis will still only show the default languages in it's
+language switcher. If you want to add you new language, you need to edit your
+:file:`development.ini` (or similar file). Look for the line that says 
+`available_languages` and add your locale identifier.
+
+.. code-block:: ini
+
+    available_languages = en nl fr de
+
+After restarting your server you will now have the option of switching to
+German.
+
 
 Contributing
 ============
