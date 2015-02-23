@@ -10,8 +10,11 @@
 	<div class="row">
 		<div class="large-4 medium-3 columns">
 			<ul class="panel side-nav text-center">
-				<li><a href="{{request.route_path('atramhasis.rdf_conceptscheme_export_ext', scheme_id=conceptscheme.scheme_id)}}">Download RDF/XML</a></li>
-				<li><a href="{{request.route_path('atramhasis.rdf_conceptscheme_export_turtle_ext', scheme_id=conceptscheme.scheme_id)}}">Download N3/Turtle</a></li>
+				<li><a title="Download the scheme and it's top concepts in RDF/XML format." href="{{request.route_path('atramhasis.rdf_conceptscheme_export_ext', scheme_id=conceptscheme.scheme_id)}}">Download RDF/XML</a></li>
+				<li><a title="Download the scheme and it's top concepts in N3/Turle format." href="{{request.route_path('atramhasis.rdf_conceptscheme_export_turtle_ext', scheme_id=conceptscheme.scheme_id)}}">Download N3/Turtle</a></li>
+				<li class="divider"></li>
+				<li><a title="Download the scheme and all it's concepts and collections in RDF/XML format." href="{{request.route_path('atramhasis.rdf_full_export_ext', scheme_id=conceptscheme.scheme_id)}}">Download Full RDF/XML</a></li>
+				<li><a title="Download the scheme and all it's concepts and collections in N3/Turtle format." href="{{request.route_path('atramhasis.rdf_full_export_turtle_ext', scheme_id=conceptscheme.scheme_id)}}">Download Full N3/Turtle</a></li>
 			</ul>
         </div>
         <div class="large-8 medium-9 columns">
