@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.4.1-dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-13 15:06+0100\n"
+"POT-Creation-Date: 2015-02-23 09:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,23 +138,23 @@ msgstr[1] ""
 msgid "welcome_to"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:6
+#: atramhasis/templates/welcome.jinja2:5
 msgid "atramhasis_expl"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:8
+#: atramhasis/templates/welcome.jinja2:7
 msgid "more_information"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:10
+#: atramhasis/templates/welcome.jinja2:9
 msgid "discussion_forum"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:11
+#: atramhasis/templates/welcome.jinja2:10
 msgid "online_documentation"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:12
+#: atramhasis/templates/welcome.jinja2:11
 msgid "issue_tracker"
 msgstr ""
 
