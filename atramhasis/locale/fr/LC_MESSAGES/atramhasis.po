@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-13 15:06+0100\n"
+"POT-Creation-Date: 2015-02-23 13:43+0100\n"
 "PO-Revision-Date: 2014-07-07 11:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
@@ -16,66 +16,66 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: atramhasis/templates/concept.jinja2:28
+#: atramhasis/templates/concept.jinja2:29
 msgid "concept"
 msgstr "concept"
 
-#: atramhasis/templates/concept.jinja2:30
+#: atramhasis/templates/concept.jinja2:31
 msgid "collection"
 msgstr "collection"
 
-#: atramhasis/templates/concept.jinja2:38
-#: atramhasis/templates/conceptscheme.jinja2:21
+#: atramhasis/templates/concept.jinja2:40
+#: atramhasis/templates/conceptscheme.jinja2:27
 msgid "labels"
 msgstr "libellés"
 
-#: atramhasis/templates/concept.jinja2:46
-#: atramhasis/templates/conceptscheme.jinja2:30
+#: atramhasis/templates/concept.jinja2:48
+#: atramhasis/templates/conceptscheme.jinja2:36
 msgid "notes"
 msgstr "notes"
 
-#: atramhasis/templates/concept.jinja2:57
+#: atramhasis/templates/concept.jinja2:59
 msgid "relations"
 msgstr "relations"
 
-#: atramhasis/templates/concept.jinja2:61
+#: atramhasis/templates/concept.jinja2:63
 msgid "broader"
 msgstr "générique"
 
-#: atramhasis/templates/concept.jinja2:66
+#: atramhasis/templates/concept.jinja2:68
 msgid "narrower"
 msgstr "spécifique"
 
-#: atramhasis/templates/concept.jinja2:71
+#: atramhasis/templates/concept.jinja2:73
 msgid "related"
 msgstr "associé"
 
-#: atramhasis/templates/concept.jinja2:76
+#: atramhasis/templates/concept.jinja2:78
 msgid "subordinate_arrays"
 msgstr "Collections assujetties"
 
-#: atramhasis/templates/concept.jinja2:83
+#: atramhasis/templates/concept.jinja2:85
 msgid "members"
 msgstr "membres"
 
-#: atramhasis/templates/concept.jinja2:88
+#: atramhasis/templates/concept.jinja2:90
 msgid "superordinates"
 msgstr "Eléments parents"
 
-#: atramhasis/templates/concept.jinja2:94
+#: atramhasis/templates/concept.jinja2:96
 msgid "member_of"
 msgstr "membre de"
 
-#: atramhasis/templates/concept.jinja2:99
+#: atramhasis/templates/concept.jinja2:101
 msgid "matches"
 msgstr ""
 
-#: atramhasis/templates/conceptscheme.jinja2:39
+#: atramhasis/templates/conceptscheme.jinja2:45
 #: atramhasis/templates/search_form.jinja2:34
 msgid "type_concept"
 msgstr "concepts"
 
-#: atramhasis/templates/conceptschemes.jinja2:8
+#: atramhasis/templates/conceptschemes.jinja2:12
 #: atramhasis/templates/search_form.jinja2:8
 msgid "select_scheme"
 msgstr "sélectionnez un schéma"
@@ -102,7 +102,6 @@ msgstr "ouvrir"
 
 #: atramhasis/templates/search_form.jinja2:22
 #: atramhasis/templates/search_form.jinja2:23
-#: atramhasis/templates/search_result.jinja2:15
 msgid "export"
 msgstr "exporter au format"
 
@@ -126,7 +125,7 @@ msgstr "rechercher"
 msgid "submit"
 msgstr "rechercher"
 
-#: atramhasis/templates/search_result.jinja2:8
+#: atramhasis/templates/search_result.jinja2:13
 #, python-format
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
@@ -137,23 +136,23 @@ msgstr[1] "%(count)s occurences:"
 msgid "welcome_to"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:6
+#: atramhasis/templates/welcome.jinja2:5
 msgid "atramhasis_expl"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:8
+#: atramhasis/templates/welcome.jinja2:7
 msgid "more_information"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:10
+#: atramhasis/templates/welcome.jinja2:9
 msgid "discussion_forum"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:11
+#: atramhasis/templates/welcome.jinja2:10
 msgid "online_documentation"
 msgstr ""
 
-#: atramhasis/templates/welcome.jinja2:12
+#: atramhasis/templates/welcome.jinja2:11
 msgid "issue_tracker"
 msgstr ""
 
@@ -184,4 +183,8 @@ msgstr ""
 
 #~ msgid "note"
 #~ msgstr "note"
+
+# | msgid "export"
+#~ msgid "export_csv"
+#~ msgstr "exporter au format"
 

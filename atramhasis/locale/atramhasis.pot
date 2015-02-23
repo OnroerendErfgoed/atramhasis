@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.4.1-dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-23 09:57+0100\n"
+"POT-Creation-Date: 2015-02-23 13:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,66 +17,66 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: atramhasis/templates/concept.jinja2:28
+#: atramhasis/templates/concept.jinja2:29
 msgid "concept"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:30
+#: atramhasis/templates/concept.jinja2:31
 msgid "collection"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:38
-#: atramhasis/templates/conceptscheme.jinja2:21
+#: atramhasis/templates/concept.jinja2:40
+#: atramhasis/templates/conceptscheme.jinja2:27
 msgid "labels"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:46
-#: atramhasis/templates/conceptscheme.jinja2:30
+#: atramhasis/templates/concept.jinja2:48
+#: atramhasis/templates/conceptscheme.jinja2:36
 msgid "notes"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:57
+#: atramhasis/templates/concept.jinja2:59
 msgid "relations"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:61
+#: atramhasis/templates/concept.jinja2:63
 msgid "broader"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:66
+#: atramhasis/templates/concept.jinja2:68
 msgid "narrower"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:71
+#: atramhasis/templates/concept.jinja2:73
 msgid "related"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:76
+#: atramhasis/templates/concept.jinja2:78
 msgid "subordinate_arrays"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:83
+#: atramhasis/templates/concept.jinja2:85
 msgid "members"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:88
+#: atramhasis/templates/concept.jinja2:90
 msgid "superordinates"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:94
+#: atramhasis/templates/concept.jinja2:96
 msgid "member_of"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:99
+#: atramhasis/templates/concept.jinja2:101
 msgid "matches"
 msgstr ""
 
-#: atramhasis/templates/conceptscheme.jinja2:39
+#: atramhasis/templates/conceptscheme.jinja2:45
 #: atramhasis/templates/search_form.jinja2:34
 msgid "type_concept"
 msgstr ""
 
-#: atramhasis/templates/conceptschemes.jinja2:8
+#: atramhasis/templates/conceptschemes.jinja2:12
 #: atramhasis/templates/search_form.jinja2:8
 msgid "select_scheme"
 msgstr ""
@@ -103,7 +103,6 @@ msgstr ""
 
 #: atramhasis/templates/search_form.jinja2:22
 #: atramhasis/templates/search_form.jinja2:23
-#: atramhasis/templates/search_result.jinja2:15
 msgid "export"
 msgstr ""
 
@@ -127,7 +126,7 @@ msgstr ""
 msgid "submit"
 msgstr ""
 
-#: atramhasis/templates/search_result.jinja2:8
+#: atramhasis/templates/search_result.jinja2:13
 #, python-format
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
