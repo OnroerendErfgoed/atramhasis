@@ -392,3 +392,106 @@ but you are off course free to make further alterations.
             {{ ga_tracker(ga_key) }}
         {% endif %}
     {% endblock %}
+
+Adding external providers
+=========================
+
+Within your Atramhasis instance you can make use of external providers. These
+are other systems serving up thesauri that you can interact with. Within the
+admin interface you can create links to these thesauri as :term:`SKOS` matches.
+This way you can state that a concept within your thesauri is the same as
+or similar to a concept in the external thesaurus. And, more interestingly, 
+you can also import concepts from such a thesaurus into your own vocabulary. 
+Importing a concept like this will automatically create a :term:`SKOS` match 
+for you. Once a match is in place, you can also update your local concept with
+information from the external concept by performing a merge.
+
+To enable all this power, you again need to configure a provider in you 
+application. Continuing with our :ref:`example project <own_project>`, we need
+to go back to our :file:`my_thesaurus/skos/__init__.py`. In this file you need
+to register other instances of 
+:class:`skosprovider.providers.VocabularyProvider`. Currently providers
+have already been written for Getty Vocabularies, English Heritage vocabularies
+and Flanders Heritage Vocabularies. Depending on the system you're trying to
+interact with, writing a new provider is fairly simple. For this example, we'll
+assume that you want to integrate the wealth of information that the 
+`Art and Architecture Thesaurus (AAT)` vocabulary offers you.
+
+The :class:`~skosprovider_getty.providers.AATProvider` for this 
+(and other Getty vocabularies) is available as skosprovider_getty_ and is 
+installed by default in an Atramhasis instance. All you need to do is configure 
+it. First, we need to import the provider. Place this code at the top 
+of :file:`my_thesaurus/skos/__init__.py`.
+
+.. code-block:: python
+    
+    from skosprovider_getty.providers import AATProvider
+
+Once this is done, we need to instantiate the provider within the `includeme`
+function and register it with the :class:`skosprovider.registry.Registry`. This
+is all quite similar to registering your own 
+:class:`skosprovider_sqlalchemy.providers.SQLAlchemyProvider`. One thing you do
+need to do, is tagging this provider with a subject. By adding the `external`
+subject to the provider, we let Atramhasis know that this is not a regular, 
+internal provider that can be stored in our database, but a special external
+one that can only be used for making matches. As such, it will not be present
+and visible to the public among your regular vocabularies.
+
+.. code-block:: python
+
+    AAT = AATProvider(
+        {'id': 'AAT', 'subject': ['external']},
+    )
+    skosregis.register_provider(AAT)
+
+That's all. You can do the same with the 
+:class:`~skosprovider_getty.providers.TGNProvider` for the 
+`Thesaurus of Geographic Names (TGN)` or any of the providers for 
+`heritagedata.org <http://heritagedata.org>`_ that can be found in 
+skosprovider_heritagedata_.
+
+In the end your :file:`my_thesaurus/skos/__init__.py` should look somewhat like
+this:
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*- 
+
+    import logging
+    log = logging.getLogger(__name__)
+                 
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+    from skosprovider_getty.providers import AATProvider
+    from skosprovider.uri import UriPatternGenerator
+
+                                                           
+    def includeme(config):                                                 
+        STUFF = SQLAlchemyProvider(                                 
+            {
+                'id': 'STUFF',
+                'conceptscheme_id': 1
+            },
+            config.registry.dbmaker,
+            uri_generator=UriPatternGenerator(
+                'http://id.mydata.org/thesauri/stuff/%s'
+            )
+        )
+
+        AAT = AATProvider(
+            {
+                'id': 'AAT',
+                'subject': ['external']
+            }
+        )
+        
+        skosregis = config.get_skos_registry()                                      
+        
+        skosregis.register_provider(STUFF)
+        skosregis.register_provider(AAT)
+
+Now you'll be able to import from the AAT to your heart's delight. For an 
+extended example that adds even more providers, you could have a look at the
+`demo` scaffold that comes with Atramhasis.
+
+.. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
+.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
