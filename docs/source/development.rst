@@ -9,7 +9,7 @@ Technology
 
 Atramhasis is a python_ webapplication that is being developed within the 
 pyramid_ framework. Other major technologies used are sqlalchemy_ as the ORM 
-and jinja2_ as the templating framework.
+and :term:`Jinja2` as the templating framework.
 
 Client side the main technologies being used are Zurb Foundation and Dojo toolkit.
 
@@ -147,21 +147,21 @@ Update the catalogs accordingly and run:
 
 .. code-block:: bash
 
-    python setup.py compile_catalog
+    $ python setup.py compile_catalog
 
 You might also want to add a new translation. Suppose you want to add a German
 translation.
 
 .. code-block:: bash
 
-   $ python setup.py init_catalog -l de -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/de/LC_MESSAGES/atramhasis.po
+    $ python setup.py init_catalog -l de -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/de/LC_MESSAGES/atramhasis.po
 
 Edit :file:`atramhasis/locale/do/LC_MESSAGES/atramhasis.po` and add the necessary
 translations. Just as with updating the catalogs, you need to recompile them.
 
 .. code-block:: bash
 
-    python setup.py compile_catalog
+    $ python setup.py compile_catalog
 
 At this moment, Atramhasis will still only show the default languages in it's
 language switcher. If you want to add you new language, you need to edit your
@@ -234,7 +234,6 @@ This will update the requirement files in the scaffolds.
 .. _python: https://wwww.python.org
 .. _pyramid: http://www.pylonsproject.org/
 .. _sqlalchemy: http://www.sqlalchemy.org
-.. _jinja2: http://jinja.pocoo.org
 .. _skosprovider: http://skosprovider.readthedocs.org
 .. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
 .. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org

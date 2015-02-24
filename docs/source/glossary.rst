@@ -45,3 +45,7 @@ Glossary
    REST
     REST or `REpresentational State Transfer` is a way of data exchange that
     is very complimentary to the operations of the HTTP protcol.
+
+   Jinja2
+    `Jinja2 <http://jinja.pocoo.org>`__ is a python templating engine. It's
+    used by Atramhasis for rendering :term:`HTML` templates.
