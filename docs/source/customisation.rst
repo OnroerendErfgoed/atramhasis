@@ -247,6 +247,17 @@ need to configure the :term:`Pyramid` config object found in
         override_with='templates/my_welcome.jinja2'                   
     )
 
+.. note::
+
+    Normally, to see the effect of the changes you made, you would need to
+    restart your webserver. When developing, you can make use of the 
+    :command:`pserve` command's auto-reload feature. To do this, start your
+    server like this:
+
+    .. code-block:: bash
+
+        $ pserve --reload development.ini
+
 .. _security:
 
 Security
