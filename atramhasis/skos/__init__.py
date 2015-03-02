@@ -23,13 +23,14 @@ def includeme(config):   # pragma: no cover
 
     STYLES = SQLAlchemyProvider(
         {'id': 'STYLES', 'conceptscheme_id': 3},
-        config.registry.dbmaker
+        config.registry.dbmaker,
+        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/stijlen_en_culturen/%s')
     )
 
     MATERIALS = SQLAlchemyProvider(
         {'id': 'MATERIALS', 'conceptscheme_id': 4},
         config.registry.dbmaker,
-        uri_generator=UriPatternGenerator('urn:x-vioe:materials:%s')
+        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/materialen/%s')
     )
 
     # use 'subject': ['external'] for read only external providers (only available in REST service)

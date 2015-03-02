@@ -4,6 +4,9 @@
 # pyramid
 pyramid-debugtoolbar==2.3
 
+# skosprovider_oe (for generating fixtures)
+-e git+https://github.com/koenedaele/skosprovider_oe.git#egg=skosprovider_oe
+
 # Testing
 pytest==2.6.3
 pytest-cov==1.8

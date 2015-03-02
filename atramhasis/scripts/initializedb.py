@@ -39,6 +39,14 @@ def main(argv=sys.argv):
     with transaction.manager:
         import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), db_session)
         import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), db_session)
-        import_provider(styles_and_cultures, ConceptScheme(id=3, uri='urn:x-vioe:styles'), db_session)
-        import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), db_session)
+        import_provider(
+            styles_and_cultures,
+            ConceptScheme(id=3, uri='https://id.erfgoed.net/thesauri/stijlen_en_culturen'),
+            db_session
+        )
+        import_provider(
+            materials,
+            ConceptScheme(id=4, uri='https://id.erfgoed.net/thesauri/materialen'),
+            db_session
+        )
     print('--atramhasis-db-initialized--')

@@ -147,5 +147,5 @@ mdata = [
 materials = DictionaryProvider(
     {'id': 'MATERIAL'},
     mdata,
-    uri_generator = UriPatternGenerator('urn:x-vioe:materials:%s')
+    uri_generator = UriPatternGenerator('https://id.erfgoed.net/thesauri/materialen/%s')
 )

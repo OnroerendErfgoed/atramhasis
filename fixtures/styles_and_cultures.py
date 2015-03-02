@@ -87,8 +87,10 @@ sdata = [
         {'broader': [62], 'narrower': [], 'notes': [], 'labels': [{'type': 'prefLabel', 'language': 'nl', 'label': 'vlaardingencultuur'}], 'type': 'concept', 'id': 113, 'related': []}
 ]
 
+from stijl_data import STIJLDATA
+
 styles_and_cultures = DictionaryProvider(
     {'id': 'STYLE'},
-    sdata,
-    uri_generator = UriPatternGenerator('urn:x-vioe:styles:%s')
+    STIJLDATA,
+    uri_generator = UriPatternGenerator('https://id.erfgoed.net/thesauri/stijlen_en_culturen/%s')
 )
