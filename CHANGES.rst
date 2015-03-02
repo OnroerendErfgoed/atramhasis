@@ -1,4 +1,4 @@
-0.4.1 (??-??-2015)
+0.4.1 (??-03-2015)
 ------------------
 
 - A conceptscheme, concept or collection can now be export to RDF through 
@@ -12,6 +12,8 @@
 - Allow merging a concept with other concepts it matches. This allows a user to
   compare a local concept with an external one it matches and import any notes
   or labels that are present in the external concept, but not the local one.
+- Reworked some parts of the public interface to make everythin a bit clearer
+  and to make all pages easily reachable.
 - Allow sorting the languages in the admin interface.
 - Reorganised and extended the right click menu on the grid in the admin 
   interface.
@@ -20,11 +22,14 @@
 - Fixed some issues when importing a collection instead of a concept.
 - Made it easy to add a Google Analytics tracker.
 - Added instructions on how to deploy a demo site on heroku_. These work just as
-  well for deploying an actual live site to heroku_.
+  well for deploying an actual live site to heroku_. Deployed an actual demo on
+  heroku_.
 - Lots of small updates and tweaks to the documentation.
 - Updated some dependencies.
 - Some code cleanup and reorganisation. Several smaller bugs in the admin 
   interface were fixed.
+- The data fixtures were updated with *skos:note* examples. Added a license for
+  reuse of the fixture data.
 
 0.4.0 (23-12-2014)
 ------------------
