@@ -500,7 +500,8 @@ class JsonTreeFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', response.status)
         self.assertIn('application/json', response.headers['Content-Type'])
         self.assertIsNotNone(response.json)
-        self.assertEqual('Materiaal', response.json[0]['label'])
+        self.assertEqual(10, len(response.json))
+        self.assertEqual('aardewerk', response.json[0]['label'])
 
     def test_no_tree(self):
         response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
