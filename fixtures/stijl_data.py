@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 STIJLDATA = [   {   u'broader': [],
         u'id': 64,
         u'labels': [   {   'label': u'acheuleaan',
