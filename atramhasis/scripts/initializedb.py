@@ -37,8 +37,6 @@ def main(argv=sys.argv):
     )
     db_session = session_maker()
     with transaction.manager:
-        import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), db_session)
-        import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), db_session)
         import_provider(
             trees, 
             ConceptScheme(
