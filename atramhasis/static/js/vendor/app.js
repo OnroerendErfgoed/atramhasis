@@ -14,9 +14,6 @@ $(document).ready(function () {
 
 function setSchemeUrls(baseurl){
     $("#search-form").attr("action", baseurl);
-    $("#schemerootlink").attr("href",  baseurl + "/");
-    $("#exportrdflink").attr("href",  baseurl + ".rdf");
-    $("#exportttllink").attr("href",  baseurl + ".ttl");
 }
 
 function getUrlVar(key){

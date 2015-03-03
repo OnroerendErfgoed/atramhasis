@@ -1,7 +1,7 @@
 import os
 import sys
 
-from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import ConceptScheme, Label
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
 import transaction
@@ -40,13 +40,51 @@ def main(argv=sys.argv):
         import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), db_session)
         import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), db_session)
         import_provider(
-            styles_and_cultures,
-            ConceptScheme(id=3, uri='https://id.erfgoed.net/thesauri/stijlen_en_culturen'),
+            trees, 
+            ConceptScheme(
+                id=1, 
+                uri='urn:x-skosprovider:trees',
+                labels=[
+                    Label('Verschillende soorten bomen', u'prefLabel', u'nl'),
+                    Label('Different types of trees', u'prefLabel', u'en')
+                ]
+            ), 
+            db_session
+        )
+        import_provider(
+            geo,
+            ConceptScheme(
+                id=2, 
+                uri='urn:x-skosprovider:geo',
+                labels=[
+                    Label('Geografie', u'prefLabel', u'nl'),
+                    Label('Geography', u'prefLabel', u'en')
+                ]
+            ), 
+            db_session
+        )
+        import_provider(
+            styles_and_cultures, 
+            ConceptScheme(
+                id=3, 
+                uri='https://id.erfgoed.net/thesauri/stijlen_en_culturen',
+                labels=[
+                    Label('Stijlen en Culturen', u'prefLabel', u'nl'),
+                    Label('Styles and Cultures', u'prefLabel', u'en')
+                ]
+             ),
             db_session
         )
         import_provider(
             materials,
-            ConceptScheme(id=4, uri='https://id.erfgoed.net/thesauri/materialen'),
+            ConceptScheme(
+                id=4, 
+                uri='https://id.erfgoed.net/thesauri/materialen',
+                labels=[
+                    Label('Materialen', u'prefLabel', u'nl'),
+                    Label('Materials', u'prefLabel', u'en')
+                ]
+                ),
             db_session
         )
     print('--atramhasis-db-initialized--')

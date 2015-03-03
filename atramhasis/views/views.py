@@ -72,8 +72,12 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
-        conceptschemes = [x.get_metadata() for x in self.skos_registry.get_providers()
-                          if not 'external' in x.get_metadata()['subject']]
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
+        ]
+
         return {'conceptschemes': conceptschemes}
 
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
@@ -85,7 +89,7 @@ class AtramhasisView(object):
         '''
         conceptschemes = [
             {'id': x.get_metadata()['id'],
-             'uri': self.conceptscheme_manager.get(x.get_metadata()['conceptscheme_id']).uri}
+             'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
         ]
 

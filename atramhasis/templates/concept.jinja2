@@ -5,12 +5,13 @@
 {% from "macros.jinja2" import
     render_relaties_lijst,
     render_labels,
-    render_matches
+	render_matches,
+	get_conceptscheme_label
 %}
 
 {% block content %}
     <div class="row">
-		<div class="large-4 columns">
+		<div class="large-4 medium-3 columns">
 			<ul class="panel side-nav text-center">
 				<li><a href="{{request.route_path('atramhasis.rdf_individual_export_ext', scheme_id=scheme_id, c_id=concept.concept_id)}}">Download RDF/XML</a></li>
 				<li><a href="{{request.route_path('atramhasis.rdf_individual_export_turtle_ext', scheme_id=scheme_id, c_id=concept.concept_id)}}">Download N3/Turtle</a></li>
@@ -19,7 +20,7 @@
                 <div id="tree1" data-url="{{ request.route_path('scheme_tree', scheme_id= scheme_id) }}"></div>
             </div>
         </div>
-		<div class="large-8 columns">
+		<div class="large-8 medium-9 columns">
     {% if concept %}
             <h1 class="concept">{{ concept.label(request.locale_name).label|title }}</h1>
             <ul>
@@ -31,7 +32,8 @@
                 {% endif %}
                 {% if concept.uri %}
                 <li>uri: <a href="{{ concept.uri }}">{{ concept.uri }}</a></li>
-                {% endif %}
+				{% endif %}
+                <li>conceptscheme: <a href="{{ request.route_path('conceptscheme', scheme_id=scheme_id) }}">{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name) }}</a></li>
             </ul>
 
             {% if concept.labels %}

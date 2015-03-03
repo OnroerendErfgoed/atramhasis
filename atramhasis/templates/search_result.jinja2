@@ -3,15 +3,19 @@
 {% block html_title %}Search{% endblock %}
 
 {% block content %}
-
-
-<h2>{% trans count=concepts|length %}There is {{ count }} result:{% pluralize %}There are {{ count }} results:{% endtrans %}</h2>
-
-    <ul>
-        {%- for c in concepts|sort(attribute='label') %}
-         <li><a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}">{{ c.label }}</a> <em>(id: {{ c.id }})</em></li>
-        {%- endfor %}
-    </ul>
-    {% trans %}export{% endtrans %}: <a href = "{{ request.path }}.csv?{{ request.query_string }}">csv</a>
-
+    <div class="row">
+		<div class="large-4 medium-3 columns">
+			<ul class="panel side-nav text-center">
+				<li><a href="{{ request.path }}.csv?{{ request.query_string }}">Download CSV</a></li>
+			</ul>
+		</div>
+		<div class="large-8 medium-9 columns">
+			<h4>{% trans count=concepts|length %}There is {{ count }} result:{% pluralize %}There are {{ count }} results:{% endtrans %}</h4>
+			<ul>
+				{%- for c in concepts|sort(attribute='label') %}
+				 <li><a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}">{{ c.label }}</a> <em>(id: {{ c.id }})</em></li>
+				{%- endfor %}
+			</ul>
+		</div>
+	</div>
 {% endblock %}

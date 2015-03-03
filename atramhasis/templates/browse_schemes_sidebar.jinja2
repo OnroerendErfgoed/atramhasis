@@ -1,0 +1,14 @@
+{% from "macros.jinja2" import
+	get_conceptscheme_label
+%}
+
+<div class="row">
+	<div class="large-12 columns">
+		<h2 class="title">{% trans %}browse{% endtrans %}</h2>
+		<ul class="side-nav">
+		{% for item in conceptschemes %}
+		  <li><a href="{{ request.route_path('conceptscheme', scheme_id=item.id) }}">{{ get_conceptscheme_label(item.conceptscheme, request.locale_name) }}</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+</div>

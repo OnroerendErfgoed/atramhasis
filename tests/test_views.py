@@ -215,7 +215,11 @@ class TestConceptSchemeView(unittest.TestCase):
     def test_conceptschemes_view(self):
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.conceptschemes_view()
-        self.assertEqual({'conceptschemes': [{'id': u'TREES', 'uri': 'urn:test:test'}]}, res)
+        self.assertIn('conceptschemes', res)
+        self.assertEqual(len(res['conceptschemes']), 1)
+        cs = res['conceptschemes'][0]
+        self.assertIn('id', cs)
+        self.assertIn('conceptscheme', cs)
 
     def test_conceptscheme_view(self):
         self.request.matchdict['scheme_id'] = 'TREES'
