@@ -37,6 +37,8 @@ def main(argv=sys.argv):
     )
     db_session = session_maker()
     with transaction.manager:
+        import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), db_session)
+        import_provider(geo, ConceptScheme(id=2, uri='urn:x-skosprovider:geo'), db_session)
         import_provider(
             trees, 
             ConceptScheme(
@@ -65,7 +67,7 @@ def main(argv=sys.argv):
             styles_and_cultures, 
             ConceptScheme(
                 id=3, 
-                uri='urn:x-vioe:styles',
+                uri='https://id.erfgoed.net/thesauri/stijlen_en_culturen',
                 labels=[
                     Label('Stijlen en Culturen', u'prefLabel', u'nl'),
                     Label('Styles and Cultures', u'prefLabel', u'en')
@@ -77,7 +79,7 @@ def main(argv=sys.argv):
             materials,
             ConceptScheme(
                 id=4, 
-                uri='urn:x-vioe:materials',
+                uri='https://id.erfgoed.net/thesauri/materialen',
                 labels=[
                     Label('Materialen', u'prefLabel', u'nl'),
                     Label('Materials', u'prefLabel', u'en')
