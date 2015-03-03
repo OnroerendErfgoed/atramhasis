@@ -14,7 +14,7 @@ skosprovider_getty==0.2.0
 skosprovider_heritagedata==0.2.0
 
 #language-tags
-language-tags==0.3.0
+language-tags==0.3.1
 
 # sqlalchemy
 sqlalchemy==0.9.8
