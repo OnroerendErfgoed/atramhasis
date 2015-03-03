@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 
 from skosprovider.providers import DictionaryProvider
 from skosprovider.uri import UriPatternGenerator
-from materiaal_data import MATERIAALDATA
+from .materiaal_data import MATERIAALDATA
 
 materials = DictionaryProvider(
     {'id': 'MATERIAL'},

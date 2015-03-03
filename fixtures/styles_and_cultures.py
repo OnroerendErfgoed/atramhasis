@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 
 from skosprovider.providers import DictionaryProvider
 from skosprovider.uri import UriPatternGenerator
-from stijl_data import STIJLDATA
+from .stijl_data import STIJLDATA
 
 styles_and_cultures = DictionaryProvider(
     {'id': 'STYLE'},
