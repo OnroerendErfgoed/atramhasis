@@ -82,7 +82,7 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='0.4.1.dev0',
+      version='0.4.1',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -99,7 +99,7 @@ setup(name='atramhasis',
       author='Flanders Heritage Agency',
       author_email='ict@onroerenderfgoed.be',
       url='http://atramhasis.readthedocs.org',
-      keywords='web wsgi pyramid skos thesaurus',
+      keywords='web wsgi pyramid SKOS thesaurus vocabulary',
       license='GPLv3',
       packages=find_packages(),
       include_package_data=True,
