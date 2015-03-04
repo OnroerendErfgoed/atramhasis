@@ -142,9 +142,11 @@ msgstr ""
 
 #: atramhasis/templates/welcome.jinja2:5
 msgid "atramhasis_expl"
-msgstr "Atramhasis est un éditeur SKOS en ligne open source. Vous pouvez utiliser cette application web pour parcourir les vocabulaires, lexiques, "
-    "fichiers d'autorité, listes de mots,... du SKOS au travers de l'interface publique. Atramhasis dispose également d'une interface d'administration que "
-    "vous pouvez utiliser pour ajouter, modifier et supprimer les concepts de vos vocabulaires."
+msgstr ""
+"Atramhasis est un éditeur <a href='http://www.w3.org/2004/02/skos/'>SKOS</a> en ligne et open source. "
+"Vous pouvez utiliser cette application web pour parcourir les vocabulaires, lexiques, fichiers d'autorité, listes de mots,... "
+"du SKOS au travers de l'interface publique. Atramhasis dispose également d'une <a href='%(admin_route)s'>interface d'administration</a> "
+"que vous pouvez utiliser pour ajouter, modifier et supprimer les concepts de vos vocabulaires."
 
 #: atramhasis/templates/welcome.jinja2:7
 msgid "more_information"
