@@ -1,9 +1,16 @@
-0.4.1 (??-03-2015)
+0.4.1 (04-03-2015)
 ------------------
 
-- A conceptscheme, concept or collection can now be export to RDF through 
+This release of Atramhasis is a minor update of the `0.4.0` release, focussing
+on small corrections and improvements and improving the documentation. A few
+interesting non-invasive features were added, mostly to the editor's admin
+interface and machine-readable exports of RDF data.
+
+Upgrading from `0.4.0` should be simple and cause no or few problems.
+
+- A conceptscheme, concept or collection can now be exported to RDF through
   skosprovider_rdf_ 0.3.1. These are individuals export endpoints that can
-  be reached in one of two ways. Either by hitting a url like 
+  be reached in one of two ways. Either by hitting a url like
   http://localhost:6543/conceptschemes/GEOGRAPHY/c/335 with a supported RDF mimetype
   (``application/rdf+xml``, ``application/x-turtle``, ``text-turle``). Or by
   using an RDF syntax specific suffix (.rdf or .ttl).
@@ -12,21 +19,20 @@
 - Allow merging a concept with other concepts it matches. This allows a user to
   compare a local concept with an external one it matches and import any notes
   or labels that are present in the external concept, but not the local one.
-- Reworked some parts of the public interface to make everythin a bit clearer
+- Reworked some parts of the public interface to make everything a bit clearer
   and to make all pages easily reachable.
 - Allow sorting the languages in the admin interface.
-- Reorganised and extended the right click menu on the grid in the admin 
+- Reorganised and extended the right click menu on the grid in the admin
   interface.
 - Allow looking up a *skos:match* from within the admin interface.
 - Some issues with the length of language ids were solved.
 - Fixed some issues when importing a collection instead of a concept.
 - Made it easy to add a Google Analytics tracker.
 - Added instructions on how to deploy a demo site on heroku_. These work just as
-  well for deploying an actual live site to heroku_. Deployed an actual demo on
-  heroku_.
+  well for deploying an actual production site to heroku_.
 - Lots of small updates and tweaks to the documentation.
 - Updated some dependencies.
-- Some code cleanup and reorganisation. Several smaller bugs in the admin 
+- Some code cleanup and reorganisation. Several smaller bugs in the admin
   interface were fixed.
 - The data fixtures were updated with *skos:note* examples. Added a license for
   reuse of the fixture data.
