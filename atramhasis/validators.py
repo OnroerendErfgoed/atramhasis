@@ -282,6 +282,10 @@ def label_lang_rule(errors, node, languages_manager, labels):
 
 
 def concept_type_rule(errors, node_location, skos_manager, conceptscheme_id, items):
+    '''
+    Checks that the targets of narrower, broader and related are concepts and
+    not collections.
+    '''
     for item_concept_id in items:
         item_concept = skos_manager.get_thing(item_concept_id, conceptscheme_id)
         if item_concept.type != 'concept':
@@ -292,6 +296,9 @@ def concept_type_rule(errors, node_location, skos_manager, conceptscheme_id, ite
 
 
 def collection_type_rule(errors, node_location, skos_manager, conceptscheme_id, members):
+    '''
+    Checks that the targets of member_of are collections and not concepts.
+    '''
     for member_collection_id in members:
         member_collection = skos_manager.get_thing(member_collection_id, conceptscheme_id)
         if member_collection.type != 'collection':
@@ -342,6 +349,9 @@ def broader_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id
 
 
 def narrower_hierarchy_build(skos_manager, conceptscheme_id, narrower, narrower_hierarchy):
+    '''
+    Builds a list of all the narrower concepts of a list of concepts.
+    '''
     for narrower_concept_id in narrower:
         narrower_concept = skos_manager.get_thing(narrower_concept_id, conceptscheme_id)
         if narrower_concept is not None and narrower_concept.type == 'concept':
@@ -375,6 +385,9 @@ def narrower_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_i
 
 
 def broader_hierarchy_build(skos_manager, conceptscheme_id, broader, broader_hierarchy):
+    '''
+    Builds a list of all the broader concepts of a list of concepts.
+    '''
     for broader_concept_id in broader:
         broader_concept = skos_manager.get_thing(broader_concept_id, conceptscheme_id)
         if broader_concept is not None and broader_concept.type == 'concept':
