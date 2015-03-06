@@ -20,7 +20,7 @@ def main(global_config, **settings):
     # Set up atramhasis
     config.include('atramhasis')
     # Set up atramhasis db
-    config.include('atramhasis:db')
+    config.include('atramhasis:data.db')
 
     # Set up security
     config.include('pyramid_persona')

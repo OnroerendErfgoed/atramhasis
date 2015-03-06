@@ -18,7 +18,7 @@ def main(global_config, **settings):
     # Set up atramhasis
     config.include('atramhasis')
     # Set up atramhasis db
-    config.include('atramhasis:db')
+    config.include('atramhasis:data.db')
 
     #Add skos support
     config.include('{{package}}.skos')
