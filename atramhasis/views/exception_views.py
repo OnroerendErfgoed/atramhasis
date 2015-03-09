@@ -7,6 +7,7 @@ import logging
 
 from pyramid.view import view_config, notfound_view_config
 from sqlalchemy.exc import IntegrityError
+import sys
 
 from atramhasis.errors import SkosRegistryNotFoundException, ValidationError
 from atramhasis.protected_resources import ProtectedResourceException
@@ -20,7 +21,7 @@ def failed_not_found(exc, request):
     '''
     View invoked when a resource could not be found.
     '''
-    log.error(exc.explanation)
+    log.debug(exc.explanation)
     request.response.status_int = 404
     return {'message': exc.explanation}
 
@@ -30,7 +31,7 @@ def failed_skos(exc, request):
     '''
     View invoked when Atramhasis can't find a SKOS registry.
     '''
-    log.error(exc.value)
+    log.error(exc.value, exc_info=sys.exc_info())
     request.response.status_int = 500
     return {'message': exc.value}
 
@@ -40,8 +41,7 @@ def failed_validation(exc, request):
     '''
     View invoked when bad data was submitted to Atramhasis.
     '''
-    log.error(exc.value)
-    log.error(exc.errors)
+    log.debug("'message': {0}, 'errors': {1}".format(exc.value, exc.errors))
     request.response.status_int = 400
     return {'message': exc.value, 'errors': exc.errors}
 
@@ -51,8 +51,7 @@ def protected(exc, request):
     '''
     when a protected operation is called on a resource that is still referenced
     '''
-    log.warn(exc.value)
-    log.warn(exc.referenced_in)
+    log.warn("'message': {0}, 'referenced_in': {1}".format(exc.value, exc.referenced_in))
     request.response.status_int = 409
     return {'message': exc.value, 'referenced_in': exc.referenced_in}
 
@@ -62,8 +61,7 @@ def provider_unavailable(exc, request):
     '''
     View invoked when ProviderUnavailableException was raised.
     '''
-    log.error(exc)
-    log.error(exc.message)
+    log.error(exc, exc_info=sys.exc_info())
     request.response.status_int = 503
     return {'message': exc.message}
 
@@ -73,7 +71,7 @@ def data_integrity(exc, request):
     '''
     View invoked when IntegrityError was raised.
     '''
-    log.error(exc)
+    log.error(exc, exc_info=sys.exc_info())
     request.response.status_int = 409
     return {'message': 'this operation violates the data integrity and could not be executed '}
 
@@ -83,7 +81,7 @@ def failed(exc, request):
     '''
     View invoked when bad data was submitted to Atramhasis.
     '''
-    log.error(exc)
+    log.error(exc, exc_info=sys.exc_info())
     request.response.status_int = 500
     return {'message': 'unexpected server error'}
 
