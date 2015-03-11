@@ -1,3 +1,15 @@
+0.4.2 (11-03-2015)
+------------------
+
+This release of Atramhasis is mostly a bugfix update of the `0.4.1` release. 
+
+- Fix paths of db in scaffolds
+- Add more information on exceptions 
+- Update skosprovider_getty and skosprovider_heritagedata 
+  (fix the problems when importing external thesauri)
+- Documentation update
+
+
 0.4.1 (04-03-2015)
 ------------------
 
