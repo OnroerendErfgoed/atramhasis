@@ -141,30 +141,30 @@ def concept_schema_validator(node, cstruct):
     if 'related' in cstruct:
         related = copy.deepcopy(cstruct['related'])
         related = [m['id'] for m in related]
-        r_validated = related_to_rule(errors, node['related'], skos_manager,
+        r_validated = semanticRelations_rule(errors, node['related'], skos_manager,
                                       conceptscheme_id, related, id)
         concept_relations_rule(errors, node['related'], related, concept_type)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
         narrower = [m['id'] for m in narrower]
-        n_validated = related_to_rule(errors, node['narrower'], skos_manager,
+        n_validated = semanticRelations_rule(errors, node['narrower'], skos_manager,
                                       conceptscheme_id, narrower, id)
         concept_relations_rule(errors, node['narrower'], narrower, concept_type)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
         broader = [m['id'] for m in broader]
-        b_validated = related_to_rule(errors, node['broader'], skos_manager,
+        b_validated = semanticRelations_rule(errors, node['broader'], skos_manager,
                                       conceptscheme_id, broader, id)
         concept_relations_rule(errors, node['broader'], broader, concept_type)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
         members = [m['id'] for m in members]
-        m_validated = related_to_rule(errors, node['members'], skos_manager,
+        m_validated = semanticRelations_rule(errors, node['members'], skos_manager,
                                       conceptscheme_id, members, id)
     if 'member_of' in cstruct:
         member_of = copy.deepcopy(cstruct['member_of'])
         member_of = [m['id'] for m in member_of]
-        o_validated = related_to_rule(errors, node['member_of'], skos_manager,
+        o_validated = semanticRelations_rule(errors, node['member_of'], skos_manager,
                                       conceptscheme_id, member_of, id)
     if r_validated and n_validated and b_validated:
         concept_type_rule(errors, node['narrower'], skos_manager, conceptscheme_id, narrower)
@@ -309,16 +309,17 @@ def collection_type_rule(errors, node_location, skos_manager, conceptscheme_id, 
             ))
 
 
-def related_to_rule(errors, node_location, skos_manager, conceptscheme_id, members, collection_id):
+def semanticRelations_rule(errors, node_location, skos_manager, conceptscheme_id, members, collection_id):
     '''
-    Checks that the members of a collection is not the collection itself and that it actually exist and are within
+    Checks that the elements in a group of concepts or collections are not the
+    the group itself, that they actually exist and are within
     the same conceptscheme.
     '''
     for member_concept_id in members:
         if member_concept_id == collection_id:
             errors.append(colander.Invalid(
                 node_location,
-                'A concepts cannot be related to itself'
+                'A concept or collection cannot be related to itself'
             ))
             return False
         try:

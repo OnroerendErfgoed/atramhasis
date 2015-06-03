@@ -377,7 +377,7 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
         self.assertTrue(isinstance(error, ValidationError))
-        self.assertIn({'narrower': 'A concepts cannot be related to itself'}, error.errors)
+        self.assertIn({'narrower': 'A concept or collection cannot be related to itself'}, error.errors)
 
     def test_broader_concept_different_conceptscheme(self):
         self.json_concept['broader'].append({"id": 777})
