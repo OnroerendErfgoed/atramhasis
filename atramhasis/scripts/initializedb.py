@@ -24,6 +24,10 @@ def main(argv=sys.argv):
     from fixtures.data import trees, geo
     from fixtures.styles_and_cultures import styles_and_cultures
     from fixtures.materials import materials
+    from fixtures.eventtypes import eventtypes
+    from fixtures.heritagetypes import heritagetypes
+    from fixtures.periods import periods
+    from fixtures.species import species
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]
@@ -81,6 +85,54 @@ def main(argv=sys.argv):
                 labels=[
                     Label('Materialen', u'prefLabel', u'nl'),
                     Label('Materials', u'prefLabel', u'en')
+                ]
+                ),
+            db_session
+        )
+        import_provider(
+            eventtypes,
+            ConceptScheme(
+                id=5,
+                uri='https://id.erfgoed.net/thesauri/gebeurtenistypes',
+                labels=[
+                    Label('Gebeurtenistypes', u'prefLabel', u'nl'),
+                    Label('Event types', u'prefLabel', u'en')
+                ]
+                ),
+            db_session
+        )
+        import_provider(
+            heritagetypes,
+            ConceptScheme(
+                id=6,
+                uri='https://id.erfgoed.net/thesauri/erfgoedtypes',
+                labels=[
+                    Label('Erfgoedtypes', u'prefLabel', u'nl'),
+                    Label('Heritage types', u'prefLabel', u'en')
+                ]
+                ),
+            db_session
+        )
+        import_provider(
+            periods,
+            ConceptScheme(
+                id=7,
+                uri='https://id.erfgoed.net/thesauri/dateringen',
+                labels=[
+                    Label('Dateringen', u'prefLabel', u'nl'),
+                    Label('Periods', u'prefLabel', u'en')
+                ]
+                ),
+            db_session
+        )
+        import_provider(
+            species,
+            ConceptScheme(
+                id=8,
+                uri='https://id.erfgoed.net/thesauri/soorten',
+                labels=[
+                    Label('Soorten', u'prefLabel', u'nl'),
+                    Label('Species', u'prefLabel', u'en')
                 ]
                 ),
             db_session
