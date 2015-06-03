@@ -2,6 +2,8 @@
 ------------------
 
 - Minor refactoring. Move the pyramid routes to a new file.
+- Fix a bug where it was possible to create a relation between a concept and
+  itself causing all sorts of nasty things to happen.
 
 0.4.3 (11-03-2015)
 ------------------
