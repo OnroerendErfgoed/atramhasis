@@ -363,6 +363,22 @@ class TestValidation(unittest.TestCase):
         self.assertIn({'narrower': 'Concept not found, check concept_id. Please be aware members'
                                    ' should be within one scheme'}, error.errors)
 
+
+    def test_narrower_concept_to_self(self):
+        self.json_concept['narrower'].append({"id": 4})
+        error_raised = False
+        error = None
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+        self.assertTrue(isinstance(error, ValidationError))
+        self.assertIn({'narrower': 'A concepts cannot be related to itself'}, error.errors)
+
     def test_broader_concept_different_conceptscheme(self):
         self.json_concept['broader'].append({"id": 777})
         error_raised = False

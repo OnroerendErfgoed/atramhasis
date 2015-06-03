@@ -215,31 +215,38 @@ define(
                         this.typeComboBox.set("value", concept.type);
                         if (concept.members) {
                             this.membersManager.setRelations(concept.members);
+                            this.membersManager.setConceptId(concept.id);
                         }
                         if (concept.member_of)
                         {
                          this.memberofManager.setRelations(concept.member_of);
+                         this.memberofManager.setConceptId(concept.id);
 
                         }
                         if (concept.broader)
                         {
                             this.broaderManager.setRelations(concept.broader);
+                            this.broaderManager.setConceptId(concept.id);
                         }
                         if (concept.narrower)
                         {
                             this.narrowerManager.setRelations(concept.narrower);
+                            this.narrowerManager.setConceptId(concept.id);
                         }
                         if (concept.related)
                         {
                             this.relatedManager.setRelations(concept.related);
+                            this.relatedManager.setConceptId(concept.id);
                         }
                         if (concept.subordinate_arrays)
                         {
                             this.subordinateArraysManager.setRelations(concept.subordinate_arrays);
+                            this.subordinateArraysManager.setConceptId(concept.id);
                         }
                         if (concept.superordinates)
                         {
                             this.superordinatesManager.setRelations(concept.superordinates);
+                            this.superordinatesManager.setConceptId(concept.id);
                         }
                         if (concept.labels) {
                             this.labelManager.setLabels(concept.labels);

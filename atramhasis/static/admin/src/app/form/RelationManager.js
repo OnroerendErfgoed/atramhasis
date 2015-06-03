@@ -1,6 +1,7 @@
 define([
         "dojo/_base/declare",
         "dojo/_base/array",
+		    "dojo/topic",
         "dojo/dom-construct",
         "dojo/query",
         "dojo/on",
@@ -17,7 +18,7 @@ define([
          "./ConceptDetailList",
         "dojo/text!./templates/RelationManager.html"
     ],
-    function (declare, arrayUtil, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory,
+    function (declare, arrayUtil, topic, domConstruct, query, on, domStyle, Dialog, WidgetBase, TemplatedMixin, Button, Memory,
               Cache, JsonRest, ObjectStoreModel, Tree,ConceptDetailList, template) {
         return declare(
             "app/form/RelationManager",
@@ -29,6 +30,7 @@ define([
                 _scheme: null,
                 _relations: null,
                 EditRelationButton:null,
+                _selfId: null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -153,15 +155,24 @@ define([
                     addBtn.onClick = function () {
                         var sel = myTree.selectedItems[0];
                         if (sel) {
-                            var path = arrayUtil.map(myTree.get("path"), function (item) {
-                                return item.label;
-                            });
-                            self._addRelation(sel.concept_id, sel.label, path);
+                            if (sel.concept_id === self._selfId) {
+                                topic.publish('dGrowl', 'Concept or collection cannot be related to itself', {
+                                    'title': 'Not valid',
+                                    'sticky': true,
+                                    'channel': 'error'
+                                });
+                            }
+                            else {
+                                var path = arrayUtil.map(myTree.get("path"), function (item) {
+                                    return item.label;
+                                });
+                                self._addRelation(sel.concept_id, sel.label, path);
 
-                            dlg.hide();
+                                dlg.hide();
+                            }
                         }
                         else {
-                            alert("Nothing is selected");
+                            topic.publish('dGrowl', 'Nothing is selected', {'title': 'Not valid', 'sticky': true, 'channel':'error'});
                         }
                     };
                     cancelBtn.onClick = function () {
@@ -202,6 +213,11 @@ define([
 
                 setScheme: function (scheme) {
                     this._scheme = scheme;
+
+                },
+
+                setConceptId: function (id) {
+                    this._selfId = id;
 
                 }
             });
