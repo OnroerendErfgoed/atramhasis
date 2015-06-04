@@ -1,12 +1,12 @@
-0.4.4 (??-05-2015)
+0.4.4 (04-06-2015)
 ------------------
 
 - Added more sample datasets to get a better view of real data. These will make
-  the demo somewhat more interesting.
-- Minor refactoring. Move the pyramid routes to a new file.
+  the demo more interesting.
 - Fix a bug where it was possible to create a relation between a concept and
   itself causing all sorts of nasty things to happen.
-- Added a CONTRIBUTING.md file.
+- Minor refactoring. Move the pyramid routes to a new file.
+- Added a CONTRIBUTING.md file. Contributions welcome!
 
 0.4.3 (11-03-2015)
 ------------------
