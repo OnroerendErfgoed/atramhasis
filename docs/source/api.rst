@@ -38,6 +38,12 @@ atramhasis.protected_resources
 .. automodule:: atramhasis.protected_resources
    :members:
 
+atramhasis.routes
+=================
+
+.. automodule:: atramhasis.routes
+   :members:
+
 atramhasis.utils
 ================
 
