@@ -9,17 +9,14 @@ and a administrators interface out of the box, you can also write your own clien
 side code that interacts with the Atramhasis services, either for reading 
 information or writing it.
 
-Read Services
-=============
+Pyramid_skosprovider
+====================
 
-The basic read services are being provided by 
-:ref:`Pyramid Skosprovider <pyramidskosprovider:services>`. These allow you to
-read conceptschemes, search for concepts and collections and integrate the
-Atramhasis backend into other applications. Maintain you thesaurus in one 
-database and use it in several other applications.
-
-Write Services
-==============
+.. include:: ../../env/src/pyramid-skosprovider/docs/services.rst
+    :start-line: 5
+                 
+Atramhasis
+==========
 
 The Atramhasis write services allow you to add concepts and collections, edit
 them and delete them.
