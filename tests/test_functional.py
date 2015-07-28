@@ -22,6 +22,7 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.data.db import data_managers
+from atramhasis.data.models import Base as VisitLogBase
 from atramhasis.protected_resources import ProtectedResourceException, ProtectedResourceEvent
 from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials
@@ -120,6 +121,8 @@ class FunctionalTests(unittest.TestCase):
 
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
+        VisitLogBase.metadata.drop_all(self.engine)
+        VisitLogBase.metadata.create_all(self.engine)
 
         Base.metadata.bind = self.engine
 

@@ -2,7 +2,7 @@
 '''
 Module that sets up the datamanagers and the database connections.
 '''
-from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, LanguagesManager
+from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, LanguagesManager, AuditManager
 from .models import Base
 from skosprovider_sqlalchemy.models import Base as SkosBase
 
@@ -24,13 +24,14 @@ def data_managers(request):
     skos_manager = SkosManager(session)
     conceptscheme_manager = ConceptSchemeManager(session)
     languages_manager = LanguagesManager(session)
+    audit_manager = AuditManager(session)
 
     def cleanup(request):
         session.close()
     request.add_finished_callback(cleanup)
 
     return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager,
-            'languages_manager': languages_manager}
+            'languages_manager': languages_manager, 'audit_manager': audit_manager}
 
 
 def includeme(config):

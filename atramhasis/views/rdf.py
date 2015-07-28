@@ -3,6 +3,7 @@ from pyramid.view import view_defaults, view_config
 from skosprovider_rdf import utils
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException
+from atramhasis.audit import audit
 
 
 @view_defaults()
@@ -21,6 +22,7 @@ class AtramhasisRDF(object):
         if not self.provider:
             raise ConceptSchemeNotFoundException(self.scheme_id)   # pragma: no cover
 
+    @audit
     @view_config(route_name='atramhasis.rdf_full_export')
     @view_config(route_name='atramhasis.rdf_full_export_ext')
     def rdf_full_export(self):
@@ -30,6 +32,7 @@ class AtramhasisRDF(object):
         response.content_disposition = 'attachment; filename="%s-full.rdf"' % (str(self.scheme_id),)
         return response
 
+    @audit
     @view_config(route_name='atramhasis.rdf_full_export_turtle')
     @view_config(route_name='atramhasis.rdf_full_export_turtle_x')
     @view_config(route_name='atramhasis.rdf_full_export_turtle_ext')
@@ -40,6 +43,7 @@ class AtramhasisRDF(object):
         response.content_disposition = 'attachment; filename="%s-full.ttl"' % (str(self.scheme_id),)
         return response
 
+    @audit
     @view_config(route_name='atramhasis.rdf_conceptscheme_export')
     @view_config(route_name='atramhasis.rdf_conceptscheme_export_ext')
     def rdf_conceptscheme_export(self):
@@ -59,6 +63,7 @@ class AtramhasisRDF(object):
         response.content_disposition = 'attachment; filename="%s.ttl"' % (str(self.scheme_id),)
         return response
 
+    @audit
     @view_config(route_name='atramhasis.rdf_individual_export')
     @view_config(route_name='atramhasis.rdf_individual_export_ext')
     def rdf_individual_export(self):
@@ -68,6 +73,7 @@ class AtramhasisRDF(object):
         response.content_disposition = 'attachment; filename="%s.rdf"' % (str(self.c_id),)
         return response
 
+    @audit
     @view_config(route_name='atramhasis.rdf_individual_export_turtle')
     @view_config(route_name='atramhasis.rdf_individual_export_turtle_x')
     @view_config(route_name='atramhasis.rdf_individual_export_turtle_ext')

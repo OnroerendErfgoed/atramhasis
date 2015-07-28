@@ -16,6 +16,7 @@ from atramhasis.mappers import map_concept
 from atramhasis.protected_resources import protected_operation
 from atramhasis.utils import from_thing, internal_providers_only
 from atramhasis.views import invalidate_scheme_cache
+from atramhasis.audit import audit
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
@@ -64,6 +65,14 @@ class AtramhasisCrud(object):
                 e.asdict()
             )
 
+    @audit
+    @view_config(route_name='atramhasis.get_conceptscheme', permission='view')
+    def get_conceptscheme(self):
+        # is the same as the pyramid_skosprovider get_conceptscheme function, but wrapped with the audit function
+        from pyramid_skosprovider.views import ProviderView
+        return ProviderView(self.request).get_conceptscheme()
+
+    @audit
     @view_config(route_name='atramhasis.get_concept', permission='view')
     def get_concept(self):
         '''

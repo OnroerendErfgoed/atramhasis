@@ -11,6 +11,7 @@ from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteT
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
+from atramhasis.audit import audit
 
 
 def labels_to_string(labels, ltype):
@@ -95,6 +96,7 @@ class AtramhasisView(object):
 
         return {'conceptschemes': conceptschemes}
 
+    @audit
     @view_config(route_name='conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
     def conceptscheme_view(self):
         '''
@@ -118,6 +120,7 @@ class AtramhasisView(object):
 
         return {'conceptscheme': scheme}
 
+    @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
         '''
@@ -284,7 +287,6 @@ class AtramhasisView(object):
             return str(concept_id)
         else:
             return parent_tree_id + "." + str(concept_id)
-
 
     @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
     def results_tree_html(self):

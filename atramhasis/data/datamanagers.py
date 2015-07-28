@@ -213,3 +213,19 @@ class LanguagesManager(DataManager):
 
     def count_languages(self, language_tag):
         return self.session.query(Language).filter_by(id=language_tag).count()
+
+
+class AuditManager(DataManager):
+    '''
+    A data manager for logging the visit.
+    '''
+
+    def save(self, visit_log):
+        '''
+        save a certain visit
+        :param visit_log: log of visit to save
+        :return: The saved visit log
+        '''
+        self.session.add(visit_log)
+        self.session.flush()
+        return visit_log
