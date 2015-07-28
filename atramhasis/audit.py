@@ -41,9 +41,12 @@ def audit(fn):
     '''
     use this decorator to audit an operation and to log the visit
 
-    * rdf routes with .rdf, .ttl extensions have html accept mimetypes,
+    * CSV routes with .csv extensions accept all mime types,
+      the response is not of the `pyramid.response.Response` type,
+      the origin is derived from the `pyramid.request.Request.url` extension.
+    * RDF routes with .rdf, .ttl extensions accept all mime types,
       the origin is derived form the response content type.
-    * for REST and HTML the view results are not of the pyramid.response Response type,
+    * REST and HTML the view results are not of the `pyramid.response.Response` type,
       the origin is derived from the accept header.
     '''
 
