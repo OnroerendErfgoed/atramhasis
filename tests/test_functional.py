@@ -243,6 +243,12 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['id'], 1)
         self.assertEqual(res.json['type'], 'concept')
 
+    def test_get_conceptscheme(self):
+        res = self.testapp.get('/conceptschemes/TREES', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+
     def test_get_concept_dictprovider(self):
         res = self.testapp.get('/conceptschemes/TEST/c/1', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
