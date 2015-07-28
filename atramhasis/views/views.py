@@ -194,6 +194,7 @@ class AtramhasisView(object):
                             max_age=31536000)  # max_age = year
         return response
 
+    @audit
     @view_config(route_name='search_result_export', renderer='csv')
     def results_csv(self):
         header = ['conceptscheme', 'id', 'uri', 'type', 'label', 'prefLabels', 'altLabels', 'definition', 'broader',

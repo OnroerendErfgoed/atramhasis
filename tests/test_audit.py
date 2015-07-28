@@ -47,6 +47,7 @@ class AuditTests(unittest.TestCase):
             self.assertEqual('1', getattr(self.audit_manager.saved_objects[nr-1], type_id))
 
     def test_audit_rest(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
         self.dummy_parent.request.accept = ['application/json']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
@@ -56,6 +57,7 @@ class AuditTests(unittest.TestCase):
         self._check(2, 'REST', ['conceptscheme_id', 'concept_id'])
 
     def test_audit_html(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
         self.dummy_parent.request.accept = ['text/html']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
@@ -65,6 +67,7 @@ class AuditTests(unittest.TestCase):
         self._check(2, 'HTML', ['conceptscheme_id', 'concept_id'])
 
     def test_audit_rdf_xml(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES.rdf"
         self.dummy_parent.request.accept = ['application/rdf+xml']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
@@ -73,7 +76,18 @@ class AuditTests(unittest.TestCase):
         self.dummy_parent.dummy()
         self._check(2, 'RDF', ['conceptscheme_id', 'concept_id'])
 
+    def test_audit_csv(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES.csv"
+        self.dummy_parent.request.accept = "text/csv"
+        self.dummy_parent.request.matchdict = {'scheme_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(1, 'CSV', ['conceptscheme_id'])
+        self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(2, 'CSV', ['conceptscheme_id', 'concept_id'])
+
     def test_audit_other(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
         self.dummy_parent.request.accept = ['application/octet-stream']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
@@ -89,6 +103,8 @@ class AuditTests(unittest.TestCase):
         self.assertEqual('HTML', _origin_from_response(res))
         res = Response(content_type='application/json')
         self.assertEqual('REST', _origin_from_response(res))
+        res = Response(content_type='text/csv')
+        self.assertEqual('CSV', _origin_from_response(res))
         res = Response(content_type='application/octet-stream')
         self.assertEqual('onbekend', _origin_from_response(res))
 

@@ -7,14 +7,17 @@ from pyramid.response import Response
 
 
 def _origin_from_request(request):
-    if 'text/html' in request.accept:
-        return 'HTML'
-    elif 'application/json' in request.accept:
-        return 'REST'
-    elif 'application/rdf+xml' in request.accept \
+    if request.url.endswith('.csv'):
+        return 'CSV'
+    elif request.url.endswith('.rdf') \
+            or 'application/rdf+xml' in request.accept \
             or 'text/turtle' in request.accept \
             or 'application/x-turtle' in request.accept:
         return 'RDF'
+    elif 'text/html' in request.accept:
+        return 'HTML'
+    elif 'application/json' in request.accept:
+        return 'REST'
     else:
         return 'onbekend'
 
@@ -28,6 +31,8 @@ def _origin_from_response(response):
             or response.content_type == 'text/turtle' \
             or response.content_type == 'application/x-turtle':
         return 'RDF'
+    elif response.content_type == 'text/csv':
+        return 'CSV'
     else:
         return 'onbekend'
 
