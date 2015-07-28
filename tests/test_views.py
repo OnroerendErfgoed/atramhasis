@@ -378,6 +378,7 @@ class TestCsvView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
+        self.request.accept = '*/*'
         self.regis = Registry()
         self.regis.register_provider(provider(1))
         self.request.skos_registry = self.regis
