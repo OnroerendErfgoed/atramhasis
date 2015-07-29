@@ -4,6 +4,9 @@ from atramhasis.data.models import (
     ConceptVisitLog
 )
 from pyramid.response import Response
+import logging
+
+log = logging.getLogger(__name__)
 
 
 def _origin_from_request(request):
@@ -59,6 +62,8 @@ def audit(fn):
                 concept_id=request.matchdict['c_id'],
                 conceptscheme_id=request.matchdict['scheme_id']
             )
+        elif 'scheme_id' not in request.matchdict.keys():
+            log.error('Misuse of the audit decorator. The url must at least contain a {scheme_id} parameter')
         else:
             visit_log = ConceptschemeVisitLog(conceptscheme_id=request.matchdict['scheme_id'])
         response = fn(parent_object, *args, **kw)
