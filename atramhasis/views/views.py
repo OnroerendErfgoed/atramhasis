@@ -306,6 +306,7 @@ class AtramhasisListView(object):
         self.localizer = request.localizer
         self._ = TranslationStringFactory('atramhasis')
 
+    @audit
     @view_config(route_name='labeltypes')
     def labeltype_list_view(self):
         return self.get_list(LabelType)

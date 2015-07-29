@@ -64,6 +64,7 @@ def audit(fn):
             )
         elif 'scheme_id' not in request.matchdict.keys():
             log.error('Misuse of the audit decorator. The url must at least contain a {scheme_id} parameter')
+            return fn(parent_object, *args, **kw)
         else:
             visit_log = ConceptschemeVisitLog(conceptscheme_id=request.matchdict['scheme_id'])
         response = fn(parent_object, *args, **kw)
