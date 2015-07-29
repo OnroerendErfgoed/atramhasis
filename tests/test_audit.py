@@ -91,10 +91,10 @@ class AuditTests(unittest.TestCase):
         self.dummy_parent.request.accept = ['application/octet-stream']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
-        self._check(1, 'onbekend', ['conceptscheme_id'])
+        self._check(1, None, ['conceptscheme_id'])
         self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
         self.dummy_parent.dummy()
-        self._check(2, 'onbekend', ['conceptscheme_id', 'concept_id'])
+        self._check(2, None, ['conceptscheme_id', 'concept_id'])
 
     def test_origin_from_response(self):
         res = Response(content_type='application/rdf+xml')
@@ -106,5 +106,5 @@ class AuditTests(unittest.TestCase):
         res = Response(content_type='text/csv')
         self.assertEqual('CSV', _origin_from_response(res))
         res = Response(content_type='application/octet-stream')
-        self.assertEqual('onbekend', _origin_from_response(res))
+        self.assertIsNone(_origin_from_response(res))
 

@@ -19,7 +19,7 @@ def _origin_from_request(request):
     elif 'application/json' in request.accept:
         return 'REST'
     else:
-        return 'onbekend'
+        return None
 
 
 def _origin_from_response(response):
@@ -34,7 +34,7 @@ def _origin_from_response(response):
     elif response.content_type == 'text/csv':
         return 'CSV'
     else:
-        return 'onbekend'
+        return None
 
 
 def audit(fn):
