@@ -18,11 +18,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import url
 
 
-
-def file_to_rdf_provider(input_file, input_name, input_ext):
+def file_to_rdf_provider(input_file):
     '''
     Create RDF provider from the input file
     '''''
+    input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     graph = Graph()
     graph.parse(input_file, format=guess_format(input_ext))
     return RDFProvider(
