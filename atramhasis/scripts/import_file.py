@@ -21,7 +21,7 @@ from sqlalchemy.engine import url
 def file_to_rdf_provider(input_file):
     '''
     Create RDF provider from the input file
-    '''''
+    '''
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     graph = Graph()
     graph.parse(input_file, format=guess_format(input_ext))
@@ -48,36 +48,6 @@ supported_types = {
 
 supported_ext = [item for sublist in [supported_types[filetype]['extensions'] for filetype in supported_types.keys()]
                  for item in sublist]
-
-
-def main(argv=sys.argv):
-    '''
-    Documentation: import -h
-    Run: import --from <path_input_file> --to <conn_string>
-
-    example path_input_file:
-     atramhasis/scripts/my_file
-
-    structure conn_string:
-     postgresql://username:password@host:port/db_name
-     sqlite:///path/db_name.sqlite
-
-    default conn_string:
-     sqlite:///atramhasis.sqlite
-    '''
-    
-    args = parse_argv_for_import(argv)
-    input_name, input_ext = os.path.splitext(os.path.basename(args.input_file))
-    session = conn_str_to_session(args.to)
-    file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
-                                 if input_ext in supported_types[filetype]['extensions']][0]
-    if file_to_provider_function == '':
-        print('Importer is not yet implemented')
-        sys.exit(1)
-    else:
-        provider = file_to_provider_function(args.input_file, input_name, input_ext)
-    cs = create_conceptscheme(input_name.capitalize())
-    provider_to_db(provider, cs, session)
 
 
 def parse_argv_for_import(argv):
@@ -168,3 +138,33 @@ def provider_to_db(provider, conceptscheme, session):
     session.add(conceptscheme)
     import_provider(provider, conceptscheme, session)
     session.commit()
+
+
+def main(argv=sys.argv):
+    '''
+    Documentation: import -h
+    Run: import --from <path_input_file> --to <conn_string>
+
+    example path_input_file:
+     atramhasis/scripts/my_file
+
+    structure conn_string:
+     postgresql://username:password@host:port/db_name
+     sqlite:///path/db_name.sqlite
+
+    default conn_string:
+     sqlite:///atramhasis.sqlite
+    '''
+
+    args = parse_argv_for_import(argv)
+    input_name, input_ext = os.path.splitext(os.path.basename(args.input_file))
+    session = conn_str_to_session(args.to)
+    file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
+                                 if input_ext in supported_types[filetype]['extensions']][0]
+    if file_to_provider_function == '':
+        print('Importer is not yet implemented')
+        sys.exit(1)
+    else:
+        provider = file_to_provider_function(args.input_file, input_name, input_ext)
+    cs = create_conceptscheme(input_name.capitalize())
+    provider_to_db(provider, cs, session)

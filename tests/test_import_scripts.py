@@ -40,7 +40,7 @@ class ImportTests(unittest.TestCase):
         Base.metadata.drop_all(self.engine)
 
     def test_import_rdf(self):
-        sys.argv = ['import', '--from', test_data, '--to', settings['sqlalchemy.url']]
+        sys.argv = ['import_file', '--from', test_data, '--to', settings['sqlalchemy.url']]
         import_file.main(sys.argv)
 
         sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session_maker)
