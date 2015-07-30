@@ -2,11 +2,15 @@
 import unittest
 from atramhasis.audit import audit, _origin_from_response
 from pyramid.response import Response
+import logging
+from testfixtures import LogCapture
 
 try:
     from unittest.mock import Mock, MagicMock
 except ImportError:
     from mock import Mock, MagicMock, call  # pragma: no cover
+
+log = logging.getLogger('')
 
 
 class RecordingManager(object):
@@ -95,6 +99,14 @@ class AuditTests(unittest.TestCase):
         self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
         self.dummy_parent.dummy()
         self._check(2, None, ['conceptscheme_id', 'concept_id'])
+
+    def test_invalid_use(self):
+        with LogCapture() as logs:
+            self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+            self.dummy_parent.request.accept = ['application/json']
+            self.dummy_parent.request.matchdict = {'invalid_parameter_id': '1'}
+            self.dummy_parent.dummy()
+        self.assertIn('Misuse of the audit decorator. The url must at least contain a {scheme_id} parameter', str(logs))
 
     def test_origin_from_response(self):
         res = Response(content_type='application/rdf+xml')
