@@ -12,7 +12,7 @@ from skosprovider_sqlalchemy.models import Base
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider.utils import dict_dumper
 
-from atramhasis.scripts import import_rdf
+from atramhasis.scripts import import_file
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
@@ -40,8 +40,8 @@ class ImportTests(unittest.TestCase):
         Base.metadata.drop_all(self.engine)
 
     def test_import_rdf(self):
-        sys.argv = ['import_rdf', '--from', test_data, '--to', settings['sqlalchemy.url']]
-        import_rdf.main(sys.argv)
+        sys.argv = ['import', '--from', test_data, '--to', settings['sqlalchemy.url']]
+        import_file.main(sys.argv)
 
         sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session_maker)
         dump = dict_dumper(sql_prov)
