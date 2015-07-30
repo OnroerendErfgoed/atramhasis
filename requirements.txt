@@ -9,7 +9,7 @@ skosprovider==0.5.2
 skosprovider_sqlalchemy==0.4.2
 #pyramid_skosprovider==0.7.0
 -e git+https://github.com/koenedaele/pyramid_skosprovider.git#egg=pyramid_skosprovider
-skosprovider_rdf==0.4.0
+skosprovider_rdf==0.4.1
 skosprovider_getty==0.2.1
 skosprovider_heritagedata==0.2.1
 
