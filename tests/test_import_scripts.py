@@ -16,6 +16,7 @@ from atramhasis.scripts import import_rdf
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
+test_data = os.path.join(here, '../', 'tests/data/trees.xml')
 
 
 class ImportTests(unittest.TestCase):
@@ -39,7 +40,7 @@ class ImportTests(unittest.TestCase):
         Base.metadata.drop_all(self.engine)
 
     def test_import_rdf(self):
-        sys.argv = ['import_rdf', '--from', 'data/trees.xml', '--to', 'sqlite:///dbtest.sqlite']
+        sys.argv = ['import_rdf', '--from', test_data, '--to', settings['sqlalchemy.url']]
         import_rdf.main(sys.argv)
 
         sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session_maker)
