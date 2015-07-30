@@ -22,6 +22,7 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.data.db import data_managers
+from atramhasis.data.models import Base as VisitLogBase
 from atramhasis.protected_resources import ProtectedResourceException, ProtectedResourceEvent
 from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials
@@ -120,6 +121,8 @@ class FunctionalTests(unittest.TestCase):
 
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
+        VisitLogBase.metadata.drop_all(self.engine)
+        VisitLogBase.metadata.create_all(self.engine)
 
         Base.metadata.bind = self.engine
 
@@ -239,6 +242,12 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['id'], 1)
         self.assertEqual(res.json['type'], 'concept')
+
+    def test_get_conceptscheme(self):
+        res = self.testapp.get('/conceptschemes/TREES', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
 
     def test_get_concept_dictprovider(self):
         res = self.testapp.get('/conceptschemes/TEST/c/1', headers=self._get_default_headers())

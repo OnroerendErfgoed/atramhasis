@@ -1,0 +1,122 @@
+# -*- coding: utf-8 -*-
+import unittest
+from atramhasis.audit import audit, _origin_from_response
+from pyramid.response import Response
+import logging
+from testfixtures import LogCapture
+
+try:
+    from unittest.mock import Mock, MagicMock
+except ImportError:
+    from mock import Mock, MagicMock, call  # pragma: no cover
+
+log = logging.getLogger('')
+
+
+class RecordingManager(object):
+
+    def __init__(self):
+        self.saved_objects = []
+
+    def save(self, object):
+        self.saved_objects.append(object)
+
+
+class DummyParent(object):
+
+    def __init__(self):
+        self.request = MagicMock()
+
+    @audit
+    def dummy(self):
+        return None
+
+
+class AuditTests(unittest.TestCase):
+
+    def setUp(self):
+        self.audit_manager = RecordingManager()
+        self.dummy_parent = DummyParent()
+        self.dummy_parent.request.data_managers = {
+            'audit_manager': self.audit_manager
+        }
+
+    def tearDown(self):
+        pass
+
+    def _check(self, nr, origin, type_id_list):
+        self.assertEqual(nr, len(self.audit_manager.saved_objects))
+        self.assertEqual(origin, self.audit_manager.saved_objects[nr-1].origin)
+        for type_id in type_id_list:
+            self.assertEqual('1', getattr(self.audit_manager.saved_objects[nr-1], type_id))
+
+    def test_audit_rest(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+        self.dummy_parent.request.accept = ['application/json']
+        self.dummy_parent.request.matchdict = {'scheme_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(1, 'REST', ['conceptscheme_id'])
+        self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(2, 'REST', ['conceptscheme_id', 'concept_id'])
+
+    def test_audit_html(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+        self.dummy_parent.request.accept = ['text/html']
+        self.dummy_parent.request.matchdict = {'scheme_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(1, 'HTML', ['conceptscheme_id'])
+        self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(2, 'HTML', ['conceptscheme_id', 'concept_id'])
+
+    def test_audit_rdf_xml(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES.rdf"
+        self.dummy_parent.request.accept = ['application/rdf+xml']
+        self.dummy_parent.request.matchdict = {'scheme_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(1, 'RDF', ['conceptscheme_id'])
+        self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(2, 'RDF', ['conceptscheme_id', 'concept_id'])
+
+    def test_audit_csv(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES.csv"
+        self.dummy_parent.request.accept = "text/csv"
+        self.dummy_parent.request.matchdict = {'scheme_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(1, 'CSV', ['conceptscheme_id'])
+        self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(2, 'CSV', ['conceptscheme_id', 'concept_id'])
+
+    def test_audit_other(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+        self.dummy_parent.request.accept = ['application/octet-stream']
+        self.dummy_parent.request.matchdict = {'scheme_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(1, None, ['conceptscheme_id'])
+        self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
+        self.dummy_parent.dummy()
+        self._check(2, None, ['conceptscheme_id', 'concept_id'])
+
+    def test_invalid_use(self):
+        with LogCapture() as logs:
+            self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+            self.dummy_parent.request.accept = ['application/json']
+            self.dummy_parent.request.matchdict = {'invalid_parameter_id': '1'}
+            self.dummy_parent.dummy()
+        self.assertIn('Misuse of the audit decorator. The url must at least contain a {scheme_id} parameter', str(logs))
+
+    def test_origin_from_response(self):
+        res = Response(content_type='application/rdf+xml')
+        self.assertEqual('RDF', _origin_from_response(res))
+        res = Response(content_type='text/html')
+        self.assertEqual('HTML', _origin_from_response(res))
+        res = Response(content_type='application/json')
+        self.assertEqual('REST', _origin_from_response(res))
+        res = Response(content_type='text/csv')
+        self.assertEqual('CSV', _origin_from_response(res))
+        res = Response(content_type='application/octet-stream')
+        self.assertIsNone(_origin_from_response(res))
+
