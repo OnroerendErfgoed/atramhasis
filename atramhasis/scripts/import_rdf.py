@@ -42,8 +42,8 @@ def main(argv=sys.argv):
     ###
     parser = argparse.ArgumentParser(
         description='Import RDF file to a database',
-        usage='%s [--from path_rdf_file] [--to conn_string]\n '
-              '(example: "%s --from atramhasis/scripts/my_rdf.rdf --to sqlite:///atramhasis.sqlite")' % (cmd, cmd)
+        usage='{0} [--from path_rdf_file] [--to conn_string]\n '
+              '(example: "{1} --from atramhasis/scripts/my_rdf.rdf --to sqlite:///atramhasis.sqlite")'.format(cmd, cmd)
     )
     parser.add_argument('--from',
                         dest='rdf_file',
@@ -59,7 +59,10 @@ def main(argv=sys.argv):
                         default='sqlite:///atramhasis.sqlite'
                         )
     args = parser.parse_args()
-    if not os.path.exists(args.rdf_file) or not validate_connection_string(args.to):
+    if not os.path.exists(args.rdf_file):
+        print('The input file {0} does not exists'.format(args.rdf_file))
+        sys.exit(1)
+    elif not validate_connection_string(args.to):
         sys.exit(1)
 
     # make session to output database
