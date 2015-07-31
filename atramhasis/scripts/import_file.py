@@ -44,10 +44,10 @@ def file_to_csv_provider(input_file):
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     with open(input_file, "rb") as ifile:
         reader = csv.reader(ifile)
-    return SimpleCsvProvider(
-        {'id': input_name.upper()},
-        reader,
-    )
+        return SimpleCsvProvider(
+            {'id': input_name.upper()},
+            reader,
+        )
 
 
 def file_to_json_provider(input_file):

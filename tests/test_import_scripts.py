@@ -11,6 +11,10 @@ from zope.sqlalchemy import ZopeTransactionExtension
 from skosprovider_sqlalchemy.models import Base
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider.utils import dict_dumper
+from skosprovider.skos import (
+    Concept,
+    Note
+)
 
 from atramhasis.scripts import import_file
 
@@ -18,6 +22,7 @@ here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
 test_data_rdf = os.path.join(here, '../', 'tests/data/trees.xml')
 test_data_json = os.path.join(here, '../', 'tests/data/trees.json')
+test_data_csv = os.path.join(here, '../', 'tests/data/menu.csv')
 
 
 class ImportTests(unittest.TestCase):
@@ -59,13 +64,44 @@ class ImportTests(unittest.TestCase):
         self.assertDictEqual(obj_1['notes'][0],
                              {'language': 'en', 'note': 'A different type of tree.', 'type': 'definition'})
 
+    def _check_menu(self):
+        sql_prov = SQLAlchemyProvider({'id': 'MENU', 'conceptscheme_id': 1}, self.session_maker)
+        self.assertEqual(11, len(sql_prov.get_all()))
+        eb = sql_prov.get_by_id(1)
+        self.assertIsInstance(eb, Concept)
+        self.assertEqual(1, eb.id)
+        self.assertEqual('urn:x-skosprovider:menu:1', eb.uri)
+        self.assertEqual('Egg and Bacon', eb.label().label)
+        self.assertEqual('prefLabel', eb.label().type)
+        self.assertEqual([], eb.notes)
+        eb = sql_prov.get_by_uri('urn:x-skosprovider:menu:3')
+        self.assertIsInstance(eb, Concept)
+        self.assertEqual(3, eb.id)
+        self.assertEqual('urn:x-skosprovider:menu:3', eb.uri)
+        spam = sql_prov.find({'label': 'Spam'})
+        self.assertEqual(8, len(spam))
+        eb = sql_prov.get_by_id(11)
+        self.assertIsInstance(eb, Concept)
+        self.assertEqual(11, eb.id)
+        self.assertEqual('Lobster Thermidor', eb.label().label)
+        self.assertIsInstance(eb.notes[0], Note)
+        self.assertIn('Mornay', eb.notes[0].note)
+        self.assertEqual('note', eb.notes[0].type)
+    
     def test_import_rdf(self):
         sys.argv = ['import_file', '--from', test_data_rdf, '--to', settings['sqlalchemy.url']]
         import_file.main(sys.argv)
+        self._check_trees()
 
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json, '--to', settings['sqlalchemy.url']]
         import_file.main(sys.argv)
+        self._check_trees()
+
+    def test_import_csv(self):
+        sys.argv = ['import_file', '--from', test_data_csv, '--to', settings['sqlalchemy.url']]
+        import_file.main(sys.argv)
+        self._check_menu()
 
 
 
