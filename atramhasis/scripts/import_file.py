@@ -42,7 +42,7 @@ def file_to_csv_provider(input_file):
     Create CSV provider from the input file
     '''
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
-    with open(input_file, "rb") as ifile:
+    with open(input_file, "r") as ifile:
         reader = csv.reader(ifile)
         return SimpleCsvProvider(
             {'id': input_name.upper()},
@@ -55,7 +55,7 @@ def file_to_json_provider(input_file):
     Create Dictionary provider from the input file
     '''
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
-    with open(input_file, 'rb') as data_file:
+    with open(input_file, 'r') as data_file:
         dictionary = json.load(data_file)
     return DictionaryProvider(
         {'id': input_name.upper()},
