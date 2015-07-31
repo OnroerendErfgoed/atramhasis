@@ -16,7 +16,8 @@ import json
 from skosprovider_sqlalchemy.utils import import_provider
 from skosprovider_sqlalchemy.models import (
     ConceptScheme,
-    Label
+    Label,
+    conceptscheme_label
 )
 
 from sqlalchemy import create_engine
@@ -106,7 +107,7 @@ def parse_argv_for_import(argv):
                         default='sqlite:///atramhasis.sqlite'
                         )
     parser.add_argument('--conceptscheme_label',
-                        dest='conceptscheme_label',
+                        dest='cs_label',
                         type=str,
                         help='Label of the conceptscheme',
                         required=False,
@@ -182,7 +183,7 @@ def provider_to_db(provider, conceptscheme, session):
 def main(argv=sys.argv):
     '''
     Documentation: import -h
-    Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <conceptscheme_label>
+    Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <cs_label>
 
     example path_input_file:
      atramhasis/scripts/my_file
@@ -204,5 +205,24 @@ def main(argv=sys.argv):
     file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
                                  if input_ext in supported_types[filetype]['extensions']][0]
     provider = file_to_provider_function(args.input_file)
-    cs = create_conceptscheme(args.conceptscheme_label if args.conceptscheme_label else input_name.capitalize())
+    cs_label = args.cs_label if args.cs_label else input_name.capitalize()
+    cs = create_conceptscheme(cs_label)
     provider_to_db(provider, cs, session)
+
+    prov_id = cs_label.upper().replace(' ', '_')
+    scheme_id = session.query(Label).\
+        join(conceptscheme_label).\
+        filter(Label.label == cs_label).\
+        first().\
+        conceptscheme.id
+
+    print("\n\n*** The import of the {0} file with conceptscheme label '{1}' is successfully imported to {2}. ***\
+          \n\nTo use the data in Atramhasis, you must edit the file atramhasis/skos/__init__.py.\
+          \nAdd next lines: \
+          \n\ndef includeme(config):\
+                \n\t{3} = SQLAlchemyProvider(\
+                    \n\t\t{{'id': '{4}', 'conceptscheme_id': {5}}},\
+                    \n\t\tconfig.registry.dbmaker\
+                \n\t)\
+                \n\tskosregis.register_provider({6})\n\n".
+          format(args.input_file, cs_label, args.to, prov_id, prov_id, scheme_id, prov_id))
