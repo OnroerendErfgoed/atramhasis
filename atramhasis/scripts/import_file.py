@@ -193,10 +193,6 @@ def main(argv=sys.argv):
     session = conn_str_to_session(args.to)
     file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
                                  if input_ext in supported_types[filetype]['extensions']][0]
-    if file_to_provider_function == '':
-        print('Importer is not yet implemented')
-        sys.exit(1)
-    else:
-        provider = file_to_provider_function(args.input_file)
+    provider = file_to_provider_function(args.input_file)
     cs = create_conceptscheme(input_name.capitalize())
     provider_to_db(provider, cs, session)
