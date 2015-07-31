@@ -91,7 +91,7 @@ def parse_argv_for_import(argv):
     parser = argparse.ArgumentParser(
         description='Import file to a database',
         usage='{0} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label]\n '
-              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite" --conceptscheme_label Labels)'.format(cmd, cmd)
+              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels")'.format(cmd, cmd)
     )
     parser.add_argument('--from',
                         dest='input_file',
@@ -218,13 +218,14 @@ def main(argv=sys.argv):
         first().\
         conceptscheme.id
     print("\n\n*** The import of the {0} file with conceptscheme label '{1}' is successfully imported to {2}. ***\
-          \n\nTo use the data in Atramhasis, you must edit the file atramhasis/skos/__init__.py.\
+          \n\nTo use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.\
           \nAdd next lines: \
           \n\ndef includeme(config):\
                 \n\t{3} = SQLAlchemyProvider(\
                     \n\t\t{{'id': '{4}', 'conceptscheme_id': {5}}},\
                     \n\t\tconfig.registry.dbmaker\
                 \n\t)\
+                \n\tskosregis = config.get_skos_registry()\
                 \n\tskosregis.register_provider({6})\n\n".
           format(args.input_file, cs_label, args.to,
                  prov_id.replace(' ', '_'), prov_id, scheme_id, prov_id.replace(' ', '_')))
