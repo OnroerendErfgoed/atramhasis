@@ -16,7 +16,8 @@ from atramhasis.scripts import import_file
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
-test_data = os.path.join(here, '../', 'tests/data/trees.xml')
+test_data_rdf = os.path.join(here, '../', 'tests/data/trees.xml')
+test_data_json = os.path.join(here, '../', 'tests/data/trees.json')
 
 
 class ImportTests(unittest.TestCase):
@@ -39,10 +40,7 @@ class ImportTests(unittest.TestCase):
     def tearDown(self):
         Base.metadata.drop_all(self.engine)
 
-    def test_import_rdf(self):
-        sys.argv = ['import_file', '--from', test_data, '--to', settings['sqlalchemy.url']]
-        import_file.main(sys.argv)
-
+    def _check_trees(self):
         sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session_maker)
         dump = dict_dumper(sql_prov)
 
@@ -60,6 +58,14 @@ class ImportTests(unittest.TestCase):
         self.assertDictEqual(label_fr, {'label': u'la châtaigne', 'language': 'fr', 'type': 'altLabel'})
         self.assertDictEqual(obj_1['notes'][0],
                              {'language': 'en', 'note': 'A different type of tree.', 'type': 'definition'})
+
+    def test_import_rdf(self):
+        sys.argv = ['import_file', '--from', test_data_rdf, '--to', settings['sqlalchemy.url']]
+        import_file.main(sys.argv)
+
+    def test_import_json(self):
+        sys.argv = ['import_file', '--from', test_data_json, '--to', settings['sqlalchemy.url']]
+        import_file.main(sys.argv)
 
 
 

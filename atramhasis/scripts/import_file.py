@@ -7,6 +7,12 @@ from skosprovider_rdf.providers import RDFProvider
 from rdflib import Graph
 from rdflib.util import guess_format
 
+from skosprovider.providers import SimpleCsvProvider
+import csv
+
+from skosprovider.providers import DictionaryProvider
+import json
+
 from skosprovider_sqlalchemy.utils import import_provider
 from skosprovider_sqlalchemy.models import (
     ConceptScheme,
@@ -30,6 +36,32 @@ def file_to_rdf_provider(input_file):
         graph
     )
 
+
+def file_to_csv_provider(input_file):
+    '''
+    Create CSV provider from the input file
+    '''
+    input_name, input_ext = os.path.splitext(os.path.basename(input_file))
+    with open(input_file, "rb") as ifile:
+        reader = csv.reader(ifile)
+    return SimpleCsvProvider(
+        {'id': input_name.upper()},
+        reader,
+    )
+
+
+def file_to_json_provider(input_file):
+    '''
+    Create Dictionary provider from the input file
+    '''
+    input_name, input_ext = os.path.splitext(os.path.basename(input_file))
+    with open(input_file, 'rb') as data_file:
+        dictionary = json.load(data_file)
+    return DictionaryProvider(
+        {'id': input_name.upper()},
+        dictionary,
+    )
+
 supported_types = {
     'RDF': {
         'extensions': ['.html', '.hturtle', '.mdata', '.microdata', '.n3', '.nquads', '.nt', '.rdfa', '.rdfa1.0',
@@ -38,11 +70,11 @@ supported_types = {
     },
     'CSV': {
         'extensions': ['.csv'],
-        'file_to_provider': ''
+        'file_to_provider': file_to_csv_provider
     },
     'JSON': {
         'extensions': ['.json'],
-        'file_to_provider': ''
+        'file_to_provider': file_to_json_provider
     }
 }
 
@@ -165,6 +197,6 @@ def main(argv=sys.argv):
         print('Importer is not yet implemented')
         sys.exit(1)
     else:
-        provider = file_to_provider_function(args.input_file, input_name, input_ext)
+        provider = file_to_provider_function(args.input_file)
     cs = create_conceptscheme(input_name.capitalize())
     provider_to_db(provider, cs, session)
