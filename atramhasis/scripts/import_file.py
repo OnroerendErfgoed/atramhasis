@@ -105,6 +105,13 @@ def parse_argv_for_import(argv):
                         required=False,
                         default='sqlite:///atramhasis.sqlite'
                         )
+    parser.add_argument('--conceptscheme_label',
+                        dest='conceptscheme_label',
+                        type=str,
+                        help='Label of the conceptscheme',
+                        required=False,
+                        default=None
+                        )
     args = parser.parse_args()
     if not validate_file(args.input_file) or not validate_connection_string(args.to):
         sys.exit(1)
@@ -153,12 +160,12 @@ def conn_str_to_session(conn_str):
     )()
 
 
-def create_conceptscheme(conceptscheme_id):
+def create_conceptscheme(conceptscheme_label):
     '''
     configure output conceptscheme
     '''
     cs = ConceptScheme()
-    l = Label(conceptscheme_id, 'prefLabel', 'nl')
+    l = Label(conceptscheme_label, 'prefLabel', 'nl')
     cs.labels.append(l)
     return cs
 
@@ -175,7 +182,7 @@ def provider_to_db(provider, conceptscheme, session):
 def main(argv=sys.argv):
     '''
     Documentation: import -h
-    Run: import --from <path_input_file> --to <conn_string>
+    Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <conceptscheme_label>
 
     example path_input_file:
      atramhasis/scripts/my_file
@@ -183,9 +190,12 @@ def main(argv=sys.argv):
     structure conn_string:
      postgresql://username:password@host:port/db_name
      sqlite:///path/db_name.sqlite
-
     default conn_string:
      sqlite:///atramhasis.sqlite
+
+    example conceptscheme_label
+     My Conceptscheme
+    default conceptscheme_label is the name of the file
     '''
 
     args = parse_argv_for_import(argv)
@@ -194,5 +204,5 @@ def main(argv=sys.argv):
     file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
                                  if input_ext in supported_types[filetype]['extensions']][0]
     provider = file_to_provider_function(args.input_file)
-    cs = create_conceptscheme(input_name.capitalize())
+    cs = create_conceptscheme(args.conceptscheme_label if args.conceptscheme_label else input_name.capitalize())
     provider_to_db(provider, cs, session)

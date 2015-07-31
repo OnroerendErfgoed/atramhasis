@@ -45,11 +45,11 @@ class ImportTests(unittest.TestCase):
     def tearDown(self):
         Base.metadata.drop_all(self.engine)
 
-    def _check_trees(self):
+    def _check_trees(self, conceptscheme_label):
         sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session_maker)
         dump = dict_dumper(sql_prov)
 
-        self.assertEqual(len(dump), 3)
+        self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.labels[0].label)
         obj_1 = [item for item in dump if item['uri'] == 'http://id.trees.org/2'][0]
         self.assertEqual(obj_1['broader'], [])
         self.assertEqual(obj_1['id'], 2)
@@ -91,12 +91,14 @@ class ImportTests(unittest.TestCase):
     def test_import_rdf(self):
         sys.argv = ['import_file', '--from', test_data_rdf, '--to', settings['sqlalchemy.url']]
         import_file.main(sys.argv)
-        self._check_trees()
+        self._check_trees('Trees')
 
     def test_import_json(self):
-        sys.argv = ['import_file', '--from', test_data_json, '--to', settings['sqlalchemy.url']]
+        sys.argv = ['import_file', '--from', test_data_json,
+                    '--to', settings['sqlalchemy.url'],
+                    '--conceptscheme_label', 'Trees Conceptscheme']
         import_file.main(sys.argv)
-        self._check_trees()
+        self._check_trees('Trees Conceptscheme')
 
     def test_import_csv(self):
         sys.argv = ['import_file', '--from', test_data_csv, '--to', settings['sqlalchemy.url']]
