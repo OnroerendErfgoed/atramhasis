@@ -90,8 +90,8 @@ def parse_argv_for_import(argv):
     cmd = os.path.basename(argv[0])
     parser = argparse.ArgumentParser(
         description='Import file to a database',
-        usage='{0} [--from path_input_file] [--to conn_string]\n '
-              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite")'.format(cmd, cmd)
+        usage='{0} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label]\n '
+              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite" --conceptscheme_label Labels)'.format(cmd, cmd)
     )
     parser.add_argument('--from',
                         dest='input_file',
@@ -199,6 +199,7 @@ def main(argv=sys.argv):
     default conceptscheme_label is the name of the file
     '''
 
+    # Import the data
     args = parse_argv_for_import(argv)
     input_name, input_ext = os.path.splitext(os.path.basename(args.input_file))
     session = conn_str_to_session(args.to)
@@ -209,13 +210,13 @@ def main(argv=sys.argv):
     cs = create_conceptscheme(cs_label)
     provider_to_db(provider, cs, session)
 
-    prov_id = cs_label.upper().replace(' ', '_')
+    # Get info to return to the user
+    prov_id = cs_label.upper()
     scheme_id = session.query(Label).\
         join(conceptscheme_label).\
         filter(Label.label == cs_label).\
         first().\
         conceptscheme.id
-
     print("\n\n*** The import of the {0} file with conceptscheme label '{1}' is successfully imported to {2}. ***\
           \n\nTo use the data in Atramhasis, you must edit the file atramhasis/skos/__init__.py.\
           \nAdd next lines: \
@@ -225,4 +226,5 @@ def main(argv=sys.argv):
                     \n\t\tconfig.registry.dbmaker\
                 \n\t)\
                 \n\tskosregis.register_provider({6})\n\n".
-          format(args.input_file, cs_label, args.to, prov_id, prov_id, scheme_id, prov_id))
+          format(args.input_file, cs_label, args.to,
+                 prov_id.replace(' ', '_'), prov_id, scheme_id, prov_id.replace(' ', '_')))
