@@ -747,4 +747,4 @@ So do what you're told and edit your :file:`my_thesaurus/skos/__init__.py` like 
         skosregis = config.get_skos_registry()
         skosregis.register_provider(TREES)
 
-Now you can use the data of the file in you're thesaurus application.
+Now you can use the data of the file in your thesaurus application.
