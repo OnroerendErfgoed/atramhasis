@@ -484,7 +484,8 @@ class RestFunctionalTests(FunctionalTests):
         })
 
     def test_method_not_allowed(self):
-        self.testapp.post('/conceptschemes/GEOGRAPHY', headers=self._get_default_headers(), status=405)
+        self.testapp.put('/conceptschemes/GEOGRAPHY', headers=self._get_default_headers(), status=405)
+        self.testapp.post('/conceptschemes', headers=self._get_default_headers(), status=405)
 
 class TestCookieView(FunctionalTests):
     def _get_default_headers(self):

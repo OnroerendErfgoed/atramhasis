@@ -30,14 +30,15 @@ class AtramhasisCrud(object):
         self.skos_manager = self.request.data_managers['skos_manager']
         self.context = context
         self.logged_in = request.authenticated_userid
-        self.scheme_id = self.request.matchdict['scheme_id']
-        if hasattr(request, 'skos_registry') and request.skos_registry is not None:
-            self.skos_registry = self.request.skos_registry
-        else:
-            raise SkosRegistryNotFoundException()
-        self.provider = self.skos_registry.get_provider(self.scheme_id)
-        if not self.provider:
-            raise ConceptSchemeNotFoundException(self.scheme_id)
+        if 'scheme_id' in self.request.matchdict:
+            self.scheme_id = self.request.matchdict['scheme_id']
+            if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+                self.skos_registry = self.request.skos_registry
+            else:
+                raise SkosRegistryNotFoundException()
+            self.provider = self.skos_registry.get_provider(self.scheme_id)
+            if not self.provider:
+                raise ConceptSchemeNotFoundException(self.scheme_id)
 
     def _get_json_body(self):
         json_body = self.request.json_body
@@ -68,11 +69,19 @@ class AtramhasisCrud(object):
     @audit
     @view_config(route_name='atramhasis.get_conceptscheme', permission='view')
     def get_conceptscheme(self):
-        if self.request.method not in ['GET', 'OPTIONS']:
+        if self.request.method in ['PUT', 'DELETE']:
             raise HTTPMethodNotAllowed
         # is the same as the pyramid_skosprovider get_conceptscheme function, but wrapped with the audit function
         from pyramid_skosprovider.views import ProviderView
         return ProviderView(self.request).get_conceptscheme()
+
+    @view_config(route_name='atramhasis.get_conceptschemes', permission='view')
+    def get_conceptschemes(self):
+        if self.request.method == 'POST':
+            raise HTTPMethodNotAllowed
+        # is the same as the pyramid_skosprovider get_conceptscheme function, method not allowed included
+        from pyramid_skosprovider.views import ProviderView
+        return ProviderView(self.request).get_conceptschemes()
 
     @audit
     @view_config(route_name='atramhasis.get_concept', permission='view')
