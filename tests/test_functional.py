@@ -487,6 +487,10 @@ class RestFunctionalTests(FunctionalTests):
         self.testapp.put('/conceptschemes/GEOGRAPHY', headers=self._get_default_headers(), status=405)
         self.testapp.post('/conceptschemes', headers=self._get_default_headers(), status=405)
 
+    def test_get_conceptschemes(self):
+        self.testapp.get('/conceptschemes', headers=self._get_default_headers(), status=200)
+
+
 class TestCookieView(FunctionalTests):
     def _get_default_headers(self):
         return {'Accept': 'text/html'}
