@@ -12,11 +12,6 @@ log = logging.getLogger(__name__)
 def _origin_from_request(request):
     if request.url.endswith('.csv'):
         return 'CSV'
-    elif request.url.endswith('.rdf') \
-            or 'application/rdf+xml' in request.accept \
-            or 'text/turtle' in request.accept \
-            or 'application/x-turtle' in request.accept:
-        return 'RDF'
     elif 'text/html' in request.accept:
         return 'HTML'
     elif 'application/json' in request.accept:
@@ -26,16 +21,10 @@ def _origin_from_request(request):
 
 
 def _origin_from_response(response):
-    if response.content_type == 'text/html':
-        return 'HTML'
-    elif response.content_type == 'application/json':
-        return 'REST'
-    elif response.content_type == 'application/rdf+xml' \
+    if response.content_type == 'application/rdf+xml' \
             or response.content_type == 'text/turtle' \
             or response.content_type == 'application/x-turtle':
         return 'RDF'
-    elif response.content_type == 'text/csv':
-        return 'CSV'
     else:
         return None
 

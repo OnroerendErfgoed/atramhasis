@@ -31,6 +31,11 @@ class DummyParent(object):
     def dummy(self):
         return None
 
+    @audit
+    def dummy_with_response(self):
+        return Response(content_type='application/rdf+xml')
+
+
 
 class AuditTests(unittest.TestCase):
 
@@ -71,13 +76,11 @@ class AuditTests(unittest.TestCase):
         self._check(2, 'HTML', ['conceptscheme_id', 'concept_id'])
 
     def test_audit_rdf_xml(self):
-        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES.rdf"
-        self.dummy_parent.request.accept = ['application/rdf+xml']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
-        self.dummy_parent.dummy()
+        self.dummy_parent.dummy_with_response()
         self._check(1, 'RDF', ['conceptscheme_id'])
         self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
-        self.dummy_parent.dummy()
+        self.dummy_parent.dummy_with_response()
         self._check(2, 'RDF', ['conceptscheme_id', 'concept_id'])
 
     def test_audit_csv(self):
