@@ -667,6 +667,11 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 
+    def test_rdf_individual_not_found(self):
+        res = self.testapp.get('/conceptschemes/TREES/c/test.ttl', headers={'Accept': 'text/turtle'}, status=404,
+                               expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
+
 
 class ListFunctionalTests(FunctionalTests):
     def test_labeltypes_list(self):
