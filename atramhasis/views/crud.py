@@ -5,10 +5,10 @@ Module containing views related to the REST service.
 
 import colander
 from pyramid.view import view_defaults, view_config
+from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
-from skosprovider_sqlalchemy.models import Concept, Thing, Collection
+from skosprovider_sqlalchemy.models import Concept, Collection
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
@@ -68,6 +68,8 @@ class AtramhasisCrud(object):
     @audit
     @view_config(route_name='atramhasis.get_conceptscheme', permission='view')
     def get_conceptscheme(self):
+        if self.request.method not in ['GET', 'OPTIONS']:
+            raise HTTPMethodNotAllowed
         # is the same as the pyramid_skosprovider get_conceptscheme function, but wrapped with the audit function
         from pyramid_skosprovider.views import ProviderView
         return ProviderView(self.request).get_conceptscheme()

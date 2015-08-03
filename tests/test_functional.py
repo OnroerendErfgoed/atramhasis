@@ -483,6 +483,8 @@ class RestFunctionalTests(FunctionalTests):
             "referenced_in": ["urn:someobject", "http://test.test.org/object/2"]
         })
 
+    def test_method_not_allowed(self):
+        self.testapp.post('/conceptschemes/GEOGRAPHY', headers=self._get_default_headers(), status=405)
 
 class TestCookieView(FunctionalTests):
     def _get_default_headers(self):
