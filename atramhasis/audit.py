@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 
 def _origin_from_request(request):
-    if request.url.endswith('.csv'):
+    if '.csv' in request.url:
         return 'CSV'
     elif 'text/html' in request.accept:
         return 'HTML'
