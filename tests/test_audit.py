@@ -111,15 +111,7 @@ class AuditTests(unittest.TestCase):
             self.dummy_parent.dummy()
         self.assertIn('Misuse of the audit decorator. The url must at least contain a {scheme_id} parameter', str(logs))
 
-    def test_origin_from_response(self):
-        res = Response(content_type='application/rdf+xml')
-        self.assertEqual('RDF', _origin_from_response(res))
-        res = Response(content_type='text/html')
-        self.assertEqual('HTML', _origin_from_response(res))
-        res = Response(content_type='application/json')
-        self.assertEqual('REST', _origin_from_response(res))
-        res = Response(content_type='text/csv')
-        self.assertEqual('CSV', _origin_from_response(res))
+    def test_origin_from_response_None(self):
         res = Response(content_type='application/octet-stream')
         self.assertIsNone(_origin_from_response(res))
 
