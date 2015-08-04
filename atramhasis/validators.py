@@ -96,6 +96,11 @@ class Concept(colander.MappingSchema):
     matches = Matches(missing={})
 
 
+class ConceptScheme(colander.MappingSchema):
+    labels = Labels(missing=[])
+    notes = Notes(missing=[])
+
+
 class LanguageTag(colander.MappingSchema):
     id = colander.SchemaNode(
         colander.String()
@@ -206,6 +211,30 @@ def concept_schema_validator(node, cstruct):
         )
 
 
+def conceptscheme_schema_validator(node, cstruct):
+    '''
+    This validator validates the incoming conceptscheme labels
+
+    :param colander.SchemaNode node: The schema that's being used while validating.
+    :param cstruct: The conceptscheme being validated.
+    '''
+    request = node.bindings['request']
+    skos_manager = request.data_managers['skos_manager']
+    languages_manager = request.data_managers['languages_manager']
+    errors = []
+    min_labels_rule(errors, node, cstruct)
+    if 'labels' in cstruct:
+        labels = copy.deepcopy(cstruct['labels'])
+        label_type_rule(errors, node, skos_manager, labels)
+        label_lang_rule(errors, node, languages_manager, labels)
+        max_preflabels_rule(errors, node, labels)
+    if len(errors) > 0:
+        raise ValidationError(
+            'ConceptScheme could not be validated',
+            [e.asdict() for e in errors]
+        )
+
+
 def concept_relations_rule(errors, node_location, relations, concept_type):
     '''
     Checks that only concepts have narrower, broader and related relations.
@@ -227,7 +256,7 @@ def max_preflabels_rule(errors, node, labels):
             if label['language'] in preflabel_found:
                 errors.append(colander.Invalid(
                     node['labels'],
-                    'A concept or collection can have only one prefLabel per language.'
+                    'Only one prefLabel per language allowed.'
                 ))
             else:
                 preflabel_found.append(label['language'])
@@ -242,7 +271,7 @@ def min_labels_rule(errors, node, cstruct):
         if len(labels) == 0:
             errors.append(colander.Invalid(
                 node['labels'],
-                'A concept or collection should have at least one label'
+                'At least one label is necessary'
             ))
 
 

@@ -102,6 +102,16 @@ class ConceptSchemeManager(DataManager):
             .all()
         return all_results
 
+    def save(self, conceptscheme):
+        '''
+
+        :param conceptscheme: conceptscheme to save
+        :return: saved conceptscheme
+        '''
+        self.session.merge(conceptscheme)
+        self.session.flush()
+        return conceptscheme
+
 
 class SkosManager(DataManager):
     '''

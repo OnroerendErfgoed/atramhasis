@@ -295,6 +295,29 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
+    def test_edit_conceptscheme(self):
+        res = self.testapp.put_json(
+            '/conceptschemes/TREES', headers=self._get_default_headers(), params=json_collection_value)
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_edit_conceptscheme_invalid(self):
+        json_collection_value.pop('labels')
+        res = self.testapp.put_json(
+            '/conceptschemes/TREES', headers=self._get_default_headers(), params=json_collection_value,
+            expect_errors=True)
+        self.assertEqual('400 Bad Request', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {
+            "errors": [{'labels': 'At least one label is necessary'}],
+            "message": 'ConceptScheme could not be validated'})
+        json_collection_value['labels'] = [{
+            "language": "nl",
+            "label": "Test verzameling",
+            "type": "prefLabel"
+        }]
+
     def test_edit_concept(self):
         res = self.testapp.put_json(
             '/conceptschemes/TREES/c/1', headers=self._get_default_headers(), params=json_value)
@@ -484,7 +507,7 @@ class RestFunctionalTests(FunctionalTests):
         })
 
     def test_method_not_allowed(self):
-        self.testapp.put('/conceptschemes/GEOGRAPHY', headers=self._get_default_headers(), status=405)
+        self.testapp.delete('/conceptschemes/TREES', headers=self._get_default_headers(), status=405)
         self.testapp.post('/conceptschemes', headers=self._get_default_headers(), status=405)
 
     def test_get_conceptschemes(self):

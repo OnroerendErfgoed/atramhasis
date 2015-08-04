@@ -1,5 +1,8 @@
 import unittest
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Match, MatchType, Language
+from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Match, MatchType, Language, ConceptScheme
+from pyramid import testing
+from fixtures.data import trees
+from skosprovider.registry import Registry
 
 
 class TestJsonRenderer(unittest.TestCase):
@@ -49,6 +52,18 @@ class TestJsonRenderer(unittest.TestCase):
         self.collection.concept_id = 102
         self.collection.uri = 'urn:x-atramhasis-demo:TREES:102'
         self.collection.conceptscheme_id = 1
+
+        self.conceptscheme = ConceptScheme()
+        self.conceptscheme.id = 1
+        self.conceptscheme.labels = labels
+        self.conceptscheme.notes = notes
+        self.conceptscheme.uri = None
+
+        self.regis = Registry()
+        self.regis.register_provider(trees)
+        self.request = testing.DummyRequest()
+        self.request.skos_registry = self.regis
+        self.request.matchdict = {'scheme_id': 'TREES'}
 
         self.concept.member_of.add(self.collection)
         self.collection.members.add(self.concept)
@@ -151,3 +166,16 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertIsInstance(res, dict)
         self.assertEqual(res['id'], 'af')
         self.assertEqual(res['name'], 'Afrikaans')
+
+    def test_conceptscheme_adapter(self):
+        from atramhasis.renderers import conceptscheme_adapter
+        c = self.conceptscheme
+        conceptscheme = conceptscheme_adapter(c, self.request)
+        self.assertGreater(len(conceptscheme['notes']), 0)
+        self.assertGreater(len(conceptscheme['labels']), 0)
+        self.assertIsNone(conceptscheme['uri'])
+        self.assertEqual('een label', conceptscheme['label'])
+        self.assertEqual(1, conceptscheme['id'])
+        self.assertEqual(0, len(conceptscheme['subject']))
+        self.assertIsInstance(conceptscheme, dict)
+
