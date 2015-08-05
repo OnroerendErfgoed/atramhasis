@@ -34,6 +34,12 @@ def provider(some_id):
     return provider_mock
 
 
+def hidden_provider(some_id):
+    provider_mock = provider(some_id)
+    provider_mock.get_metadata = Mock(return_value={'id': some_id, 'subject': ['hidden']})
+    return provider_mock
+
+
 def data_managers(request):
     session_mock = Mock()
     session_mock.query = Mock(side_effect=create_query_mock)
@@ -176,6 +182,7 @@ class TestHomeView(unittest.TestCase):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
+        self.regis.register_provider(hidden_provider(2))
         self.request = testing.DummyRequest()
         self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None, 'audit_manager': None}
 
@@ -188,6 +195,7 @@ class TestHomeView(unittest.TestCase):
         info = atramhasisview.home_view()
         self.assertIsNotNone(info['conceptschemes'][0])
         self.assertEqual(info['conceptschemes'][0]['id'], 'TREES')
+        self.assertEqual(1, len(info['conceptschemes']))
 
 
 class TestFavicoView(unittest.TestCase):

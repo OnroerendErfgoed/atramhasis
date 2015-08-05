@@ -76,7 +76,8 @@ class AtramhasisView(object):
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
         ]
 
         return {'conceptschemes': conceptschemes}
@@ -91,7 +92,8 @@ class AtramhasisView(object):
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
         ]
 
         return {'conceptschemes': conceptschemes}
