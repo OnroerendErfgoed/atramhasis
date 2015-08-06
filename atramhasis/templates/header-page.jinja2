@@ -1,0 +1,47 @@
+{% set app_package = app_package|default('atramhasis', true) %}
+
+<div class="sticky">
+  <nav class="top-bar" data-topbar role="navigation">
+    <ul class="title-area">
+      <li class="name">
+        <a href="/"><img src="{{ request.static_path(app_package + ':static/img/atramlogo.png') }}" class="left logo-small">
+          <h1 class="left logo-small-text">Atramhasis</h1>
+        </a>
+      </li>
+      <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+      <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+    </ul>
+
+    <section class="top-bar-section">
+      <!-- Right Nav Section -->
+      <ul class="right">
+        <li class="divider"></li>
+        <li class="has-dropdown">
+          <a href="#">Kies een schema</a>
+          <ul class="dropdown" style="">
+            <li><a href="#">Verschillende soorten bomen</a></li>
+            <li class=""><a href="#">Stijlen en Culturen</a></li>
+            <li><a href="#">Geografie</a></li>
+            <li><a href="#">Materialen</a></li>
+          </ul>
+        </li>
+        <li class="divider"></li>
+        <li class="has-dropdown">
+          <a href="#">Kies een type</a>
+          <ul class="dropdown">
+            <li><a href="#">Concepten</a></li>
+            <li class=""><a href="#">Collecties</a></li>
+          </ul>
+        </li>
+        <li class="divider"></li>
+        <li class="has-form">
+          <div class="row collapse">
+            <div class="left"><input type="text" class="search-input-top" placeholder="Zoek een label"></div>
+            <div class="left"><a href="#"><span class="ico-mglass"></span></a></div>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </nav>
+</div>
+

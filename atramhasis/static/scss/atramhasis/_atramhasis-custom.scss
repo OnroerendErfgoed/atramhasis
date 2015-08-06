@@ -1,0 +1,27 @@
+
+//custom
+small {font-size:0.6em;color:$steel}
+a {color:$blue;}
+a:hover {color:$orange !important;}
+
+// top menu
+.divider {border:1px solid $aluminum;}
+.dropdown {box-shadow:0px 2px 2px #ccc;border:1px solid $aluminum;}
+input.search-input-top {border:0;font-size:0.8em}
+
+// submenu 
+.nostyleList {list-style:none;margin-left: 0;padding-left: 0 }
+h3 {font-size:0.7em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 0;}
+
+/*padding fix result page*/
+.large-3-pad {padding:0;}
+
+/*download top*/
+ul.downloadtop {margin:30px 0 0 0;padding:0;}
+.downloadtop li {list-style-type:none;font-size:0.6em;padding:0 0 5px 15px;margin:0 0 20px 2px;float:$default-float;}
+.downloadtop li a {border:1px solid #d6d6d6;background:$white;padding:8px 15px;}
+.downloadtop li:first-child {padding:0;}
+
+
+/* home form */
+.home-search-placer {padding:0 0 0 30px;}
