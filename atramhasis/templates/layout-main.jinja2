@@ -24,17 +24,6 @@
     {% endif %}
   {% endblock %}
 </head>
-<style>
-ul.no_bullet {
-list-style-type: none;
-padding: 0 ;
-margin: 0 ;
-}
-
-li.cube {
-background: url({{ request.static_path(app_package + ':static/img/listitem.png') }}) no-repeat 0 6px;padding:0 0 15px 15px;
-}
-</style>
 <body>
 
 {% block header %}

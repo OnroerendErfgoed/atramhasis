@@ -52,9 +52,6 @@
           <h3>top {% trans %}type_concept{% endtrans %}</h3>
         </div>
         {{ print_concepts(request, conceptscheme.top_concepts, conceptscheme) }}
-{#        {%- for concept in conceptscheme.top_concepts %}#}
-{#          <div class="large-3 large-3-pad columns result-grid"><a href="{{ request.route_path('concept', scheme_id= conceptscheme.scheme_id, c_id = concept.id) }}"><h5>{{ concept.label }}</h5> <span>[ id: {{ concept.id }} ]</span> <br><small>{{ concept.type }}</small></a></div>#}
-{#        {%- endfor %}#}
       {% endif %}
     </div>
   </div>

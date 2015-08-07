@@ -7,7 +7,7 @@
     <div class="row">
       <div class="clearfix">
         <h1 class="title-result left">
-          {% trans count=concepts|length %}There is <strong>{{ count }}</strong> result.{% pluralize %}There are <strong>{{ count }}</strong> results.{% endtrans %}
+          {% trans count=concepts|length %}There is {{ count }} result:{% pluralize %}There are {{ count }} results:{% endtrans %}
         </h1>
         <ul class="downloadtop right">
           <li>DOWNLOAD</li>
