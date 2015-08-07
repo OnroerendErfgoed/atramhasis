@@ -17,6 +17,14 @@
       <ul class="right">
         <li class="divider"></li>
         <li class="has-dropdown">
+          {#            <select id="scheme">#}
+          {#              <option value="" selected>{% trans %}select_scheme{% endtrans %}</option>#}
+          {#              {% for item in conceptschemes %}#}
+          {#                <option value="{{ request.route_path('search_result', scheme_id=item.id) }}">#}
+          {#                  {{ get_conceptscheme_label(item.conceptscheme, request.locale_name) }}#}
+          {#                </option>#}
+          {#              {% endfor %}#}
+          {#            </select>#}
           <a href="#">Kies een schema</a>
           <ul class="dropdown" style="">
             <li><a href="#">Verschillende soorten bomen</a></li>
@@ -24,6 +32,7 @@
             <li><a href="#">Geografie</a></li>
             <li><a href="#">Materialen</a></li>
           </ul>
+
         </li>
         <li class="divider"></li>
         <li class="has-dropdown">

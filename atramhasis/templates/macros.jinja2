@@ -83,3 +83,42 @@
     {%- endfor %}
   </div>
 {% endmacro %}
+
+{% macro print_labels(labels) %}
+  {%- set pref = [] %}
+  {%- set alt = [] %}
+  {%- set hidden = [] %}
+  {%- for label in labels %}
+    {%- if label.type == 'prefLabel' or label.labeltype_id == 'prefLabel' %}
+      {% do pref.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>') %}
+    {%- elif label.type == 'altLabel' or label.labeltype_id == 'altLabel' %}
+      {%- do alt.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>')  %}
+    {%- elif label.type == 'hiddenLabel' or label.labeltype_id == 'hiddenLabel' %}
+      {%- do hidden.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>')  %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if pref|length > 0 %}
+    <dt>{% trans %}labels{% endtrans %}</dt>
+    <dd>
+      {{ pref | join(', ') | safe }}
+    </dd>
+  {%- endif %}
+  {%- if alt|length > 0 %}
+    <dt>{% trans %}altLabel{% endtrans %}</dt>
+    <dd>
+      {{ alt | join(', ') | safe }}
+    </dd>
+  {%- endif %}
+  {%- if hidden|length > 0 %}
+    <dt>{% trans %}hiddenLabel{% endtrans %}</dt>
+    <dd>
+      {{ alt | join(', ') | safe }}
+    </dd>
+  {%- endif %}
+{% endmacro %}
+
+{% macro print_concepts(request, concepts, conceptscheme) %}
+  {%- for concept in concepts %}
+    <div class="large-3 large-3-pad columns result-grid"><a href="{{ request.route_path('concept', scheme_id= conceptscheme.scheme_id, c_id = concept.id) }}"><h5>{{ concept.label }}</h5> <span>[ id: {{ concept.id }} ]</span> <br><small>{{ concept.type }}</small></a></div>
+  {%- endfor %}
+{% endmacro %}

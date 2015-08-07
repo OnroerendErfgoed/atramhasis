@@ -4,9 +4,10 @@
 
 {% from "macros.jinja2" import
     render_relaties_lijst,
-    render_labels,
+    print_labels,
 	render_matches,
-	get_conceptscheme_label
+	get_conceptscheme_label,
+        print_concepts
   %}
 
 {% block content %}
@@ -42,11 +43,8 @@
             {% endif %}
             <dt>schema</dt>
             <dd><a href="{{ request.route_path('conceptscheme', scheme_id=scheme_id) }}">{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name) }}</a></dd>
-            <dt>{% trans %}labels{% endtrans %}</dt>
             {% if concept.labels %}
-              <dd> {{ render_labels(concept.labels, 'prefLabel') }}
-                {{ render_labels(concept.labels, 'altLabel') }}
-                {{ render_labels(concept.labels, 'hiddenLabel') }}</dd>
+              {{ print_labels(concept.labels) }}
             {% endif %}
           </dl>
 
