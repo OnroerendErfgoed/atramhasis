@@ -23,9 +23,13 @@
   }
 
 @media (min-width: 1024px)  {
-
   .footerpage {padding-left:18px;margin-top:60px}
+  .result-grid {width: 240px; word-break: break-word;}
   }
+
+@media (min-width: 1045px)  {
+  .result-grid {width: 250px; word-break: break-word;}
+}
 
 @media (max-width: 1024px)  {
   .logo {margin:10px 20px 0 5px;}

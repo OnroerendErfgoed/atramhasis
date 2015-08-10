@@ -156,6 +156,12 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
         ctype = self._read_request_param('ctype')
@@ -167,7 +173,7 @@ class AtramhasisView(object):
                 concepts = provider.find({'type': ctype}, language=self.request.locale_name)
             else:
                 concepts = provider.get_all(language=self.request.locale_name)
-            return {'concepts': concepts, 'scheme_id': scheme_id}
+            return {'concepts': concepts, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
         return Response(content_type='text/plain', status_int=404)
 
     @view_config(route_name='locale')

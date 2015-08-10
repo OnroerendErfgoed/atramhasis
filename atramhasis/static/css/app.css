@@ -6822,7 +6822,7 @@ meta.foundation-mq-topbar {
 /* line 119, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
 .contain-to-grid {
   width: 100%;
-  background: #333333;
+  background: white;
 }
 /* line 123, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
 .contain-to-grid .top-bar {
@@ -6858,7 +6858,7 @@ meta.foundation-mq-topbar {
 
 /* line 156, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
 .top-bar {
-  background: #333333;
+  background: white;
   height: 3.75rem;
   line-height: 3.75rem;
   margin-bottom: 0;
@@ -6981,7 +6981,7 @@ meta.foundation-mq-topbar {
 }
 /* line 272, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
 .top-bar.expanded .title-area {
-  background: #333333;
+  background: white;
 }
 /* line 277, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
 .top-bar.expanded .toggle-topbar a {
@@ -7022,14 +7022,14 @@ meta.foundation-mq-topbar {
 /* line 323, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
 .top-bar-section .divider,
 .top-bar-section [role="separator"] {
-  border-top: solid 1px #1a1a1a;
+  border-top: solid 1px gray;
   clear: both;
   height: 1px;
   width: 100%;
 }
 /* line 331, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
 .top-bar-section ul li {
-  background: white;
+  background: white !important;
 }
 /* line 334, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
 .top-bar-section ul li > a {
@@ -7345,7 +7345,7 @@ meta.foundation-mq-topbar {
 @media only screen and (min-width: 40.0625em) {
   /* line 492, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
   .top-bar {
-    background: #333333;
+    background: white;
     overflow: visible;
   }
   /* line 172, ../bower_components/foundation/scss/foundation/components/_global.scss */
@@ -7386,7 +7386,7 @@ meta.foundation-mq-topbar {
   }
   /* line 517, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
   .top-bar.expanded {
-    background: #333333;
+    background: white;
   }
 
   /* line 522, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
@@ -7423,7 +7423,7 @@ meta.foundation-mq-topbar {
   }
   /* line 555, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
   .top-bar-section li:not(.has-form) a:not(.button) {
-    background: #333333;
+    background: white;
     line-height: 3.75rem;
     padding: 0 1.25rem;
   }
@@ -7539,7 +7539,7 @@ meta.foundation-mq-topbar {
   /* line 668, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
   .top-bar-section > ul > .divider,
   .top-bar-section > ul > [role="separator"] {
-    border-right: solid 1px #4e4e4e;
+    border-right: solid 1px white;
     border-bottom: none;
     border-top: none;
     clear: none;
@@ -7548,7 +7548,7 @@ meta.foundation-mq-topbar {
   }
   /* line 678, ../bower_components/foundation/scss/foundation/components/_top-bar.scss */
   .top-bar-section .has-form {
-    background: #333333;
+    background: white;
     height: 3.75rem;
     padding: 0 1.25rem;
   }
@@ -12535,8 +12535,7 @@ span.jqtree-dragging {
 /* line 1, ../scss/atramhasis/_atramhasis-footer.scss */
 footer {
   clear: both;
-  margin-top: 0px;
-  margin-top: 20px;
+  margin: 10px 0 0 0;
   padding: 10px 0;
   border-top: 1px solid #e5e5e5;
 }
@@ -12544,8 +12543,8 @@ footer {
 /* line 2, ../scss/atramhasis/_atramhasis-footer.scss */
 footer .footerpage {
   clear: both;
-  margin: 0px 26px;
-  padding: 26px 10px;
+  margin: 0px 0px;
+  padding: 26px 0px;
 }
 
 /* line 6, ../scss/atramhasis/_atramhasis-footer.scss */
@@ -12644,20 +12643,42 @@ h3 {
   margin: 30px 0;
 }
 
+/* line 15, ../scss/atramhasis/_atramhasis-custom.scss */
+h4 {
+  font-size: 0.6em;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #666666;
+  margin: 30px 20px;
+}
+
+/* line 18, ../scss/atramhasis/_atramhasis-custom.scss */
+ul.no_bullet {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* line 24, ../scss/atramhasis/_atramhasis-custom.scss */
+li.cube {
+  background: url(listitem.png) no-repeat 0 6px;
+  padding: 0 0 15px 15px;
+}
+
 /*padding fix result page*/
-/* line 17, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 31, ../scss/atramhasis/_atramhasis-custom.scss */
 .large-3-pad {
   padding: 0;
 }
 
 /*download top*/
-/* line 20, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 34, ../scss/atramhasis/_atramhasis-custom.scss */
 ul.downloadtop {
   margin: 30px 0 0 0;
   padding: 0;
 }
 
-/* line 21, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 35, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li {
   list-style-type: none;
   font-size: 0.6em;
@@ -12666,20 +12687,20 @@ ul.downloadtop {
   float: left;
 }
 
-/* line 22, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 36, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li a {
   border: 1px solid #d6d6d6;
   background: white;
   padding: 8px 15px;
 }
 
-/* line 23, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 37, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li:first-child {
   padding: 0;
 }
 
 /* home form */
-/* line 27, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 41, ../scss/atramhasis/_atramhasis-custom.scss */
 .home-search-placer {
   padding: 0 0 0 30px;
 }
@@ -12718,13 +12739,13 @@ h1.logo-small-text {
 /*home*/
 /* line 10, ../scss/atramhasis/_atramhasis-home.scss */
 .language {
-  font-size: 0.5em;
+  font-size: 0.6em;
   margin: 10px 5px 0 0;
   padding: 0;
 }
 
 /* line 11, ../scss/atramhasis/_atramhasis-home.scss */
-.language-active {
+.language-active a {
   color: #f77f00;
 }
 
@@ -12860,7 +12881,7 @@ dl.infolist {
 
 /* line 19, ../scss/atramhasis/_atramhasis-article.scss */
 .infolist dd {
-  margin: -24px 0 0 90px;
+  margin: -25px 0 0 105px;
 }
 
 /* line 22, ../scss/atramhasis/_atramhasis-article.scss */
@@ -12893,6 +12914,7 @@ ul.scopeNote {
 .result-grid {
   background: white;
   display: table;
+  word-wrap: break-word;
 }
 
 /* line 28, ../scss/atramhasis/_atramhasis-article.scss */
@@ -13037,47 +13059,60 @@ ul.downloadtop {
   }
 }
 @media (min-width: 1024px) {
-  /* line 27, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 26, ../scss/atramhasis/_atramhasis-mquery.scss */
   .footerpage {
     padding-left: 18px;
     margin-top: 60px;
   }
+
+  /* line 27, ../scss/atramhasis/_atramhasis-mquery.scss */
+  .result-grid {
+    width: 240px;
+    word-break: break-word;
+  }
+}
+@media (min-width: 1045px) {
+  /* line 31, ../scss/atramhasis/_atramhasis-mquery.scss */
+  .result-grid {
+    width: 250px;
+    word-break: break-word;
+  }
 }
 @media (max-width: 1024px) {
-  /* line 31, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 35, ../scss/atramhasis/_atramhasis-mquery.scss */
   .logo {
     margin: 10px 20px 0 5px;
   }
 
-  /* line 32, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 36, ../scss/atramhasis/_atramhasis-mquery.scss */
   .footerpage {
     padding-left: 18px;
     margin-top: 30px;
   }
 
-  /* line 33, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 37, ../scss/atramhasis/_atramhasis-mquery.scss */
   .ptext {
     padding: 0 38px;
   }
 
-  /* line 34, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 38, ../scss/atramhasis/_atramhasis-mquery.scss */
   .home-search-placer {
     padding: 0 20px;
   }
 }
 @media screen and (min-width: 768px) {
-  /* line 39, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 43, ../scss/atramhasis/_atramhasis-mquery.scss */
   .rwd-break {
     display: none;
   }
 }
 @media (min-width: 1000px) {
-  /* line 44, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 48, ../scss/atramhasis/_atramhasis-mquery.scss */
   .ptext {
     padding: 20px 20px 0 0px;
   }
 
-  /* line 45, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 49, ../scss/atramhasis/_atramhasis-mquery.scss */
   .home-img_position {
     margin: 0px 0px 0 0;
   }
@@ -13093,4 +13128,14 @@ ul.no_bullet {
 li.cube {
   background: url("../img/listitem.png") no-repeat 0 6px;
   padding: 0 0 15px 15px;
+}
+
+/* line 12, ../scss/_atramhasis.scss */
+h3.relations-title {
+  margin-bottom: 0px;
+}
+
+/* line 16, ../scss/_atramhasis.scss */
+h4.relations-subtitle {
+  margin: 20px 20px;
 }
