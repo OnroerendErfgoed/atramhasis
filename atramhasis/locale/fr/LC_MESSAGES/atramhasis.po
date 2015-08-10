@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-02-23 21:28+0100\n"
-"PO-Revision-Date: 2015-08-07 13:53+0100\n"
+"PO-Revision-Date: 2015-08-10 10:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -84,7 +84,7 @@ msgstr "concepts"
 #: atramhasis/templates/conceptschemes.jinja2:12
 #: atramhasis/templates/search_form.jinja2:11
 msgid "select_scheme"
-msgstr "sélectionnez un schéma"
+msgstr "Sélectionnez un schéma"
 
 #: atramhasis/templates/macros.jinja2:22
 msgid "prefLabel"
@@ -92,7 +92,7 @@ msgstr "libellés principaux"
 
 #: atramhasis/templates/macros.jinja2:24
 msgid "altLabel"
-msgstr "libellés alternatifs"
+msgstr "libellés alt"
 
 #: atramhasis/templates/macros.jinja2:26
 msgid "hiddenLabel"
@@ -113,7 +113,7 @@ msgstr "exporter au format"
 
 #: atramhasis/templates/search_form.jinja2:34
 msgid "select_type"
-msgstr "sélectionnez un type"
+msgstr "Sélectionnez un type"
 
 #: atramhasis/templates/search_form.jinja2:38
 msgid "type_all"
@@ -125,7 +125,7 @@ msgstr "collections"
 
 #: atramhasis/templates/search_form.jinja2:46
 msgid "search_for"
-msgstr "rechercher"
+msgstr "Rechercher"
 
 #: atramhasis/templates/search_form.jinja2:54
 msgid "submit"
@@ -169,6 +169,15 @@ msgstr "Notre documentation en ligne"
 #: atramhasis/templates/welcome.jinja2:11
 msgid "issue_tracker"
 msgstr "Suivi des problèmes"
+
+msgid "recently_viewed"
+msgstr "Consultés récemment"
+
+msgid "follow"
+msgstr "Suivre Atramhasis"
+
+msgid "popular_category"
+msgstr "Populaires dans cette catégorie"
 
 #~ msgid "type"
 #~ msgstr "type"

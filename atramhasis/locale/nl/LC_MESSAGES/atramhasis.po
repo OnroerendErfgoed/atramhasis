@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-02-23 21:37+0100\n"
-"PO-Revision-Date: 2015-08-07 13:53+0100\n"
+"PO-Revision-Date: 2015-08-10 10:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: nl <LL@li.org>\n"
 "Language: nl\n"
@@ -74,7 +74,7 @@ msgstr "lid van"
 
 #: atramhasis/templates/concept.jinja2:101
 msgid "matches"
-msgstr ""
+msgstr "gelijkaardige"
 
 #: atramhasis/templates/conceptscheme.jinja2:45
 #: atramhasis/templates/search_form.jinja2:39
@@ -84,7 +84,7 @@ msgstr "concepten"
 #: atramhasis/templates/conceptschemes.jinja2:12
 #: atramhasis/templates/search_form.jinja2:11
 msgid "select_scheme"
-msgstr "kies een schema"
+msgstr "Kies een schema"
 
 #: atramhasis/templates/macros.jinja2:22
 msgid "prefLabel"
@@ -92,7 +92,7 @@ msgstr "geprefereerde labels"
 
 #: atramhasis/templates/macros.jinja2:24
 msgid "altLabel"
-msgstr "alternatieve labels"
+msgstr "alt labels"
 
 #: atramhasis/templates/macros.jinja2:26
 msgid "hiddenLabel"
@@ -113,7 +113,7 @@ msgstr "exporteer"
 
 #: atramhasis/templates/search_form.jinja2:34
 msgid "select_type"
-msgstr "kies een type"
+msgstr "Kies een type"
 
 #: atramhasis/templates/search_form.jinja2:38
 msgid "type_all"
@@ -125,7 +125,7 @@ msgstr "collecties"
 
 #: atramhasis/templates/search_form.jinja2:46
 msgid "search_for"
-msgstr "zoek naar"
+msgstr "Zoek naar"
 
 #: atramhasis/templates/search_form.jinja2:54
 msgid "submit"
@@ -135,8 +135,8 @@ msgstr "zoek"
 #, python-format
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
-msgstr[0] "er is %(count)s resultaat gevonden:"
-msgstr[1] "er zijn %(count)s resultaten gevonden:"
+msgstr[0] "Er is %(count)s resultaat gevonden:"
+msgstr[1] "Er zijn %(count)s resultaten gevonden:"
 
 #: atramhasis/templates/welcome.jinja2:3
 msgid "welcome_to"
@@ -167,6 +167,15 @@ msgstr "Onze online handleiding"
 #: atramhasis/templates/welcome.jinja2:11
 msgid "issue_tracker"
 msgstr "Onze issue tracker"
+
+msgid "recently_viewed"
+msgstr "Recent door u bekeken"
+
+msgid "follow"
+msgstr "Volg Atramhasis"
+
+msgid "popular_category"
+msgstr "Populair in deze categorie"
 
 #~ msgid "type"
 #~ msgstr "type"

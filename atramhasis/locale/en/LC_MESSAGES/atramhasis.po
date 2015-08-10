@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-02-23 21:28+0100\n"
-"PO-Revision-Date: 2015-08-07 13:51+0100\n"
+"PO-Revision-Date: 2015-08-10 10:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: en <LL@li.org>\n"
 "Language: en\n"
@@ -16,11 +16,11 @@ msgstr ""
 
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
-msgstr[0] "there is %(count)s result:"
-msgstr[1] "there are %(count)s results:"
+msgstr[0] "There is %(count)s result:"
+msgstr[1] "There are %(count)s results:"
 
 msgid "altLabel"
-msgstr "alternative labels"
+msgstr "alt labels"
 
 msgid "atramhasis_expl"
 msgstr ""
@@ -95,13 +95,13 @@ msgid "search"
 msgstr "search"
 
 msgid "search_for"
-msgstr "search for"
+msgstr "Search for"
 
 msgid "select_scheme"
-msgstr "select scheme"
+msgstr "Select scheme"
 
 msgid "select_type"
-msgstr "select type"
+msgstr "Select type"
 
 msgid "submit"
 msgstr "submit"
@@ -123,3 +123,12 @@ msgstr "concepts"
 
 msgid "welcome_to"
 msgstr "Welcome to Atramhasis "
+
+msgid "recently_viewed"
+msgstr "Recently viewed"
+
+msgid "follow"
+msgstr "Follow Atramhasis"
+
+msgid "popular_category"
+msgstr "Popular in this category"

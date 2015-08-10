@@ -161,3 +161,13 @@ msgstr ""
 msgid "issue_tracker"
 msgstr ""
 
+msgid "recently_viewed"
+msgstr ""
+
+msgid "follow"
+msgstr ""
+
+msgid "popular_category"
+msgstr ""
+
+
