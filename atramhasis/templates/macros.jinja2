@@ -34,17 +34,17 @@
 {% endmacro %}
 
 
-{% macro render_matches(matches) %}
+{% macro render_matches(matches, request) %}
   {% set sorted_matches = {'broadMatch': [], 'closeMatch': [], 'exactMatch': [], 'narrowMatch': [], 'relatedMatch': []} %}
   {%- for match in matches %}
-    {% if sorted_matches[match.matchtype.name].append(match.uri) %}{% endif %}
+    {% if sorted_matches[match.matchtype.name].append(match) %}{% endif %}
   {%- endfor %}
   {% if sorted_matches|length > 0 %}
     {%- for matchtype in sorted_matches %}
       {% if sorted_matches[matchtype]|length > 0 %}
         <h4 class="relations-subtitle">{{ matchtype }}</h4>
           {%- for value in sorted_matches[matchtype] %}
-             <div class="large-3 large-3-pad columns result-grid"><a href="{{ value }}">{{ value }}</a></div>
+             <div class="large-3 large-3-pad columns result-grid"><a href="{{ value.uri }}"><h5>{{ value.concept.label(request.locale_name).label }}</h5> <span>[ id: {{ value.concept.id }} ]</span> <br><small>{{ value.concept.type }}</small></a></div>
           {%- endfor %}
       {% endif %}
     {%- endfor %}

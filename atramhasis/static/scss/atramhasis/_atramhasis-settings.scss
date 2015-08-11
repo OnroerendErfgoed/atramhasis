@@ -721,8 +721,8 @@ $hr-margin: rem-calc(20);
 // $glowing-effect-color: $input-focus-border-color;
 
 // Select variables
-// $select-bg-color: $white;
-// $select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%);
+$select-bg-color: $white;
+$select-hover-bg-color: scale-color($select-bg-color, $lightness: -3%);
 
 
 
@@ -1433,13 +1433,13 @@ $topbar-height: rem-calc(60);
 // $topbar-title-font-size: rem-calc(17);
 
 // Style the top bar dropdown elements
-$topbar-dropdown-bg: $white !important;
-$topbar-dropdown-link-color: $blue;
-$topbar-dropdown-link-bg: $white;
-$topbar-dropdown-link-weight: $font-weight-normal;
-$topbar-dropdown-toggle-size: 5px;
-$topbar-dropdown-toggle-color: $orange;
-$topbar-dropdown-toggle-alpha: 0.9;
+//$topbar-dropdown-bg: $white !important;
+//$topbar-dropdown-link-color: $blue;
+//$topbar-dropdown-link-bg: $white;
+//$topbar-dropdown-link-weight: $font-weight-normal;
+//$topbar-dropdown-toggle-size: 5px;
+//$topbar-dropdown-toggle-color: $orange;
+//$topbar-dropdown-toggle-alpha: 0.9;
 
 // Set the link colors and styles for top-level nav
 

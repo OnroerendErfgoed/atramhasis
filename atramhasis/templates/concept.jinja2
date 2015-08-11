@@ -58,6 +58,19 @@
         <div class="clearfix">
           <h3 class="relations-title">{% trans %}relations{% endtrans %}</h3>
           {% if conceptType == 'Concept' %}
+             {#            // broader#}
+            {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
+              <div class="clearfix">
+                <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
+                {% if concept.broader_concepts|length > 0 %}
+                  {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+                {% endif %}
+                {% if concept.member_of|length > 0 %}
+                  {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
+                {% endif %}
+              </div>
+            {% endif %}
+
             {#            // narrower#}
             {% if concept.narrower_concepts|length > 0 or concept.narrower_collections|length > 0 %}
               <div class="clearfix">
@@ -67,19 +80,6 @@
                 {% endif %}
                 {% if concept.narrower_collections|length > 0 %}
                   {{ render_relaties_lijst(request, concept.narrower_collections, scheme_id) }}
-                {% endif %}
-              </div>
-            {% endif %}
-
-            {#            // broader#}
-            {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
-              <div class="clearfix">
-                <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
-                {% if concept.broader_concepts|length > 0 %}
-                  {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
-                {% endif %}
-                {% if concept.member_of|length > 0 %}
-                  {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
                 {% endif %}
               </div>
             {% endif %}
@@ -94,14 +94,6 @@
           {% endif %}
 
           {% if conceptType == 'Collection' %}
-            {#            // narrower#}
-            {% if concept.members|length > 0 %}
-              <div class="clearfix">
-                <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
-                {{ render_relaties_lijst(request, concept.members, scheme_id) }}
-              </div>
-            {% endif %}
-
             {#            // broader#}
             {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
               <div class="clearfix">
@@ -114,6 +106,13 @@
                 {% endif %}
               </div>
             {% endif %}
+            {#            // narrower#}
+            {% if concept.members|length > 0 %}
+              <div class="clearfix">
+                <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
+                {{ render_relaties_lijst(request, concept.members, scheme_id) }}
+              </div>
+            {% endif %}
           {% endif %}
         </div>
 
@@ -121,7 +120,7 @@
         {% if concept.matches|length > 0 %}
           <div class="clearfix">
             <h3 class="relations-title">{% trans %}matches{% endtrans %}</h3>
-            {{ render_matches(concept.matches) }}
+            {{ render_matches(concept.matches, request) }}
           </div>
         {% endif %}
 

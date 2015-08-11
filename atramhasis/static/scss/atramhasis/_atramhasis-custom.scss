@@ -9,7 +9,17 @@ a:hover {color:$orange !important;}
 .dropdown {box-shadow:0px 2px 2px #ccc;border:1px solid $aluminum;}
 input.search-input-top {border:0;font-size:0.8em}
 
-// submenu 
+// removes blue border when selected
+textarea:focus, input:focus, select:focus{ outline: none;}
+*:focus {outline: none;}
+
+//select:hover {background:#fff}
+// header search
+input.search-input-top {background:#fff;border:1px solid #fff !important; height: 100%; margin-top:-16px; box-shadow: none;}
+input.search-input-top:hover {background:#fff;border:1px solid #fff !important}
+
+
+// submenu
 .nostyleList {list-style:none;margin-left: 0;padding-left: 0 }
 h3 {font-size:0.7em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 0;}
 h4 {font-size:0.6em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 20px;}
