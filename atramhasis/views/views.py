@@ -106,6 +106,13 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
+
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
         conceptScheme = provider.concept_scheme
@@ -120,7 +127,7 @@ class AtramhasisView(object):
             'top_concepts':  provider.get_top_concepts()
         }
 
-        return {'conceptscheme': scheme}
+        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes}
 
     @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
@@ -130,6 +137,13 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
+
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
@@ -144,7 +158,7 @@ class AtramhasisView(object):
                 concept_type = "Collection"
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
-            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id}
+            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
@@ -162,6 +176,7 @@ class AtramhasisView(object):
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
         ]
+
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
         ctype = self._read_request_param('ctype')
