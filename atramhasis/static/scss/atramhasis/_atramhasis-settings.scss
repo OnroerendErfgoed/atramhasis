@@ -54,6 +54,7 @@
 
 // Allows the use of rem-calc() or lower-bound() in your settings
 @import "foundation/functions";
+$fa-font-path: "../bower_components/font-awesome/fonts";
 
 // The default font-size is set to 100% of the browser style sheet (usually 16px)
 // for compatibility with browser-based text zoom or user-set defaults.
@@ -1367,7 +1368,7 @@ $panel-margin-bottom: 0;
 
 // $tabs-vertical-navigation-margin-bottom: 1.25rem;
 
-// custon background 
+// custom background
 // .tabs-content {background:$light-gray;padding:5px 10px;border:1px solid $dark-purple}
 
 

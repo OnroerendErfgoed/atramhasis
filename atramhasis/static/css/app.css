@@ -9448,8 +9448,8 @@ th.hide-for-touch {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url("../fonts/fontawesome-webfont.eot?v=4.3.0");
-  src: url("../fonts/fontawesome-webfont.eot?#iefix&v=4.3.0") format("embedded-opentype"), url("../fonts/fontawesome-webfont.woff2?v=4.3.0") format("woff2"), url("../fonts/fontawesome-webfont.woff?v=4.3.0") format("woff"), url("../fonts/fontawesome-webfont.ttf?v=4.3.0") format("truetype"), url("../fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular") format("svg");
+  src: url("../bower_components/font-awesome/fonts/fontawesome-webfont.eot?v=4.3.0");
+  src: url("../bower_components/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.3.0") format("embedded-opentype"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.woff2?v=4.3.0") format("woff2"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.woff?v=4.3.0") format("woff"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.ttf?v=4.3.0") format("truetype"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -12641,8 +12641,6 @@ textarea:focus, input:focus, select:focus {
 input.search-input-top {
   background: #fff;
   border: 1px solid #fff !important;
-  height: 100%;
-  margin-top: -16px;
   box-shadow: none;
 }
 
@@ -12652,14 +12650,53 @@ input.search-input-top:hover {
   border: 1px solid #fff !important;
 }
 
+/* line 22, ../scss/atramhasis/_atramhasis-custom.scss */
+.toggle-topbar {
+  background: white;
+  font-weight: normal;
+}
+
 /* line 23, ../scss/atramhasis/_atramhasis-custom.scss */
+.menu-icon {
+  color: #666666 !important;
+}
+
+/* line 24, ../scss/atramhasis/_atramhasis-custom.scss */
+.menu-icon a {
+  color: #666666 !important;
+}
+
+/* line 25, ../scss/atramhasis/_atramhasis-custom.scss */
+.menu-icon a:hover {
+  color: #666666 !important;
+}
+
+/* line 26, ../scss/atramhasis/_atramhasis-custom.scss */
+.has-form {
+  background-color: white !important;
+}
+
+/* line 28, ../scss/atramhasis/_atramhasis-custom.scss */
+.top-bar-section li {
+  background: white !important;
+}
+
+/* line 29, ../scss/atramhasis/_atramhasis-custom.scss */
+.top-bar-section li select {
+  border: 0;
+  padding: 0 30px 0 10px;
+  height: 100%;
+  margin-top: -16px;
+}
+
+/* line 33, ../scss/atramhasis/_atramhasis-custom.scss */
 .nostyleList {
   list-style: none;
   margin-left: 0;
   padding-left: 0;
 }
 
-/* line 24, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 34, ../scss/atramhasis/_atramhasis-custom.scss */
 h3 {
   font-size: 0.7em;
   text-transform: uppercase;
@@ -12668,7 +12705,7 @@ h3 {
   margin: 30px 0;
 }
 
-/* line 25, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 35, ../scss/atramhasis/_atramhasis-custom.scss */
 h4 {
   font-size: 0.6em;
   text-transform: uppercase;
@@ -12677,33 +12714,33 @@ h4 {
   margin: 30px 20px;
 }
 
-/* line 28, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 38, ../scss/atramhasis/_atramhasis-custom.scss */
 ul.no_bullet {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-/* line 34, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 44, ../scss/atramhasis/_atramhasis-custom.scss */
 li.cube {
   background: url(listitem.png) no-repeat 0 6px;
   padding: 0 0 15px 15px;
 }
 
 /*padding fix result page*/
-/* line 41, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 51, ../scss/atramhasis/_atramhasis-custom.scss */
 .large-3-pad {
   padding: 0;
 }
 
 /*download top*/
-/* line 44, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 54, ../scss/atramhasis/_atramhasis-custom.scss */
 ul.downloadtop {
   margin: 30px 0 0 0;
   padding: 0;
 }
 
-/* line 45, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 55, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li {
   list-style-type: none;
   font-size: 0.6em;
@@ -12712,20 +12749,46 @@ ul.downloadtop {
   float: left;
 }
 
-/* line 46, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 56, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li a {
   border: 1px solid #d6d6d6;
   background: white;
   padding: 8px 15px;
 }
 
-/* line 47, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 57, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li:first-child {
   padding: 0;
 }
 
+/*tab nav*/
+/* line 61, ../scss/atramhasis/_atramhasis-custom.scss */
+.tabnav li {
+  list-style-type: none;
+  float: left;
+  text-transform: uppercase;
+}
+
+/* line 62, ../scss/atramhasis/_atramhasis-custom.scss */
+.tabnav li a {
+  border: 1px solid #d6d6d6;
+  background: white;
+  color: #2b709d !important;
+}
+
+/* line 63, ../scss/atramhasis/_atramhasis-custom.scss */
+.tabnav li a:hover {
+  color: #f77f00 !important;
+  background-color: white !important;
+}
+
+/* line 64, ../scss/atramhasis/_atramhasis-custom.scss */
+.tabnav li:first-child {
+  padding: 0;
+}
+
 /* home form */
-/* line 51, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 68, ../scss/atramhasis/_atramhasis-custom.scss */
 .home-search-placer {
   padding: 0 0 0 30px;
 }
@@ -13047,95 +13110,108 @@ ul.downloadtop {
     margin-right: 0px;
     padding: 0;
   }
+
+  /* line 14, ../scss/atramhasis/_atramhasis-mquery.scss */
+  input.search-input-top {
+    padding-left: 0;
+    margin: 0px 0 0 -10px;
+    background: white !important;
+  }
 }
 @media (min-width: 320px) and (max-width: 400px) {
-  /* line 17, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 19, ../scss/atramhasis/_atramhasis-mquery.scss */
   .ptext {
     padding: 0 38px;
   }
 
-  /* line 18, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 20, ../scss/atramhasis/_atramhasis-mquery.scss */
   .home-search-placer {
     margin: 0px;
     padding: 0;
   }
 
-  /* line 19, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 21, ../scss/atramhasis/_atramhasis-mquery.scss */
   li.cube {
     background: url(listitem.png) no-repeat 0 5px;
     padding: 0 0 0 15px;
   }
 
-  /* line 20, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 22, ../scss/atramhasis/_atramhasis-mquery.scss */
   .home-img_position {
     margin: 0px 30px 0 0;
   }
 
-  /* line 21, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 23, ../scss/atramhasis/_atramhasis-mquery.scss */
   .subfooter, .subfooterright {
     margin: 30px 0 0 0;
     border: 0;
   }
 
-  /* line 22, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 24, ../scss/atramhasis/_atramhasis-mquery.scss */
   .footerpage {
     padding-left: 18px;
     margin-top: 30px;
   }
+
+  /* line 25, ../scss/atramhasis/_atramhasis-mquery.scss */
+  input.search-input-top {
+    padding-left: 0;
+    margin: -4px 0 0 -10px;
+    background: white !important;
+  }
+
+  /* line 27, ../scss/atramhasis/_atramhasis-mquery.scss */
+  .ico-mglass {
+    margin-top: -40px;
+  }
 }
 @media (min-width: 1024px) {
-  /* line 27, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 32, ../scss/atramhasis/_atramhasis-mquery.scss */
   .footerpage {
     margin-top: 60px;
   }
-
-  /* line 28, ../scss/atramhasis/_atramhasis-mquery.scss */
-  .result-grid {
-    width: 240px;
-    word-break: break-word;
-  }
 }
 @media (max-width: 1024px) {
-  /* line 32, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 36, ../scss/atramhasis/_atramhasis-mquery.scss */
   .logo {
     margin: 10px 20px 0 5px;
   }
 
-  /* line 33, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 37, ../scss/atramhasis/_atramhasis-mquery.scss */
   .footerpage {
     padding-left: 18px;
     margin-top: 30px;
   }
 
-  /* line 34, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 38, ../scss/atramhasis/_atramhasis-mquery.scss */
   .ptext {
     padding: 0 38px;
   }
 
-  /* line 35, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 39, ../scss/atramhasis/_atramhasis-mquery.scss */
   .home-search-placer {
     padding: 0 20px;
   }
 }
 @media screen and (min-width: 768px) {
-  /* line 40, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 44, ../scss/atramhasis/_atramhasis-mquery.scss */
   .rwd-break {
     display: none;
   }
 }
 @media (min-width: 1000px) {
-  /* line 45, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 49, ../scss/atramhasis/_atramhasis-mquery.scss */
   .ptext {
     padding: 20px 20px 0 0px;
   }
 
-  /* line 46, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 50, ../scss/atramhasis/_atramhasis-mquery.scss */
   .home-img_position {
     margin: 0px 0px 0 0;
   }
 }
 @media (min-width: 1045px) {
-  /* line 51, ../scss/atramhasis/_atramhasis-mquery.scss */
+  /* line 55, ../scss/atramhasis/_atramhasis-mquery.scss */
   .result-grid {
     width: 250px;
     word-break: break-word;
@@ -13162,4 +13238,16 @@ h3.relations-title {
 /* line 16, ../scss/_atramhasis.scss */
 h4.relations-subtitle {
   margin: 20px 20px;
+}
+
+/* line 20, ../scss/_atramhasis.scss */
+.pageOverlay {
+  text-align: center;
+}
+
+/* line 21, ../scss/_atramhasis.scss */
+.loadingMessage {
+  font-size: 1em;
+  margin: 30px;
+  color: #999;
 }

@@ -19,7 +19,7 @@
       <ul class="right">
         <li class="divider"></li>
         <li>
-          <select id="scheme" style="border:0;padding:0 30px;height:100%;margin-top: -16px;">
+          <select id="scheme">
             <option value="" selected>{% trans %}select_scheme{% endtrans %}</option>
             {% for item in conceptschemes %}
               <option value="{{ request.route_path('search_result', scheme_id=item.id) }}">
@@ -30,7 +30,7 @@
         </li>
         <li class="divider"></li>
         <li>
-          <select id="ctype" name="ctype" style="border:0;padding:0 30px;height:100%;margin-top: -16px;">
+          <select id="ctype" name="ctype">
             <option value="all" selected>{% trans %}select_type{% endtrans %}</option>
             <option value="all">{% trans %}type_all{% endtrans %}</option>
             <option value="concept">{% trans %}type_concept{% endtrans %}</option>

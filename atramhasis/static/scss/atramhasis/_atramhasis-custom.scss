@@ -13,10 +13,20 @@ input.search-input-top {border:0;font-size:0.8em}
 textarea:focus, input:focus, select:focus{ outline: none;}
 *:focus {outline: none;}
 
-//select:hover {background:#fff}
+
 // header search
-input.search-input-top {background:#fff;border:1px solid #fff !important; height: 100%; margin-top:-16px; box-shadow: none;}
+input.search-input-top {background:#fff;border:1px solid #fff !important;box-shadow:none}
 input.search-input-top:hover {background:#fff;border:1px solid #fff !important}
+
+
+.toggle-topbar {background:$white;font-weight:normal}
+.menu-icon  {color:$steel !important; }
+.menu-icon a {color:$steel !important; }
+.menu-icon a:hover {color:$steel !important; }
+.has-form {background-color:$white !important}
+
+.top-bar-section li {background:$white !important}
+.top-bar-section li select {border:0;padding:0 30px 0 10px;height:100%;margin-top: -16px;}
 
 
 // submenu
@@ -45,6 +55,13 @@ ul.downloadtop {margin:30px 0 0 0;padding:0;}
 .downloadtop li {list-style-type:none;font-size:0.6em;padding:0 0 5px 15px;margin:0 0 20px 2px;float:$default-float;}
 .downloadtop li a {border:1px solid #d6d6d6;background:$white;padding:8px 15px;}
 .downloadtop li:first-child {padding:0;}
+
+
+/*tab nav*/
+.tabnav li {list-style-type:none;float:$default-float;text-transform: uppercase;}
+.tabnav li a {border:1px solid #d6d6d6;background:$white;color:$blue !important}
+.tabnav li a:hover {color:$orange !important;background-color:$white !important}
+.tabnav li:first-child {padding:0;}
 
 
 /* home form */
