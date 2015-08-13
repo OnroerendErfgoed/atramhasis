@@ -87,6 +87,13 @@ class ConceptSchemeManagerTest(DatamangersTests):
         res = self.conceptscheme_manager.get_all(2)
         self.assertEqual(10, len(res))
 
+    def test_save(self):
+        local_session = self.session_maker()
+        conceptscheme = local_session.query(ConceptScheme).filter(Concept.id == 1).first()
+        conceptscheme = self.conceptscheme_manager.save(conceptscheme)
+        self.assertIsNotNone(conceptscheme.id)
+        local_session.close()
+
 
 class SkosManagerTest(DatamangersTests):
 
