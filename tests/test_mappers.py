@@ -10,8 +10,8 @@ try:
 except ImportError:
     from mock import Mock  # pragma: no cover
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Label, Collection, MatchType, Match, Thing
-from atramhasis.mappers import map_concept
+from skosprovider_sqlalchemy.models import Concept, Label, Collection, MatchType, Match, Thing, ConceptScheme
+from atramhasis.mappers import map_concept, map_conceptscheme
 
 test_json = {
     "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
@@ -53,6 +53,20 @@ json_collection = {
                   "language": "nl"
               }]
 }
+test_json_conceptscheme = {
+    "label": "Stijlen en culturen",
+    "labels": [{
+                   "language": "nl",
+                   "label": "Stijlen en culturen",
+                   "type": "prefLabel"
+               }],
+    "notes": [{
+                  "note": "een notitie",
+                  "type": "note",
+                  "language": "nl"
+              }]
+}
+
 
 
 def filter_by_mock_concept(concept_id, conceptscheme_id):
@@ -121,6 +135,8 @@ class TestMappers(unittest.TestCase):
         self.collection = Collection()
         self.collection.concept_id = 0
         self.collection.conceptscheme_id = 1
+        self.conceptscheme = ConceptScheme()
+        self.conceptscheme.id = 1
 
     def tearDown(self):
         self.concept = None
@@ -212,3 +228,9 @@ class TestMappers(unittest.TestCase):
         self.assertTrue(hasattr(result_collection, 'broader_concepts'))
         self.assertEqual(1, len(result_collection.broader_concepts))
         self.assertEqual([c for c in result_collection.broader_concepts][0].concept_id, 12)
+
+    def test_mapping_conceptscheme(self):
+        result_conceptscheme = map_conceptscheme(self.conceptscheme, test_json_conceptscheme)
+        self.assertIsNotNone(result_conceptscheme)
+        self.assertEqual(1, len(result_conceptscheme.labels))
+        self.assertEqual(1, len(result_conceptscheme.notes))

@@ -9,7 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
-from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager
+from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, AuditManager
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.views import tree_cache_dictionary
 from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView, \
@@ -34,12 +34,23 @@ def provider(some_id):
     return provider_mock
 
 
+def hidden_provider(some_id):
+    provider_mock = provider(some_id)
+    provider_mock.get_metadata = Mock(return_value={'id': some_id, 'subject': ['hidden']})
+    return provider_mock
+
+
 def data_managers(request):
     session_mock = Mock()
     session_mock.query = Mock(side_effect=create_query_mock)
     skos_manager = SkosManager(session_mock)
     conceptscheme_manager = ConceptSchemeManager(session_mock)
-    return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager}
+    audit_manager = AuditManager(session_mock)
+    return {
+        'skos_manager': skos_manager,
+        'conceptscheme_manager': conceptscheme_manager,
+        'audit_manager': audit_manager
+    }
 
 
 def create_query_mock(some_class):
@@ -125,7 +136,12 @@ def list_db(request):
     session_mock.query = Mock(side_effect=create_listquery_mock)
     skos_manager = SkosManager(session_mock)
     conceptscheme_manager = ConceptSchemeManager(session_mock)
-    return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager}
+    audit_manager = AuditManager(session_mock)
+    return {
+        'skos_manager': skos_manager,
+        'conceptscheme_manager': conceptscheme_manager,
+        'audit_manager': audit_manager
+    }
 
 
 def create_listquery_mock(some_class):
@@ -146,7 +162,7 @@ class TestAtramhasisView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
-        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None, 'audit_manager': None}
 
     def tearDown(self):
         testing.tearDown()
@@ -166,8 +182,9 @@ class TestHomeView(unittest.TestCase):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
+        self.regis.register_provider(hidden_provider(2))
         self.request = testing.DummyRequest()
-        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None, 'audit_manager': None}
 
     def tearDown(self):
         testing.tearDown()
@@ -178,6 +195,7 @@ class TestHomeView(unittest.TestCase):
         info = atramhasisview.home_view()
         self.assertIsNotNone(info['conceptschemes'][0])
         self.assertEqual(info['conceptschemes'][0]['id'], 'TREES')
+        self.assertEqual(1, len(info['conceptschemes']))
 
 
 class TestFavicoView(unittest.TestCase):
@@ -186,7 +204,7 @@ class TestFavicoView(unittest.TestCase):
         self.regis = Registry()
         self.regis.register_provider(trees)
         self.request = testing.DummyRequest()
-        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None, 'audit_manager': None}
 
     def tearDown(self):
         testing.tearDown()
@@ -206,6 +224,7 @@ class TestConceptSchemeView(unittest.TestCase):
         self.regis = Registry()
         self.regis.register_provider(trees)
         self.request = testing.DummyRequest()
+        self.request.accept = ['text/html']
         self.request.data_managers = data_managers(self.request)
         self.request.skos_registry = self.regis
 
@@ -239,6 +258,7 @@ class TestConceptView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
+        self.request.accept = ['text/html']
         self.regis = Registry()
         self.regis.register_provider(provider(1))
         self.request.data_managers = data_managers(self.request)
@@ -312,7 +332,7 @@ class TestSearchResultView(unittest.TestCase):
         self.regis = Registry()
         self.regis.register_provider(trees)
         self.request = testing.DummyRequest()
-        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None, 'audit_manager': None}
 
     def tearDown(self):
         testing.tearDown()
@@ -366,6 +386,7 @@ class TestCsvView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
+        self.request.accept = '*/*'
         self.regis = Registry()
         self.regis.register_provider(provider(1))
         self.request.skos_registry = self.regis
@@ -416,7 +437,7 @@ class TestLocaleView(unittest.TestCase):
         config.add_route('home', 'foo')
         config.add_settings(settings)
         self.request = testing.DummyRequest()
-        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None, 'audit_manager': None}
 
     def tearDown(self):
         testing.tearDown()
@@ -474,7 +495,7 @@ class TestHtmlTreeView(unittest.TestCase):
         self.regis = Registry()
         self.regis.register_provider(trees)
         self.request = testing.DummyRequest()
-        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None}
+        self.request.data_managers = {'skos_manager': None, 'conceptscheme_manager': None, 'audit_manager': None}
 
     def tearDown(self):
         testing.tearDown()

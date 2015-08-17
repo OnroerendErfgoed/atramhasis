@@ -14,6 +14,7 @@ py==1.4.26
 coveralls==0.4.4
 webtest==2.0.16
 mock==1.0.1
+testfixtures==4.1.2
 
 # Documentation
 Sphinx==1.2.3

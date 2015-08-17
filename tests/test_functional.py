@@ -22,6 +22,7 @@ from sqlalchemy import engine_from_config
 
 from atramhasis import includeme
 from atramhasis.data.db import data_managers
+from atramhasis.data.models import Base as VisitLogBase
 from atramhasis.protected_resources import ProtectedResourceException, ProtectedResourceEvent
 from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials
@@ -120,6 +121,8 @@ class FunctionalTests(unittest.TestCase):
 
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
+        VisitLogBase.metadata.drop_all(self.engine)
+        VisitLogBase.metadata.create_all(self.engine)
 
         Base.metadata.bind = self.engine
 
@@ -240,6 +243,12 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['id'], 1)
         self.assertEqual(res.json['type'], 'concept')
 
+    def test_get_conceptscheme(self):
+        res = self.testapp.get('/conceptschemes/TREES', headers=self._get_default_headers())
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json['id'])
+
     def test_get_concept_dictprovider(self):
         res = self.testapp.get('/conceptschemes/TEST/c/1', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
@@ -285,6 +294,29 @@ class RestFunctionalTests(FunctionalTests):
             expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_edit_conceptscheme(self):
+        res = self.testapp.put_json(
+            '/conceptschemes/TREES', headers=self._get_default_headers(), params=json_collection_value)
+        self.assertEqual('200 OK', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+
+    def test_edit_conceptscheme_invalid(self):
+        json_collection_value.pop('labels')
+        res = self.testapp.put_json(
+            '/conceptschemes/TREES', headers=self._get_default_headers(), params=json_collection_value,
+            expect_errors=True)
+        self.assertEqual('400 Bad Request', res.status)
+        self.assertIn('application/json', res.headers['Content-Type'])
+        self.assertIsNotNone(res.json)
+        self.assertEqual(res.json, {
+            "errors": [{'labels': 'At least one label is necessary'}],
+            "message": 'ConceptScheme could not be validated'})
+        json_collection_value['labels'] = [{
+            "language": "nl",
+            "label": "Test verzameling",
+            "type": "prefLabel"
+        }]
 
     def test_edit_concept(self):
         res = self.testapp.put_json(
@@ -474,6 +506,13 @@ class RestFunctionalTests(FunctionalTests):
             "referenced_in": ["urn:someobject", "http://test.test.org/object/2"]
         })
 
+    def test_method_not_allowed(self):
+        self.testapp.delete('/conceptschemes/TREES', headers=self._get_default_headers(), status=405)
+        self.testapp.post('/conceptschemes', headers=self._get_default_headers(), status=405)
+
+    def test_get_conceptschemes(self):
+        self.testapp.get('/conceptschemes', headers=self._get_default_headers(), status=200)
+
 
 class TestCookieView(FunctionalTests):
     def _get_default_headers(self):
@@ -657,6 +696,11 @@ class RdfFunctionalTests(FunctionalTests):
         ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c/1.ttl')
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
+
+    def test_rdf_individual_not_found(self):
+        res = self.testapp.get('/conceptschemes/TREES/c/test.ttl', headers={'Accept': 'text/turtle'}, status=404,
+                               expect_errors=True)
+        self.assertEqual('404 Not Found', res.status)
 
 
 class ListFunctionalTests(FunctionalTests):

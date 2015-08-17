@@ -11,6 +11,7 @@ from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteT
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
+from atramhasis.audit import audit
 
 
 def labels_to_string(labels, ltype):
@@ -75,7 +76,8 @@ class AtramhasisView(object):
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
         ]
 
         return {'conceptschemes': conceptschemes}
@@ -90,11 +92,13 @@ class AtramhasisView(object):
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
         ]
 
         return {'conceptschemes': conceptschemes}
 
+    @audit
     @view_config(route_name='conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
     def conceptscheme_view(self):
         '''
@@ -118,6 +122,7 @@ class AtramhasisView(object):
 
         return {'conceptscheme': scheme}
 
+    @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
         '''
@@ -191,6 +196,7 @@ class AtramhasisView(object):
                             max_age=31536000)  # max_age = year
         return response
 
+    @audit
     @view_config(route_name='search_result_export', renderer='csv')
     def results_csv(self):
         header = ['conceptscheme', 'id', 'uri', 'type', 'label', 'prefLabels', 'altLabels', 'definition', 'broader',
@@ -284,7 +290,6 @@ class AtramhasisView(object):
             return str(concept_id)
         else:
             return parent_tree_id + "." + str(concept_id)
-
 
     @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
     def results_tree_html(self):

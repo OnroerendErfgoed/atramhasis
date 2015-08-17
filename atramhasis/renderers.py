@@ -3,7 +3,7 @@ import codecs
 
 from six import StringIO, text_type, PY2
 from pyramid.renderers import JSON
-from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note, Language
+from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note, Language, ConceptScheme
 from pyramid_skosprovider.utils import concept_adapter as skos_concept_adapter
 from pyramid_skosprovider.utils import collection_adapter as skos_collection_adapter
 from pyramid_skosprovider.utils import label_adapter as skos_label_adapter
@@ -56,6 +56,25 @@ class CSVRenderer(object):
 
 
 json_renderer_verbose = JSON()
+
+
+def conceptscheme_adapter(obj, request):
+    '''
+    Adapter for rendering a :class:`skosprovider_sqlalchemy.models.ConceptScheme` to json
+
+    :param skosprovider_sqlalchemy.models.ConceptScheme obj: The conceptscheme to be rendered.
+    :rtype: :class:`dict`
+    '''
+    scheme_id = request.matchdict['scheme_id']
+    provider = request.skos_registry.get_provider(scheme_id)
+    return {
+        'id': obj.id,
+        'uri': obj.uri,
+        'label': obj.label().label if obj.label() else None,
+        'subject': provider.metadata['subject'] if provider.metadata['subject'] else [],
+        'labels': obj.labels,
+        'notes': obj.notes,
+    }
 
 
 def concept_adapter(obj, request):
@@ -157,6 +176,7 @@ def language_adaptor(obj, request):
         'name': obj.name
     }
 
+json_renderer_verbose.add_adapter(ConceptScheme, conceptscheme_adapter)
 json_renderer_verbose.add_adapter(Concept, concept_adapter)
 json_renderer_verbose.add_adapter(Collection, collection_adapter)
 json_renderer_verbose.add_adapter(Label, label_adapter)
