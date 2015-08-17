@@ -1,6 +1,6 @@
 <div id="tree">
   <div id="loadingOverlay" class="pageOverlay">
-    <div class="loadingMessage">Even geduld. De toepassing wordt geladen...</div>
+    <div class="loadingMessage">Loading..</div>
     <div><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
   </div>
 </div>
@@ -12,7 +12,7 @@
 
   .node circle {
     fill: #fff;
-    stroke: steelblue;
+    stroke: rgb(247, 127, 0);
     stroke-width: 1.5px;
   }
 
@@ -99,7 +99,7 @@
 
     nodeEnter.append("circle")
             .attr("r", 1e-6)
-            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "lightsteelblue" : "#fff"; });
+            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "#fff"; });
 
     nodeEnter.append("text")
             .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
@@ -115,7 +115,7 @@
 
     nodeUpdate.select("circle")
             .attr("r", 4.5)
-            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "lightsteelblue" : "#fff"; });
+            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "#fff"; });
 
     nodeUpdate.select("text")
             .style("fill-opacity", 1);
@@ -181,7 +181,7 @@
     {#  if (d.parent) {#}
     {#    hover(d.parent);#}
     {#  }#}
-    console.log(tree.nodes(root));
+{#    console.log(tree.nodes(root));#}
 {#    d.enter().select("circle").attr("r", 10);#}
   }
 </script>

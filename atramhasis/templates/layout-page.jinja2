@@ -11,6 +11,7 @@
   {% block css_files %}
     <link rel="stylesheet" href="{{request.static_path(app_package + ':static/css/app.css')}}" />
     <link rel="stylesheet" href="{{request.static_path(app_package + ':static/css/print.css')}}" media="print" />
+    <link rel="stylesheet" href="{{request.static_path(app_package + ':static/css/jqtree.css')}}" />
   {% endblock %}
 
   <link rel="icon" type="image/x-icon" href="{{request.static_path(app_package + ':static/img/favicon.ico')}}" />
@@ -48,5 +49,7 @@
   <script src="{{ request.static_path(app_package + ':static/bower_components/foundation/js/foundation.min.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/js/app.js') }}"></script>
 {% endblock %}
+
+{% block custom_js %}{% endblock %}
 </body>
 </html>
