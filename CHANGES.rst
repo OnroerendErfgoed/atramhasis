@@ -1,3 +1,13 @@
+0.5.0 (??-??-2015)
+------------------
+
+- Added the idea of private conceptschemes
+- Importing an entire vocabulary
+- Collect usage stats
+- Added a SessionFactory to keep some small data on the session
+- ...
+
+
 0.4.4 (04-06-2015)
 ------------------
 

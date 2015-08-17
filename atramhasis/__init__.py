@@ -3,6 +3,9 @@ from pyramid.config import Configurator
 from atramhasis.renderers import json_renderer_verbose
 
 
+
+
+
 def includeme(config):
     """this function adds some configuration for the application"""
     config.include('pyramid_jinja2')
@@ -23,6 +26,11 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     config = Configurator(settings=settings)
+
+    from pyramid.session import SignedCookieSessionFactory
+    atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
+    config.set_session_factory(atramhasis_session_factory)
+
     includeme(config)
 
     config.add_translation_dirs('atramhasis:locale/')

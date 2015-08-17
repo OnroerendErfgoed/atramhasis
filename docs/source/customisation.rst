@@ -748,3 +748,16 @@ So do what you're told and edit your :file:`my_thesaurus/skos/__init__.py` like 
         skosregis.register_provider(TREES)
 
 Now you can use the data of the file in your thesaurus application.
+
+SessionFactory
+==============
+
+You can change the default session factory in the __init__.py file.
+
+.. code-block:: python
+
+    # set default session factory
+    from pyramid.session import SignedCookieSessionFactory
+    atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
+    config.set_session_factory(atramhasis_session_factory)
+
