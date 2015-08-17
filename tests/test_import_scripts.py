@@ -62,7 +62,7 @@ class ImportTests(unittest.TestCase):
         label_fr = [label for label in obj_1['labels'] if label['language'] == 'fr'][0]
         self.assertDictEqual(label_fr, {'label': u'la châtaigne', 'language': 'fr', 'type': 'altLabel'})
         self.assertDictEqual(obj_1['notes'][0],
-                             {'language': 'en', 'note': 'A different type of tree.', 'type': 'definition'})
+                             {'language': 'en', 'note': 'A different type of tree.', 'type': 'definition', 'markup': None})
 
     def _check_menu(self):
         sql_prov = SQLAlchemyProvider({'id': 'MENU', 'conceptscheme_id': 1}, self.session_maker)
