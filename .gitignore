@@ -67,14 +67,10 @@ _build
 # sqlite stuff
 *.sqlite
 
-# dojo/js stuff
-atramhasis/static/admin/src/util/
-atramhasis/static/admin/src/dojo/
-atramhasis/static/admin/src/dojox/
-atramhasis/static/admin/src/dijit/
-atramhasis/static/admin/src/dGrowl/
-atramhasis/static/admin/src/dgrid/
-atramhasis/static/admin/src/put-selector/
-atramhasis/static/admin/src/xstyle/
-#atramhasis/static/admin/dist
+#bower dependencies
+atramhasis/static/bower_components
+atramhasis/static/admin/src/*
+!atramhasis/static/admin/src/dojoConfig.js
+!atramhasis/static/admin/src/app
+atramhasis/static/admin/dist
 atramhasis/static/admin/node_modules
