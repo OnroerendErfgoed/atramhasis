@@ -170,4 +170,10 @@ msgstr ""
 msgid "popular_category"
 msgstr ""
 
+msgid "view_tree"
+msgstr ""
+
+msgid "view_relations"
+msgstr ""
+
 

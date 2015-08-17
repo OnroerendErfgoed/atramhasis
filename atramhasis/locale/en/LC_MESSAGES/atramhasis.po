@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-02-23 21:28+0100\n"
-"PO-Revision-Date: 2015-08-10 10:58+0100\n"
+"PO-Revision-Date: 2015-08-17 10:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: en <LL@li.org>\n"
 "Language: en\n"
@@ -132,3 +132,9 @@ msgstr "Follow Atramhasis"
 
 msgid "popular_category"
 msgstr "Popular in this category"
+
+msgid "view_tree"
+msgstr "View in tree structure"
+
+msgid "view_relations"
+msgstr "View all relations"
