@@ -5,9 +5,10 @@ pyramid-tm==0.10
 pyramid_rewrite==0.2
 
 # skos
-skosprovider==0.5.2
-skosprovider_sqlalchemy==0.4.2
-#pyramid_skosprovider==0.7.0
+-e git+https://github.com/koenedaele/skosprovider.git#egg=skosprovider
+#skosprovider_sqlalchemy==0.4.2
+-e git+https://github.com/cahytinne/skosprovider_sqlalchemy.git#egg=skosprovider_sqlalchemy
+#pyramid_skosprovider==0.6.0
 -e git+https://github.com/koenedaele/pyramid_skosprovider.git#egg=pyramid_skosprovider
 skosprovider_rdf==0.4.0
 skosprovider_getty==0.2.1
