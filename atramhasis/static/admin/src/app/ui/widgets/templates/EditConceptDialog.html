@@ -1,0 +1,20 @@
+
+<div data-dojo-attach-point='containerNode' class="formContainer">
+
+    <div data-dojo-attach-point="conceptSchemaNode"></div>
+
+    <div data-dojo-attach-point="formNode" class="cFormDialog">
+        <div data-dojo-props="title: 'labels', open:true">
+            <div data-dojo-attach-point="labelContainerNode"></div>
+        </div>
+
+        <div data-dojo-props="title: 'notes', open:false">
+            <div data-dojo-attach-point="noteContainerNode"></div>
+        </div>
+
+    </div>
+    <div class="dijitDialogPaneActionBar">
+        <a href="#" data-dojo-attach-event="onClick: _conceptEdit">Bewerk schema</a>
+        <a href="#" data-dojo-attach-event="onClick: _close">Annuleren</a>
+    </div>
+</div>

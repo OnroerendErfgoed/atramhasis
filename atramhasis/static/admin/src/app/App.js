@@ -12,7 +12,7 @@ define([
     "dijit/registry",
     "dijit/form/FilteringSelect",
     "dijit/MenuItem",
-    "dijit/_Widget",
+    'dijit/_WidgetBase',
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!./templates/App.html",
@@ -29,15 +29,19 @@ define([
     "./LanguageManager",
     "dGrowl",
     "dijit/layout/ContentPane",
+
+    "./ui/widgets/EditConceptDialog",
+    './controllers/ConceptController',
+
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
 
 
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, string, registry, FilteringSelect, MenuItem,
-             _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
+             _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
-             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, TabContainer) {
-    return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
+             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, EditConceptDialog, ConceptController, TabContainer, BorderContainer) {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
         thesauri: null,
@@ -47,25 +51,21 @@ define([
         notificationController: null,
         languageManager: null,
 
-        postMixInProperties: function () {
-            this.inherited(arguments);
-        },
-
-        buildRendering: function () {
-            this.inherited(arguments);
-        },
+        _controllers: {},
 
         postCreate: function () {
             this.inherited(arguments);
             this.thesauri = new ThesaurusCollection();
 
-            this.notificationController = new dGrowl({
+            new dGrowl({
                 'channels':[
                     {'name':'info','pos':3},
                     {'name':'error', 'pos':1},
                     {'name':'warn', 'pos':2}
                 ]
             });
+
+            this._controllers.conceptController = new ConceptController();
         },
 
         startup: function () {
@@ -99,6 +99,10 @@ define([
             var conceptForm = new ConceptForm({
                 thesauri: this.thesauri,
                 externalSchemeService: this.externalSchemeService,
+                languageStore: this.languageManager.languageStore
+            });
+            var editConceptDialog = new EditConceptDialog({
+                conceptController: this._controllers.conceptController,
                 languageStore: this.languageManager.languageStore
             });
             var conceptDialog = new Dialog({
@@ -136,6 +140,15 @@ define([
                     }
                 }));
             }
+
+            var editConceptSchemeBtn = new Button({
+                label: "Bewerk concept schema",
+                disabled: "disabled"
+            }, this.thesaurusConceptSchemeEditNode);
+
+            on(editConceptSchemeBtn, "click", function () {
+                self._editConceptSchema(editConceptDialog, self.currentScheme);
+            });
 
             var addConceptButton = new Button({
                 label: "Add concept or collection",
@@ -180,6 +193,7 @@ define([
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
                     importConceptButton.set('disabled', false);
+                    editConceptSchemeBtn.set('disabled', false);
                 }
                 else {
                     filteredGrid.ResetConceptGrid();
@@ -395,15 +409,18 @@ define([
                     );
                 }
             });
-
-            this.notificationController.addNotification("Atramhasis is up and running",{'channel':'info'});
-
+            topic.publish('dGrowl', "Atramhasis is up and running",
+                {'title': "started...", 'sticky': false, 'channel': 'info'});
         },
 
         _createConcept: function (conceptForm, conceptDialog, Scheme) {
             conceptForm.init(Scheme);
             conceptDialog.set("title", "Add concept or collection");
             conceptDialog.show();
+        },
+
+        _editConceptSchema: function (editConceptDialog, Scheme) {
+            editConceptDialog.init(Scheme);
         },
 
         _importConcept: function (conceptForm, conceptDialog, concepturi, importscheme) {
