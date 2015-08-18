@@ -12767,6 +12767,7 @@ ul.downloadtop {
   list-style-type: none;
   float: left;
   text-transform: uppercase;
+  margin-top: 20px;
 }
 
 /* line 62, ../scss/atramhasis/_atramhasis-custom.scss */
@@ -12787,8 +12788,19 @@ ul.downloadtop {
   padding: 0;
 }
 
+/* line 65, ../scss/atramhasis/_atramhasis-custom.scss */
+.tabnav .tab-title > a {
+  background-color: #efefef !important;
+}
+
+/* line 66, ../scss/atramhasis/_atramhasis-custom.scss */
+.tabnav .tab-title.active > a {
+  background-color: white !important;
+  color: #000000 !important;
+}
+
 /* home form */
-/* line 68, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 70, ../scss/atramhasis/_atramhasis-custom.scss */
 .home-search-placer {
   padding: 0 0 0 30px;
 }

@@ -58,10 +58,12 @@ ul.downloadtop {margin:30px 0 0 0;padding:0;}
 
 
 /*tab nav*/
-.tabnav li {list-style-type:none;float:$default-float;text-transform: uppercase;}
+.tabnav li {list-style-type:none;float:$default-float;text-transform: uppercase;margin-top: 20px;}
 .tabnav li a {border:1px solid #d6d6d6;background:$white;color:$blue !important}
 .tabnav li a:hover {color:$orange !important;background-color:$white !important}
 .tabnav li:first-child {padding:0;}
+.tabnav .tab-title > a {background-color:#efefef !important;}
+.tabnav .tab-title.active > a {background-color:$white !important; color: $black !important;}
 
 
 /* home form */
