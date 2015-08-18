@@ -151,17 +151,20 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
     def test_update_last_visited_concepts(self):
         c = Concept()
         c.id= 2
-        update_last_visited_concepts(self.request, {'concept': c, 'conceptType': 'concept', 'scheme_id': 1})
+        c.labels = [Label('test', language_id='en-us')]
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
         c = Concept()
         c.id= 33
-        update_last_visited_concepts(self.request, {'concept': c, 'conceptType': 'concept', 'scheme_id': 2})
+        c.labels = [Label('test', language_id='nl-be')]
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(2)})
         self.assertEqual(2, len(self.request.session['last_visited']))
 
     def test_update_last_visited_concepts_max(self):
         for id in range(50):
             c = Concept()
             c.id = id
-            update_last_visited_concepts(self.request, {'concept': c, 'conceptType': 'concept', 'scheme_id': 1})
-        self.assertEqual(10, len(self.request.session['last_visited']))
+            c.labels = [Label('test', language_id='en-us')]
+            update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(id)})
+        self.assertEqual(4, len(self.request.session['last_visited']))
         last = self.request.session['last_visited'].pop()
-        self.assertEqual(49, last['concept'].id)
+        self.assertEqual('http://test.test/49', last['url'])
