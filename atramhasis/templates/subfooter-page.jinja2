@@ -14,7 +14,7 @@
     <div class="subfooter-page">
       <h5>{% trans %}recently_viewed{% endtrans %}</h5>
       <ul class="no_bullet">
-        {% for c in request.session['last_visited'] %}
+        {% for c in request.session['last_visited']|reverse() %}
           <li class="cube"><a href="{{ c.url }}">{{ c.label|capitalize() }}</a></li>
         {% endfor %}
       </ul>
