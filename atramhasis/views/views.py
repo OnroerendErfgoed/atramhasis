@@ -145,8 +145,8 @@ class AtramhasisView(object):
                 concept_type = "Collection"
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
-            update_last_visited_concepts(self.request,
-                                         {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id})
+            url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
+            update_last_visited_concepts(self.request, {'label': c.label().label, 'url': url})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
