@@ -14,10 +14,9 @@
     <div class="subfooter-page">
       <h5>{% trans %}recently_viewed{% endtrans %}</h5>
       <ul class="no_bullet">
-        <li class="cube"><a href="">Belgium</a></li>
-        <li class="cube"><a href="">Flanders</a></li>
-        <li class="cube"><a href="">Heist op den berg</a></li>
-        <li class="cube"><a href="">World</a></li>
+        {% for c in request.session['last_visited'] %}
+          <li class="cube"><a href="{{ c.url }}">{{ c.label|capitalize() }}</a></li>
+        {% endfor %}
       </ul>
     </div>
   </div>
