@@ -44,6 +44,14 @@
             {%- endfor %}
           </dd>
         {% endif %}
+        <div class="row">
+          <div class="large-2 columns right">
+            <a href="{{ request.route_path('admin') }}"
+               class="fa fa-pencil editIcon"
+               title="Edit concept">
+            </a>
+          </div>
+        </div>
       </div>
 
       {% if conceptscheme.top_concepts %}

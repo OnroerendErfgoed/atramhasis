@@ -9,5 +9,10 @@
     <img src="{{ request.static_path(app_package + ':static/img/atramlogo.png') }}" width="70" class="left logo">
     <h1 class="left logotext">Atramhasis</h1>
   </div>
+{#  IF ADMIN #}
+  <div class="right language">
+    <span>&nbsp;<a href="{{ request.route_path('admin') }}">Admin</a></span>
+  </div>
+{#  ENDIF #}
   {{ get_language_links(request) }}
 </div>

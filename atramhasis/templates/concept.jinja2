@@ -54,6 +54,14 @@
               {% endif %}
             {% endif %}
           </ul>
+          <div class="row">
+            <div class="large-2 columns right">
+              <a href="{{ request.route_path('admin') }}"
+                 class="fa fa-pencil editIcon"
+                 title="Edit concept">
+              </a>
+            </div>
+          </div>
         </div>
         <ul class="tabs tabnav" data-tab role="tablist" style="width:100%">
           <li class="tab-title active" role="presentation" style="width:50%;"><a href="#panel2-1" role="tab" tabindex="0" aria-selected="true" aria-controls="panel2-1">{% trans %}view_relations{% endtrans %}</a></li>

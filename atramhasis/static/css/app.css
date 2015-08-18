@@ -13263,3 +13263,11 @@ h4.relations-subtitle {
   margin: 30px;
   color: #999;
 }
+
+/* line 23, ../scss/_atramhasis.scss */
+.editIcon {
+  float: right;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-right: 5px;
+}
