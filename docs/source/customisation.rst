@@ -506,3 +506,258 @@ extended example that adds even more providers, you could have a look at the
 
 .. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
 .. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
+
+Adding providers from files
+===========================
+
+The Atramhasis module includes a script `atramhasis.scripts.import_file` which makes
+it possible to add providers to your project including data from files.
+
+The supported file types are:
+
+- RDF (.html, .hturtle, .mdata, .microdata, .n3, .nquads, .nt, .rdfa, .rdfa1.0, .rdfa1.1, .trix, .turtle, .xml)
+  using :class:`~skosprovider_rdf.providers.RDFProvider`
+- CSV (.csv) using :class:`~skosprovider.providers.SimpleCsvProvider`.
+  The provider only supports id, prefLabel and note.
+- JSON (.json) using :class:`~skosprovider.providers.DictionaryProvider`
+
+The script can be called through commandline in the project virtual environment. The
+usage and possible arguments are returned with the `help` argument
+
+.. code-block:: bash
+
+    $ workon my_thesarus
+    $ import_files --help
+
+    usage: import_file [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label]
+     (example: "import_file --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels")
+
+    Import file to a database
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      --from INPUT_FILE     local path to the input file
+      --to TO               Connection string of the output database
+      --conceptscheme_label CS_LABEL
+                            Label of the conceptscheme
+
+
+The location of the input path is add to the `from` argument, for example
+'atramhasis/scripts/my_file'. The `from` argument is required.
+
+The `to` argument contains the connection string of output database. Only
+PostGreSQL an SQLite are supported. The structure is either
+'postgresql://username:password@host:port/db_name' or
+either 'sqlite:///path/db_name.sqlite'. The default value is 'sqlite:///atramhasis.sqlite'
+
+The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. The
+conceptscheme needs a label. The label can be added to the `conceptscheme_label`
+argument. The default label is the name of the file.
+
+Once the data is loaded in the database, the configuration of the added provider must be
+included in the :file:`my_thesaurus/skos/__init__.py`. A suggestion of the lines to add
+to the file are already given at the end of a successful run of the import script.
+It contains the right ConceptScheme ID.
+
+For example, to insert next file:
+
+.. code-block:: json
+
+    [{"broader": [],
+      "id": 1,
+      "labels": [{"label": "The Larch",
+                   "language": "en",
+                   "type": "prefLabel"},
+                  {"label": "De Lariks",
+                   "language": "nl",
+                   "type": "prefLabel"}],
+      "matches": {"broad": [],
+                   "close": [],
+                   "exact": [],
+                   "narrow": [],
+                   "related": []},
+      "member_of": [3],
+      "narrower": [],
+      "notes": [{"language": "en",
+                  "note": "A type of tree.",
+                  "type": "definition"}],
+      "related": [],
+      "subordinate_arrays": [],
+      "type": "concept",
+      "uri": "http://id.trees.org/1"},
+     {"broader": [],
+      "id": 2,
+      "labels": [{"label": "The Chestnut",
+                   "language": "en",
+                   "type": "prefLabel"},
+                  {"label": "De Paardekastanje",
+                   "language": "nl",
+                   "type": "altLabel"},
+                  {"label": "la châtaigne",
+                   "language": "fr",
+                   "type": "altLabel"}],
+      "matches": {"broad": [],
+                   "close": [],
+                   "exact": [],
+                   "narrow": [],
+                   "related": []},
+      "member_of": [3],
+      "narrower": [],
+      "notes": [{"language": "en",
+                  "note": "A different type of tree.",
+                  "type": "definition"}],
+      "related": [],
+      "subordinate_arrays": [],
+      "type": "concept",
+      "uri": "http://id.trees.org/2"},
+     {"id": 3,
+      "labels": [{"label": "Bomen per soort",
+                   "language": "nl",
+                   "type": "prefLabel"},
+                  {"label": "Trees by species",
+                   "language": "en",
+                   "type": "prefLabel"}],
+      "member_of": [],
+      "members": [1, 2],
+      "notes": [],
+      "superordinates": [],
+      "type": "collection",
+      "uri": "http://id.trees.org/3"}]
+
+run following command:
+
+.. code-block:: bash
+
+    $ workon my_thesarus
+    $ import_file --from my_thesaurus/data/trees.json --to sqlite:///my_thesaurus.sqlite --conceptscheme_label Trees
+
+which returns:
+
+.. code-block:: bash
+
+    sqlalchemy.engine.base.Engine SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+    sqlalchemy.engine.base.Engine ()
+    sqlalchemy.engine.base.Engine SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+    sqlalchemy.engine.base.Engine ()
+    sqlalchemy.engine.base.Engine BEGIN (implicit)
+    sqlalchemy.engine.base.Engine INSERT INTO note (note, notetype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('A type of tree.', 'definition', 'en')
+    sqlalchemy.engine.base.Engine INSERT INTO note (note, notetype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('A different type of tree.', 'definition', 'en')
+    sqlalchemy.engine.base.Engine INSERT INTO conceptscheme (uri) VALUES (?)
+    sqlalchemy.engine.base.Engine (None,)
+    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('Trees', 'prefLabel', 'nl')
+    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('The Larch', 'prefLabel', 'en')
+    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('De Lariks', 'prefLabel', 'nl')
+    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('The Chestnut', 'prefLabel', 'en')
+    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('De Paardekastanje', 'altLabel', 'nl')
+    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('la châtaigne', 'altLabel', 'fr')
+    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('Bomen per soort', 'prefLabel', 'nl')
+    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
+    sqlalchemy.engine.base.Engine ('Trees by species', 'prefLabel', 'en')
+    sqlalchemy.engine.base.Engine INSERT INTO conceptscheme_label (conceptscheme_id, label_id) VALUES (?, ?)
+    sqlalchemy.engine.base.Engine (11, 3548)
+    sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
+    sqlalchemy.engine.base.Engine ('concept', 1, 'http://id.trees.org/1', 11)
+    sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
+    sqlalchemy.engine.base.Engine ('concept', 2, 'http://id.trees.org/2', 11)
+    sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
+    sqlalchemy.engine.base.Engine ('collection', 3, 'http://id.trees.org/3', 11)
+    sqlalchemy.engine.base.Engine INSERT INTO concept_label (concept_id, label_id) VALUES (?, ?)
+    sqlalchemy.engine.base.Engine ((2558, 3551), (2558, 3552), (2558, 3553), (2557, 3549), (2557, 3550), (2559, 3554), (2559, 3555))
+    sqlalchemy.engine.base.Engine INSERT INTO concept_note (concept_id, note_id) VALUES (?, ?)
+    sqlalchemy.engine.base.Engine ((2558, 3605), (2557, 3604))
+    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
+    FROM concept
+    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ? AND concept.type IN (?)
+    sqlalchemy.engine.base.Engine (11, 1, 'concept')
+    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
+    FROM concept
+    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ? AND concept.type IN (?)
+    sqlalchemy.engine.base.Engine (11, 2, 'concept')
+    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
+    FROM concept
+    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ? AND concept.type IN (?)
+    sqlalchemy.engine.base.Engine (11, 3, 'collection')
+    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
+    FROM concept
+    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ?
+    sqlalchemy.engine.base.Engine (11, 1)
+    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
+    FROM concept, collection_concept
+    WHERE ? = collection_concept.collection_id AND concept.id = collection_concept.concept_id
+    sqlalchemy.engine.base.Engine (2559,)
+    sqlalchemy.engine.base.Engine INSERT INTO collection_concept (collection_id, concept_id) VALUES (?, ?)
+    sqlalchemy.engine.base.Engine (2559, 2557)
+    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
+    FROM concept
+    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ?
+    sqlalchemy.engine.base.Engine (11, 2)
+    sqlalchemy.engine.base.Engine INSERT INTO collection_concept (collection_id, concept_id) VALUES (?, ?)
+    sqlalchemy.engine.base.Engine (2559, 2558)
+    sqlalchemy.engine.base.Engine COMMIT
+    sqlalchemy.engine.base.Engine BEGIN (implicit)
+    sqlalchemy.engine.base.Engine SELECT label.id AS label_id, label.label AS label_label, label.labeltype_id AS label_labeltype_id, label.language_id AS label_language_id
+    FROM label JOIN conceptscheme_label ON label.id = conceptscheme_label.label_id
+    WHERE label.label = ?
+     LIMIT ? OFFSET ?
+    sqlalchemy.engine.base.Engine ('Trees', 1, 0)
+    sqlalchemy.engine.base.Engine SELECT conceptscheme.id AS conceptscheme_id, conceptscheme.uri AS conceptscheme_uri
+    FROM conceptscheme, conceptscheme_label
+    WHERE ? = conceptscheme_label.label_id AND conceptscheme.id = conceptscheme_label.conceptscheme_id
+    sqlalchemy.engine.base.Engine (3548,)
+
+
+    *** The import of the my_thesaurus/data/trees.json file with conceptscheme label 'Trees' is successfully imported to sqlite:///my_thesaurus.sqlite. ***
+
+    To use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.
+    Add next lines:
+
+    def includeme(config):
+            TREES = SQLAlchemyProvider(
+                    {'id': 'TREES', 'conceptscheme_id': 11},
+                    config.registry.dbmaker
+            )
+            skosregis = config.get_skos_registry()
+            skosregis.register_provider(TREES)
+
+So do what you're told and edit your :file:`my_thesaurus/skos/__init__.py` like this:
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+
+    import logging
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+    log = logging.getLogger(__name__)
+
+
+    def includeme(config):
+        TREES = SQLAlchemyProvider(
+                {'id': 'TREES', 'conceptscheme_id': 11},
+                config.registry.dbmaker
+        )
+        skosregis = config.get_skos_registry()
+        skosregis.register_provider(TREES)
+
+Now you can use the data of the file in your thesaurus application.
+
+SessionFactory
+==============
+
+You can change the default session factory in the __init__.py file.
+
+.. code-block:: python
+
+    # set default session factory
+    from pyramid.session import SignedCookieSessionFactory
+    atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
+    config.set_session_factory(atramhasis_session_factory)
+

@@ -10,6 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteType
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
+from atramhasis.utils import update_last_visited_concepts
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
 from atramhasis.audit import audit
 
@@ -78,7 +79,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         return {'conceptschemes': conceptschemes}
 
@@ -94,7 +95,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         return {'conceptschemes': conceptschemes}
 
@@ -124,7 +125,7 @@ class AtramhasisView(object):
             'uri': conceptScheme.uri,
             'labels': conceptScheme.labels,
             'notes': conceptScheme.notes,
-            'top_concepts':  provider.get_top_concepts()
+            'top_concepts': provider.get_top_concepts()
         }
 
         return {'conceptscheme': scheme, 'conceptschemes': conceptschemes}
@@ -158,10 +159,11 @@ class AtramhasisView(object):
                 concept_type = "Collection"
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
+            update_last_visited_concepts(self.request,
+                                         {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
-
 
     @view_config(route_name='search_result', renderer='atramhasis:templates/search_result.jinja2')
     def search_result(self):
@@ -323,6 +325,7 @@ class AtramhasisListView(object):
     '''
     This object groups list views part for the user interface.
     '''
+
     def __init__(self, request):
         self.request = request
         self.skos_manager = self.request.data_managers['skos_manager']
