@@ -165,6 +165,6 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
             c.id = id
             c.labels = [Label('test', language_id='en-us')]
             update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(id)})
-        self.assertEqual(10, len(self.request.session['last_visited']))
+        self.assertEqual(4, len(self.request.session['last_visited']))
         last = self.request.session['last_visited'].pop()
         self.assertEqual('http://test.test/49', last['url'])

@@ -82,6 +82,6 @@ def internal_providers_only(fn):
 def update_last_visited_concepts(request, concept_data):
     session = request.session
     if 'last_visited' not in session:
-        session['last_visited'] = deque(maxlen=10)
+        session['last_visited'] = deque(maxlen=4)
     last_visited = session['last_visited']
     last_visited.append(concept_data)
