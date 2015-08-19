@@ -11,7 +11,6 @@ define([
     "dojox/layout/TableContainer",
     "dgrid/OnDemandGrid",
     "dgrid/extensions/ColumnHider",
-    "dgrid/editor",
     "dojo/_base/lang",
     "dojo/store/Memory",
     "dojo/on",
@@ -19,7 +18,7 @@ define([
     "dojo/_base/array",
     "./ConceptDetailList",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, editor, lang, Memory, on, JsonRest, arrayUtil, ConceptDetailList, template) {
+], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, lang, Memory, on, JsonRest, arrayUtil, ConceptDetailList, template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
         name: 'NoteManager',
@@ -189,10 +188,10 @@ define([
             };
             cancelBtn.onClick = function () {
                 self.notes = lang.clone(self.tempNotes);
+                self._setGrid(self.notes);
                 dlg.hide();
             };
             on(dlg, "hide", function () {
-                self.notes = self.noteGrid.store.data;
                 noteArea.destroy();
                 languageComboBox.destroy();
                 labelComboBox.destroy();
@@ -211,17 +210,24 @@ define([
                 {label: "Language", field: "languageValue", unhidable: true, hidden: true},
                 {label: "Type", field: "typeDisplayed"},
                 {label: "Type", field: "type", unhidable: true, hidden: true},
-                editor({label: " ", field: 'button',
-                        editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
-
-                            var row = grid.row(event);
-                            var itemToDelete = row.data.id;
-                            grid.store.remove(itemToDelete);
-                            grid.resize();
-                            grid.refresh();
-                        }
-                        }},
-                    Button)
+                {
+                    label: ' ',
+                    field: 'complexCell',
+                    renderCell: function (object, value, node, options) {
+                        return new Button({
+                            label: "remove",
+                            onClick: function () {
+                                //re-add fitlered data, removing items directly is not possible without id's
+                                grid.get('store').data = arrayUtil.filter(grid.get('store').data, function (item) {
+                                    return !(object.label == item.label
+                                    && object.language == item.language
+                                    && object.type == item.type)
+                                });
+                                grid.refresh();
+                            }
+                        }).domNode;
+                    }
+                }
             ];
             var gridStore = new Memory({
                 data: []
@@ -286,7 +292,7 @@ define([
 
         geNotes: function () {
             if(this.noteGrid) {
-                var notes = this.noteGrid.store.data;
+                var notes = this.noteGrid.get('store').data;
                 var notesToSend = [];
                 arrayUtil.forEach(notes, function (note) {
                     var noteToSend = {
