@@ -5,21 +5,51 @@ define([
     'dojo/_base/declare',
     "dijit/form/Button",
     "dijit/Dialog",
+    'dijit/form/TextBox',
     "dojo/dom-construct",
     "dijit/form/Textarea",
     "dijit/form/Select",
     "dojox/layout/TableContainer",
     "dgrid/OnDemandGrid",
-    "dgrid/extensions/ColumnHider",
+    'dgrid/Keyboard',
+    'dgrid/Selection',
+    'dgrid/extensions/DijitRegistry',
     "dgrid/editor",
     "dojo/_base/lang",
     "dojo/store/Memory",
+    'dojo/store/Cache',
+    'dojo/store/Observable',
     "dojo/on",
     "dojo/store/JsonRest",
     "dojo/_base/array",
     "./ConceptDetailList",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, editor, lang, Memory, on, JsonRest, arrayUtil, ConceptDetailList, template) {
+], function (
+    WidgetsInTemplateMixin,
+    TemplatedMixin,
+    WidgetBase,
+    declare,
+    Button,
+    Dialog,
+    TextBox,
+    domConstruct,
+    Textarea,
+    Select,
+    TableContainer,
+    OnDemandGrid,
+    Keyboard,
+    Selection,
+    DijitRegistry,
+    editor,
+    lang,
+    Memory,
+    Cache,
+    Observable,
+    on,
+    JsonRest,
+    arrayUtil,
+    ConceptDetailList,
+    template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
         name: 'NoteManager',
@@ -82,7 +112,7 @@ define([
             var self = this;
 
             var dlg = new Dialog({
-                style: "width: 600px",
+                style: "width: 800px",
                 title: "Save Notes",
                 doLayout: true
             });
@@ -91,18 +121,21 @@ define([
             var tableBoxDiv = domConstruct.create("div");
             domConstruct.place(tableBoxDiv, mainDiv, "first");
             var labelTabForBoxes = new TableContainer({cols: 3, spacing: 10, orientation: "vert"}, tableBoxDiv);
-            var noctypes = self._getNoteType();
+            this.noctypes = Observable( Cache( JsonRest({
+                target: "/notetypes",
+                idProperty: 'key'
+            }), Memory()));
             var labelComboBox = new Select(
                 {
                     id: "labelComboBox",
                     name: "labelTypeComboBox",
                     title: "Type of note:",
                     placeHolder: 'Select a type',
-                    options: noctypes,
-                    style: { width: '130px' }
-
+                    store: this.noctypes,
+                    style: { width: '130px' },
+                    labelAttr: "label"
                 });
-            labelComboBox.set("value", 'Select a type');
+            //labelComboBox.set("value", 'Select a type');
 
             var languageComboBox = new Select({
                 id: "languageComboBox",
@@ -204,30 +237,55 @@ define([
 
 
         _createGrid: function (gridDiv) {
-            var columns;
-            columns = [
-                {label: "Note", field: "label"},
-                {label: "Language", field: "language"},
-                {label: "Language", field: "languageValue", unhidable: true, hidden: true},
-                {label: "Type", field: "typeDisplayed"},
-                {label: "Type", field: "type", unhidable: true, hidden: true},
-                editor({label: " ", field: 'button',
-                        editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
-
-                            var row = grid.row(event);
-                            var itemToDelete = row.data.id;
-                            grid.store.remove(itemToDelete);
-                            grid.resize();
-                            grid.refresh();
-                        }
-                        }},
-                    Button)
-            ];
+            var self =this;
+            var columns = {
+                label: editor({
+                    label: "Note",
+                    field: "label",
+                    autoSave: true,
+                    editorArgs: {maxHeight: 150}
+                }, TextBox),
+                languageValue: editor({
+                    label: "language",
+                    field: "languageValue",
+                    autoSave: true,
+                    editorArgs: {store: self.languageStore , maxHeight: 150, style: "width:80px;", labelAttr: "name"}
+                }, Select),
+                type: editor({
+                    label: "Type",
+                    field: "type",
+                    autoSave: true,
+                    editorArgs: {store: self.noctypes , maxHeight: 150, style: "width:80px;", labelAttr: "label"}
+                }, Select),
+                remove: {
+                    label: "",
+                    resizable: false,
+                    renderCell: function (object, value, node, options) {
+                        if (!object) return null;
+                        var div = domConstruct.create("div", {'innerHTML': '' });
+                        var a = domConstruct.create("a", {
+                            href: "#",
+                            title: "Verwijder deze note",
+                            innerHTML: 'remove',
+                            onclick: function (evt) {
+                                evt.preventDefault();
+                                grid.get('store').data = arrayUtil.filter(grid.get('store').data, function (item) {
+                                    return !(object.label == item.label
+                                    && object.language == item.language
+                                    && object.type == item.type)
+                                });
+                                grid.refresh();
+                            }
+                        }, div);
+                        return div;
+                    }
+                }
+            };
             var gridStore = new Memory({
                 data: []
 
             });
-           var grid = new (declare([OnDemandGrid, ColumnHider]))({
+           var grid = new (declare([OnDemandGrid, Keyboard, Selection, DijitRegistry]))({
                 columns: columns,
                 store: gridStore,
                 selectionMode: "single" // for Selection; only select a single row at a time

@@ -54,6 +54,9 @@ define([
                         onClick: function () {
                             var dlg = self._createDialog();
                             if (self.labels) {
+                                arrayUtil.forEach(self.labels, function(item){
+                                    item.id = Math.random();
+                                });
                                 self._setGrid(self.labels);
                                 self.tempLabels = lang.clone(self.labels);
                                // self._setLanguageComboBox(self.labels);
@@ -86,7 +89,7 @@ define([
                     var labelTabForBoxes = new TableContainer({cols: 4, spacing: 10, orientation: "vert"}, tableBoxDiv);
 
 
-                    var labelType = this._getLabelType();
+                    this.labelType = new Memory({data: this._getLabelType(), idProperty: 'value'});
 
                     var labelTypeComboBox = new Select(
                         {
@@ -94,8 +97,9 @@ define([
                             name: "labelTypeComboBox",
                             title: "Type of label:",
                             placeHolder: 'Select a type',
-                            options: labelType,
-                            style: { width: '120px' }
+                            store: this.labelType,
+                            style: { width: '120px' },
+                            labelAttr: "label"
 
                         });
 
@@ -115,6 +119,7 @@ define([
                             showLabel: false,
                             onClick: lang.hitch(this, function () {
                                 self.labelGrid.store.add({
+                                    id: Math.random(),
                                     label: self.titleLabel.get('value'),
                                     language: self.languageComboBox.get('displayedValue'),
                                     languageValue: self.languageComboBox.get('value'),
@@ -206,45 +211,49 @@ define([
                         data: []
                     });
 
-                    var columns;
-                    columns = [
-                        {label: "Title", field: "label"},
-                        {label: "Language", field: "language"},
-                        {label: "Language", field: "languageValue", unhidable: true, hidden: true},
-                        {label: "Type", field: "typeDisplayed"},
-                        {label: "Type", field: "type", unhidable: true, hidden: true},
-                        {
-                            label: ' ',
-                            field: 'complexCell',
+                    var columns = {
+                        label: editor({
+                            label: "Title",
+                            field: "label",
+                            autoSave: true,
+                            editorArgs: {maxHeight: 150}
+                        }, TextBox),
+                        languageValue: editor({
+                            label: "language",
+                            field: "languageValue",
+                            autoSave: true,
+                            editorArgs: {store: self.languageStore , maxHeight: 150, style: "width:80px;", labelAttr: "name"}
+                        }, Select),
+                        type: editor({
+                            label: "Type",
+                            field: "type",
+                            autoSave: true,
+                            editorArgs: {store: self.labelType , maxHeight: 150, style: "width:80px;", labelAttr: "label"}
+                        }, Select),
+                        remove: {
+                            label: "",
+                            resizable: false,
                             renderCell: function (object, value, node, options) {
-                                return new Button({
-                                    label: "remove",
-                                    onClick: function () {
-                                        //re-add fitlered data, removing items directly is not possible without id's
-                                        grid.store.data = arrayUtil.filter(grid.store.data, function (item) {
+                                if (!object) return null;
+                                var div = domConstruct.create("div", {'innerHTML': '' });
+                                var a = domConstruct.create("a", {
+                                    href: "#",
+                                    title: "Verwijder deze note",
+                                    innerHTML: 'remove',
+                                    onclick: function (evt) {
+                                        evt.preventDefault();
+                                        grid.get('store').data = arrayUtil.filter(grid.get('store').data, function (item) {
                                             return !(object.label == item.label
-                                              && object.language == item.language
-                                              && object.type == item.type)
+                                            && object.language == item.language
+                                            && object.type == item.type)
                                         });
                                         grid.refresh();
                                     }
-                                }).domNode;
+                                }, div);
+                                return div;
                             }
                         }
-//                        editor({label: " ", field: 'button',
-//                                editorArgs: {label: "delete", showLabel: false, iconClass: 'minIcon', onClick: function (event) {
-//                                    console.log('deleting ', event, grid.row(event));
-//                                    var row = grid.row(event);
-//                                    self.languageComboBox.getOptions(row.data.languageValue).disabled=false;
-//                                    var itemToDelete = row.data.id;
-//                                    grid.store.remove(itemToDelete);
-//                                    grid.resize();
-//                                    grid.refresh();
-//                                   // self._checkPrefLabelRules(row.data.type);
-//                                }
-//                                }},
-//                            Button)
-                    ];
+                    };
 
                     var grid = new (declare([OnDemandGrid, ColumnHider]))({
                         columns: columns,
