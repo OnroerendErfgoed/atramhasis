@@ -34,6 +34,7 @@ define(
                 thesauri: null,
                 externalSchemeService: null,
                 languageStore: null,
+                conceptSchemeController: null,
 
                 constructor: function (options) {
                     declare.safeMixin(this, options);
@@ -70,7 +71,7 @@ define(
                     this.concept.labels = this.labelManager.getLabels();
                     this.concept.notes = this.noteManager.geNotes();
                     console.log("edit concept scheme: " + this.concept);
-                    this.conceptController.editConceptScheme(this.concept).then(
+                    this.conceptSchemeController.editConceptScheme(this.concept).then(
                         lang.hitch(this, function (result) {
                             topic.publish('dGrowl', "Concept schema is gewijzigd.",
                                 {'title': "succes...", 'sticky': false, 'channel': 'info'});
@@ -98,7 +99,7 @@ define(
                     this.reset();
                     this.scheme = scheme;
                     this.schemebox.set('value', scheme);
-                    this.conceptController.getConcept(scheme).then(
+                    this.conceptSchemeController.getConcept(scheme).then(
                         lang.hitch(this, function (concept) {
                             this.concept = concept;
                             topic.publish("concept.close", this.concept.id, scheme);

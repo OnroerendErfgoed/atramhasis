@@ -31,7 +31,7 @@ define([
     "dijit/layout/ContentPane",
 
     "./ui/widgets/EditConceptDialog",
-    './controllers/ConceptController',
+    './controllers/ConceptSchemeController',
 
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
@@ -40,7 +40,8 @@ define([
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, string, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
-             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, EditConceptDialog, ConceptController, TabContainer, BorderContainer) {
+             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, EditConceptDialog, ConceptSchemeController,
+             TabContainer, BorderContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -73,7 +74,7 @@ define([
                 ]
             });
 
-            this._controllers.conceptController = new ConceptController();
+            this._controllers.conceptSchemeController = new ConceptSchemeController();
         },
 
         startup: function () {
@@ -110,7 +111,7 @@ define([
                 languageStore: this.languageManager.languageStore
             });
             var editConceptDialog = new EditConceptDialog({
-                conceptController: this._controllers.conceptController,
+                conceptSchemeController: this._controllers.conceptSchemeController,
                 languageStore: this.languageManager.languageStore
             });
             var conceptDialog = new Dialog({
