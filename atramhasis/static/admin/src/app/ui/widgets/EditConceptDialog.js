@@ -9,6 +9,7 @@ define(
         'dijit/_WidgetsInTemplateMixin',
         'dijit/Dialog',
         'dijit/form/TextBox',
+        'dijit/form/Button',
         '../../form/LabelManager',
         '../../form/NoteManager'
     ],
@@ -22,6 +23,7 @@ define(
         WidgetsInTemplateMixin,
         Dialog,
         TextBox,
+        Button,
         LabelManager,
         NoteManager) {
         return declare([
@@ -44,7 +46,7 @@ define(
                 postCreate: function () {
                     this.inherited(arguments);
                     this.dialog = new Dialog({
-                        title: 'Bewerk concept schema',
+                        title: 'Edit concept scheme',
                         style: 'width: 400px',
                         draggable: false
                     });
@@ -66,26 +68,25 @@ define(
                     this.inherited(arguments);
                 },
 
-                _conceptEdit: function(evt){
+                _save: function(evt){
                     evt.preventDefault();
                     this.concept.labels = this.labelManager.getLabels();
                     this.concept.notes = this.noteManager.geNotes();
-                    console.log("edit concept scheme: " + this.concept);
                     this.conceptSchemeController.editConceptScheme(this.concept).then(
                         lang.hitch(this, function (result) {
-                            topic.publish('dGrowl', "Concept schema is gewijzigd.",
-                                {'title': "succes...", 'sticky': false, 'channel': 'info'});
+                            topic.publish('dGrowl', "The concept scheme has been saved",
+                                {'title': "Succes", 'sticky': false, 'channel': 'info'});
                             this.dialog.hide();
                         }),
                         function (error) {
-                            console.log(error);
-                            topic.publish('dGrowl', "Er ging iets mis tijdens het editeren van het concept schema. Onze excuses voor het ongemak.",
+                            console.error(error);
+                            topic.publish('dGrowl', "Something went wrong while saving the concept scheme",
                                 {'title': "Error status: " + error.response.status, 'sticky': true, 'channel': 'error'});
                         }
                     );
                 },
 
-                _close: function (evt) {
+                _cancel: function (evt) {
                     evt.preventDefault();
                     this.dialog.hide();
                 },
@@ -103,7 +104,6 @@ define(
                         lang.hitch(this, function (concept) {
                             this.concept = concept;
                             topic.publish("concept.close", this.concept.id, scheme);
-                            console.log("editing existing concept: " + this.concept.label);
                             if (this.concept.labels) {
                                 this.labelManager.setLabels(this.concept.labels);
                                 if(this.concept.labels.length>0) {
@@ -120,8 +120,8 @@ define(
                             this.dialog.show();
                         }),
                         function (error) {
-                            console.log(error);
-                            topic.publish('dGrowl', "Er ging iets mis tijdens het laden van het concept schema. Onze excuses voor het ongemak.",
+                            console.error(error);
+                            topic.publish('dGrowl', "Something went wrong while opening the concept scheme",
                                 {'title': "Error status: " + error.response.status, 'sticky': true, 'channel': 'error'});
                         }
                     );

@@ -151,7 +151,7 @@ define([
             }
 
             var editConceptSchemeBtn = new Button({
-                label: "Bewerk concept schema",
+                label: "Edit concept scheme",
                 disabled: "disabled"
             }, this.thesaurusConceptSchemeEditNode);
 
