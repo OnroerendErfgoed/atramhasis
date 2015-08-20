@@ -261,23 +261,20 @@ define([
                     label: "",
                     resizable: false,
                     renderCell: function (object, value, node, options) {
-                        if (!object) return null;
-                        var div = domConstruct.create("div", {'innerHTML': '' });
-                        var a = domConstruct.create("a", {
-                            href: "#",
-                            title: "Verwijder deze note",
-                            innerHTML: 'remove',
-                            onclick: function (evt) {
-                                evt.preventDefault();
-                                grid.get('store').data = arrayUtil.filter(grid.get('store').data, function (item) {
+                        return new Button({
+                            label: "remove",
+                            showLabel: false,
+                            iconClass: "minIcon",
+                            onClick: function () {
+                                //re-add fitlered data, removing items directly is not possible without id's
+                                grid.store.data = arrayUtil.filter(grid.store.data, function (item) {
                                     return !(object.label == item.label
-                                    && object.language == item.language
-                                    && object.type == item.type)
+                                      && object.language == item.language
+                                      && object.type == item.type)
                                 });
                                 grid.refresh();
                             }
-                        }, div);
-                        return div;
+                        }).domNode;
                     }
                 }
             };
