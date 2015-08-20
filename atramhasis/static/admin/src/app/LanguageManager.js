@@ -2,10 +2,12 @@ define([
     'dijit/_WidgetBase',
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/dom-construct',
     'dojo/on',
     'dojo/when',
     'dojo/Evented',
+    'dojo/json',
     'dojo/store/JsonRest',
     'dojo/store/Observable',
     'dijit/Dialog',
@@ -20,10 +22,12 @@ define([
     WidgetBase,
     declare,
     lang,
+    array,
     domConstruct,
     on,
     when,
     Evented,
+    JSON,
     JsonRest,
     Observable,
     Dialog,
@@ -195,9 +199,21 @@ define([
         },
 
         _handleError: function (error) {
+            var errorJson = JSON.parse(error.responseText);
+            var message = "",
+                prop = null;
+            array.forEach(errorJson.errors, function (errorObj) {
+                for (prop in errorObj) {
+                    message += "-<em>";
+                    message += prop;
+                    message += "</em>: ";
+                    message += errorObj[prop];
+                    message += "<br>";
+                }
+            });
             this.emit('error', {
-                'title':'bieeep...',
-                'message': error.message
+                'title': errorJson.message,
+                'message': message
             });
         },
 
