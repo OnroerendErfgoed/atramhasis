@@ -16,7 +16,6 @@ from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, Atramhas
     labels_to_string, get_definition
 from fixtures.data import trees
 
-
 try:
     from unittest.mock import Mock
 except ImportError:
@@ -109,10 +108,16 @@ def filter_by_mock_concept(**kwargs):
     if concept_id == '1':
         c = Concept(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
         c.type = 'concept'
+        label_mock = Mock()
+        label_mock.label = 'test'
+        c.label = Mock(return_value=label_mock)
         filter_mock.one = Mock(return_value=c)
     elif concept_id == '3':
         c = Collection(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
         c.type = 'collection'
+        label_mock = Mock()
+        label_mock.label = 'test'
+        c.label = Mock(return_value=label_mock)
         filter_mock.one = Mock(return_value=c)
     elif concept_id == '555':
         c = Thing(concept_id=concept_id, conceptscheme_id=conceptscheme_id)
@@ -158,7 +163,6 @@ def get_all_list_mock():
 
 
 class TestAtramhasisView(unittest.TestCase):
-
     def setUp(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
@@ -257,6 +261,8 @@ class TestConceptSchemeView(unittest.TestCase):
 class TestConceptView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
+        self.config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
+                              request_method="GET")
         self.request = testing.DummyRequest()
         self.request.accept = ['text/html']
         self.regis = Registry()
