@@ -53,14 +53,13 @@ define([
 
         postCreate: function () {
             this.inherited(arguments);
-            //todo eventueel listcontroller aanmaken stores cachen
-            var masterStore = new JsonRest({
+
+            this.languageStore = new Observable(new JsonRest({
                 'target': '/languages',
                 'idProperty': 'id',
                 'sortParam': 'sort',
                 'accepts': 'application/json'
-            });
-            this.languageStore = new Observable(masterStore);
+            }));
         },
 
         startup: function () {
