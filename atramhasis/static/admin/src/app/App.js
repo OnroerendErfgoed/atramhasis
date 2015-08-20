@@ -12,7 +12,7 @@ define([
     "dijit/registry",
     "dijit/form/FilteringSelect",
     "dijit/MenuItem",
-    'dijit/_WidgetBase',
+    "dijit/_Widget",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!./templates/App.html",
@@ -38,10 +38,10 @@ define([
 
 
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, string, registry, FilteringSelect, MenuItem,
-             _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
+             _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
              ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, EditConceptDialog, ConceptController, TabContainer, BorderContainer) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
         thesauri: null,
@@ -57,7 +57,7 @@ define([
             this.inherited(arguments);
             this.thesauri = new ThesaurusCollection();
 
-            new dGrowl({
+            this.notificationController = new dGrowl({
                 'channels':[
                     {'name':'info','pos':3},
                     {'name':'error', 'pos':1},
@@ -66,6 +66,14 @@ define([
             });
 
             this._controllers.conceptController = new ConceptController();
+        },
+
+        postMixInProperties: function () {
+            this.inherited(arguments);
+        },
+
+        buildRendering: function () {
+            this.inherited(arguments);
         },
 
         startup: function () {
@@ -409,8 +417,7 @@ define([
                     );
                 }
             });
-            topic.publish('dGrowl', "Atramhasis is up and running",
-                {'title': "started...", 'sticky': false, 'channel': 'info'});
+            this.notificationController.addNotification("Atramhasis is up and running",{'channel':'info'});
         },
 
         _createConcept: function (conceptForm, conceptDialog, Scheme) {
