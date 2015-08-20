@@ -108,7 +108,6 @@ define([
             }).placeAt(document.body);
 
             on(conceptForm, "cancel", function () {
-                conceptDialog.reset();
                 conceptDialog.hide();
             });
 
