@@ -8,10 +8,9 @@ define(
         'dijit/_TemplatedMixin',
         'dijit/_WidgetsInTemplateMixin',
         'dijit/Dialog',
-        'dijit/form/TextBox',
-        'dijit/form/Button',
         '../../form/LabelManager',
-        '../../form/NoteManager'
+        '../../form/NoteManager',
+        'dijit/form/Button'
     ],
     function (
         declare,
@@ -20,14 +19,12 @@ define(
         template,
         _WidgetBase,
         _TemplatedMixin,
-        WidgetsInTemplateMixin,
+        _WidgetsInTemplateMixin,
         Dialog,
-        TextBox,
-        Button,
         LabelManager,
         NoteManager) {
         return declare([
-                _WidgetBase, WidgetsInTemplateMixin, _TemplatedMixin], {
+                _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
                 templateString: template,
                 widgetsInTemplate: true,
                 dialog: null,
@@ -48,6 +45,7 @@ define(
                     this.dialog = new Dialog({
                         title: 'Edit concept scheme',
                         style: 'width: 400px',
+                        'class': 'externalForm',
                         draggable: false
                     });
                     this.labelManager = new LabelManager({
@@ -58,8 +56,6 @@ define(
                         'name': 'noteMgr',
                         'languageStore': this.languageStore
                     }, this.noteContainerNode);
-                    this.schemebox = new TextBox({title: "Scheme:"}, this.conceptSchemaNode);
-                    this.schemebox.set('disabled', true);
 
                     this.dialog.set('content', this);
                 },
@@ -99,7 +95,7 @@ define(
                 init: function (scheme) {
                     this.reset();
                     this.scheme = scheme;
-                    this.schemebox.set('value', scheme);
+                    this.conceptSchemaNode.innerHTML = scheme;
                     this.conceptSchemeController.getConcept(scheme).then(
                         lang.hitch(this, function (concept) {
                             this.concept = concept;
