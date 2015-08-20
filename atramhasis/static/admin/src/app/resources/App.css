@@ -82,3 +82,8 @@ html, body {
 	width: 280px;
 }
 
+h2.dialogHeader {
+    margin: 5px 0;
+    border-bottom: 1px solid #d3d3d3;
+}
+
