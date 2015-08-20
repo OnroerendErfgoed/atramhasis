@@ -53,6 +53,14 @@ define([
 
         _controllers: {},
 
+        postMixInProperties: function () {
+            this.inherited(arguments);
+        },
+
+        buildRendering: function () {
+            this.inherited(arguments);
+        },
+
         postCreate: function () {
             this.inherited(arguments);
             this.thesauri = new ThesaurusCollection();
@@ -66,14 +74,6 @@ define([
             });
 
             this._controllers.conceptController = new ConceptController();
-        },
-
-        postMixInProperties: function () {
-            this.inherited(arguments);
-        },
-
-        buildRendering: function () {
-            this.inherited(arguments);
         },
 
         startup: function () {
@@ -207,6 +207,7 @@ define([
                     filteredGrid.ResetConceptGrid();
                     addConceptButton.set('disabled', true);
                     importConceptButton.set('disabled', true);
+                    editConceptSchemeBtn.set('disabled', true);
                 }
             });
 
@@ -417,7 +418,9 @@ define([
                     );
                 }
             });
+
             this.notificationController.addNotification("Atramhasis is up and running",{'channel':'info'});
+
         },
 
         _createConcept: function (conceptForm, conceptDialog, Scheme) {
