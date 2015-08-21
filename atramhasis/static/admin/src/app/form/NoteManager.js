@@ -15,12 +15,10 @@ define([
     'dgrid/Selection',
     'dgrid/extensions/DijitRegistry',
     "dgrid/editor",
-    "dgrid/extensions/ColumnHider",
     "dojo/_base/lang",
     "dojo/store/Memory",
     'dojo/store/Cache',
     'dojo/store/Observable',
-    "dojo/on",
     "dojo/store/JsonRest",
     "dojo/_base/array",
     "./ConceptDetailList",
@@ -42,18 +40,17 @@ define([
     Selection,
     DijitRegistry,
     editor,
-    ColumnHider,
     lang,
     Memory,
     Cache,
     Observable,
-    on,
     JsonRest,
     arrayUtil,
     ConceptDetailList,
     template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
+        dialog: null,
         name: 'NoteManager',
         title: 'Notes:',
         noteArea: null,
@@ -83,21 +80,20 @@ define([
             self.historyNoteList = new ConceptDetailList({}, self.historyNoteListNode);
             self.scopeNoteList = new ConceptDetailList({}, self.scopeNoteListNode);
             self.noteList = new ConceptDetailList({}, self.noteListNode);
+            if(this.dialog === null){
+                self.dialog = self._createDialog();
+            }
 
             self.editNoteButton= new Button({
                 label: "Add Notes",
                 showLabel: true,
                 iconClass: 'plusIcon',
                 onClick: function () {
-                    var dlg = self._createDialog();
                     if (self.notes) {
                         self._setGrid(self.notes);
 
                     }
-                    dlg.show();
-                    self.noteGrid.resize();
-                    self.noteGrid.refresh();
-                    self.labelComboBox.reset();
+                    self.dialog.show();
                 }
             }, this.noteButton)
 
@@ -129,7 +125,6 @@ define([
             }), Memory()));
             var labelComboBox = new Select(
                 {
-                    id: "labelComboBox",
                     name: "labelTypeComboBox",
                     title: "Type of note:",
                     placeHolder: 'Select a type',
@@ -140,7 +135,6 @@ define([
             //labelComboBox.set("value", 'Select a type');
 
             var languageComboBox = new Select({
-                id: "languageComboBox",
                 name: "languageComboBox",
                 title: "Language:",
                 store: this.languageStore,
@@ -227,11 +221,6 @@ define([
                 self._setGrid(self.notes);
                 dlg.hide();
             };
-            on(dlg, "hide", function () {
-                noteArea.destroy();
-                languageComboBox.destroy();
-                labelComboBox.destroy();
-            });
             noteGrid.resize();
             return dlg;
 
@@ -239,32 +228,6 @@ define([
 
 
         _createGrid: function (gridDiv) {
-            var columns;
-            columns = [
-                {label: "Note", field: "label"},
-                {label: "Language", field: "language"},
-                {label: "Language", field: "languageValue", unhidable: true, hidden: true},
-                {label: "Type", field: "typeDisplayed"},
-                {label: "Type", field: "type", unhidable: true, hidden: true},
-                {
-                    label: ' ',
-                    field: 'complexCell',
-                    renderCell: function (object, value, node, options) {
-                        return new Button({
-                            label: "remove",
-                            onClick: function () {
-                                //re-add fitlered data, removing items directly is not possible without id's
-                                grid.get('store').data = arrayUtil.filter(grid.get('store').data, function (item) {
-                                    return !(object.label == item.label
-                                    && object.language == item.language
-                                    && object.type == item.type)
-                                });
-                                grid.refresh();
-                            }
-                        }).domNode;
-                    }
-                }
-            ];
             var self =this;
             var columns = {
                 label: editor({

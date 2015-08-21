@@ -12,14 +12,16 @@ define([
         "dojo/dom-construct",
         "dojo/store/Memory",
         "dgrid/editor",
-        "dgrid/extensions/ColumnHider",
+        'dgrid/Keyboard',
+        'dgrid/Selection',
+        'dgrid/extensions/DijitRegistry',
         "dojo/_base/array",
         "dojo/on",
         "./ConceptDetailList",
         "dojo/text!./templates/LabelManager.html"
 
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, editor, ColumnHider, arrayUtil, on, ConceptDetailList, template) {
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, editor, Keyboard, Selection, DijitRegistry, arrayUtil, on, ConceptDetailList, template) {
         return declare(
             "app/form/LabelManager",
             [WidgetBase, TemplatedMixin],
@@ -38,6 +40,7 @@ define([
                 tempLabels: null,//this variable is used to recover the labels if user delete a label and then press on the cancel button
                 EditLabelButton: null,
                 languageStore: null,
+                dialog: null,
 
                 buildRendering: function () {
                     this.inherited(arguments);
@@ -46,13 +49,15 @@ define([
                     this.inherited(arguments);
                     var self = this;
                     //noinspection CommaExpressionJS
+                    if(this.dialog === null){
+                        self.dialog = self._createDialog();
+                    }
 
                     self.EditLabelButton = new Button({
                         label: "Add Labels",
                         showLabel: true,
                         iconClass: 'plusIcon',
                         onClick: function () {
-                            var dlg = self._createDialog();
                             if (self.labels) {
                                 arrayUtil.forEach(self.labels, function(item){
                                     item.id = Math.random();
@@ -61,9 +66,7 @@ define([
                                 self.tempLabels = lang.clone(self.labels);
                                // self._setLanguageComboBox(self.labels);
                             }
-                            dlg.show();
-                            self.labelGrid.resize();
-                            self.labelGrid.refresh();
+                            self.dialog.show();
                         }
                     }, this.labelButton);
 
@@ -93,7 +96,6 @@ define([
 
                     var labelTypeComboBox = new Select(
                         {
-                            id: "TypeComboBox",
                             name: "labelTypeComboBox",
                             title: "Type of label:",
                             placeHolder: 'Select a type',
@@ -104,7 +106,6 @@ define([
                         });
 
                     var langStoreComboBox = new Select({
-                        id: "langStoreComboBox",
                         name: "langStoreComboBox",
                         title: "Language:",
                         store: this.languageStore,
@@ -134,13 +135,11 @@ define([
                         }
                     );
 
-                    var titleLabel = new TextBox({id: "titleLabel", title: "Title:"});
-
-                    self.titleLabel = titleLabel;
+                    self.titleLabel = new TextBox({title: "Title:"});
                     self.labelTypeComboBox = labelTypeComboBox;
                     self.languageComboBox = langStoreComboBox;
 
-                    labelTabForBoxes.addChild(titleLabel);
+                    labelTabForBoxes.addChild(self.titleLabel);
                     labelTabForBoxes.addChild(langStoreComboBox);
                     labelTabForBoxes.addChild(labelTypeComboBox);
                     labelTabForBoxes.addChild(addLabelButtonToTable);
@@ -182,12 +181,6 @@ define([
 
                         }
                     );
-
-                    on(dlg, "hide", function () {
-                        titleLabel.destroy();
-                        labelTypeComboBox.destroy();
-                        langStoreComboBox.destroy();
-                    });
 
                     return dlg;
 
@@ -253,13 +246,13 @@ define([
                         }
                     };
 
-                    var grid = new (declare([OnDemandGrid, ColumnHider]))({
+                    var grid = new (declare([OnDemandGrid, Keyboard, Selection, DijitRegistry]))({
                         columns: columns,
                         store: gridStore
                     }, gridDiv);
 
                     grid.startup();
-
+                    grid.resize();
                     return grid;
                 },
                 _createNodeList: function (labels) {
