@@ -90,6 +90,9 @@ define([
                 iconClass: 'plusIcon',
                 onClick: function () {
                     if (self.notes) {
+                        arrayUtil.forEach(self.notes, function(item){
+                            item.id = Math.random();
+                        });
                         self._setGrid(self.notes);
 
                     }
@@ -152,6 +155,7 @@ define([
                         console.log("Add note to note tabel in note dialog dialog");
 
                         noteGrid.store.add({
+                            id: Math.random(),
                             label: self.noteArea.get('value'),
                             language: self.languageComboBox.get('displayedValue'),
                             languageValue: self.languageComboBox.get('value'),

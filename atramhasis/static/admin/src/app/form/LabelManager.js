@@ -378,7 +378,6 @@ define([
                     this.hiddenLabelList.reset();
                     this.labels = null;
                     this.tempLabels = null;
-                    this.labelGrid=null;
                     this.EditLabelButton.set("label", "Add labels");
                     this.EditLabelButton.set("iconClass", "plusIcon");
                 }
