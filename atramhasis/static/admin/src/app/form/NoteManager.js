@@ -222,7 +222,7 @@ define([
             };
             cancelBtn.onClick = function () {
                 self.notes = lang.clone(self.tempNotes);
-                self._setGrid(self.notes);
+                self._setGrid([]);
                 dlg.hide();
             };
             noteGrid.resize();
@@ -335,7 +335,7 @@ define([
         },
 
         geNotes: function () {
-            if(this.noteGrid) {
+            if(this.noteGrid.store.data.length > 0) {
                 var notes = this.noteGrid.get('store').data;
                 var notesToSend = [];
                 arrayUtil.forEach(notes, function (note) {
@@ -366,6 +366,7 @@ define([
             this.historyNoteList.reset();
             this.scopeNoteList.reset();
             this.noteList.reset();
+            this.noteGrid.set('store', new Memory({data: []}));
             this.editNoteButton.set("label","Add Notes");
             this.editNoteButton.set("iconClass","plusIcon");
         },

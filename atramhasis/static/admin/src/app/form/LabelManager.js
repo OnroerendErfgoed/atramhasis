@@ -5,6 +5,7 @@ define([
         "dijit/_TemplatedMixin",
         "dijit/form/Button",
         "dijit/form/Select",
+        "dijit/form/FilteringSelect",
         "dgrid/OnDemandGrid",
         "dijit/form/TextBox",
         "dojox/layout/TableContainer",
@@ -21,7 +22,9 @@ define([
         "dojo/text!./templates/LabelManager.html"
 
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, editor, Keyboard, Selection, DijitRegistry, arrayUtil, on, ConceptDetailList, template) {
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, FilteringSelect, OnDemandGrid, TextBox,
+              TableContainer, lang, domConstruct, Memory, editor, Keyboard, Selection, DijitRegistry, arrayUtil, on,
+              ConceptDetailList, template) {
         return declare(
             "app/form/LabelManager",
             [WidgetBase, TemplatedMixin],
@@ -171,7 +174,7 @@ define([
                     };
                     cancelBtn.onClick = function () {
                         self.labels = lang.clone(self.tempLabels);
-                        self._setGrid(self.labels);
+                        self._setGrid([]);
                         dlg.hide();
                     };
 
@@ -217,7 +220,7 @@ define([
                             field: "languageValue",
                             autoSave: true,
                             editorArgs: {store: self.languageStore , maxHeight: 150, style: "width:80px;", labelAttr: "name"}
-                        }, Select),
+                        }, FilteringSelect),
                         type: editor({
                             label: "Type",
                             field: "type",
@@ -343,7 +346,7 @@ define([
 
                 },
                 getLabels: function () {
-                    if(this.labelGrid)
+                    if(this.labelGrid.store.data.length > 0)
                     {
                      return  arrayUtil.map(this.labelGrid.store.data, function (label) {
                         return {"type": label.type, "language": label.languageValue, "label": label.label};
@@ -376,6 +379,7 @@ define([
                     this.prefLabelList.reset();
                     this.altLabelList.reset();
                     this.hiddenLabelList.reset();
+                    this.labelGrid.set('store', new Memory({data: []}));
                     this.labels = null;
                     this.tempLabels = null;
                     this.EditLabelButton.set("label", "Add labels");
