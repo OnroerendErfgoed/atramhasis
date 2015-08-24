@@ -148,6 +148,9 @@ define([
             on(dlg, "hide", lang.hitch(this, function () {
                 this.reset();
             }));
+            on(dlg, "show", lang.hitch(this, function () {
+                grid.refresh();
+            }));
 
             return dlg;
         },
