@@ -343,7 +343,7 @@ define([
 
                 },
                 getLabels: function () {
-                    if(this.labelGrid)
+                    if(this.labelGrid.store.data.length > 0)
                     {
                      return  arrayUtil.map(this.labelGrid.store.data, function (label) {
                         return {"type": label.type, "language": label.languageValue, "label": label.label};
@@ -376,6 +376,7 @@ define([
                     this.prefLabelList.reset();
                     this.altLabelList.reset();
                     this.hiddenLabelList.reset();
+                    this.labelGrid.set('store', new Memory({data: []}));
                     this.labels = null;
                     this.tempLabels = null;
                     this.EditLabelButton.set("label", "Add labels");
