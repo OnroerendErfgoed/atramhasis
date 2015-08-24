@@ -5,6 +5,7 @@ define([
         "dijit/_TemplatedMixin",
         "dijit/form/Button",
         "dijit/form/Select",
+        "dijit/form/FilteringSelect",
         "dgrid/OnDemandGrid",
         "dijit/form/TextBox",
         "dojox/layout/TableContainer",
@@ -21,7 +22,9 @@ define([
         "dojo/text!./templates/LabelManager.html"
 
     ],
-    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, OnDemandGrid, TextBox, TableContainer, lang, domConstruct, Memory, editor, Keyboard, Selection, DijitRegistry, arrayUtil, on, ConceptDetailList, template) {
+    function (declare, Dialog, WidgetBase, TemplatedMixin, Button, Select, FilteringSelect, OnDemandGrid, TextBox,
+              TableContainer, lang, domConstruct, Memory, editor, Keyboard, Selection, DijitRegistry, arrayUtil, on,
+              ConceptDetailList, template) {
         return declare(
             "app/form/LabelManager",
             [WidgetBase, TemplatedMixin],
@@ -217,7 +220,7 @@ define([
                             field: "languageValue",
                             autoSave: true,
                             editorArgs: {store: self.languageStore , maxHeight: 150, style: "width:80px;", labelAttr: "name"}
-                        }, Select),
+                        }, FilteringSelect),
                         type: editor({
                             label: "Type",
                             field: "type",
