@@ -5,22 +5,52 @@ define([
     'dojo/_base/declare',
     "dijit/form/Button",
     "dijit/Dialog",
+    'dijit/form/TextBox',
     "dojo/dom-construct",
     "dijit/form/Textarea",
     "dijit/form/Select",
     "dojox/layout/TableContainer",
     "dgrid/OnDemandGrid",
-    "dgrid/extensions/ColumnHider",
+    'dgrid/Keyboard',
+    'dgrid/Selection',
+    'dgrid/extensions/DijitRegistry',
+    "dgrid/editor",
     "dojo/_base/lang",
     "dojo/store/Memory",
-    "dojo/on",
+    'dojo/store/Cache',
+    'dojo/store/Observable',
     "dojo/store/JsonRest",
     "dojo/_base/array",
     "./ConceptDetailList",
     'dojo/text!./templates/NoteManager.html'
-], function (WidgetsInTemplateMixin, TemplatedMixin, WidgetBase, declare, Button, Dialog, domConstruct, Textarea, Select, TableContainer, OnDemandGrid, ColumnHider, lang, Memory, on, JsonRest, arrayUtil, ConceptDetailList, template) {
+], function (
+    WidgetsInTemplateMixin,
+    TemplatedMixin,
+    WidgetBase,
+    declare,
+    Button,
+    Dialog,
+    TextBox,
+    domConstruct,
+    Textarea,
+    Select,
+    TableContainer,
+    OnDemandGrid,
+    Keyboard,
+    Selection,
+    DijitRegistry,
+    editor,
+    lang,
+    Memory,
+    Cache,
+    Observable,
+    JsonRest,
+    arrayUtil,
+    ConceptDetailList,
+    template) {
     return declare("app/form/NoteManager", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
         templateString: template,
+        dialog: null,
         name: 'NoteManager',
         title: 'Notes:',
         noteArea: null,
@@ -50,21 +80,23 @@ define([
             self.historyNoteList = new ConceptDetailList({}, self.historyNoteListNode);
             self.scopeNoteList = new ConceptDetailList({}, self.scopeNoteListNode);
             self.noteList = new ConceptDetailList({}, self.noteListNode);
+            if(this.dialog === null){
+                self.dialog = self._createDialog();
+            }
 
             self.editNoteButton= new Button({
                 label: "Add Notes",
                 showLabel: true,
                 iconClass: 'plusIcon',
                 onClick: function () {
-                    var dlg = self._createDialog();
                     if (self.notes) {
+                        arrayUtil.forEach(self.notes, function(item){
+                            item.id = Math.random();
+                        });
                         self._setGrid(self.notes);
 
                     }
-                    dlg.show();
-                    self.noteGrid.resize();
-                    self.noteGrid.refresh();
-                    self.labelComboBox.reset();
+                    self.dialog.show();
                 }
             }, this.noteButton)
 
@@ -81,7 +113,7 @@ define([
             var self = this;
 
             var dlg = new Dialog({
-                style: "width: 600px",
+                style: "width: 800px",
                 title: "Save Notes",
                 doLayout: true
             });
@@ -90,21 +122,22 @@ define([
             var tableBoxDiv = domConstruct.create("div");
             domConstruct.place(tableBoxDiv, mainDiv, "first");
             var labelTabForBoxes = new TableContainer({cols: 3, spacing: 10, orientation: "vert"}, tableBoxDiv);
-            var noctypes = self._getNoteType();
+            this.noctypes = Observable( Cache( JsonRest({
+                target: "/notetypes",
+                idProperty: 'key'
+            }), Memory()));
             var labelComboBox = new Select(
                 {
-                    id: "labelComboBox",
                     name: "labelTypeComboBox",
                     title: "Type of note:",
                     placeHolder: 'Select a type',
-                    options: noctypes,
-                    style: { width: '130px' }
-
+                    store: this.noctypes,
+                    style: { width: '130px' },
+                    labelAttr: "label"
                 });
-            labelComboBox.set("value", 'Select a type');
+            //labelComboBox.set("value", 'Select a type');
 
             var languageComboBox = new Select({
-                id: "languageComboBox",
                 name: "languageComboBox",
                 title: "Language:",
                 store: this.languageStore,
@@ -122,6 +155,7 @@ define([
                         console.log("Add note to note tabel in note dialog dialog");
 
                         noteGrid.store.add({
+                            id: Math.random(),
                             label: self.noteArea.get('value'),
                             language: self.languageComboBox.get('displayedValue'),
                             languageValue: self.languageComboBox.get('value'),
@@ -191,11 +225,6 @@ define([
                 self._setGrid(self.notes);
                 dlg.hide();
             };
-            on(dlg, "hide", function () {
-                noteArea.destroy();
-                languageComboBox.destroy();
-                labelComboBox.destroy();
-            });
             noteGrid.resize();
             return dlg;
 
@@ -203,37 +232,52 @@ define([
 
 
         _createGrid: function (gridDiv) {
-            var columns;
-            columns = [
-                {label: "Note", field: "label"},
-                {label: "Language", field: "language"},
-                {label: "Language", field: "languageValue", unhidable: true, hidden: true},
-                {label: "Type", field: "typeDisplayed"},
-                {label: "Type", field: "type", unhidable: true, hidden: true},
-                {
-                    label: ' ',
-                    field: 'complexCell',
+            var self =this;
+            var columns = {
+                label: editor({
+                    label: "Note",
+                    field: "label",
+                    autoSave: true,
+                    editorArgs: {maxHeight: 150}
+                }, TextBox),
+                languageValue: editor({
+                    label: "language",
+                    field: "languageValue",
+                    autoSave: true,
+                    editorArgs: {store: self.languageStore , maxHeight: 150, style: "width:80px;", labelAttr: "name"}
+                }, Select),
+                type: editor({
+                    label: "Type",
+                    field: "type",
+                    autoSave: true,
+                    editorArgs: {store: self.noctypes , maxHeight: 150, style: "width:80px;", labelAttr: "label"}
+                }, Select),
+                remove: {
+                    label: "",
+                    resizable: false,
                     renderCell: function (object, value, node, options) {
                         return new Button({
                             label: "remove",
+                            showLabel: false,
+                            iconClass: "minIcon",
                             onClick: function () {
                                 //re-add fitlered data, removing items directly is not possible without id's
-                                grid.get('store').data = arrayUtil.filter(grid.get('store').data, function (item) {
+                                grid.store.data = arrayUtil.filter(grid.store.data, function (item) {
                                     return !(object.label == item.label
-                                    && object.language == item.language
-                                    && object.type == item.type)
+                                      && object.language == item.language
+                                      && object.type == item.type)
                                 });
                                 grid.refresh();
                             }
                         }).domNode;
                     }
                 }
-            ];
+            };
             var gridStore = new Memory({
                 data: []
 
             });
-           var grid = new (declare([OnDemandGrid, ColumnHider]))({
+           var grid = new (declare([OnDemandGrid, Keyboard, Selection, DijitRegistry]))({
                 columns: columns,
                 store: gridStore,
                 selectionMode: "single" // for Selection; only select a single row at a time

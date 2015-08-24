@@ -9,3 +9,7 @@
 .claro .formContainer .dijitDialogPaneActionBar {
     margin: 0;
 }
+
+.dgrid-column-remove {
+    width: 35px;
+}
