@@ -67,6 +67,17 @@ _build
 # sqlite stuff
 *.sqlite
 
+# Vagrant stuff:
+.vagrant/
+Vagrantfile
+vagrant_provision/
+
+# dojo/js stuff
+atramhasis/static/bower_components
+atramhasis/static/admin/src/*
+!atramhasis/static/admin/src/dojoConfig.js
+!atramhasis/static/admin/src/app
+atramhasis/static/admin/dist
 #bower dependencies
 atramhasis/static/bower_components
 atramhasis/static/admin/src/*

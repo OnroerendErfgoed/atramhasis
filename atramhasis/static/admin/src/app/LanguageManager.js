@@ -8,9 +8,7 @@ define([
     'dojo/when',
     'dojo/Evented',
     'dojo/json',
-    'dojo/store/Memory',
     'dojo/store/JsonRest',
-    'dojo/store/Cache',
     'dojo/store/Observable',
     'dijit/Dialog',
     'dijit/form/Button',
@@ -18,11 +16,28 @@ define([
     'dgrid/OnDemandGrid',
     'dgrid/Keyboard',
     'dgrid/Selection',
-    'dgrid/extensions/DijitRegistry'
-], function (WidgetBase, declare, lang, array, domConstruct, on, when, Evented, JSON,
-             Memory, JsonRest, Cache, Observable,
-             Dialog, Button, TextBox,
-             OnDemandGrid, dgridKeyboard, dgridSelection, DijitRegistry
+    'dgrid/extensions/DijitRegistry',
+    "dgrid/editor"
+], function (
+    WidgetBase,
+    declare,
+    lang,
+    array,
+    domConstruct,
+    on,
+    when,
+    Evented,
+    JSON,
+    JsonRest,
+    Observable,
+    Dialog,
+    Button,
+    TextBox,
+    OnDemandGrid,
+    dgridKeyboard,
+    dgridSelection,
+    DijitRegistry,
+    editor
     ) {
     return declare([WidgetBase, Evented], {
 
@@ -39,12 +54,12 @@ define([
         postCreate: function () {
             this.inherited(arguments);
 
-            this.languageStore = Observable( Cache( JsonRest({
+            this.languageStore = new Observable(new JsonRest({
                 'target': '/languages',
                 'idProperty': 'id',
                 'sortParam': 'sort',
                 'accepts': 'application/json'
-            }), Memory()));
+            }));
         },
 
         startup: function () {
@@ -60,7 +75,6 @@ define([
 
         _createDialog: function () {
 
-            var langStore = this.languageStore;
             var dlg = new Dialog({
                 'class': "externalForm",
                 'title': "Manage languages",
@@ -103,7 +117,7 @@ define([
             }, dlg.containerNode);
 
             var gridDiv = domConstruct.create("div", {}, dlg.containerNode);
-            var grid = this._createLangGrid(langStore, gridDiv);
+            var grid = this._createLangGrid(gridDiv);
             this._languageGrid = grid;
 
             var actionBar = domConstruct.create("div", {
@@ -138,15 +152,21 @@ define([
             return dlg;
         },
 
-        _createLangGrid: function (store, node) {
+        _createLangGrid: function (node) {
             return new (declare([OnDemandGrid, dgridKeyboard, dgridSelection, DijitRegistry]))({
                 sort: "id",
                 columns: [
                     {label:'Id', field:'id', sortable: true},
-                    {label:'Name', field:'name', sortable: true}
+                    editor({
+                        field: "name",
+                        label: "Name",
+                        editor: TextBox,
+                        autoSave: true,
+                        editOn: "dgrid-cellfocusin",
+                        sortable: true
+                    })
                 ],
-                store: store,
-                getBeforePut: false,
+                store: this.languageStore,
                 selectionMode: "single"
             }, node);
         },
@@ -178,9 +198,10 @@ define([
         },
 
         _handleError: function (error) {
-            var errorObj = JSON.parse(error.responseText);
-            var message = "";
-            array.forEach(errorObj.errors, function (errorObj) {
+            var errorJson = JSON.parse(error.responseText);
+            var message = "",
+                prop = null;
+            array.forEach(errorJson.errors, function (errorObj) {
                 for (prop in errorObj) {
                     message += "-<em>";
                     message += prop;
@@ -189,9 +210,8 @@ define([
                     message += "<br>";
                 }
             });
-
             this.emit('error', {
-                'title': errorObj.message,
+                'title': errorJson.message,
                 'message': message
             });
         },

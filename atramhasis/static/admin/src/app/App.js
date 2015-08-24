@@ -29,6 +29,10 @@ define([
     "./LanguageManager",
     "dGrowl",
     "dijit/layout/ContentPane",
+
+    "./ui/widgets/EditConceptDialog",
+    './controllers/ConceptSchemeController',
+
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer"
 
@@ -36,7 +40,8 @@ define([
 ], function (declare, on, topic, aspect, lang, Memory, dom, request, JSON, string, registry, FilteringSelect, MenuItem,
              _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, template, array, ComboBox, Button, Dialog,
              FilteredGrid, ConceptDetail, ThesaurusCollection, ConceptForm, ExternalSchemeService,
-             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, TabContainer) {
+             ExternalSchemeForm, LanguageManager, dGrowl, ContentPane, EditConceptDialog, ConceptSchemeController,
+             TabContainer, BorderContainer) {
     return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
@@ -46,6 +51,8 @@ define([
         externalSchemeForm: null,
         notificationController: null,
         languageManager: null,
+
+        _controllers: {},
 
         postMixInProperties: function () {
             this.inherited(arguments);
@@ -66,6 +73,8 @@ define([
                     {'name':'warn', 'pos':2}
                 ]
             });
+
+            this._controllers.conceptSchemeController = new ConceptSchemeController();
         },
 
         startup: function () {
@@ -99,6 +108,10 @@ define([
             var conceptForm = new ConceptForm({
                 thesauri: this.thesauri,
                 externalSchemeService: this.externalSchemeService,
+                languageStore: this.languageManager.languageStore
+            });
+            var editConceptDialog = new EditConceptDialog({
+                conceptSchemeController: this._controllers.conceptSchemeController,
                 languageStore: this.languageManager.languageStore
             });
             var conceptDialog = new Dialog({
@@ -136,6 +149,15 @@ define([
                     }
                 }));
             }
+
+            var editConceptSchemeBtn = new Button({
+                label: "Edit concept scheme",
+                disabled: "disabled"
+            }, this.thesaurusConceptSchemeEditNode);
+
+            on(editConceptSchemeBtn, "click", function () {
+                self._editConceptSchema(editConceptDialog, self.currentScheme);
+            });
 
             var addConceptButton = new Button({
                 label: "Add concept or collection",
@@ -180,11 +202,13 @@ define([
                     filteredGrid.setScheme(e);
                     addConceptButton.set('disabled', false);
                     importConceptButton.set('disabled', false);
+                    editConceptSchemeBtn.set('disabled', false);
                 }
                 else {
                     filteredGrid.ResetConceptGrid();
                     addConceptButton.set('disabled', true);
                     importConceptButton.set('disabled', true);
+                    editConceptSchemeBtn.set('disabled', true);
                 }
             });
 
@@ -404,6 +428,10 @@ define([
             conceptForm.init(Scheme);
             conceptDialog.set("title", "Add concept or collection");
             conceptDialog.show();
+        },
+
+        _editConceptSchema: function (editConceptDialog, Scheme) {
+            editConceptDialog.init(Scheme);
         },
 
         _importConcept: function (conceptForm, conceptDialog, concepturi, importscheme) {

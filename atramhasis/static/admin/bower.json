@@ -22,6 +22,6 @@
     "put-selector": "~0.3.6",
     "xstyle": "~0.2.1",
     "dgrid": "0.3.17",
-    "dGrowl": "~0.0.0"
+    "dGrowl": "0.1.2"
   }
 }
