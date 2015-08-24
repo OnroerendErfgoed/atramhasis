@@ -2,11 +2,12 @@ define([
     "dojo/_base/declare",
     "dijit/_WidgetBase",
     "dojo/request/xhr",
+    "dojo/Deferred",
     "dojo/_base/array",
     "dojo/json",
     "dojo/when"
 
-], function (declare, WidgetBase, xhr, array, JSON, when) {
+], function (declare, WidgetBase, xhr, Deferred, array, JSON, when) {
     return declare([WidgetBase], {
 
         thesauri: null,
@@ -80,15 +81,40 @@ define([
         },
 
         getConcept: function (scheme, uri) {
+            var deferred = new Deferred();
+
             var pathArray =  uri.split('/');
             var id = pathArray.pop();
-            if (!scheme || !id) throw  "Malformed external scheme URI";
+            if (!scheme || !id) {
+                deferred.reject("Malformed external scheme URI");
+            }
+
             var url = "/conceptschemes/" + scheme + "/c/" + id;
 
-            return xhr.get(url, {
+            xhr.get(url, {
                 handleAs: "json",
                 headers: {'Accept' : 'application/json'}
-            });
+            }).then(
+                function (c) {
+                    var clone = {
+                        label: c.label,
+                        labels: c.labels,
+                        type: c.type,
+                        notes: c.notes
+                    };
+                    if (c.type != 'collection') {
+                        clone.matches = {
+                            exact: [uri]
+                        }
+                    }
+                    deferred.resolve(clone);
+                },
+                function (err) {
+                    deferred.reject(err);
+                }
+            );
+
+            return deferred;
         },
 
         getScheme: function (schemeUrl) {

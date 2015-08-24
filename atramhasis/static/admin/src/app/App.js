@@ -436,28 +436,16 @@ define([
 
         _importConcept: function (conceptForm, conceptDialog, concepturi, importscheme) {
             var scheme = this.currentScheme;
-            try {
-                this.externalSchemeService.getConcept(importscheme, concepturi).then(function(concept) {
-                    var clone = {
-                        label: concept.label,
-                        labels: concept.labels,
-                        type: concept.type,
-                        notes: concept.notes
-                    };
-                    if(concept.type != 'collection'){
-                        clone.matches = {
-                            exact: [concepturi]
-                        }
-                    }
-                    conceptForm.init(scheme, clone);
+            this.externalSchemeService.getConcept(importscheme, concepturi).then(function (concept) {
+                if (concept) {
+                    conceptForm.init(scheme, concept);
                     conceptDialog.set("title", "Import concept or collection");
                     conceptDialog.show();
-                }, function(err){
-                    topic.publish('dGrowl', "", {'title': err, 'sticky': true, 'channel':'error'});
-                });
-            } catch(err) {
-                topic.publish('dGrowl', "", {'title': err, 'sticky': true, 'channel':'error'});
-            }
+                }
+            }, function (err) {
+                topic.publish('dGrowl', err,
+                  {'title': 'Error importing external concept or collection', 'sticky': true, 'channel': 'error'});
+            });
         },
 
         _handleSaveErrors: function(error) {
