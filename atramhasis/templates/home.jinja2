@@ -1,20 +1,16 @@
-{% extends 'base.jinja2' %}
+{% extends 'layout-main.jinja2' %}
+{% set app_package = app_package|default('atramhasis', true) %}
 
 {% block html_title %}Home{% endblock %}
 
 {% from "macros.jinja2" import
 	get_conceptscheme_label
-%}
-
+  %}
 
 {% block content %}
-<div class="row">
-	<div class="medium-3 columns">
-		{% include 'browse_schemes_sidebar.jinja2' %}
-	</div>
-	<div class="medium-9 columns">
-		{% include 'search_form.jinja2' %}
-	</div>
-</div>
-	{% include 'welcome.jinja2' %}
+  <div class="row">
+    {% include 'welcome.jinja2' %}
+    {% include 'search_form.jinja2' %}
+{#    {% include 'd3cloud.jinja2' %}#}
+  </div>
 {% endblock %}

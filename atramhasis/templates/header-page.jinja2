@@ -1,0 +1,51 @@
+{% from "macros.jinja2" import
+	get_conceptscheme_label
+  %}
+{% set app_package = app_package|default('atramhasis', true) %}
+
+<div class="sticky">
+  <nav class="top-bar" data-topbar role="navigation">
+    <ul class="title-area">
+      <li class="name">
+        <a href="/"><img src="{{ request.static_path(app_package + ':static/img/atramlogo.png') }}" class="left logo-small">
+          <h1 class="left logo-small-text">Atramhasis</h1>
+        </a>
+      </li>
+      <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+      <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+    </ul>
+    <form id="search-form" method="get" action="#" name="searchForm" class="top-bar-section">
+      <!-- Right Nav Section -->
+      <ul class="right">
+        <li class="divider"></li>
+        <li>
+          <select id="scheme">
+            <option value="" selected>{% trans %}select_scheme{% endtrans %}</option>
+            {% for item in conceptschemes %}
+              <option value="{{ request.route_path('search_result', scheme_id=item.id) }}">
+                {{ get_conceptscheme_label(item.conceptscheme, request.locale_name) }}
+              </option>
+            {% endfor %}
+          </select>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <select id="ctype" name="ctype">
+            <option value="all" selected>{% trans %}select_type{% endtrans %}</option>
+            <option value="all">{% trans %}type_all{% endtrans %}</option>
+            <option value="concept">{% trans %}type_concept{% endtrans %}</option>
+            <option value="collection">{% trans %}type_collection{% endtrans %}</option>
+          </select>
+        </li>
+        <li class="divider"></li>
+        <li class="has-form">
+          <div class="row collapse">
+            <div class="left"><input name="label" id="label" type="text" class="search-input-top" placeholder="{% trans %}search_for{% endtrans %} {% trans %}labels{% endtrans %}"/></div>
+            <div class="left"><a onclick="document.searchForm.submit();"><span class="ico ico-mglass"></span></a></div>
+          </div>
+        </li>
+      </ul>
+    </form>
+  </nav>
+</div>
+

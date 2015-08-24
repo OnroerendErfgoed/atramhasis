@@ -78,4 +78,10 @@ atramhasis/static/admin/src/*
 !atramhasis/static/admin/src/dojoConfig.js
 !atramhasis/static/admin/src/app
 atramhasis/static/admin/dist
+#bower dependencies
+atramhasis/static/bower_components
+atramhasis/static/admin/src/*
+!atramhasis/static/admin/src/dojoConfig.js
+!atramhasis/static/admin/src/app
+atramhasis/static/admin/dist
 atramhasis/static/admin/node_modules

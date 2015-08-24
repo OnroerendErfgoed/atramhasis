@@ -107,6 +107,13 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
+
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
         conceptScheme = provider.concept_scheme
@@ -121,7 +128,7 @@ class AtramhasisView(object):
             'top_concepts': provider.get_top_concepts()
         }
 
-        return {'conceptscheme': scheme}
+        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes}
 
     @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
@@ -131,6 +138,13 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
+
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
@@ -146,8 +160,8 @@ class AtramhasisView(object):
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
             url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
-            update_last_visited_concepts(self.request, {'label': c.label().label, 'url': url})
-            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id}
+            update_last_visited_concepts(self.request, {'label': c.label(self.request.locale_name).label, 'url': url})
+            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
@@ -158,6 +172,13 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
+
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
         ctype = self._read_request_param('ctype')
@@ -169,7 +190,7 @@ class AtramhasisView(object):
                 concepts = provider.find({'type': ctype}, language=self.request.locale_name)
             else:
                 concepts = provider.get_all(language=self.request.locale_name)
-            return {'concepts': concepts, 'scheme_id': scheme_id}
+            return {'concepts': concepts, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
         return Response(content_type='text/plain', status_int=404)
 
     @view_config(route_name='locale')
