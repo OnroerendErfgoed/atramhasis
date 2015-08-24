@@ -222,7 +222,7 @@ define([
             };
             cancelBtn.onClick = function () {
                 self.notes = lang.clone(self.tempNotes);
-                self._setGrid(self.notes);
+                self._setGrid([]);
                 dlg.hide();
             };
             noteGrid.resize();

@@ -171,7 +171,7 @@ define([
                     };
                     cancelBtn.onClick = function () {
                         self.labels = lang.clone(self.tempLabels);
-                        self._setGrid(self.labels);
+                        self._setGrid([]);
                         dlg.hide();
                     };
 
