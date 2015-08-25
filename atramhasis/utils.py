@@ -84,4 +84,14 @@ def update_last_visited_concepts(request, concept_data):
     if 'last_visited' not in session:
         session['last_visited'] = deque(maxlen=4)
     last_visited = session['last_visited']
+
+    try:
+        # Try to remove concept from the queue to prevent double entries
+        last_visited.remove(concept_data)
+    except ValueError:
+        # Concept is not in the queue
+        pass
+
+    # Add concept to the queue
     last_visited.append(concept_data)
+
