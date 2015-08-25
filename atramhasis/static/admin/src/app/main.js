@@ -6,7 +6,7 @@ define([
 ) {
 	'use strict';
 
-    var app = window.app = {};
+	var app = window.app = {};
 
 	app.main = new App().placeAt("appDiv");
 
