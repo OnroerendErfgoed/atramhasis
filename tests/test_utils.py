@@ -168,3 +168,15 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
         self.assertEqual(4, len(self.request.session['last_visited']))
         last = self.request.session['last_visited'].pop()
         self.assertEqual('http://test.test/49', last['url'])
+
+    def test_no_double_last_visited_concepts(self):
+        c = Concept()
+        c.id = 2
+        c.labels = [Label('test', language_id='en-us')]
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
+        c = Concept()
+        c.id = 33
+        c.labels = [Label('test', language_id='nl-be')]
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(2)})
+        self.assertEqual(2, len(self.request.session['last_visited']))
