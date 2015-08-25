@@ -28,8 +28,10 @@
   }
 
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>#}
 <script>
+
+  var depth = 140;
 
   var margin = {top: 20, right: 150, bottom: 20, left: 120},
           width = 960 - margin.right - margin.left,
@@ -52,16 +54,21 @@
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   var scheme_label = '{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name)|trim }}';
+  var scheme_id = '{{ scheme_id }}';
+  var current = '{{ concept.concept_id }}';
+
+  var initialRoot = null;
+  var currentIds = null;
 
   d3.json('{{ request.route_path("scheme_tree", scheme_id = scheme_id ) }}', function(error, flare) {
     if (error) throw error;
 
-    $('#loadingOverlay').hide();
-
-    root = { label: scheme_label };
+    root = { label: scheme_label, scheme_id: scheme_id };
     root.children = flare;
     root.x0 = height / 2;
     root.y0 = 0;
+
+    initialRoot = root;
 
     function collapse(d) {
       if (d.children) {
@@ -70,21 +77,32 @@
         d.children = null;
       }
     }
-    console.log(root);
+
     root.children.forEach(collapse);
+    root.children.forEach(function(item, index) {
+      expandToCurrent(item, current);
+    });
     update(root);
+
+    // hide loading
+    $('#loadingOverlay').hide();
   });
 
   d3.select(self.frameElement).style("height", "800px");
 
   function update(source) {
 
+    if (currentIds) {
+      if (currentIds.length > 4) {
+        depth = width / currentIds.length;
+      }
+    }
     // Compute the new tree layout.
     var nodes = tree.nodes(root).reverse(),
             links = tree.links(nodes);
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d) { d.y = d.depth * 150; });
+    nodes.forEach(function(d) { d.y = d.depth * depth; });
 
     // Update the nodes…
     var node = svg.selectAll("g.node")
@@ -95,18 +113,27 @@
             .attr("class", "node")
             .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
             .on("click", click)
-            .on("mouseover", hover);
+            .on("dblclick", openConcept);
+
 
     nodeEnter.append("circle")
             .attr("r", 1e-6)
+            .style("fill-opacity", 0.8)
             .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "#fff"; });
 
     nodeEnter.append("text")
             .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
             .attr("dy", ".35em")
-            .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+            .attr("text-anchor", function(d) {return d.children || d._children ? "end" : "start"; })
             .text(function(d) { return d.label; })
-            .style("fill-opacity", 1e-6);
+            .style("fill-opacity", 1e-6)
+            .style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" })
+            .on("mouseover", function(d) {
+              d3.select(this).style("fill", "rgb(27, 69, 97)");
+            })
+            .on("mouseout", function(d) {
+              d3.select(this).style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" });
+            });
 
     // Transition nodes to their new position.
     var nodeUpdate = node.transition()
@@ -115,7 +142,7 @@
 
     nodeUpdate.select("circle")
             .attr("r", 4.5)
-            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "#fff"; });
+            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5"; });
 
     nodeUpdate.select("text")
             .style("fill-opacity", 1);
@@ -158,6 +185,9 @@
             })
             .remove();
 
+    // highlight path of current node
+    link.style("stroke", function(d) { return d.target.highlight ? "rgba(247, 127, 0, 0.4)" : null });
+
     // Stash the old positions for transition.
     nodes.forEach(function(d) {
       d.x0 = d.x;
@@ -167,21 +197,55 @@
 
   // Toggle children on click.
   function click(d) {
-    if (d.children) {
-      d._children = d.children;
-      d.children = null;
-    } else {
-      d.children = d._children;
-      d._children = null;
-    }
-    update(d);
+    setTimeout(function() {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      update(d);
+    }, 200); //timeout to let doubleclick finish
   }
 
-  function hover(d) {
-    {#  if (d.parent) {#}
-    {#    hover(d.parent);#}
-    {#  }#}
-{#    console.log(tree.nodes(root));#}
-{#    d.enter().select("circle").attr("r", 10);#}
+  function expandToCurrent(node, current) {
+    if (node.concept_id == current) {
+      node.highlight = true;
+    } else {
+      node._children.forEach(function (item, index) {
+        if (item.concept_id == current) {
+          expandPath(item.id);
+          item.highlight = true;
+        }
+        else {
+          expandToCurrent(item, current);
+        }
+      });
+    }
+  }
+
+  function expandPath(id) {
+    var ids = id.split('.');
+
+    currentIds = ids;
+    var childrenArray = root.children;
+    for (i = 0; i < (ids.length - 1); ++i) {
+      var child = $.grep(childrenArray, function(child){ return child.concept_id == ids[i]; });
+      child[0].children = child[0]._children;
+      child[0].highlight = true;
+      child[0]._children = null;
+      childrenArray = child[0].children;
+    }
+  }
+
+  function openConcept(d) {
+    if (d.concept_id) {
+      var basepath = '{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}';
+      window.location.href = basepath + d.concept_id;
+    }
+    else {
+      window.location.href = '/conceptschemes/' + d.scheme_id;
+    }
   }
 </script>
