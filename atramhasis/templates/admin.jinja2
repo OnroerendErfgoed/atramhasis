@@ -8,6 +8,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/css/app-admin.css') }}" />
+  <link rel="stylesheet" href="{{ request.static_path(release_dir + '/dGrowl/dGrowl.css') }}" />
   <title>Atramhasis Admin</title>
   {% block ga %}
     {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
