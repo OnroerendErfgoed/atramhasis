@@ -33,7 +33,7 @@
   var depth = 140;
 
   var margin = {top: 20, right: 150, bottom: 20, left: 120},
-          width = 960 - margin.right - margin.left,
+          width = 1020 - margin.right - margin.left,
           height = 800 - margin.top - margin.bottom;
 
   var i = 0,
@@ -56,7 +56,6 @@
   var scheme_id = '{{ scheme_id }}';
   var current = '{{ concept.concept_id }}';
 
-  var initialRoot = null;
   var currentIds = null;
 
   d3.json('{{ request.route_path("scheme_tree", scheme_id = scheme_id ) }}', function(error, flare) {
@@ -64,10 +63,9 @@
 
     root = { label: scheme_label, scheme_id: scheme_id };
     root.children = flare;
+    root.id = -1;
     root.x0 = height / 2;
     root.y0 = 0;
-
-    initialRoot = root;
 
     function collapse(d) {
       if (d.children) {
@@ -78,16 +76,18 @@
     }
 
     root.children.forEach(collapse);
-    root.children.forEach(function(item, index) {
+    root.children.forEach(function(item) {
       expandToCurrent(item, current);
     });
+
+    console.log(root);
     update(root);
 
     // hide loading
     $('#loadingOverlay').hide();
   });
 
-  d3.select(self.frameElement).style("height", "800px");
+  d3.select(self.frameElement).style("height", "850px");
 
   function update(source) {
 
@@ -96,6 +96,7 @@
         depth = width / currentIds.length;
       }
     }
+
     // Compute the new tree layout.
     var nodes = tree.nodes(root).reverse(),
             links = tree.links(nodes);
@@ -118,7 +119,7 @@
     nodeEnter.append("circle")
             .attr("r", 1e-6)
             .style("fill-opacity", 0.8)
-            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "#fff"; });
+            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5)"; });
 
     nodeEnter.append("text")
             .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
@@ -141,7 +142,7 @@
 
     nodeUpdate.select("circle")
             .attr("r", 4.5)
-            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5"; });
+            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5)"; });
 
     nodeUpdate.select("text")
             .style("fill-opacity", 1);
@@ -228,6 +229,7 @@
     var ids = id.split('.');
 
     currentIds = ids;
+    console.log(ids);
     var childrenArray = root.children;
     for (i = 0; i < (ids.length - 1); ++i) {
       var child = $.grep(childrenArray, function(child){ return child.concept_id == ids[i]; });
