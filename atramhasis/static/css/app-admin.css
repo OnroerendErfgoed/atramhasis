@@ -13231,18 +13231,13 @@ ul.downloadtop {
 }
 /* main html */
 /* line 2, ../scss/atramhasis/_atramhasis-admin.scss */
-html, body {
+html, body, #appDiv {
   width: 100%;
   height: 100%;
 }
 
-/* line 3, ../scss/atramhasis/_atramhasis-admin.scss */
-body {
-  background-color: #ffffff;
-}
-
 /* noscript div */
-/* line 6, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 5, ../scss/atramhasis/_atramhasis-admin.scss */
 .noscript {
   top: 0;
   left: 0;
@@ -13257,7 +13252,7 @@ body {
 }
 
 /* Loading overlay */
-/* line 9, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 8, ../scss/atramhasis/_atramhasis-admin.scss */
 .pageOverlay {
   top: 0;
   left: 0;
@@ -13271,7 +13266,7 @@ body {
   color: #d6d6d6;
 }
 
-/* line 10, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 9, ../scss/atramhasis/_atramhasis-admin.scss */
 .loadingMessage {
   font-size: 1em;
   margin: 30px;

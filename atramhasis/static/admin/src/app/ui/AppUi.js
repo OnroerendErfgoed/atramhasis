@@ -98,6 +98,20 @@ define([
     _search: function (evt) {
       console.debug('AppUi::_search');
       evt.preventDefault();
+
+      var searchParams = {
+        conceptScheme: domUtils.getSelectedOption(this.conceptSchemeSelect),
+        conceptType: domUtils.getSelectedOption(this.conceptTypeSelect),
+        label: this.labelInput.value
+      };
+      console.debug('AppUi::_search searchParams', searchParams);
+
+      this._resetSearchInputs();
+    },
+
+    _resetSearchInputs: function () {
+      console.debug('AppUi::_resetSearchInputs');
+      this.labelSearchForm.reset();
     }
   });
 });

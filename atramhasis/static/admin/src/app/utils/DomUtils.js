@@ -29,6 +29,15 @@ define([
         domConstruct.place('<option value="' + item[options.idProperty] + '">' + item[options.labelProperty] + '</option>',
           select);
       });
+    },
+
+    /**
+     * Get the selected'option' from a 'select'.
+     * @param {Object} select The 'select' element
+     * @returns {String} Value from the selected 'option'
+     */
+    getSelectedOption: function (select) {
+      return select.options[select.selectedIndex].value;
     }
 
   }
