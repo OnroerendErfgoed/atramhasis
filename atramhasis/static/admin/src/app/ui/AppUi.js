@@ -9,13 +9,15 @@ define([
   'dojo/topic',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
-  'dojo/text!./AppUi.html'
-], function (declare, lang, fx, domStyle, topic, _WidgetBase, _TemplatedMixin, template) {
+  'dojo/text!./AppUi.html',
+  '../utils/DomUtils'
+], function (declare, lang, fx, domStyle, topic, _WidgetBase, _TemplatedMixin, template, domUtils) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
     loadingContainer: null,
     staticAppPath: null,
+    conceptSchemeController: null,
 
     /**
      * Standard widget function.
@@ -25,7 +27,7 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::postCreate');
       this._registerLoadingEvents();
-
+      this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
     },
 
     /**
@@ -83,7 +85,14 @@ define([
           this._hideLoading();
         }))
       );
+    },
 
+    _fillConceptSchemeSelect: function (options) {
+      domUtils.addOptionsToSelect(this.conceptSchemeSelect, {
+        data: options,
+        idProperty: 'id',
+        labelProperty: 'name'
+      });
     }
   });
 });
