@@ -4,11 +4,24 @@
       <img src="${staticAppPath}img/atramlogo.png" width="70" class="left logo">
       <h1 class="left logotext">Atramhasis</h1>
     </div>
-    <div class="large-3 columns">
+    <div class="large-2 columns">
       <select data-dojo-attach-point="conceptSchemeSelect">
-        <option value="-1">Select Thesaurus</option>
+        <option value="-1" selected>Select scheme</option>
       </select>
     </div>
-    <div  class="large-5 columns">-</div>
+    <div class="large-2 columns">
+      <select data-dojo-attach-point="conceptTypeSelect">
+        <option value="all" selected>Select type</option>
+        <option value="all">all types</option>
+        <option value="concept">concepts</option>
+        <option value="collection">collections</option>
+      </select>
+    </div>
+    <div  class="large-3 columns">
+      <input type="text" data-dojo-attach-point="labelInput" placeholder="Search for labels" />
+    </div>
+    <div  class="large-1 columns">
+      <a data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass-large"></span></a>
+    </div>
   </div>
 </div>

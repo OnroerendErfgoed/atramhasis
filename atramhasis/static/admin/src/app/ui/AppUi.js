@@ -93,6 +93,11 @@ define([
         idProperty: 'id',
         labelProperty: 'name'
       });
+    },
+
+    _search: function (evt) {
+      console.debug('AppUi::_search');
+      evt.preventDefault();
     }
   });
 });
