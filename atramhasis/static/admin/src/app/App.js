@@ -34,7 +34,8 @@ define([
       console.debug('App::startup');
 
       new AppUi({
-        loadingContainer: this.appConfig.loadingContainer
+        loadingContainer: this.appConfig.loadingContainer,
+        staticAppPath: this.appConfig.staticAppPath
       }, this.appConfig.appContainer).startup();
     }
   });

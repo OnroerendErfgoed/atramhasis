@@ -15,6 +15,7 @@ define([
 
     templateString: template,
     loadingContainer: null,
+    staticAppPath: null,
 
     /**
      * Standard widget function.

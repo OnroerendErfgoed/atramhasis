@@ -12,7 +12,8 @@ define([
 
   var appConfig = {
     appContainer: dom.byId("appDiv"),
-    loadingContainer: dom.byId("loadingOverlay")
+    loadingContainer: dom.byId("loadingOverlay"),
+    staticAppPath: staticAppPath
   };
 
   new App({appConfig: appConfig}).startup();
