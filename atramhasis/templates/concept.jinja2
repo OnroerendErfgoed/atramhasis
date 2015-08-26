@@ -140,50 +140,11 @@
 
           <section role="tabpanel" aria-hidden="true" class="content" id="panel2-2">
             <div id="treetab" style="padding: 10px 50px 0px 50px;">
-              <div id="tree1" data-url="{{ request.route_path('scheme_tree', scheme_id= scheme_id) }}"></div>
+                {% include "tree.jinja2" %}
             </div>
           </section>
         </div>
       {% endif %}
     </div>
   </div>
-{% endblock %}
-
-{% block custom_js %}
-  <script>
-    var $tree = $('#tree1');
-    $tree.tree({
-      onCreateLi: function(node, $li) {
-        $li.find('.jqtree-title').wrap(function() {
-          return "<a href='{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}" + node.concept_id + "?treeid=" + node.id + "'><div></div></a>";
-        });
-      }
-    });
-
-    {% if concept %}
-      $tree.bind(
-              'tree.init',
-              function() {
-                var treeid = getUrlVar("treeid");
-                if(treeid != '') {
-                  var node = $tree.tree('getNodeById', treeid);
-                  $tree.tree('selectNode', node, true);
-                  $tree.tree('openNode', node);
-                }
-                else {
-                  var nodes = $tree.tree('getNodesByProperty', 'concept_id', {{ concept.concept_id }} );
-                  $.each(nodes, function( index, node ) {
-                    $tree.tree('addToSelection', node);
-                    if ( node.children.length > 0){
-                      $tree.tree('openNode', node);
-                    } else {
-                      $tree.tree('openNode', node.parent);
-                    }
-
-                  });
-                }
-              }
-      );
-    {% endif %}
-  </script>
 {% endblock %}
