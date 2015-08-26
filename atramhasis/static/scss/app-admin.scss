@@ -13,3 +13,13 @@
 @import "atramhasis/atramhasis-mquery";
 @import "atramhasis/atramhasis-admin";
 @import "atramhasis";
+
+/* main html */
+html, body {  width: 100%;  height: 100%;  }
+
+/* noscript div */
+.noscript { top: 0; left: 0; position: absolute; width: 100%; height: 100%; z-index: 1002; display: block; background-color: $body-bg; text-align: center; padding: 25px}
+
+/* Loading overlay */
+.pageOverlay { top: 0; left: 0; position: absolute; height: 100%; width: 100%; z-index: 1001; display: block; background-color: $steel; text-align: center; color: $light-gray;}
+.loadingMessage {font-size: 1em; margin: 30px; color: $light-gray;}
