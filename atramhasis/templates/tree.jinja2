@@ -124,7 +124,7 @@
     nodeEnter.append("text")
             .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
             .attr("dy", ".35em")
-            .attr("text-anchor", function(d) {return d.children || d._children ? "end" : "start"; })
+            .attr("text-anchor", function(d) {return (d.children || d._children) ? "end" : "start"; })
             .text(function(d) { return d.label; })
             .style("fill-opacity", 1e-6)
             .style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" })
@@ -206,7 +206,7 @@
         d._children = null;
       }
       update(d);
-    }, 200); //timeout to let doubleclick finish
+    }, 300); //timeout to let doubleclick finish
   }
 
   function expandToCurrent(node, current) {
@@ -227,9 +227,7 @@
 
   function expandPath(id) {
     var ids = id.split('.');
-
     currentIds = ids;
-    console.log(ids);
     var childrenArray = root.children;
     for (i = 0; i < (ids.length - 1); ++i) {
       var child = $.grep(childrenArray, function(child){ return child.concept_id == ids[i]; });
