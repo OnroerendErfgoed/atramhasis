@@ -3,9 +3,10 @@
 {% else %}
 	{% set release_dir = 'atramhasis:static/admin/src' %}
 {% endif %}
+{% set app_package = app_package|default('atramhasis', true) -%}
 <html>
 <head>
-    <link rel="stylesheet" href="{{ request.static_path(release_dir + '/app/resources/App.css') }}">
+    <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/css/app-admin.css') }}" />
     <title>Atramhasis Admin</title>
     {% block ga %}
         {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
