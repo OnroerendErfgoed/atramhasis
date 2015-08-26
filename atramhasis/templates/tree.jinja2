@@ -1,6 +1,6 @@
 <div id="tree">
   <div id="loadingOverlay" class="pageOverlay">
-    <div class="loadingMessage">Loading..</div>
+{#    <div class="loadingMessage">Loading..</div>#}
     <div><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
   </div>
 </div>
@@ -28,7 +28,6 @@
   }
 
 </style>
-{#<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>#}
 <script>
 
   var depth = 140;
@@ -245,7 +244,9 @@
       window.location.href = basepath + d.concept_id;
     }
     else {
-      window.location.href = '/conceptschemes/' + d.scheme_id;
+      if (d.scheme_id) {
+        window.location.href = '/conceptschemes/' + d.scheme_id;
+      }
     }
   }
 </script>
