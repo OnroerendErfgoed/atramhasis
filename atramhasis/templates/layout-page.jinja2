@@ -11,11 +11,13 @@
   {% block css_files %}
     <link rel="stylesheet" href="{{request.static_path(app_package + ':static/css/app.css')}}" />
     <link rel="stylesheet" href="{{request.static_path(app_package + ':static/css/print.css')}}" media="print" />
-    <link rel="stylesheet" href="{{request.static_path(app_package + ':static/css/jqtree.css')}}" />
   {% endblock %}
 
   <link rel="icon" type="image/x-icon" href="{{request.static_path(app_package + ':static/img/favicon.ico')}}" />
-  <script src="{{request.static_path(app_package + ':static/js/vendor/modernizr.js')}}"></script>
+  <script src="{{ request.static_path(app_package + ':static/js/vendor/modernizr.js') }}"></script>
+  <script src="{{ request.static_path(app_package + ':static/bower_components/jquery/dist/jquery.js') }}"></script>
+  <script src="{{ request.static_path(app_package + ':static/bower_components/jquery.cookie/jquery.cookie.js') }}"></script>
+  <script src="{{ request.static_path(app_package + ':static/bower_components/d3/d3.min.js') }}"></script>
 
   {% block ga %}
     {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
@@ -43,9 +45,6 @@
 {% endblock %}
 
 {% block js_files %}
-  <script src="{{ request.static_path(app_package + ':static/bower_components/jquery/dist/jquery.js') }}"></script>
-  <script src="{{ request.static_path(app_package + ':static/bower_components/jquery.cookie/jquery.cookie.js') }}"></script>
-  <script src="{{ request.static_path(app_package + ':static/bower_components/jqtree/tree.jquery.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/bower_components/foundation/js/foundation.min.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/js/app.js') }}"></script>
 {% endblock %}
