@@ -252,20 +252,24 @@ class AuditManager(DataManager):
         '''
 
         start_date = self._get_first_day(period)
-        return \
-            self.session.query(
-                ConceptVisitLog.concept_id,
-                func.count(ConceptVisitLog.concept_id).label('count')
-            ).filter(
-                and_(ConceptVisitLog.conceptscheme_id == conceptscheme_id,
-                     ConceptVisitLog.visited_at >= start_date)
-            ).group_by(
-                ConceptVisitLog.concept_id
-            ).order_by(
-                desc('count')
-            ).limit(
-                max
-            ).all()
+        popular_concepts = self.session.query(
+            ConceptVisitLog.concept_id,
+            func.count(ConceptVisitLog.concept_id).label('count')
+        ).filter(
+            and_(ConceptVisitLog.conceptscheme_id == conceptscheme_id,
+                 ConceptVisitLog.visited_at >= start_date)
+        ).group_by(
+            ConceptVisitLog.concept_id
+        ).order_by(
+            desc('count')
+        ).limit(
+            max
+        ).all()
+        results = []
+        for concept in popular_concepts:
+            results.append({'concept_id': concept.concept_id, 'scheme_id': conceptscheme_id})
+        return results
+
 
     @staticmethod
     def _get_first_day(period):

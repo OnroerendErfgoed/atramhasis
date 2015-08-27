@@ -207,11 +207,11 @@ class AuditManagerTest(DatamangersTests):
 
     @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 9, 15))))
     def test_get_most_popular_concepts_for_conceptscheme(self):
-        self.assertListEqual([(1, 2), (2, 1)],
+        self.assertListEqual([{'concept_id': 1, 'scheme_id': 1}, {'concept_id': 2, 'scheme_id': 1}],
                              self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_month'))
-        self.assertListEqual([(2, 1)],
+        self.assertListEqual([{'concept_id': 2, 'scheme_id': 2}],
                              self.audit_manager.get_most_popular_concepts_for_conceptscheme(2, 5, 'last_month'))
-        self.assertListEqual([(1, 2)],
+        self.assertListEqual([{'concept_id': 1, 'scheme_id': 1}],
                              self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 1, 'last_month'))
         self.assertListEqual([],
                              self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_day'))

@@ -124,3 +124,10 @@
     <div class="large-3 large-3-pad columns result-grid" {% if counter == concepts|length %}style="float:left;"{% endif %}><a href="{{ request.route_path('concept', scheme_id= conceptscheme.scheme_id, c_id = concept.id) }}"><h5>{{ concept.label }}</h5> <span>[ id: {{ concept.id }} ]</span> <br><small>{{ concept.type }}</small></a></div>
   {%- endfor %}
 {% endmacro %}
+
+{% macro popular_concepts(request, scheme_id, max) %}
+    {% for c in request.data_managers['audit_manager'].get_most_popular_concepts_for_conceptscheme(scheme_id, max) %}
+      <li class="cube"><a href="/conceptschemes/{{ scheme_id }}/c/{{ c.concept_id }}">
+          {{ request.skos_registry.get_provider(scheme_id).get_by_id(c.concept_id).label().label|capitalize() }}</a></li>
+    {% endfor %}
+{% endmacro %}

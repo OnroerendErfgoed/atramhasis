@@ -1,12 +1,11 @@
+{% from "macros.jinja2" import popular_concepts %}
+
 <div class="row">
   <div class="large-4 columns">
     <div class="subfooter-page">
       <h5>{% trans %}popular_category{% endtrans %}</h5>
       <ul class="no_bullet">
-        <li class="cube"><a href="">Belgium</a></li>
-        <li class="cube"><a href="">Flanders</a></li>
-        <li class="cube"><a href="">Heist op den berg</a></li>
-        <li class="cube"><a href="">World</a></li>
+          {{ popular_concepts(request, request.matchdict['scheme_id'], 4) }}
       </ul>
     </div>
   </div>
@@ -30,3 +29,4 @@
       </ul>
     </div>
   </div>
+</div>
