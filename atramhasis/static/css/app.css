@@ -13240,31 +13240,32 @@ ul.no_bullet {
 li.cube {
   background: url("../img/listitem.png") no-repeat 0 6px;
   padding: 0 0 15px 15px;
+  font-size: 0.8rem;
 }
 
-/* line 12, ../scss/_atramhasis.scss */
+/* line 13, ../scss/_atramhasis.scss */
 h3.relations-title {
   margin-bottom: 0px;
 }
 
-/* line 16, ../scss/_atramhasis.scss */
+/* line 17, ../scss/_atramhasis.scss */
 h4.relations-subtitle {
   margin: 20px 20px;
 }
 
-/* line 20, ../scss/_atramhasis.scss */
+/* line 21, ../scss/_atramhasis.scss */
 .pageOverlay {
   text-align: center;
 }
 
-/* line 21, ../scss/_atramhasis.scss */
+/* line 22, ../scss/_atramhasis.scss */
 .loadingMessage {
   font-size: 1em;
   margin: 30px;
   color: #999;
 }
 
-/* line 23, ../scss/_atramhasis.scss */
+/* line 24, ../scss/_atramhasis.scss */
 .editIcon {
   float: right;
   font-size: 20px;
