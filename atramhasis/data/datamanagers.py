@@ -12,6 +12,7 @@ from sqlalchemy.orm import joinedload
 from atramhasis.data.models import ConceptVisitLog
 from datetime import datetime, date
 import dateutil.relativedelta
+from atramhasis.data import popular_concepts
 
 class DataManager(object):
     '''
@@ -242,6 +243,7 @@ class AuditManager(DataManager):
         self.session.flush()
         return visit_log
 
+    @popular_concepts.cache_on_arguments(expiration_time=86400)
     def get_most_popular_concepts_for_conceptscheme(self, conceptscheme_id, max=5, period='last_month'):
         '''
         get the most popular concepts for a conceptscheme
