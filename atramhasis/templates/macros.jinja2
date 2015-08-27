@@ -127,7 +127,9 @@
 
 {% macro popular_concepts(request, scheme_id, max) %}
     {% for c in request.data_managers['audit_manager'].get_most_popular_concepts_for_conceptscheme(scheme_id, max) %}
-      <li class="cube"><a href="/conceptschemes/{{ scheme_id }}/c/{{ c.concept_id }}">
-          {{ request.skos_registry.get_provider(scheme_id).get_by_id(c.concept_id).label().label|capitalize() }}</a></li>
+        <ul class="no_bullet">
+            <li class="cube"><a href="/conceptschemes/{{ scheme_id }}/c/{{ c.concept_id }}">
+                {{ request.skos_registry.get_provider(scheme_id).get_by_id(c.concept_id).label().label|capitalize() }}</a></li>
+        </ul>
     {% endfor %}
 {% endmacro %}
