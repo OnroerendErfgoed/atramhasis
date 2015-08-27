@@ -7,9 +7,11 @@ that abstract all interactions with the database away from the views.
 '''
 from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language, MatchType, Match, \
     LabelType
-from sqlalchemy import desc, func
+from sqlalchemy import desc, func, distinct, and_
 from sqlalchemy.orm import joinedload
-
+from atramhasis.data.models import ConceptVisitLog
+from datetime import datetime, date
+import dateutil.relativedelta
 
 class DataManager(object):
     '''
@@ -239,3 +241,46 @@ class AuditManager(DataManager):
         self.session.add(visit_log)
         self.session.flush()
         return visit_log
+
+    def get_most_popular_concepts_for_conceptscheme(self, conceptscheme_id, max=5, period='last_month'):
+        '''
+        get the most popular concepts for a conceptscheme
+        :param conceptscheme_id: id of the conceptscheme
+        :param max: maximum number of results, default 5
+        :param period: 'last_day' or 'last_week' or 'last_month' or 'last_year', default 'last_month'
+        :return: List of the most popular concepts of a conceptscheme over a certain period
+        '''
+
+        start_date = self._get_first_day(period)
+        return \
+            self.session.query(
+                ConceptVisitLog.concept_id,
+                func.count(ConceptVisitLog.concept_id).label('count')
+            ).filter(
+                and_(ConceptVisitLog.conceptscheme_id == conceptscheme_id,
+                     ConceptVisitLog.visited_at >= start_date)
+            ).group_by(
+                ConceptVisitLog.concept_id
+            ).order_by(
+                desc('count')
+            ).limit(
+                max
+            ).all()
+
+    @staticmethod
+    def _get_first_day(period):
+        '''
+        get the first day of a certain period until now
+        :param period: 'last_day' or 'last_week' or 'last_month' or 'last_year'
+        :return: (string) the first day of the period
+        '''
+        d = date.today()
+        datetime.combine(d, datetime.min.time())
+        start_date = d - dateutil.relativedelta.relativedelta(
+            days=1 if period == 'last_day' else 0,
+            weeks=1 if period == 'last_week' else 0,
+            months=1 if period == 'last_month' else 0,
+            years=1 if period == 'last_year' else 0
+        )
+        return start_date.strftime("%Y-%m-%d")
+

@@ -9,10 +9,16 @@ from sqlalchemy.orm.exc import NoResultFound
 import transaction
 from zope.sqlalchemy import ZopeTransactionExtension
 from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType, Concept, NoteType, Match
-from atramhasis.data.datamanagers import ConceptSchemeManager, SkosManager, LanguagesManager
+from atramhasis.data.models import Base as VisitLogBase
+from atramhasis.data.datamanagers import ConceptSchemeManager, SkosManager, LanguagesManager, AuditManager
 from fixtures.materials import materials
 from fixtures.data import trees, geo
-
+try:
+    from unittest.mock import Mock, patch
+except:
+    from mock import Mock, patch
+from datetime import date, datetime
+from atramhasis.data.models import ConceptVisitLog
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
@@ -30,8 +36,10 @@ class DatamangersTests(unittest.TestCase):
     def setUp(self):
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
-
         Base.metadata.bind = self.engine
+        VisitLogBase.metadata.drop_all(self.engine)
+        VisitLogBase.metadata.create_all(self.engine)
+        VisitLogBase.metadata.bind = self.engine
 
         with transaction.manager:
             local_session = self.session_maker()
@@ -58,6 +66,15 @@ class DatamangersTests(unittest.TestCase):
             match.uri = 'urn:test'
             match.concept_id = 1
             local_session.add(match)
+
+            local_session.add(ConceptVisitLog(concept_id=1, conceptscheme_id=1, origin='REST',
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
+            local_session.add(ConceptVisitLog(concept_id=1, conceptscheme_id=1, origin='REST',
+                                              visited_at=datetime(2015, 8, 27, 11, 58, 03)))
+            local_session.add(ConceptVisitLog(concept_id=2, conceptscheme_id=1, origin='REST',
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
+            local_session.add(ConceptVisitLog(concept_id=2, conceptscheme_id=2, origin='REST',
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
 
 
 class ConceptSchemeManagerTest(DatamangersTests):
@@ -173,3 +190,28 @@ class LanguagesManagerTest(DatamangersTests):
     def test_count_languages(self):
         res = self.language_manager.count_languages('nl')
         self.assertEqual(1, res)
+
+
+class AuditManagerTest(DatamangersTests):
+
+    def setUp(self):
+        super(AuditManagerTest, self).setUp()
+        self.audit_manager = AuditManager(self.session_maker())
+
+    @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 8, 1))))
+    def test_get_first_day(self):
+        self.assertEqual('2015-07-31', self.audit_manager._get_first_day('last_day'))
+        self.assertEqual('2015-07-25', self.audit_manager._get_first_day('last_week'))
+        self.assertEqual('2015-07-01', self.audit_manager._get_first_day('last_month'))
+        self.assertEqual('2014-08-01', self.audit_manager._get_first_day('last_year'))
+
+    @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 9, 15))))
+    def test_get_most_popular_concepts_for_conceptscheme(self):
+        self.assertListEqual([(1, 2), (2, 1)],
+                             self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_month'))
+        self.assertListEqual([(2, 1)],
+                             self.audit_manager.get_most_popular_concepts_for_conceptscheme(2, 5, 'last_month'))
+        self.assertListEqual([(1, 2)],
+                             self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 1, 'last_month'))
+        self.assertListEqual([],
+                             self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_day'))
