@@ -1,14 +1,21 @@
+/**
+ * Main module. Starts the App module.
+ * @module main
+ * @see module:App
+ */
+
 define([
-	'./App',
-	'dojo/domReady!'
-], function (
-	App
-) {
-	'use strict';
+  './App',
+  'dojo/dom',
+  'dojo/domReady!'
+], function (App, dom) {
 
-    var app = window.app = {};
+  var appConfig = {
+    appContainer: dom.byId("appDiv"),
+    loadingContainer: dom.byId("loadingOverlay"),
+    staticAppPath: staticAppPath
+  };
 
-	app.main = new App().placeAt("appDiv");
+  new App({appConfig: appConfig}).startup();
 
-	app.main.startup();
 });
