@@ -106,7 +106,7 @@ define([
       evt.preventDefault();
       var schemeId = domUtils.getSelectedOption(this.conceptSchemeSelect);
       if (schemeId == -1) {
-        topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': true, 'channel':'warn'});
+        topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': false, 'channel':'warn'});
         return;
       }
       var filter = {
