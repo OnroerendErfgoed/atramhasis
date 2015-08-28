@@ -31,12 +31,23 @@
           <li class="has-form">
             <div class="row collapse">
               <div class="left"><input data-dojo-attach-point="labelInput" type="text" class="search-input-top" placeholder="Search for labels"/></div>
-              <div class="left"><a href="/#/search" data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass"></span></a></div>
+              <div class="left"><a href="#/search" data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass"></span></a></div>
             </div>
           </li>
         </ul>
       </div>
     </nav>
   </form>
+
+  <div class="action-bar">
+    <ul class="right">
+      <li><a href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>
+      <li><a href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>
+    </ul>
+  </div>
+
+  <div class="search-results">
+    search
+  </div>
 
 </div>

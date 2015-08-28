@@ -7,3 +7,37 @@ html, body, #appDiv {  width: 100%;  height: 100%;  }
 /* Loading overlay */
 .pageOverlay { top: 0; left: 0; position: absolute; height: 100%; width: 100%; z-index: 1001; display: block; background-color: $steel; text-align: center; color: $light-gray;}
 .loadingMessage {font-size: 1em; margin: 30px; color: $light-gray;}
+
+/* buttons under header */
+.action-bar {
+  height: 30px;
+  position: absolute;
+  right: 0;
+  top: 70px;
+}
+.action-bar ul {
+  margin: 0;
+  padding: 0;
+}
+
+.action-bar li {
+  list-style-type: none;
+  font-size: 0.6em;
+  padding: 0 0 5px 15px;
+  margin: 0 0 20px 2px;
+  float: left;
+}
+
+.action-bar li a {
+  border: 1px solid #d6d6d6;
+  background: white;
+  padding: 8px 15px;
+}
+
+
+/* search results pane */
+.search-results {
+  background: $topbar-bg;
+  height: 150px;
+  width: 100%;
+}

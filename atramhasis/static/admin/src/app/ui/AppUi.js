@@ -110,6 +110,16 @@ define([
     _resetSearchInputs: function () {
       console.debug('AppUi::_resetSearchInputs');
       this.labelSearchForm.reset();
+    },
+
+    _createConcept: function(evt) {
+      evt.preventDefault();
+      console.debug('AppUi::_createConcept');
+    },
+
+    _importConcept  : function(evt) {
+      evt.preventDefault();
+      console.debug('AppUi::_importConcept');
     }
   });
 });
