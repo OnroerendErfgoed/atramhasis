@@ -104,15 +104,17 @@ define([
 
     _search: function (evt) {
       evt.preventDefault();
-      var searchParams = {
-        conceptScheme: domUtils.getSelectedOption(this.conceptSchemeSelect),
-        conceptType: domUtils.getSelectedOption(this.conceptTypeSelect),
+      var schemeId = domUtils.getSelectedOption(this.conceptSchemeSelect);
+      if (schemeId == -1) {
+        topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': true, 'channel':'warn'});
+        return;
+      }
+      var filter = {
+        type: domUtils.getSelectedOption(this.conceptTypeSelect),
         label: this.labelInput.value
       };
-      console.debug('AppUi::_search searchParams', searchParams);
-
-      var store = this.conceptController.getConceptStore(searchParams.conceptScheme);
-      console.debug('AppUi::_search store', store);
+      console.debug('AppUi::_search searchParams', schemeId, filter);
+      var store = this.conceptController.getConceptStore(schemeId).filter(filter);
       this._searchResultsPane.setStore(store);
 
       this._resetSearchInputs();
