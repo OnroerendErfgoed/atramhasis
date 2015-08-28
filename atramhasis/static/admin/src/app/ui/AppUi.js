@@ -133,6 +133,11 @@ define([
     _importConcept  : function(evt) {
       evt.preventDefault();
       console.debug('AppUi::_importConcept');
+    },
+
+    _editLanguages: function (evt) {
+      evt.preventDefault();
+      console.debug('AppUi::_editLanguages');
     }
   });
 });
