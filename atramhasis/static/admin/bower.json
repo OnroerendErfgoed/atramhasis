@@ -21,9 +21,10 @@
     "util": "dojo-util#~1.10.4",
     "put-selector": "~0.3.6",
     "xstyle": "~0.2.1",
-    "dgrid": "0.3.17",
+    "dgrid": "~0.4.0",
     "dGrowl": "0.1.2",
     "foundation": "~5.5.0",
-    "font-awesome": "~4.3.0"
+    "font-awesome": "~4.3.0",
+    "dstore": "1.1.0"
   }
 }

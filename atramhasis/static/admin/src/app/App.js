@@ -10,8 +10,9 @@ define([
   'dijit/_WidgetBase',
   './ui/AppUi',
   './controllers/ConceptSchemeController',
+  './controllers/ConceptController',
   'dGrowl'
-], function (declare, lang, all, WidgetBase, AppUi, ConceptSchemeController, dGrowl) {
+], function (declare, lang, all, WidgetBase, AppUi, ConceptSchemeController, ConceptController, dGrowl) {
   return declare([WidgetBase], {
 
     appConfig: null,
@@ -28,6 +29,7 @@ define([
       this._controllers = {};
 
       this._controllers.conceptSchemeController = new ConceptSchemeController({});
+      this._controllers.conceptController = new ConceptController({});
 
       //Start message handler
       new dGrowl({
@@ -57,7 +59,8 @@ define([
             new AppUi({
               loadingContainer: this.appConfig.loadingContainer,
               staticAppPath: this.appConfig.staticAppPath,
-              conceptSchemeController: this._controllers.conceptSchemeController
+              conceptSchemeController: this._controllers.conceptSchemeController,
+              conceptController: this._controllers.conceptController
             }, this.appConfig.appContainer).startup();
           }),
           lang.hitch(this, function(error) {
