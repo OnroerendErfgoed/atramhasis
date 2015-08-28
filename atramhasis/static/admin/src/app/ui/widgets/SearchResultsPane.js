@@ -62,7 +62,8 @@ define([
       });
     },
 
-    _toggleHeight: function () {
+    _toggleHeight: function (evt) {
+      evt.preventDefault();
       console.debug('SearchResultsPane::_expand');
       if (!domClass.contains(this.domNode, "search-results-expanded")) {
         domClass.add(this.domNode, "search-results-expanded");
