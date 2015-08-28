@@ -10,14 +10,17 @@ define([
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./AppUi.html',
-  '../utils/DomUtils'
-], function (declare, lang, fx, domStyle, topic, _WidgetBase, _TemplatedMixin, template, domUtils) {
+  '../utils/DomUtils',
+  './widgets/SearchResultsPane'
+], function (declare, lang, fx, domStyle, topic, _WidgetBase, _TemplatedMixin, template, domUtils, SearchResultsPane) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
     loadingContainer: null,
     staticAppPath: null,
     conceptSchemeController: null,
+    conceptController: null,
+    _searchResultsPane: null,
 
     /**
      * Standard widget function.
@@ -28,6 +31,8 @@ define([
       console.debug('AppUi::postCreate');
       this._registerLoadingEvents();
       this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
+
+      this._searchResultsPane = new SearchResultsPane({}, this.searchPaneNode);
     },
 
     /**
@@ -37,6 +42,8 @@ define([
     startup: function () {
       this.inherited(arguments);
       console.debug('AppUi::startup');
+
+      this._searchResultsPane.startup();
 
       this._hideLoading();
     },
@@ -103,6 +110,10 @@ define([
         label: this.labelInput.value
       };
       console.debug('AppUi::_search searchParams', searchParams);
+
+      var store = this.conceptController.getConceptStore(searchParams.conceptScheme);
+      console.debug('AppUi::_search store', store);
+      this._searchResultsPane.setStore(store);
 
       this._resetSearchInputs();
     },

@@ -13280,15 +13280,16 @@ html, body, #appDiv {
   position: absolute;
   right: 0;
   top: 70px;
+  z-index: 500;
 }
 
-/* line 18, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 19, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar ul {
   margin: 0;
   padding: 0;
 }
 
-/* line 23, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 24, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar li {
   list-style-type: none;
   font-size: 0.6em;
@@ -13297,7 +13298,7 @@ html, body, #appDiv {
   float: left;
 }
 
-/* line 31, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 32, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar li a {
   border: 1px solid #d6d6d6;
   background: white;
@@ -13305,11 +13306,26 @@ html, body, #appDiv {
 }
 
 /* search results pane */
-/* line 39, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 40, ../scss/atramhasis/_atramhasis-admin.scss */
 .search-results {
   background: white;
-  height: 150px;
+  height: 200px;
   width: 100%;
+}
+
+/* line 46, ../scss/atramhasis/_atramhasis-admin.scss */
+.search-results .dgrid {
+  height: 150px;
+}
+
+/* line 50, ../scss/atramhasis/_atramhasis-admin.scss */
+.search-results-expanded {
+  height: 400px !important;
+}
+
+/* line 54, ../scss/atramhasis/_atramhasis-admin.scss */
+.search-results.search-results-expanded .dgrid {
+  height: 350px;
 }
 
 /* line 1, ../scss/_atramhasis.scss */

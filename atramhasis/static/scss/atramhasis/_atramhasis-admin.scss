@@ -14,6 +14,7 @@ html, body, #appDiv {  width: 100%;  height: 100%;  }
   position: absolute;
   right: 0;
   top: 70px;
+  z-index: 500;
 }
 .action-bar ul {
   margin: 0;
@@ -38,6 +39,18 @@ html, body, #appDiv {  width: 100%;  height: 100%;  }
 /* search results pane */
 .search-results {
   background: $topbar-bg;
-  height: 150px;
+  height: 200px;
   width: 100%;
+}
+
+.search-results .dgrid {
+  height: 150px;
+}
+
+.search-results-expanded {
+  height: 400px !important;
+}
+
+.search-results.search-results-expanded .dgrid {
+  height: 350px;
 }
