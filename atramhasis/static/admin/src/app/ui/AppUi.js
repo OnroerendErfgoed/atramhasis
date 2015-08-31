@@ -138,6 +138,11 @@ define([
     _editLanguages: function (evt) {
       evt.preventDefault();
       console.debug('AppUi::_editLanguages');
+    },
+
+    _editConceptScheme: function (evt) {
+      evt.preventDefault();
+      console.debug('AppUi::_editConceptScheme');
     }
   });
 });
