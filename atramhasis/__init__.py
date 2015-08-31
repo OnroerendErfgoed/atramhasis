@@ -1,4 +1,5 @@
 from pyramid.config import Configurator
+from pyramid.settings import aslist
 
 from atramhasis.renderers import json_renderer_verbose
 
@@ -25,6 +26,7 @@ def includeme(config):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    settings['layout.focus_conceptschemes'] = aslist(settings['layout.focus_conceptschemes'], flatten=False)
     config = Configurator(settings=settings)
 
     from pyramid.session import SignedCookieSessionFactory
