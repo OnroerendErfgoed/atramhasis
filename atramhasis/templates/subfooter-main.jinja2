@@ -2,7 +2,6 @@
 
 <div class="row">
   {% set topSchemes = request.registry.settings.get('layout.focus_conceptschemes') %}
-{#  {% set topSchemes = ['HERITAGETYPE', 'PERIOD', 'GEOGRAPHY', 'MATERIALS'] %}#}
   {% set schemes = [] %}
   {% if topSchemes|length > 0 %}
     {% for s in topSchemes %}
