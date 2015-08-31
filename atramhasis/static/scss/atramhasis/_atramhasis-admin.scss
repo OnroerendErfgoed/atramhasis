@@ -99,11 +99,13 @@ a.admin-button:hover {
     background-color: $white;
     margin: 10px 0;
     flex: 1;
+    display: flex;
+    flex-direction: column;
 
     .tab-panel {
+      flex: 1;
       display: none;
       background-color: tomato;
-      height: 100%;
     }
 
     .tab-panel.active {
