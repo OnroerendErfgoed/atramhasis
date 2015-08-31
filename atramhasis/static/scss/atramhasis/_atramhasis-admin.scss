@@ -1,10 +1,34 @@
-/* main html */
-html, body {  width: 100%;  height: 100%;  }
+/* main html layout */
+html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
 
 #appDiv {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+}
+
+#appDiv header {
+  display: block;
+  background-color: $topbar-bg-color;
+  z-index: 2;
+
+  nav {
+    border-bottom: 1px solid #f0f1f3;
+  }
+
+  .search-results .dgrid {
+    height: 150px;
+    width: 100%
+  }
+
+  .search-results-expanded .dgrid {
+    height: 350px;
+  }
+}
+
+#appDiv .app-content {
+  flex: 1 100%;
+  display: block;
 }
 
 /* Custom notification styles! */
@@ -35,58 +59,26 @@ a.admin-button:hover {
 .pageOverlay { top: 0; left: 0; position: absolute; height: 100%; width: 100%; z-index: 1001; display: block; background-color: $steel; text-align: center; color: $light-gray;}
 .loadingMessage {font-size: 1em; margin: 30px; color: $light-gray;}
 
-/* top bar */
-.app-header {
-  height: 300px;
-}
+
 
 /* buttons under header */
 .action-bar {
   height: 30px;
   position: absolute;
-  right: 0;
+  right: 15px;
   top: 70px;
-  z-index: 500;
-}
-.action-bar ul {
-  margin: 0;
-  padding: 0;
-}
+  z-index: 3;
 
-.action-bar li {
-  list-style-type: none;
-  font-size: 0.6em;
-  padding: 0 0 5px 15px;
-  margin: 0 0 20px 2px;
-  float: left;
-}
+  ul {
+    margin: 0;
+    padding: 0;
 
-/* search results pane */
-.search-results {
-  background: $topbar-bg;
-  height: 200px;
-  width: 100%;
-}
+    li {
+      list-style-type: none;
+      padding: 5px;
+      float: left;
+    }
+  }
 
-.search-results .dgrid {
-  height: 150px;
-  width: 100%
-}
 
-.search-results-expanded {
-  height: 400px !important;
-}
-
-.search-results.search-results-expanded .dgrid {
-  height: 350px;
-}
-
-/* concept tab container */
-.app-content {
-  flex: 1;
-}
-
-/* Main app body */
-.app-body {
-  margin: 70px auto;
 }
