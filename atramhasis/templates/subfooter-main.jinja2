@@ -1,6 +1,7 @@
 {% from "macros.jinja2" import popular_concepts, get_conceptscheme_label %}
 
 <div class="row">
+  {% set topSchemes = request.registry.settings.get('layout.focus_conceptschemes') %}
   {% set schemes = conceptschemes %}
   {% if schemes|length > 0 %}
     {% if schemes|length >= 4 %}
