@@ -7,7 +7,9 @@ define([
   'dijit/layout/ContentPane'
 ], function (declare, _WidgetBase, _TemplatedMixin,template, TabContainer, ContentPane) {
   return declare([_WidgetBase, _TemplatedMixin], {
+
     templateString: template,
+    baseClass: 'concept-container',
 
     postCreate: function () {
       this.inherited(arguments);

@@ -13246,40 +13246,49 @@ html, body {
 }
 
 /* line 10, ../scss/atramhasis/_atramhasis-admin.scss */
+#appDiv footer {
+  display: block;
+  height: 30px;
+  background-color: white;
+  padding: 5px 10px;
+}
+
+/* line 17, ../scss/atramhasis/_atramhasis-admin.scss */
 #appDiv header {
   display: block;
   background-color: white;
   z-index: 2;
 }
-/* line 15, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 22, ../scss/atramhasis/_atramhasis-admin.scss */
 #appDiv header nav {
   border-bottom: 1px solid #f0f1f3;
 }
-/* line 19, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 26, ../scss/atramhasis/_atramhasis-admin.scss */
 #appDiv header .search-results .dgrid {
   height: 150px;
   width: 100%;
 }
-/* line 24, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 31, ../scss/atramhasis/_atramhasis-admin.scss */
 #appDiv header .search-results-expanded .dgrid {
   height: 350px;
 }
 
-/* line 29, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 36, ../scss/atramhasis/_atramhasis-admin.scss */
 #appDiv .app-content {
   flex: 1 100%;
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Custom notification styles! */
-/* line 35, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 43, ../scss/atramhasis/_atramhasis-admin.scss */
 .dGrowl-channel-warn .dGrowl-notification {
   background-color: #fffaf5;
   border: 1px solid #e97b14;
 }
 
 /* buttons */
-/* line 41, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 49, ../scss/atramhasis/_atramhasis-admin.scss */
 a.button {
   color: white;
   background-color: #2b709d;
@@ -13289,14 +13298,14 @@ a.button {
   margin: 0;
 }
 
-/* line 50, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 58, ../scss/atramhasis/_atramhasis-admin.scss */
 a.admin-button:hover {
   background-color: #255f85;
   color: white !important;
 }
 
 /* noscript div */
-/* line 56, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 64, ../scss/atramhasis/_atramhasis-admin.scss */
 .noscript {
   top: 0;
   left: 0;
@@ -13311,7 +13320,7 @@ a.admin-button:hover {
 }
 
 /* Loading overlay */
-/* line 59, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 67, ../scss/atramhasis/_atramhasis-admin.scss */
 .pageOverlay {
   top: 0;
   left: 0;
@@ -13325,7 +13334,7 @@ a.admin-button:hover {
   color: #d6d6d6;
 }
 
-/* line 60, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 68, ../scss/atramhasis/_atramhasis-admin.scss */
 .loadingMessage {
   font-size: 1em;
   margin: 30px;
@@ -13333,7 +13342,7 @@ a.admin-button:hover {
 }
 
 /* buttons under header */
-/* line 65, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 73, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar {
   height: 30px;
   position: absolute;
@@ -13341,16 +13350,70 @@ a.admin-button:hover {
   top: 70px;
   z-index: 3;
 }
-/* line 72, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 80, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar ul {
   margin: 0;
   padding: 0;
 }
-/* line 76, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 84, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar ul li {
   list-style-type: none;
   padding: 5px;
   float: left;
+}
+
+/*tabs*/
+/* line 93, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+/* line 98, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels {
+  background-color: white;
+  margin: 10px 0;
+  flex: 1;
+}
+/* line 103, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .tab-panel {
+  display: none;
+  background-color: tomato;
+  height: 100%;
+}
+/* line 109, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .tab-panel.active {
+  display: block;
+}
+/* line 114, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .tabs {
+  margin: 0;
+  height: 30px;
+}
+/* line 118, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .tabs ul {
+  margin: 0;
+  padding: 0;
+}
+/* line 122, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .tabs ul li.tab {
+  list-style-type: none;
+  padding-right: 5px;
+  float: left;
+}
+/* line 127, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .tabs ul li.tab a {
+  color: white;
+  background-color: #2b709d;
+  border: 1px solid #d6d6d6;
+  padding: 0.1rem 0.5rem 0.2rem 0.5rem;
+  margin: 0;
+}
+/* line 135, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .tabs ul li.tab a:hover,
+.concept-container .tabs ul li.tab a.selected {
+  color: black;
+  background-color: white;
 }
 
 /* line 1, ../scss/_atramhasis.scss */
