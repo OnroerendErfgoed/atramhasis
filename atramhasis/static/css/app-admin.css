@@ -13243,8 +13243,25 @@ html, body, #appDiv {
   border: 1px solid #e97b14;
 }
 
-/* noscript div */
+/* buttons */
 /* line 11, ../scss/atramhasis/_atramhasis-admin.scss */
+a.button {
+  color: white;
+  background-color: #2b709d;
+  border: 1px solid #d6d6d6;
+  padding: 0.1rem 0.5rem 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* line 20, ../scss/atramhasis/_atramhasis-admin.scss */
+a.admin-button:hover {
+  background-color: #255f85;
+  color: white !important;
+}
+
+/* noscript div */
+/* line 26, ../scss/atramhasis/_atramhasis-admin.scss */
 .noscript {
   top: 0;
   left: 0;
@@ -13259,7 +13276,7 @@ html, body, #appDiv {
 }
 
 /* Loading overlay */
-/* line 14, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 29, ../scss/atramhasis/_atramhasis-admin.scss */
 .pageOverlay {
   top: 0;
   left: 0;
@@ -13273,15 +13290,21 @@ html, body, #appDiv {
   color: #d6d6d6;
 }
 
-/* line 15, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 30, ../scss/atramhasis/_atramhasis-admin.scss */
 .loadingMessage {
   font-size: 1em;
   margin: 30px;
   color: #d6d6d6;
 }
 
+/* top bar */
+/* line 33, ../scss/atramhasis/_atramhasis-admin.scss */
+.app-header {
+  height: 300px;
+}
+
 /* buttons under header */
-/* line 18, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 38, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar {
   height: 30px;
   position: absolute;
@@ -13290,13 +13313,13 @@ html, body, #appDiv {
   z-index: 500;
 }
 
-/* line 25, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 45, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar ul {
   margin: 0;
   padding: 0;
 }
 
-/* line 30, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 50, ../scss/atramhasis/_atramhasis-admin.scss */
 .action-bar li {
   list-style-type: none;
   font-size: 0.6em;
@@ -13305,34 +13328,34 @@ html, body, #appDiv {
   float: left;
 }
 
-/* line 38, ../scss/atramhasis/_atramhasis-admin.scss */
-.action-bar li a {
-  border: 1px solid #d6d6d6;
-  background: white;
-  padding: 8px 15px;
-}
-
 /* search results pane */
-/* line 46, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 59, ../scss/atramhasis/_atramhasis-admin.scss */
 .search-results {
   background: white;
   height: 200px;
   width: 100%;
 }
 
-/* line 52, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 65, ../scss/atramhasis/_atramhasis-admin.scss */
 .search-results .dgrid {
   height: 150px;
+  width: 100%;
 }
 
-/* line 56, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 70, ../scss/atramhasis/_atramhasis-admin.scss */
 .search-results-expanded {
   height: 400px !important;
 }
 
-/* line 60, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 74, ../scss/atramhasis/_atramhasis-admin.scss */
 .search-results.search-results-expanded .dgrid {
   height: 350px;
+}
+
+/* Main app body */
+/* line 79, ../scss/atramhasis/_atramhasis-admin.scss */
+.app-body {
+  margin: 70px auto;
 }
 
 /* line 1, ../scss/_atramhasis.scss */
@@ -13346,31 +13369,32 @@ ul.no_bullet {
 li.cube {
   background: url("../img/listitem.png") no-repeat 0 6px;
   padding: 0 0 15px 15px;
+  font-size: 0.8rem;
 }
 
-/* line 12, ../scss/_atramhasis.scss */
+/* line 13, ../scss/_atramhasis.scss */
 h3.relations-title {
   margin-bottom: 0px;
 }
 
-/* line 16, ../scss/_atramhasis.scss */
+/* line 17, ../scss/_atramhasis.scss */
 h4.relations-subtitle {
   margin: 20px 20px;
 }
 
-/* line 20, ../scss/_atramhasis.scss */
+/* line 21, ../scss/_atramhasis.scss */
 .pageOverlay {
   text-align: center;
 }
 
-/* line 21, ../scss/_atramhasis.scss */
+/* line 22, ../scss/_atramhasis.scss */
 .loadingMessage {
   font-size: 1em;
   margin: 30px;
   color: #999;
 }
 
-/* line 23, ../scss/_atramhasis.scss */
+/* line 24, ../scss/_atramhasis.scss */
 .editIcon {
   float: right;
   font-size: 20px;
