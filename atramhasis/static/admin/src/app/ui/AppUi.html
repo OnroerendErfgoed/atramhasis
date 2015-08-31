@@ -1,6 +1,6 @@
 <div>
 
-  <form class="sticky top-search" data-dojo-attach-point="labelSearchForm" data-dojo-attach-event="onsubmit: _search">
+  <form class="sticky" data-dojo-attach-point="labelSearchForm" data-dojo-attach-event="onsubmit: _search">
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
@@ -8,46 +8,60 @@
             <h1 class="left logo-small-text">Atramhasis</h1>
           </a>
         </li>
+        <li class="divider"></li>
       </ul>
       <div class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
           <li class="divider"></li>
           <li>
-            <select data-dojo-attach-point="conceptSchemeSelect">
-              <option value="-1" selected>Select scheme</option>
-            </select>
+            <input data-dojo-attach-point="labelInput" type="text" class="search-input-top" placeholder="Filter by label"/>
           </li>
           <li class="divider"></li>
           <li>
             <select data-dojo-attach-point="conceptTypeSelect">
-              <option value="all" selected>Select type</option>
+              <option value="all" selected>Filter by type</option>
               <option value="all">all types</option>
               <option value="concept">concepts</option>
               <option value="collection">collections</option>
             </select>
           </li>
           <li class="divider"></li>
-          <li class="has-form">
-            <div class="row collapse">
-              <div class="left"><input data-dojo-attach-point="labelInput" type="text" class="search-input-top" placeholder="Search for labels"/></div>
-              <div class="left"><a href="#/search" data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass"></span></a></div>
-            </div>
+          <li>
+            <a href="#/search" data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass"></span></a>
           </li>
+        </ul>
+        <!-- Left Nav Section -->
+        <ul class="left show-for-large-up">
+          <li class="divider"></li>
+          <li>
+            <select data-dojo-attach-point="conceptSchemeSelect">
+              <option value="-1" selected>Select Thesaurus</option>
+            </select>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a class="button" href="#/conceptscheme/edit" data-dojo-attach-event="onClick: _editConceptScheme">Edit</a>
+          </li>
+          <li class="divider"></li>
         </ul>
       </div>
     </nav>
   </form>
-
-  <div class="top-results">
     <div class="action-bar">
       <ul class="right">
-        <li><a href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>
-        <li><a href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>
-        <li><a href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a></li>
+        <li><a class="button" href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>
+        <li><a class="button" href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>
+        <li><a class="button" href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a></li>
       </ul>
     </div>
-    <div data-dojo-attach-point="searchPaneNode"></div>
+
+  <div class="action-bar">
+    <ul class="right">
+      <li><a href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>
+      <li><a href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>
+      <li><a href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a></li>
+    </ul>
   </div>
 
   <div class="row app-content">
