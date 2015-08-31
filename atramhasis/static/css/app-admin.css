@@ -13229,6 +13229,112 @@ ul.downloadtop {
     word-break: break-word;
   }
 }
+/* main html */
+/* line 2, ../scss/atramhasis/_atramhasis-admin.scss */
+html, body, #appDiv {
+  width: 100%;
+  height: 100%;
+}
+
+/* Custom notification styles! */
+/* line 5, ../scss/atramhasis/_atramhasis-admin.scss */
+.dGrowl-channel-warn .dGrowl-notification {
+  background-color: #fffaf5;
+  border: 1px solid #e97b14;
+}
+
+/* noscript div */
+/* line 11, ../scss/atramhasis/_atramhasis-admin.scss */
+.noscript {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1002;
+  display: block;
+  background-color: #efefef;
+  text-align: center;
+  padding: 25px;
+}
+
+/* Loading overlay */
+/* line 14, ../scss/atramhasis/_atramhasis-admin.scss */
+.pageOverlay {
+  top: 0;
+  left: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1001;
+  display: block;
+  background-color: #666666;
+  text-align: center;
+  color: #d6d6d6;
+}
+
+/* line 15, ../scss/atramhasis/_atramhasis-admin.scss */
+.loadingMessage {
+  font-size: 1em;
+  margin: 30px;
+  color: #d6d6d6;
+}
+
+/* buttons under header */
+/* line 18, ../scss/atramhasis/_atramhasis-admin.scss */
+.action-bar {
+  height: 30px;
+  position: absolute;
+  right: 0;
+  top: 70px;
+  z-index: 500;
+}
+
+/* line 25, ../scss/atramhasis/_atramhasis-admin.scss */
+.action-bar ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 30, ../scss/atramhasis/_atramhasis-admin.scss */
+.action-bar li {
+  list-style-type: none;
+  font-size: 0.6em;
+  padding: 0 0 5px 15px;
+  margin: 0 0 20px 2px;
+  float: left;
+}
+
+/* line 38, ../scss/atramhasis/_atramhasis-admin.scss */
+.action-bar li a {
+  border: 1px solid #d6d6d6;
+  background: white;
+  padding: 8px 15px;
+}
+
+/* search results pane */
+/* line 46, ../scss/atramhasis/_atramhasis-admin.scss */
+.search-results {
+  background: white;
+  height: 200px;
+  width: 100%;
+}
+
+/* line 52, ../scss/atramhasis/_atramhasis-admin.scss */
+.search-results .dgrid {
+  height: 150px;
+}
+
+/* line 56, ../scss/atramhasis/_atramhasis-admin.scss */
+.search-results-expanded {
+  height: 400px !important;
+}
+
+/* line 60, ../scss/atramhasis/_atramhasis-admin.scss */
+.search-results.search-results-expanded .dgrid {
+  height: 350px;
+}
+
 /* line 1, ../scss/_atramhasis.scss */
 ul.no_bullet {
   list-style-type: none;
@@ -13240,32 +13346,31 @@ ul.no_bullet {
 li.cube {
   background: url("../img/listitem.png") no-repeat 0 6px;
   padding: 0 0 15px 15px;
-  font-size: 0.8rem;
 }
 
-/* line 13, ../scss/_atramhasis.scss */
+/* line 12, ../scss/_atramhasis.scss */
 h3.relations-title {
   margin-bottom: 0px;
 }
 
-/* line 17, ../scss/_atramhasis.scss */
+/* line 16, ../scss/_atramhasis.scss */
 h4.relations-subtitle {
   margin: 20px 20px;
 }
 
-/* line 21, ../scss/_atramhasis.scss */
+/* line 20, ../scss/_atramhasis.scss */
 .pageOverlay {
   text-align: center;
 }
 
-/* line 22, ../scss/_atramhasis.scss */
+/* line 21, ../scss/_atramhasis.scss */
 .loadingMessage {
   font-size: 1em;
   margin: 30px;
   color: #999;
 }
 
-/* line 24, ../scss/_atramhasis.scss */
+/* line 23, ../scss/_atramhasis.scss */
 .editIcon {
   float: right;
   font-size: 20px;

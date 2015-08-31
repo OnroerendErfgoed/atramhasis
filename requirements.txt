@@ -5,9 +5,9 @@ pyramid-tm==0.10
 pyramid_rewrite==0.2
 
 # skos
--e git+https://github.com/koenedaele/skosprovider.git#egg=skosprovider
+-e git+https://github.com/koenedaele/skosprovider.git@a662451dcfa9a8ec58242523432b85688012033c#egg=skosprovider
 #skosprovider_sqlalchemy==0.4.2
--e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git#egg=skosprovider_sqlalchemy
+-e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git@4b202215971c5180a2a196170a237026e6cbd50c#egg=skosprovider_sqlalchemy
 #pyramid_skosprovider==0.6.0
 -e git+https://github.com/koenedaele/pyramid_skosprovider.git#egg=pyramid_skosprovider
 skosprovider_rdf==0.4.1
@@ -40,3 +40,4 @@ dogpile.cache==0.5.6
 # other
 six==1.6.1
 requests==2.5.1
+python-dateutil==2.4.2

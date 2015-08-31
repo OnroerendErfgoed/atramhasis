@@ -1,0 +1,52 @@
+<div>
+
+  <form class="sticky" data-dojo-attach-point="labelSearchForm" data-dojo-attach-event="onsubmit: _search">
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <a href="/"><img src="${staticAppPath}img/atramlogo.png" class="left logo-small">
+            <h1 class="left logo-small-text">Atramhasis</h1>
+          </a>
+        </li>
+      </ul>
+      <div class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <li class="divider"></li>
+          <li>
+            <select data-dojo-attach-point="conceptSchemeSelect">
+              <option value="-1" selected>Select scheme</option>
+            </select>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <select data-dojo-attach-point="conceptTypeSelect">
+              <option value="all" selected>Select type</option>
+              <option value="all">all types</option>
+              <option value="concept">concepts</option>
+              <option value="collection">collections</option>
+            </select>
+          </li>
+          <li class="divider"></li>
+          <li class="has-form">
+            <div class="row collapse">
+              <div class="left"><input data-dojo-attach-point="labelInput" type="text" class="search-input-top" placeholder="Search for labels"/></div>
+              <div class="left"><a href="#/search" data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass"></span></a></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </form>
+
+  <div class="action-bar">
+    <ul class="right">
+      <li><a href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>
+      <li><a href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>
+      <li><a href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a></li>
+    </ul>
+  </div>
+
+  <div data-dojo-attach-point="searchPaneNode"></div>
+
+</div>

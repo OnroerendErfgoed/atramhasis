@@ -1,10 +1,10 @@
 {
   "name": "atradmin",
-  "version": "0.1.0",
+  "version": "0.4.4",
   "authors": [
-    "Cedrik Vanderhaegen <cedrik.vanderhaegen@geosolutions.be>"
+    "Flanders Heritage Agency <ict@onroerenderfgoed.be>"
   ],
-  "description": "atramhasis private frontend for administration",
+  "description": "Atramhasis private frontend for administration",
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -21,7 +21,10 @@
     "util": "dojo-util#~1.10.4",
     "put-selector": "~0.3.6",
     "xstyle": "~0.2.1",
-    "dgrid": "0.3.17",
-    "dGrowl": "0.1.2"
+    "dgrid": "~0.4.0",
+    "dGrowl": "0.1.2",
+    "foundation": "~5.5.0",
+    "font-awesome": "~4.3.0",
+    "dstore": "1.1.0"
   }
 }
