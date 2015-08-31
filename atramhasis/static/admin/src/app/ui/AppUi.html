@@ -1,6 +1,6 @@
 <div>
 
-  <form class="sticky" data-dojo-attach-point="labelSearchForm" data-dojo-attach-event="onsubmit: _search">
+  <form class="sticky top-search" data-dojo-attach-point="labelSearchForm" data-dojo-attach-event="onsubmit: _search">
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
@@ -39,14 +39,19 @@
     </nav>
   </form>
 
-  <div class="action-bar">
-    <ul class="right">
-      <li><a href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>
-      <li><a href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>
-      <li><a href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a></li>
-    </ul>
+  <div class="top-results">
+    <div class="action-bar">
+      <ul class="right">
+        <li><a href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>
+        <li><a href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>
+        <li><a href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a></li>
+      </ul>
+    </div>
+    <div data-dojo-attach-point="searchPaneNode"></div>
   </div>
 
-  <div data-dojo-attach-point="searchPaneNode"></div>
+  <div class="row app-content">
+    <div data-dojo-attach-point="conceptContainerNode"></div>
+  </div>
 
 </div>

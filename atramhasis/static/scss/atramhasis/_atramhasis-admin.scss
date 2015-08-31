@@ -1,5 +1,11 @@
 /* main html */
-html, body, #appDiv {  width: 100%;  height: 100%;  }
+html, body {  width: 100%;  height: 100%;  }
+
+#appDiv {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
 
 /* Custom notification styles! */
 .dGrowl-channel-warn .dGrowl-notification {
@@ -59,4 +65,9 @@ html, body, #appDiv {  width: 100%;  height: 100%;  }
 
 .search-results.search-results-expanded .dgrid {
   height: 350px;
+}
+
+/* concept tab container */
+.app-content {
+  flex: 1;
 }
