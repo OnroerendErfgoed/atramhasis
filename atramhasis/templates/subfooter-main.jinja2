@@ -1,20 +1,28 @@
-{% from "macros.jinja2" import popular_concepts %}
+{% from "macros.jinja2" import popular_concepts, get_conceptscheme_label %}
 
 <div class="row">
-  <div class="large-3 columns subfooter">
-    <h3>Geografie</h3>
-    {{ popular_concepts(request, 'GEOGRAPHY', 3) }}
-  </div>
-  <div class="large-3 columns subfooter">
-    <h3>Stijlen &amp; Culturen</h3>
-    {{ popular_concepts(request, 'STYLES', 3) }}
-  </div>
-  <div class="large-3 columns subfooter">
-    <h3>soorten bomen</h3>
-    {{ popular_concepts(request, 'SPECIES', 3) }}
-  </div>
-  <div class="large-3 columns subfooterright">
-    <h3>Materialen</h3>
-    {{ popular_concepts(request, 'MATERIALS', 3) }}
-  </div>
+  {% set schemes = conceptschemes %}
+  {% if schemes|length > 0 %}
+    {% if schemes|length >= 4 %}
+      {% set maxLength = 4 %}
+    {% else %}
+      {% set maxLength = schemes|length %}
+    {% endif %}
+    {% for x in range(0, maxLength) %}
+      {% set conceptscheme = schemes|random %}
+      {% do schemes.remove(conceptscheme) %}
+      {% if loop.last %}
+        {% if maxLength >= 4 %}
+          <div class="large-3 columns subfooterright">
+        {% else %}
+          <div class="large-3 columns subfooterright left">
+        {% endif %}
+      {% else %}
+        <div class="large-3 columns subfooter">
+      {% endif %}
+    <h3>{{ get_conceptscheme_label(conceptscheme.conceptscheme, request.locale_name) }}</h3>
+    {{ popular_concepts(request, conceptscheme.id, 3) }}
+    </div>
+    {% endfor %}
+  {% endif %}
 </div>
