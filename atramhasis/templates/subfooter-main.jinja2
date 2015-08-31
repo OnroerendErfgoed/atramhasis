@@ -1,8 +1,20 @@
 {% from "macros.jinja2" import popular_concepts, get_conceptscheme_label %}
 
 <div class="row">
-  {% set topSchemes = request.registry.settings.get('layout.focus_conceptschemes') %}
-  {% set schemes = conceptschemes %}
+{#  {% set topSchemes = request.registry.settings.get('layout.focus_conceptschemes') %}#}
+  {% set topSchemes = ['HERITAGETYPE', 'PERIOD', 'GEOGRAPHY', 'MATERIALS'] %}
+  {% set schemes = [] %}
+  {% if topSchemes|length > 0 %}
+    {% for s in topSchemes %}
+      {% for c in conceptschemes %}
+        {% if c.id == s %}
+          {% do schemes.append(c) %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  {% else %}
+    {% set schemes = conceptschemes %}
+  {% endif %}
   {% if schemes|length > 0 %}
     {% if schemes|length >= 4 %}
       {% set maxLength = 4 %}
