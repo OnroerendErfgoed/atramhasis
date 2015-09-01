@@ -105,7 +105,6 @@ a.admin-button:hover {
     .tab-panel {
       flex: 1;
       display: none;
-      background-color: tomato;
     }
 
     .tab-panel.active {
@@ -113,33 +112,33 @@ a.admin-button:hover {
     }
   }
 
-  .tabs {
+  ul.tabs {
     margin: 0;
     height: 30px;
+    padding: 0;
 
-    ul {
-      margin: 0;
-      padding: 0;
+    li.tab {
+      list-style-type: none;
+      padding-right: 5px;
+      float: left;
 
-      li.tab {
-        list-style-type: none;
-        padding-right: 5px;
-        float: left;
-
-        a {
-          color: $white;
-          background-color: $blue;
-          border: 1px solid $light-gray;
-          padding: 0.1rem 0.5rem 0.2rem 0.5rem;
-          margin: 0;
-        }
-
-        a:hover,
-        a.selected {
-          color: black;
-          background-color: $white;
-        }
+      a {
+        color: $white;
+        background-color: $blue;
+        border: 1px solid $light-gray;
+        padding: 0.1rem 0.5rem 0.2rem 0.5rem;
+        margin: 0;
       }
+
+      a:hover {
+        color: black;
+        background-color: $white;
+      }
+    }
+
+    li.tab.active a {
+      color: black;
+      background-color: $white;
     }
   }
 }
