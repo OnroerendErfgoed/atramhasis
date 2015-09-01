@@ -1,4 +1,5 @@
 import unittest
+from pyramid import testing
 
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider.providers import DictionaryProvider
@@ -8,9 +9,7 @@ from skosprovider.skos import(
     Concept as SkosConcept,
     Collection as SkosCollection
 )
-
-from atramhasis.utils import from_thing, internal_providers_only
-
+from atramhasis.utils import from_thing, internal_providers_only, update_last_visited_concepts
 
 species = {
     'id': 3,
@@ -137,3 +136,47 @@ class TestInternalProviderOnly(unittest.TestCase):
         self.dummy.provider = DictionaryProvider(list=[species], metadata={'id': 'Test'})
         self.assertRaises(HTTPMethodNotAllowed, self.dummy.internal_providers, 'ok')
         self.assertIsNone(self.dummy.dummy)
+
+
+class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
+
+    def setUp(self):
+        self.config = testing.setUp()
+        self.request = testing.DummyRequest()
+        self.request.session = {}
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_update_last_visited_concepts(self):
+        c = Concept()
+        c.id= 2
+        c.labels = [Label('test', language_id='en-us')]
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
+        c = Concept()
+        c.id= 33
+        c.labels = [Label('test', language_id='nl-be')]
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(2)})
+        self.assertEqual(2, len(self.request.session['last_visited']))
+
+    def test_update_last_visited_concepts_max(self):
+        for id in range(50):
+            c = Concept()
+            c.id = id
+            c.labels = [Label('test', language_id='en-us')]
+            update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(id)})
+        self.assertEqual(4, len(self.request.session['last_visited']))
+        last = self.request.session['last_visited'].pop()
+        self.assertEqual('http://test.test/49', last['url'])
+
+    def test_no_double_last_visited_concepts(self):
+        c = Concept()
+        c.id = 2
+        c.labels = [Label('test', language_id='en-us')]
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
+        c = Concept()
+        c.id = 33
+        c.labels = [Label('test', language_id='nl-be')]
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(2)})
+        self.assertEqual(2, len(self.request.session['last_visited']))

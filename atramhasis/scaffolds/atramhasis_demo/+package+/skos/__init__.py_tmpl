@@ -34,6 +34,30 @@ def includeme(config):
         uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/materialen/%s')
     )
 
+    EVENTTYPES = SQLAlchemyProvider(
+        {'id': 'EVENTTYPE', 'conceptscheme_id': 5},
+        config.registry.dbmaker,
+        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/gebeurtenistypes/%s')
+    )
+
+    HERITAGETYPES = SQLAlchemyProvider(
+        {'id': 'HERITAGETYPE', 'conceptscheme_id': 6},
+        config.registry.dbmaker,
+        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/erfgoedtypes/%s')
+    )
+
+    PERIODS = SQLAlchemyProvider(
+        {'id': 'PERIOD', 'conceptscheme_id': 7},
+        config.registry.dbmaker,
+        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/dateringen/%s')
+    )
+
+    SPECIES = SQLAlchemyProvider(
+        {'id': 'SPECIES', 'conceptscheme_id': 8},
+        config.registry.dbmaker,
+        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/soorten/%s')
+    )
+
     # use 'subject': ['external'] for read only external providers (only available in REST service)
 
     AAT = AATProvider(
@@ -59,6 +83,10 @@ def includeme(config):
     skosregis.register_provider(GEO)
     skosregis.register_provider(STYLES)
     skosregis.register_provider(MATERIALS)
+    skosregis.register_provider(EVENTTYPES)
+    skosregis.register_provider(HERITAGETYPES)
+    skosregis.register_provider(PERIODS)
+    skosregis.register_provider(SPECIES)
     skosregis.register_provider(AAT)
     skosregis.register_provider(TGN)
     skosregis.register_provider(EH_PERIOD)

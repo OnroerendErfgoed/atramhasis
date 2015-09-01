@@ -10,7 +10,9 @@ from sqlalchemy.orm.exc import NoResultFound
 from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteType
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
+from atramhasis.utils import update_last_visited_concepts
 from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
+from atramhasis.audit import audit
 
 
 def labels_to_string(labels, ltype):
@@ -75,8 +77,9 @@ class AtramhasisView(object):
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
-        ]
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+            ]
 
         return {'conceptschemes': conceptschemes}
 
@@ -90,11 +93,13 @@ class AtramhasisView(object):
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not 'external' in x.get_metadata()['subject']
-        ]
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+            ]
 
         return {'conceptschemes': conceptschemes}
 
+    @audit
     @view_config(route_name='conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
     def conceptscheme_view(self):
         '''
@@ -102,6 +107,13 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
+
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
         conceptScheme = provider.concept_scheme
@@ -113,11 +125,12 @@ class AtramhasisView(object):
             'uri': conceptScheme.uri,
             'labels': conceptScheme.labels,
             'notes': conceptScheme.notes,
-            'top_concepts':  provider.get_top_concepts()
+            'top_concepts': provider.get_top_concepts()
         }
 
-        return {'conceptscheme': scheme}
+        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes}
 
+    @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
         '''
@@ -125,6 +138,13 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
+
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
@@ -139,10 +159,11 @@ class AtramhasisView(object):
                 concept_type = "Collection"
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
-            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id}
+            url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
+            update_last_visited_concepts(self.request, {'label': c.label(self.request.locale_name).label, 'url': url})
+            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
-
 
     @view_config(route_name='search_result', renderer='atramhasis:templates/search_result.jinja2')
     def search_result(self):
@@ -151,6 +172,13 @@ class AtramhasisView(object):
 
         :param request: A :class:`pyramid.request.Request`
         '''
+        conceptschemes = [
+            {'id': x.get_metadata()['id'],
+             'conceptscheme': x.concept_scheme}
+            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                                    for not_shown in ['external', 'hidden']])
+        ]
+
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
         ctype = self._read_request_param('ctype')
@@ -162,7 +190,7 @@ class AtramhasisView(object):
                 concepts = provider.find({'type': ctype}, language=self.request.locale_name)
             else:
                 concepts = provider.get_all(language=self.request.locale_name)
-            return {'concepts': concepts, 'scheme_id': scheme_id}
+            return {'concepts': concepts, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
         return Response(content_type='text/plain', status_int=404)
 
     @view_config(route_name='locale')
@@ -191,6 +219,7 @@ class AtramhasisView(object):
                             max_age=31536000)  # max_age = year
         return response
 
+    @audit
     @view_config(route_name='search_result_export', renderer='csv')
     def results_csv(self):
         header = ['conceptscheme', 'id', 'uri', 'type', 'label', 'prefLabels', 'altLabels', 'definition', 'broader',
@@ -285,7 +314,6 @@ class AtramhasisView(object):
         else:
             return parent_tree_id + "." + str(concept_id)
 
-
     @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
     def results_tree_html(self):
         scheme_id = self.request.matchdict['scheme_id']
@@ -297,6 +325,7 @@ class AtramhasisListView(object):
     '''
     This object groups list views part for the user interface.
     '''
+
     def __init__(self, request):
         self.request = request
         self.skos_manager = self.request.data_managers['skos_manager']

@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 '''
-Routes for the ATRAMHASIS views.
+Routes for the Atramhasis views.
 
+.. versionadded:: 0.4.4
 '''
+
 def includeme(config):
+    '''
+    Setup the routing for Atramhasis.
+
+    :param pyramid.config.Configurator config: The application config.
+    '''
+
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')
 
@@ -22,6 +30,10 @@ def includeme(config):
     config.add_route('scheme_root', pattern='/conceptschemes/{scheme_id}/c/', accept='text/html')
     config.add_route('scheme_tree', pattern='/conceptschemes/{scheme_id}/tree', accept='application/json')
     config.add_route('search_result_export', pattern='/conceptschemes/{scheme_id}/c.csv')
+    config.add_route('atramhasis.edit_conceptscheme', pattern='/conceptschemes/{scheme_id}',
+                     accept='application/json', request_method='PUT')
+    config.add_route('atramhasis.get_conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='application/json')
+    config.add_route('atramhasis.get_conceptschemes', pattern='/conceptschemes', accept='application/json')
     config.add_route('atramhasis.get_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='application/json', request_method="GET")
     config.add_route('atramhasis.add_concept', pattern='/conceptschemes/{scheme_id}/c', accept='application/json',

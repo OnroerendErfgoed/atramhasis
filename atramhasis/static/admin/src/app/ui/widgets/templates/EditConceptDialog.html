@@ -1,0 +1,20 @@
+
+<div data-dojo-attach-point='containerNode'>
+
+    <h2 class="dialogHeader" data-dojo-attach-point="conceptSchemaNode"></h2>
+
+    <div data-dojo-attach-point="formNode" class="cFormDialog">
+        <div data-dojo-props="title: 'labels', open:true">
+            <div data-dojo-attach-point="labelContainerNode"></div>
+        </div>
+
+        <div data-dojo-props="title: 'notes', open:false">
+            <div data-dojo-attach-point="noteContainerNode"></div>
+        </div>
+
+    </div>
+    <div class="dijitDialogPaneActionBar">
+        <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _save">Save</button>
+        <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _cancel">Cancel</button>
+    </div>
+</div>

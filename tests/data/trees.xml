@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+   xmlns:dcterms="http://purl.org/dc/terms/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+>
+  <rdf:Description rdf:about="http://id.trees.org/1">
+    <skos:inScheme rdf:resource="urn:x-skosprovider:tree"/>
+    <dcterms:identifier>1</dcterms:identifier>
+    <skos:prefLabel xml:lang="en">The Larch</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">A type of tree.</skos:definition>
+    <skos:prefLabel xml:lang="nl">De Lariks</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://id.trees.org/3">
+    <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</dcterms:identifier>
+    <skos:member rdf:resource="http://id.trees.org/2"/>
+    <skos:prefLabel xml:lang="nl">Bomen per soort</skos:prefLabel>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Collection"/>
+    <skos:inScheme rdf:resource="urn:x-skosprovider:tree"/>
+    <skos:member rdf:resource="http://id.trees.org/1"/>
+    <skos:prefLabel xml:lang="en">Trees by species</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://id.trees.org/2">
+    <skos:altLabel xml:lang="nl">De Paardekastanje</skos:altLabel>
+    <skos:inScheme rdf:resource="urn:x-skosprovider:tree"/>
+    <skos:altLabel xml:lang="fr">la châtaigne</skos:altLabel>
+    <skos:prefLabel xml:lang="en">The Chestnut</skos:prefLabel>
+    <skos:definition xml:lang="en">A different type of tree.</skos:definition>
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <dcterms:identifier>2</dcterms:identifier>
+  </rdf:Description>
+</rdf:RDF>

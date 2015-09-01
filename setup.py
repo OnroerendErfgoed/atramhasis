@@ -82,7 +82,7 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='0.4.3',
+      version='0.4.4',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -111,6 +111,7 @@ setup(name='atramhasis',
       main = atramhasis:main
       [console_scripts]
       initialize_atramhasis_db = atramhasis.scripts.initializedb:main
+      import_file = atramhasis.scripts.import_file:main
       [pyramid.scaffold]
         atramhasis_scaffold=atramhasis.scaffolds:AtramhasisTemplate
         atramhasis_demo=atramhasis.scaffolds:AtramhasisDemoTemplate

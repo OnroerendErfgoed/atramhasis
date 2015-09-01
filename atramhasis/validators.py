@@ -9,7 +9,7 @@ import colander
 from skosprovider_sqlalchemy.models import (
     Concept as DomainConcept,
     Collection as DomainCollection,
-    Thing, 
+    Thing,
     LabelType,
     Language
 )
@@ -96,6 +96,11 @@ class Concept(colander.MappingSchema):
     matches = Matches(missing={})
 
 
+class ConceptScheme(colander.MappingSchema):
+    labels = Labels(missing=[])
+    notes = Notes(missing=[])
+
+
 class LanguageTag(colander.MappingSchema):
     id = colander.SchemaNode(
         colander.String()
@@ -120,6 +125,7 @@ def concept_schema_validator(node, cstruct):
     languages_manager = request.data_managers['languages_manager']
     conceptscheme_id = node.bindings['conceptscheme_id']
     concept_type = cstruct['type']
+    id = cstruct['id']
     narrower = None
     broader = None
     related = None
@@ -140,31 +146,31 @@ def concept_schema_validator(node, cstruct):
     if 'related' in cstruct:
         related = copy.deepcopy(cstruct['related'])
         related = [m['id'] for m in related]
-        r_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['related'], skos_manager,
-                                                                         conceptscheme_id, related)
+        r_validated = semanticRelations_rule(errors, node['related'], skos_manager,
+                                      conceptscheme_id, related, id)
         concept_relations_rule(errors, node['related'], related, concept_type)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
         narrower = [m['id'] for m in narrower]
-        n_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['narrower'], skos_manager,
-                                                                         conceptscheme_id, narrower)
+        n_validated = semanticRelations_rule(errors, node['narrower'], skos_manager,
+                                      conceptscheme_id, narrower, id)
         concept_relations_rule(errors, node['narrower'], narrower, concept_type)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
         broader = [m['id'] for m in broader]
-        b_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['broader'], skos_manager,
-                                                                         conceptscheme_id, broader)
+        b_validated = semanticRelations_rule(errors, node['broader'], skos_manager,
+                                      conceptscheme_id, broader, id)
         concept_relations_rule(errors, node['broader'], broader, concept_type)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
         members = [m['id'] for m in members]
-        m_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['members'], skos_manager,
-                                                                         conceptscheme_id, members)
+        m_validated = semanticRelations_rule(errors, node['members'], skos_manager,
+                                      conceptscheme_id, members, id)
     if 'member_of' in cstruct:
         member_of = copy.deepcopy(cstruct['member_of'])
         member_of = [m['id'] for m in member_of]
-        o_validated = concept_exists_andnot_different_conceptscheme_rule(errors, node['member_of'], skos_manager,
-                                                                         conceptscheme_id, member_of)
+        o_validated = semanticRelations_rule(errors, node['member_of'], skos_manager,
+                                      conceptscheme_id, member_of, id)
     if r_validated and n_validated and b_validated:
         concept_type_rule(errors, node['narrower'], skos_manager, conceptscheme_id, narrower)
         narrower_hierarchy_rule(errors, node['narrower'], skos_manager, conceptscheme_id, cstruct)
@@ -205,6 +211,30 @@ def concept_schema_validator(node, cstruct):
         )
 
 
+def conceptscheme_schema_validator(node, cstruct):
+    '''
+    This validator validates the incoming conceptscheme labels
+
+    :param colander.SchemaNode node: The schema that's being used while validating.
+    :param cstruct: The conceptscheme being validated.
+    '''
+    request = node.bindings['request']
+    skos_manager = request.data_managers['skos_manager']
+    languages_manager = request.data_managers['languages_manager']
+    errors = []
+    min_labels_rule(errors, node, cstruct)
+    if 'labels' in cstruct:
+        labels = copy.deepcopy(cstruct['labels'])
+        label_type_rule(errors, node, skos_manager, labels)
+        label_lang_rule(errors, node, languages_manager, labels)
+        max_preflabels_rule(errors, node, labels)
+    if len(errors) > 0:
+        raise ValidationError(
+            'ConceptScheme could not be validated',
+            [e.asdict() for e in errors]
+        )
+
+
 def concept_relations_rule(errors, node_location, relations, concept_type):
     '''
     Checks that only concepts have narrower, broader and related relations.
@@ -226,7 +256,7 @@ def max_preflabels_rule(errors, node, labels):
             if label['language'] in preflabel_found:
                 errors.append(colander.Invalid(
                     node['labels'],
-                    'A concept or collection can have only one prefLabel per language.'
+                    'Only one prefLabel per language allowed.'
                 ))
             else:
                 preflabel_found.append(label['language'])
@@ -241,7 +271,7 @@ def min_labels_rule(errors, node, cstruct):
         if len(labels) == 0:
             errors.append(colander.Invalid(
                 node['labels'],
-                'A concept or collection should have at least one label'
+                'At least one label is necessary'
             ))
 
 
@@ -308,12 +338,19 @@ def collection_type_rule(errors, node_location, skos_manager, conceptscheme_id, 
             ))
 
 
-def concept_exists_andnot_different_conceptscheme_rule(errors, node_location, skos_manager, conceptscheme_id, members):
+def semanticRelations_rule(errors, node_location, skos_manager, conceptscheme_id, members, collection_id):
     '''
-    Checks that the members of a collection actually exist and are within
+    Checks that the elements in a group of concepts or collections are not the
+    the group itself, that they actually exist and are within
     the same conceptscheme.
     '''
     for member_concept_id in members:
+        if member_concept_id == collection_id:
+            errors.append(colander.Invalid(
+                node_location,
+                'A concept or collection cannot be related to itself'
+            ))
+            return False
         try:
             skos_manager.get_thing(member_concept_id, conceptscheme_id)
         except NoResultFound:

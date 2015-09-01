@@ -18,6 +18,8 @@ jinja2.directories =
 	atramhasis:templates
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
+atramhasis.session_factory.secret = test123
+
 # Run dojo from source (src) or distribution (dist)
 # If unspecified, defaults to src.
 dojo.mode = dist

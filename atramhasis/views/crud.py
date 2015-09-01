@@ -5,17 +5,19 @@ Module containing views related to the REST service.
 
 import colander
 from pyramid.view import view_defaults, view_config
+from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound
-from skosprovider_sqlalchemy.models import Concept, Thing, Collection
+from skosprovider_sqlalchemy.models import Concept, Collection
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
-from atramhasis.mappers import map_concept
+from atramhasis.mappers import map_concept, map_conceptscheme
 from atramhasis.protected_resources import protected_operation
 from atramhasis.utils import from_thing, internal_providers_only
 from atramhasis.views import invalidate_scheme_cache
+from atramhasis.audit import audit
+from pyramid_skosprovider.views import ProviderView
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
@@ -27,16 +29,18 @@ class AtramhasisCrud(object):
     def __init__(self, context, request):
         self.request = request
         self.skos_manager = self.request.data_managers['skos_manager']
+        self.conceptscheme_manager = self.request.data_managers['conceptscheme_manager']
         self.context = context
         self.logged_in = request.authenticated_userid
-        self.scheme_id = self.request.matchdict['scheme_id']
-        if hasattr(request, 'skos_registry') and request.skos_registry is not None:
-            self.skos_registry = self.request.skos_registry
-        else:
-            raise SkosRegistryNotFoundException()
-        self.provider = self.skos_registry.get_provider(self.scheme_id)
-        if not self.provider:
-            raise ConceptSchemeNotFoundException(self.scheme_id)
+        if 'scheme_id' in self.request.matchdict:
+            self.scheme_id = self.request.matchdict['scheme_id']
+            if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+                self.skos_registry = self.request.skos_registry
+            else:
+                raise SkosRegistryNotFoundException()
+            self.provider = self.skos_registry.get_provider(self.scheme_id)
+            if not self.provider:
+                raise ConceptSchemeNotFoundException(self.scheme_id)
 
     def _get_json_body(self):
         json_body = self.request.json_body
@@ -64,6 +68,56 @@ class AtramhasisCrud(object):
                 e.asdict()
             )
 
+    def _validate_conceptscheme(self, json_conceptscheme):
+        from atramhasis.validators import (
+            ConceptScheme as ConceptSchemeSchema,
+            conceptscheme_schema_validator
+        )
+
+        conceptscheme_schema = ConceptSchemeSchema(
+            validator=conceptscheme_schema_validator
+        ).bind(
+            request=self.request
+        )
+        try:
+            return conceptscheme_schema.deserialize(json_conceptscheme)
+        except colander.Invalid as e:
+            raise ValidationError(
+                'Conceptscheme could not be validated',
+                e.asdict()
+            )
+
+    @audit
+    @view_config(route_name='atramhasis.get_conceptscheme', permission='view')
+    def get_conceptscheme(self):
+        if self.request.method == 'DELETE':
+            raise HTTPMethodNotAllowed
+        # is the same as the pyramid_skosprovider get_conceptscheme function, but wrapped with the audit function
+        return ProviderView(self.request).get_conceptscheme()
+
+    @view_config(route_name='atramhasis.edit_conceptscheme', permission='edit')
+    def edit_conceptscheme(self):
+        '''
+        Edit an existing concept
+
+        :raises atramhasis.errors.ValidationError: If the provided json can't be validated
+        '''
+        validated_json_conceptscheme = self._validate_conceptscheme(self._get_json_body())
+        conceptscheme = self.conceptscheme_manager.get(self.provider.conceptscheme_id)
+        conceptscheme = map_conceptscheme(conceptscheme, validated_json_conceptscheme)
+        conceptscheme = self.conceptscheme_manager.save(conceptscheme)
+        self.request.response.status = '200'
+        return conceptscheme
+
+    @view_config(route_name='atramhasis.get_conceptschemes', permission='view')
+    def get_conceptschemes(self):
+        if self.request.method == 'POST':
+            raise HTTPMethodNotAllowed
+        # is the same as the pyramid_skosprovider get_conceptscheme function, method not allowed included
+        from pyramid_skosprovider.views import ProviderView
+        return ProviderView(self.request).get_conceptschemes()
+
+    @audit
     @view_config(route_name='atramhasis.get_concept', permission='view')
     def get_concept(self):
         '''

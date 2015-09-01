@@ -1,77 +1,135 @@
 {% macro render_relaties_lijst(request, relaties, scheme_id) %}
-	{% if relaties|length > 0 %}
-        <ul class="concept">
-            {%- for c in relaties %}
-                <li>
-                    <a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.concept_id) }}">{{ c.label(request.locale_name).label }}</a>
-                </li>
-            {%- endfor %}
-        </ul>
-	{% endif %}
+  {% if relaties|length > 0 %}
+    {%- set counter = 0  %}
+    {%- for c in relaties|sort(attribute='label') %}
+      {%- set counter = counter + 1 %}
+      <div class="large-3 large-3-pad columns result-grid" {% if counter == relaties|length %}style="float: left;"{% endif %}>
+        <a href="{{ request.route_path('concept', scheme_id = scheme_id, c_id = c.concept_id) }}"><h5>{{ c.label(request.locale_name).label }}</h5> <span> [ ID : {{ c.id }} ]</span><br><small>{{ c.type }}</small></a>
+      </div>
+    {%- endfor %}
+  {% endif %}
 {% endmacro %}
 
 {% macro render_labels(labels, type) %}
-    {% set type_labels = [] %}
-    {%- for label in labels %}
-        {% if label.labeltype_id == type %}
-            {% if type_labels.append(label) %}{% endif %}
-        {% endif %}
-    {%- endfor %}
-    {% if type_labels|length > 0 %}
-        {% if type == 'prefLabel' %}
-        <h4 class="subheader">{% trans %}prefLabel{% endtrans %}:</h4>
-        {% elif type == 'altLabel' %}
-        <h4 class="subheader">{% trans %}altLabel{% endtrans %}:</h4>
-        {% elif type == 'hiddenLabel' %}
-        <h4 class="subheader">{% trans %}hiddenLabel{% endtrans %}:</h4>
-        {% endif %}
-		<ul class="concept">
-		    {%- for label in type_labels|sort(attribute='label') %}
-            <li>{{ label.label}} <em class="language">({{ label.language }})</em></li>
-		    {%- endfor %}
-		</ul>
+  {% set type_labels = [] %}
+  {%- for label in labels %}
+    {% if label.labeltype_id == type %}
+      {% if type_labels.append(label) %}{% endif %}
     {% endif %}
+  {%- endfor %}
+  {% if type_labels|length > 0 %}
+    {% if type == 'prefLabel' %}
+      <h4 class="subheader">{% trans %}prefLabel{% endtrans %}:</h4>
+    {% elif type == 'altLabel' %}
+      <h4 class="subheader">{% trans %}altLabel{% endtrans %}:</h4>
+    {% elif type == 'hiddenLabel' %}
+      <h4 class="subheader">{% trans %}hiddenLabel{% endtrans %}:</h4>
+    {% endif %}
+    <ul class="concept">
+      {%- for label in type_labels|sort(attribute='label') %}
+        <li>{{ label.label}} <em class="language">({{ label.language }})</em></li>
+      {%- endfor %}
+    </ul>
+  {% endif %}
 {% endmacro %}
 
 
-{% macro render_matches(matches) %}
-    {% set sorted_matches = {'broadMatch': [], 'closeMatch': [], 'exactMatch': [], 'narrowMatch': [], 'relatedMatch': []} %}
-    {%- for match in matches %}
-        {% if sorted_matches[match.matchtype.name].append(match.uri) %}{% endif %}
+{% macro render_matches(matches, request) %}
+  {% set sorted_matches = {'broadMatch': [], 'closeMatch': [], 'exactMatch': [], 'narrowMatch': [], 'relatedMatch': []} %}
+  {%- for match in matches %}
+    {% if sorted_matches[match.matchtype.name].append(match) %}{% endif %}
+  {%- endfor %}
+  {% if sorted_matches|length > 0 %}
+    {%- for matchtype in sorted_matches %}
+      {% if sorted_matches[matchtype]|length > 0 %}
+        <h4 class="relations-subtitle">{{ matchtype }}</h4>
+          {%- for value in sorted_matches[matchtype] %}
+             <div class="large-3 large-3-pad columns result-grid"><a href="{{ value.uri }}"><h5>{{ value.concept.label(request.locale_name).label }}</h5> <span>[ id: {{ value.concept.id }} ]</span> <br><small>{{ value.concept.type }}</small></a></div>
+          {%- endfor %}
+      {% endif %}
     {%- endfor %}
-    {% if sorted_matches|length > 0 %}
-        {%- for matchtype in sorted_matches %}
-        {% if sorted_matches[matchtype]|length > 0 %}
-        <h4 class="subheader">{{ matchtype }}:</h4>
-		<ul class="concept">
-		    {%- for value in sorted_matches[matchtype] %}
-            <li><a href="{{ value }}">{{ value }}</a></li>
-		    {%- endfor %}
-		</ul>
-        {% endif %}
-        {%- endfor %}
-    {% endif %}
+  {% endif %}
 {% endmacro %}
 
 {% macro ga_tracker(ga_key) %}
-	<!-- Google Analytics -->
-	<script type="text/javascript">
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <!-- Google Analytics -->
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-	ga('create', '{{ ga_key }}', 'auto');
-	ga('send', 'pageview');
-	</script>
-	<!-- End Google Analytics -->
+    ga('create', '{{ ga_key }}', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <!-- End Google Analytics -->
 {% endmacro %}
 
 {% macro get_conceptscheme_label(conceptscheme, language) %}
-	{% set label = conceptscheme.label(language) %}
-	{% if label %}
-		{{ label.label }}
-	{% else %}
-		{{ conceptscheme.uri }}
-	{% endif %}
+  {% set label = conceptscheme.label(language) %}
+  {% if label %}
+    {{ label.label }}
+  {% else %}
+    {{ conceptscheme.uri }}
+  {% endif %}
+{% endmacro %}
+
+{% macro get_language_links(request) %}
+  <div class="right language">
+    {% set default_lang = request.registry.settings.get('pyramid.default_locale_name') %}
+    {% set languages = request.registry.settings.get('available_languages', default_lang).split() %}
+    {%- for language in languages %}
+      <span {% if request.locale_name==language %}class='language-active'{% endif %}><a href="{{ request.route_path('locale') }}?language={{ language }}">{{ language|upper }}</a></span>&nbsp;
+    {%- endfor %}
+  </div>
+{% endmacro %}
+
+{% macro print_labels(labels) %}
+  {%- set pref = [] %}
+  {%- set alt = [] %}
+  {%- set hidden = [] %}
+  {%- for label in labels %}
+    {%- if label.type == 'prefLabel' or label.labeltype_id == 'prefLabel' %}
+      {% do pref.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>') %}
+    {%- elif label.type == 'altLabel' or label.labeltype_id == 'altLabel' %}
+      {%- do alt.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>')  %}
+    {%- elif label.type == 'hiddenLabel' or label.labeltype_id == 'hiddenLabel' %}
+      {%- do hidden.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>')  %}
+    {%- endif %}
+  {%- endfor %}
+  {%- if pref|length > 0 %}
+    <dt>{% trans %}labels{% endtrans %}</dt>
+    <dd>
+      {{ pref | join(', ') | safe }}
+    </dd>
+  {%- endif %}
+  {%- if alt|length > 0 %}
+    <dt>{% trans %}altLabel{% endtrans %}</dt>
+    <dd>
+      {{ alt | join(', ') | safe }}
+    </dd>
+  {%- endif %}
+  {%- if hidden|length > 0 %}
+    <dt>{% trans %}hiddenLabel{% endtrans %}</dt>
+    <dd>
+      {{ hidden | join(', ') | safe }}
+    </dd>
+  {%- endif %}
+{% endmacro %}
+
+{% macro print_concepts(request, concepts, conceptscheme) %}
+  {%- set counter = 0  %}
+  {%- for concept in concepts|sort(attribute='label') %}
+    {%- set counter = counter + 1 %}
+    <div class="large-3 large-3-pad columns result-grid" {% if counter == concepts|length %}style="float:left;"{% endif %}><a href="{{ request.route_path('concept', scheme_id= conceptscheme.scheme_id, c_id = concept.id) }}"><h5>{{ concept.label }}</h5> <span>[ id: {{ concept.id }} ]</span> <br><small>{{ concept.type }}</small></a></div>
+  {%- endfor %}
+{% endmacro %}
+
+{% macro popular_concepts(request, scheme_id, max) %}
+    {% for c in request.data_managers['audit_manager'].get_most_popular_concepts_for_conceptscheme(scheme_id, max) %}
+        <ul class="no_bullet">
+            <li class="cube"><a href="{{ request.route_path('atramhasis.get_concept', scheme_id=scheme_id, c_id=c.concept_id) }}">
+                {{ request.skos_registry.get_provider(scheme_id).get_by_id(c.concept_id).label().label|capitalize() }}</a></li>
+        </ul>
+    {% endfor %}
 {% endmacro %}

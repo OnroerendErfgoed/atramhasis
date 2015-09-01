@@ -14,8 +14,10 @@ import colander
 from pyramid import testing
 from skosprovider_sqlalchemy.models import Concept, Collection, LabelType, Language, Thing
 from atramhasis.validators import (
+    ConceptScheme as ConceptSchemeSchema,
     Concept as ConceptSchema,
     concept_schema_validator,
+    conceptscheme_schema_validator,
     LanguageTag, languagetag_validator)
 
 
@@ -116,6 +118,11 @@ class TestValidation(unittest.TestCase):
             request=self.request,
             new=True
         )
+        self.conceptscheme_schema = ConceptSchemeSchema(
+            validator=conceptscheme_schema_validator
+        ).bind(
+            request=self.request
+        )
         self.json_concept = {
             "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
             "label": "Belgium",
@@ -152,9 +159,32 @@ class TestValidation(unittest.TestCase):
                       }],
             "member_of": [{"id": 666}]
         }
+        self.json_conceptscheme = {
+            "labels": [{
+                           "language": "nl-BE",
+                           "label": "Stijlen en culturen",
+                           "type": "prefLabel"
+                       }],
+            "label": "Stijlen en culturen",
+            "notes": [{
+                          "note": "een notitie",
+                          "type": "note",
+                          "language": "nl"
+                      }]
+        }
 
     def tearDown(self):
         testing.tearDown()
+
+    def test_validation_conceptscheme(self):
+        validated_conceptscheme = self.conceptscheme_schema.deserialize(self.json_conceptscheme)
+        self.assertIsNotNone(validated_conceptscheme)
+        self.assertEqual(1, len(validated_conceptscheme['labels']))
+        self.assertEqual(1, len(validated_conceptscheme['notes']))
+
+    def test_invalid_conceptscheme(self):
+        self.json_conceptscheme.pop('labels')
+        self.assertRaises(ValidationError, self.conceptscheme_schema.deserialize, self.json_conceptscheme)
 
     def test_validation_concept(self):
         error_raised = False
@@ -189,7 +219,7 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(error_raised)
         self.assertIsNone(validated_concept)
         self.assertTrue(isinstance(error, ValidationError))
-        self.assertIn({'labels': 'A concept or collection can have only one prefLabel per language.'}, error.errors)
+        self.assertIn({'labels': 'Only one prefLabel per language allowed.'}, error.errors)
 
     def test_max_preflabels_1_en_1_nl(self):
         self.json_concept['labels'].append({
@@ -362,6 +392,22 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(isinstance(error, ValidationError))
         self.assertIn({'narrower': 'Concept not found, check concept_id. Please be aware members'
                                    ' should be within one scheme'}, error.errors)
+
+
+    def test_narrower_concept_to_self(self):
+        self.json_concept['narrower'].append({"id": 4})
+        error_raised = False
+        error = None
+        validated_concept = None
+        try:
+            validated_concept = self.concept_schema.deserialize(self.json_concept)
+        except ValidationError as e:
+            error_raised = True
+            error = e
+        self.assertTrue(error_raised)
+        self.assertIsNone(validated_concept)
+        self.assertTrue(isinstance(error, ValidationError))
+        self.assertIn({'narrower': 'A concept or collection cannot be related to itself'}, error.errors)
 
     def test_broader_concept_different_conceptscheme(self):
         self.json_concept['broader'].append({"id": 777})
@@ -721,7 +767,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNone(validated_concept)
         self.assertIsNotNone(error)
         self.assertTrue(isinstance(error, ValidationError))
-        self.assertIn({'labels': 'A concept or collection should have at least one label'}, error.errors)
+        self.assertIn({'labels': 'At least one label is necessary'}, error.errors)
 
     def test_min_labels_rule_no_labels(self):
         error_raised = False
@@ -749,7 +795,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNone(validated_concept)
         self.assertIsNotNone(error)
         self.assertTrue(isinstance(error, ValidationError))
-        self.assertIn({'labels': 'A concept or collection should have at least one label'}, error.errors)
+        self.assertIn({'labels': 'At least one label is necessary'}, error.errors)
 
     def test_concept_matches_rule(self):
         error_raised = False

@@ -11,7 +11,8 @@ import sys
 
 from atramhasis.errors import SkosRegistryNotFoundException, ValidationError
 from atramhasis.protected_resources import ProtectedResourceException
-from skosprovider.exceptions import ProviderUnavailableException
+from skosprovider.exceptions import ProviderUnavailableException;
+from pyramid.httpexceptions import HTTPMethodNotAllowed
 
 log = logging.getLogger(__name__)
 
@@ -84,4 +85,14 @@ def failed(exc, request):
     log.error(exc, exc_info=sys.exc_info())
     request.response.status_int = 500
     return {'message': 'unexpected server error'}
+
+
+@view_config(context=HTTPMethodNotAllowed, renderer='json')
+def failed_not_method_not_allowed(exc, request):
+    '''
+    View invoked when a method is not allowed.
+    '''
+    log.debug(exc.explanation)
+    request.response.status_int = 405
+    return {'message': exc.explanation}
 
