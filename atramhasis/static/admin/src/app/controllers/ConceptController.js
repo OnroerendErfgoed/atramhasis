@@ -6,8 +6,9 @@ define([
   'dojo/_base/lang',
   'dojo/_base/array',
   'dojo/request/xhr',
+  'dojo/Deferred',
   'dstore/Rest'
-], function (declare, lang, array, xhr, Rest) {
+], function (declare, lang, array, xhr, Deferred, Rest) {
   return declare( null, {
 
     _stores: {},
@@ -18,12 +19,28 @@ define([
       declare.safeMixin(this, args);
     },
 
-    getConcepts: function(){
-      console.debug('ConceptController::getConcepts');
-    },
-
-    getConcept: function(id) {
-      console.debug('ConceptController::getConcept', id);
+    getConcept: function(schemeId, id) {
+      console.debug('ConceptController::getConcept', schemeId, id);
+      var deferred = new Deferred();
+      var url = this._target.replace('{schemeId}', schemeId) + id;
+      xhr.get(url, {
+        handleAs: 'json',
+        headers:{'Accept': 'application/json'}
+      }).then(
+        lang.hitch(this,function(data){
+          deferred.resolve(data);
+        }),
+        function(err){
+          console.error(err);
+          if (err.response && err.response.data && err.response.data.message) {
+            deferred.reject(err.response.data.message);
+          }
+          else {
+            deferred.reject(err);
+          }
+        }
+      );
+      return deferred;
     },
 
     getConceptStore: function (schemeId) {

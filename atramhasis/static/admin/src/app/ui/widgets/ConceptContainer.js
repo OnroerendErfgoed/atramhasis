@@ -4,10 +4,11 @@ define([
   'dojo/_base/lang',
   'dojo/dom-construct',
   'dojo/dom-class',
+  'dojo/json',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/ConceptContainer.html'
-], function (declare, array, lang, domConstruct, domClass, _WidgetBase, _TemplatedMixin, template) {
+], function (declare, array, lang, domConstruct, domClass, JSON, _WidgetBase, _TemplatedMixin, template) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
@@ -43,7 +44,7 @@ define([
 
       //create tab panel
       var panel = domConstruct.create("div", {
-        'innerHTML': "<p>" + content.id + "</p>" + "<p>" + content.label + "</p>" + "<p>" + content.uri + "</p>",
+        'innerHTML': "<p>" + content.id + "</p>" + "<p>" + content.label + "</p>" + "<p>" +JSON.stringify(content) + "</p>",
         'class': "tab-panel"
       }, this.panelNode);
 
@@ -52,7 +53,7 @@ define([
         'class': "tab"
       }, this.tabNode);
       domConstruct.create("a", {
-        'innerHTML': 'tab' + newId,
+        'innerHTML': content.label,
         'href': "#/tabs/tab/" + newId,
         'onclick': lang.hitch(this, function (evt) {
           evt.preventDefault();

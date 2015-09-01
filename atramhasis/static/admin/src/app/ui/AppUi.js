@@ -121,7 +121,7 @@ define([
       };
       console.debug('AppUi::_search searchParams', schemeId, filter);
       var store = this.conceptController.getConceptStore(schemeId).filter(filter);
-      this._searchResultsPane.setStore(store);
+      this._searchResultsPane.init(schemeId, store);
 
       this._resetSearchInputs();
     },
@@ -155,8 +155,15 @@ define([
       this._searchResultsPane = new SearchResultsPane({}, node);
       this.own(
         on(this._searchResultsPane, 'row-select', lang.hitch(this, function (evt) {
-          console.debug('catch select event', evt.data);
-          this._conceptContainer.openTab(evt.data);
+          console.debug('catch select event', evt);
+          this.conceptController.getConcept(evt.scheme, evt.data.id).then(
+            lang.hitch(this, function (response) {
+              this._conceptContainer.openTab(response);
+            }),
+            function (error) {
+              topic.publish('dGrowl', error, {'title': "Error", 'sticky': true, 'channel':'error'});
+            }
+          );
         }))
       );
     }
