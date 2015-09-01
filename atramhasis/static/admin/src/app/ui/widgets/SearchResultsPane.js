@@ -14,6 +14,8 @@ define([
 
     templateString: template,
     _grid: null,
+    _scheme: null,
+
 
     postCreate: function () {
       this.inherited(arguments);
@@ -27,7 +29,9 @@ define([
 
     },
 
-    setStore: function (store) {
+    init: function (scheme, store) {
+      console.debug('SearchResultsPane::init',scheme, store);
+      this._scheme = scheme;
       this._grid.set('collection', store);
     },
 
@@ -64,13 +68,17 @@ define([
       grid.on('dgrid-deselect', lang.hitch(this, function (event) {
         console.debug('SearchResultsPane row de-selected: ', event.rows);
         array.forEach(event.rows, function (row) {
-          this.emit('row-deselect', row.data);
+          this._rowDeSelect(row);
         }, this);
       }));
     },
 
     _rowSelect: function (row) {
-      this.emit('row-select', {data: row.data});
+      this.emit('row-select', {data: row.data, scheme: this._scheme});
+    },
+
+    _rowDeSelect: function (row) {
+      this.emit('row-deselect', {data: row.data, scheme: this._scheme});
     },
 
     _toggleHeight: function (evt) {
