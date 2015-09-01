@@ -27,9 +27,14 @@ define([
     },
 
     openTab: function (content) {
-      console.debug('ConceptContainer::openTab TODO', content);
-      //open or create new tab
-      //check on content
+      console.debug('ConceptContainer::openTab', content);
+      var tab = this._getTabByContentId(content.id);
+      if (tab) {
+        this._activateTab(tab.id);
+      }
+      else {
+        this._createTab(content);
+      }
     },
 
     _createTab: function (content) {
@@ -38,7 +43,7 @@ define([
 
       //create tab panel
       var panel = domConstruct.create("div", {
-        'innerHTML': "<p>tab " + newId + "</p>",
+        'innerHTML': "<p>" + content.id + "</p>" + "<p>" + content.label + "</p>" + "<p>" + content.uri + "</p>",
         'class': "tab-panel"
       }, this.panelNode);
 
@@ -77,6 +82,14 @@ define([
       console.debug('ConceptContainer::_getTab', tabId);
       var tabs = array.filter(this._tabs, function (tab) {
         return tab.id == tabId;
+      });
+      return tabs.length > 0 ? tabs[0] : null;
+    },
+
+    _getTabByContentId: function (contentId) {
+      console.debug('ConceptContainer::_getTabByContentId', contentId);
+      var tabs = array.filter(this._tabs, function (tab) {
+        return tab.content && tab.content.id == contentId;
       });
       return tabs.length > 0 ? tabs[0] : null;
     },
