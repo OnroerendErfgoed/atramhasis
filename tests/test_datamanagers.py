@@ -69,13 +69,13 @@ class DatamangersTests(unittest.TestCase):
             local_session.add(match)
 
             local_session.add(ConceptVisitLog(concept_id=1, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
             local_session.add(ConceptVisitLog(concept_id=1, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 11, 58, 03)))
+                                              visited_at=datetime(2015, 8, 27, 11, 58, 3)))
             local_session.add(ConceptVisitLog(concept_id=2, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
             local_session.add(ConceptVisitLog(concept_id=2, conceptscheme_id=2, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
 
 
 class ConceptSchemeManagerTest(DatamangersTests):
