@@ -26,5 +26,8 @@
     "foundation": "~5.5.0",
     "font-awesome": "~4.3.0",
     "dstore": "1.1.0"
+  },
+  "resolutions": {
+    "dstore": "1.1.0"
   }
 }

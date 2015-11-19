@@ -102,7 +102,7 @@ class LanguagesCrud(object):
         '''
         Delete an existing concept
 
-        :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
+        :raises atramhasis.errors.LanguageNotFoundException: If the language can't be found
         '''
         l_id = self.request.matchdict['l_id']
         try:

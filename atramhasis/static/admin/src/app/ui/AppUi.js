@@ -7,12 +7,15 @@ define([
   'dojo/_base/fx',
   'dojo/dom-style',
   'dojo/topic',
+  'dojo/on',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./AppUi.html',
   '../utils/DomUtils',
-  './widgets/SearchResultsPane'
-], function (declare, lang, fx, domStyle, topic, _WidgetBase, _TemplatedMixin, template, domUtils, SearchResultsPane) {
+  './widgets/SearchResultsPane',
+  './widgets/ConceptContainer'
+], function (declare, lang, fx, domStyle, topic, on, _WidgetBase, _TemplatedMixin, template, domUtils, SearchResultsPane,
+             ConceptContainer) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
@@ -21,6 +24,7 @@ define([
     conceptSchemeController: null,
     conceptController: null,
     _searchResultsPane: null,
+    _conceptContainer: null,
 
     /**
      * Standard widget function.
@@ -32,7 +36,8 @@ define([
       this._registerLoadingEvents();
       this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
 
-      this._searchResultsPane = new SearchResultsPane({}, this.searchPaneNode);
+      this._createSearchResultsPane(this.searchPaneNode);
+      this._conceptContainer = new ConceptContainer({}, this.conceptContainerNode);
     },
 
     /**
@@ -44,6 +49,7 @@ define([
       console.debug('AppUi::startup');
 
       this._searchResultsPane.startup();
+      this._conceptContainer.startup();
 
       this._hideLoading();
     },
@@ -138,6 +144,21 @@ define([
     _editLanguages: function (evt) {
       evt.preventDefault();
       console.debug('AppUi::_editLanguages');
+    },
+
+    _editConceptScheme: function (evt) {
+      evt.preventDefault();
+      console.debug('AppUi::_editConceptScheme');
+    },
+
+    _createSearchResultsPane: function (node) {
+      this._searchResultsPane = new SearchResultsPane({}, node);
+      this.own(
+        on(this._searchResultsPane, 'row-select', lang.hitch(this, function (evt) {
+          console.debug('catch select event', evt.data);
+          this._conceptContainer.openTab(evt.data);
+        }))
+      );
     }
   });
 });

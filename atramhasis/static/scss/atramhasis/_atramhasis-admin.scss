@@ -1,10 +1,63 @@
-/* main html */
-html, body, #appDiv {  width: 100%;  height: 100%;  }
+/* main html layout */
+html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
+
+#appDiv {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+#appDiv footer {
+  display: block;
+  height: 30px;
+  background-color: $topbar-bg-color;
+  padding: 5px 10px;
+}
+
+#appDiv header {
+  display: block;
+  background-color: $topbar-bg-color;
+  z-index: 2;
+
+  nav {
+    border-bottom: 1px solid #f0f1f3;
+  }
+
+  .search-results .dgrid {
+    height: 150px;
+    width: 100%
+  }
+
+  .search-results-expanded .dgrid {
+    height: 350px;
+  }
+}
+
+#appDiv .app-content {
+  flex: 1 100%;
+  display: flex;
+  flex-direction: column;
+}
 
 /* Custom notification styles! */
 .dGrowl-channel-warn .dGrowl-notification {
 	background-color: rgb(255, 250, 245);
   border: 1px solid #e97b14;
+}
+
+/* buttons */
+a.button {
+  color: $white;
+  background-color: $blue;
+  border: 1px solid $light-gray;
+  padding: 0.1rem 0.5rem 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+a.admin-button:hover {
+  background-color: scale-color($blue, $lightness: -15%);
+  color: $white !important;
 }
 
 /* noscript div */
@@ -14,49 +67,78 @@ html, body, #appDiv {  width: 100%;  height: 100%;  }
 .pageOverlay { top: 0; left: 0; position: absolute; height: 100%; width: 100%; z-index: 1001; display: block; background-color: $steel; text-align: center; color: $light-gray;}
 .loadingMessage {font-size: 1em; margin: 30px; color: $light-gray;}
 
+
+
 /* buttons under header */
 .action-bar {
   height: 30px;
   position: absolute;
-  right: 0;
+  right: 15px;
   top: 70px;
-  z-index: 500;
-}
-.action-bar ul {
-  margin: 0;
-  padding: 0;
-}
+  z-index: 3;
 
-.action-bar li {
-  list-style-type: none;
-  font-size: 0.6em;
-  padding: 0 0 5px 15px;
-  margin: 0 0 20px 2px;
-  float: left;
-}
+  ul {
+    margin: 0;
+    padding: 0;
 
-.action-bar li a {
-  border: 1px solid #d6d6d6;
-  background: white;
-  padding: 8px 15px;
+    li {
+      list-style-type: none;
+      padding: 5px;
+      float: left;
+    }
+  }
 }
 
+ /*tabs*/
+.concept-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 
-/* search results pane */
-.search-results {
-  background: $topbar-bg;
-  height: 200px;
-  width: 100%;
-}
+  .panels {
+    background-color: $white;
+    margin: 10px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
-.search-results .dgrid {
-  height: 150px;
-}
+    .tab-panel {
+      flex: 1;
+      display: none;
+    }
 
-.search-results-expanded {
-  height: 400px !important;
-}
+    .tab-panel.active {
+      display: block;
+    }
+  }
 
-.search-results.search-results-expanded .dgrid {
-  height: 350px;
+  ul.tabs {
+    margin: 0;
+    height: 30px;
+    padding: 0;
+
+    li.tab {
+      list-style-type: none;
+      padding-right: 5px;
+      float: left;
+
+      a {
+        color: $white;
+        background-color: $blue;
+        border: 1px solid $light-gray;
+        padding: 0.1rem 0.5rem 0.2rem 0.5rem;
+        margin: 0;
+      }
+
+      a:hover {
+        color: black;
+        background-color: $white;
+      }
+    }
+
+    li.tab.active a {
+      color: black;
+      background-color: $white;
+    }
+  }
 }

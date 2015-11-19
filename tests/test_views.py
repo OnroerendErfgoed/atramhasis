@@ -29,6 +29,7 @@ def provider(some_id):
     provider_mock = Mock()
     if some_id == 1:
         provider_mock.get_vocabulary_id = Mock(return_value='TREES')
+        provider_mock.get_metadata = Mock(return_value={'id': some_id, 'subject': []})
     provider_mock.conceptscheme_id = Mock(return_value=some_id)
     return provider_mock
 
