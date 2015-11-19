@@ -5,7 +5,7 @@ Services
 ========
 
 Atramhasis can be used fully with a :term:`SOA`. While we provide a public and
-and a administrators interface out of the box, you can also write your own client
+and an administrator's interface out of the box, you can also write your own client
 side code that interacts with the Atramhasis services, either for reading 
 information or writing it.
 
@@ -15,14 +15,17 @@ Read Services
 The basic read services are being provided by 
 :ref:`Pyramid Skosprovider <pyramidskosprovider:services>`. These allow you to
 read conceptschemes, search for concepts and collections and integrate the
-Atramhasis backend into other applications. Maintain you thesaurus in one 
+Atramhasis backend into other applications. Maintain your thesaurus in one 
 database and use it in several other applications.
 
 Write Services
 ==============
 
-The Atramhasis write services allow you to add concepts and collections, edit
-them and delete them.
+Concepts and collections
+------------------------
+
+The main Atramhasis write services allow you to add concepts and collections,
+edit them and delete them.
 
 .. http:post:: /conceptschemes/{scheme_id}/c
 
@@ -273,3 +276,166 @@ them and delete them.
         Atramhasis has determined that it's still being used somewhere else. The
         response body will contain a message and a list of :term:`URI`'s that
         are using this concept.
+
+Languages
+---------
+
+Apart from the main services, Atramhasis exposes some secondary services that
+deal with languages.
+
+.. http:get:: /languages
+
+    List all languages known to this Atramhasis instance.
+
+    Please bear in mind that these are not all known IANA language tags, but a
+    subset used in this Atramhasis instance. This is used to populate drop down
+    lists and such.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /languages HTTP/1.1
+        Host: demo.atramhasis.org
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        [
+            {"id": "la", "name": "Latin"},
+            {"id": "nl", "name": "Dutch"},
+            {"id": "en", "name": "English"},
+            {"id": "fr", "name": "French"},
+            {"id": "de", "name": "German"}
+        ]
+
+    :param sort: Which field to sort on. Use `-` and `+` to indicate sort order.
+        Eg. `id` or `+id` sort ascending on `id`, `-name` sort descending on
+        `name`.
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 200: The list of languages was returned.
+
+.. http:get:: /languages/{language_id}
+
+    Get information on a certain language.
+
+    Please bear in mind this will only work for languages known to this
+    Atramhasis instance. Valid IANA languages not known to this instance will
+    not work.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        GET /languages HTTP/1.1
+        Host: demo.atramhasis.org
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "id": "la",
+            "name": "Latin"
+        }
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 200: The language was found.
+    :statuscode 404: The language was not found in this instance.
+
+.. http:put:: /languages/{language_id}
+
+    Update the information on a certain language or create an entry for a new
+    one.
+
+    The user is required to submit the `language_id` and this must be a valid
+    IANA language tag.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        PUT /languages/nl-BE HTTP/1.1
+        Host: demo.atramhasis.org
+        Accept: application/json
+
+        {
+            "id": "nl-BE",
+            "name": "Dutch (Flanders)"
+        }
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "id": "nl-BE",
+            "name": "Dutch (Flanders)"
+        }
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 200: The language was updated or added.
+    :statuscode 400: The request could not be executed because of problems with
+        the submitted data. Most likely you are submitting an invalid IANA
+        langage code.
+
+.. http:delete:: /languages/{language_id}
+
+    Delete a language from this Atramhasis instance.
+
+    **Example request**:
+
+    .. sourcecode:: http
+
+        DELETE /languages/nl-BE HTTP/1.1
+        Host: demo.atramhasis.org
+        Accept: application/json
+
+    **Example response**:
+
+    .. sourcecode:: http
+
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
+        {
+            "id": "nl-BE",
+            "name": "Dutch (Flanders)"
+        }
+
+    :reqheader Accept: The response content type depends on this header. 
+        Currently only :mimetype:`application/json` is supported.
+
+    :resheader Content-Type: This service currently always returns 
+        :mimetype:`application/json`
+
+    :statuscode 200: The language was deleted.
+    :statuscode 404: The language was not found in this instance.

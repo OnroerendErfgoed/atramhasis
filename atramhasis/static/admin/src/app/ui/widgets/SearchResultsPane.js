@@ -1,5 +1,7 @@
 define([
   'dojo/_base/declare',
+  'dojo/_base/array',
+  'dojo/_base/lang',
   'dojo/dom-class',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
@@ -7,7 +9,7 @@ define([
   'dgrid/OnDemandGrid',
   'dgrid/Keyboard',
   'dgrid/Selection'
-], function (declare, domClass, _WidgetBase, _TemplatedMixin, template, OnDemandGrid, Keyboard, Selection) {
+], function (declare, array, lang, domClass, _WidgetBase, _TemplatedMixin, template, OnDemandGrid, Keyboard, Selection) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
@@ -46,9 +48,11 @@ define([
         collection: null
       }, node);
 
-      grid.on('dgrid-select', function (event) {
-        // Report the item from the selected row to the console.
-        console.debug('SearchResultsPane row selected: ', event.rows); //event.rows[0].data);
+      grid.on('dgrid-select', lang.hitch(this, function (event) {
+        console.debug('SearchResultsPane row selected: ', event.rows);
+        array.forEach(event.rows, function (row) {
+          this._rowSelect(row);
+        }, this);
 
         // Iterate through all currently-selected items
         //for (var id in grid.selection) {
@@ -56,10 +60,17 @@ define([
                 // ...
             //}
         //}
-      });
-      grid.on('dgrid-deselect', function (event) {
+      }));
+      grid.on('dgrid-deselect', lang.hitch(this, function (event) {
         console.debug('SearchResultsPane row de-selected: ', event.rows);
-      });
+        array.forEach(event.rows, function (row) {
+          this.emit('row-deselect', row.data);
+        }, this);
+      }));
+    },
+
+    _rowSelect: function (row) {
+      this.emit('row-select', {data: row.data});
     },
 
     _toggleHeight: function (evt) {
