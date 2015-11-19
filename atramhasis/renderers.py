@@ -74,6 +74,7 @@ def conceptscheme_adapter(obj, request):
         'subject': provider.metadata['subject'] if provider.metadata['subject'] else [],
         'labels': obj.labels,
         'notes': obj.notes,
+        'languages': obj.languages
     }
 
 
