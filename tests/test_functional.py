@@ -47,7 +47,12 @@ json_value = {
             "label": "The Larch"
         }
     ],
-    "notes": []
+    "notes": [],
+    "sources": [
+        {
+            "citation": "Python, M.: Episode Three: How to recognise different types of trees from quite a long way away."
+        }
+    ]
 }
 
 json_value_relations = {

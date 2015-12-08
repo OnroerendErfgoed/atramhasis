@@ -5,7 +5,7 @@ Module containing utility functions used by Atramhasis.
 from collections import deque
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 
-from skosprovider.skos import Concept, Collection, Label, Note, ConceptScheme
+from skosprovider.skos import Concept, Collection, Label, Note, Source, ConceptScheme
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
 
@@ -27,6 +27,10 @@ def from_thing(thing):
             labels=[
                 Label(l.label, l.labeltype_id, l.language_id)
                 for l in thing.labels
+            ],
+            sources=[
+                Source(s.citation)
+                for s in thing.sources
             ],
             members=[member.concept_id for member in thing.members] if hasattr(thing, 'members') else [],
             member_of=[c.concept_id for c in thing.member_of],
@@ -50,6 +54,10 @@ def from_thing(thing):
             notes=[
                 Note(n.note, n.notetype_id, n.language_id)
                 for n in thing.notes
+            ],
+            sources=[
+                Source(s.citation)
+                for s in thing.sources
             ],
             broader=[c.concept_id for c in thing.broader_concepts],
             narrower=[c.concept_id for c in thing.narrower_concepts],
