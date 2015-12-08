@@ -1,5 +1,5 @@
 import unittest
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Match, MatchType, Language, ConceptScheme
+from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Source, Match, MatchType, Language, ConceptScheme
 from pyramid import testing
 from fixtures.data import trees
 from skosprovider.registry import Registry
@@ -31,6 +31,11 @@ class TestJsonRenderer(unittest.TestCase):
         labels.append(label3)
         self.concept.labels = labels
 
+        sources = []
+        source = Source('Van Daele K. 2009')
+        sources.append(source)
+        self.concept.sources = sources
+
         matches = []
         match = Match()
         match.matchtype = MatchType(name='closeMatch', description='test')
@@ -57,6 +62,7 @@ class TestJsonRenderer(unittest.TestCase):
         self.conceptscheme.id = 1
         self.conceptscheme.labels = labels
         self.conceptscheme.notes = notes
+        self.conceptscheme.sources = sources
         self.conceptscheme.uri = None
 
         self.regis = Registry()
@@ -86,6 +92,13 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(note['type'], 'example')
         self.assertEqual(note['language'], 'en')
 
+    def test_source_adapter(self):
+        from atramhasis.renderers import source_adapter
+        s = self.concept.sources[0]
+        source = source_adapter(s, {})
+        self.assertIsInstance(source, dict)
+        self.assertEqual(source['citation'], 'Van Daele K. 2009')
+
     def test_concept_adapter(self):
         from atramhasis.renderers import concept_adapter
         c = self.concept
@@ -99,6 +112,8 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(len(concept['labels']), 3)
         self.assertIsInstance(concept['notes'], list)
         self.assertEqual(len(concept['notes']), 2)
+        self.assertIsInstance(concept['sources'], list)
+        self.assertEqual(len(concept['sources']), 1)
         self.assertIsInstance(concept['member_of'], list)
         self.assertEqual(len(concept['member_of']), 1)
         self.assertIsInstance(concept['narrower'], list)
@@ -173,6 +188,7 @@ class TestJsonRenderer(unittest.TestCase):
         conceptscheme = conceptscheme_adapter(c, self.request)
         self.assertGreater(len(conceptscheme['notes']), 0)
         self.assertGreater(len(conceptscheme['labels']), 0)
+        self.assertGreater(len(conceptscheme['sources']), 0)
         self.assertIsNone(conceptscheme['uri'])
         self.assertEqual('een label', conceptscheme['label'])
         self.assertEqual(1, conceptscheme['id'])

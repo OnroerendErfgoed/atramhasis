@@ -31,6 +31,10 @@ def map_concept(concept, concept_json, skos_manager):
         for n in notes:
             note = Note(note=n.get('note', ''), notetype_id=n.get('type', ''), language_id=n.get('language', ''))
             concept.notes.append(note)
+        sources = concept_json.get('sources', [])
+        for s in sources:
+            source = Source(citation=s.get('citation', ''))
+            concept.sources.append(source)
 
         concept.member_of.clear()
         member_of = concept_json.get('member_of', [])
@@ -151,4 +155,8 @@ def map_conceptscheme(conceptscheme, conceptscheme_json):
     for n in notes:
         note = Note(note=n.get('note', ''), notetype_id=n.get('type', ''), language_id=n.get('language', ''))
         conceptscheme.notes.append(note)
+    sources = concept_json.get('sources', [])
+    for s in sources:
+        source = Source(citation=s.get('citation', ''))
+        concept.sources.append(source)
     return conceptscheme

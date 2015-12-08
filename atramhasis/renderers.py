@@ -3,7 +3,7 @@ import codecs
 
 from six import StringIO, text_type, PY2
 from pyramid.renderers import JSON
-from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note, Language, ConceptScheme
+from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note, Source, Language, ConceptScheme
 from pyramid_skosprovider.utils import concept_adapter as skos_concept_adapter
 from pyramid_skosprovider.utils import collection_adapter as skos_collection_adapter
 from pyramid_skosprovider.utils import label_adapter as skos_label_adapter
@@ -74,7 +74,8 @@ def conceptscheme_adapter(obj, request):
         'subject': provider.metadata['subject'] if provider.metadata['subject'] else [],
         'labels': obj.labels,
         'notes': obj.notes,
-        'languages': obj.languages
+        'languages': obj.languages,
+        'sources': obj.sources
     }
 
 
@@ -98,6 +99,7 @@ def concept_adapter(obj, request):
         'label': obj.label().label if obj.label() else None,
         'labels': obj.labels,
         'notes': obj.notes,
+        'sources': obj.sources,
         'broader': [map_relation(c) for c in obj.broader_concepts],
         'narrower': [map_relation(c) for c in obj.narrower_concepts],
         'related': [map_relation(c) for c in obj.related_concepts],
@@ -120,6 +122,7 @@ def collection_adapter(obj, request):
         'uri': obj.uri,
         'label': obj.label().label if obj.label() else None,
         'labels': obj.labels,
+        'sources': obj.sources,
         'members': [map_relation(c) for c in obj.members],
         'member_of': [map_relation(c) for c in obj.member_of],
         'superordinates': [map_relation(c) for c in obj.broader_concepts]
@@ -165,6 +168,18 @@ def note_adapter(obj, request):
     }
 
 
+def source_adapter(obj, request):
+    '''
+    Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Source` to json.
+
+    :param skosprovider_sqlalchemy.models.Source obj: The source to be rendered.
+    :rtype: :class:`dict`
+    '''
+    return {
+        'citation': obj.citation
+    }
+
+
 def language_adaptor(obj, request):
     '''
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Language` to json.
@@ -182,6 +197,7 @@ json_renderer_verbose.add_adapter(Concept, concept_adapter)
 json_renderer_verbose.add_adapter(Collection, collection_adapter)
 json_renderer_verbose.add_adapter(Label, label_adapter)
 json_renderer_verbose.add_adapter(Note, note_adapter)
+json_renderer_verbose.add_adapter(Source, source_adapter)
 json_renderer_verbose.add_adapter(Language, language_adaptor)
 json_renderer_verbose.add_adapter(SkosConcept, skos_concept_adapter)
 json_renderer_verbose.add_adapter(SkosCollection, skos_collection_adapter)
