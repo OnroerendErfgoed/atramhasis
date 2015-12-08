@@ -155,7 +155,7 @@ def map_conceptscheme(conceptscheme, conceptscheme_json):
     for n in notes:
         note = Note(note=n.get('note', ''), notetype_id=n.get('type', ''), language_id=n.get('language', ''))
         conceptscheme.notes.append(note)
-    sources = concept_json.get('sources', [])
+    sources = conceptscheme_json.get('sources', [])
     for s in sources:
         source = Source(citation=s.get('citation', ''))
         concept.sources.append(source)
