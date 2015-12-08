@@ -3,7 +3,7 @@
 Module containing mapping functions used by Atramhasis.
 '''
 
-from skosprovider_sqlalchemy.models import Label, Note, Concept, Thing, Collection, Match, MatchType
+from skosprovider_sqlalchemy.models import Label, Note, Source, Concept, Thing, Collection, Match, MatchType
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -158,5 +158,5 @@ def map_conceptscheme(conceptscheme, conceptscheme_json):
     sources = conceptscheme_json.get('sources', [])
     for s in sources:
         source = Source(citation=s.get('citation', ''))
-        concept.sources.append(source)
+        conceptscheme.sources.append(source)
     return conceptscheme

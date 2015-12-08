@@ -8,10 +8,12 @@ from pyramid_skosprovider.utils import concept_adapter as skos_concept_adapter
 from pyramid_skosprovider.utils import collection_adapter as skos_collection_adapter
 from pyramid_skosprovider.utils import label_adapter as skos_label_adapter
 from pyramid_skosprovider.utils import note_adapter as skos_note_adapter
+from pyramid_skosprovider.utils import source_adapter as skos_source_adapter
 from skosprovider.skos import Concept as SkosConcept
 from skosprovider.skos import Collection as SkosCollection
 from skosprovider.skos import Label as SkosLabel
 from skosprovider.skos import Note as SkosNote
+from skosprovider.skos import Source as SkosSource
 
 
 class UnicodeWriter:
@@ -203,3 +205,4 @@ json_renderer_verbose.add_adapter(SkosConcept, skos_concept_adapter)
 json_renderer_verbose.add_adapter(SkosCollection, skos_collection_adapter)
 json_renderer_verbose.add_adapter(SkosLabel, skos_label_adapter)
 json_renderer_verbose.add_adapter(SkosNote, skos_note_adapter)
+json_renderer_verbose.add_adapter(SkosSource, skos_source_adapter)
