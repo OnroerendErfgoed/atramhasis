@@ -13,8 +13,7 @@ pyramid_rewrite==0.2
 #skosprovider_rdf==0.4.1
 -e git+https://github.com/OnroerendErfgoed/skosprovider_rdf.git#egg=skosprovider_rdf
 # skosprovider_getty==0.3.0
--e
-git+https://github.com/OnroerendErfgoed/skosprovider_getty.git#egg=skosprovider_getty
+-e git+https://github.com/OnroerendErfgoed/skosprovider_getty.git#egg=skosprovider_getty
 # skosprovider_heritagedata==0.3.0
 -e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata.git#egg=skosprovider_heritagedata
 
