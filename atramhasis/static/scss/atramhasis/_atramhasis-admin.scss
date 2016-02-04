@@ -1,3 +1,5 @@
+$animationSpeed: 0.8s;
+
 /* main html layout */
 html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
 
@@ -23,13 +25,60 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
     border-bottom: 1px solid #f0f1f3;
   }
 
+  .search-results {
+    padding: 10px;
+    border-bottom: 1px solid lightgray;
+  }
+
   .search-results .dgrid {
-    height: 150px;
-    width: 100%
+    width: 100%;
+    border-color: #f0f1f3;
+  }
+
+  .search-results table {
+    margin: 0;
+  }
+
+  .search-results table tr th,
+  .search-results table tr td {
+    font-size: 11px !important;
+  }
+
+  .search-results .dgrid-header table .dgrid-cell {
+    padding: 10px;
+  }
+
+  .search-results table .dgrid-cell {
+    padding-left: 10px;
+    border-color: #f0f1f3;
   }
 
   .search-results-expanded .dgrid {
-    height: 350px;
+    -webkit-transition: height $animationSpeed ease-in-out;
+    -moz-transition: height $animationSpeed ease-in-out;
+    -o-transition: height $animationSpeed ease-in-out;
+    transition: height $animationSpeed ease-in-out;
+    height: 450px;
+  }
+
+  .search-results-closed .dgrid {
+    -webkit-transition: height $animationSpeed ease-in-out;
+    -moz-transition: height $animationSpeed ease-in-out;
+    -o-transition: height $animationSpeed ease-in-out;
+    transition: height $animationSpeed ease-in-out;
+    height: 200px;
+  }
+
+  .top-bar-section li select {
+    height: 3.65rem !important;
+    cursor: pointer;
+  }
+
+  .search-results .dgrid .dgrid-column-id {
+    width: 50px;
+  }
+  .search-results .dgrid .dgrid-column-type {
+    width: 300px;
   }
 }
 
@@ -41,7 +90,7 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
 
 /* Custom notification styles! */
 .dGrowl-channel-warn .dGrowl-notification {
-	background-color: rgb(255, 250, 245);
+  background-color: rgb(255, 250, 245);
   border: 1px solid #e97b14;
 }
 
@@ -73,7 +122,7 @@ a.admin-button:hover {
 .action-bar {
   height: 30px;
   position: absolute;
-  right: 15px;
+  right: 35px;
   top: 70px;
   z-index: 3;
 
@@ -89,7 +138,7 @@ a.admin-button:hover {
   }
 }
 
- /*tabs*/
+/*tabs*/
 .concept-container {
   flex: 1;
   display: flex;

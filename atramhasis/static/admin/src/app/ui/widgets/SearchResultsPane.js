@@ -33,6 +33,7 @@ define([
       console.debug('SearchResultsPane::init',scheme, store);
       this._scheme = scheme;
       this._grid.set('collection', store);
+      console.log(this._grid.get('collection'));
     },
 
     _createGrid: function (node) {
@@ -86,9 +87,11 @@ define([
       console.debug('SearchResultsPane::_expand');
       if (!domClass.contains(this.domNode, "search-results-expanded")) {
         domClass.add(this.domNode, "search-results-expanded");
+        domClass.remove(this.domNode, "search-results-closed");
       }
       else {
         domClass.remove(this.domNode, "search-results-expanded");
+        domClass.add(this.domNode, "search-results-closed");
       }
     }
   });
