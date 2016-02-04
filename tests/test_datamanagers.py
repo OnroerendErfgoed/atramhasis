@@ -43,6 +43,9 @@ class DatamangersTests(unittest.TestCase):
 
         with transaction.manager:
             local_session = self.session_maker()
+            local_session.add(Language('nl', 'Dutch'))
+            local_session.add(Language('en', 'English'))
+
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2), local_session)
@@ -50,8 +53,6 @@ class DatamangersTests(unittest.TestCase):
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
-            local_session.add(Language('nl', 'Dutch'))
-            local_session.add(Language('en', 'English'))
 
             local_session.add(MatchType('broadMatch', ''))
             local_session.add(MatchType('closeMatch', ''))
@@ -68,13 +69,13 @@ class DatamangersTests(unittest.TestCase):
             local_session.add(match)
 
             local_session.add(ConceptVisitLog(concept_id=1, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
             local_session.add(ConceptVisitLog(concept_id=1, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 11, 58, 03)))
+                                              visited_at=datetime(2015, 8, 27, 11, 58, 3)))
             local_session.add(ConceptVisitLog(concept_id=2, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
             local_session.add(ConceptVisitLog(concept_id=2, conceptscheme_id=2, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 03)))
+                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
 
 
 class ConceptSchemeManagerTest(DatamangersTests):
@@ -177,7 +178,7 @@ class LanguagesManagerTest(DatamangersTests):
 
     def test_get_all(self):
         res = self.language_manager.get_all()
-        self.assertEqual(2, len(res))
+        self.assertEqual(3, len(res))
 
     def test_get_all_sorted(self):
         res = self.language_manager.get_all_sorted('id', False)

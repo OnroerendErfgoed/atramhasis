@@ -3,7 +3,12 @@ from pyramid import testing
 
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider.providers import DictionaryProvider
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, ConceptScheme, Match, MatchType
+from skosprovider_sqlalchemy.models import (
+    Concept, Collection,
+    Note, Label, Source,
+    ConceptScheme,
+    Match, MatchType
+)
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider.skos import(
     Concept as SkosConcept,
@@ -59,6 +64,11 @@ class TestFromThing(unittest.TestCase):
         labels.append(label3)
         self.concept.labels = labels
 
+        sources = []
+        source = Source(citation='Kinsella S. & Carlisle P. 2015: Alice.')
+        sources.append(source)
+        self.concept.sources = sources
+
         matches = []
         match1 = Match()
         match1.uri ='urn:test'
@@ -86,6 +96,7 @@ class TestFromThing(unittest.TestCase):
         self.assertEqual(skosconcept.id, 101)
         self.assertEqual(len(skosconcept.labels), 3)
         self.assertEqual(len(skosconcept.notes), 2)
+        self.assertEqual(len(skosconcept.sources), 1)
         self.assertEqual(skosconcept.uri, 'urn:x-atramhasis-demo:TREES:101')
 
     def test_thing_to_collection(self):

@@ -34,7 +34,10 @@ test_json = {
                   "note": "een notitie",
                   "type": "note",
                   "language": "nl"
-              }]
+              }],
+    "sources": [{
+        "citation": "Atlas."
+    }]
 }
 json_collection = {
     "id": 0,
@@ -64,7 +67,10 @@ test_json_conceptscheme = {
                   "note": "een notitie",
                   "type": "note",
                   "language": "nl"
-              }]
+              }],
+    "sources": [{
+        "citation": "Atlas."
+    }]
 }
 
 
@@ -150,6 +156,7 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_concept.member_of))
         self.assertEqual(2, len(result_concept.labels))
         self.assertEqual(1, len(result_concept.notes))
+        self.assertEqual(1, len(result_concept.sources))
         self.assertFalse(hasattr(result_concept, 'members'))
 
     def test_mapping_collections_filled(self):
@@ -234,3 +241,4 @@ class TestMappers(unittest.TestCase):
         self.assertIsNotNone(result_conceptscheme)
         self.assertEqual(1, len(result_conceptscheme.labels))
         self.assertEqual(1, len(result_conceptscheme.notes))
+        self.assertEqual(1, len(result_conceptscheme.sources))

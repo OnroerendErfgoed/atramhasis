@@ -16,6 +16,11 @@
   <link rel="icon" type="image/x-icon" href="{{request.static_path(app_package + ':static/img/favicon.ico')}}" />
   <script src="{{request.static_path(app_package + ':static/js/vendor/modernizr.js')}}"></script>
 
+  {% block js_files_head %}
+    <script src="{{ request.static_path(app_package + ':static/bower_components/jquery/dist/jquery.js') }}"></script>
+    <script src="{{ request.static_path(app_package + ':static/bower_components/jquery.cookie/jquery.cookie.js') }}"></script>
+  {% endblock %}
+
   {% block ga %}
     {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
     {% from 'macros.jinja2' import ga_tracker %}
@@ -27,28 +32,22 @@
 <body>
 
 {% block header %}
-  {% include 'header-main.jinja2' %}
 {% endblock %}
 
-<div class="bgcontainer">
-  {% block content %}
-  {% endblock %}
-</div>
+{% block content %}
+{% endblock %}
 
 {% block subfooter %}
-  {% include 'subfooter-main.jinja2' %}
 {% endblock %}
 
 {% block footer %}
-  {% include 'footer-main.jinja2' %}
 {% endblock %}
 
 {% block js_files %}
-  <script src="{{ request.static_path(app_package + ':static/bower_components/jquery/dist/jquery.js') }}"></script>
-  <script src="{{ request.static_path(app_package + ':static/bower_components/jquery.cookie/jquery.cookie.js') }}"></script>
-  <script src="{{ request.static_path(app_package + ':static/bower_components/jqtree/tree.jquery.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/bower_components/foundation/js/foundation.min.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/js/app.js') }}"></script>
 {% endblock %}
+
+{% block custom_js %}{% endblock %}
 </body>
 </html>

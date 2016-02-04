@@ -42,12 +42,22 @@ class Note(colander.MappingSchema):
     )
 
 
+class Source(colander.MappingSchema):
+    citation = colander.SchemaNode(
+        colander.String()
+    )
+
+
 class Labels(colander.SequenceSchema):
     label = Label()
 
 
 class Notes(colander.SequenceSchema):
     note = Note()
+
+
+class Sources(colander.SequenceSchema):
+    source = Source()
 
 
 class RelatedConcept(colander.MappingSchema):
@@ -86,6 +96,7 @@ class Concept(colander.MappingSchema):
     )
     labels = Labels(missing=[])
     notes = Notes(missing=[])
+    sources = Sources(missing=[])
     broader = Concepts(missing=[])
     narrower = Concepts(missing=[])
     related = Concepts(missing=[])
@@ -99,6 +110,7 @@ class Concept(colander.MappingSchema):
 class ConceptScheme(colander.MappingSchema):
     labels = Labels(missing=[])
     notes = Notes(missing=[])
+    sources = Sources(missing=[])
 
 
 class LanguageTag(colander.MappingSchema):
