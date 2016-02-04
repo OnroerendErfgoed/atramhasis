@@ -26,7 +26,7 @@ define([
       this.inherited(arguments);
       console.debug('SearchResultsPane::startup');
       this._createGrid(this.gridNode);
-
+      this._grid.startup();
     },
 
     init: function (scheme, store) {
@@ -45,6 +45,9 @@ define([
           label: 'Label',
           type: 'Type',
           uri: 'URI'
+        },
+        sort: {
+          property: 'label'
         },
         selectionMode: 'extended',
         cellNavigation: false,

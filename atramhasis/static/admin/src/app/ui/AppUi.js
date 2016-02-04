@@ -117,7 +117,8 @@ define([
       }
       var filter = {
         type: domUtils.getSelectedOption(this.conceptTypeSelect),
-        label: this.labelInput.value
+        label: this.labelInput.value,
+        sort: '+label'
       };
       console.debug('AppUi::_search searchParams', schemeId, filter);
       var store = this.conceptController.getConceptStore(schemeId).filter(filter);
@@ -158,7 +159,7 @@ define([
           console.debug('catch select event', evt);
           this.conceptController.getConcept(evt.scheme, evt.data.id).then(
             lang.hitch(this, function (response) {
-              this._conceptContainer.openTab(response);
+              this._conceptContainer.openTab(response, evt.scheme);
             }),
             function (error) {
               topic.publish('dGrowl', error, {'title': "Error", 'sticky': true, 'channel':'error'});

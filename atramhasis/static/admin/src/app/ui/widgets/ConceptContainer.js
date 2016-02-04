@@ -7,8 +7,20 @@ define([
   'dojo/json',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
-  'dojo/text!./templates/ConceptContainer.html'
-], function (declare, array, lang, domConstruct, domClass, JSON, _WidgetBase, _TemplatedMixin, template) {
+  'dojo/text!./templates/ConceptContainer.html',
+  './ConceptDetail'
+], function (
+  declare,
+  array,
+  lang,
+  domConstruct,
+  domClass,
+  JSON,
+  _WidgetBase,
+  _TemplatedMixin,
+  template,
+  ConceptDetail
+) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
@@ -27,26 +39,37 @@ define([
       console.debug('ConceptContainer::startup');
     },
 
-    openTab: function (content) {
+    openTab: function (content, scheme) {
       console.debug('ConceptContainer::openTab', content);
       var tab = this._getTabByContentId(content.id);
       if (tab) {
         this._activateTab(tab.id);
       }
       else {
-        this._createTab(content);
+        this._createTab(content, scheme);
       }
     },
 
-    _createTab: function (content) {
+    _createTab: function (content, scheme) {
       console.debug('ConceptContainer::_createTab', content);
       var newId = this._tabIndex++;
 
       //create tab panel
       var panel = domConstruct.create("div", {
-        'innerHTML': "<p>" + content.id + "</p>" + "<p>" + content.label + "</p>" + "<p>" +JSON.stringify(content) + "</p>",
+        //'innerHTML': "<p>" + content.id + "</p>" + "<p>" + content.label + "</p>" + "<p>" +JSON.stringify(content) + "</p>",
         'class': "tab-panel"
       }, this.panelNode);
+
+      var panelContent = domConstruct.create('div', {
+        'class': 'tab-panel-content'
+      }, panel);
+
+      // create tab content
+      var conceptDetail = new ConceptDetail({
+        concept: content,
+        scheme: scheme
+      }, panelContent);
+      conceptDetail.startup();
 
       //create tab button
       var tab = domConstruct.create("li", {
@@ -73,7 +96,7 @@ define([
         id: newId,
         tab: tab,
         panel: panel,
-        content: content
+        content: conceptDetail
       });
 
       this._activateTab(newId);

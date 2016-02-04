@@ -163,13 +163,14 @@ a.admin-button:hover {
 
   ul.tabs {
     margin: 0;
-    height: 30px;
+    height: auto;
     padding: 0;
 
     li.tab {
       list-style-type: none;
       padding-right: 5px;
       float: left;
+      height: 100%;
 
       a {
         color: $white;
@@ -177,6 +178,7 @@ a.admin-button:hover {
         border: 1px solid $light-gray;
         padding: 0.1rem 0.5rem 0.2rem 0.5rem;
         margin: 0;
+        font-size: 12px;
       }
 
       a:hover {

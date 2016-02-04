@@ -12799,6 +12799,24 @@ input.search-input-top:hover {
 }
 
 /* line 34, ../scss/atramhasis/_atramhasis-custom.scss */
+h1 {
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: black;
+  margin: 30px 0;
+}
+
+/* line 35, ../scss/atramhasis/_atramhasis-custom.scss */
+h2 {
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #666666;
+  margin: 30px 0;
+}
+
+/* line 36, ../scss/atramhasis/_atramhasis-custom.scss */
 h3 {
   font-size: 0.7em;
   text-transform: uppercase;
@@ -12807,7 +12825,7 @@ h3 {
   margin: 30px 0;
 }
 
-/* line 35, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 37, ../scss/atramhasis/_atramhasis-custom.scss */
 h4 {
   font-size: 0.6em;
   text-transform: uppercase;
@@ -12816,33 +12834,33 @@ h4 {
   margin: 30px 20px;
 }
 
-/* line 38, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 40, ../scss/atramhasis/_atramhasis-custom.scss */
 ul.no_bullet {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-/* line 44, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 46, ../scss/atramhasis/_atramhasis-custom.scss */
 li.cube {
   background: url(listitem.png) no-repeat 0 6px;
   padding: 0 0 15px 15px;
 }
 
 /*padding fix result page*/
-/* line 51, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 53, ../scss/atramhasis/_atramhasis-custom.scss */
 .large-3-pad {
   padding: 0;
 }
 
 /*download top*/
-/* line 54, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 56, ../scss/atramhasis/_atramhasis-custom.scss */
 ul.downloadtop {
   margin: 30px 0 0 0;
   padding: 0;
 }
 
-/* line 55, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 57, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li {
   list-style-type: none;
   font-size: 0.6em;
@@ -12851,20 +12869,20 @@ ul.downloadtop {
   float: left;
 }
 
-/* line 56, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 58, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li a {
   border: 1px solid #d6d6d6;
   background: white;
   padding: 8px 15px;
 }
 
-/* line 57, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 59, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li:first-child {
   padding: 0;
 }
 
 /*tab nav*/
-/* line 61, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 63, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav li {
   list-style-type: none;
   float: left;
@@ -12872,37 +12890,37 @@ ul.downloadtop {
   margin-top: 20px;
 }
 
-/* line 62, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 64, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav li a {
   border: 1px solid #d6d6d6;
   background: white;
   color: #2b709d !important;
 }
 
-/* line 63, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 65, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav li a:hover {
   color: #f77f00 !important;
   background-color: white !important;
 }
 
-/* line 64, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 66, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav li:first-child {
   padding: 0;
 }
 
-/* line 65, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 67, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav .tab-title > a {
   background-color: #efefef !important;
 }
 
-/* line 66, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 68, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav .tab-title.active > a {
   background-color: white !important;
   color: #000000 !important;
 }
 
 /* home form */
-/* line 70, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 72, ../scss/atramhasis/_atramhasis-custom.scss */
 .home-search-placer {
   padding: 0 0 0 30px;
 }
