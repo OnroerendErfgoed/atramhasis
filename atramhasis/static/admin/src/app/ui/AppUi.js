@@ -64,7 +64,7 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::startup');
 
-      //this._searchResultsPane.startup();
+      this._searchResultsPane.startup();
       this._conceptContainer.startup();
 
       this._hideLoading();
@@ -138,8 +138,8 @@ define([
       };
       console.debug('AppUi::_search searchParams', schemeId, filter);
       var store = this.conceptController.getConceptStore(schemeId).filter(filter);
-      //this._searchResultsPane.init(schemeId, store);
-
+      this._searchResultsPane.init(schemeId, store);
+      this._slideMenu._slideOpen();
       this._resetSearchInputs();
     },
 
@@ -170,24 +170,30 @@ define([
 
     _createSlideMenu: function(node) {
       this._slideMenu = new SlideMenu({ overlayContainer: this.menuOverlayContainer }, node);
-
+      this._slideMenu.startup();
+      this._createSearchResultsPane(this._slideMenu.menuNode);
     },
 
-    //_createSearchResultsPane: function (node) {
-    //  this._searchResultsPane = new SearchResultsPane({}, node);
-    //  this.own(
-    //    on(this._searchResultsPane, 'row-select', lang.hitch(this, function (evt) {
-    //      console.debug('catch select event', evt);
-    //      this.conceptController.getConcept(evt.scheme, evt.data.id).then(
-    //        lang.hitch(this, function (response) {
-    //          this._conceptContainer.openTab(response, evt.scheme);
-    //        }),
-    //        function (error) {
-    //          topic.publish('dGrowl', error, {'title': "Error", 'sticky': true, 'channel':'error'});
-    //        }
-    //      );
-    //    }))
-    //  );
-    //}
+    _closeMenu: function(evt) {
+      evt ? evt.preventDefault() : null;
+      this._slideMenu._slideClose();
+    },
+
+    _createSearchResultsPane: function (node) {
+      this._searchResultsPane = new SearchResultsPane({}, node);
+      this.own(
+        on(this._searchResultsPane, 'row-select', lang.hitch(this, function (evt) {
+          console.debug('catch select event', evt);
+          this.conceptController.getConcept(evt.scheme, evt.data.id).then(
+            lang.hitch(this, function (response) {
+              this._conceptContainer.openTab(response, evt.scheme);
+            }),
+            function (error) {
+              topic.publish('dGrowl', error, {'title': "Error", 'sticky': true, 'channel':'error'});
+            }
+          );
+        }))
+      );
+    }
   });
 });

@@ -1,6 +1,6 @@
 $animationSpeed: 0.8s;
 $menu-width: 60px;
-$menu-width-open: 400px;
+$menu-width-open: 500px;
 
 /* main html layout */
 html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
@@ -28,63 +28,9 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
     border-bottom: 1px solid #f0f1f3;
   }
 
-  .search-results {
-    padding: 10px;
-    border-bottom: 1px solid lightgray;
-  }
-
-  .search-results .dgrid {
-    width: 100%;
-    border-color: #f0f1f3;
-  }
-
-  .search-results table {
-    margin: 0;
-  }
-
-  .search-results table tr th,
-  .search-results table tr td {
-    font-size: 11px !important;
-  }
-
-  .search-results .dgrid-header table .dgrid-cell {
-    padding: 10px;
-  }
-
-  .search-results table .dgrid-cell {
-    padding-left: 10px;
-    border-color: #f0f1f3;
-  }
-
-  .search-results-expanded .dgrid {
-    -webkit-transition: height $animationSpeed ease-in-out;
-    -moz-transition: height $animationSpeed ease-in-out;
-    -o-transition: height $animationSpeed ease-in-out;
-    transition: height $animationSpeed ease-in-out;
-    height: 450px;
-  }
-
-  .search-results-closed .dgrid {
-    -webkit-transition: height $animationSpeed ease-in-out;
-    -moz-transition: height $animationSpeed ease-in-out;
-    -o-transition: height $animationSpeed ease-in-out;
-    transition: height $animationSpeed ease-in-out;
-    height: 200px;
-  }
-
   .top-bar-section li select {
     height: 3.65rem !important;
     cursor: pointer;
-  }
-
-  .search-results .dgrid .dgrid-column-id {
-    width: 50px;
-  }
-  .search-results .dgrid .dgrid-column-type {
-    width: 200px;
-  }
-  .search-results .dgrid .dgrid-column-label {
-    width: 350px;
   }
 }
 
@@ -261,7 +207,7 @@ a.admin-button:hover {
 }
 
 .slidemenu-inner {
-  float: right;
+  float: left;
   display: inline-block;
   text-align: left;
   padding-left: 20px;
@@ -320,4 +266,53 @@ a.admin-button:hover {
   -o-transition: width $animationSpeed ease-in-out;
   transition: width $animationSpeed ease-in-out;
   width: $menu-width;
+}
+
+.slidemenu-container {
+
+  .search-results .dgrid {
+    width: 100%;
+    border-color: #f0f1f3;
+    height: 500px;
+  }
+
+  .search-results table {
+    margin: 0;
+  }
+
+  .search-results table tr th,
+  .search-results table tr td {
+    font-size: 11px !important;
+  }
+
+  .search-results .dgrid-header table .dgrid-cell {
+    padding: 5px;
+  }
+
+  .search-results table .dgrid-cell {
+    padding-left: 5px;
+    border-color: #f0f1f3;
+  }
+
+  .search-results .dgrid .dgrid-column-id {
+    width: 45px;
+  }
+
+  .search-results .dgrid .dgrid-content .dgrid-column-id {
+    vertical-align: middle;
+  }
+
+  .search-results .slideMenuGridCell h3 {
+    margin-bottom: 3px;
+    color: #753f7f !important;
+    font-weight: bold !important;
+    margin-top: 0 !important;
+  }
+
+  .search-results .slideMenuGridCell p {
+    padding: 0;
+    margin: 0;
+    color: darkslategray;
+    font-size: 11px;
+  }
 }

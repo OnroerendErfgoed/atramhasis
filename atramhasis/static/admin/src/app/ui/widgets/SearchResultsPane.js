@@ -8,8 +8,21 @@ define([
   'dojo/text!./templates/SearchResultsPane.html',
   'dgrid/OnDemandGrid',
   'dgrid/Keyboard',
-  'dgrid/Selection'
-], function (declare, array, lang, domClass, _WidgetBase, _TemplatedMixin, template, OnDemandGrid, Keyboard, Selection) {
+  'dgrid/Selection',
+  'dojo/dom-construct'
+], function (
+  declare,
+  array,
+  lang,
+  domClass,
+  _WidgetBase,
+  _TemplatedMixin,
+  template,
+  OnDemandGrid,
+  Keyboard,
+  Selection,
+  domConstruct
+) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
@@ -42,9 +55,16 @@ define([
       var grid = this._grid = new declare([ OnDemandGrid, Keyboard, Selection ])({
         columns: {
           id: 'ID',
-          label: 'Label',
-          type: 'Type',
-          uri: 'URI'
+          concept: {
+            label: 'Concept',
+            renderCell: function(object) {
+              var div = domConstruct.create('div', {
+                'class': "slideMenuGridCell",
+                innerHTML: '<h3>' + object.label + '</h3><p>TYPE: ' + object.type + '</p><p>URI: ' + object.uri + '</p>'
+              });
+              return div;
+            }
+          }
         },
         sort: {
           property: 'label'
@@ -65,8 +85,8 @@ define([
         // Iterate through all currently-selected items
         //for (var id in grid.selection) {
         //    if (grid.selection[id]) {
-                // ...
-            //}
+        // ...
+        //}
         //}
       }));
       grid.on('dgrid-deselect', lang.hitch(this, function (event) {
@@ -83,19 +103,6 @@ define([
 
     _rowDeSelect: function (row) {
       this.emit('row-deselect', {data: row.data, scheme: this._scheme});
-    },
-
-    _toggleHeight: function (evt) {
-      evt.preventDefault();
-      console.debug('SearchResultsPane::_expand');
-      if (!domClass.contains(this.domNode, "search-results-expanded")) {
-        domClass.add(this.domNode, "search-results-expanded");
-        domClass.remove(this.domNode, "search-results-closed");
-      }
-      else {
-        domClass.remove(this.domNode, "search-results-expanded");
-        domClass.add(this.domNode, "search-results-closed");
-      }
     }
   });
 });
