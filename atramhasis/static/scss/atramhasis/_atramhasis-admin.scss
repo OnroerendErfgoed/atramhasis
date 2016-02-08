@@ -1,4 +1,6 @@
 $animationSpeed: 0.8s;
+$menu-width: 60px;
+$menu-width-open: 400px;
 
 /* main html layout */
 html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
@@ -14,6 +16,7 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
   height: 30px;
   background-color: $topbar-bg-color;
   padding: 5px 10px;
+  margin: 0;
 }
 
 #appDiv header {
@@ -78,14 +81,44 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
     width: 50px;
   }
   .search-results .dgrid .dgrid-column-type {
-    width: 300px;
+    width: 200px;
+  }
+  .search-results .dgrid .dgrid-column-label {
+    width: 350px;
   }
 }
 
-#appDiv .app-content {
+//#appDiv .app-content {
+//  flex: 1 100%;
+//  display: flex;
+//  flex-direction: column;
+//}
+
+/* flex for side menu placeholder */
+#appDiv .app-content-container {
+  flex: 1 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.app-content-container .app-content {
+  flex: 1;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.app-content-container .app-content-inner {
   flex: 1 100%;
   display: flex;
   flex-direction: column;
+}
+
+.app-content-container .app-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: $menu-width;
+  background-color: $white;
 }
 
 /* Custom notification styles! */
@@ -159,6 +192,13 @@ a.admin-button:hover {
     .tab-panel.active {
       display: block;
     }
+
+    .concept-title-info {
+      padding-top: 10px;
+      margin-right: 20px;
+      font-size: 0.8rem;
+      float: left;
+    }
   }
 
   ul.tabs {
@@ -192,4 +232,92 @@ a.admin-button:hover {
       background-color: $white;
     }
   }
+}
+
+
+// slide menu
+
+.slidemenu-container {
+  min-height: 300px;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 10;
+  border-left: 1px solid $silver;
+  box-shadow: -1px 0px 2px 0px $silver;
+}
+
+.slidemenu-overlay {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  background-color: black;
+  height: 100%;
+  width: 100%;
+}
+
+.slidemenu-inner {
+  float: right;
+  display: inline-block;
+  text-align: left;
+  padding-left: 20px;
+  padding-top: 20px;
+  padding-right: 15px;
+  width: $menu-width-open;
+  height: 100%;
+}
+
+.slidemenu-open {
+  -webkit-transition: width $animationSpeed ease-in-out;
+  -moz-transition: width $animationSpeed ease-in-out;
+  -o-transition: width $animationSpeed ease-in-out;
+  transition: width $animationSpeed ease-in-out;
+  width: $menu-width-open;
+}
+
+.slidemenu-close .slidemenu-inner {
+  overflow-y: hidden;
+}
+
+.slideoverlay-open.slidemenu-overlay {
+  -webkit-transition: opacity $animationSpeed ease-in-out;
+  -moz-transition: opacity $animationSpeed ease-in-out;
+  -o-transition: opacity $animationSpeed ease-in-out;
+  transition: opacity $animationSpeed ease-in-out;
+  opacity: 0.3;
+  visibility: visible;
+}
+
+.slideoverlay-close.slidemenu-overlay {
+  transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -moz-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -webkit-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -o-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.slidemenu-open .slidemenu-inner:not(.slidemenu-control) {
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+//.slidemenu-close .slidemenu-inner:not(.slidemenu-control) .layerName {
+//  -webkit-transition: opacity $animationSpeed ease-in-out;
+//  -moz-transition: opacity $animationSpeed ease-in-out;
+//  -o-transition: opacity $animationSpeed ease-in-out;
+//  transition: opacity $animationSpeed ease-in-out;
+//  opacity: 0;
+//}
+
+.slidemenu-close {
+  -webkit-transition: width $animationSpeed ease-in-out;
+  -moz-transition: width $animationSpeed ease-in-out;
+  -o-transition: width $animationSpeed ease-in-out;
+  transition: width $animationSpeed ease-in-out;
+  width: $menu-width;
 }

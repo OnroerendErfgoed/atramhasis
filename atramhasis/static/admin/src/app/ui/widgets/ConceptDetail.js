@@ -40,7 +40,13 @@ define([
 
     _setData: function() {
 
-      this.conceptTitleNode.innerHTML = '<strong>' + this.scheme + ' : ' + this.concept.label + '</strong>';
+      // set view data
+      this.conceptTitleViewNode.innerHTML = '<strong>' + this.scheme + ' : ' + this.concept.label + '</strong>';
+      this.idViewNode.innerHTML = 'ID: ' + this.concept.id;
+      this.typeViewNode.innerHTML = 'TYPE: ' + this.concept.type;
+      this.uriViewNode.innerHTML = 'URI: ';
+      domConstruct.create('a', { href: this.concept.uri, innerHTML: this.concept.uri, target: '_blank' }, this.uriViewNode);
+
     }
   });
 });

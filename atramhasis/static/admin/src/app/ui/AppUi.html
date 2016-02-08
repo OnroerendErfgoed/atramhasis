@@ -47,21 +47,40 @@
       </form>
     </nav>
 
-     <div class="top-results">
-        <div class="action-bar">
-          <ul class="right">
-            <li><a class="button"  href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>
-            <li><a class="button"  href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>
-            <li><a class="button"  href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a></li>
-          </ul>
-        </div>
-        <div data-dojo-attach-point="searchPaneNode"></div>
-      </div>
+    <!--?<div class="top-results">-->
+    <!--?<div class="action-bar">-->
+    <!--?<ul class="right">-->
+    <!--?<li><a class="button"  href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a></li>-->
+    <!--?<li><a class="button"  href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a></li>-->
+    <!--?<li><a class="button"  href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a></li>-->
+    <!--?</ul>-->
+    <!--?</div>-->
+    <!--?<div data-dojo-attach-point="searchPaneNode"></div>-->
+    <!--?</div>-->
   </header>
 
-  <div class="row app-content">
-    <div data-dojo-attach-point="conceptContainerNode"></div>
+  <!--?<div class="row app-content">-->
+  <!--?<-->
+  <!--?</div>-->
+
+  <!--?<div class="app-menu-container" style="top: 0; right: 0; position: absolute; border: 1px solid cornflowerblue">-->
+  <!--?<div data-dojo-attach-point="menuContainerNode">test</div>-->
+  <!--?</div>-->
+
+  <div class="app-content-container">
+    <div class="row app-content">
+      <div class="app-content-inner">
+        <div data-dojo-attach-point="conceptContainerNode"></div>
+      </div>
+    </div>
+    <div class="app-menu">
+      <div data-dojo-attach-point="menuContainerNode">
+      </div>
+      <div class="slidemenu-overlay slideoverlay-close" data-dojo-attach-point="menuOverlayContainer"></div>
+    </div>
   </div>
+
+
 
   <footer>
     © Copyright 2014-2015 <a href="https://www.onroerenderfgoed.be/">Flanders Heritage Agency</a>
