@@ -1,6 +1,6 @@
 $animationSpeed: 0.8s;
-$menu-width: 60px;
-$menu-width-open: 500px;
+$menu-width: 50px;
+$menu-width-open: 480px;
 
 /* main html layout */
 html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
@@ -32,13 +32,27 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
     height: 3.65rem !important;
     cursor: pointer;
   }
-}
 
-//#appDiv .app-content {
-//  flex: 1 100%;
-//  display: flex;
-//  flex-direction: column;
-//}
+  .top-bar-section .menu-button {
+    height: 3.65rem !important;
+    cursor: pointer;
+    top: auto;
+    background-color: white;
+    border: 0;
+    width: 100%;
+    color: #666666;
+  }
+
+  .top-bar-section .menu-button:hover {
+    background-color: black;
+  }
+
+  .top-bar-section .menu-button i {
+    width: 100%;
+    font-size: 20px;
+    padding: 5px;
+  }
+}
 
 /* flex for side menu placeholder */
 #appDiv .app-content-container {
@@ -180,9 +194,7 @@ a.admin-button:hover {
   }
 }
 
-
 // slide menu
-
 .slidemenu-container {
   min-height: 300px;
   position: absolute;
@@ -193,8 +205,8 @@ a.admin-button:hover {
   overflow: hidden;
   white-space: nowrap;
   z-index: 10;
-  border-left: 1px solid $silver;
-  box-shadow: -1px 0px 2px 0px $silver;
+  border-left: 1px solid $gray;
+  box-shadow: -1px 0px 2px 0px $gray;
 }
 
 .slidemenu-overlay {
@@ -210,7 +222,7 @@ a.admin-button:hover {
   float: left;
   display: inline-block;
   text-align: left;
-  padding-left: 20px;
+  padding-left: 5px;
   padding-top: 20px;
   padding-right: 15px;
   width: $menu-width-open;
@@ -252,14 +264,6 @@ a.admin-button:hover {
   padding-right: 10px;
 }
 
-//.slidemenu-close .slidemenu-inner:not(.slidemenu-control) .layerName {
-//  -webkit-transition: opacity $animationSpeed ease-in-out;
-//  -moz-transition: opacity $animationSpeed ease-in-out;
-//  -o-transition: opacity $animationSpeed ease-in-out;
-//  transition: opacity $animationSpeed ease-in-out;
-//  opacity: 0;
-//}
-
 .slidemenu-close {
   -webkit-transition: width $animationSpeed ease-in-out;
   -moz-transition: width $animationSpeed ease-in-out;
@@ -268,12 +272,38 @@ a.admin-button:hover {
   width: $menu-width;
 }
 
+.slidemenu-close .search-form, .slidemenu-close .search-footer-buttons {
+  transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -moz-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -webkit-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -o-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.slidemenu-open .search-form, .slidemenu-open .search-footer-buttons {
+  -webkit-transition: opacity $animationSpeed ease-in-out;
+  -moz-transition: opacity $animationSpeed ease-in-out;
+  -o-transition: opacity $animationSpeed ease-in-out;
+  transition: opacity $animationSpeed ease-in-out;
+  opacity: 1;
+  visibility: visible;
+}
+
 .slidemenu-container {
+
+  .search-pane {
+    height: 100%;
+  }
+
+  .search-results {
+    padding-left: 15px;
+  }
 
   .search-results .dgrid {
     width: 100%;
     border-color: #f0f1f3;
-    height: 500px;
+    height: 100%;
   }
 
   .search-results table {
@@ -302,6 +332,11 @@ a.admin-button:hover {
     vertical-align: middle;
   }
 
+  .search-results .slideMenuGridCell {
+    word-break: keep-all;
+    white-space: normal;
+  }
+
   .search-results .slideMenuGridCell h3 {
     margin-bottom: 3px;
     color: #753f7f !important;
@@ -315,4 +350,39 @@ a.admin-button:hover {
     color: $jumbo;
     font-size: 11px;
   }
+
+  .search-form {
+    margin-bottom: 15px;
+    display: inline-block;
+
+    .scheme-select {
+      display: inline-block;
+      width: 100%;
+    }
+
+    .search-button {
+      background-color: $mid-gray;
+      border: 0;
+      padding: 10px 45px 15px 40px;
+    }
+
+    .search-button:hover {
+      background-color: $light-gray;
+    }
+
+    .search-button span {
+      margin: 0;
+    }
+
+    .edit-scheme-button {
+      margin-left: 0;
+      padding-left: 0;
+    }
+  }
+
+  .search-footer-buttons {
+    margin-top: 20px;
+    height: 60px;
+  }
 }
+

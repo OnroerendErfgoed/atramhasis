@@ -117,38 +117,6 @@ define([
       );
     },
 
-    //_fillConceptSchemeSelect: function (options) {
-    //  domUtils.addOptionsToSelect(this.conceptSchemeSelect, {
-    //    data: options,
-    //    idProperty: 'id',
-    //    labelProperty: 'name'
-    //  });
-    //},
-
-    //_search: function (evt) {
-    //  evt.preventDefault();
-    //  var schemeId = domUtils.getSelectedOption(this.conceptSchemeSelect);
-    //  if (schemeId == -1) {
-    //    topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': false, 'channel':'warn'});
-    //    return;
-    //  }
-    //  var filter = {
-    //    type: domUtils.getSelectedOption(this.conceptTypeSelect),
-    //    label: this.labelInput.value,
-    //    sort: '+label'
-    //  };
-    //  console.debug('AppUi::_search searchParams', schemeId, filter);
-    //  var store = this.conceptController.getConceptStore(schemeId).filter(filter);
-    //  this._searchPane.init(schemeId, store);
-    //  this._slideMenu._slideOpen();
-    //  this._resetSearchInputs();
-    //},
-    //
-    //_resetSearchInputs: function () {
-    //  console.debug('AppUi::_resetSearchInputs');
-    //  this.labelSearchForm.reset();
-    //},
-
     _createConcept: function(evt) {
       evt.preventDefault();
       console.debug('AppUi::_createConcept');
@@ -180,6 +148,11 @@ define([
     _closeMenu: function(evt) {
       evt ? evt.preventDefault() : null;
       this._slideMenu._slideClose();
+    },
+
+    _toggleMenu: function(evt) {
+      evt ? evt.preventDefault() : null;
+      this._slideMenu._toggleMenu();
     },
 
     _createSearchPane: function (node) {

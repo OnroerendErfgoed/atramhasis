@@ -20,7 +20,7 @@ define([
   _TemplatedMixin,
   topic,
   on,
-  window,
+  wind,
   domStyle
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -40,6 +40,7 @@ define([
       this.inherited(arguments);
       console.debug('SlideLegend::postCreate');
       this._calculateMenuHeight();
+      on(window, 'resize', lang.hitch(this, function() { this._calculateMenuHeight() }));
     },
 
     /**
@@ -52,7 +53,7 @@ define([
     },
 
     _calculateMenuHeight: function () {
-      var win = window.getBox();
+      var win = wind.getBox();
       var footerheight = 30;
       var headerheight = 60;
       domStyle.set(this.menuContainer, 'height', win.h - footerheight - headerheight + 'px');

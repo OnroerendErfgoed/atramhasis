@@ -11,6 +11,9 @@ define([
   'dgrid/Selection',
   'dojo/dom-construct',
   'dojo/topic',
+  'dojo/on',
+  'dojo/dom-style',
+  'dojo/window',
   '../../utils/DomUtils'
 ], function (
   declare,
@@ -25,12 +28,16 @@ define([
   Selection,
   domConstruct,
   topic,
+  on,
+  domStyle,
+  wind,
   domUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
     conceptSchemeList: null,
+    baseClass: 'search-pane',
     appUi: null,
     _grid: null,
     _scheme: null,
@@ -47,6 +54,8 @@ define([
       this._fillConceptSchemeSelect(this.conceptSchemeList);
       this._createGrid(this.gridNode);
       this._grid.startup();
+      this._calculateGridHeight();
+      on(window, 'resize', lang.hitch(this, function() { this._calculateGridHeight() }));
     },
 
     init: function (scheme, store) {
@@ -102,6 +111,16 @@ define([
           this._rowDeSelect(row);
         }, this);
       }));
+    },
+
+    _calculateGridHeight: function () {
+      var win = wind.getBox();
+      var footerheight = 30;
+      var headerheight = 60;
+      var menuheight = win.h - footerheight - headerheight;
+      var form = 250;
+      var buttons = 80;
+      domStyle.set(this.searchResultsNode, 'height', menuheight - form - buttons + 'px');
     },
 
     _rowSelect: function (row) {
