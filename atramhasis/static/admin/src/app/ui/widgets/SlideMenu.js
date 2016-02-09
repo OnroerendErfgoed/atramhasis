@@ -53,8 +53,10 @@ define([
 
     _calculateMenuHeight: function () {
       var win = window.getBox();
-      domStyle.set(this.menuContainer, 'height', win.h - 90 + 'px');
-      domStyle.set(this.overlayContainer, 'height', win.h - 90 + 'px');
+      var footerheight = 30;
+      var headerheight = 60;
+      domStyle.set(this.menuContainer, 'height', win.h - footerheight - headerheight + 'px');
+      domStyle.set(this.overlayContainer, 'height', win.h - footerheight - headerheight + 'px');
     },
 
     _toggleMenu: function(evt) {

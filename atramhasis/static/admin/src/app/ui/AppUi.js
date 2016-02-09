@@ -12,7 +12,7 @@ define([
   'dijit/_TemplatedMixin',
   'dojo/text!./AppUi.html',
   '../utils/DomUtils',
-  './widgets/SearchResultsPane',
+  './widgets/SearchPane',
   './widgets/ConceptContainer',
   './widgets/SlideMenu'
 ], function (
@@ -26,7 +26,7 @@ define([
   _TemplatedMixin,
   template,
   domUtils,
-  SearchResultsPane,
+  SearchPane,
   ConceptContainer,
   SlideMenu
 ) {
@@ -37,7 +37,7 @@ define([
     staticAppPath: null,
     conceptSchemeController: null,
     conceptController: null,
-    _searchResultsPane: null,
+    _searchPane: null,
     _conceptContainer: null,
     _slideMenu: null,
 
@@ -49,9 +49,8 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::postCreate');
       this._registerLoadingEvents();
-      this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
+      //this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
 
-      //this._createSearchResultsPane(this.searchPaneNode);
       this._createSlideMenu(this.menuContainerNode);
       this._conceptContainer = new ConceptContainer({}, this.conceptContainerNode);
     },
@@ -64,8 +63,10 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::startup');
 
-      this._searchResultsPane.startup();
+      this._searchPane.startup();
       this._conceptContainer.startup();
+
+      this._slideMenu._slideOpen();
 
       this._hideLoading();
     },
@@ -116,37 +117,37 @@ define([
       );
     },
 
-    _fillConceptSchemeSelect: function (options) {
-      domUtils.addOptionsToSelect(this.conceptSchemeSelect, {
-        data: options,
-        idProperty: 'id',
-        labelProperty: 'name'
-      });
-    },
+    //_fillConceptSchemeSelect: function (options) {
+    //  domUtils.addOptionsToSelect(this.conceptSchemeSelect, {
+    //    data: options,
+    //    idProperty: 'id',
+    //    labelProperty: 'name'
+    //  });
+    //},
 
-    _search: function (evt) {
-      evt.preventDefault();
-      var schemeId = domUtils.getSelectedOption(this.conceptSchemeSelect);
-      if (schemeId == -1) {
-        topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': false, 'channel':'warn'});
-        return;
-      }
-      var filter = {
-        type: domUtils.getSelectedOption(this.conceptTypeSelect),
-        label: this.labelInput.value,
-        sort: '+label'
-      };
-      console.debug('AppUi::_search searchParams', schemeId, filter);
-      var store = this.conceptController.getConceptStore(schemeId).filter(filter);
-      this._searchResultsPane.init(schemeId, store);
-      this._slideMenu._slideOpen();
-      this._resetSearchInputs();
-    },
-
-    _resetSearchInputs: function () {
-      console.debug('AppUi::_resetSearchInputs');
-      this.labelSearchForm.reset();
-    },
+    //_search: function (evt) {
+    //  evt.preventDefault();
+    //  var schemeId = domUtils.getSelectedOption(this.conceptSchemeSelect);
+    //  if (schemeId == -1) {
+    //    topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': false, 'channel':'warn'});
+    //    return;
+    //  }
+    //  var filter = {
+    //    type: domUtils.getSelectedOption(this.conceptTypeSelect),
+    //    label: this.labelInput.value,
+    //    sort: '+label'
+    //  };
+    //  console.debug('AppUi::_search searchParams', schemeId, filter);
+    //  var store = this.conceptController.getConceptStore(schemeId).filter(filter);
+    //  this._searchPane.init(schemeId, store);
+    //  this._slideMenu._slideOpen();
+    //  this._resetSearchInputs();
+    //},
+    //
+    //_resetSearchInputs: function () {
+    //  console.debug('AppUi::_resetSearchInputs');
+    //  this.labelSearchForm.reset();
+    //},
 
     _createConcept: function(evt) {
       evt.preventDefault();
@@ -169,9 +170,11 @@ define([
     },
 
     _createSlideMenu: function(node) {
-      this._slideMenu = new SlideMenu({ overlayContainer: this.menuOverlayContainer }, node);
+      this._slideMenu = new SlideMenu({
+        overlayContainer: this.menuOverlayContainer
+        }, node);
       this._slideMenu.startup();
-      this._createSearchResultsPane(this._slideMenu.menuNode);
+      this._createSearchPane(this._slideMenu.menuNode);
     },
 
     _closeMenu: function(evt) {
@@ -179,10 +182,13 @@ define([
       this._slideMenu._slideClose();
     },
 
-    _createSearchResultsPane: function (node) {
-      this._searchResultsPane = new SearchResultsPane({}, node);
+    _createSearchPane: function (node) {
+      this._searchPane = new SearchPane({
+        conceptSchemeList: this.conceptSchemeController.conceptSchemeList,
+        appUi: this
+      }, node);
       this.own(
-        on(this._searchResultsPane, 'row-select', lang.hitch(this, function (evt) {
+        on(this._searchPane, 'row-select', lang.hitch(this, function (evt) {
           console.debug('catch select event', evt);
           this.conceptController.getConcept(evt.scheme, evt.data.id).then(
             lang.hitch(this, function (response) {

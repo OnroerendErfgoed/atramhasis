@@ -1,0 +1,53 @@
+<div>
+  <div class="searchForm">
+    <form data-dojo-attach-point="labelSearchForm" data-dojo-attach-event="onsubmit: _search">
+      <div class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <li>
+            <select data-dojo-attach-point="conceptSchemeSelect">
+              <option value="-1" selected>Select Thesaurus</option>
+            </select>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a class="button tiny" href="#/conceptscheme/edit" data-dojo-attach-event="onClick: _editConceptScheme">Edit</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <input data-dojo-attach-point="labelInput" type="text" class="search-input-top" placeholder="Filter by label"/>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <select data-dojo-attach-point="conceptTypeSelect">
+              <option value="all" selected>Filter by type</option>
+              <option value="all">all types</option>
+              <option value="concept">concepts</option>
+              <option value="collection">collections</option>
+            </select>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="#/search" data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass"></span></a>
+          </li>
+        </ul>
+        <!--?<!-- Left Nav Section -->
+        <!--?<ul class="left show-for-large-up">-->
+        <!--?<li class="divider"></li>-->
+        <!--?<li>-->
+        <!--?<select data-dojo-attach-point="conceptSchemeSelect">-->
+        <!--?<option value="-1" selected>Select Thesaurus</option>-->
+        <!--?</select>-->
+        <!--?</li>-->
+        <!--?<li class="divider"></li>-->
+        <!--?<li>-->
+        <!--?<a class="button" href="#/conceptscheme/edit" data-dojo-attach-event="onClick: _editConceptScheme">Edit</a>-->
+        <!--?</li>-->
+        <!--?</ul>-->
+      </div>
+    </form>
+  </div>
+  <div class="search-results">
+    <div data-dojo-attach-point="gridNode"></div>
+  </div>
+</div>
