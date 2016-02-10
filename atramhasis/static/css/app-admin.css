@@ -13585,7 +13585,7 @@ html, body {
 }
 /* line 46, ../scss/atramhasis/_atramhasis-admin.scss */
 #appDiv header .top-bar-section .menu-button:hover {
-  background-color: black;
+  background-color: #666666;
 }
 /* line 50, ../scss/atramhasis/_atramhasis-admin.scss */
 #appDiv header .top-bar-section .menu-button i {
@@ -13732,26 +13732,78 @@ a.admin-button:hover {
   display: block;
 }
 /* line 156, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .concept-detail {
+  padding-right: 20px;
+  display: inline-block;
+  overflow-y: auto;
+}
+/* line 162, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-container .panels .concept-title-info {
   padding-top: 10px;
   margin-right: 20px;
   font-size: 0.8rem;
   float: left;
 }
-/* line 164, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 169, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .concept-hr {
+  margin-left: 1.25rem;
+}
+/* line 173, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .no-top-padding {
+  padding-top: 0;
+  margin-top: 0;
+}
+/* line 178, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .label-relation-block .dllist {
+  font-size: 1em;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+/* line 184, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .label-relation-block .dllist dt {
+  font-size: 1.2em;
+  padding-top: 5px;
+  margin: 0;
+}
+/* line 190, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .label-relation-block .dllist dd {
+  margin-left: 120px;
+  margin-top: -20px;
+  min-height: 19px;
+  font-size: 13px;
+}
+/* line 197, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .label-relation-block {
+  max-height: 200px;
+  overflow-y: auto;
+}
+/* line 202, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .scopeNote {
+  border: 0 !important;
+  font-size: 1.1em;
+}
+/* line 206, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .scopeNote h3 {
+  margin-bottom: 20px;
+}
+/* line 210, ../scss/atramhasis/_atramhasis-admin.scss */
+.concept-container .panels .scopeNote li {
+  padding-bottom: 10px !important;
+}
+/* line 216, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-container ul.tabs {
   margin: 0;
   height: auto;
   padding: 0;
 }
-/* line 169, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 221, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-container ul.tabs li.tab {
   list-style-type: none;
   padding-right: 5px;
   float: left;
   height: 100%;
 }
-/* line 175, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 227, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-container ul.tabs li.tab a {
   color: white;
   background-color: #2b709d;
@@ -13760,18 +13812,18 @@ a.admin-button:hover {
   margin: 0;
   font-size: 12px;
 }
-/* line 184, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 236, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-container ul.tabs li.tab a:hover {
   color: black;
   background-color: white;
 }
-/* line 190, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 242, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-container ul.tabs li.tab.active a {
   color: black;
   background-color: white;
 }
 
-/* line 198, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 250, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container {
   min-height: 300px;
   position: absolute;
@@ -13786,7 +13838,7 @@ a.admin-button:hover {
   box-shadow: -1px 0px 2px 0px #d5d5d5;
 }
 
-/* line 212, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 264, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-overlay {
   position: absolute;
   top: 60px;
@@ -13796,7 +13848,7 @@ a.admin-button:hover {
   width: 100%;
 }
 
-/* line 221, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 273, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-inner {
   float: left;
   display: inline-block;
@@ -13808,7 +13860,7 @@ a.admin-button:hover {
   height: 100%;
 }
 
-/* line 232, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 284, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-open {
   -webkit-transition: width 0.8s ease-in-out;
   -moz-transition: width 0.8s ease-in-out;
@@ -13817,12 +13869,12 @@ a.admin-button:hover {
   width: 480px;
 }
 
-/* line 240, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 292, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-close .slidemenu-inner {
   overflow-y: hidden;
 }
 
-/* line 244, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 296, ../scss/atramhasis/_atramhasis-admin.scss */
 .slideoverlay-open.slidemenu-overlay {
   -webkit-transition: opacity 0.8s ease-in-out;
   -moz-transition: opacity 0.8s ease-in-out;
@@ -13832,7 +13884,7 @@ a.admin-button:hover {
   visibility: visible;
 }
 
-/* line 253, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 305, ../scss/atramhasis/_atramhasis-admin.scss */
 .slideoverlay-close.slidemenu-overlay {
   transition: visibility 0.8s, opacity 0.8s ease-in-out;
   -moz-transition: visibility 0.8s, opacity 0.8s ease-in-out;
@@ -13842,13 +13894,13 @@ a.admin-button:hover {
   opacity: 0;
 }
 
-/* line 262, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 314, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-open .slidemenu-inner:not(.slidemenu-control) {
   overflow-y: auto;
   padding-right: 10px;
 }
 
-/* line 267, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 319, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-close {
   -webkit-transition: width 0.8s ease-in-out;
   -moz-transition: width 0.8s ease-in-out;
@@ -13857,7 +13909,7 @@ a.admin-button:hover {
   width: 50px;
 }
 
-/* line 275, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 327, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-close .search-form, .slidemenu-close .search-footer-buttons {
   transition: visibility 0.8s, opacity 0.8s ease-in-out;
   -moz-transition: visibility 0.8s, opacity 0.8s ease-in-out;
@@ -13867,7 +13919,7 @@ a.admin-button:hover {
   opacity: 0;
 }
 
-/* line 284, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 336, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-open .search-form, .slidemenu-open .search-footer-buttons {
   -webkit-transition: opacity 0.8s ease-in-out;
   -moz-transition: opacity 0.8s ease-in-out;
@@ -13877,95 +13929,95 @@ a.admin-button:hover {
   visibility: visible;
 }
 
-/* line 295, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 347, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-pane {
   height: 100%;
 }
-/* line 299, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 351, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results {
   padding-left: 15px;
 }
-/* line 303, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 355, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results .dgrid {
   width: 100%;
   border-color: #f0f1f3;
   height: 100%;
 }
-/* line 309, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 361, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results table {
   margin: 0;
 }
-/* line 313, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 365, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results table tr th,
 .slidemenu-container .search-results table tr td {
   font-size: 11px !important;
 }
-/* line 318, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 370, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results .dgrid-header table .dgrid-cell {
   padding: 5px;
 }
-/* line 322, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 374, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results table .dgrid-cell {
   padding-left: 5px;
   border-color: #f0f1f3;
 }
-/* line 327, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 379, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results .dgrid .dgrid-column-id {
   width: 45px;
 }
-/* line 331, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 383, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results .dgrid .dgrid-content .dgrid-column-id {
   vertical-align: middle;
 }
-/* line 335, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 387, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results .slideMenuGridCell {
   word-break: keep-all;
   white-space: normal;
 }
-/* line 340, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 392, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results .slideMenuGridCell h3 {
   margin-bottom: 3px;
   color: #753f7f !important;
   font-weight: bold !important;
   margin-top: 0 !important;
 }
-/* line 347, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 399, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-results .slideMenuGridCell p {
   padding: 0;
   margin: 0;
   color: #888888;
   font-size: 11px;
 }
-/* line 354, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 406, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-form {
   margin-bottom: 15px;
   display: inline-block;
 }
-/* line 358, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 410, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-form .scheme-select {
   display: inline-block;
   width: 100%;
 }
-/* line 363, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 415, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-form .search-button {
   background-color: #e5e5e5;
   border: 0;
   padding: 10px 45px 15px 40px;
 }
-/* line 369, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 421, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-form .search-button:hover {
   background-color: #d6d6d6;
 }
-/* line 373, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 425, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-form .search-button span {
   margin: 0;
 }
-/* line 377, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 429, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-form .edit-scheme-button {
   margin-left: 0;
   padding-left: 0;
 }
-/* line 383, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 435, ../scss/atramhasis/_atramhasis-admin.scss */
 .slidemenu-container .search-footer-buttons {
   margin-top: 20px;
   height: 60px;

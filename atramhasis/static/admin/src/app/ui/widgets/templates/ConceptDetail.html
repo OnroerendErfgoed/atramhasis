@@ -1,5 +1,5 @@
-<div>
-  <div class="large-12 columns" style="margin-top: 20px;">
+<div data-dojo-attach-point="conceptDetailNode">
+  <div class="large-12 columns" style="margin-top: 20px; padding-bottom: 20px;">
     <div class="large-10 columns">
       <h1 data-dojo-attach-point="conceptTitleViewNode"></h1>
       <span class="concept-title-info" data-dojo-attach-point="idViewNode"></span>
@@ -7,9 +7,33 @@
       <span class="concept-title-info" data-dojo-attach-point="uriViewNode"></span>
     </div>
     <div class="large-2 columns">
+      <a href="#" class="button tiny right">EDIT</a>
     </div>
   </div>
-  <div class="large-12 columns">
+  <hr class="concept-hr">
+  <div class="large-12 columns label-relation-block" style="padding-bottom: 20px;">
+    <div class="large-6 columns">
+      <h4 class="no-top-padding">Labels</h4>
+      <dl class="dllist">
+        <dt>Preferred labels</dt><dd data-dojo-attach-point="preferredLabelsNode"></dd>
+        <dt>Alternate labels</dt><dd data-dojo-attach-point="alternateLabelsNode"></dd>
+      </dl>
+    </div>
+    <div class="large-6 columns">
+      <h4 class="no-top-padding">Relations</h4>
+      <dl class="dllist" data-dojo-attach-point="relationsListNode">
+      </dl>
+      <h4 class="no-top-padding">Matches</h4>
+      <dl class="dllist" data-dojo-attach-point="matchesListNode">
+      </dl>
+    </div>
   </div>
-  <div class="large-12 columns"></div>
+  <hr class="concept-hr">
+  <div class="large-12 columns">
+    <div class="large-12 columns">
+      <ul class="scopeNote" data-dojo-attach-point="scopeNoteNode">
+        <h3>notities</h3>
+      </ul>
+    </div>
+  </div>
 </div>

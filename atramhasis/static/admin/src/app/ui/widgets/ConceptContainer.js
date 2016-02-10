@@ -5,6 +5,8 @@ define([
   'dojo/dom-construct',
   'dojo/dom-class',
   'dojo/json',
+  'dojo/window',
+  'dojo/dom-style',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/ConceptContainer.html',
@@ -16,6 +18,8 @@ define([
   domConstruct,
   domClass,
   JSON,
+  wind,
+  domStyle,
   _WidgetBase,
   _TemplatedMixin,
   template,
@@ -32,11 +36,21 @@ define([
       this.inherited(arguments);
       console.debug('ConceptContainer::postCreate');
       this._tabs = [];
+      this._calculateBodyHeight();
     },
 
     startup: function () {
       this.inherited(arguments);
       console.debug('ConceptContainer::startup');
+    },
+
+    _calculateBodyHeight: function() {
+       var win = wind.getBox();
+      var footerheight = 30;
+      var headerheight = 60;
+      var padding = 80;
+      domStyle.set(this.panelNode, 'max-height', win.h - footerheight - headerheight - padding + 'px');
+      return (win.h - footerheight - headerheight - padding);
     },
 
     openTab: function (content, scheme) {
@@ -56,7 +70,6 @@ define([
 
       //create tab panel
       var panel = domConstruct.create("div", {
-        //'innerHTML': "<p>" + content.id + "</p>" + "<p>" + content.label + "</p>" + "<p>" +JSON.stringify(content) + "</p>",
         'class': "tab-panel"
       }, this.panelNode);
 
@@ -67,7 +80,8 @@ define([
       // create tab content
       var conceptDetail = new ConceptDetail({
         concept: content,
-        scheme: scheme
+        scheme: scheme,
+        maxHeight: this._calculateBodyHeight()
       }, panelContent);
       conceptDetail.startup();
 
