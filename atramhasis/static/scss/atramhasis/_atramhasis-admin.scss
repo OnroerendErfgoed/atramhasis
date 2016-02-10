@@ -157,6 +157,7 @@ a.admin-button:hover {
       padding-right: 20px;
       display: inline-block;
       overflow-y: auto;
+      width: 100%;
     }
 
     .concept-title-info {
@@ -438,3 +439,31 @@ a.admin-button:hover {
   }
 }
 
+.claro .dijitDialogUnderlay { background: rgba(72, 72, 72, 0.8) !important; opacity: 1 !important; }
+.claro .dijitDialog .dijitDialogTitle { font-size: 18px; color: #753f7f; }
+.claro .dijitDialogCloseIcon { background: none !important;  font-size: 22px; font-weight: bold; }
+.claro .dijitDialog .closeText { display: block; color: $silver }
+.claro .dijitDialog { background-color: #FFFFFF; }
+.claro .dijitDialog .dijitDialogPaneContent { padding: 25px; }
+.claro .dijitDialogTitleBar { padding: 10px !important; background-color: #FFFFFF !important;}
+
+.claro .dijitTabSpacer { border: none; height: 0; }
+.claro .dijitTabPaneWrapper { border: none; border-radius: 0; }
+//.claro .dijitTabContainerBottom-tabs .dijitTab { border: 1px solid #efefef; border-top: none; background: #ffffff none; border-radius: 0; }
+//.claro .dijitTab .tabLabel, .nihilo .dijitTabCloseButton:before { color: $gray; }
+//.claro .dijitTabCloseButton { background: none; width: 15px; height: 100%; padding-top: 5px; }
+//.claro .dijitTabCloseButton:before { content: "\f00d"; font-family: FontAwesome; }
+//.claro .dijitTabContainerBottom-tabs .dijitTabContainerBottom-tabs .dijitTabChecked { border: none; background: #ffffff none; }
+//.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked .dijitTabCloseButton{ cursor: pointer; padding-top: 5px;}
+//.claro .dijitTabContainerBottom-tabs .dijitTabChecked .tabLabel,
+//.claro .dijitTabContainerBottom-tabs .dijitTabHover .tabLabel,
+//.claro .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabCloseButton:before,
+//.claro .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabCloseButtonHover:before { color: $dark-purple; }
+.claro .dijitTabContainerTop-tabs { text-align: center; width: 100% !important; padding: 0; border: 0; height: 50px; }
+.claro .dijitTabContainerTop-tabs .dijitTab { background: $blue none !important; border: 1px solid $light-gray; border-radius: 0; color: $white; font-size: 0.6875rem; padding: 0.625rem 1.25rem !important; text-transform: uppercase; line-height: normal; margin: 0 1px 1.25rem 0 !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked) { background-color: #763e81 !important; color: $orange !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab.dijitTabChecked { background: $orange none !important; }
+//
+//color: $white;
+//  background-color: $blue;
+//  border: 1px solid $light-gray;

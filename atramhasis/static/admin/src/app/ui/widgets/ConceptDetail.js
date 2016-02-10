@@ -8,7 +8,8 @@ define([
   'dojo/json',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
-  'dojo/text!./templates/ConceptDetail.html'
+  'dojo/text!./templates/ConceptDetail.html',
+  '../dialogs/ConceptEditDialog'
 ], function (
   declare,
   array,
@@ -19,7 +20,8 @@ define([
   JSON,
   _WidgetBase,
   _TemplatedMixin,
-  template
+  template,
+  ConceptEditDialog
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -28,6 +30,7 @@ define([
     concept: null,
     scheme: null,
     maxHeight: null,
+    _editDialog: null,
 
     postCreate: function () {
       this.inherited(arguments);
@@ -37,8 +40,19 @@ define([
     startup: function () {
       this.inherited(arguments);
       console.debug('ConceptDetail::startup');
+
       this._setData(this.concept);
       domStyle.set(this.conceptDetailNode, 'max-height', (this.maxHeight ? this.maxHeight + 'px' : '500px'));
+    },
+
+    _openEditDialog: function () {
+      console.debug('ConceptDetail::_openEditDialog');
+      this._editDialog = new ConceptEditDialog({
+        concept: this.concept,
+        scheme: this.scheme,
+        parent: this
+      });
+      this._editDialog.startup();
     },
 
     _setData: function(concept) {
@@ -111,12 +125,6 @@ define([
 
       //TODO matches
 
-      // notes
-      //{%- for note in concept.notes %}
-      //<li lang="{{ note.language }}">
-      //  <strong>{{ note.notetype_id|capitalize }}</strong> <em>({{ note.language }})</em>: {{ note.note|safe }}
-      //</li>
-      //{%- endfor %}
 
       if (concept.notes && concept.notes.length > 0) {
         array.forEach(concept.notes, lang.hitch(this, function(note) {
@@ -133,6 +141,13 @@ define([
     _capitalize: function (s) {
       // returns the first letter capitalized + the string from index 1 and out aka. the rest of the string
       return s[0].toUpperCase() + s.substr(1);
+    },
+
+    _closeEditDialog: function() {
+      if (this._editDialog) {
+        this._editDialog._close();
+        this._editDialog.destroyRecursive();
+      }
     }
   });
 });
