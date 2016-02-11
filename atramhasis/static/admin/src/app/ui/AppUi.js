@@ -37,6 +37,7 @@ define([
     staticAppPath: null,
     conceptSchemeController: null,
     conceptController: null,
+    languageController: null,
     _searchPane: null,
     _conceptContainer: null,
     _slideMenu: null,
@@ -52,7 +53,9 @@ define([
       //this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
 
       this._createSlideMenu(this.menuContainerNode);
-      this._conceptContainer = new ConceptContainer({}, this.conceptContainerNode);
+      this._conceptContainer = new ConceptContainer({
+        languageController: this.languageController
+      }, this.conceptContainerNode);
     },
 
     /**

@@ -446,6 +446,7 @@ a.admin-button:hover {
 .claro .dijitDialog { background-color: #FFFFFF; }
 .claro .dijitDialog .dijitDialogPaneContent { padding: 25px; }
 .claro .dijitDialogTitleBar { padding: 10px !important; background-color: #FFFFFF !important;}
+.claro .dijitDialog .dijitDialogTitleBar .dijitDialogTitle strong { color: black; text-transform: uppercase; }
 
 .claro .dijitTabSpacer { border: none; height: 0; }
 .claro .dijitTabPaneWrapper { border: none; border-radius: 0; }

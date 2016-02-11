@@ -7,6 +7,7 @@ define([
   'dijit/_TemplatedMixin',
   'dijit/_WidgetsInTemplateMixin',
   '../../utils/DomUtils',
+  '../../form/LabelManager',
   'dojo/text!./templates/ConceptEditDialog.html',
   'dijit/layout/TabContainer',
   'dijit/layout/ContentPane'
@@ -19,6 +20,7 @@ define([
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
   DomUtils,
+  LabelManager,
   template
 ) {
   return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -29,15 +31,24 @@ define([
     dialog: null,
     parent: null,
     scheme: null,
+    languageController: null,
 
     /**
      * Standaard widget functie
      */
     postCreate: function () {
       this.inherited(arguments);
-      this.dialog = new Dialog({title: 'Edit <strong>' + this.concept.label + '</strong>', style: 'width: 1000px; min-height: 500px;'});
+      this.dialog = new Dialog({
+        title: 'Edit <strong>' + this.concept.label + '</strong>',
+        style: 'width: 1000px; min-height: 500px;',
+        onHide: lang.hitch(this, function() {
+          this.parent._closeEditDialog();
+        })
+      });
       this.dialog.closeText.innerHTML = '<i class="fa fa-times"></i>';
       this.dialog.set('content', this);
+
+      this._createLabelsTab(this.concept);
     },
 
     /**
@@ -45,7 +56,6 @@ define([
      */
     startup: function () {
       this.inherited(arguments);
-
       this._setData(this.concept);
       this.showDialog();
       this.tabContainer.layout();
@@ -69,6 +79,15 @@ define([
      */
     _close: function () {
       this.dialog.hide();
+    },
+
+    _createLabelsTab: function(concept) {
+      this.labelManager = new LabelManager({
+        'name': 'lblMgr',
+        'languageStore': this.languageController.getLanguageStore()
+      }, this.labelsNode);
+      this.labelManager.startup();
+      this.labelManager.setLabels(concept.labels);
     }
   });
 });

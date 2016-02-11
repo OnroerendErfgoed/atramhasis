@@ -29,6 +29,7 @@ define([
 
     templateString: template,
     baseClass: 'concept-container',
+    languageController: null,
     _tabs: null,
     _tabIndex: 0,
 
@@ -81,7 +82,8 @@ define([
       var conceptDetail = new ConceptDetail({
         concept: content,
         scheme: scheme,
-        maxHeight: this._calculateBodyHeight()
+        maxHeight: this._calculateBodyHeight(),
+        languageController: this.languageController
       }, panelContent);
       conceptDetail.startup();
 

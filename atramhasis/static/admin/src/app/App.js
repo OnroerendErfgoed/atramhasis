@@ -11,13 +11,15 @@ define([
   './ui/AppUi',
   './controllers/ConceptSchemeController',
   './controllers/ConceptController',
+  './controllers/LanguageController',
   'dGrowl'
-], function (declare, lang, all, WidgetBase, AppUi, ConceptSchemeController, ConceptController, dGrowl) {
+], function (declare, lang, all, WidgetBase, AppUi, ConceptSchemeController, ConceptController, LanguageController, dGrowl) {
   return declare([WidgetBase], {
 
     appConfig: null,
 
     _controllers: null,
+    languageManager: null,
 
     /**
      * Standard widget function.
@@ -30,6 +32,7 @@ define([
 
       this._controllers.conceptSchemeController = new ConceptSchemeController({});
       this._controllers.conceptController = new ConceptController({});
+      this._controllers.languageController = new LanguageController({});
 
       //Start message handler
       new dGrowl({
@@ -60,7 +63,8 @@ define([
               loadingContainer: this.appConfig.loadingContainer,
               staticAppPath: this.appConfig.staticAppPath,
               conceptSchemeController: this._controllers.conceptSchemeController,
-              conceptController: this._controllers.conceptController
+              conceptController: this._controllers.conceptController,
+              languageController: this._controllers.languageController
             }, this.appConfig.appContainer).startup();
           }),
           lang.hitch(this, function(error) {

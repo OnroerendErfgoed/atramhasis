@@ -30,6 +30,7 @@ define([
     concept: null,
     scheme: null,
     maxHeight: null,
+    languageController: null,
     _editDialog: null,
 
     postCreate: function () {
@@ -50,7 +51,8 @@ define([
       this._editDialog = new ConceptEditDialog({
         concept: this.concept,
         scheme: this.scheme,
-        parent: this
+        parent: this,
+        languageController: this.languageController
       });
       this._editDialog.startup();
     },
