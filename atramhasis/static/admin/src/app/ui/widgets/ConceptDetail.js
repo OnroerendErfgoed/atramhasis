@@ -68,26 +68,24 @@ define([
       domConstruct.create('a', { href: this.concept.uri, innerHTML: this.concept.uri, target: '_blank' }, this.uriViewNode);
 
       if (concept.labels && concept.label.length > 0) {
+        var pref = '';
+        var alt = '';
         array.forEach(concept.labels, lang.hitch(this, function(label) {
-          var pref = '';
-          var alt = '';
           if (label.type === 'prefLabel') {
             pref += label.label + ' (' + label.language + '), ';
           }
           if (label.type === 'altLabel') {
             alt += label.label + ' (' + label.language + '), ';
           }
-
-          if (alt.length > 2) {
-            alt = alt.substring(0, alt.length - 2);
-          }
-          if (pref.length > 2) {
-            pref = pref.substring(0, pref.length - 2);
-          }
-
-          this.preferredLabelsNode.innerHTML = pref;
-          this.alternateLabelsNode.innerHTML = alt;
         }));
+        if (alt.length > 2) {
+          alt = alt.substring(0, alt.length - 2);
+        }
+        if (pref.length > 2) {
+          pref = pref.substring(0, pref.length - 2);
+        }
+        this.preferredLabelsNode.innerHTML = pref;
+        this.alternateLabelsNode.innerHTML = alt;
       }
 
       if (concept.narrower && concept.narrower.length > 0) {

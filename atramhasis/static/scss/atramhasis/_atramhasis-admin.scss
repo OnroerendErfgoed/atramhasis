@@ -441,8 +441,26 @@ a.admin-button:hover {
 
 .label-manager {
   .dgrid .dgrid-column-language {
-    width: 120px;
+    width: 160px;
   }
+
+  .dgrid .dgrid-column-remove_label {
+    width: 50px;
+  }
+
+  .dgrid .dgrid-column-label {
+    width: 380px;
+  }
+
+  .dGridHyperlink {
+    text-align: center;
+  }
+
+  .dGridHyperlink a {
+    width: 100%;
+    font-size: 18px;
+  }
+
 }
 
 .claro .dijitDialogUnderlay { background: rgba(72, 72, 72, 0.8) !important; opacity: 1 !important; }

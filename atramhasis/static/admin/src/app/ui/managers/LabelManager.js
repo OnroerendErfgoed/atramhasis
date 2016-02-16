@@ -42,8 +42,10 @@ define([
     languageController: null,
     listController: null,
     concept: null,
+    languageList: null,
     _labelStore: null,
     _labelGrid: null,
+    _index: 0,
 
     postCreate: function () {
       this.inherited(arguments);
@@ -53,45 +55,75 @@ define([
         idProperty: 'value',
         labelProperty: 'label'
       });
-      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(results) {
-        DomUtils.addOptionsToSelect(this.languageSelectNode, {
-          data: results,
-          idProperty: 'id',
-          labelProperty: 'name'
-        });
-      }));
+      DomUtils.addOptionsToSelect(this.languageSelectNode, {
+        data: this.languageList,
+        idProperty: 'id',
+        labelProperty: 'name'
+      });
       var TrackableMemory = declare([Memory, Trackable]);
-      var labels = this.concept.labels;
-      this._labelStore = new TrackableMemory({data: []});
-      array.forEach(labels, lang.hitch(this, function(item){
-        item.id = Math.random();
+      this._labelStore = new TrackableMemory({ data: [] });
+      array.forEach(this.concept.labels, lang.hitch(this, function(item){
+        item.id = this._index++;
         this._labelStore.put(item);
       }));
+      this._createGrid({
+        collection: this._labelStore
+      }, this.labelGridNode);
     },
 
     startup: function () {
       this.inherited(arguments);
       console.debug('LabelManager::startup');
-      this._createGrid({
-        collection: this._labelStore
-      }, this.labelGridNode);
       this._labelGrid.startup();
     },
 
     _createGrid: function(options, node) {
       var columns = {
-        id: 'id',
         label: {
           label: "Title",
           field: "label"
         },
         language: {
           label: "Language",
-          field: "language"
+          field: "language",
+          formatter: lang.hitch(this, function (value, object) {
+            var lang = array.filter(this.languageList, function (obj) {
+              console.log(obj, value);
+              return obj.id === value;
+            })[0];
+            return lang.name;
+          })
         },
         type: {
           label: "Type",
-          field: "type"
+          field: "type",
+          formatter: lang.hitch(this, function (value, object) {
+            var lang = array.filter(this.listController.getLabelTypes(), function (obj) {
+              console.log(obj, value);
+              return obj.value === value;
+            })[0];
+            return lang.label;
+          })
+        },
+        remove_label: {
+          label: 'Remove',
+          renderCell: lang.hitch(this, function (object) {
+            if (object.id === undefined) {
+              return null;
+            }
+            var div = domConstruct.create('div', {'class': 'dGridHyperlink'});
+            domConstruct.create('a', {
+              href: '#',
+              title: 'Remove label',
+              className: 'fa fa-trash',
+              innerHTML: '',
+              onclick: lang.hitch(this, function (evt) {
+                evt.preventDefault();
+                this._removeRow(object.id);
+              })
+            }, div);
+            return div;
+          })
         }
       };
 
@@ -99,9 +131,6 @@ define([
         collection: options.collection,
         columns: columns,
         showHeader: false,
-        sort: [
-          { attribute: 'label' }
-        ],
         noDataMessage: 'No labels found',
         loadingMessage: 'Fetching data..'
       }, node);
@@ -109,7 +138,6 @@ define([
       this._labelGrid = grid;
 
       grid.on('dgrid-error', function(event) {
-        // Display an error message above the grid when an error occurs.
         console.log(event.error.message);
       });
     },
@@ -122,7 +150,7 @@ define([
       evt ? evt.preventDefault() : null;
 
       var label = {
-        id: Math.random(),
+        id: this._index++,
         language: DomUtils.getSelectedOption(this.languageSelectNode),
         type: DomUtils.getSelectedOption(this.labelTypeSelectNode),
         label: this.labelTitleNode.value
@@ -131,16 +159,17 @@ define([
       if (this._validate(label)) {
         this._addRow(label);
       } else {
-        topic.publish('dGrowl', 'Please fill in all label fields', {'title': "Error", 'sticky': true, 'channel':'error'});
+        topic.publish('dGrowl', 'Please fill in the fields for a new label', {'title': "Error", 'sticky': true, 'channel':'error'});
       }
+    },
+
+    _removeRow: function(rowId) {
+      this._labelStore.remove(rowId);
     },
 
     _addRow: function(row) {
       console.log('ADD ROW', row);
-      console.log(this._labelStore);
-      console.log(this._labelGrid.get('collection'));
-      this._labelStore.put(row);
-      this._labelGrid.refresh();
+      this._labelStore.add(row);
     },
 
     _validate: function(label) {

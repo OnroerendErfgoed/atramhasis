@@ -82,13 +82,25 @@ define([
       this.dialog.hide();
     },
 
+    _saveConcept: function(evt) {
+      evt ? evt.preventDefault() : null;
+    },
+
+    _cancel: function(evt) {
+      evt ? evt.preventDefault() : null;
+      this.parent._closeEditDialog();
+    },
+
     _createLabelsTab: function(concept) {
-      this.labelManager = new LabelManager({
-        languageController: this.languageController,
-        listController: this.listController,
-        concept: concept
-      }, this.labelsNode);
-      this.labelManager.startup();
+      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(languages) {
+        this.labelManager = new LabelManager({
+          languageController: this.languageController,
+          listController: this.listController,
+          concept: concept,
+          languageList: languages
+        }, this.labelsNode);
+        this.labelManager.startup();
+      }));
     }
   });
 });
