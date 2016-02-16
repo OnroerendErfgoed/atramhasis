@@ -30,6 +30,7 @@ define([
     templateString: template,
     baseClass: 'concept-container',
     languageController: null,
+    listController: null,
     _tabs: null,
     _tabIndex: 0,
 
@@ -83,7 +84,8 @@ define([
         concept: content,
         scheme: scheme,
         maxHeight: this._calculateBodyHeight(),
-        languageController: this.languageController
+        languageController: this.languageController,
+        listController: this.listController
       }, panelContent);
       conceptDetail.startup();
 

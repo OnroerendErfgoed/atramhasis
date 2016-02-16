@@ -439,6 +439,12 @@ a.admin-button:hover {
   }
 }
 
+.label-manager {
+  .dgrid .dgrid-column-language {
+    width: 120px;
+  }
+}
+
 .claro .dijitDialogUnderlay { background: rgba(72, 72, 72, 0.8) !important; opacity: 1 !important; }
 .claro .dijitDialog .dijitDialogTitle { font-size: 18px; color: #753f7f; }
 .claro .dijitDialogCloseIcon { background: none !important;  font-size: 22px; font-weight: bold; }
@@ -464,7 +470,17 @@ a.admin-button:hover {
 .claro .dijitTabContainerTop-tabs .dijitTab { background: $blue none !important; border: 1px solid $light-gray; border-radius: 0; color: $white; font-size: 0.6875rem; padding: 0.625rem 1.25rem !important; text-transform: uppercase; line-height: normal; margin: 0 1px 1.25rem 0 !important; }
 .claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked) { background-color: #763e81 !important; color: $orange !important; }
 .claro .dijitTabContainerTop-tabs .dijitTab.dijitTabChecked { background: $orange none !important; }
-//
-//color: $white;
-//  background-color: $blue;
-//  border: 1px solid $light-gray;
+
+
+.claro .dijitTabContainerTop-dijitContentPane {
+  padding: 5px 0 0 0 !important;
+}
+
+// overwrites for dgrid border color
+.claro .dgrid {
+  border-color: #f0f1f3 !important;
+
+  .dgrid-cell {
+    border-color: #f0f1f3 !important;
+  }
+}

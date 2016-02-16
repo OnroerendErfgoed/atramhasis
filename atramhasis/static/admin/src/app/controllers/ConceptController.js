@@ -8,7 +8,14 @@ define([
   'dojo/request/xhr',
   'dojo/Deferred',
   'dstore/Rest'
-], function (declare, lang, array, xhr, Deferred, Rest) {
+], function (
+  declare,
+  lang,
+  array,
+  xhr,
+  Deferred,
+  Rest
+) {
   return declare( null, {
 
     _stores: {},

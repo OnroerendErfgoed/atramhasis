@@ -7,7 +7,7 @@ define([
   'dijit/_TemplatedMixin',
   'dijit/_WidgetsInTemplateMixin',
   '../../utils/DomUtils',
-  '../../form/LabelManager',
+  '../managers/LabelManager',
   'dojo/text!./templates/ConceptEditDialog.html',
   'dijit/layout/TabContainer',
   'dijit/layout/ContentPane'
@@ -32,6 +32,7 @@ define([
     parent: null,
     scheme: null,
     languageController: null,
+    listController: null,
 
     /**
      * Standaard widget functie
@@ -83,11 +84,11 @@ define([
 
     _createLabelsTab: function(concept) {
       this.labelManager = new LabelManager({
-        'name': 'lblMgr',
-        'languageStore': this.languageController.getLanguageStore()
+        languageController: this.languageController,
+        listController: this.listController,
+        concept: concept
       }, this.labelsNode);
       this.labelManager.startup();
-      this.labelManager.setLabels(concept.labels);
     }
   });
 });
