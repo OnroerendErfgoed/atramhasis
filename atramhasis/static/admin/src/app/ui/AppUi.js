@@ -12,10 +12,24 @@ define([
   'dijit/_TemplatedMixin',
   'dojo/text!./AppUi.html',
   '../utils/DomUtils',
-  './widgets/SearchResultsPane',
-  './widgets/ConceptContainer'
-], function (declare, lang, fx, domStyle, topic, on, _WidgetBase, _TemplatedMixin, template, domUtils, SearchResultsPane,
-             ConceptContainer) {
+  './widgets/SearchPane',
+  './widgets/ConceptContainer',
+  './widgets/SlideMenu'
+], function (
+  declare,
+  lang,
+  fx,
+  domStyle,
+  topic,
+  on,
+  _WidgetBase,
+  _TemplatedMixin,
+  template,
+  domUtils,
+  SearchPane,
+  ConceptContainer,
+  SlideMenu
+) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
@@ -23,8 +37,11 @@ define([
     staticAppPath: null,
     conceptSchemeController: null,
     conceptController: null,
-    _searchResultsPane: null,
+    languageController: null,
+    listController: null,
+    _searchPane: null,
     _conceptContainer: null,
+    _slideMenu: null,
 
     /**
      * Standard widget function.
@@ -34,10 +51,13 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::postCreate');
       this._registerLoadingEvents();
-      this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
+      //this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
 
-      this._createSearchResultsPane(this.searchPaneNode);
-      this._conceptContainer = new ConceptContainer({}, this.conceptContainerNode);
+      this._createSlideMenu(this.menuContainerNode);
+      this._conceptContainer = new ConceptContainer({
+        languageController: this.languageController,
+        listController: this.listController
+      }, this.conceptContainerNode);
     },
 
     /**
@@ -48,8 +68,10 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::startup');
 
-      this._searchResultsPane.startup();
+      this._searchPane.startup();
       this._conceptContainer.startup();
+
+      this._slideMenu._slideOpen();
 
       this._hideLoading();
     },
@@ -100,37 +122,6 @@ define([
       );
     },
 
-    _fillConceptSchemeSelect: function (options) {
-      domUtils.addOptionsToSelect(this.conceptSchemeSelect, {
-        data: options,
-        idProperty: 'id',
-        labelProperty: 'name'
-      });
-    },
-
-    _search: function (evt) {
-      evt.preventDefault();
-      var schemeId = domUtils.getSelectedOption(this.conceptSchemeSelect);
-      if (schemeId == -1) {
-        topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': false, 'channel':'warn'});
-        return;
-      }
-      var filter = {
-        type: domUtils.getSelectedOption(this.conceptTypeSelect),
-        label: this.labelInput.value
-      };
-      console.debug('AppUi::_search searchParams', schemeId, filter);
-      var store = this.conceptController.getConceptStore(schemeId).filter(filter);
-      this._searchResultsPane.setStore(store);
-
-      this._resetSearchInputs();
-    },
-
-    _resetSearchInputs: function () {
-      console.debug('AppUi::_resetSearchInputs');
-      this.labelSearchForm.reset();
-    },
-
     _createConcept: function(evt) {
       evt.preventDefault();
       console.debug('AppUi::_createConcept');
@@ -151,12 +142,40 @@ define([
       console.debug('AppUi::_editConceptScheme');
     },
 
-    _createSearchResultsPane: function (node) {
-      this._searchResultsPane = new SearchResultsPane({}, node);
+    _createSlideMenu: function(node) {
+      this._slideMenu = new SlideMenu({
+        overlayContainer: this.menuOverlayContainer
+        }, node);
+      this._slideMenu.startup();
+      this._createSearchPane(this._slideMenu.menuNode);
+    },
+
+    _closeMenu: function(evt) {
+      evt ? evt.preventDefault() : null;
+      this._slideMenu._slideClose();
+    },
+
+    _toggleMenu: function(evt) {
+      evt ? evt.preventDefault() : null;
+      this._slideMenu._toggleMenu();
+    },
+
+    _createSearchPane: function (node) {
+      this._searchPane = new SearchPane({
+        conceptSchemeList: this.conceptSchemeController.conceptSchemeList,
+        appUi: this
+      }, node);
       this.own(
-        on(this._searchResultsPane, 'row-select', lang.hitch(this, function (evt) {
-          console.debug('catch select event', evt.data);
-          this._conceptContainer.openTab(evt.data);
+        on(this._searchPane, 'row-select', lang.hitch(this, function (evt) {
+          console.debug('catch select event', evt);
+          this.conceptController.getConcept(evt.scheme, evt.data.id).then(
+            lang.hitch(this, function (response) {
+              this._conceptContainer.openTab(response, evt.scheme);
+            }),
+            function (error) {
+              topic.publish('dGrowl', error, {'title': "Error", 'sticky': true, 'channel':'error'});
+            }
+          );
         }))
       );
     }

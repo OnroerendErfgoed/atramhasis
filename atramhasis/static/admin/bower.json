@@ -17,10 +17,7 @@
   "dependencies": {
     "dijit": "~1.10.4",
     "dojo": "~1.10.4",
-    "dojox": "~1.10.4",
     "util": "dojo-util#~1.10.4",
-    "put-selector": "~0.3.6",
-    "xstyle": "~0.2.1",
     "dgrid": "~0.4.0",
     "dGrowl": "0.1.2",
     "foundation": "~5.5.0",

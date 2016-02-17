@@ -4,14 +4,33 @@ define([
   'dojo/_base/lang',
   'dojo/dom-construct',
   'dojo/dom-class',
+  'dojo/json',
+  'dojo/window',
+  'dojo/dom-style',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
-  'dojo/text!./templates/ConceptContainer.html'
-], function (declare, array, lang, domConstruct, domClass, _WidgetBase, _TemplatedMixin, template) {
+  'dojo/text!./templates/ConceptContainer.html',
+  './ConceptDetail'
+], function (
+  declare,
+  array,
+  lang,
+  domConstruct,
+  domClass,
+  JSON,
+  wind,
+  domStyle,
+  _WidgetBase,
+  _TemplatedMixin,
+  template,
+  ConceptDetail
+) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
     baseClass: 'concept-container',
+    languageController: null,
+    listController: null,
     _tabs: null,
     _tabIndex: 0,
 
@@ -19,6 +38,7 @@ define([
       this.inherited(arguments);
       console.debug('ConceptContainer::postCreate');
       this._tabs = [];
+      this._calculateBodyHeight();
     },
 
     startup: function () {
@@ -26,33 +46,55 @@ define([
       console.debug('ConceptContainer::startup');
     },
 
-    openTab: function (content) {
+    _calculateBodyHeight: function() {
+       var win = wind.getBox();
+      var footerheight = 30;
+      var headerheight = 60;
+      var padding = 80;
+      domStyle.set(this.panelNode, 'max-height', win.h - footerheight - headerheight - padding + 'px');
+      return (win.h - footerheight - headerheight - padding);
+    },
+
+    openTab: function (content, scheme) {
       console.debug('ConceptContainer::openTab', content);
       var tab = this._getTabByContentId(content.id);
       if (tab) {
         this._activateTab(tab.id);
       }
       else {
-        this._createTab(content);
+        this._createTab(content, scheme);
       }
     },
 
-    _createTab: function (content) {
+    _createTab: function (content, scheme) {
       console.debug('ConceptContainer::_createTab', content);
       var newId = this._tabIndex++;
 
       //create tab panel
       var panel = domConstruct.create("div", {
-        'innerHTML': "<p>" + content.id + "</p>" + "<p>" + content.label + "</p>" + "<p>" + content.uri + "</p>",
         'class': "tab-panel"
       }, this.panelNode);
+
+      var panelContent = domConstruct.create('div', {
+        'class': 'tab-panel-content'
+      }, panel);
+
+      // create tab content
+      var conceptDetail = new ConceptDetail({
+        concept: content,
+        scheme: scheme,
+        maxHeight: this._calculateBodyHeight(),
+        languageController: this.languageController,
+        listController: this.listController
+      }, panelContent);
+      conceptDetail.startup();
 
       //create tab button
       var tab = domConstruct.create("li", {
         'class': "tab"
       }, this.tabNode);
       domConstruct.create("a", {
-        'innerHTML': 'tab' + newId,
+        'innerHTML': content.label,
         'href': "#/tabs/tab/" + newId,
         'onclick': lang.hitch(this, function (evt) {
           evt.preventDefault();
@@ -72,7 +114,7 @@ define([
         id: newId,
         tab: tab,
         panel: panel,
-        content: content
+        content: conceptDetail
       });
 
       this._activateTab(newId);

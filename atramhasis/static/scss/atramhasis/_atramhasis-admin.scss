@@ -1,3 +1,7 @@
+$animationSpeed: 0.8s;
+$menu-width: 50px;
+$menu-width-open: 480px;
+
 /* main html layout */
 html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
 
@@ -12,6 +16,7 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
   height: 30px;
   background-color: $topbar-bg-color;
   padding: 5px 10px;
+  margin: 0;
 }
 
 #appDiv header {
@@ -23,25 +28,62 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
     border-bottom: 1px solid #f0f1f3;
   }
 
-  .search-results .dgrid {
-    height: 150px;
-    width: 100%
+  .top-bar-section li select {
+    height: 3.65rem !important;
+    cursor: pointer;
   }
 
-  .search-results-expanded .dgrid {
-    height: 350px;
+  .top-bar-section .menu-button {
+    height: 3.65rem !important;
+    cursor: pointer;
+    top: auto;
+    background-color: white;
+    border: 0;
+    width: 100%;
+    color: #666666;
+  }
+
+  .top-bar-section .menu-button:hover {
+    background-color: #666666;
+  }
+
+  .top-bar-section .menu-button i {
+    width: 100%;
+    font-size: 20px;
+    padding: 5px;
   }
 }
 
-#appDiv .app-content {
+/* flex for side menu placeholder */
+#appDiv .app-content-container {
+  flex: 1 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.app-content-container .app-content {
+  flex: 1;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.app-content-container .app-content-inner {
   flex: 1 100%;
   display: flex;
   flex-direction: column;
 }
 
+.app-content-container .app-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: $menu-width;
+  background-color: $white;
+}
+
 /* Custom notification styles! */
 .dGrowl-channel-warn .dGrowl-notification {
-	background-color: rgb(255, 250, 245);
+  background-color: rgb(255, 250, 245);
   border: 1px solid #e97b14;
 }
 
@@ -73,7 +115,7 @@ a.admin-button:hover {
 .action-bar {
   height: 30px;
   position: absolute;
-  right: 15px;
+  right: 35px;
   top: 70px;
   z-index: 3;
 
@@ -89,7 +131,7 @@ a.admin-button:hover {
   }
 }
 
- /*tabs*/
+/*tabs*/
 .concept-container {
   flex: 1;
   display: flex;
@@ -110,17 +152,78 @@ a.admin-button:hover {
     .tab-panel.active {
       display: block;
     }
+
+    .concept-detail {
+      padding-right: 20px;
+      display: inline-block;
+      overflow-y: auto;
+      width: 100%;
+    }
+
+    .concept-title-info {
+      padding-top: 10px;
+      margin-right: 20px;
+      font-size: 0.8rem;
+      float: left;
+    }
+
+    .concept-hr {
+      margin-left: 1.25rem;
+    }
+
+    .no-top-padding {
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .label-relation-block .dllist {
+      font-size: 1em;
+      padding: 0;
+      margin: 10px 0 0 0;
+    }
+
+    .label-relation-block .dllist dt {
+      font-size:1.2em;
+      padding-top:5px;
+      margin:0;
+    }
+
+    .label-relation-block .dllist dd {
+      margin-left:120px;
+      margin-top:-20px;
+      min-height: 19px;
+      font-size: 13px;
+    }
+
+    .label-relation-block {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .scopeNote {
+      border: 0 !important;
+      font-size: 1.1em;
+
+      h3 {
+        margin-bottom: 20px;
+      }
+
+      li {
+        padding-bottom: 10px !important;
+      }
+    }
   }
 
   ul.tabs {
     margin: 0;
-    height: 30px;
+    height: auto;
     padding: 0;
 
     li.tab {
       list-style-type: none;
       padding-right: 5px;
       float: left;
+      height: 100%;
 
       a {
         color: $white;
@@ -128,6 +231,7 @@ a.admin-button:hover {
         border: 1px solid $light-gray;
         padding: 0.1rem 0.5rem 0.2rem 0.5rem;
         margin: 0;
+        font-size: 12px;
       }
 
       a:hover {
@@ -140,5 +244,261 @@ a.admin-button:hover {
       color: black;
       background-color: $white;
     }
+  }
+}
+
+// slide menu
+.slidemenu-container {
+  min-height: 300px;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 10;
+  border-left: 1px solid $gray;
+  box-shadow: -1px 0px 2px 0px $gray;
+}
+
+.slidemenu-overlay {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  background-color: black;
+  height: 100%;
+  width: 100%;
+}
+
+.slidemenu-inner {
+  float: left;
+  display: inline-block;
+  text-align: left;
+  padding-left: 5px;
+  padding-top: 20px;
+  padding-right: 15px;
+  width: $menu-width-open;
+  height: 100%;
+}
+
+.slidemenu-open {
+  -webkit-transition: width $animationSpeed ease-in-out;
+  -moz-transition: width $animationSpeed ease-in-out;
+  -o-transition: width $animationSpeed ease-in-out;
+  transition: width $animationSpeed ease-in-out;
+  width: $menu-width-open;
+}
+
+.slidemenu-close .slidemenu-inner {
+  overflow-y: hidden;
+}
+
+.slideoverlay-open.slidemenu-overlay {
+  -webkit-transition: opacity $animationSpeed ease-in-out;
+  -moz-transition: opacity $animationSpeed ease-in-out;
+  -o-transition: opacity $animationSpeed ease-in-out;
+  transition: opacity $animationSpeed ease-in-out;
+  opacity: 0.3;
+  visibility: visible;
+}
+
+.slideoverlay-close.slidemenu-overlay {
+  transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -moz-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -webkit-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -o-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.slidemenu-open .slidemenu-inner:not(.slidemenu-control) {
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.slidemenu-close {
+  -webkit-transition: width $animationSpeed ease-in-out;
+  -moz-transition: width $animationSpeed ease-in-out;
+  -o-transition: width $animationSpeed ease-in-out;
+  transition: width $animationSpeed ease-in-out;
+  width: $menu-width;
+}
+
+.slidemenu-close .search-form, .slidemenu-close .search-footer-buttons {
+  transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -moz-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -webkit-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -o-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.slidemenu-open .search-form, .slidemenu-open .search-footer-buttons {
+  -webkit-transition: opacity $animationSpeed ease-in-out;
+  -moz-transition: opacity $animationSpeed ease-in-out;
+  -o-transition: opacity $animationSpeed ease-in-out;
+  transition: opacity $animationSpeed ease-in-out;
+  opacity: 1;
+  visibility: visible;
+}
+
+.slidemenu-container {
+
+  .search-pane {
+    height: 100%;
+  }
+
+  .search-results {
+    padding-left: 15px;
+  }
+
+  .search-results .dgrid {
+    width: 100%;
+    border-color: #f0f1f3;
+    height: 100%;
+  }
+
+  .search-results table {
+    margin: 0;
+  }
+
+  .search-results table tr th,
+  .search-results table tr td {
+    font-size: 11px !important;
+  }
+
+  .search-results .dgrid-header table .dgrid-cell {
+    padding: 5px;
+  }
+
+  .search-results table .dgrid-cell {
+    padding-left: 5px;
+    border-color: #f0f1f3;
+  }
+
+  .search-results .dgrid .dgrid-column-id {
+    width: 45px;
+  }
+
+  .search-results .dgrid .dgrid-content .dgrid-column-id {
+    vertical-align: middle;
+  }
+
+  .search-results .slideMenuGridCell {
+    word-break: keep-all;
+    white-space: normal;
+  }
+
+  .search-results .slideMenuGridCell h3 {
+    margin-bottom: 3px;
+    color: #753f7f !important;
+    font-weight: bold !important;
+    margin-top: 0 !important;
+  }
+
+  .search-results .slideMenuGridCell p {
+    padding: 0;
+    margin: 0;
+    color: $jumbo;
+    font-size: 11px;
+  }
+
+  .search-form {
+    margin-bottom: 15px;
+    display: inline-block;
+
+    .scheme-select {
+      display: inline-block;
+      width: 100%;
+    }
+
+    .search-button {
+      background-color: $mid-gray;
+      border: 0;
+      padding: 10px 45px 15px 40px;
+    }
+
+    .search-button:hover {
+      background-color: $light-gray;
+    }
+
+    .search-button span {
+      margin: 0;
+    }
+
+    .edit-scheme-button {
+      margin-left: 0;
+      padding-left: 0;
+    }
+  }
+
+  .search-footer-buttons {
+    margin-top: 20px;
+    height: 60px;
+  }
+}
+
+.label-manager {
+  .dgrid .dgrid-column-language {
+    width: 160px;
+  }
+
+  .dgrid .dgrid-column-remove_label {
+    width: 50px;
+  }
+
+  .dgrid .dgrid-column-label {
+    width: 380px;
+  }
+
+  .dGridHyperlink {
+    text-align: center;
+  }
+
+  .dGridHyperlink a {
+    width: 100%;
+    font-size: 18px;
+  }
+
+}
+
+.claro .dijitDialogUnderlay { background: rgba(72, 72, 72, 0.8) !important; opacity: 1 !important; }
+.claro .dijitDialog .dijitDialogTitle { font-size: 18px; color: #753f7f; }
+.claro .dijitDialogCloseIcon { background: none !important;  font-size: 22px; font-weight: bold; }
+.claro .dijitDialog .closeText { display: block; color: $silver }
+.claro .dijitDialog { background-color: #FFFFFF; }
+.claro .dijitDialog .dijitDialogPaneContent { padding: 25px; }
+.claro .dijitDialogTitleBar { padding: 10px !important; background-color: #FFFFFF !important;}
+.claro .dijitDialog .dijitDialogTitleBar .dijitDialogTitle strong { color: black; text-transform: uppercase; }
+
+.claro .dijitTabSpacer { border: none; height: 0; }
+.claro .dijitTabPaneWrapper { border: none; border-radius: 0; }
+//.claro .dijitTabContainerBottom-tabs .dijitTab { border: 1px solid #efefef; border-top: none; background: #ffffff none; border-radius: 0; }
+//.claro .dijitTab .tabLabel, .nihilo .dijitTabCloseButton:before { color: $gray; }
+//.claro .dijitTabCloseButton { background: none; width: 15px; height: 100%; padding-top: 5px; }
+//.claro .dijitTabCloseButton:before { content: "\f00d"; font-family: FontAwesome; }
+//.claro .dijitTabContainerBottom-tabs .dijitTabContainerBottom-tabs .dijitTabChecked { border: none; background: #ffffff none; }
+//.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked .dijitTabCloseButton{ cursor: pointer; padding-top: 5px;}
+//.claro .dijitTabContainerBottom-tabs .dijitTabChecked .tabLabel,
+//.claro .dijitTabContainerBottom-tabs .dijitTabHover .tabLabel,
+//.claro .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabCloseButton:before,
+//.claro .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabCloseButtonHover:before { color: $dark-purple; }
+.claro .dijitTabContainerTop-tabs { text-align: center; width: 100% !important; padding: 0; border: 0; height: 50px; }
+.claro .dijitTabContainerTop-tabs .dijitTab { background: $blue none !important; border: 1px solid $light-gray; border-radius: 0; color: $white; font-size: 0.6875rem; padding: 0.625rem 1.25rem !important; text-transform: uppercase; line-height: normal; margin: 0 1px 1.25rem 0 !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked) { background-color: #763e81 !important; color: $orange !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab.dijitTabChecked { background: $orange none !important; }
+
+
+.claro .dijitTabContainerTop-dijitContentPane {
+  padding: 5px 0 0 0 !important;
+}
+
+// overwrites for dgrid border color
+.claro .dgrid {
+  border-color: #f0f1f3 !important;
+
+  .dgrid-cell {
+    border-color: #f0f1f3 !important;
   }
 }
