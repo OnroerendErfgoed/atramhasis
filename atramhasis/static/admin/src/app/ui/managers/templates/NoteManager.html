@@ -1,0 +1,17 @@
+<div>
+  <div class="large-5 columns">
+    <input type="text" placeholder="Type note ..." data-dojo-attach-point="noteTitleNode"/>
+  </div>
+  <div class="large-2 columns">
+    <select data-dojo-attach-point="languageSelectNode"></select>
+  </div>
+  <div class="large-4 columns">
+    <select data-dojo-attach-point="noteTypeSelectNode"></select>
+  </div>
+  <div class="large-1 columns">
+    <a href="#" class="button tiny" data-dojo-attach-event="onClick: _addNote"><i class="fa fa-plus"></i></a>
+  </div>
+  <div class="large-12 columns">
+    <div data-dojo-attach-point="noteGridNode" style="max-height: 200px;"></div>
+  </div>
+</div>

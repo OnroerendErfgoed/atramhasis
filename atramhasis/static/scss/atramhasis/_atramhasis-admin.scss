@@ -439,7 +439,7 @@ a.admin-button:hover {
   }
 }
 
-.label-manager {
+.label-manager, .note-manager {
   .dgrid .dgrid-column-language {
     width: 160px;
   }
@@ -448,7 +448,8 @@ a.admin-button:hover {
     width: 50px;
   }
 
-  .dgrid .dgrid-column-label {
+  .dgrid .dgrid-column-label,
+  .dgrid .dgrid-column-note {
     width: 380px;
   }
 

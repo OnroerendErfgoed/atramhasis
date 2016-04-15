@@ -9,7 +9,7 @@ define([
   'dojo/topic',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
-  'dojo/text!./templates/LabelManager.html',
+  'dojo/text!./templates/NoteManager.html',
   'dstore/Memory',
   'dstore/Trackable',
   'dgrid/OnDemandGrid',
@@ -38,20 +38,20 @@ define([
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
-    baseClass: 'label-manager',
+    baseClass: 'note-manager',
     languageController: null,
     listController: null,
     concept: null,
     languageList: null,
-    _labelStore: null,
-    _labelGrid: null,
+    _noteStore: null,
+    _noteGrid: null,
     _index: 0,
 
     postCreate: function () {
       this.inherited(arguments);
-      console.debug('LabelManager::postCreate');
-      DomUtils.addOptionsToSelect(this.labelTypeSelectNode, {
-        data: this.listController.getLabelTypes(),
+      console.debug('NoteManager::postCreate');
+      DomUtils.addOptionsToSelect(this.noteTypeSelectNode, {
+        data: this.listController.getNoteTypes(),
         idProperty: 'value',
         labelProperty: 'label'
       });
@@ -61,27 +61,27 @@ define([
         labelProperty: 'name'
       });
       var TrackableMemory = declare([Memory, Trackable]);
-      this._labelStore = new TrackableMemory({ data: [] });
-      array.forEach(this.concept.labels, lang.hitch(this, function(item){
+      this._noteStore = new TrackableMemory({ data: [] });
+      array.forEach(this.concept.notes, lang.hitch(this, function(item){
         item.id = this._index++;
-        this._labelStore.put(item);
+        this._noteStore.put(item);
       }));
       this._createGrid({
-        collection: this._labelStore
-      }, this.labelGridNode);
+        collection: this._noteStore
+      }, this.noteGridNode);
     },
 
     startup: function () {
       this.inherited(arguments);
-      console.debug('LabelManager::startup');
-      this._labelGrid.startup();
+      console.debug('NoteManager::startup');
+      this._noteGrid.startup();
     },
 
     _createGrid: function(options, node) {
       var columns = {
-        label: {
-          label: "Title",
-          field: "label"
+        note: {
+          label: "Note",
+          field: "note"
         },
         language: {
           label: "Language",
@@ -98,7 +98,7 @@ define([
           label: "Type",
           field: "type",
           formatter: lang.hitch(this, function (value, object) {
-            var lang = array.filter(this.listController.getLabelTypes(), function (obj) {
+            var lang = array.filter(this.listController.getNoteTypes(), function (obj) {
               console.log(obj, value);
               return obj.value === value;
             })[0];
@@ -114,7 +114,7 @@ define([
             var div = domConstruct.create('div', {'class': 'dGridHyperlink'});
             domConstruct.create('a', {
               href: '#',
-              title: 'Remove label',
+              title: 'Remove note',
               className: 'fa fa-trash',
               innerHTML: '',
               onclick: lang.hitch(this, function (evt) {
@@ -131,11 +131,11 @@ define([
         collection: options.collection,
         columns: columns,
         showHeader: false,
-        noDataMessage: 'No labels found',
+        noDataMessage: 'No notes found',
         loadingMessage: 'Fetching data..'
       }, node);
 
-      this._labelGrid = grid;
+      this._noteGrid = grid;
 
       grid.on('dgrid-error', function(event) {
         console.log(event.error.message);
@@ -143,45 +143,45 @@ define([
     },
 
     getData: function() {
-      return this._labelStore.data;
+      return this._noteStore.data;
     },
 
-    _addLabel: function(evt) {
+    _addNote: function(evt) {
       evt ? evt.preventDefault() : null;
 
-      var label = {
+      var note = {
         id: this._index++,
         language: DomUtils.getSelectedOption(this.languageSelectNode),
-        type: DomUtils.getSelectedOption(this.labelTypeSelectNode),
-        label: this.labelTitleNode.value
+        type: DomUtils.getSelectedOption(this.noteTypeSelectNode),
+        note: this.noteTitleNode.value
       };
 
-      if (this._validate(label)) {
-        this._addRow(label);
+      if (this._validate(note)) {
+        this._addRow(note);
       } else {
-        topic.publish('dGrowl', 'Please fill in the fields for a new label', {'title': "Error", 'sticky': true, 'channel':'error'});
+        topic.publish('dGrowl', 'Please fill in the fields for a new note', {'title': "Error", 'sticky': true, 'channel':'error'});
       }
     },
 
     _removeRow: function(rowId) {
-      this._labelStore.remove(rowId);
+      this._noteStore.remove(rowId);
     },
 
     _addRow: function(row) {
       console.log('ADD ROW', row);
-      this._labelStore.add(row);
+      this._noteStore.add(row);
     },
 
-    _validate: function(label) {
+    _validate: function(note) {
       var valid = true;
 
-      if (!label.language || label.language === '') {
+      if (!note.language || note.language === '') {
         valid = false;
       }
-      if (!label.type || label.type === '') {
+      if (!note.type || note.type === '') {
         valid = false;
       }
-      if (!label.label || label.label === '') {
+      if (!note.note || note.note === '') {
         valid = false;
       }
 

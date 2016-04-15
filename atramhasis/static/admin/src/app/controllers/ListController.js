@@ -23,6 +23,10 @@ define([
       {label: "Alternative", value: "altLabel"},
       {label: "Hidden", value: "hiddenLabel"}
     ],
+    noteTypes: [
+      {label: "Definition", value: "definition"},
+      {label: "Note", value: "note"}
+    ],
 
 
     constructor: function (args) {
@@ -32,6 +36,10 @@ define([
 
     getLabelTypes: function() {
       return this.labelTypes;
+    },
+
+    getNoteTypes: function() {
+      return this.noteTypes;
     }
 
   });

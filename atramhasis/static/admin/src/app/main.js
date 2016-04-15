@@ -11,8 +11,8 @@ define([
 ], function (App, dom) {
 
   var appConfig = {
-    appContainer: dom.byId("appDiv"),
-    loadingContainer: dom.byId("loadingOverlay"),
+    appContainer: dom.byId('appDiv'),
+    loadingContainer: dom.byId('loadingOverlay'),
     staticAppPath: staticAppPath
   };
 

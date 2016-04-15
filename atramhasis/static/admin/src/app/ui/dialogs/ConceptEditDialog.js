@@ -8,6 +8,7 @@ define([
   'dijit/_WidgetsInTemplateMixin',
   '../../utils/DomUtils',
   '../managers/LabelManager',
+  '../managers/NoteManager',
   'dojo/text!./templates/ConceptEditDialog.html',
   'dijit/layout/TabContainer',
   'dijit/layout/ContentPane'
@@ -21,6 +22,7 @@ define([
   _WidgetsInTemplateMixin,
   DomUtils,
   LabelManager,
+  NoteManager,
   template
 ) {
   return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -50,6 +52,7 @@ define([
       this.dialog.set('content', this);
 
       this._createLabelsTab(this.concept);
+      this._createNotesTab(this.concept);
     },
 
     /**
@@ -84,6 +87,12 @@ define([
 
     _saveConcept: function(evt) {
       evt ? evt.preventDefault() : null;
+
+      var labelData = this.labelManager.getData();
+      console.log(labelData);
+
+      var noteData = this.noteManager.getData();
+      console.log(noteData);
     },
 
     _cancel: function(evt) {
@@ -100,6 +109,18 @@ define([
           languageList: languages
         }, this.labelsNode);
         this.labelManager.startup();
+      }));
+    },
+
+    _createNotesTab: function(concept) {
+      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(languages) {
+        this.noteManager = new NoteManager({
+          languageController: this.languageController,
+          listController: this.listController,
+          concept: concept,
+          languageList: languages
+        }, this.notesNode);
+        this.noteManager.startup();
       }));
     }
   });
