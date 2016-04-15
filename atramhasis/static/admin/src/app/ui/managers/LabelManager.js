@@ -88,7 +88,6 @@ define([
           field: "language",
           formatter: lang.hitch(this, function (value, object) {
             var lang = array.filter(this.languageList, function (obj) {
-              console.log(obj, value);
               return obj.id === value;
             })[0];
             return lang.name;
@@ -99,13 +98,12 @@ define([
           field: "type",
           formatter: lang.hitch(this, function (value, object) {
             var lang = array.filter(this.listController.getLabelTypes(), function (obj) {
-              console.log(obj, value);
               return obj.value === value;
             })[0];
             return lang.label;
           })
         },
-        remove_label: {
+        remove: {
           label: 'Remove',
           renderCell: lang.hitch(this, function (object) {
             if (object.id === undefined) {

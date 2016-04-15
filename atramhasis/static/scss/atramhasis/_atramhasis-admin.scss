@@ -444,7 +444,7 @@ a.admin-button:hover {
     width: 160px;
   }
 
-  .dgrid .dgrid-column-remove_label {
+  .dgrid .dgrid-column-remove {
     width: 50px;
   }
 
@@ -462,6 +462,51 @@ a.admin-button:hover {
     font-size: 18px;
   }
 
+}
+
+.relation-manager {
+  .relation-row {
+    vertical-align: middle;
+    margin-bottom: 5px;
+    background-color: #f0f1f3;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .relation-row p {
+    margin-top: 0;
+    color: black;
+    margin-top: 7px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .relation-row .large-1 {
+    padding-right: 0;
+  }
+
+  .dgrid {
+    max-height: 80px;
+
+    .dgrid-cell {
+      padding-left: 15px;
+    }
+
+    .dgrid-column-remove {
+      width: 50px;
+      padding-right: 60px;
+    }
+
+    .dGridHyperlink {
+      text-align: center;
+    }
+
+    .dGridHyperlink a {
+      width: 100%;
+      font-size: 18px;
+    }
+  }
 }
 
 .claro .dijitDialogUnderlay { background: rgba(72, 72, 72, 0.8) !important; opacity: 1 !important; }

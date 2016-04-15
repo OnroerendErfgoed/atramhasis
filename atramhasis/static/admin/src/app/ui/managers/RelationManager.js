@@ -9,7 +9,7 @@ define([
   'dojo/topic',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
-  'dojo/text!./templates/NoteManager.html',
+  'dojo/text!./templates/RelationManager.html',
   'dstore/Memory',
   'dstore/Trackable',
   'dgrid/OnDemandGrid',
@@ -38,73 +38,76 @@ define([
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
-    baseClass: 'note-manager',
+    baseClass: 'relation-manager',
     languageController: null,
     listController: null,
     concept: null,
     languageList: null,
-    _noteStore: null,
-    _noteGrid: null,
+    _broaderStore: null,
+    _broaderGrid: null,
+    _narrowerStore: null,
+    _narrowerGrid: null,
+    _relatedStore: null,
+    _relatedGrid: null,
+    _memberOfStore: null,
+    _memberOfGrid: null,
+    _subordinateStore: null,
+    _subordinateGrid: null,
     _index: 0,
 
     postCreate: function () {
       this.inherited(arguments);
-      console.debug('NoteManager::postCreate');
-      DomUtils.addOptionsToSelect(this.noteTypeSelectNode, {
-        data: this.listController.getNoteTypes(),
-        idProperty: 'value',
-        labelProperty: 'label'
-      });
-      DomUtils.addOptionsToSelect(this.languageSelectNode, {
-        data: this.languageList,
-        idProperty: 'id',
-        labelProperty: 'name'
-      });
+      console.debug('RelationManager::postCreate');
+
       var TrackableMemory = declare([Memory, Trackable]);
-      this._noteStore = new TrackableMemory({ data: [] });
-      array.forEach(this.concept.notes, lang.hitch(this, function(item){
-        item.id = this._index++;
-        this._noteStore.put(item);
-      }));
-      this._createGrid({
-        collection: this._noteStore
-      }, this.noteGridNode);
+
+      //array.forEach(this.concept.notes, lang.hitch(this, function(item){
+      //  item.id = this._index++;
+      //  this._noteStore.put(item);
+      //}));
+      this._broaderStore = new TrackableMemory({ data: this.concept.broader });
+      this._broaderGrid = this._createGrid({
+        collection: this._broaderStore
+      }, this.broaderGridNode);
+
+      this._narrowerStore = new TrackableMemory({ data: this.concept.narrower });
+      this._narrowerGrid = this._createGrid({
+        collection: this._narrowerStore
+      }, this.narrowerGridNode);
+
+      this._relatedStore = new TrackableMemory({ data: this.concept.related });
+      this._relatedGrid = this._createGrid({
+        collection: this._relatedStore
+      }, this.relatedGridNode);
+
+      this._memberOfStore = new TrackableMemory({ data: this.concept.member_of });
+      this._memberOfGrid = this._createGrid({
+        collection: this._memberOfStore
+      }, this.memberOfGridNode);
+
+      this._subordinateStore = new TrackableMemory({ data: this.concept.subordinate_arrays });
+      this._subordinateGrid = this._createGrid({
+        collection: this._subordinateStore
+      }, this.subordinateGridNode);
     },
 
     startup: function () {
       this.inherited(arguments);
-      console.debug('NoteManager::startup');
-      this._noteGrid.startup();
+      console.debug('RelationManager::startup');
+      this._broaderGrid.startup();
+      this._narrowerGrid.startup();
+      this._relatedGrid.startup();
+      this._memberOfGrid.startup();
+      this._subordinateGrid.startup();
     },
 
     _createGrid: function(options, node) {
       var columns = {
-        note: {
-          label: "Note",
-          field: "note"
-        },
-        language: {
-          label: "Language",
-          field: "language",
-          formatter: lang.hitch(this, function (value, object) {
-            var lang = array.filter(this.languageList, function (obj) {
-              return obj.id === value;
-            })[0];
-            return lang.name;
-          })
-        },
-        type: {
-          label: "Type",
-          field: "type",
-          formatter: lang.hitch(this, function (value, object) {
-            var lang = array.filter(this.listController.getNoteTypes(), function (obj) {
-              return obj.value === value;
-            })[0];
-            return lang.label;
-          })
+        label: {
+          label: '',
         },
         remove: {
-          label: 'Remove',
+          label: '',
           renderCell: lang.hitch(this, function (object) {
             if (object.id === undefined) {
               return null;
@@ -117,7 +120,7 @@ define([
               innerHTML: '',
               onclick: lang.hitch(this, function (evt) {
                 evt.preventDefault();
-                this._removeRow(object.id);
+                //this._removeRow(object.id);
               })
             }, div);
             return div;
@@ -126,39 +129,46 @@ define([
       };
 
       var grid = new (declare([OnDemandGrid, DijitRegistry, ColumnResizer]))({
+        className: "dgrid-autoheight",
         collection: options.collection,
         columns: columns,
         showHeader: false,
-        noDataMessage: 'No notes found',
+        noDataMessage: '',
         loadingMessage: 'Fetching data..'
       }, node);
-
-      this._noteGrid = grid;
 
       grid.on('dgrid-error', function(event) {
         console.log(event.error.message);
       });
+
+      return grid;
     },
 
     getData: function() {
-      return this._noteStore.data;
+      return [];
     },
 
-    _addNote: function(evt) {
+    _addBroader: function(evt) {
       evt ? evt.preventDefault() : null;
 
-      var note = {
-        id: this._index++,
-        language: DomUtils.getSelectedOption(this.languageSelectNode),
-        type: DomUtils.getSelectedOption(this.noteTypeSelectNode),
-        note: this.noteTitleNode.value
-      };
+    },
 
-      if (this._validate(note)) {
-        this._addRow(note);
-      } else {
-        topic.publish('dGrowl', 'Please fill in the fields for a new note', {'title': "Error", 'sticky': true, 'channel':'error'});
-      }
+    _addNarrower: function(evt) {
+      evt ? evt.preventDefault() : null;
+    },
+
+    _addRelated: function(evt) {
+      evt ? evt.preventDefault() : null;
+
+    },
+
+    _addMemberOf: function(evt) {
+      evt ? evt.preventDefault() : null;
+
+    },
+
+    _addSubordinateArray: function(evt) {
+      evt ? evt.preventDefault(): null;
     },
 
     _removeRow: function(rowId) {

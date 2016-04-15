@@ -9,6 +9,7 @@ define([
   '../../utils/DomUtils',
   '../managers/LabelManager',
   '../managers/NoteManager',
+  '../managers/RelationManager',
   'dojo/text!./templates/ConceptEditDialog.html',
   'dijit/layout/TabContainer',
   'dijit/layout/ContentPane'
@@ -23,6 +24,7 @@ define([
   DomUtils,
   LabelManager,
   NoteManager,
+  RelationManager,
   template
 ) {
   return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -53,6 +55,7 @@ define([
 
       this._createLabelsTab(this.concept);
       this._createNotesTab(this.concept);
+      this._createRelationsTab(this.concept);
     },
 
     /**
@@ -121,6 +124,18 @@ define([
           languageList: languages
         }, this.notesNode);
         this.noteManager.startup();
+      }));
+    },
+
+    _createRelationsTab: function(concept) {
+      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(languages) {
+        this.relationManager = new RelationManager({
+          languageController: this.languageController,
+          listController: this.listController,
+          concept: concept,
+          languageList: languages
+        }, this.relationsNode);
+        this.relationManager.startup();
       }));
     }
   });
