@@ -29,7 +29,13 @@ define([
       {label: 'History note', value: 'historyNote'},
       {label: 'Scope note', value: 'scopeNote'}
     ],
-
+    matchTypes: [
+      {label: "Broad", value: "broad"},
+      {label: "Close", value: "close"},
+      {label: "Exact", value: "exact"},
+      {label: "Narrow", value: "narrow"},
+      {label: "Related", value: "related"}
+    ],
 
     constructor: function (args) {
       console.debug('ConceptController::constructor');
@@ -42,6 +48,10 @@ define([
 
     getNoteTypes: function() {
       return this.noteTypes;
+    },
+
+    getMatchTypes: function() {
+      return this.matchTypes;
     }
 
   });

@@ -14170,8 +14170,6 @@ a.admin-button:hover {
 .claro .dijitTabPaneWrapper {
   border: none;
   border-radius: 0;
-  max-height: 450px;
-  overflow-y: auto;
 }
 
 /* line 548, ../scss/atramhasis/_atramhasis-admin.scss */

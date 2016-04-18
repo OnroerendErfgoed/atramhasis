@@ -10,6 +10,7 @@ define([
   '../managers/LabelManager',
   '../managers/NoteManager',
   '../managers/RelationManager',
+  '../managers/MatchesManager',
   'dojo/text!./templates/ConceptEditDialog.html',
   'dijit/layout/TabContainer',
   'dijit/layout/ContentPane'
@@ -25,6 +26,7 @@ define([
   LabelManager,
   NoteManager,
   RelationManager,
+  MatchesManager,
   template
 ) {
   return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -57,6 +59,7 @@ define([
       this._createLabelsTab(this.concept);
       this._createNotesTab(this.concept);
       this._createRelationsTab(this.concept);
+      this._createMatchesTab(this.concept);
     },
 
     /**
@@ -141,6 +144,21 @@ define([
           scheme: this.scheme
         }, this.relationsNode);
         this.relationManager.startup();
+      }));
+    },
+
+    _createMatchesTab: function(concept) {
+      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(languages) {
+        this.matchesManager = new MatchesManager({
+          languageController: this.languageController,
+          listController: this.listController,
+          conceptSchemeController: this.conceptSchemeController,
+          concept: concept,
+          languageList: languages,
+          scheme: this.scheme,
+          matchTypes: this.listController.getMatchTypes()
+        }, this.matchesNode);
+        this.matchesManager.startup();
       }));
     }
   });
