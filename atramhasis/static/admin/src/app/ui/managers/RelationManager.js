@@ -7,6 +7,7 @@ define([
   'dojo/dom-style',
   'dojo/json',
   'dojo/topic',
+  'dojo/on',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/RelationManager.html',
@@ -15,7 +16,8 @@ define([
   'dgrid/OnDemandGrid',
   'dgrid/extensions/DijitRegistry',
   'dgrid/extensions/ColumnResizer',
-  '../../utils/DomUtils'
+  '../../utils/DomUtils',
+  '../dialogs/AddRelationDialog'
 ], function (
   declare,
   array,
@@ -25,6 +27,7 @@ define([
   domStyle,
   JSON,
   topic,
+  on,
   _WidgetBase,
   _TemplatedMixin,
   template,
@@ -33,7 +36,8 @@ define([
   OnDemandGrid,
   DijitRegistry,
   ColumnResizer,
-  DomUtils
+  DomUtils,
+  AddRelationDialog
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -41,7 +45,9 @@ define([
     baseClass: 'relation-manager',
     languageController: null,
     listController: null,
+    conceptSchemeController: null,
     concept: null,
+    scheme: null,
     languageList: null,
     _broaderStore: null,
     _broaderGrid: null,
@@ -54,17 +60,14 @@ define([
     _subordinateStore: null,
     _subordinateGrid: null,
     _index: 0,
+    _relationStore: null,
+    _addRelationDialog: null,
 
     postCreate: function () {
       this.inherited(arguments);
       console.debug('RelationManager::postCreate');
-
       var TrackableMemory = declare([Memory, Trackable]);
 
-      //array.forEach(this.concept.notes, lang.hitch(this, function(item){
-      //  item.id = this._index++;
-      //  this._noteStore.put(item);
-      //}));
       this._broaderStore = new TrackableMemory({ data: this.concept.broader });
       this._broaderGrid = this._createGrid({
         collection: this._broaderStore
@@ -89,6 +92,21 @@ define([
       this._subordinateGrid = this._createGrid({
         collection: this._subordinateStore
       }, this.subordinateGridNode);
+
+      this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme)
+      this._addRelationDialog = new AddRelationDialog({
+        parentNode: this,
+        relationStore: this._relationStore,
+        scheme: this.scheme,
+        concept: this.concept
+      });
+      this._addRelationDialog.startup();
+      this.own(
+        on(this._addRelationDialog, 'ok', lang.hitch(this, function (evt) {
+          this._addRelation(evt.conceptId, evt.conceptLabel, evt.conceptPath, evt.relation);
+        }))
+      );
+
     },
 
     startup: function () {
@@ -120,7 +138,7 @@ define([
               innerHTML: '',
               onclick: lang.hitch(this, function (evt) {
                 evt.preventDefault();
-                //this._removeRow(object.id);
+                this._removeRow(object.id, options.collection);
               })
             }, div);
             return div;
@@ -148,53 +166,46 @@ define([
       return [];
     },
 
+    _addRelation: function(id, label, path, relation) {
+      var store = relation;
+
+      var found = array.some(store.data, function (item) {
+        return item.id == id;
+      });
+      if (!found) {
+        store.add({id: id, label: label, path: path});
+        return true;
+      }
+      return false;
+    },
+
     _addBroader: function(evt) {
       evt ? evt.preventDefault() : null;
-
+      this._addRelationDialog.show(this._broaderStore);
     },
 
     _addNarrower: function(evt) {
       evt ? evt.preventDefault() : null;
+      this._addRelationDialog.show(this._narrowerStore);
     },
 
     _addRelated: function(evt) {
       evt ? evt.preventDefault() : null;
-
+      this._addRelationDialog.show(this._relatedStore);
     },
 
     _addMemberOf: function(evt) {
       evt ? evt.preventDefault() : null;
-
+      this._addRelationDialog.show(this._memberOfStore);
     },
 
     _addSubordinateArray: function(evt) {
       evt ? evt.preventDefault(): null;
+      this._addRelationDialog.show(this._subordinateStore);
     },
 
-    _removeRow: function(rowId) {
-      this._noteStore.remove(rowId);
-    },
-
-    _addRow: function(row) {
-      console.log('ADD ROW', row);
-      this._noteStore.add(row);
-    },
-
-    _validate: function(note) {
-      var valid = true;
-
-      if (!note.language || note.language === '') {
-        valid = false;
-      }
-      if (!note.type || note.type === '') {
-        valid = false;
-      }
-      if (!note.note || note.note === '') {
-        valid = false;
-      }
-
-      return valid;
+    _removeRow: function(rowId, store) {
+      store.remove(rowId);
     }
-
   });
 });

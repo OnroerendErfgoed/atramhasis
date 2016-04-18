@@ -6,8 +6,20 @@ define([
   'dojo/_base/lang',
   'dojo/_base/array',
   'dojo/request/xhr',
+  'dojo/store/JsonRest',
+  'dojo/store/Cache',
+  'dojo/store/Memory',
   'dojo/json'
-], function (declare, lang, array, xhr, json) {
+], function (
+  declare,
+  lang,
+  array,
+  xhr,
+  JsonRest,
+  Cache,
+  Memory,
+  json
+) {
   return declare( null, {
 
     conceptSchemeList: null,
@@ -53,23 +65,33 @@ define([
     loadConceptSchemeStores: function() {
       console.debug('ConceptSchemeController::loadConceptSchemeStores');
       return this.getConceptSchemes().then(lang.hitch(this, function (schemes) {
-          var externalSchemelist = [];
-          array.forEach(schemes, lang.hitch(this, function (scheme) {
-            if(array.indexOf(scheme.subject, 'external') == -1){
-              this.conceptSchemeList.push({name: scheme.label, id: scheme.id});
-              //this.stores[scheme.id] = new JsonRest({
-              //  'target': this._target + '/' + scheme.id + '/c/',
-              //  'accepts': 'application/json'
-              //});
-            }else{
-              externalSchemelist.push(scheme);
-            }
-          }));
-          //this.externalSchemeStore = new Memory({
-          //  idProperty: "id",
-          //  data: externalSchemelist
-          //});
-        }))
+        var externalSchemelist = [];
+        array.forEach(schemes, lang.hitch(this, function (scheme) {
+          if(array.indexOf(scheme.subject, 'external') == -1){
+            this.conceptSchemeList.push({name: scheme.label, id: scheme.id});
+            //this.stores[scheme.id] = new JsonRest({
+            //  'target': this._target + '/' + scheme.id + '/c/',
+            //  'accepts': 'application/json'
+            //});
+          }else{
+            externalSchemelist.push(scheme);
+          }
+        }));
+        //this.externalSchemeStore = new Memory({
+        //  idProperty: "id",
+        //  data: externalSchemelist
+        //});
+      }))
+    },
+
+    getConceptSchemeTree: function(scheme) {
+      var myStore = new Cache(new JsonRest({
+        target: "/conceptschemes/" + scheme + "/tree",
+        getChildren: function (object) {
+          return object.children || [];
+        }
+      }), new Memory());
+      return myStore;
     }
   })
 });

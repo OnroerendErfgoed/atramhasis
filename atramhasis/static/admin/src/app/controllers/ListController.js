@@ -25,7 +25,9 @@ define([
     ],
     noteTypes: [
       {label: "Definition", value: "definition"},
-      {label: "Note", value: "note"}
+      {label: "Note", value: "note"},
+      {label: 'History note', value: 'historyNote'},
+      {label: 'Scope note', value: 'scopeNote'}
     ],
 
 

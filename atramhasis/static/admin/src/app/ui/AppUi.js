@@ -56,7 +56,8 @@ define([
       this._createSlideMenu(this.menuContainerNode);
       this._conceptContainer = new ConceptContainer({
         languageController: this.languageController,
-        listController: this.listController
+        listController: this.listController,
+        conceptSchemeController: this.conceptSchemeController
       }, this.conceptContainerNode);
     },
 

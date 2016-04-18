@@ -75,6 +75,7 @@ define([
       this.inherited(arguments);
       console.debug('LabelManager::startup');
       this._labelGrid.startup();
+      this._labelGrid.resize();
     },
 
     _createGrid: function(options, node) {

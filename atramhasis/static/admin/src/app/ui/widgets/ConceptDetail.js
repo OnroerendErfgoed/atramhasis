@@ -32,6 +32,7 @@ define([
     maxHeight: null,
     languageController: null,
     listController: null,
+    conceptSchemeController: null,
     _editDialog: null,
 
     postCreate: function () {
@@ -54,7 +55,8 @@ define([
         scheme: this.scheme,
         parent: this,
         languageController: this.languageController,
-        listController: this.listController
+        listController: this.listController,
+        conceptSchemeController: this.conceptSchemeController
       });
       this._editDialog.startup();
     },

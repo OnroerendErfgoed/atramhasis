@@ -37,6 +37,7 @@ define([
     scheme: null,
     languageController: null,
     listController: null,
+    conceptSchemeController: null,
 
     /**
      * Standaard widget functie
@@ -77,7 +78,9 @@ define([
      * Toont het dialog
      */
     showDialog: function () {
+      this.tabContainer.layout();
       this.dialog.show();
+      this.dialog.resize();
     },
 
     /**
@@ -132,8 +135,10 @@ define([
         this.relationManager = new RelationManager({
           languageController: this.languageController,
           listController: this.listController,
+          conceptSchemeController: this.conceptSchemeController,
           concept: concept,
-          languageList: languages
+          languageList: languages,
+          scheme: this.scheme
         }, this.relationsNode);
         this.relationManager.startup();
       }));

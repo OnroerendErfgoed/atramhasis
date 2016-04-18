@@ -75,6 +75,7 @@ define([
       this.inherited(arguments);
       console.debug('NoteManager::startup');
       this._noteGrid.startup();
+      this._noteGrid.resize();
     },
 
     _createGrid: function(options, node) {
@@ -86,7 +87,7 @@ define([
         language: {
           label: "Language",
           field: "language",
-          formatter: lang.hitch(this, function (value, object) {
+          formatter: lang.hitch(this, function (value) {
             var lang = array.filter(this.languageList, function (obj) {
               return obj.id === value;
             })[0];
@@ -96,7 +97,7 @@ define([
         type: {
           label: "Type",
           field: "type",
-          formatter: lang.hitch(this, function (value, object) {
+          formatter: lang.hitch(this, function (value) {
             var lang = array.filter(this.listController.getNoteTypes(), function (obj) {
               return obj.value === value;
             })[0];

@@ -18,11 +18,11 @@
     "dijit": "~1.10.4",
     "dojo": "~1.10.4",
     "util": "dojo-util#~1.10.4",
-    "dgrid": "~0.4.0",
+    "dgrid": "~0.4.1",
+    "dstore": "~1.1.1",
     "dGrowl": "0.1.2",
     "foundation": "~5.5.0",
-    "font-awesome": "~4.3.0",
-    "dstore": "1.1.0"
+    "font-awesome": "~4.3.0"
   },
   "resolutions": {
     "dstore": "1.1.0"
