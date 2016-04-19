@@ -142,7 +142,10 @@ define([
     },
 
     getData: function() {
-      return this._noteStore.data;
+      var notes = {
+        notes: this._noteStore.data
+      }
+      return notes;
     },
 
     _addNote: function(evt) {

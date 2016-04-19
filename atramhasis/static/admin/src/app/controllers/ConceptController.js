@@ -6,14 +6,18 @@ define([
   'dojo/_base/lang',
   'dojo/_base/array',
   'dojo/request/xhr',
+  'dojo/request',
   'dojo/Deferred',
+  'dojo/json',
   'dstore/Rest'
 ], function (
   declare,
   lang,
   array,
   xhr,
+  request,
   Deferred,
+  json,
   Rest
 ) {
   return declare( null, {
@@ -64,9 +68,22 @@ define([
       return this._stores[schemeId];
     },
 
-    saveConcept: function(concept) {
+    saveConcept: function(concept, schemeId) {
       console.debug('ConceptController::saveConcept', concept);
 
+      var method = 'PUT';
+      var url = this._target.replace('{schemeId}', schemeId) + concept.id;
+
+      return request(url, {
+        method: method,
+        data: json.stringify(concept),
+        handleAs: 'json',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'X-Requested-With': ''
+        }
+      });
     }
   })
 });

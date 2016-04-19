@@ -142,7 +142,10 @@ define([
     },
 
     getData: function() {
-      return this._labelStore.data;
+      var labels = {
+        labels: this._labelStore.data
+      }
+      return labels;
     },
 
     _addLabel: function(evt) {

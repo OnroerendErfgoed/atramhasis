@@ -7,6 +7,7 @@ define([
   'dojo/json',
   'dojo/window',
   'dojo/dom-style',
+  'dojo/on',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/ConceptContainer.html',
@@ -20,6 +21,7 @@ define([
   JSON,
   wind,
   domStyle,
+  on,
   _WidgetBase,
   _TemplatedMixin,
   template,
@@ -31,6 +33,7 @@ define([
     baseClass: 'concept-container',
     languageController: null,
     listController: null,
+    conceptController: null,
     conceptSchemeController: null,
     _tabs: null,
     _tabIndex: 0,
@@ -48,7 +51,7 @@ define([
     },
 
     _calculateBodyHeight: function() {
-       var win = wind.getBox();
+      var win = wind.getBox();
       var footerheight = 30;
       var headerheight = 60;
       var padding = 80;
@@ -89,7 +92,12 @@ define([
         listController: this.listController,
         conceptSchemeController: this.conceptSchemeController
       }, panelContent);
+      on(conceptDetail, 'concept.save', lang.hitch(this, function(evt) {
+        console.log(evt);
+        this._saveConcept(newId, evt.concept, evt.schemeId);
+      }));
       conceptDetail.startup();
+
 
       //create tab button
       var tab = domConstruct.create("li", {
@@ -168,6 +176,17 @@ define([
       if (this._tabs.length > 0) {
         this._activateTab(this._tabs[this._tabs.length - 1].id);
       }
+    },
+
+    _saveConcept: function(tabId, concept, schemeId) {
+      console.debug('ConceptContainer::_saveConcept', concept);
+
+      this.conceptController.saveConcept(concept, schemeId).then(lang.hitch(this, function(res) {
+        // save successful
+        console.log(res);
+      }), function(err) {
+        console.log(err);
+      });
     }
   });
 });

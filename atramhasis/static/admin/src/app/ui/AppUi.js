@@ -57,7 +57,8 @@ define([
       this._conceptContainer = new ConceptContainer({
         languageController: this.languageController,
         listController: this.listController,
-        conceptSchemeController: this.conceptSchemeController
+        conceptSchemeController: this.conceptSchemeController,
+        conceptController: this.conceptController
       }, this.conceptContainerNode);
     },
 

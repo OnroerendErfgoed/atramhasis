@@ -6,6 +6,7 @@ define([
   'dojo/dom-class',
   'dojo/dom-style',
   'dojo/json',
+  'dojo/on',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/ConceptDetail.html',
@@ -18,6 +19,7 @@ define([
   domClass,
   domStyle,
   JSON,
+  on,
   _WidgetBase,
   _TemplatedMixin,
   template,
@@ -58,6 +60,13 @@ define([
         listController: this.listController,
         conceptSchemeController: this.conceptSchemeController
       });
+      on(this._editDialog, 'concept.save', lang.hitch(this, function(evt) {
+        console.log(evt);
+        this.emit('concept.save', {
+          concept: evt.concept,
+          schemeId: evt.schemeId
+        });
+      }));
       this._editDialog.startup();
     },
 

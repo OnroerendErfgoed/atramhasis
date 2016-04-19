@@ -223,7 +223,17 @@ define([
     },
 
     getData: function() {
-      return [];
+      var matches = {
+        matches: {
+          narrow: this._narrowStore.data || [],
+          broad: this._broadStore.data || [],
+          related: this._relatedStore.data || [],
+          close: this._closeStore.data || [],
+          exact: this._exactStore.data || []
+        }
+      };
+
+      return matches;
     },
 
     _addNewMatch: function(match, matchtype) {

@@ -163,7 +163,16 @@ define([
     },
 
     getData: function() {
-      return [];
+      var relations = {};
+      relations.related = this._relatedStore.data;
+      relations.narrower = this._narrowerStore.data;
+      relations.broader = this._broaderStore.data;
+      /* jshint -W106 */
+      relations.member_of = this._memberOfStore.data;
+      relations.subordinate_arrays = this._subordinateStore.data;
+      /* jshint +W106 */
+
+      return relations;
     },
 
     _addRelation: function(id, label, path, relation) {
