@@ -48,7 +48,7 @@ define([
       this.inherited(arguments);
       this.dialog = new Dialog({
         title: 'Edit <strong>' + this.concept.label + '</strong>',
-        style: 'width: 1000px; min-height: 500px;',
+        style: 'width: 1000px; min-height: 700px;',
         onHide: lang.hitch(this, function() {
           this.parent._closeEditDialog();
         })

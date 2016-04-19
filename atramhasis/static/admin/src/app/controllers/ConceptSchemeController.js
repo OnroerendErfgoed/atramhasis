@@ -10,6 +10,7 @@ define([
   'dojo/store/JsonRest',
   'dojo/store/Cache',
   'dojo/store/Memory',
+  'dstore/Memory',
   'dojo/json'
 ], function (
   declare,
@@ -20,6 +21,7 @@ define([
   JsonRest,
   Cache,
   Memory,
+  dMemory,
   json
 ) {
   return declare( null, {
@@ -79,10 +81,10 @@ define([
             externalSchemelist.push(scheme);
           }
         }));
-        //this.externalSchemeStore = new Memory({
-        //  idProperty: "id",
-        //  data: externalSchemelist
-        //});
+        this.externalSchemeStore = new dMemory({
+          idProperty: "id",
+          data: externalSchemelist
+        });
       }))
     },
 
@@ -202,6 +204,13 @@ define([
       else {
         return correctlangLabels[0].label;
       }
+    },
+
+    getExternalSchemeStore: function() {
+      if (this.externalSchemeStore) {
+        return this.externalSchemeStore;
+      }
+      return null;
     }
   })
 });

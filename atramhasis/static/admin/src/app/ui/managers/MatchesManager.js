@@ -16,7 +16,8 @@ define([
   'dgrid/OnDemandGrid',
   'dgrid/extensions/DijitRegistry',
   'dgrid/extensions/ColumnResizer',
-  '../../utils/DomUtils'
+  '../../utils/DomUtils',
+  '../dialogs/AddMatchesDialog'
 ], function (
   declare,
   array,
@@ -35,7 +36,8 @@ define([
   OnDemandGrid,
   DijitRegistry,
   ColumnResizer,
-  DomUtils
+  DomUtils,
+  AddMatchesDialog
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -59,12 +61,14 @@ define([
     _closeStore: null,
     _closeGrid: null,
     _index: 0,
+    _matchesDialog: null,
 
     postCreate: function () {
       this.inherited(arguments);
       console.debug('RelationManager::postCreate');
       var TrackableMemory = declare([Memory, Trackable]);
 
+      // init grids
       this._broadStore = new TrackableMemory({ data: [] });
       this._broadGrid = this._createGrid({
         collection: this._broadStore
@@ -90,7 +94,18 @@ define([
         collection: this._closeStore
       }, this.closeGridNode);
 
-      this._loadMatches(this.concept.matches);
+      if (this.concept && this.concept.matches) {
+        this._loadMatches(this.concept.matches);
+      }
+
+      // load add dialog
+      this._matchesDialog = new AddMatchesDialog({
+        scheme: this.scheme,
+        concept: this.concept,
+        externalSchemeStore: this.conceptSchemeController.getExternalSchemeStore(),
+        matchTypesList: this.listController.getMatchTypes()
+      });
+      this._matchesDialog.startup();
     },
 
     startup: function () {
@@ -229,6 +244,8 @@ define([
 
     _addMatches: function(evt) {
       evt ? evt.preventDefault() : null;
+      // open dialog
+      this._matchesDialog.show();
     },
 
     _removeRow: function(rowId, store) {

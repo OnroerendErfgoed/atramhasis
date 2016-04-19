@@ -14106,73 +14106,80 @@ a.admin-button:hover {
 /* line 519, ../scss/atramhasis/_atramhasis-admin.scss */
 .relation-dialog {
   height: 500px;
+  width: 450px;
 }
 
-/* line 523, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 524, ../scss/atramhasis/_atramhasis-admin.scss */
+.matches-dialog {
+  width: 800px;
+  height: 620px;
+}
+
+/* line 529, ../scss/atramhasis/_atramhasis-admin.scss */
 .footerButtons {
   margin-top: 20px;
 }
 
-/* line 527, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 533, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogUnderlay {
   background: rgba(72, 72, 72, 0.8) !important;
   opacity: 1 !important;
 }
 
-/* line 528, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 534, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogTitle {
   font-size: 18px;
   color: #753f7f;
 }
 
-/* line 529, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 535, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogCloseIcon {
   background: none !important;
   font-size: 22px;
   font-weight: bold;
 }
 
-/* line 530, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 536, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .closeText {
   display: block;
   color: #989898;
 }
 
-/* line 531, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 537, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog {
   background-color: #FFFFFF;
 }
 
-/* line 532, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 538, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogPaneContent {
   padding: 25px;
 }
 
-/* line 533, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 539, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogTitleBar {
   padding: 10px !important;
   background-color: #FFFFFF !important;
 }
 
-/* line 534, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 540, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogTitleBar .dijitDialogTitle strong {
   color: black;
   text-transform: uppercase;
 }
 
-/* line 536, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 542, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabSpacer {
   border: none;
   height: 0;
 }
 
-/* line 537, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 543, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabPaneWrapper {
   border: none;
   border-radius: 0;
 }
 
-/* line 548, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 554, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabContainerTop-tabs {
   text-align: center;
   width: 100% !important;
@@ -14181,7 +14188,7 @@ a.admin-button:hover {
   height: 50px;
 }
 
-/* line 549, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 555, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabContainerTop-tabs .dijitTab {
   background: #2b709d none !important;
   border: 1px solid #d6d6d6;
@@ -14194,27 +14201,27 @@ a.admin-button:hover {
   margin: 0 1px 1.25rem 0 !important;
 }
 
-/* line 550, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 556, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked) {
   background-color: #763e81 !important;
   color: #f77f00 !important;
 }
 
-/* line 551, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 557, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabContainerTop-tabs .dijitTab.dijitTabChecked {
   background: #f77f00 none !important;
 }
 
-/* line 553, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 559, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabContainerTop-dijitContentPane {
   padding: 5px 0 0 0 !important;
 }
 
-/* line 558, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 564, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dgrid {
   border-color: #f0f1f3 !important;
 }
-/* line 561, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 567, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dgrid .dgrid-cell {
   border-color: #f0f1f3 !important;
 }
