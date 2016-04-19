@@ -42,7 +42,7 @@ define([
   return declare([_WidgetBase, _TemplatedMixin], {
 
     templateString: template,
-    baseClass: 'relation-manager',
+    baseClass: 'matches-manager',
     languageController: null,
     listController: null,
     conceptSchemeController: null,
@@ -103,9 +103,16 @@ define([
         scheme: this.scheme,
         concept: this.concept,
         externalSchemeStore: this.conceptSchemeController.getExternalSchemeStore(),
+        conceptSchemeController: this.conceptSchemeController,
         matchTypesList: this.listController.getMatchTypes()
       });
       this._matchesDialog.startup();
+
+      this.own(
+        on(this._matchesDialog, 'match.add', lang.hitch(this, function(evt) {
+          this._addNewMatch(evt.match, evt.matchType);
+        }))
+      );
     },
 
     startup: function () {
@@ -130,7 +137,7 @@ define([
           label: '',
           renderCell: function(object){
             if (object && object.data) {
-              return domConstruct.create('a', { href: object.data.uri, target: '_blank',
+              return domConstruct.create('a', { href: object.data.uri, target: '_blank', title: object.data.uri,
                 innerHTML: '<i class="fa fa-external-link"></i>&nbsp;&nbsp;' + object.data.uri });
             }
           }
@@ -193,6 +200,7 @@ define([
         if (matches.exact) {
           array.forEach(matches.exact, function (match) {
             this.conceptSchemeController.getMatch(match, 'exact').then(lang.hitch(this, function (matched) {
+              console.log(matched);
               this._addMatch(matched, this._exactStore);
             }));
           }, this);
@@ -216,6 +224,35 @@ define([
 
     getData: function() {
       return [];
+    },
+
+    _addNewMatch: function(match, matchtype) {
+      var store = null;
+
+      switch(matchtype) {
+        case 'broad': store = this._broadStore;
+          break;
+        case 'narrow': store = this._narrowStore;
+          break;
+        case 'related': store = this._relatedStore;
+          break;
+        case 'close': store = this._closeStore;
+          break;
+        case 'exact': store = this._exactStore;
+          break;
+      }
+
+      if (match && store) {
+        var formatMatch = {
+          data: {
+            id: match.id,
+            label: match.label,
+            uri: match.uri
+          },
+          type: match.type
+        };
+        this._addMatch(formatMatch, store);
+      }
     },
 
     _addMatch: function(match, store) {

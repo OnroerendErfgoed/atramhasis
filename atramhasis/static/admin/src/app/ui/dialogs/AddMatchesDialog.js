@@ -3,15 +3,15 @@ define([
   'dijit/_TemplatedMixin',
   'dijit/_WidgetsInTemplateMixin',
   'dijit/Dialog',
-  'dijit/tree/ObjectStoreModel',
-  'dstore/legacy/DstoreAdapter',
-  'dijit/Tree',
   'dojo/_base/lang',
   'dojo/_base/array',
+  'dstore/Memory',
   'dojo/topic',
+  'dojo/dom-construct',
   'dgrid/OnDemandGrid',
   'dgrid/extensions/DijitRegistry',
   'dgrid/extensions/ColumnResizer',
+  'dgrid/Selection',
   '../../utils/DomUtils',
   'dojo/text!./templates/AddMatchesDialog.html'
 ], function (
@@ -19,15 +19,15 @@ define([
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
   Dialog,
-  ObjectStoreModel,
-  DstoreAdapter,
-  Tree,
   lang,
   array,
+  Memory,
   topic,
+  domConstruct,
   OnDemandGrid,
   DijitRegistry,
   ColumnResizer,
+  Selection,
   domUtils,
   template
 ) {
@@ -39,6 +39,7 @@ define([
     title: 'Add a match',
     scheme: null,
     concept: null,
+    conceptSchemeController: null,
     externalSchemeStore: null,
     matchTypesList: null,
     _matchesGrid: null,
@@ -82,12 +83,19 @@ define([
       var columns = {
         label: {
           label: ''
+        },
+        id: {
+          label: ''
+        },
+        type: {
+          label: ''
         }
       };
 
-      var grid = new (declare([OnDemandGrid, DijitRegistry, ColumnResizer]))({
+      var grid = new (declare([OnDemandGrid, DijitRegistry, ColumnResizer, Selection]))({
         collection: options.collection,
         columns: columns,
+        selectionMode: 'single',
         showHeader: false,
         noDataMessage: '',
         loadingMessage: 'Fetching data..'
@@ -103,6 +111,25 @@ define([
     _okClick: function (evt) {
       console.debug('MatchesDialog::_okClick');
       evt.preventDefault();
+
+      var matchType = domUtils.getSelectedOption(this.matchTypeSelectNode);
+      var selected = null;
+      for (var id in this._matchesGrid.selection) {
+        if (this._matchesGrid.selection[id]) {
+          selected = this._matchesStore.getSync(id);
+        }
+      }
+
+      if (selected) {
+        this.emit('match.add', {
+          matchType: matchType,
+          match: selected
+        });
+        this.hide();
+      } else {
+        // none selected
+        // todo dgrowl
+      }
     },
 
     _cancelClick: function (evt) {
@@ -113,6 +140,25 @@ define([
 
     _searchMatches: function(evt)  {
       evt ? evt.preventDefault() : null;
+
+      var externalScheme = domUtils.getSelectedOption(this.externalSchemeSelect);
+      var searchLabel = this.searchLabelInput.value;
+
+      if (externalScheme && searchLabel && searchLabel !== '') {
+        this._loadStore(externalScheme, searchLabel)
+      }
+    },
+
+    _loadStore: function(externalScheme, searchLabel) {
+      this.conceptSchemeController.searchForConcepts(externalScheme, searchLabel).then(lang.hitch(this,
+        function(concepts) {
+          this._matchesStore = new Memory({ data: concepts });
+          this._matchesGrid.set('collection', this._matchesStore);
+          this._matchesGrid.resize();
+        }), function(err) {
+        console.log(err);
+      });
+
     },
 
     _reset: function () {

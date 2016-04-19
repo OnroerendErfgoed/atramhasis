@@ -36,9 +36,13 @@ define([
       {label: "Narrow", value: "narrow"},
       {label: "Related", value: "related"}
     ],
+    conceptTypes: [
+      {label: 'COLLECTION', value: 'collection'},
+      {label: 'CONCEPT', value: 'concept'}
+    ],
 
     constructor: function (args) {
-      console.debug('ConceptController::constructor');
+      console.debug('ListController::constructor');
       declare.safeMixin(this, args);
     },
 
@@ -52,6 +56,10 @@ define([
 
     getMatchTypes: function() {
       return this.matchTypes;
+    },
+
+    getConceptTypes: function() {
+      return this.conceptTypes;
     }
 
   });

@@ -11,6 +11,7 @@ define([
   '../managers/NoteManager',
   '../managers/RelationManager',
   '../managers/MatchesManager',
+  '../../utils/DomUtils',
   'dojo/text!./templates/ConceptEditDialog.html',
   'dijit/layout/TabContainer',
   'dijit/layout/ContentPane'
@@ -27,6 +28,7 @@ define([
   NoteManager,
   RelationManager,
   MatchesManager,
+  domUtils,
   template
 ) {
   return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -56,6 +58,12 @@ define([
       this.dialog.closeText.innerHTML = '<i class="fa fa-times"></i>';
       this.dialog.set('content', this);
 
+      domUtils.addOptionsToSelect(this.typeNode, {
+        data: this.listController.getConceptTypes(),
+        idProperty: 'value',
+        labelProperty: 'label'
+      });
+
       this._createLabelsTab(this.concept);
       this._createNotesTab(this.concept);
       this._createRelationsTab(this.concept);
@@ -67,7 +75,9 @@ define([
      */
     startup: function () {
       this.inherited(arguments);
-      this._setData(this.concept);
+      if (this.concept) {
+        this._setData(this.concept);
+      }
       this.showDialog();
       this.tabContainer.layout();
       this.dialog.resize();
@@ -75,6 +85,7 @@ define([
 
     _setData: function(concept) {
       this.schemeNode.value = this.scheme;
+      this.typeNode.value = this.concept.type;
     },
 
     /**

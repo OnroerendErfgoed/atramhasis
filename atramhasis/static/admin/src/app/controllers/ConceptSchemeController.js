@@ -211,6 +211,20 @@ define([
         return this.externalSchemeStore;
       }
       return null;
+    },
+
+    searchForConcepts: function (scheme, value) {
+      var url = '/conceptschemes/' + scheme + '/c?label=' + value + '&type=all&sort=+label';
+      return xhr.get(url, {
+        handleAs: "json",
+        headers: {'Accept' : 'application/json'}
+      })
+      //  .then(function(data){
+      //  self._externalConceptList.refresh();
+      //  self._externalConceptList.renderArray(data);
+      //}, function(err){
+      //  console.error(err);
+      //});
     }
   })
 });

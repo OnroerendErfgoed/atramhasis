@@ -54,14 +54,19 @@ define([
       console.debug('ConceptController::getConceptStore', schemeId);
       //check if store has been cached already
       if( !(schemeId in this._stores) ){
-          this._stores[schemeId] = new Rest({
-            target: this._target.replace('{schemeId}', schemeId),
-            idProperty: 'id',
-            sortParam: 'sort',
-            useRangeHeaders: true
-          });
+        this._stores[schemeId] = new Rest({
+          target: this._target.replace('{schemeId}', schemeId),
+          idProperty: 'id',
+          sortParam: 'sort',
+          useRangeHeaders: true
+        });
       }
       return this._stores[schemeId];
+    },
+
+    saveConcept: function(concept) {
+      console.debug('ConceptController::saveConcept', concept);
+
     }
   })
 });

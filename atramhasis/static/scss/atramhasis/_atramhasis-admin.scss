@@ -1,3 +1,9 @@
+// DOJO imports
+@import '../admin/src/dojo/resources/dojo.css';
+@import '../admin/src/dgrid/css/dgrid.css';
+//@import '../admin/src/dijit/themes/claro/claro.css'; // messes with dialogs :/
+@import '../admin/src/dGrowl/dGrowl.css';
+
 $animationSpeed: 0.8s;
 $menu-width: 50px;
 $menu-width-open: 480px;
@@ -466,7 +472,7 @@ a.admin-button:hover {
 
 }
 
-.relation-manager {
+.relation-manager, .matches-manager {
   height: 402px;
 
   .relation-row {
@@ -516,6 +522,12 @@ a.admin-button:hover {
   }
 }
 
+.matches-manager .dgrid .dgrid-column-uri {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+
 .relation-dialog {
   height: 500px;
   width: 450px;
@@ -523,7 +535,28 @@ a.admin-button:hover {
 
 .matches-dialog {
   width: 800px;
-  height: 620px;
+  height: 635px;
+
+  .dgrid {
+    .dgrid-cell {
+      font-size: 13px;
+      padding-bottom: 0;
+      padding-left: 5px;
+    }
+
+    .dgrid-row-table {
+      margin: 0;
+    }
+
+    .dgrid-column-id,
+    .dgrid-column-type {
+      width: 100px;
+    }
+
+    .dgrid-selected .dgrid-row-table {
+      background-color: #cee6fa;
+    }
+  }
 }
 
 .footerButtons {
