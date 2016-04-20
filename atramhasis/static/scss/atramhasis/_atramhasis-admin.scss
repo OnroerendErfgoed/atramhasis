@@ -9,26 +9,41 @@ $menu-width: 50px;
 $menu-width-open: 480px;
 
 /* main html layout */
-html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
+html, body { width: 100%;  height: 100%;  margin: 0; overflow:hidden; }
 
-#appDiv {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
+.app-content-container, #appDiv, #appContainer { width: 100%; height: 100%; background: #f3f3f3; }
+.appBody { width: 100%; height: 100%; padding: 20px 80px 10px 20px; }
+
+//Tab container
+.claro .dijitTabSpacer { border: none; height: 0; }
+.claro .dijitTabPaneWrapper { border: none; border-radius: 0; }
+.claro .dijitTabContainerBottom-tabs { border: 0;}
+.claro .dijitTabContainerBottom-tabs .dijitTab { border: 1px solid #efefef; border-top: none; background: #ffffff none; border-radius: 0; }
+.claro .dijitTab .tabLabel, .claro .dijitTabCloseButton:before { color: $gray; }
+.claro .dijitTabCloseButton { background: none; width: 15px; height: 100%; padding-top: 5px; }
+.claro .dijitTabCloseButton:before { content: "\f00d"; font-family: FontAwesome; }
+.claro .dijitTabContainerBottom-tabs .dijitTabContainerBottom-tabs .dijitTabChecked { border: none; background: #ffffff none; }
+.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked .dijitTabCloseButton{ cursor: pointer; padding-top: 5px;}
+.claro .dijitTabContainerBottom-tabs .dijitTabChecked .tabLabel,
+.claro .dijitTabContainerBottom-tabs .dijitTabHover .tabLabel,
+.claro .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabCloseButton:before,
+.claro .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabCloseButtonHover:before { color: $dark-purple; }
+
+.claro .dijitTabContainerTop-tabs { text-align: center; width: 100% !important; padding: 0; border: 0; height: 50px; }
+.claro .dijitTabContainerTop-tabs .dijitTab { background: $blue none !important; border: 1px solid $light-gray; border-radius: 0; color: $white; font-size: 0.6875rem; padding: 0.625rem 1.25rem !important; text-transform: uppercase; line-height: normal; margin: 0 1px 1.25rem 0 !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked) { background-color: #763e81 !important; color: $orange !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab.dijitTabChecked { background: $orange none !important; }
+.claro .dijitTabContainer .tabStripButton { height: 100% !important; }
 
 #appDiv footer {
-  display: block;
   height: 30px;
   background-color: $topbar-bg-color;
   padding: 5px 10px;
-  margin: 0;
+  margin-top: 0;
 }
 
 #appDiv header {
-  display: block;
   background-color: $topbar-bg-color;
-  z-index: 2;
 
   nav {
     border-bottom: 1px solid #f0f1f3;
@@ -60,37 +75,22 @@ html, body {  width: 100%;  height: 100%;  margin: 0; overflow:hidden;}
   }
 }
 
-/* flex for side menu placeholder */
-#appDiv .app-content-container {
-  flex: 1 100%;
-  display: flex;
-  flex-direction: row;
-}
-
-.app-content-container .app-content {
-  flex: 1;
-  display: flex;
-  margin-bottom: 10px;
-}
-
-.app-content-container .app-content-inner {
-  flex: 1 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.app-content-container .app-menu {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  width: $menu-width;
-  background-color: $white;
+.claro .dijitContentPane {
+  padding: 0 !important;
 }
 
 /* Custom notification styles! */
+.dGrowl-channel {
+  width: 350px !important;
+}
+.dGrowl-notification {
+  width: 320px !important;
+}
+
+/* 'Warning' Channel */
 .dGrowl-channel-warn .dGrowl-notification {
-  background-color: rgb(255, 250, 245);
-  border: 1px solid #e97b14;
+  background-color: rgb(255, 217, 162);
+  border: 1px solid rgb(233, 123, 20);
 }
 
 /* buttons */
@@ -115,143 +115,25 @@ a.admin-button:hover {
 .pageOverlay { top: 0; left: 0; position: absolute; height: 100%; width: 100%; z-index: 1001; display: block; background-color: $steel; text-align: center; color: $light-gray;}
 .loadingMessage {font-size: 1em; margin: 30px; color: $light-gray;}
 
-
-
-/* buttons under header */
-.action-bar {
-  height: 30px;
-  position: absolute;
-  right: 35px;
-  top: 70px;
-  z-index: 3;
-
-  ul {
-    margin: 0;
-    padding: 0;
-
-    li {
-      list-style-type: none;
-      padding: 5px;
-      float: left;
-    }
-  }
-}
-
-/*tabs*/
-.concept-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-
-  .panels {
-    background-color: $white;
-    margin: 10px 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-
-    .tab-panel {
-      flex: 1;
-      display: none;
-    }
-
-    .tab-panel.active {
-      display: block;
-    }
-
-    .concept-detail {
-      padding-right: 20px;
-      display: inline-block;
-      overflow-y: auto;
-      width: 100%;
-    }
-
-    .concept-title-info {
-      padding-top: 10px;
-      margin-right: 20px;
-      font-size: 0.8rem;
-      float: left;
-    }
-
-    .concept-hr {
-      margin-left: 1.25rem;
-    }
-
-    .no-top-padding {
-      padding-top: 0;
-      margin-top: 0;
-    }
-
-    .label-relation-block .dllist {
-      font-size: 1em;
-      padding: 0;
-      margin: 10px 0 0 0;
-    }
-
-    .label-relation-block .dllist dt {
-      font-size:1.2em;
-      padding-top:5px;
-      margin:0;
-    }
-
-    .label-relation-block .dllist dd {
-      margin-left:120px;
-      margin-top:-20px;
-      min-height: 19px;
-      font-size: 13px;
-    }
-
-    .label-relation-block {
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    .scopeNote {
-      border: 0 !important;
-      font-size: 1.1em;
-
-      h3 {
-        margin-bottom: 20px;
-      }
-
-      li {
-        padding-bottom: 10px !important;
-      }
-    }
-  }
-
-  ul.tabs {
-    margin: 0;
-    height: auto;
-    padding: 0;
-
-    li.tab {
-      list-style-type: none;
-      padding-right: 5px;
-      float: left;
-      height: 100%;
-
-      a {
-        color: $white;
-        background-color: $blue;
-        border: 1px solid $light-gray;
-        padding: 0.1rem 0.5rem 0.2rem 0.5rem;
-        margin: 0;
-        font-size: 12px;
-      }
-
-      a:hover {
-        color: black;
-        background-color: $white;
-      }
-    }
-
-    li.tab.active a {
-      color: black;
-      background-color: $white;
-    }
-  }
-}
+///* buttons under header */
+//.action-bar {
+//  height: 30px;
+//  position: absolute;
+//  right: 35px;
+//  top: 70px;
+//  z-index: 3;
+//
+//  ul {
+//    margin: 0;
+//    padding: 0;
+//
+//    li {
+//      list-style-type: none;
+//      padding: 5px;
+//      float: left;
+//    }
+//  }
+//}
 
 // slide menu
 .slidemenu-container {
@@ -563,6 +445,71 @@ a.admin-button:hover {
   margin-top: 20px;
 }
 
+.concept-detail {
+  background-color: $white;
+  padding-right: 20px;
+  display: inline-block;
+  overflow-y: auto;
+  width: 100%;
+
+  .concept-title-info {
+    padding-top: 10px;
+    margin-right: 20px;
+    font-size: 0.8rem;
+    float: left;
+  }
+
+  .concept-hr {
+    margin-left: 1.25rem;
+  }
+
+  .no-top-padding {
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .label-relation-block {
+    margin-bottom: 20px;
+  }
+
+  .label-relation-block .dllist {
+    font-size: 1em;
+    padding: 0;
+    margin: 10px 0 0 0;
+  }
+
+  .label-relation-block .dllist dt {
+    font-size:1.2em;
+    padding-top:5px;
+    margin:0;
+  }
+
+  .label-relation-block .dllist dd {
+    margin-left:120px;
+    margin-top:-20px;
+    min-height: 19px;
+    font-size: 13px;
+  }
+
+  .label-relation-block {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .scopeNote {
+    border: 0 !important;
+    font-size: 1.1em;
+
+    h3 {
+      margin-bottom: 20px;
+    }
+
+    li {
+      padding-bottom: 10px !important;
+    }
+  }
+}
+
 .claro .dijitDialogUnderlay { background: rgba(72, 72, 72, 0.8) !important; opacity: 1 !important; }
 .claro .dijitDialog .dijitDialogTitle { font-size: 18px; color: #753f7f; }
 .claro .dijitDialogCloseIcon { background: none !important;  font-size: 22px; font-weight: bold; }
@@ -571,23 +518,6 @@ a.admin-button:hover {
 .claro .dijitDialog .dijitDialogPaneContent { padding: 25px; }
 .claro .dijitDialogTitleBar { padding: 10px !important; background-color: #FFFFFF !important;}
 .claro .dijitDialog .dijitDialogTitleBar .dijitDialogTitle strong { color: black; text-transform: uppercase; }
-
-.claro .dijitTabSpacer { border: none; height: 0; }
-.claro .dijitTabPaneWrapper { border: none; border-radius: 0; }
-//.claro .dijitTabContainerBottom-tabs .dijitTab { border: 1px solid #efefef; border-top: none; background: #ffffff none; border-radius: 0; }
-//.claro .dijitTab .tabLabel, .nihilo .dijitTabCloseButton:before { color: $gray; }
-//.claro .dijitTabCloseButton { background: none; width: 15px; height: 100%; padding-top: 5px; }
-//.claro .dijitTabCloseButton:before { content: "\f00d"; font-family: FontAwesome; }
-//.claro .dijitTabContainerBottom-tabs .dijitTabContainerBottom-tabs .dijitTabChecked { border: none; background: #ffffff none; }
-//.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked .dijitTabCloseButton{ cursor: pointer; padding-top: 5px;}
-//.claro .dijitTabContainerBottom-tabs .dijitTabChecked .tabLabel,
-//.claro .dijitTabContainerBottom-tabs .dijitTabHover .tabLabel,
-//.claro .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabCloseButton:before,
-//.claro .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabCloseButtonHover:before { color: $dark-purple; }
-.claro .dijitTabContainerTop-tabs { text-align: center; width: 100% !important; padding: 0; border: 0; height: 50px; }
-.claro .dijitTabContainerTop-tabs .dijitTab { background: $blue none !important; border: 1px solid $light-gray; border-radius: 0; color: $white; font-size: 0.6875rem; padding: 0.625rem 1.25rem !important; text-transform: uppercase; line-height: normal; margin: 0 1px 1.25rem 0 !important; }
-.claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked) { background-color: #763e81 !important; color: $orange !important; }
-.claro .dijitTabContainerTop-tabs .dijitTab.dijitTabChecked { background: $orange none !important; }
 
 .claro .dijitTabContainerTop-dijitContentPane {
   padding: 5px 0 0 0 !important;

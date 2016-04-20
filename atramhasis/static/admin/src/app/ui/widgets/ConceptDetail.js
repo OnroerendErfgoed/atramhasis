@@ -32,8 +32,9 @@ define([
     templateString: template,
     baseClass: 'concept-detail',
     concept: null,
+    conceptId: null,
+    conceptLabel: null,
     scheme: null,
-    maxHeight: null,
     languageController: null,
     listController: null,
     conceptSchemeController: null,
@@ -49,7 +50,7 @@ define([
       console.debug('ConceptDetail::startup');
 
       this._setData(this.concept);
-      domStyle.set(this.conceptDetailNode, 'max-height', (this.maxHeight ? this.maxHeight + 'px' : '500px'));
+      //domStyle.set(this.conceptDetailNode, 'max-height', (this.maxHeight ? this.maxHeight + 'px' : '500px'));
     },
 
     _openEditDialog: function () {

@@ -74,6 +74,7 @@ define([
           lang.hitch(this, function(results) {
             new AppUi({
               loadingContainer: this.appConfig.loadingContainer,
+              appContainer: this.appConfig.appContainer,
               staticAppPath: this.appConfig.staticAppPath,
               conceptSchemeController: this._controllers.conceptSchemeController,
               conceptController: this._controllers.conceptController,
