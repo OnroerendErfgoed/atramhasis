@@ -128,7 +128,8 @@ define([
 
       //body of main layout
       this._container = new TabContainer({
-        tabPosition: 'bottom'
+        tabPosition: 'bottom',
+        splitter: true
       });
 
       appContainer.addChild(new ContentPane({

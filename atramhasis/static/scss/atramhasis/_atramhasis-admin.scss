@@ -17,17 +17,18 @@ html, body { width: 100%;  height: 100%;  margin: 0; overflow:hidden; }
 //Tab container
 .claro .dijitTabSpacer { border: none; height: 0; }
 .claro .dijitTabPaneWrapper { border: none; border-radius: 0; }
-.claro .dijitTabContainerBottom-tabs { border: 0;}
+.claro .dijitTabContainerBottom-tabs { border: 0; font-size:14px;}
 .claro .dijitTabContainerBottom-tabs .dijitTab { border: 1px solid #efefef; border-top: none; background: #ffffff none; border-radius: 0; }
 .claro .dijitTab .tabLabel, .claro .dijitTabCloseButton:before { color: $gray; }
-.claro .dijitTabCloseButton { background: none; width: 15px; height: 100%; padding-top: 5px; }
+.claro .dijitTabCloseButton { background: none !important; width: 15px; height: 100%; padding-top: 0; }
 .claro .dijitTabCloseButton:before { content: "\f00d"; font-family: FontAwesome; }
 .claro .dijitTabContainerBottom-tabs .dijitTabContainerBottom-tabs .dijitTabChecked { border: none; background: #ffffff none; }
-.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked .dijitTabCloseButton{ cursor: pointer; padding-top: 5px;}
+.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked .dijitTabCloseButton{ cursor: pointer; padding-top: 0;}
+.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked { padding-bottom: 3px; }
 .claro .dijitTabContainerBottom-tabs .dijitTabChecked .tabLabel,
 .claro .dijitTabContainerBottom-tabs .dijitTabHover .tabLabel,
 .claro .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabCloseButton:before,
-.claro .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabCloseButtonHover:before { color: $dark-purple; }
+.claro .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabCloseButtonHover:before { color: $blue; }
 
 .claro .dijitTabContainerTop-tabs { text-align: center; width: 100% !important; padding: 0; border: 0; height: 50px; }
 .claro .dijitTabContainerTop-tabs .dijitTab { background: $blue none !important; border: 1px solid $light-gray; border-radius: 0; color: $white; font-size: 0.6875rem; padding: 0.625rem 1.25rem !important; text-transform: uppercase; line-height: normal; margin: 0 1px 1.25rem 0 !important; }
