@@ -63,8 +63,6 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::postCreate');
       this._registerLoadingEvents();
-      //this._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
-
       this._createSlideMenu(this.menuContainerNode);
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
@@ -218,7 +216,6 @@ define([
             conceptId: conceptId,
             conceptLabel: data.label,
             scheme: scheme,
-            //maxHeight: this._calculateBodyHeight(),
             languageController: this.languageController,
             listController: this.listController,
             conceptSchemeController: this.conceptSchemeController
