@@ -164,12 +164,32 @@ define([
 
     getData: function() {
       var relations = {};
-      relations.related = this._relatedStore.data;
-      relations.narrower = this._narrowerStore.data;
-      relations.broader = this._broaderStore.data;
+      relations.related = array.map(this._relatedStore.data, function(item) {
+        var con = {};
+        con.id = item.id;
+        return con;
+      }, this);
+      relations.narrower = array.map(this._narrowerStore.data, function(item) {
+        var con = {};
+        con.id = item.id;
+        return con;
+      }, this);
+      relations.broader = array.map(this._broaderStore.data, function(item) {
+        var con = {};
+        con.id = item.id;
+        return con;
+      }, this);
       /* jshint -W106 */
-      relations.member_of = this._memberOfStore.data;
-      relations.subordinate_arrays = this._subordinateStore.data;
+      relations.member_of = array.map(this._memberOfStore.data, function(item) {
+        var con = {};
+        con.id = item.id;
+        return con;
+      }, this);
+      relations.subordinate_arrays = array.map(this._subordinateStore.data, function(item) {
+        var con = {};
+        con.id = item.id;
+        return con;
+      }, this);
       /* jshint +W106 */
 
       return relations;

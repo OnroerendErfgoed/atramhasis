@@ -2,6 +2,7 @@ define([
   'dojo/_base/declare',
   'dojo/_base/array',
   'dojo/_base/lang',
+  'dojo/promise/all',
   'dojo/dom-construct',
   'dojo/dom-class',
   'dojo/dom-style',
@@ -15,6 +16,7 @@ define([
   declare,
   array,
   lang,
+  all,
   domConstruct,
   domClass,
   domStyle,
@@ -136,7 +138,24 @@ define([
         domConstruct.create('dd', {innerHTML: relatedString}, dt);
       }
 
-      //TODO matches
+      if (concept.matches) {
+        var matches = concept.matches;
+        if (matches.broad && matches.broad.length > 0) {
+          this._loadMatches(matches.broad, 'broad');
+        }
+        if (matches.narrow && matches.narrow.length > 0) {
+          this._loadMatches(matches.narrow, 'narrow');
+        }
+        if (matches.exact && matches.exact.length > 0) {
+          this._loadMatches(matches.exact, 'exact');
+        }
+        if (matches.close && matches.close.length > 0) {
+          this._loadMatches(matches.close, 'close');
+        }
+        if (matches.related && matches.related.length > 0) {
+          this._loadMatches(matches.related, 'related');
+        }
+      }
 
 
       if (concept.notes && concept.notes.length > 0) {
@@ -161,6 +180,28 @@ define([
         this._editDialog._close();
         this._editDialog.destroyRecursive();
       }
+    },
+
+    _loadMatches: function(matches, matchType) {
+      var dt = domConstruct.create('dt', { innerHTML: this.capitalize(matchType) }, this.matchesListNode, 'last');
+      var matchString = '';
+      var promises = [];
+      array.forEach(matches, function (match) {
+        promises.push(this.conceptSchemeController.getMatch(match, matchType).then(lang.hitch(this, function (matched) {
+          matchString += '<a href="' + matched.data.uri + '" target="_blank" >' + matched.data.label + '</a>, '
+        })));
+      }, this);
+
+      all(promises).then(function(res) {
+        if (matchString.length > 2) {
+          matchString = matchString.substring(0, matchString.length - 2);
+        }
+        domConstruct.create('dd', {innerHTML: matchString}, dt);
+      })
+    },
+
+    capitalize: function(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
     }
   });
 });

@@ -223,17 +223,27 @@ define([
     },
 
     getData: function() {
-      var matches = {
-        matches: {
-          narrow: this._narrowStore.data || [],
-          broad: this._broadStore.data || [],
-          related: this._relatedStore.data || [],
-          close: this._closeStore.data || [],
-          exact: this._exactStore.data || []
-        }
-      };
+      var data = {};
 
-      return matches;
+      var matches = {};
+      matches.narrow = array.map(this._narrowStore.data, function(item) {
+        return item.data.uri;
+      });
+      matches.broad = array.map(this._broadStore.data, function(item) {
+        return item.data.uri;
+      });
+      matches.related = array.map(this._relatedStore.data, function(item) {
+        return item.data.uri;
+      });
+      matches.close = array.map(this._closeStore.data, function(item) {
+        return item.data.uri;
+      });
+      matches.exact = array.map(this._exactStore.data, function(item) {
+        return item.data.uri;
+      });
+      data.matches = matches;
+
+      return data;
     },
 
     _addNewMatch: function(match, matchtype) {
