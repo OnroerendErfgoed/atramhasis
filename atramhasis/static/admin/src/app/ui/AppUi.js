@@ -13,6 +13,7 @@ define([
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/AppUi.html',
+  'dojo/text!./templates/Help.html',
   'dijit/layout/ContentPane',
   'dijit/layout/TabContainer',
   'dijit/layout/LayoutContainer',
@@ -33,6 +34,7 @@ define([
   _WidgetBase,
   _TemplatedMixin,
   template,
+  helpTemplate,
   ContentPane,
   TabContainer,
   LayoutContainer,
@@ -146,7 +148,7 @@ define([
       tabContainer.addChild(new ContentPane({
         tabId: 'help',
         title: 'Info',
-        content: '<h1>help</h1>',
+        content: helpTemplate,
         closable: false
       }));
     },
