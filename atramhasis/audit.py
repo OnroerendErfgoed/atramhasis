@@ -30,7 +30,7 @@ def _origin_from_response(response):
 
 
 def audit(fn):
-    '''
+    """
     use this decorator to audit an operation and to log the visit
 
     * CSV routes with .csv extensions accept all mime types,
@@ -40,7 +40,7 @@ def audit(fn):
       the origin is derived form the response content type.
     * REST and HTML the view results are not of the `pyramid.response.Response` type,
       the origin is derived from the accept header.
-    '''
+    """
 
     def advice(parent_object, *args, **kw):
         request = parent_object.request

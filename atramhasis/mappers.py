@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Module containing mapping functions used by Atramhasis.
-'''
+"""
 
-from skosprovider_sqlalchemy.models import Label, Note, Source, Concept, Thing, Collection, Match, MatchType
+from skosprovider_sqlalchemy.models import Label, Note, Source, Concept, Collection, Match
 from sqlalchemy.orm.exc import NoResultFound
 
 
 def map_concept(concept, concept_json, skos_manager):
-    '''
+    """
     Map a concept from json to the database.
 
-    :param skosprovider_sqlalchemy.models.Thing concept: A concept or 
+    :param skosprovider_sqlalchemy.models.Thing concept: A concept or
         collection as known to the database.
-    :param dict concept_json: A dict representing the json sent to our REST 
+    :param dict concept_json: A dict representing the json sent to our REST
         service.
     :param skos_manager: A skos_manager to acces db operations
-    :returns: The :class:`skosprovider_sqlalchemy.models.Thing` enhanced 
+    :returns: The :class:`skosprovider_sqlalchemy.models.Thing` enhanced
         with the information from the json object.
-    '''
+    """
     concept.type = concept_json.get('type', None)
     if concept.type in ('concept', 'collection'):
         concept.labels[:] = []
@@ -136,7 +136,7 @@ def map_concept(concept, concept_json, skos_manager):
 
 
 def map_conceptscheme(conceptscheme, conceptscheme_json):
-    '''
+    """
     Map a conceptscheme from json to the database.
 
     :param skosprovider_sqlalchemy.models.ConceptScheme conceptscheme: A conceptscheme as known to the database.
@@ -144,7 +144,7 @@ def map_conceptscheme(conceptscheme, conceptscheme_json):
         service.
     :returns: The :class:`skosprovider_sqlalchemy.models.ConceptScheme` enhanced
         with the information from the json object.
-    '''
+    """
     conceptscheme.labels[:] = []
     labels = conceptscheme_json.get('labels', [])
     for l in labels:

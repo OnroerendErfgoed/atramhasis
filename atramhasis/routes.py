@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Routes for the Atramhasis views.
 
 .. versionadded:: 0.4.4
-'''
+"""
+
 
 def includeme(config):
-    '''
+    """
     Setup the routing for Atramhasis.
 
     :param pyramid.config.Configurator config: The application config.
-    '''
+    """
 
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')

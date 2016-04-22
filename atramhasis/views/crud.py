@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Module containing views related to the REST service.
-'''
+"""
 
 import colander
 from pyramid.view import view_defaults, view_config
@@ -22,9 +22,9 @@ from pyramid_skosprovider.views import ProviderView
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
 class AtramhasisCrud(object):
-    '''
+    """
     This object groups CRUD REST views part of the private user interface.
-    '''
+    """
 
     def __init__(self, context, request):
         self.request = request
@@ -44,7 +44,7 @@ class AtramhasisCrud(object):
 
     def _get_json_body(self):
         json_body = self.request.json_body
-        if 'c_id' in self.request.matchdict and not 'id' in json_body:
+        if 'c_id' in self.request.matchdict and 'id' not in json_body:
             json_body['id'] = self.request.matchdict['c_id']
         return json_body
 
@@ -97,11 +97,11 @@ class AtramhasisCrud(object):
 
     @view_config(route_name='atramhasis.edit_conceptscheme', permission='edit')
     def edit_conceptscheme(self):
-        '''
+        """
         Edit an existing concept
 
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
-        '''
+        """
         validated_json_conceptscheme = self._validate_conceptscheme(self._get_json_body())
         conceptscheme = self.conceptscheme_manager.get(self.provider.conceptscheme_id)
         conceptscheme = map_conceptscheme(conceptscheme, validated_json_conceptscheme)
@@ -120,11 +120,11 @@ class AtramhasisCrud(object):
     @audit
     @view_config(route_name='atramhasis.get_concept', permission='view')
     def get_concept(self):
-        '''
+        """
         Get an existing concept
 
         :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
-        '''
+        """
         c_id = self.request.matchdict['c_id']
         if isinstance(self.provider, SQLAlchemyProvider):
             try:
@@ -142,11 +142,11 @@ class AtramhasisCrud(object):
     @internal_providers_only
     @view_config(route_name='atramhasis.add_concept', permission='edit')
     def add_concept(self):
-        '''
+        """
         Add a new concept to a conceptscheme
 
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
-        '''
+        """
         validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
         cid = self.skos_manager.get_next_cid(self.provider.conceptscheme_id)
         if not cid:
@@ -172,12 +172,12 @@ class AtramhasisCrud(object):
     @internal_providers_only
     @view_config(route_name='atramhasis.edit_concept', permission='edit')
     def edit_concept(self):
-        '''
+        """
         Edit an existing concept
 
         :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
-        '''
+        """
         c_id = self.request.matchdict['c_id']
         validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
         try:
@@ -195,11 +195,11 @@ class AtramhasisCrud(object):
     @protected_operation
     @view_config(route_name='atramhasis.delete_concept', permission='delete')
     def delete_concept(self):
-        '''
+        """
         Delete an existing concept
 
         :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
-        '''
+        """
         c_id = self.request.matchdict['c_id']
         try:
             concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
