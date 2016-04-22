@@ -9,9 +9,10 @@ from sqlalchemy import engine_from_config
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
-    )
+)
 from pyramid.scripts.common import parse_vars
 from zope.sqlalchemy import ZopeTransactionExtension
+
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -42,51 +43,51 @@ def main(argv=sys.argv):
     db_session = session_maker()
     with transaction.manager:
         import_provider(
-            trees, 
+            trees,
             ConceptScheme(
-                id=1, 
+                id=1,
                 uri='urn:x-skosprovider:trees',
                 labels=[
                     Label('Verschillende soorten bomen', u'prefLabel', u'nl'),
                     Label('Different types of trees', u'prefLabel', u'en')
                 ]
-            ), 
+            ),
             db_session
         )
         import_provider(
             geo,
             ConceptScheme(
-                id=2, 
+                id=2,
                 uri='urn:x-skosprovider:geo',
                 labels=[
                     Label('Geografie', u'prefLabel', u'nl'),
                     Label('Geography', u'prefLabel', u'en')
                 ]
-            ), 
+            ),
             db_session
         )
         import_provider(
-            styles_and_cultures, 
+            styles_and_cultures,
             ConceptScheme(
-                id=3, 
+                id=3,
                 uri='https://id.erfgoed.net/thesauri/stijlen_en_culturen',
                 labels=[
                     Label('Stijlen en Culturen', u'prefLabel', u'nl'),
                     Label('Styles and Cultures', u'prefLabel', u'en')
                 ]
-             ),
+            ),
             db_session
         )
         import_provider(
             materials,
             ConceptScheme(
-                id=4, 
+                id=4,
                 uri='https://id.erfgoed.net/thesauri/materialen',
                 labels=[
                     Label('Materialen', u'prefLabel', u'nl'),
                     Label('Materials', u'prefLabel', u'en')
                 ]
-                ),
+            ),
             db_session
         )
         import_provider(
@@ -98,7 +99,7 @@ def main(argv=sys.argv):
                     Label('Gebeurtenistypes', u'prefLabel', u'nl'),
                     Label('Event types', u'prefLabel', u'en')
                 ]
-                ),
+            ),
             db_session
         )
         import_provider(
@@ -110,7 +111,7 @@ def main(argv=sys.argv):
                     Label('Erfgoedtypes', u'prefLabel', u'nl'),
                     Label('Heritage types', u'prefLabel', u'en')
                 ]
-                ),
+            ),
             db_session
         )
         import_provider(
@@ -122,7 +123,7 @@ def main(argv=sys.argv):
                     Label('Dateringen', u'prefLabel', u'nl'),
                     Label('Periods', u'prefLabel', u'en')
                 ]
-                ),
+            ),
             db_session
         )
         import_provider(
@@ -134,7 +135,7 @@ def main(argv=sys.argv):
                     Label('Soorten', u'prefLabel', u'nl'),
                     Label('Species', u'prefLabel', u'en')
                 ]
-                ),
+            ),
             db_session
         )
     print('--atramhasis-db-initialized--')
