@@ -379,7 +379,8 @@ def hierarchy_build(skos_manager, conceptscheme_id, property_list, property_hier
             property_concept = skos_manager.get_thing(property_concept_id, conceptscheme_id)
         except NoResultFound:
             property_concept = None
-        if property_concept is not None and property_concept.type == property_concept_type:
+        if property_concept is not None and (
+                        property_concept.type == property_concept_type or property_concept_type is None):
             property_concepts = [n.concept_id for n in getattr(property_concept, property_list_name)]
             for members_id in property_concepts:
                 property_hierarchy.append(members_id)
@@ -468,32 +469,10 @@ def members_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id
     Checks that a collection does not have members that are in themselves
     already "parents" of that collection.
     """
-    memberof_hierarchy = []
-    members = []
-    if 'members' in cstruct:
-        members = copy.deepcopy(cstruct['members'])
-        members = [m['id'] for m in members]
-    if 'member_of' in cstruct:
-        member_of = copy.deepcopy(cstruct['member_of'])
-        member_of = [m['id'] for m in member_of]
-        memberof_hierarchy = member_of
-        memberof_hierarchy_build(skos_manager, conceptscheme_id, member_of, memberof_hierarchy)
-    for member_concept_id in members:
-        if member_concept_id in memberof_hierarchy:
-            errors.append(colander.Invalid(
-                node_location,
-                'The item of a members collection must not itself be a parent of the concept/collection being edited.'
-            ))
-
-
-def memberof_hierarchy_build(skos_manager, conceptscheme_id, member_of, memberof_hierarchy):
-    for memberof_concept_id in member_of:
-        memberof_concept = skos_manager.get_thing(memberof_concept_id, conceptscheme_id)
-        if memberof_concept is not None:
-            memberof_concepts = [n.concept_id for n in memberof_concept.member_of]
-            for memberof_id in memberof_concepts:
-                memberof_hierarchy.append(memberof_id)
-            memberof_hierarchy_build(skos_manager, conceptscheme_id, memberof_concepts, memberof_hierarchy)
+    hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct, 'members', 'member_of',
+                   'member_of', 'collection',
+                   'The item of a members collection must not itself be a parent of the concept/collection being edited.'
+                   )
 
 
 def concept_matches_rule(errors, node_location, matches, concept_type):
