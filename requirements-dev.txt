@@ -2,29 +2,29 @@
 --requirement requirements.txt
 
 # pyramid
-pyramid-debugtoolbar==2.3
+pyramid-debugtoolbar==2.5
 
 # skosprovider_oe (for generating fixtures)
-skosprovider_oe==0.4.1
+skosprovider_oe==0.4.2
 
 # Testing
-pytest==2.6.3
-pytest-cov==1.8
-py==1.4.26
-coveralls==0.4.4
-webtest==2.0.16
-mock==1.0.1
-testfixtures==4.1.2
+pytest==2.9.1
+pytest-cov==2.2.1
+py==1.4.31
+coveralls==1.1
+webtest==2.0.21
+mock==2.0.0
+testfixtures==4.9.1
 
 # Documentation
-Sphinx==1.2.3
-sphinxcontrib-httpdomain==1.3.0
+Sphinx==1.4.1
+sphinxcontrib-httpdomain==1.4.0
 
 # waitress
-waitress==0.8.9
+waitress==0.9.0
 
 # Linting
-flake8==2.1.0
-mccabe==0.2.1
-pep8==1.4.6
-pyflakes==0.7.3
+flake8==2.5.4
+mccabe==0.4.0
+pep8==1.7.0
+pyflakes==1.1.0
