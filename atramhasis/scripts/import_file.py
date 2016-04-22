@@ -26,9 +26,9 @@ from sqlalchemy.engine import url
 
 
 def file_to_rdf_provider(input_file):
-    '''
+    """
     Create RDF provider from the input file
-    '''
+    """
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     graph = Graph()
     graph.parse(input_file, format=guess_format(input_ext))
@@ -39,9 +39,9 @@ def file_to_rdf_provider(input_file):
 
 
 def file_to_csv_provider(input_file):
-    '''
+    """
     Create CSV provider from the input file
-    '''
+    """
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     with open(input_file, "r") as ifile:
         reader = csv.reader(ifile)
@@ -52,9 +52,9 @@ def file_to_csv_provider(input_file):
 
 
 def file_to_json_provider(input_file):
-    '''
+    """
     Create Dictionary provider from the input file
-    '''
+    """
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     with open(input_file, 'r') as data_file:
         dictionary = json.load(data_file)
@@ -62,6 +62,7 @@ def file_to_json_provider(input_file):
         {'id': input_name.upper()},
         dictionary,
     )
+
 
 supported_types = {
     'RDF': {
@@ -84,14 +85,15 @@ supported_ext = [item for sublist in [supported_types[filetype]['extensions'] fo
 
 
 def parse_argv_for_import(argv):
-    '''
+    """
     Parse parameters and validate
-    '''
+    """
     cmd = os.path.basename(argv[0])
     parser = argparse.ArgumentParser(
         description='Import file to a database',
         usage='{0} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label]\n '
-              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels")'.format(cmd, cmd)
+              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels")'.format(
+            cmd, cmd)
     )
     parser.add_argument('--from',
                         dest='input_file',
@@ -131,11 +133,11 @@ def validate_file(input_file):
 
 
 def validate_connection_string(connection_string):
-    '''
+    """
     Validate the connection string
     :param connection_string
     :return: Boolean True if correct connection string
-    '''
+    """
     u = url.make_url(connection_string)
     if u.drivername == 'postgresql':
         if u.username and u.password and u.host and u.port and u.database:
@@ -151,9 +153,9 @@ def validate_connection_string(connection_string):
 
 
 def conn_str_to_session(conn_str):
-    '''
+    """
     create session from database connection string
-    '''
+    """
     connect_uri = conn_str
     engine = create_engine(connect_uri, echo=True)
     return sessionmaker(
@@ -162,9 +164,9 @@ def conn_str_to_session(conn_str):
 
 
 def create_conceptscheme(conceptscheme_label):
-    '''
+    """
     configure output conceptscheme
-    '''
+    """
     cs = ConceptScheme()
     l = Label(conceptscheme_label, 'prefLabel', 'nl')
     cs.labels.append(l)
@@ -172,16 +174,16 @@ def create_conceptscheme(conceptscheme_label):
 
 
 def provider_to_db(provider, conceptscheme, session):
-    '''
+    """
     import provider data into the database
-    '''
+    """
     session.add(conceptscheme)
     import_provider(provider, conceptscheme, session)
     session.commit()
 
 
 def main(argv=sys.argv):
-    '''
+    """
     Documentation: import -h
     Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <cs_label>
 
@@ -197,7 +199,7 @@ def main(argv=sys.argv):
     example conceptscheme_label
      My Conceptscheme
     default conceptscheme_label is the name of the file
-    '''
+    """
 
     # Import the data
     args = parse_argv_for_import(argv)
@@ -212,10 +214,10 @@ def main(argv=sys.argv):
 
     # Get info to return to the user
     prov_id = cs_label.upper()
-    scheme_id = session.query(Label).\
-        join(conceptscheme_label).\
-        filter(Label.label == cs_label).\
-        first().\
+    scheme_id = session.query(Label). \
+        join(conceptscheme_label). \
+        filter(Label.label == cs_label). \
+        first(). \
         conceptscheme.id
     print("\n\n*** The import of the {0} file with conceptscheme label '{1}' is successfully imported to {2}. ***\
           \n\nTo use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.\

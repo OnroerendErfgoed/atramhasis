@@ -23,7 +23,7 @@ class UnicodeWriter:
         self.encoder = codecs.getincrementalencoder(encoding)()
 
     def writerow(self, row):  # pragma: no cover
-        #some ugly code to support python2
+        # some ugly code to support python2
         if PY2:
             encoded_row = []
             for s in row:
@@ -61,12 +61,13 @@ json_renderer_verbose = JSON()
 
 
 def conceptscheme_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.ConceptScheme` to json
 
     :param skosprovider_sqlalchemy.models.ConceptScheme obj: The conceptscheme to be rendered.
+    :param request: the current request
     :rtype: :class:`dict`
-    '''
+    """
     scheme_id = request.matchdict['scheme_id']
     provider = request.skos_registry.get_provider(scheme_id)
     return {
@@ -82,16 +83,17 @@ def conceptscheme_adapter(obj, request):
 
 
 def concept_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Concept` to json with verbose relations.
 
     :param skosprovider_sqlalchemy.models.Concept obj: The concept to be rendered.
+    :param request: the current request
     :rtype: :class:`dict`
-    '''
+    """
     matches = {}
     for m in obj.matches:
         key = m.matchtype.name[:m.matchtype.name.find('Match')]
-        if not key in matches:
+        if key not in matches:
             matches[key] = []
         matches[key].append(m.uri)
     return {
@@ -112,12 +114,13 @@ def concept_adapter(obj, request):
 
 
 def collection_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Collection` to json with verbose relations.
 
     :param skosprovider_sqlalchemy.models.Collection obj: The collection to be rendered.
+    :param request: the current request
     :rtype: :class:`dict`
-    '''
+    """
     return {
         'id': obj.concept_id,
         'type': obj.type,
@@ -132,7 +135,11 @@ def collection_adapter(obj, request):
 
 
 def map_relation(thing):
-    #Map thing in a relation, leaving out the relations (to avoid circular dependencies)
+    """
+    Map thing in a relation, leaving out the relations (to avoid circular dependencies)
+    :param thing: the thing to map
+    :rtype: :class:`dict`
+    """
     return {
         'id': thing.concept_id,
         'type': thing.type,
@@ -143,12 +150,13 @@ def map_relation(thing):
 
 
 def label_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Label` to json.
 
     :param skosprovider_sqlalchemy.models.Label obj: The label to be rendered.
+    :param request: the current request
     :rtype: :class:`dict`
-    '''
+    """
     return {
         'label': obj.label,
         'type': obj.labeltype_id,
@@ -157,12 +165,13 @@ def label_adapter(obj, request):
 
 
 def note_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Note` to json.
 
     :param skosprovider_sqlalchemy.models.Note obj: The note to be rendered.
+    :param request: the current request
     :rtype: :class:`dict`
-    '''
+    """
     return {
         'note': obj.note,
         'type': obj.notetype_id,
@@ -171,24 +180,26 @@ def note_adapter(obj, request):
 
 
 def source_adapter(obj, request):
-    '''
+    """
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Source` to json.
 
     :param skosprovider_sqlalchemy.models.Source obj: The source to be rendered.
+    :param request: the current request
     :rtype: :class:`dict`
-    '''
+    """
     return {
         'citation': obj.citation
     }
 
 
 def language_adaptor(obj, request):
-    '''
+    """
     Adapter for rendering a :class:`skosprovider_sqlalchemy.models.Language` to json.
 
     :param skosprovider_sqlalchemy.models.Language obj: The language to be rendered.
+    :param request: the current request
     :rtype: :class:`dict`
-    '''
+    """
     return {
         'id': obj.id,
         'name': obj.name

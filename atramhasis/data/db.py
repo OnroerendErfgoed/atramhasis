@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Module that sets up the datamanagers and the database connections.
-'''
+"""
 from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, LanguagesManager, AuditManager
 from .models import Base
 from skosprovider_sqlalchemy.models import Base as SkosBase
@@ -12,14 +12,14 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 
 def data_managers(request):
-    '''
+    """
     Generate a datamanager with a database session and register a cleanup handler.
 
     :param pyramid.request.Request request: The request this db session will
         be tied to.
-    :returns: A dictionary containing different 
+    :returns: A dictionary containing different
         :class:`datamanagers <atramhasis.data.datamanagers.DataManager>`.
-    '''
+    """
     session = request.registry.dbmaker()
     skos_manager = SkosManager(session)
     conceptscheme_manager = ConceptSchemeManager(session)
@@ -35,11 +35,11 @@ def data_managers(request):
 
 
 def includeme(config):
-    '''
+    """
     Set up SQLAlchemy.
 
     :param pyramid.config.Configurator config: Pyramid configuration.
-    '''
+    """
 
     # Setting up SQLAlchemy
     engine = engine_from_config(config.get_settings(), 'sqlalchemy.')

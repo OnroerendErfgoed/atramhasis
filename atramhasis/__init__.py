@@ -4,9 +4,6 @@ from pyramid.settings import aslist
 from atramhasis.renderers import json_renderer_verbose
 
 
-
-
-
 def includeme(config):
     """this function adds some configuration for the application"""
     config.include('pyramid_jinja2')
