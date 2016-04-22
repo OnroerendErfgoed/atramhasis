@@ -372,40 +372,55 @@ def semantic_relations_rule(errors, node_location, skos_manager, conceptscheme_i
     return True
 
 
+def hierarchy_build(skos_manager, conceptscheme_id, property_list, property_hierarchy, property_concept_type,
+                    property_list_name):
+    for property_concept_id in property_list:
+        try:
+            property_concept = skos_manager.get_thing(property_concept_id, conceptscheme_id)
+        except NoResultFound:
+            property_concept = None
+        if property_concept is not None and property_concept.type == property_concept_type:
+            property_concepts = [n.concept_id for n in getattr(property_concept, property_list_name)]
+            for members_id in property_concepts:
+                property_hierarchy.append(members_id)
+                hierarchy_build(skos_manager, conceptscheme_id, property_concepts, property_hierarchy,
+                                property_concept_type, property_list_name)
+
+
+def hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct, property1, property2,
+                   property2_list_name, concept_type, error_message):
+    """
+    Checks that the property1 of a concept are not already in property2 hierarchy
+
+    """
+    property2_hierarchy = []
+    property1_list = []
+    if property1 in cstruct:
+        property1_value = copy.deepcopy(cstruct[property1])
+        property1_list = [m['id'] for m in property1_value]
+    if property2 in cstruct:
+        property2_value = copy.deepcopy(cstruct[property2])
+        property2_list = [m['id'] for m in property2_value]
+        property2_hierarchy = property2_list
+        hierarchy_build(skos_manager, conceptscheme_id, property2_list, property2_hierarchy, concept_type,
+                        property2_list_name)
+    for broader_concept_id in property1_list:
+        if broader_concept_id in property2_hierarchy:
+            errors.append(colander.Invalid(
+                node_location,
+                error_message
+            ))
+
+
 def broader_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
     """
     Checks that the broader concepts of a concepts are not alreadt narrower
     concepts of that concept.
     """
-    narrower_hierarchy = []
-    broader = []
-    if 'broader' in cstruct:
-        broader = copy.deepcopy(cstruct['broader'])
-        broader = [m['id'] for m in broader]
-    if 'narrower' in cstruct:
-        narrower = copy.deepcopy(cstruct['narrower'])
-        narrower = [m['id'] for m in narrower]
-        narrower_hierarchy = narrower
-        narrower_hierarchy_build(skos_manager, conceptscheme_id, narrower, narrower_hierarchy)
-    for broader_concept_id in broader:
-        if broader_concept_id in narrower_hierarchy:
-            errors.append(colander.Invalid(
-                node_location,
-                'The broader concept of a concept must not itself be a narrower concept of the concept being edited.'
-            ))
-
-
-def narrower_hierarchy_build(skos_manager, conceptscheme_id, narrower, narrower_hierarchy):
-    """
-    Builds a list of all the narrower concepts of a list of concepts.
-    """
-    for narrower_concept_id in narrower:
-        narrower_concept = skos_manager.get_thing(narrower_concept_id, conceptscheme_id)
-        if narrower_concept is not None and narrower_concept.type == 'concept':
-            narrower_concepts = [n.concept_id for n in narrower_concept.narrower_concepts]
-            for narrower_id in narrower_concepts:
-                narrower_hierarchy.append(narrower_id)
-            narrower_hierarchy_build(skos_manager, conceptscheme_id, narrower_concepts, narrower_hierarchy)
+    hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct, 'broader', 'narrower',
+                   'narrower_concepts', 'concept',
+                   'The broader concept of a concept must not itself be a narrower concept of the concept being edited.'
+                   )
 
 
 def narrower_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
@@ -413,35 +428,10 @@ def narrower_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_i
     Checks that the narrower concepts of a concept are not already broader
     concepts of that concept.
     """
-    broader_hierarchy = []
-    narrower = []
-    if 'narrower' in cstruct:
-        narrower = copy.deepcopy(cstruct['narrower'])
-        narrower = [m['id'] for m in narrower]
-    if 'broader' in cstruct:
-        broader = copy.deepcopy(cstruct['broader'])
-        broader = [m['id'] for m in broader]
-        broader_hierarchy = broader
-        broader_hierarchy_build(skos_manager, conceptscheme_id, broader, broader_hierarchy)
-    for narrower_concept_id in narrower:
-        if narrower_concept_id in broader_hierarchy:
-            errors.append(colander.Invalid(
-                node_location,
-                'The narrower concept of a concept must not itself be a broader concept of the concept being edited.'
-            ))
-
-
-def broader_hierarchy_build(skos_manager, conceptscheme_id, broader, broader_hierarchy):
-    """
-    Builds a list of all the broader concepts of a list of concepts.
-    """
-    for broader_concept_id in broader:
-        broader_concept = skos_manager.get_thing(broader_concept_id, conceptscheme_id)
-        if broader_concept is not None and broader_concept.type == 'concept':
-            broader_concepts = [n.concept_id for n in broader_concept.broader_concepts]
-            for broader_id in broader_concepts:
-                broader_hierarchy.append(broader_id)
-            broader_hierarchy_build(skos_manager, conceptscheme_id, broader_concepts, broader_hierarchy)
+    hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct, 'narrower', 'broader',
+                   'broader_concepts', 'concept',
+                   'The narrower concept of a concept must not itself be a broader concept of the concept being edited.'
+                   )
 
 
 def collection_members_unique_rule(errors, node_location, members):
@@ -467,35 +457,10 @@ def members_only_in_collection_rule(errors, node, concept_type, members):
 
 
 def memberof_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
-    members_hierarchy = []
-    memberof = []
-    if 'member_of' in cstruct:
-        memberof = copy.deepcopy(cstruct['member_of'])
-        memberof = [m['id'] for m in memberof]
-    if 'members' in cstruct:
-        members = copy.deepcopy(cstruct['members'])
-        members = [m['id'] for m in members]
-        members_hierarchy = members
-        members_hierarchy_build(skos_manager, conceptscheme_id, members, members_hierarchy)
-    for memberof_concept_id in memberof:
-        if memberof_concept_id in members_hierarchy:
-            errors.append(colander.Invalid(
-                node_location,
-                'The parent member_of collection of a concept must not itself be a member of the concept being edited.'
-            ))
-
-
-def members_hierarchy_build(skos_manager, conceptscheme_id, members, members_hierarchy):
-    for members_concept_id in members:
-        try:
-            members_concept = skos_manager.get_thing(members_concept_id, conceptscheme_id)
-        except NoResultFound:
-            members_concept = None
-        if members_concept is not None and members_concept.type == 'collection':
-            members_concepts = [n.concept_id for n in members_concept.members]
-            for members_id in members_concepts:
-                members_hierarchy.append(members_id)
-            members_hierarchy_build(skos_manager, conceptscheme_id, members_concepts, members_hierarchy)
+    hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct, 'member_of', 'members',
+                   'members', 'collection',
+                   'The parent member_of collection of a concept must not itself be a member of the concept being edited.'
+                   )
 
 
 def members_hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct):
@@ -641,22 +606,10 @@ def subordinate_arrays_hierarchy_rule(errors, node_location, skos_manager, conce
     Checks that the subordinate arrays of a concept are not themselves
     parents of that concept.
     """
-    member_of_hierarchy = []
-    subordinate_arrays = []
-    if 'subordinate_arrays' in cstruct:
-        subordinate_arrays = copy.deepcopy(cstruct['subordinate_arrays'])
-        subordinate_arrays = [m['id'] for m in subordinate_arrays]
-    if 'member_of' in cstruct:
-        member_of = copy.deepcopy(cstruct['member_of'])
-        member_of = [m['id'] for m in member_of]
-        member_of_hierarchy = member_of
-        members_hierarchy_build(skos_manager, conceptscheme_id, member_of, member_of_hierarchy)
-    for subordinate_array_id in subordinate_arrays:
-        if subordinate_array_id in member_of_hierarchy:
-            errors.append(colander.Invalid(
-                node_location,
-                'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.'
-            ))
+    hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct, 'subordinate_arrays', 'member_of',
+                   'members', 'collection',
+                   'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.'
+                   )
 
 
 def superordinates_only_in_concept_rule(errors, node, concept_type, superordinates):
@@ -688,19 +641,7 @@ def superordinates_hierarchy_rule(errors, node_location, skos_manager, conceptsc
     Checks that the superordinate concepts of a collection are not themselves
     members of that collection.
     """
-    members_hierarchy = []
-    superordinates = []
-    if 'superordinates' in cstruct:
-        superordinates = copy.deepcopy(cstruct['superordinates'])
-        superordinates = [m['id'] for m in superordinates]
-    if 'members' in cstruct:
-        members = copy.deepcopy(cstruct['members'])
-        members = [m['id'] for m in members]
-        members_hierarchy = members
-        members_hierarchy_build(skos_manager, conceptscheme_id, members, members_hierarchy)
-    for superordinates_id in superordinates:
-        if superordinates_id in members_hierarchy:
-            errors.append(colander.Invalid(
-                node_location,
-                'The superordinates of a collection must not itself be a member of the collection being edited.'
-            ))
+    hierarchy_rule(errors, node_location, skos_manager, conceptscheme_id, cstruct, 'superordinates', 'members',
+                   'members', 'collection',
+                   'The superordinates of a collection must not itself be a member of the collection being edited.'
+                   )
