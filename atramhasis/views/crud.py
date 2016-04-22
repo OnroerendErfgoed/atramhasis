@@ -81,7 +81,8 @@ class AtramhasisCrud(object):
         )
         try:
             return conceptscheme_schema.deserialize(json_conceptscheme)
-        except colander.Invalid as e:
+        except colander.Invalid as e:  # pragma no cover
+            # I doubt this code will ever be reached, keeping it here just in case
             raise ValidationError(
                 'Conceptscheme could not be validated',
                 e.asdict()
