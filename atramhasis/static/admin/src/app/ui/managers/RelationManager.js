@@ -122,7 +122,7 @@ define([
     _createGrid: function(options, node) {
       var columns = {
         label: {
-          label: '',
+          label: ''
         },
         remove: {
           label: '',
