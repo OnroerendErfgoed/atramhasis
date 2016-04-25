@@ -423,6 +423,23 @@ a.admin-button:hover {
   }
 }
 
+.notes-dialog {
+
+  .htmlEditor .dijitToolbar{
+    border: 1px #ccc solid;
+  }
+
+  .htmlEditor textarea {
+    height: 300px;
+    border: 1px #ccc solid;
+    width: 99.8%;
+    padding: 5px;
+    resize: vertical;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
+
 .footerButtons {
   margin-top: 20px;
 }

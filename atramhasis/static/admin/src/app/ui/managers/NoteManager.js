@@ -15,7 +15,8 @@ define([
   'dgrid/OnDemandGrid',
   'dgrid/extensions/DijitRegistry',
   'dgrid/extensions/ColumnResizer',
-  '../../utils/DomUtils'
+  '../../utils/DomUtils',
+  '../dialogs/NotesDialog'
 ], function (
   declare,
   array,
@@ -33,7 +34,8 @@ define([
   OnDemandGrid,
   DijitRegistry,
   ColumnResizer,
-  DomUtils
+  DomUtils,
+  NotesDialog
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -69,11 +71,18 @@ define([
       this._createGrid({
         collection: this._noteStore
       }, this.noteGridNode);
+
+      this._notesDialog = new NotesDialog({
+        parentNode: this,
+        langList: this.languageList,
+        typeList: this.listController.getNoteTypes()
+      });
     },
 
     startup: function () {
       this.inherited(arguments);
       console.debug('NoteManager::startup');
+      this._notesDialog.startup();
       this._noteGrid.startup();
       this._noteGrid.resize();
     },
@@ -151,18 +160,20 @@ define([
     _addNote: function(evt) {
       evt ? evt.preventDefault() : null;
 
-      var note = {
-        id: this._index++,
-        language: DomUtils.getSelectedOption(this.languageSelectNode),
-        type: DomUtils.getSelectedOption(this.noteTypeSelectNode),
-        note: this.noteTitleNode.value
-      };
+      //var note = {
+      //  id: this._index++,
+      //  language: DomUtils.getSelectedOption(this.languageSelectNode),
+      //  type: DomUtils.getSelectedOption(this.noteTypeSelectNode),
+      //  note: this.noteTitleNode.value
+      //};
+      //
+      //if (this._validate(note)) {
+      //  this._addRow(note);
+      //} else {
+      //  topic.publish('dGrowl', 'Please fill in the fields for a new note', {'title': "Error", 'sticky': true, 'channel':'error'});
+      //}
 
-      if (this._validate(note)) {
-        this._addRow(note);
-      } else {
-        topic.publish('dGrowl', 'Please fill in the fields for a new note', {'title': "Error", 'sticky': true, 'channel':'error'});
-      }
+      this._notesDialog.show();
     },
 
     _removeRow: function(rowId) {
