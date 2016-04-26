@@ -543,3 +543,20 @@ a.admin-button:hover {
     border-color: #f0f1f3 !important;
   }
 }
+
+.confirm-dialog .dijitDialogPaneActionBar {
+  text-align: center !important;
+  padding-bottom: 15px !important;
+
+  .dijitButtonNode {
+    background: transparent none !important;
+    border: none !important;
+  }
+  .dijitButtonHover .dijitButtonNode {
+    color: $white !important;
+  }
+
+  *:focus {
+    outline: none !important;
+  }
+}

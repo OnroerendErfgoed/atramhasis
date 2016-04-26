@@ -53,8 +53,9 @@ define([
       //domStyle.set(this.conceptDetailNode, 'max-height', (this.maxHeight ? this.maxHeight + 'px' : '500px'));
     },
 
-    _openEditDialog: function () {
+    _openEditDialog: function (evt) {
       console.debug('ConceptDetail::_openEditDialog');
+      evt ? evt.preventDefault() : null;
       this._editDialog = new ConceptEditDialog({
         concept: this.concept,
         scheme: this.scheme,
@@ -71,6 +72,16 @@ define([
         });
       }));
       this._editDialog.startup();
+    },
+
+    _deleteConcept: function(evt) {
+      console.debug('ConceptDetail::_deleteConcept');
+      evt ? evt.preventDefault() : null;
+
+      this.emit('concept.delete', {
+        concept: this.concept,
+        schemeId: this.scheme
+      });
     },
 
     _setData: function(concept) {

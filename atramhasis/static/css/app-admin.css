@@ -14279,6 +14279,25 @@ a.admin-button:hover {
   border-color: #f0f1f3 !important;
 }
 
+/* line 547, ../scss/atramhasis/_atramhasis-admin.scss */
+.confirm-dialog .dijitDialogPaneActionBar {
+  text-align: center !important;
+  padding-bottom: 15px !important;
+}
+/* line 551, ../scss/atramhasis/_atramhasis-admin.scss */
+.confirm-dialog .dijitDialogPaneActionBar .dijitButtonNode {
+  background: transparent none !important;
+  border: none !important;
+}
+/* line 555, ../scss/atramhasis/_atramhasis-admin.scss */
+.confirm-dialog .dijitDialogPaneActionBar .dijitButtonHover .dijitButtonNode {
+  color: white !important;
+}
+/* line 559, ../scss/atramhasis/_atramhasis-admin.scss */
+.confirm-dialog .dijitDialogPaneActionBar *:focus {
+  outline: none !important;
+}
+
 /* line 1, ../scss/_atramhasis.scss */
 ul.no_bullet {
   list-style-type: none;

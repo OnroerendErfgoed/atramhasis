@@ -10,8 +10,10 @@ define([
   'dojo/topic',
   'dojo/on',
   'dojo/window',
+  'dojo/query',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
+  'dijit/ConfirmDialog',
   'dojo/text!./templates/AppUi.html',
   'dojo/text!./templates/Help.html',
   'dijit/layout/ContentPane',
@@ -22,7 +24,8 @@ define([
   './widgets/ConceptDetail',
   './widgets/SlideMenu',
   './dialogs/ConceptAddDialog',
-  '../utils/ErrorUtils'
+  '../utils/ErrorUtils',
+  'dojo/NodeList-manipulate'
 ], function (
   declare,
   lang,
@@ -32,8 +35,10 @@ define([
   topic,
   on,
   wind,
+  query,
   _WidgetBase,
   _TemplatedMixin,
+  ConfirmDialog,
   template,
   helpTemplate,
   ContentPane,
@@ -242,6 +247,9 @@ define([
           on(conceptDetail, 'concept.save', lang.hitch(this, function(evt) {
             this._saveConcept(conceptDetail, evt.concept, evt.schemeId);
           }));
+          on(conceptDetail, 'concept.delete', lang.hitch(this, function(evt) {
+            this._deleteConcept(conceptDetail, evt.concept, evt.schemeId);
+          }));
           conceptDetail.startup();
           this._addTab(conceptDetail);
         }));
@@ -323,6 +331,45 @@ define([
       if (this._container) {
         this._container.resize();
       }
+    },
+
+    _deleteConcept: function(view, concept, schemeId) {
+      var content = '<p style="font-size: 15px;">Are you sure you want to remove <strong>'+ concept.label +
+        '</strong> (ID: ' + concept.id + ') from scheme <strong>' + schemeId + '</strong></p>';
+      var confirmationDialog = new ConfirmDialog({
+        title: 'Delete concept',
+        content: content,
+        baseClass: 'confirm-dialog'
+      });
+      query('.dijitButton', confirmationDialog.domNode).addClass('button tiny');
+
+      on(confirmationDialog, 'close', function() {
+        confirmationDialog.destroy();
+      });
+      on(confirmationDialog, 'execute', lang.hitch(this, function () {
+        this._showLoading('Removing concept..');
+        this.conceptController.deleteConcept(concept, schemeId).then(
+          lang.hitch(this, function(result) {
+            console.log('delete concept results', result);
+            if (view) {
+              this._closeTab(view);
+            }
+            this._hideLoading();
+          }),
+          lang.hitch(this, function (error) {
+            console.error('delete concept error', error);
+            var parsedError = errorUtils.parseError(error);
+            this._hideLoading();
+            topic.publish('dGrowl', parsedError.message, {
+              'title': parsedError.title,
+              'sticky': true,
+              'channel': 'error'
+            });
+          })
+        );
+      }));
+
+      confirmationDialog.show();
     },
 
     _saveConcept: function(view, concept, schemeId) {
