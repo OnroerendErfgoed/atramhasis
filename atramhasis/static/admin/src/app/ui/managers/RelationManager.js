@@ -68,32 +68,32 @@ define([
       console.debug('RelationManager::postCreate');
       var TrackableMemory = declare([Memory, Trackable]);
 
-      this._broaderStore = new TrackableMemory({ data: this.concept.broader });
+      this._broaderStore = new TrackableMemory({ data: this.concept ? this.concept.broader : [] });
       this._broaderGrid = this._createGrid({
         collection: this._broaderStore
       }, this.broaderGridNode);
 
-      this._narrowerStore = new TrackableMemory({ data: this.concept.narrower });
+      this._narrowerStore = new TrackableMemory({ data: this.concept ? this.concept.narrower : [] });
       this._narrowerGrid = this._createGrid({
         collection: this._narrowerStore
       }, this.narrowerGridNode);
 
-      this._relatedStore = new TrackableMemory({ data: this.concept.related });
+      this._relatedStore = new TrackableMemory({ data: this.concept ? this.concept.related : [] });
       this._relatedGrid = this._createGrid({
         collection: this._relatedStore
       }, this.relatedGridNode);
 
-      this._memberOfStore = new TrackableMemory({ data: this.concept.member_of });
+      this._memberOfStore = new TrackableMemory({ data: this.concept ? this.concept.member_of : [] });
       this._memberOfGrid = this._createGrid({
         collection: this._memberOfStore
       }, this.memberOfGridNode);
 
-      this._subordinateStore = new TrackableMemory({ data: this.concept.subordinate_arrays });
+      this._subordinateStore = new TrackableMemory({ data: this.concept ? this.concept.subordinate_arrays : [] });
       this._subordinateGrid = this._createGrid({
         collection: this._subordinateStore
       }, this.subordinateGridNode);
 
-      this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme)
+      this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme);
       this._addRelationDialog = new AddRelationDialog({
         parentNode: this,
         relationStore: this._relationStore,
@@ -117,6 +117,10 @@ define([
       this._relatedGrid.startup();
       this._memberOfGrid.startup();
       this._subordinateGrid.startup();
+    },
+
+    setScheme: function (scheme) {
+      this.scheme = scheme;
     },
 
     _createGrid: function(options, node) {

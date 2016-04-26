@@ -218,7 +218,7 @@ define([
       return xhr.get(url, {
         handleAs: "json",
         headers: {'Accept' : 'application/json'}
-      })
+      });
       //  .then(function(data){
       //  self._externalConceptList.refresh();
       //  self._externalConceptList.renderArray(data);

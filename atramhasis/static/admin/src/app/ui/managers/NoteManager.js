@@ -62,10 +62,12 @@ define([
       });
       var TrackableMemory = declare([Memory, Trackable]);
       this._noteStore = new TrackableMemory({ data: [] });
-      array.forEach(this.concept.notes, lang.hitch(this, function(item){
-        item.id = this._index++;
-        this._noteStore.put(item);
-      }));
+      if (this.concept) {
+        array.forEach(this.concept.notes, lang.hitch(this, function (item) {
+          item.id = this._index++;
+          this._noteStore.put(item);
+        }));
+      }
       this._createGrid({
         collection: this._noteStore
       }, this.noteGridNode);

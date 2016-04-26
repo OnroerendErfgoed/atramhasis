@@ -21,6 +21,7 @@ define([
   './widgets/SearchPane',
   './widgets/ConceptDetail',
   './widgets/SlideMenu',
+  './dialogs/ConceptAddDialog',
   '../utils/ErrorUtils'
 ], function (
   declare,
@@ -42,6 +43,7 @@ define([
   SearchPane,
   ConceptDetail,
   SlideMenu,
+  ConceptAddDialog,
   errorUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -56,6 +58,7 @@ define([
     _searchPane: null,
     _conceptContainer: null,
     _slideMenu: null,
+    _addConceptDialog: null,
 
     /**
      * Standard widget function.
@@ -66,6 +69,21 @@ define([
       console.debug('AppUi::postCreate');
       this._registerLoadingEvents();
       this._createSlideMenu(this.menuContainerNode);
+
+      this._addConceptDialog = new ConceptAddDialog({
+        parent: this,
+        languageController: this.languageController,
+        listController: this.listController,
+        conceptSchemeController: this.conceptSchemeController
+      });
+      on(this._addConceptDialog, 'new.concept.save', lang.hitch(this, function(evt) {
+        console.log(evt);
+        //this.emit('new.concept.save', {
+        //  concept: evt.concept,
+        //  schemeId: evt.schemeId
+        //});
+      }));
+      this._addConceptDialog.startup();
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
     },
@@ -171,6 +189,8 @@ define([
     _createConcept: function(evt) {
       evt.preventDefault();
       console.debug('AppUi::_createConcept');
+
+
     },
 
     _importConcept  : function(evt) {
