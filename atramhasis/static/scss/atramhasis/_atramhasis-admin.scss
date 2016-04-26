@@ -32,7 +32,9 @@ html, body { width: 100%;  height: 100%;  margin: 0; overflow:hidden; }
 
 .claro .dijitTabContainerTop-tabs { text-align: center; width: 100% !important; padding: 0; border: 0; height: 50px; }
 .claro .dijitTabContainerTop-tabs .dijitTab { background: $blue none !important; border: 1px solid $light-gray; border-radius: 0; color: $white; font-size: 0.6875rem; padding: 0.625rem 1.25rem !important; text-transform: uppercase; line-height: normal; margin: 0 1px 1.25rem 0 !important; }
-.claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked) { background-color: #763e81 !important; color: $orange !important; }
+.claro .dijitTabContainerTop-tabs .dijitTabDisabled { background: $gray !important; }
+.claro .dijitTabContainerTop-tabs .dijitTabDisabled .tabLabel { color: $dark-gray !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked):not(.dijitTabDisabled) { background-color: #763e81 !important; color: $orange !important; }
 .claro .dijitTabContainerTop-tabs .dijitTab.dijitTabChecked { background: $orange none !important; }
 .claro .dijitTabContainer .tabStripButton { height: 100% !important; }
 .claro .dijitTabPaneWrapper .dijitTabContainerBottomChildWrapper { overflow-y: auto; height: 100%; }

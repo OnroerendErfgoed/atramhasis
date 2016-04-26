@@ -64,6 +64,9 @@ define([
         idProperty: 'value',
         labelProperty: 'label'
       });
+      on(this.typeNode, 'change', lang.hitch(this, function(evt) {
+        this._toggleMatches(evt.target.value);
+      }));
 
       domUtils.addOptionsToSelect(this.schemeNode, {
         data: this.conceptSchemeController.conceptSchemeList,
@@ -105,6 +108,17 @@ define([
       this.relationManager.setScheme(newScheme);
     },
 
+    _toggleMatches: function(type) {
+      if (type === 'collection') {
+        this.tabMatches.set('disabled', true);
+        if (this.tabContainer.selectedChildWidget === this.tabMatches) {
+          this.tabContainer.selectChild(this.tabLabels)
+        }
+      } else {
+        this.tabMatches.set('disabled', false);
+      }
+    },
+
     /**
      * Sluit het dialog
      * @private
@@ -135,9 +149,11 @@ define([
       lang.mixin(concept, relationData);
       console.log(relationData);
 
-      var matchesData = this.matchesManager.getData();
-      lang.mixin(concept, matchesData);
-      console.log(matchesData);
+      if (concept.type !== 'collection') {
+        var matchesData = this.matchesManager.getData();
+        lang.mixin(concept, matchesData);
+        console.log(matchesData);
+      }
 
       // emit save event
       this.emit('new.concept.save', {

@@ -2,6 +2,7 @@ define([
   'dojo/_base/declare',
   'dojo/_base/lang',
   'dojo/topic',
+  'dojo/on',
   'dijit/Dialog',
   'dijit/_Widget',
   'dijit/_TemplatedMixin',
@@ -19,6 +20,7 @@ define([
   declare,
   lang,
   topic,
+  on,
   Dialog,
   _Widget,
   _TemplatedMixin,
@@ -63,6 +65,9 @@ define([
         idProperty: 'value',
         labelProperty: 'label'
       });
+      on(this.typeNode, 'change', lang.hitch(this, function(evt) {
+        this._toggleMatches(evt.target.value);
+      }));
 
       this._createLabelsTab(this.concept);
       this._createNotesTab(this.concept);
@@ -86,6 +91,7 @@ define([
     _setData: function(concept) {
       this.schemeNode.value = this.scheme;
       this.typeNode.value = this.concept.type;
+      this._toggleMatches(this.concept.type);
     },
 
     /**
@@ -95,6 +101,17 @@ define([
       this.tabContainer.layout();
       this.dialog.show();
       this.dialog.resize();
+    },
+
+    _toggleMatches: function(type) {
+      if (type === 'collection') {
+        this.tabMatches.set('disabled', true);
+        if (this.tabContainer.selectedChildWidget === this.tabMatches) {
+          this.tabContainer.selectChild(this.tabLabels)
+        }
+      } else {
+        this.tabMatches.set('disabled', false);
+      }
     },
 
     /**
@@ -139,12 +156,13 @@ define([
       lang.mixin(concept, relationData);
       console.log(relationData);
 
-      var matchesData = this.matchesManager.getData();
-      lang.mixin(concept, matchesData);
-      console.log(matchesData);
+      if (concept.type !== 'collection') {
+        var matchesData = this.matchesManager.getData();
+        lang.mixin(concept, matchesData);
+        console.log(matchesData);
+      }
 
       // emit save event
-      //console.log(JSON.stringify(concept));
       this.emit('concept.save', {
         concept: concept,
         schemeId: this.scheme
