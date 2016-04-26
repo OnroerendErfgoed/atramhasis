@@ -1,4 +1,4 @@
-<div class="dijitDialog" role="dialog" aria-labelledby="notesDialog_title">
+<div class="dijitDialog" role="dialog" aria-labelledby="labelsDialog_title">
   <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
     <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" role="heading"></span>
 		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
@@ -25,7 +25,9 @@
     </div>
     <div class="row">
       <div class="large-12 columns">
-        <div data-dojo-attach-point="htmlEditorNode">
+        <div class="placeholder-container">
+          <label for="labelInputNode-${id}">Label</label>
+          <input type="text" data-dojo-attach-point="labelInputNode" id="labelInputNode-${id}">
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ define([
   'dojo/dom-class',
   'dojo/dom-style',
   'dojo/json',
+  'dojo/on',
   'dojo/topic',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
@@ -15,7 +16,8 @@ define([
   'dgrid/OnDemandGrid',
   'dgrid/extensions/DijitRegistry',
   'dgrid/extensions/ColumnResizer',
-  '../../utils/DomUtils'
+  '../../utils/DomUtils',
+  '../dialogs/LabelsDialog'
 ], function (
   declare,
   array,
@@ -24,6 +26,7 @@ define([
   domClass,
   domStyle,
   JSON,
+  on,
   topic,
   _WidgetBase,
   _TemplatedMixin,
@@ -33,7 +36,8 @@ define([
   OnDemandGrid,
   DijitRegistry,
   ColumnResizer,
-  DomUtils
+  DomUtils,
+  LabelsDialog
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -43,6 +47,7 @@ define([
     listController: null,
     concept: null,
     languageList: null,
+    _labelDialog: null,
     _labelStore: null,
     _labelGrid: null,
     _index: 0,
@@ -50,16 +55,6 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       console.debug('LabelManager::postCreate');
-      DomUtils.addOptionsToSelect(this.labelTypeSelectNode, {
-        data: this.listController.getLabelTypes(),
-        idProperty: 'value',
-        labelProperty: 'label'
-      });
-      DomUtils.addOptionsToSelect(this.languageSelectNode, {
-        data: this.languageList,
-        idProperty: 'id',
-        labelProperty: 'name'
-      });
       var TrackableMemory = declare([Memory, Trackable]);
       this._labelStore = new TrackableMemory({ data: [] });
       array.forEach(this.concept.labels, lang.hitch(this, function(item){
@@ -69,6 +64,18 @@ define([
       this._createGrid({
         collection: this._labelStore
       }, this.labelGridNode);
+
+      this._labelDialog = new LabelsDialog({
+        parentNode: this,
+        langList: this.languageList,
+        typeList: this.listController.getLabelTypes()
+      });
+      on(this._labelDialog, 'add.label', lang.hitch(this, function(evt) {
+        this._doAddLabel(evt);
+      }));
+      on(this._labelDialog, 'edit.label', lang.hitch(this, function(evt) {
+        this._doEditLabel(evt);
+      }));
     },
 
     startup: function () {
@@ -104,13 +111,24 @@ define([
             return lang.label;
           })
         },
-        remove: {
-          label: 'Remove',
+        actions: {
+          label: '',
           renderCell: lang.hitch(this, function (object) {
             if (object.id === undefined) {
               return null;
             }
             var div = domConstruct.create('div', {'class': 'dGridHyperlink'});
+            domConstruct.create('a', {
+              href: '#',
+              title: 'Edit label',
+              className: 'fa fa-pencil',
+              innerHTML: '',
+              style: 'margin-right: 12px;',
+              onclick: lang.hitch(this, function (evt) {
+                evt.preventDefault();
+                this._editLabel(object);
+              })
+            }, div);
             domConstruct.create('a', {
               href: '#',
               title: 'Remove label',
@@ -150,45 +168,34 @@ define([
 
     _addLabel: function(evt) {
       evt ? evt.preventDefault() : null;
+      this._labelDialog.show();
+    },
 
-      var label = {
-        id: this._index++,
-        language: DomUtils.getSelectedOption(this.languageSelectNode),
-        type: DomUtils.getSelectedOption(this.labelTypeSelectNode),
-        label: this.labelTitleNode.value
+    _editLabel: function(label) {
+      this._labelDialog.show(label);
+    },
+
+    _doAddLabel: function(label) {
+      var newLabel = {
+        language: label.lang,
+        type: label.labelType,
+        label: label.label
       };
+      this._labelStore.add(newLabel);
+    },
 
-      if (this._validate(label)) {
-        this._addRow(label);
-      } else {
-        topic.publish('dGrowl', 'Please fill in the fields for a new label', {'title': "Error", 'sticky': true, 'channel':'error'});
-      }
+    _doEditLabel: function(label) {
+      var editLabel = {
+        language: label.lang,
+        type: label.labelType,
+        label: label.label,
+        id: label.id
+      };
+      this._labelStore.put(editLabel);
     },
 
     _removeRow: function(rowId) {
       this._labelStore.remove(rowId);
-    },
-
-    _addRow: function(row) {
-      console.log('ADD ROW', row);
-      this._labelStore.add(row);
-    },
-
-    _validate: function(label) {
-      var valid = true;
-
-      if (!label.language || label.language === '') {
-        valid = false;
-      }
-      if (!label.type || label.type === '') {
-        valid = false;
-      }
-      if (!label.label || label.label === '') {
-        valid = false;
-      }
-
-      return valid;
     }
-
   });
 });

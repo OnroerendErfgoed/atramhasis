@@ -113,7 +113,7 @@ define([
           })
         },
         actions: {
-          label: 'Remove',
+          label: '',
           renderCell: lang.hitch(this, function (object) {
             if (object.id === undefined) {
               return null;
