@@ -87,6 +87,13 @@ define([
       this._labelGrid.resize();
     },
 
+    reset: function() {
+      if (this._labelDialog) { this._labelDialog.reset(); }
+      var TrackableMemory = declare([Memory, Trackable]);
+      this._labelStore = new TrackableMemory({ data: [] });
+      this._labelGrid.set('collection', this._labelStore);
+    },
+
     _createGrid: function(options, node) {
       var columns = {
         label: {

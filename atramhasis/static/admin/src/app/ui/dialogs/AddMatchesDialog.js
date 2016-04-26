@@ -37,7 +37,6 @@ define([
     parentNode: null,
     baseClass: 'matches-dialog',
     title: 'Add a match',
-    scheme: null,
     concept: null,
     conceptSchemeController: null,
     externalSchemeStore: null,
@@ -72,6 +71,14 @@ define([
     startup: function () {
       this.inherited(arguments);
       this._matchesGrid.startup();
+    },
+
+    reset: function() {
+      this.externalSchemeSelect.selectedIndex = 0;
+      this.matchTypeSelectNode.selectedIndex = 0;
+      this._matchesStore = new Memory({ data: [] });
+      this._matchesGrid.set('collection', this._matchesStore);
+      this.searchLabelInput.value = '';
     },
 
     hide: function () {
@@ -159,10 +166,6 @@ define([
         console.log(err);
       });
 
-    },
-
-    _reset: function () {
-      //this.auteurInput.value = '';
     },
 
     _validate: function () {

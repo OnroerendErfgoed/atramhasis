@@ -59,12 +59,12 @@ define([
 
     hide: function () {
       this.inherited(arguments);
-      this._reset();
+      this.reset();
     },
 
     show: function (note) {
       this.inherited(arguments);
-      this._reset();
+      this.reset();
       if (note) {
         this.setData(note);
         this.set('title', 'Edit note');
@@ -112,7 +112,7 @@ define([
       this.hide();
     },
 
-    _reset: function () {
+    reset: function () {
       this._editor.setContent('');
       this.langSelectNode.selectedIndex = 0;
       this.typeSelectNode.selectedIndex = 0;

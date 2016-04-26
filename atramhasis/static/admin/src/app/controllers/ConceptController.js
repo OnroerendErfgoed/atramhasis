@@ -68,11 +68,14 @@ define([
       return this._stores[schemeId];
     },
 
-    saveConcept: function(concept, schemeId) {
+    saveConcept: function(concept, schemeId, method) {
       console.debug('ConceptController::saveConcept', concept);
 
-      var method = 'PUT';
-      var url = this._target.replace('{schemeId}', schemeId) + concept.id;
+      var url = this._target.replace('{schemeId}', schemeId);
+
+      if (method === 'PUT') {
+        var url = this._target.replace('{schemeId}', schemeId) + concept.id;
+      }
 
       return request(url, {
         method: method,

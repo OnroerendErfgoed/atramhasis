@@ -100,7 +100,6 @@ define([
 
       // load add dialog
       this._matchesDialog = new AddMatchesDialog({
-        scheme: this.scheme,
         concept: this.concept,
         externalSchemeStore: this.conceptSchemeController.getExternalSchemeStore(),
         conceptSchemeController: this.conceptSchemeController,
@@ -123,6 +122,22 @@ define([
       this._relatedGrid.startup();
       this._exactGrid.startup();
       this._closeGrid.startup();
+    },
+
+    reset: function() {
+      var TrackableMemory = declare([Memory, Trackable]);
+      this._broadStore = new TrackableMemory({ data: [] });
+      this._broadGrid.set('collection', this._broadStore);
+      this._narrowStore = new TrackableMemory({ data: [] });
+      this._narrowGrid.set('collection', this._narrowStore);
+      this._relatedStore = new TrackableMemory({ data: [] });
+      this._relatedGrid.set('collection', this._relatedStore);
+      this._exactStore = new TrackableMemory({ data: [] });
+      this._exactGrid.set('collection', this._exactStore);
+      this._closeStore = new TrackableMemory({ data: [] });
+      this._closeGrid.set('collection', this._exactStore);
+
+      if (this._matchesDialog) { this._matchesDialog.reset(); }
     },
 
     _createGrid: function(options, node) {

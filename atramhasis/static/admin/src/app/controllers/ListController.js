@@ -37,8 +37,8 @@ define([
       {label: "Related", value: "related"}
     ],
     conceptTypes: [
-      {label: 'COLLECTION', value: 'collection'},
-      {label: 'CONCEPT', value: 'concept'}
+      {label: 'Concept', value: 'concept'},
+      {label: 'Collection', value: 'collection'}
     ],
 
     constructor: function (args) {

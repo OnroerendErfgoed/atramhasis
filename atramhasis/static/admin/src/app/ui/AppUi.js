@@ -78,10 +78,7 @@ define([
       });
       on(this._addConceptDialog, 'new.concept.save', lang.hitch(this, function(evt) {
         console.log(evt);
-        //this.emit('new.concept.save', {
-        //  concept: evt.concept,
-        //  schemeId: evt.schemeId
-        //});
+        this._saveNewConcept(this._addConceptDialog, evt.concept, evt.schemeId);
       }));
       this._addConceptDialog.startup();
 
@@ -190,7 +187,7 @@ define([
       evt.preventDefault();
       console.debug('AppUi::_createConcept');
 
-
+      this._addConceptDialog.showDialog();
     },
 
     _importConcept  : function(evt) {
@@ -331,10 +328,30 @@ define([
     _saveConcept: function(view, concept, schemeId) {
       console.debug('ConceptContainer::_saveConcept', concept);
 
-      this.conceptController.saveConcept(concept, schemeId).then(lang.hitch(this, function(res) {
+      this.conceptController.saveConcept(concept, schemeId, 'PUT').then(lang.hitch(this, function(res) {
         // save successful
         view._closeEditDialog();
         this._closeTab(view);
+        this._openConcept(res.id, schemeId);
+        topic.publish('dGrowl', 'The concept was successfully saved.', {
+          'title': 'Save successful',
+          'sticky': false,
+          'channel': 'info'
+        });
+      }), function(err) {
+        var parsedError = errorUtils.parseError(err);
+        topic.publish('dGrowl', parsedError.message, {
+          'title': parsedError.title,
+          'sticky': true,
+          'channel': 'error'
+        });
+      });
+    },
+
+    _saveNewConcept: function(view, concept, schemeId) {
+      this.conceptController.saveConcept(concept, schemeId, 'POST').then(lang.hitch(this, function(res) {
+        // save successful
+        view._close();
         this._openConcept(res.id, schemeId);
         topic.publish('dGrowl', 'The concept was successfully saved.', {
           'title': 'Save successful',

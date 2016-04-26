@@ -88,6 +88,13 @@ define([
       this._noteGrid.resize();
     },
 
+    reset: function() {
+      if (this._notesDialog) { this._notesDialog.reset(); }
+      var TrackableMemory = declare([Memory, Trackable]);
+      this._noteStore = new TrackableMemory({ data: [] });
+      this._noteGrid.set('collection', this._noteStore);
+    },
+
     _createGrid: function(options, node) {
       var columns = {
         note: {

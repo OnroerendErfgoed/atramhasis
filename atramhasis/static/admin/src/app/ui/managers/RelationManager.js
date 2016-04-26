@@ -97,8 +97,7 @@ define([
       this._addRelationDialog = new AddRelationDialog({
         parentNode: this,
         relationStore: this._relationStore,
-        scheme: this.scheme,
-        concept: this.concept
+        scheme: this.scheme
       });
       this._addRelationDialog.startup();
       this.own(
@@ -121,6 +120,22 @@ define([
 
     setScheme: function (scheme) {
       this.scheme = scheme;
+      this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme);
+      this._addRelationDialog.setScheme(scheme);
+    },
+
+    reset: function() {
+      var TrackableMemory = declare([Memory, Trackable]);
+      this._broaderStore = new TrackableMemory({ data: [] });
+      this._broaderGrid.set('collection', this._broaderStore);
+      this._narrowerStore = new TrackableMemory({ data: [] });
+      this._narrowerGrid.set('collection', this._narrowerStore);
+      this._relatedStore = new TrackableMemory({ data: [] });
+      this._relatedGrid.set('colleciton', this._relatedStore);
+      this._memberOfStore = new TrackableMemory({ data: [] });
+      this._memberOfGrid.set('collection', this._memberOfStore);
+      this._subordinateStore = new TrackableMemory({ data: [] });
+      this._subordinateGrid.set('collection', this._subordinateStore);
     },
 
     _createGrid: function(options, node) {
@@ -214,27 +229,27 @@ define([
 
     _addBroader: function(evt) {
       evt ? evt.preventDefault() : null;
-      this._addRelationDialog.show(this._broaderStore);
+      this._addRelationDialog.show(this._broaderStore, this._relationStore);
     },
 
     _addNarrower: function(evt) {
       evt ? evt.preventDefault() : null;
-      this._addRelationDialog.show(this._narrowerStore);
+      this._addRelationDialog.show(this._narrowerStore, this._relationStore);
     },
 
     _addRelated: function(evt) {
       evt ? evt.preventDefault() : null;
-      this._addRelationDialog.show(this._relatedStore);
+      this._addRelationDialog.show(this._relatedStore, this._relationStore);
     },
 
     _addMemberOf: function(evt) {
       evt ? evt.preventDefault() : null;
-      this._addRelationDialog.show(this._memberOfStore);
+      this._addRelationDialog.show(this._memberOfStore, this._relationStore);
     },
 
     _addSubordinateArray: function(evt) {
       evt ? evt.preventDefault(): null;
-      this._addRelationDialog.show(this._subordinateStore);
+      this._addRelationDialog.show(this._subordinateStore, this._relationStore);
     },
 
     _removeRow: function(rowId, store) {
