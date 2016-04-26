@@ -3,6 +3,7 @@ define([
   'dijit/_TemplatedMixin',
   'dijit/_WidgetsInTemplateMixin',
   'dijit/Dialog',
+  'dojo/topic',
   'dojo/text!./templates/NotesDialog.html',
   '../../utils/HtmlEditor',
   '../../utils/DomUtils'
@@ -11,6 +12,7 @@ define([
   _TemplatedMixin,
   _WidgetsInTemplateMixin,
   Dialog,
+  topic,
   template,
   HtmlEditor,
   DomUtils
@@ -21,9 +23,11 @@ define([
     parentNode: null,
     baseClass: 'notes-dialog',
     title: 'Add note',
+    note: null,
     typeList: null,
     langList: null,
     _editor: null,
+    edit: false,
 
     postCreate: function () {
       this.inherited(arguments);
@@ -44,23 +48,61 @@ define([
       this.inherited(arguments);
       this._editor.startup();
       this._editor.addButtons(['emphasis', 'strong', 'link']);
-      this._editor.setContent('blablabla');
+      this._editor.setContent('');
+    },
+
+    setData: function(note) {
+      this._editor.setContent(note.note);
+      this.langSelectNode.value = note.language;
+      this.typeSelectNode.value = note.type;
     },
 
     hide: function () {
-      this._reset();
       this.inherited(arguments);
+      this._reset();
+    },
+
+    show: function (note) {
+      this.inherited(arguments);
+      this._reset();
+      if (note) {
+        this.setData(note);
+        this.set('title', 'Edit note');
+        this.okButtonNode.innerHTML = 'Edit';
+        this.edit = true;
+        this.note = note;
+      } else {
+        this.set('title', 'Add new note');
+        this.okButtonNode.innerHTML = 'Add';
+        this.edit = false;
+      }
     },
 
     _okClick: function (evt) {
       console.debug('NotesDialog::_okClick');
       evt.preventDefault();
       if (this._validate()) {
-        //this.emit('ok', {
-        //  auteur: this.auteurInput.value,
-        //  node: this.parentNode
-        //});
+        if (this.edit) {
+          this.emit('edit.note', {
+            note: this._editor.getContent(),
+            lang: this.langSelectNode.value,
+            noteType: this.typeSelectNode.value,
+            id: this.note.id
+          });
+        } else {
+          this.emit('add.note', {
+            note: this._editor.getContent(),
+            lang: this.langSelectNode.value,
+            noteType: this.typeSelectNode.value
+          });
+        }
         this.hide();
+      } else {
+        topic.publish('dGrowl', 'Please fill in all fields.', {
+          'title': 'Invalid note',
+          'sticky': false,
+          'channel': 'info'
+        });
       }
     },
 
@@ -71,11 +113,13 @@ define([
     },
 
     _reset: function () {
-      //this.auteurInput.value = '';
+      this._editor.setContent('');
+      this.langSelectNode.selectedIndex = 0;
+      this.typeSelectNode.selectedIndex = 0;
     },
 
     _validate: function () {
-      //return this.auteurInput.value.trim() !== '';
+      return this._editor.getContent().trim() !== '';
     }
   });
 });

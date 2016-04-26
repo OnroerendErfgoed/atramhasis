@@ -310,14 +310,10 @@ a.admin-button:hover {
 }
 
 .label-manager, .note-manager {
-  height: 400px;
+  height: 402px;
 
   .dgrid .dgrid-column-language {
     width: 160px;
-  }
-
-  .dgrid .dgrid-column-remove {
-    width: 50px;
   }
 
   .dgrid .dgrid-column-label,
@@ -325,26 +321,39 @@ a.admin-button:hover {
     width: 380px;
   }
 
+  .dgrid-row-table {
+    margin: 0;
+  }
+
+  .dgrid-cell {
+    padding: 5px;
+  }
+
+  .dgrid-column-actions {
+    width: 90px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
   .dGridHyperlink {
     text-align: center;
   }
 
   .dGridHyperlink a {
-    width: 100%;
     font-size: 18px;
   }
 
 }
 
+.relation-row {
+  vertical-align: middle;
+  background-color: #f0f1f3;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .relation-manager, .matches-manager {
   height: 402px;
-
-  .relation-row {
-    vertical-align: middle;
-    background-color: #f0f1f3;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
 
   .relation-row p {
     margin-top: 0;
@@ -370,9 +379,11 @@ a.admin-button:hover {
       margin: 0;
     }
 
-    .dgrid-column-remove {
-      width: 50px;
-      padding-right: 60px;
+    .dgrid-column-remove,
+    .dgrid-column-actions {
+      width: 60px;
+      text-align: center;
+      vertical-align: middle;
     }
 
     .dGridHyperlink {
@@ -426,12 +437,12 @@ a.admin-button:hover {
 .notes-dialog {
 
   .htmlEditor .dijitToolbar{
-    border: 1px #ccc solid;
+    border: 1px #d5d5d5 solid;
   }
 
   .htmlEditor textarea {
     height: 300px;
-    border: 1px #ccc solid;
+    border: 1px #d5d5d5 solid;
     width: 99.8%;
     padding: 5px;
     resize: vertical;

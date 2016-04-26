@@ -27,9 +27,9 @@ define([
       {name: 'h4', icon: 'dijitEditorIconHeader dijitEditorIconH4', title: 'Header 4'},
       {name: 'h5', icon: 'dijitEditorIconHeader dijitEditorIconH5', title: 'Header 5'},
       {name: 'h6', icon: 'dijitEditorIconHeader dijitEditorIconH6', title: 'Header 6'},
-      {name: 'emphasis', label: '', icon: 'dijitEditorIcon dijitEditorIconItalic', title: 'Schuine tekst'},
-      {name: 'strong',  label: '', icon: 'dijitEditorIcon dijitEditorIconBold', title: 'Vette tekst'},
-      {name: 'link', label: '', icon: 'dijitEditorIcon dijitEditorIconCreateLink', title: 'Link Toevoegen'},
+      {name: 'emphasis', label: '', icon: 'dijitEditorIcon dijitEditorIconItalic', title: 'Italic'},
+      {name: 'strong',  label: '', icon: 'dijitEditorIcon dijitEditorIconBold', title: 'Bold'},
+      {name: 'link', label: '', icon: 'dijitEditorIcon dijitEditorIconCreateLink', title: 'Hyperlink'},
       {name: 'list', label: '', icon: 'dijitEditorIcon dijitEditorIconListBulletIndent', title: 'Lijst Toevoegen'},
       {name: 'addbibitem', label: '', icon: 'dijitEditorIcon dijitEditorIconInsertUnorderedList',
         title: 'Item Toevoegen'}
@@ -67,6 +67,7 @@ define([
               var button = new Button({
                 name: btn.name,
                 iconClass: btn.icon,
+                title: btn.title,
                 showLabel: false,
                 onClick: lang.hitch(this, function () {
                   this._btnAction(btn.name);
@@ -85,7 +86,6 @@ define([
       var textarea = this.containerTextAreaNode;
       var regex = /[^\n\r\v]+/gm;
       var elementValue = this._getHtmlElementByKey(btn);
-      console.log(elementValue);
       var open = elementValue.open;
       var close = elementValue.close;
       var position = textarea.scrollTop;
@@ -116,7 +116,6 @@ define([
       var htmlElements = array.filter(this.htmlElements, function(item) {
         return item.key === key;
       });
-      console.log(htmlElements);
       return htmlElements[0].value;
     }
   });
