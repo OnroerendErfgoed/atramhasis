@@ -10,6 +10,7 @@ define([
   'dojo/topic',
   'dojo/on',
   'dojo/window',
+  'dojo/router',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/AppUi.html',
@@ -31,6 +32,7 @@ define([
   topic,
   on,
   wind,
+  router,
   _WidgetBase,
   _TemplatedMixin,
   template,
@@ -65,6 +67,7 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::postCreate');
       this._registerLoadingEvents();
+      this._registerRoutes();
       this._createSlideMenu(this.menuContainerNode);
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
@@ -83,6 +86,8 @@ define([
       this._searchPane.startup();
       this._slideMenu._slideOpen();
       this._hideLoading();
+
+      router.startup('#');
     },
 
     /**
@@ -166,6 +171,18 @@ define([
           this._hideLoading();
         }))
       );
+    },
+
+    _registerRoutes: function () {
+
+      router.register('/conceptschemes/:scheme/c/:id', lang.hitch(this, function(evt){
+        if (!evt.params.id || !evt.params.scheme) { return; }
+        this._openConcept(evt.params.id, evt.params.scheme);
+        this._closeMenu();
+        router.go('#');
+      }));
+
+      // TODO add route for conceptscheme
     },
 
     _createConcept: function(evt) {
