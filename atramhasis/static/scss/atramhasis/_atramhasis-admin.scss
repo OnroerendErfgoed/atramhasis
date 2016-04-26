@@ -551,9 +551,13 @@ a.admin-button:hover {
   .dijitButtonNode {
     background: transparent none !important;
     border: none !important;
+    box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    color: $white !important;
   }
   .dijitButtonHover .dijitButtonNode {
-    color: $white !important;
+    color: $orange !important;
   }
 
   *:focus {

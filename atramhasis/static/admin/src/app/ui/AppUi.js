@@ -335,13 +335,14 @@ define([
 
     _deleteConcept: function(view, concept, schemeId) {
       var content = '<p style="font-size: 15px;">Are you sure you want to remove <strong>'+ concept.label +
-        '</strong> (ID: ' + concept.id + ') from scheme <strong>' + schemeId + '</strong></p>';
+        '</strong> (ID: ' + concept.id + ') from scheme <strong>' + schemeId + '</strong>?</p>';
       var confirmationDialog = new ConfirmDialog({
         title: 'Delete concept',
         content: content,
         baseClass: 'confirm-dialog'
       });
       query('.dijitButton', confirmationDialog.domNode).addClass('button tiny');
+      confirmationDialog.closeText.innerHTML = '<i class="fa fa-times"></i>';
 
       on(confirmationDialog, 'close', function() {
         confirmationDialog.destroy();

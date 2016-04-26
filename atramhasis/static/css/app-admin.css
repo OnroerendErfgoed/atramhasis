@@ -14288,12 +14288,16 @@ a.admin-button:hover {
 .confirm-dialog .dijitDialogPaneActionBar .dijitButtonNode {
   background: transparent none !important;
   border: none !important;
-}
-/* line 555, ../scss/atramhasis/_atramhasis-admin.scss */
-.confirm-dialog .dijitDialogPaneActionBar .dijitButtonHover .dijitButtonNode {
+  box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
   color: white !important;
 }
 /* line 559, ../scss/atramhasis/_atramhasis-admin.scss */
+.confirm-dialog .dijitDialogPaneActionBar .dijitButtonHover .dijitButtonNode {
+  color: #f77f00 !important;
+}
+/* line 563, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar *:focus {
   outline: none !important;
 }
