@@ -30,6 +30,7 @@ define([
     baseClass: 'relation-dialog',
     title: 'Add a relation',
     scheme: null,
+    concept: null,
     relationStore: null,
     _tree: null,
     _myRelation: null,
@@ -58,6 +59,7 @@ define([
 
       var sel = this._tree.selectedItems[0];
       if (sel) {
+        console.log(sel.concept_id, this.concept.id);
         if (this.concept && sel.concept_id === this.concept.id) {
           topic.publish('dGrowl', 'Concept or collection cannot be related to itself', {
             'title': 'Not valid',

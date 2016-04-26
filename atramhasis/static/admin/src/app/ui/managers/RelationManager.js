@@ -97,6 +97,7 @@ define([
       this._addRelationDialog = new AddRelationDialog({
         parentNode: this,
         relationStore: this._relationStore,
+        concept: this.concept,
         scheme: this.scheme
       });
       this._addRelationDialog.startup();

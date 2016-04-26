@@ -139,20 +139,16 @@ define([
       // mixin tab data
       var labelData = this.labelManager.getData();
       lang.mixin(concept, labelData);
-      console.log(labelData);
 
       var noteData = this.noteManager.getData();
       lang.mixin(concept, noteData);
-      console.log(noteData);
 
       var relationData = this.relationManager.getData();
       lang.mixin(concept, relationData);
-      console.log(relationData);
 
       if (concept.type !== 'collection') {
         var matchesData = this.matchesManager.getData();
         lang.mixin(concept, matchesData);
-        console.log(matchesData);
       }
 
       // emit save event

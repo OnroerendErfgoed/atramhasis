@@ -126,40 +126,30 @@ define([
       evt ? evt.preventDefault() : null;
       var concept = {};
 
-      // set concept specific fields like uri
+      // set concept specific fields
       if (this.concept) {
-        concept.label = this.concept.label;
         concept.id = this.concept.id;
-        concept.type = this.typeNode.value;
         concept.uri = this.concept.uri;
         /* jshint -W106 */
         concept.concept_scheme = this.scheme;
         /* jshint +W106 */
-      } else {
-        concept.label = '';
-        concept.id = '';
-        concept.type = '';
-        concept.uri ='';
-        // TODO check if possible => throw error?
       }
+
+      concept.type = this.typeNode.value;
 
       // mixin tab data
       var labelData = this.labelManager.getData();
       lang.mixin(concept, labelData);
-      console.log(labelData);
 
       var noteData = this.noteManager.getData();
       lang.mixin(concept, noteData);
-      console.log(noteData);
 
       var relationData = this.relationManager.getData();
       lang.mixin(concept, relationData);
-      console.log(relationData);
 
       if (concept.type !== 'collection') {
         var matchesData = this.matchesManager.getData();
         lang.mixin(concept, matchesData);
-        console.log(matchesData);
       }
 
       // emit save event
