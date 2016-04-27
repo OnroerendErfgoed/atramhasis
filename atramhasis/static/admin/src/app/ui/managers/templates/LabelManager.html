@@ -1,17 +1,12 @@
 <div>
-  <div class="large-5 columns">
-    <input type="text" placeholder="Type label title ..." data-dojo-attach-point="labelTitleNode"/>
+  <div class="row relation-row" style="margin-bottom: 5px;">
+    <div class="large-offset-10 large-2 columns">
+      <a style="float: right;" href="#" class="button tiny" data-dojo-attach-event="onClick: _addLabel" title="Add label">Add Label&nbsp;&nbsp;<i class="fa fa-plus"></i></a>
+    </div>
   </div>
-  <div class="large-2 columns">
-    <select data-dojo-attach-point="languageSelectNode"></select>
-  </div>
-  <div class="large-4 columns">
-    <select data-dojo-attach-point="labelTypeSelectNode"></select>
-  </div>
-  <div class="large-1 columns">
-    <a href="#" class="button tiny" data-dojo-attach-event="onClick: _addLabel"><i class="fa fa-plus"></i></a>
-  </div>
-  <div class="large-12 columns">
-    <div data-dojo-attach-point="labelGridNode" style="max-height: 350px;"></div>
+  <div class="row">
+    <div class="large-12 columns" style="padding: 0;">
+      <div data-dojo-attach-point="labelGridNode" style="max-height: 350px;"></div>
+    </div>
   </div>
 </div>

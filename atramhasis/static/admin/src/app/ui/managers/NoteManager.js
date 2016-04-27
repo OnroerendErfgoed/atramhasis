@@ -6,6 +6,7 @@ define([
   'dojo/dom-class',
   'dojo/dom-style',
   'dojo/json',
+  'dojo/on',
   'dojo/topic',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
@@ -15,7 +16,8 @@ define([
   'dgrid/OnDemandGrid',
   'dgrid/extensions/DijitRegistry',
   'dgrid/extensions/ColumnResizer',
-  '../../utils/DomUtils'
+  '../../utils/DomUtils',
+  '../dialogs/NotesDialog'
 ], function (
   declare,
   array,
@@ -24,6 +26,7 @@ define([
   domClass,
   domStyle,
   JSON,
+  on,
   topic,
   _WidgetBase,
   _TemplatedMixin,
@@ -33,7 +36,8 @@ define([
   OnDemandGrid,
   DijitRegistry,
   ColumnResizer,
-  DomUtils
+  DomUtils,
+  NotesDialog
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
 
@@ -50,16 +54,7 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       console.debug('NoteManager::postCreate');
-      DomUtils.addOptionsToSelect(this.noteTypeSelectNode, {
-        data: this.listController.getNoteTypes(),
-        idProperty: 'value',
-        labelProperty: 'label'
-      });
-      DomUtils.addOptionsToSelect(this.languageSelectNode, {
-        data: this.languageList,
-        idProperty: 'id',
-        labelProperty: 'name'
-      });
+
       var TrackableMemory = declare([Memory, Trackable]);
       this._noteStore = new TrackableMemory({ data: [] });
       array.forEach(this.concept.notes, lang.hitch(this, function(item){
@@ -69,11 +64,24 @@ define([
       this._createGrid({
         collection: this._noteStore
       }, this.noteGridNode);
+
+      this._notesDialog = new NotesDialog({
+        parentNode: this,
+        langList: this.languageList,
+        typeList: this.listController.getNoteTypes()
+      });
+      on(this._notesDialog, 'add.note', lang.hitch(this, function(evt) {
+        this._doAddNote(evt);
+      }));
+      on(this._notesDialog, 'edit.note', lang.hitch(this, function(evt) {
+        this._doEditNote(evt);
+      }));
     },
 
     startup: function () {
       this.inherited(arguments);
       console.debug('NoteManager::startup');
+      this._notesDialog.startup();
       this._noteGrid.startup();
       this._noteGrid.resize();
     },
@@ -104,13 +112,24 @@ define([
             return lang.label;
           })
         },
-        remove: {
-          label: 'Remove',
+        actions: {
+          label: '',
           renderCell: lang.hitch(this, function (object) {
             if (object.id === undefined) {
               return null;
             }
             var div = domConstruct.create('div', {'class': 'dGridHyperlink'});
+            domConstruct.create('a', {
+              href: '#',
+              title: 'Edit note',
+              className: 'fa fa-pencil',
+              innerHTML: '',
+              style: 'margin-right: 12px;',
+              onclick: lang.hitch(this, function (evt) {
+                evt.preventDefault();
+                this._editNote(object);
+              })
+            }, div);
             domConstruct.create('a', {
               href: '#',
               title: 'Remove note',
@@ -150,45 +169,36 @@ define([
 
     _addNote: function(evt) {
       evt ? evt.preventDefault() : null;
+      this._notesDialog.show();
+    },
 
-      var note = {
-        id: this._index++,
-        language: DomUtils.getSelectedOption(this.languageSelectNode),
-        type: DomUtils.getSelectedOption(this.noteTypeSelectNode),
-        note: this.noteTitleNode.value
+    _editNote: function(note) {
+      this._notesDialog.show(note);
+    },
+
+    _doAddNote: function(note) {
+      var newNote = {
+        language: note.lang,
+        type: note.noteType,
+        note: note.note
       };
+      console.log(newNote);
+      this._noteStore.add(newNote);
+    },
 
-      if (this._validate(note)) {
-        this._addRow(note);
-      } else {
-        topic.publish('dGrowl', 'Please fill in the fields for a new note', {'title': "Error", 'sticky': true, 'channel':'error'});
-      }
+    _doEditNote: function(note) {
+      var editNote = {
+        language: note.lang,
+        type: note.noteType,
+        note: note.note,
+        id: note.id
+      };
+      console.log(editNote);
+      this._noteStore.put(editNote);
     },
 
     _removeRow: function(rowId) {
       this._noteStore.remove(rowId);
-    },
-
-    _addRow: function(row) {
-      console.log('ADD ROW', row);
-      this._noteStore.add(row);
-    },
-
-    _validate: function(note) {
-      var valid = true;
-
-      if (!note.language || note.language === '') {
-        valid = false;
-      }
-      if (!note.type || note.type === '') {
-        valid = false;
-      }
-      if (!note.note || note.note === '') {
-        valid = false;
-      }
-
-      return valid;
     }
-
   });
 });
