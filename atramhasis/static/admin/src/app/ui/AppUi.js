@@ -207,8 +207,8 @@ define([
     },
 
     _openConcept: function(conceptId, scheme) {
-      if (this._getTab(conceptId)) {
-        this._openTab(this._getTab(conceptId));
+      if (this._getTab(scheme + '_' + conceptId)) {
+        this._openTab(this._getTab(scheme + '_' + conceptId));
         return;
       }
       this.conceptController.getConcept(scheme, conceptId).then(
@@ -287,7 +287,7 @@ define([
      */
     _addTab: function(content) {
       var tab = content;
-      tab.tabId = content.conceptId;
+      tab.tabId = content.scheme + '_' + content.conceptId;
       tab.title = content.conceptLabel;
       tab.closable = true;
       tab.onClose = lang.hitch(this, function() {
