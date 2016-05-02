@@ -10,6 +10,7 @@ define([
   'dojo/topic',
   'dojo/on',
   'dojo/window',
+  'dojo/router',
   'dojo/query',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
@@ -35,6 +36,7 @@ define([
   topic,
   on,
   wind,
+  router,
   query,
   _WidgetBase,
   _TemplatedMixin,
@@ -73,6 +75,7 @@ define([
       this.inherited(arguments);
       console.debug('AppUi::postCreate');
       this._registerLoadingEvents();
+      this._registerRoutes();
       this._createSlideMenu(this.menuContainerNode);
 
       this._addConceptDialog = new ConceptAddDialog({
@@ -103,6 +106,8 @@ define([
       this._searchPane.startup();
       this._slideMenu._slideOpen();
       this._hideLoading();
+
+      router.startup('#');
     },
 
     /**
@@ -188,6 +193,18 @@ define([
       );
     },
 
+    _registerRoutes: function () {
+
+      router.register('/conceptschemes/:scheme/c/:id', lang.hitch(this, function(evt){
+        if (!evt.params.id || !evt.params.scheme) { return; }
+        this._openConcept(evt.params.id, evt.params.scheme);
+        this._closeMenu();
+        router.go('#');
+      }));
+
+      // TODO add route for conceptscheme
+    },
+
     _createConcept: function(evt) {
       evt.preventDefault();
       console.debug('AppUi::_createConcept');
@@ -229,8 +246,8 @@ define([
     },
 
     _openConcept: function(conceptId, scheme) {
-      if (this._getTab(conceptId)) {
-        this._openTab(this._getTab(conceptId));
+      if (this._getTab(scheme + '_' + conceptId)) {
+        this._openTab(this._getTab(scheme + '_' + conceptId));
         return;
       }
       this.conceptController.getConcept(scheme, conceptId).then(
@@ -312,7 +329,7 @@ define([
      */
     _addTab: function(content) {
       var tab = content;
-      tab.tabId = content.conceptId;
+      tab.tabId = content.scheme + '_' + content.conceptId;
       tab.title = content.conceptLabel;
       tab.closable = true;
       tab.onClose = lang.hitch(this, function() {
