@@ -57,9 +57,14 @@ define([
     _relatedGrid: null,
     _memberOfStore: null,
     _memberOfGrid: null,
+    _membersStore: null,
+    _membersGrid: null,
     _subordinateStore: null,
     _subordinateGrid: null,
+    _subordinateCollStore: null,
+    _subordinateCollGrid: null,
     _index: 0,
+    _isCollection: null,
     _relationStore: null,
     _addRelationDialog: null,
 
@@ -88,10 +93,20 @@ define([
         collection: this._memberOfStore
       }, this.memberOfGridNode);
 
+      this._membersStore = new TrackableMemory({ data: this.concept ? this.concept.members : [] });
+      this._membersGrid = this._createGrid({
+        collection: this._membersStore
+      }, this.membersGridNode);
+
       this._subordinateStore = new TrackableMemory({ data: this.concept ? this.concept.subordinate_arrays : [] });
       this._subordinateGrid = this._createGrid({
         collection: this._subordinateStore
       }, this.subordinateGridNode);
+
+      this._subordinateCollStore = new TrackableMemory({ data: this.concept ? this.concept.subordinates : [] });
+      this._subordinateCollGrid = this._createGrid({
+        collection: this._subordinateCollStore
+      }, this.subordinateCollGridNode);
 
       this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme);
       this._addRelationDialog = new AddRelationDialog({
@@ -107,6 +122,11 @@ define([
         }))
       );
 
+      if (this.concept && this.concept.type === 'collection') {
+        this.setCollectionTypes();
+      } else {
+        this.setConceptTypes();
+      }
     },
 
     startup: function () {
@@ -116,7 +136,9 @@ define([
       this._narrowerGrid.startup();
       this._relatedGrid.startup();
       this._memberOfGrid.startup();
+      this._membersGrid.startup();
       this._subordinateGrid.startup();
+      this._subordinateCollGrid.startup();
     },
 
     setScheme: function (scheme) {
@@ -137,6 +159,40 @@ define([
       this._memberOfGrid.set('collection', this._memberOfStore);
       this._subordinateStore = new TrackableMemory({ data: [] });
       this._subordinateGrid.set('collection', this._subordinateStore);
+      this._subordinateCollStore = new TrackableMemory({ data: [] });
+      this._subordinateCollGrid.set('collection', this._subordinateCollStore);
+    },
+
+    setCollectionTypes: function() {
+      this._isCollection = true;
+      console.log('collection');
+      this.broaderContainerNode.style.display = 'none';
+      this.broaderGridNode.style.display = 'none';
+      this.narrowerContainerNode.style.display = 'none';
+      this.narrowerGridNode.style.display = 'none';
+      this.relatedContainerNode.style.display = 'none';
+      this.relatedGridNode.style.display = 'none';
+      this.subordinateArraysContainerNode.style.display = 'none';
+      this.subordinateGridNode.style.display = 'none';
+
+      this.membersContainerNode.style.display = 'block';
+      this.membersGridNode.style.display = 'block';
+    },
+
+    setConceptTypes: function() {
+      this._isCollection = false;
+      console.log('concept');
+      this.broaderContainerNode.style.display = 'block';
+      this.broaderGridNode.style.display = 'block';
+      this.narrowerContainerNode.style.display = 'block';
+      this.narrowerGridNode.style.display = 'block';
+      this.relatedContainerNode.style.display = 'block';
+      this.relatedGridNode.style.display = 'block';
+      this.subordinateArraysContainerNode.style.display = 'block';
+      this.subordinateGridNode.style.display = 'block';
+
+      this.membersContainerNode.style.display = 'none';
+      this.membersGridNode.style.display = 'none';
     },
 
     _createGrid: function(options, node) {
@@ -184,28 +240,44 @@ define([
 
     getData: function() {
       var relations = {};
-      relations.related = array.map(this._relatedStore.data, function(item) {
-        var con = {};
-        con.id = item.id;
-        return con;
-      }, this);
-      relations.narrower = array.map(this._narrowerStore.data, function(item) {
-        var con = {};
-        con.id = item.id;
-        return con;
-      }, this);
-      relations.broader = array.map(this._broaderStore.data, function(item) {
-        var con = {};
-        con.id = item.id;
-        return con;
-      }, this);
+      if (!this._isCollection) {
+        relations.related = array.map(this._relatedStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        relations.narrower = array.map(this._narrowerStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        relations.broader = array.map(this._broaderStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        /* jshint -W106 */
+        relations.subordinate_arrays = array.map(this._subordinateStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        /* jshint +W106 */
+      } else {
+        relations.members = array.map(this._membersStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        relations.subordinates = array.map(this._subordinateCollStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+      }
+
       /* jshint -W106 */
       relations.member_of = array.map(this._memberOfStore.data, function(item) {
-        var con = {};
-        con.id = item.id;
-        return con;
-      }, this);
-      relations.subordinate_arrays = array.map(this._subordinateStore.data, function(item) {
         var con = {};
         con.id = item.id;
         return con;
@@ -248,9 +320,19 @@ define([
       this._addRelationDialog.show(this._memberOfStore, this._relationStore);
     },
 
+    _addMembers: function(evt) {
+      evt ? evt.preventDefault() : null;
+      this._addRelationDialog.show(this._membersStore, this._relationStore);
+    },
+
     _addSubordinateArray: function(evt) {
       evt ? evt.preventDefault(): null;
       this._addRelationDialog.show(this._subordinateStore, this._relationStore);
+    },
+
+    _addSubordinates: function(evt) {
+      evt ? evt.preventDefault(): null;
+      this._addRelationDialog.show(this._subordinateCollStore, this._relationStore);
     },
 
     _removeRow: function(rowId, store) {

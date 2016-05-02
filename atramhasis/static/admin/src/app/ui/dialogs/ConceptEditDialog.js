@@ -67,6 +67,7 @@ define([
       });
       on(this.typeNode, 'change', lang.hitch(this, function(evt) {
         this._toggleMatches(evt.target.value);
+        this._toggleRelations(evt.target.value);
       }));
 
       this._createLabelsTab(this.concept);
@@ -111,6 +112,14 @@ define([
         }
       } else {
         this.tabMatches.set('disabled', false);
+      }
+    },
+
+    _toggleRelations: function(type) {
+      if (type === 'collection') {
+        this.relationManager.setCollectionTypes();
+      } else {
+        this.relationManager.setConceptTypes();
       }
     },
 

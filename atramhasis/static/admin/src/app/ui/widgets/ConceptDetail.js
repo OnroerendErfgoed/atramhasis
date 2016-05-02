@@ -169,6 +169,7 @@ define([
         }
       }
 
+      // TODO add members/member_of/subordinate_arrays/subordinates
 
       if (concept.notes && concept.notes.length > 0) {
         array.forEach(concept.notes, lang.hitch(this, function(note) {

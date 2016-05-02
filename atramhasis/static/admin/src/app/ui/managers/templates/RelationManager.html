@@ -1,5 +1,5 @@
 <div>
-  <div class="row relation-row">
+  <div class="row relation-row" data-dojo-attach-point="broaderContainerNode">
     <div class="large-11 columns">
       <p>Broader</p>
     </div>
@@ -11,7 +11,7 @@
        data-dojo-attach-point="broaderGridNode">
   </div>
 
-  <div class="row relation-row">
+  <div class="row relation-row" data-dojo-attach-point="narrowerContainerNode">
     <div class="large-11 columns">
       <p>Narrower</p>
     </div>
@@ -23,7 +23,7 @@
        data-dojo-attach-point="narrowerGridNode">
   </div>
 
-  <div class="row relation-row">
+  <div class="row relation-row" data-dojo-attach-point="relatedContainerNode">
     <div class="large-11 columns">
       <p>Related</p>
     </div>
@@ -35,7 +35,19 @@
        data-dojo-attach-point="relatedGridNode">
   </div>
 
-  <div class="row relation-row">
+  <div class="row relation-row" data-dojo-attach-point="membersContainerNode">
+    <div class="large-11 columns">
+      <p>Members</p>
+    </div>
+    <div class="large-1 columns">
+      <a href="#" class="button tiny" data-dojo-attach-event="onClick: _addMembers" title="Add members"><i class="fa fa-plus"></i></a>
+    </div>
+  </div>
+  <div class="row large-12 columns"
+       data-dojo-attach-point="membersGridNode">
+  </div>
+
+  <div class="row relation-row" data-dojo-attach-point="memberOfContainerNode">
     <div class="large-11 columns">
       <p>Member of</p>
     </div>
@@ -47,7 +59,7 @@
        data-dojo-attach-point="memberOfGridNode">
   </div>
 
-  <div class="row relation-row">
+  <div class="row relation-row" data-dojo-attach-point="subordinateArraysContainerNode">
     <div class="large-11 columns">
       <p>Subordinate arrays</p>
     </div>
@@ -57,5 +69,17 @@
   </div>
   <div class="row large-12 columns"
        data-dojo-attach-point="subordinateGridNode">
+  </div>
+
+  <div class="row relation-row" data-dojo-attach-point="subordinateCollContainerNode">
+    <div class="large-11 columns">
+      <p>Subordinates</p>
+    </div>
+    <div class="large-1 columns">
+      <a href="#" class="button tiny" data-dojo-attach-event="onClick: _addSubordinates" title="Add subordinates"><i class="fa fa-plus"></i></a>
+    </div>
+  </div>
+  <div class="row large-12 columns"
+       data-dojo-attach-point="subordinateCollGridNode">
   </div>
 </div>
