@@ -85,13 +85,17 @@ define([
     },
 
     _setData: function(concept) {
+
+      console.log(concept);
       // set view data
       this.conceptTitleViewNode.innerHTML = '<strong>' + this.scheme + ' : ' + concept.label + '</strong>';
       this.idViewNode.innerHTML = 'ID: ' + concept.id;
       this.typeViewNode.innerHTML = 'TYPE: ' + concept.type;
       this.uriViewNode.innerHTML = 'URI: ';
-      domConstruct.create('a', { href: this.concept.uri, innerHTML: this.concept.uri, target: '_blank' }, this.uriViewNode);
+      domConstruct.create('a', { href: this.concept.uri, innerHTML: this.concept.uri, target: '_blank' },
+        this.uriViewNode);
 
+      // LABELS
       if (concept.labels && concept.label.length > 0) {
         var pref = '';
         var alt = '';
@@ -113,6 +117,7 @@ define([
         this.alternateLabelsNode.innerHTML = alt;
       }
 
+      // NARROWER
       if (concept.narrower && concept.narrower.length > 0) {
         var dt = domConstruct.create('dt', { innerHTML: 'Narrower' }, this.relationsListNode, 'first');
         var narrowString = '';
@@ -125,12 +130,13 @@ define([
         domConstruct.create('dd', {innerHTML: narrowString}, dt);
       }
 
-
+      // BROADER
       if (concept.broader && concept.broader.length > 0) {
         var dt = domConstruct.create('dt', { innerHTML: 'Broader' }, this.relationsListNode, 'last');
         var broadString = '';
         array.forEach(concept.broader, lang.hitch(this, function(broader) {
-          broadString += '<a href="' + broader.uri + '" target="_blank" >' + broader.label + '</a> (' + broader.id + '), '
+          broadString += '<a href="' + broader.uri + '" target="_blank" >' + broader.label + '</a> (' +
+            broader.id + '), '
         }));
         if (broadString.length > 2) {
           broadString = broadString.substring(0, broadString.length - 2);
@@ -138,11 +144,13 @@ define([
         domConstruct.create('dd', {innerHTML: broadString}, dt);
       }
 
+      // RELATED
       if (concept.related && concept.related.length > 0) {
         var dt = domConstruct.create('dt', { innerHTML: 'Related' }, this.relationsListNode, 'last');
         var relatedString = '';
         array.forEach(concept.related, lang.hitch(this, function(related) {
-          relatedString += '<a href="' + related.uri + '" target="_blank" >' + related.label + '</a> (' + related.id + '), '
+          relatedString += '<a href="' + related.uri + '" target="_blank" >' + related.label + '</a> (' +
+            related.id + '), '
         }));
         if (relatedString.length > 2) {
           relatedString = relatedString.substring(0, relatedString.length - 2);
@@ -150,6 +158,63 @@ define([
         domConstruct.create('dd', {innerHTML: relatedString}, dt);
       }
 
+      // MEMBER OF
+      if (concept.member_of && concept.member_of.length > 0) {
+        var dt = domConstruct.create('dt', { innerHTML: 'Member of' }, this.relationsListNode, 'last');
+        var memberOfString = '';
+        array.forEach(concept.member_of, lang.hitch(this, function(member) {
+          memberOfString += '<a href="' + member.uri + '" target="_blank" >' + member.label + '</a> (' +
+            member.id + '), '
+        }));
+        if (memberOfString.length > 2) {
+          memberOfString = memberOfString.substring(0, memberOfString.length - 2);
+        }
+        domConstruct.create('dd', {innerHTML: memberOfString}, dt);
+      }
+
+      // MEMBERS
+      if (concept.members && concept.members.length > 0) {
+        var dt = domConstruct.create('dt', { innerHTML: 'Members' }, this.relationsListNode, 'last');
+        var memberString = '';
+        array.forEach(concept.members, lang.hitch(this, function(member) {
+          memberString += '<a href="' + member.uri + '" target="_blank" >' + member.label + '</a> (' +
+            member.id + '), '
+        }));
+        if (memberString.length > 2) {
+          memberString = memberString.substring(0, memberString.length - 2);
+        }
+        domConstruct.create('dd', {innerHTML: memberString}, dt);
+      }
+
+      // SUBORDINATE ARRAYS
+      if (concept.subordinate_arrays && concept.subordinate_arrays.length > 0) {
+        var dt = domConstruct.create('dt', { innerHTML: 'Subordinate <br>arrays' }, this.relationsListNode, 'last');
+        var subString = '';
+        array.forEach(concept.subordinate_arrays, lang.hitch(this, function(subordinate) {
+          subString += '<a href="' + subordinate.uri + '" target="_blank" >' + subordinate.label + '</a> (' +
+            subordinate.id + '), '
+        }));
+        if (subString.length > 2) {
+          subString = subString.substring(0, subString.length - 2);
+        }
+        domConstruct.create('dd', {innerHTML: subString}, dt);
+      }
+
+      // SUPERORDINATES
+      if (concept.superordinates && concept.superordinates.length > 0) {
+        var dt = domConstruct.create('dt', { innerHTML: 'Superordinates' }, this.relationsListNode, 'last');
+        var superString = '';
+        array.forEach(concept.superordinates, lang.hitch(this, function(superordinate) {
+          superString += '<a href="' + superordinate.uri + '" target="_blank" >' + superordinate.label + '</a> (' +
+            superordinate.id + '), '
+        }));
+        if (superString.length > 2) {
+          superString = superString.substring(0, superString.length - 2);
+        }
+        domConstruct.create('dd', {innerHTML: superString}, dt);
+      }
+
+      // MATCHES
       if (concept.matches) {
         var matches = concept.matches;
         if (matches.broad && matches.broad.length > 0) {
@@ -169,13 +234,13 @@ define([
         }
       }
 
-      // TODO add members/member_of/subordinate_arrays/subordinates
-
+      // NOTES
       if (concept.notes && concept.notes.length > 0) {
         array.forEach(concept.notes, lang.hitch(this, function(note) {
           domConstruct.create('li', {
             lang: note.language,
-            innerHTML: '<strong>' + this._capitalize(note.type) + '</strong> <em>(' + note.language + ')</em>: ' + note.note
+            innerHTML: '<strong>' + this._capitalize(note.type) + '</strong> <em>(' + note.language +
+            ')</em>: ' + note.note
           }, this.scopeNoteNode, 'last');
         }));
       } else {

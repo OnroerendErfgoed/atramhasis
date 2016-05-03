@@ -61,8 +61,8 @@ define([
     _membersGrid: null,
     _subordinateStore: null,
     _subordinateGrid: null,
-    _subordinateCollStore: null,
-    _subordinateCollGrid: null,
+    _superordinatesCollStore: null,
+    _superordinatesCollGrid: null,
     _index: 0,
     _isCollection: null,
     _relationStore: null,
@@ -103,10 +103,10 @@ define([
         collection: this._subordinateStore
       }, this.subordinateGridNode);
 
-      this._subordinateCollStore = new TrackableMemory({ data: this.concept ? this.concept.subordinates : [] });
-      this._subordinateCollGrid = this._createGrid({
-        collection: this._subordinateCollStore
-      }, this.subordinateCollGridNode);
+      this._superordinatesCollStore = new TrackableMemory({ data: this.concept ? this.concept.superordinates : [] });
+      this._superordinatesCollGrid = this._createGrid({
+        collection: this._superordinatesCollStore
+      }, this.superordinatesCollGridNode);
 
       this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme);
       this._addRelationDialog = new AddRelationDialog({
@@ -138,7 +138,7 @@ define([
       this._memberOfGrid.startup();
       this._membersGrid.startup();
       this._subordinateGrid.startup();
-      this._subordinateCollGrid.startup();
+      this._superordinatesCollGrid.startup();
     },
 
     setScheme: function (scheme) {
@@ -159,8 +159,8 @@ define([
       this._memberOfGrid.set('collection', this._memberOfStore);
       this._subordinateStore = new TrackableMemory({ data: [] });
       this._subordinateGrid.set('collection', this._subordinateStore);
-      this._subordinateCollStore = new TrackableMemory({ data: [] });
-      this._subordinateCollGrid.set('collection', this._subordinateCollStore);
+      this._superordinatesCollStore = new TrackableMemory({ data: [] });
+      this._superordinatesCollGrid.set('collection', this._superordinatesCollStore);
     },
 
     setCollectionTypes: function() {
@@ -175,6 +175,8 @@ define([
       this.subordinateArraysContainerNode.style.display = 'none';
       this.subordinateGridNode.style.display = 'none';
 
+      this.superordinatesCollContainerNode.style.display = 'block';
+      this.superordinatesCollGridNode.style.display = 'block';
       this.membersContainerNode.style.display = 'block';
       this.membersGridNode.style.display = 'block';
     },
@@ -193,6 +195,8 @@ define([
 
       this.membersContainerNode.style.display = 'none';
       this.membersGridNode.style.display = 'none';
+      this.superordinatesCollContainerNode.style.display = 'none';
+      this.superordinatesCollGridNode.style.display = 'none';
     },
 
     _createGrid: function(options, node) {
@@ -269,7 +273,7 @@ define([
           con.id = item.id;
           return con;
         }, this);
-        relations.subordinates = array.map(this._subordinateCollStore.data, function (item) {
+        relations.superordinates = array.map(this._superordinatesCollStore.data, function (item) {
           var con = {};
           con.id = item.id;
           return con;
@@ -330,9 +334,9 @@ define([
       this._addRelationDialog.show(this._subordinateStore, this._relationStore);
     },
 
-    _addSubordinates: function(evt) {
+    _addSuperordinates: function(evt) {
       evt ? evt.preventDefault(): null;
-      this._addRelationDialog.show(this._subordinateCollStore, this._relationStore);
+      this._addRelationDialog.show(this._superordinatesCollStore, this._relationStore);
     },
 
     _removeRow: function(rowId, store) {
