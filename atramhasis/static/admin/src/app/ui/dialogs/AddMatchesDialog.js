@@ -82,7 +82,7 @@ define([
     },
 
     hide: function () {
-      this._reset();
+      this.reset();
       this.inherited(arguments);
     },
 
