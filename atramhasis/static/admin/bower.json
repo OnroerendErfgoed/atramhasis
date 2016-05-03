@@ -1,6 +1,6 @@
 {
   "name": "atradmin",
-  "version": "0.4.4",
+  "version": "0.5.05.05.05.05.0",
   "authors": [
     "Flanders Heritage Agency <ict@onroerenderfgoed.be>"
   ],
@@ -23,8 +23,5 @@
     "dGrowl": "0.1.2",
     "foundation": "~5.5.0",
     "font-awesome": "~4.6.1"
-  },
-  "resolutions": {
-    "dstore": "1.1.0"
   }
 }
