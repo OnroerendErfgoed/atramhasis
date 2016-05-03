@@ -137,6 +137,14 @@ define([
         idProperty: 'id',
         labelProperty: 'name'
       });
+
+      this.own(
+        on(this.conceptSchemeSelect, 'change', lang.hitch(this, function() {
+          this.emit('scheme.changed', {
+            schemeId: this.conceptSchemeSelect.value
+          });
+        }))
+      );
     },
 
     _search: function (evt) {

@@ -66,6 +66,7 @@ define([
     _conceptContainer: null,
     _slideMenu: null,
     _addConceptDialog: null,
+    _selectedSchemeId: null,
 
     /**
      * Standard widget function.
@@ -209,7 +210,7 @@ define([
       evt.preventDefault();
       console.debug('AppUi::_createConcept');
 
-      this._addConceptDialog.showDialog();
+      this._addConceptDialog.showDialog(this._selectedSchemeId);
     },
 
     _importConcept  : function(evt) {
@@ -281,6 +282,11 @@ define([
         on(this._searchPane, 'row-select', lang.hitch(this, function (evt) {
           console.debug('catch select event', evt);
           this._openConcept(evt.data.id, evt.scheme);
+        }))
+      );
+      this.own(
+        on(this._searchPane, 'scheme.changed', lang.hitch(this, function (evt) {
+          this._selectedSchemeId = evt.schemeId;
         }))
       );
     },

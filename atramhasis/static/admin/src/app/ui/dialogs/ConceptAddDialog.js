@@ -98,10 +98,14 @@ define([
     /**
      * Toont het dialog
      */
-    showDialog: function () {
+    showDialog: function (scheme) {
       this.dialog.show();
       this.tabContainer.layout();
       this.dialog.resize();
+      if (scheme) {
+        this.schemeNode.value = scheme;
+        this.updateScheme(scheme);
+      }
     },
 
     updateScheme: function(newScheme) {
