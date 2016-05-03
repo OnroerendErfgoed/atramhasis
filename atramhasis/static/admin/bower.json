@@ -15,14 +15,14 @@
     "tests"
   ],
   "dependencies": {
-    "dijit": "~1.10.4",
-    "dojo": "~1.10.4",
-    "util": "dojo-util#~1.10.4",
-    "dgrid": "~0.4.1",
+    "dijit": "~1.10.5",
+    "dojo": "~1.10.5",
+    "util": "dojo-util#~1.10.5",
+    "dgrid": "~1.0.0",
     "dstore": "~1.1.1",
     "dGrowl": "0.1.2",
     "foundation": "~5.5.0",
-    "font-awesome": "~4.3.0"
+    "font-awesome": "~4.6.1"
   },
   "resolutions": {
     "dstore": "1.1.0"
