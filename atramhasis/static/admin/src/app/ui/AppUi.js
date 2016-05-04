@@ -210,11 +210,40 @@ define([
       // TODO add route for conceptscheme
     },
 
+
     _createConcept: function(evt) {
-      evt.preventDefault();
+      evt ? evt.preventDefault() : null;
       console.debug('AppUi::_createConcept');
 
-      this._manageConceptDialog.showDialog(this._selectedSchemeId);
+      this._manageConceptDialog.showDialog(this._selectedSchemeId, 'add');
+    },
+
+    _createAddSubordinateArrayConcept: function(concept, schemeId) {
+      var newConcept = {
+        superordinates: [],
+        type: 'collection'
+      };
+      newConcept.superordinates.push(concept);
+      console.log(newConcept);
+      this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
+    },
+
+    _createAddNarrowerConcept: function(concept, schemeId) {
+      var newConcept = {
+        broader: [],
+        type: 'concept'
+      };
+      newConcept.broader.push(concept);
+      this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
+    },
+
+    _createAddMemberConcept: function(concept, schemeId) {
+      var newConcept = {
+        member_of: [],
+        type: 'concept'
+      };
+      newConcept.member_of.push(concept);
+      this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
     },
 
     _importConcept  : function(evt) {
@@ -291,11 +320,42 @@ define([
           this._openConcept(evt.data.id, evt.scheme);
         }))
       );
-      this.own(
-        on(this._searchPane, 'scheme.changed', lang.hitch(this, function (evt) {
-          this._selectedSchemeId = evt.schemeId;
-        }))
-      );
+      on(this._searchPane, 'scheme.changed', lang.hitch(this, function (evt) {
+        this._selectedSchemeId = evt.schemeId;
+      }));
+      on(this._searchPane, 'concept.create', lang.hitch(this, function (evt) {
+        this._createConcept();
+      }));
+      on(this._searchPane, 'concept.edit', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._editConcept(null, data, this._selectedSchemeId);
+          }));
+      }));
+      on(this._searchPane, 'concept.delete', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._deleteConcept(this._getTab(this._selectedSchemeId + '_' + data.id), data, this._selectedSchemeId);
+          }));
+      }));
+      on(this._searchPane, 'concept.addnarrower', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._createAddNarrowerConcept(data, this._selectedSchemeId);
+          }));
+      }));
+      on(this._searchPane, 'concept.addsubarray', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._createAddSubordinateArrayConcept(data, this._selectedSchemeId);
+          }));
+      }));
+      on(this._searchPane, 'concept.addmember', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._createAddMemberConcept(data, this._selectedSchemeId);
+          }));
+      }));
     },
 
     /* Tab container functions*/
@@ -366,7 +426,7 @@ define([
     _editConcept: function(view, concept, schemeId) {
       console.debug('AppUi::_editConcept');
 
-      this._manageConceptDialog.showDialog(schemeId, concept);
+      this._manageConceptDialog.showDialog(schemeId, concept, 'edit');
     },
 
     _deleteConcept: function(view, concept, schemeId) {

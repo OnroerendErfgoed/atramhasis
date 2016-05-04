@@ -102,7 +102,10 @@ define([
     /**
      * Toont het dialog
      */
-    showDialog: function (scheme, concept) {
+    showDialog: function (scheme, concept, mode) {
+      if (mode) {
+        this._mode = mode;
+      }
       if (scheme) {
         this.schemeNode.value = scheme;
         this.updateScheme(scheme);
@@ -110,14 +113,19 @@ define([
         domAttr.set(this.schemeNode, 'disabled', false);
 
         if (concept) {
-          this._mode = 'edit';
-          this.dialog.set('title', 'Edit <strong>' + concept.label + '</strong>');
+          if (concept.id) {
+            this.dialog.set('title', 'Edit <strong>' + concept.label + '</strong>');
+          }
           domAttr.set(this.schemeNode, 'disabled', true);
           this.relationManager.setConcept(concept);
           this.labelManager.setConcept(concept);
           this.noteManager.setConcept(concept);
           this.matchesManager.setConcept(concept);
           this.concept = concept;
+          this.typeNode.value = concept.type;
+
+          this._toggleMatches(concept.type);
+          this._toggleRelations(concept.type);
         }
       }
       this.dialog.show();
@@ -165,12 +173,10 @@ define([
       var concept = {};
 
       if (this.concept) {
-        concept.id = this.concept.id;
-        concept.uri = this.concept.uri;
-        /* jshint -W106 */
-        concept.concept_scheme = this.scheme;
-        /* jshint +W106 */
+        concept.id = this.concept.id || undefined;
+        concept.uri = this.concept.uri || undefined;
       }
+      concept.concept_scheme = this.scheme;
       concept.type = this.typeNode.value;
 
       // mixin tab data
