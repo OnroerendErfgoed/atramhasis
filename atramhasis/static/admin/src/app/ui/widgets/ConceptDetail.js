@@ -56,22 +56,11 @@ define([
     _openEditDialog: function (evt) {
       console.debug('ConceptDetail::_openEditDialog');
       evt ? evt.preventDefault() : null;
-      this._editDialog = new ConceptEditDialog({
+
+      this.emit('concept.edit', {
         concept: this.concept,
-        scheme: this.scheme,
-        parent: this,
-        languageController: this.languageController,
-        listController: this.listController,
-        conceptSchemeController: this.conceptSchemeController
+        schemeId: this.scheme
       });
-      on(this._editDialog, 'concept.save', lang.hitch(this, function(evt) {
-        console.log(evt);
-        this.emit('concept.save', {
-          concept: evt.concept,
-          schemeId: evt.schemeId
-        });
-      }));
-      this._editDialog.startup();
     },
 
     _deleteConcept: function(evt) {
@@ -251,13 +240,6 @@ define([
     _capitalize: function (s) {
       // returns the first letter capitalized + the string from index 1 and out aka. the rest of the string
       return s[0].toUpperCase() + s.substr(1);
-    },
-
-    _closeEditDialog: function() {
-      if (this._editDialog) {
-        this._editDialog._close();
-        this._editDialog.destroyRecursive();
-      }
     },
 
     _loadMatches: function(matches, matchType) {

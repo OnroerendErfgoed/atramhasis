@@ -2,6 +2,7 @@ define([
   'dojo/_base/declare',
   'dojo/_base/lang',
   'dojo/topic',
+  'dojo/dom-attr',
   'dojo/on',
   'dijit/Dialog',
   'dijit/_Widget',
@@ -13,13 +14,14 @@ define([
   '../managers/RelationManager',
   '../managers/MatchesManager',
   '../../utils/DomUtils',
-  'dojo/text!./templates/ConceptAddDialog.html',
+  'dojo/text!./templates/ManageConceptDialog.html',
   'dijit/layout/TabContainer',
   'dijit/layout/ContentPane'
 ], function (
   declare,
   lang,
   topic,
+  domAttr,
   on,
   Dialog,
   _Widget,
@@ -39,10 +41,12 @@ define([
     baseClass: 'concept-add-dialog',
     dialog: null,
     parent: null,
+    concept: null,
     scheme: null,
     languageController: null,
     listController: null,
     conceptSchemeController: null,
+    _mode: 'add',
 
     /**
      * Standaard widget functie
@@ -98,14 +102,28 @@ define([
     /**
      * Toont het dialog
      */
-    showDialog: function (scheme) {
-      this.dialog.show();
-      this.tabContainer.layout();
-      this.dialog.resize();
+    showDialog: function (scheme, concept) {
       if (scheme) {
         this.schemeNode.value = scheme;
         this.updateScheme(scheme);
+        this.dialog.set('title', 'Add new concept or collection');
+        domAttr.set(this.schemeNode, 'disabled', false);
+
+        if (concept) {
+          this._mode = 'edit';
+          this.dialog.set('title', 'Edit <strong>' + concept.label + '</strong>');
+          domAttr.set(this.schemeNode, 'disabled', true);
+          this.relationManager.setConcept(concept);
+          this.labelManager.setConcept(concept);
+          this.noteManager.setConcept(concept);
+          this.matchesManager.setConcept(concept);
+          this.concept = concept;
+        }
       }
+      this.dialog.show();
+      this.tabContainer.selectChild(this.tabLabels);
+      this.tabContainer.layout();
+      this.dialog.resize();
     },
 
     updateScheme: function(newScheme) {
@@ -117,7 +135,7 @@ define([
       if (type === 'collection') {
         this.tabMatches.set('disabled', true);
         if (this.tabContainer.selectedChildWidget === this.tabMatches) {
-          this.tabContainer.selectChild(this.tabLabels)
+          this.tabContainer.selectChild(this.tabLabels);
         }
       } else {
         this.tabMatches.set('disabled', false);
@@ -146,8 +164,14 @@ define([
       evt ? evt.preventDefault() : null;
       var concept = {};
 
+      if (this.concept) {
+        concept.id = this.concept.id;
+        concept.uri = this.concept.uri;
+        /* jshint -W106 */
+        concept.concept_scheme = this.scheme;
+        /* jshint +W106 */
+      }
       concept.type = this.typeNode.value;
-      concept.concept_scheme = this.schemeNode.value;
 
       // mixin tab data
       var labelData = this.labelManager.getData();
@@ -164,11 +188,18 @@ define([
         lang.mixin(concept, matchesData);
       }
 
-      // emit save event
-      this.emit('new.concept.save', {
-        concept: concept,
-        schemeId: this.schemeNode.value
-      });
+      if (this._mode === 'add') {
+        // emit save event
+        this.emit('new.concept.save', {
+          concept: concept,
+          schemeId: this.schemeNode.value
+        });
+      } else {
+        this.emit('concept.save', {
+          concept: concept,
+          schemeId: this.schemeNode.value
+        });
+      }
     },
 
     _cancel: function(evt) {
@@ -190,6 +221,7 @@ define([
         this.labelManager = new LabelManager({
           languageController: this.languageController,
           listController: this.listController,
+          concept: concept,
           languageList: languages
         }, this.labelsNode);
         this.labelManager.startup();
@@ -201,6 +233,7 @@ define([
         this.noteManager = new NoteManager({
           languageController: this.languageController,
           listController: this.listController,
+          concept: concept,
           languageList: languages
         }, this.notesNode);
         this.noteManager.startup();
@@ -214,7 +247,8 @@ define([
           listController: this.listController,
           conceptSchemeController: this.conceptSchemeController,
           languageList: languages,
-          scheme: this.scheme
+          scheme: this.scheme,
+          concept: concept,
         }, this.relationsNode);
         this.relationManager.startup();
         this.updateScheme(this.schemeNode.value);
@@ -229,6 +263,7 @@ define([
           conceptSchemeController: this.conceptSchemeController,
           languageList: languages,
           scheme: this.scheme,
+          concept: concept,
           matchTypes: this.listController.getMatchTypes()
         }, this.matchesNode);
         this.matchesManager.startup();

@@ -196,6 +196,16 @@ define([
       return grid;
     },
 
+    setConcept: function(concept) {
+      if (concept) {
+        this.concept = concept;
+        this.reset();
+        if (this.concept.matches) {
+          this._loadMatches(this.concept.matches);
+        }
+      }
+    },
+
     _loadMatches: function(matches) {
       if (matches) {
         if (matches.broad) {

@@ -24,7 +24,7 @@ define([
   './widgets/SearchPane',
   './widgets/ConceptDetail',
   './widgets/SlideMenu',
-  './dialogs/ConceptAddDialog',
+  './dialogs/ManageConceptDialog',
   '../utils/ErrorUtils',
   'dojo/NodeList-manipulate'
 ], function (
@@ -50,7 +50,7 @@ define([
   SearchPane,
   ConceptDetail,
   SlideMenu,
-  ConceptAddDialog,
+  ManageConceptDialog,
   errorUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -65,7 +65,7 @@ define([
     _searchPane: null,
     _conceptContainer: null,
     _slideMenu: null,
-    _addConceptDialog: null,
+    _manageConceptDialog: null,
     _selectedSchemeId: null,
 
     /**
@@ -79,17 +79,21 @@ define([
       this._registerRoutes();
       this._createSlideMenu(this.menuContainerNode);
 
-      this._addConceptDialog = new ConceptAddDialog({
+      this._manageConceptDialog = new ManageConceptDialog({
         parent: this,
         languageController: this.languageController,
         listController: this.listController,
         conceptSchemeController: this.conceptSchemeController
       });
-      on(this._addConceptDialog, 'new.concept.save', lang.hitch(this, function(evt) {
+      on(this._manageConceptDialog, 'new.concept.save', lang.hitch(this, function(evt) {
         console.log(evt);
-        this._saveNewConcept(this._addConceptDialog, evt.concept, evt.schemeId);
+        this._saveNewConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
       }));
-      this._addConceptDialog.startup();
+      on(this._manageConceptDialog, 'concept.save', lang.hitch(this, function(evt) {
+        console.log(evt);
+        this._saveConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
+      }));
+      this._manageConceptDialog.startup();
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
     },
@@ -210,7 +214,7 @@ define([
       evt.preventDefault();
       console.debug('AppUi::_createConcept');
 
-      this._addConceptDialog.showDialog(this._selectedSchemeId);
+      this._manageConceptDialog.showDialog(this._selectedSchemeId);
     },
 
     _importConcept  : function(evt) {
@@ -268,6 +272,9 @@ define([
           on(conceptDetail, 'concept.delete', lang.hitch(this, function(evt) {
             this._deleteConcept(conceptDetail, evt.concept, evt.schemeId);
           }));
+          on(conceptDetail, 'concept.edit', lang.hitch(this, function(evt) {
+            this._editConcept(conceptDetail, evt.concept, evt.schemeId);
+          }))
           conceptDetail.startup();
           this._addTab(conceptDetail);
         }));
@@ -356,6 +363,12 @@ define([
       }
     },
 
+    _editConcept: function(view, concept, schemeId) {
+      console.debug('AppUi::_editConcept');
+
+      this._manageConceptDialog.showDialog(schemeId, concept);
+    },
+
     _deleteConcept: function(view, concept, schemeId) {
       var content = '<p style="font-size: 15px;">Are you sure you want to remove <strong>'+ concept.label +
         '</strong> (ID: ' + concept.id + ') from scheme <strong>' + schemeId + '</strong>?</p>';
@@ -401,8 +414,9 @@ define([
 
       this.conceptController.saveConcept(concept, schemeId, 'PUT').then(lang.hitch(this, function(res) {
         // save successful
-        view._closeEditDialog();
-        this._closeTab(view);
+        view._close();
+        var tab = this._getTab(schemeId + '_' + concept.id);
+        this._closeTab(tab);
         this._openConcept(res.id, schemeId);
         topic.publish('dGrowl', 'The concept was successfully saved.', {
           'title': 'Save successful',
@@ -437,6 +451,13 @@ define([
           'channel': 'error'
         });
       });
+    },
+
+    _closeEditDialog: function() {
+      if (this._editDialog) {
+        this._editDialog._close();
+        this._editDialog.destroyRecursive();
+      }
     }
   });
 });

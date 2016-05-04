@@ -55,8 +55,8 @@ define([
       this.inherited(arguments);
       console.debug('NoteManager::postCreate');
 
-      var TrackableMemory = declare([Memory, Trackable]);
-      this._noteStore = new TrackableMemory({ data: [] });
+      this.trackableMemory = declare([Memory, Trackable]);
+      this._noteStore = new this.trackableMemory({ data: [] });
       if (this.concept) {
         array.forEach(this.concept.notes, lang.hitch(this, function (item) {
           item.id = this._index++;
@@ -174,6 +174,18 @@ define([
         notes: this._noteStore.data
       }
       return notes;
+    },
+
+    setConcept: function(concept) {
+      if (concept) {
+        this.concept = concept;
+        this._noteStore = new this.trackableMemory({ data: [] });
+        array.forEach(this.concept.notes, lang.hitch(this, function (item) {
+          item.id = this._index++;
+          this._noteStore.put(item);
+        }));
+        this._noteGrid.set('collection', this._noteStore);
+      }
     },
 
     _addNote: function(evt) {

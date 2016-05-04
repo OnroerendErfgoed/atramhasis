@@ -71,39 +71,39 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       console.debug('RelationManager::postCreate');
-      var TrackableMemory = declare([Memory, Trackable]);
+      this.trackableMemory = declare([Memory, Trackable]);
 
-      this._broaderStore = new TrackableMemory({ data: this.concept ? this.concept.broader : [] });
+      this._broaderStore = new this.trackableMemory({ data: this.concept ? this.concept.broader : [] });
       this._broaderGrid = this._createGrid({
         collection: this._broaderStore
       }, this.broaderGridNode);
 
-      this._narrowerStore = new TrackableMemory({ data: this.concept ? this.concept.narrower : [] });
+      this._narrowerStore = new this.trackableMemory({ data: this.concept ? this.concept.narrower : [] });
       this._narrowerGrid = this._createGrid({
         collection: this._narrowerStore
       }, this.narrowerGridNode);
 
-      this._relatedStore = new TrackableMemory({ data: this.concept ? this.concept.related : [] });
+      this._relatedStore = new this.trackableMemory({ data: this.concept ? this.concept.related : [] });
       this._relatedGrid = this._createGrid({
         collection: this._relatedStore
       }, this.relatedGridNode);
 
-      this._memberOfStore = new TrackableMemory({ data: this.concept ? this.concept.member_of : [] });
+      this._memberOfStore = new this.trackableMemory({ data: this.concept ? this.concept.member_of : [] });
       this._memberOfGrid = this._createGrid({
         collection: this._memberOfStore
       }, this.memberOfGridNode);
 
-      this._membersStore = new TrackableMemory({ data: this.concept ? this.concept.members : [] });
+      this._membersStore = new this.trackableMemory({ data: this.concept ? this.concept.members : [] });
       this._membersGrid = this._createGrid({
         collection: this._membersStore
       }, this.membersGridNode);
 
-      this._subordinateStore = new TrackableMemory({ data: this.concept ? this.concept.subordinate_arrays : [] });
+      this._subordinateStore = new this.trackableMemory({ data: this.concept ? this.concept.subordinate_arrays : [] });
       this._subordinateGrid = this._createGrid({
         collection: this._subordinateStore
       }, this.subordinateGridNode);
 
-      this._superordinatesCollStore = new TrackableMemory({ data: this.concept ? this.concept.superordinates : [] });
+      this._superordinatesCollStore = new this.trackableMemory({ data: this.concept ? this.concept.superordinates : [] });
       this._superordinatesCollGrid = this._createGrid({
         collection: this._superordinatesCollStore
       }, this.superordinatesCollGridNode);
@@ -302,6 +302,32 @@ define([
         return true;
       }
       return false;
+    },
+
+    setConcept: function(concept) {
+      if (concept) {
+        this.concept = concept;
+        this._broaderStore = new this.trackableMemory({data: this.concept ? this.concept.broader : []});
+        this._broaderGrid.set('collection', this._broaderStore);
+        this._narrowerStore = new this.trackableMemory({data: this.concept ? this.concept.narrower : []});
+        this._narrowerGrid.set('collection', this._narrowerStore);
+        this._relatedStore = new this.trackableMemory({data: this.concept ? this.concept.related : []});
+        this._relatedGrid.set('collection', this._relatedStore);
+        this._memberOfStore = new this.trackableMemory({data: this.concept ? this.concept.member_of : []});
+        this._memberOfGrid.set('collection', this._memberOfStore);
+        this._membersStore = new this.trackableMemory({data: this.concept ? this.concept.members : []});
+        this._membersGrid.set('collection', this._membersStore);
+        this._subordinateStore = new this.trackableMemory({data: this.concept ? this.concept.subordinate_arrays : []});
+        this._subordinateGrid.set('collection', this._subordinateStore);
+        this._superordinatesCollStore = new this.trackableMemory({data: this.concept ? this.concept.superordinates : []});
+        this._superordinatesCollGrid.set('collection', this._superordinatesCollStore);
+
+        if (this.concept.type === 'collection') {
+          this.setCollectionTypes();
+        } else {
+          this.setConceptTypes();
+        }
+      }
     },
 
     _addBroader: function(evt) {
