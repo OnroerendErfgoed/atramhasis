@@ -100,7 +100,6 @@ define([
         link: {
           label: '',
           renderCell: function(object){
-            console.log(object);
             if (object && object.uri) {
               return domConstruct.create('a', { href: object.uri, target: '_blank', title: object.uri,
                 innerHTML: '<i class="fa fa-external-link"></i>' });
