@@ -154,6 +154,7 @@ define([
           this.emit('scheme.changed', {
             schemeId: this.conceptSchemeSelect.value
           });
+          this._search();
         }))
       );
     },
@@ -246,7 +247,7 @@ define([
 
 
     _search: function (evt) {
-      evt.preventDefault();
+      evt ? evt.preventDefault() : null;
       var schemeId = domUtils.getSelectedOption(this.conceptSchemeSelect);
       if (schemeId == -1) {
         topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': false, 'channel':'warn'});
