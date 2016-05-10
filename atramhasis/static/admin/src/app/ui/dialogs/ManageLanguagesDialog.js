@@ -21,10 +21,12 @@ define([
     parentNode: null,
     baseClass: 'manage-languages-dialog',
     title: 'Manage languages',
+    languageController: null,
+    _langStore: null,
+    _langGrid: null,
 
     postCreate: function () {
       this.inherited(arguments);
-
     },
 
     startup: function () {

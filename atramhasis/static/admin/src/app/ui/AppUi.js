@@ -25,6 +25,7 @@ define([
   './widgets/ConceptDetail',
   './widgets/SlideMenu',
   './dialogs/ManageConceptDialog',
+  './dialogs/ManageLanguagesDialog',
   '../utils/ErrorUtils',
   'dojo/NodeList-manipulate'
 ], function (
@@ -51,6 +52,7 @@ define([
   ConceptDetail,
   SlideMenu,
   ManageConceptDialog,
+  ManageLanguagesDialog,
   errorUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -66,6 +68,7 @@ define([
     _conceptContainer: null,
     _slideMenu: null,
     _manageConceptDialog: null,
+    _manageLanguagesDialog: null,
     _selectedSchemeId: null,
 
     /**
@@ -94,6 +97,12 @@ define([
         this._saveConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
       }));
       this._manageConceptDialog.startup();
+
+      this._manageLanguagesDialog = new ManageLanguagesDialog({
+        parentNode: this,
+        languageController: this.languageController
+      });
+      this._manageLanguagesDialog.startup();
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
     },
@@ -254,6 +263,7 @@ define([
     _editLanguages: function (evt) {
       evt.preventDefault();
       console.debug('AppUi::_editLanguages');
+      this._manageLanguagesDialog.show();
     },
 
     _editConceptScheme: function (evt) {
