@@ -2,6 +2,7 @@ define([
   'dojo/_base/declare',
   'dojo/_base/lang',
   'dojo/topic',
+  'dojo/dom-attr',
   'dojo/on',
   'dijit/Dialog',
   'dijit/_Widget',
@@ -13,13 +14,14 @@ define([
   '../managers/RelationManager',
   '../managers/MatchesManager',
   '../../utils/DomUtils',
-  'dojo/text!./templates/ConceptEditDialog.html',
+  'dojo/text!./templates/ManageConceptDialog.html',
   'dijit/layout/TabContainer',
   'dijit/layout/ContentPane'
 ], function (
   declare,
   lang,
   topic,
+  domAttr,
   on,
   Dialog,
   _Widget,
@@ -36,14 +38,15 @@ define([
   return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
     templateString: template,
-    baseClass: 'concept-edit-dialog',
-    concept: null,
+    baseClass: 'concept-add-dialog',
     dialog: null,
     parent: null,
+    concept: null,
     scheme: null,
     languageController: null,
     listController: null,
     conceptSchemeController: null,
+    _mode: 'add',
 
     /**
      * Standaard widget functie
@@ -51,11 +54,11 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       this.dialog = new Dialog({
-        title: 'Edit <strong>' + this.concept.label + '</strong>',
-        style: 'width: 1000px; min-height: 700px;',
-        onHide: lang.hitch(this, function() {
-          this.parent._closeEditDialog();
-        })
+        title: 'Add new concept',
+        style: 'width: 1000px; min-height: 700px;'
+        //onHide: lang.hitch(this, function() {
+        //  this.parent._closeAddDialog();
+        //})
       });
       this.dialog.closeText.innerHTML = '<i class="fa fa-times"></i>';
       this.dialog.set('content', this);
@@ -70,10 +73,21 @@ define([
         this._toggleRelations(evt.target.value);
       }));
 
-      this._createLabelsTab(this.concept);
-      this._createNotesTab(this.concept);
-      this._createRelationsTab(this.concept);
-      this._createMatchesTab(this.concept);
+      domUtils.addOptionsToSelect(this.schemeNode, {
+        data: this.conceptSchemeController.conceptSchemeList,
+        idProperty: 'id',
+        labelProperty: 'name'
+      });
+      on(this.schemeNode, 'change', lang.hitch(this, function(evt) {
+        this.updateScheme(evt.target.value);
+      }));
+
+      this.scheme = this.schemeNode.value;
+
+      this._createLabelsTab();
+      this._createNotesTab();
+      this._createRelationsTab();
+      this._createMatchesTab();
     },
 
     /**
@@ -81,34 +95,55 @@ define([
      */
     startup: function () {
       this.inherited(arguments);
-      if (this.concept) {
-        this._setData(this.concept);
-      }
-      this.showDialog();
       this.tabContainer.layout();
       this.dialog.resize();
-    },
-
-    _setData: function(concept) {
-      this.schemeNode.value = this.scheme;
-      this.typeNode.value = this.concept.type;
-      this._toggleMatches(this.concept.type);
     },
 
     /**
      * Toont het dialog
      */
-    showDialog: function () {
-      this.tabContainer.layout();
+    showDialog: function (scheme, concept, mode) {
+      if (mode) {
+        this._mode = mode;
+      }
+      if (scheme) {
+        this.schemeNode.value = scheme;
+        this.updateScheme(scheme);
+        this.dialog.set('title', 'Add new concept or collection');
+        domAttr.set(this.schemeNode, 'disabled', false);
+
+        if (concept) {
+          if (concept.id) {
+            this.dialog.set('title', 'Edit <strong>' + concept.label + '</strong>');
+          }
+          domAttr.set(this.schemeNode, 'disabled', true);
+          this.relationManager.setConcept(concept);
+          this.labelManager.setConcept(concept);
+          this.noteManager.setConcept(concept);
+          this.matchesManager.setConcept(concept);
+          this.concept = concept;
+          this.typeNode.value = concept.type;
+
+          this._toggleMatches(concept.type);
+          this._toggleRelations(concept.type);
+        }
+      }
       this.dialog.show();
+      this.tabContainer.selectChild(this.tabLabels);
+      this.tabContainer.layout();
       this.dialog.resize();
+    },
+
+    updateScheme: function(newScheme) {
+      this.scheme = newScheme;
+      this.relationManager.setScheme(newScheme);
     },
 
     _toggleMatches: function(type) {
       if (type === 'collection') {
         this.tabMatches.set('disabled', true);
         if (this.tabContainer.selectedChildWidget === this.tabMatches) {
-          this.tabContainer.selectChild(this.tabLabels)
+          this.tabContainer.selectChild(this.tabLabels);
         }
       } else {
         this.tabMatches.set('disabled', false);
@@ -128,6 +163,8 @@ define([
      * @private
      */
     _close: function () {
+
+      this._reset();
       this.dialog.hide();
     },
 
@@ -135,15 +172,11 @@ define([
       evt ? evt.preventDefault() : null;
       var concept = {};
 
-      // set concept specific fields
       if (this.concept) {
-        concept.id = this.concept.id;
-        concept.uri = this.concept.uri;
-        /* jshint -W106 */
-        concept.concept_scheme = this.scheme;
-        /* jshint +W106 */
+        concept.id = this.concept.id || undefined;
+        concept.uri = this.concept.uri || undefined;
       }
-
+      concept.concept_scheme = this.scheme;
       concept.type = this.typeNode.value;
 
       // mixin tab data
@@ -161,17 +194,32 @@ define([
         lang.mixin(concept, matchesData);
       }
 
-      // emit save event
-      this.emit('concept.save', {
-        concept: concept,
-        schemeId: this.scheme
-      });
-
+      if (this._mode === 'add') {
+        // emit save event
+        this.emit('new.concept.save', {
+          concept: concept,
+          schemeId: this.schemeNode.value
+        });
+      } else {
+        this.emit('concept.save', {
+          concept: concept,
+          schemeId: this.schemeNode.value
+        });
+      }
     },
 
     _cancel: function(evt) {
       evt ? evt.preventDefault() : null;
-      this.parent._closeEditDialog();
+      this._close();
+    },
+
+    _reset: function() {
+      this.schemeNode.selectedIndex = 0;
+      this.typeNode.selectedIndex = 0;
+      this.labelManager.reset();
+      this.noteManager.reset();
+      this.relationManager.reset();
+      this.matchesManager.reset();
     },
 
     _createLabelsTab: function(concept) {
@@ -204,11 +252,12 @@ define([
           languageController: this.languageController,
           listController: this.listController,
           conceptSchemeController: this.conceptSchemeController,
-          concept: concept,
           languageList: languages,
-          scheme: this.scheme
+          scheme: this.scheme,
+          concept: concept,
         }, this.relationsNode);
         this.relationManager.startup();
+        this.updateScheme(this.schemeNode.value);
       }));
     },
 
@@ -218,9 +267,9 @@ define([
           languageController: this.languageController,
           listController: this.listController,
           conceptSchemeController: this.conceptSchemeController,
-          concept: concept,
           languageList: languages,
           scheme: this.scheme,
+          concept: concept,
           matchTypes: this.listController.getMatchTypes()
         }, this.matchesNode);
         this.matchesManager.startup();

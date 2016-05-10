@@ -11,8 +11,10 @@ define([
   'dojo/on',
   'dojo/window',
   'dojo/router',
+  'dojo/query',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
+  'dijit/ConfirmDialog',
   'dojo/text!./templates/AppUi.html',
   'dojo/text!./templates/Help.html',
   'dijit/layout/ContentPane',
@@ -22,7 +24,9 @@ define([
   './widgets/SearchPane',
   './widgets/ConceptDetail',
   './widgets/SlideMenu',
-  '../utils/ErrorUtils'
+  './dialogs/ManageConceptDialog',
+  '../utils/ErrorUtils',
+  'dojo/NodeList-manipulate'
 ], function (
   declare,
   lang,
@@ -33,8 +37,10 @@ define([
   on,
   wind,
   router,
+  query,
   _WidgetBase,
   _TemplatedMixin,
+  ConfirmDialog,
   template,
   helpTemplate,
   ContentPane,
@@ -44,6 +50,7 @@ define([
   SearchPane,
   ConceptDetail,
   SlideMenu,
+  ManageConceptDialog,
   errorUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -58,6 +65,8 @@ define([
     _searchPane: null,
     _conceptContainer: null,
     _slideMenu: null,
+    _manageConceptDialog: null,
+    _selectedSchemeId: null,
 
     /**
      * Standard widget function.
@@ -69,6 +78,22 @@ define([
       this._registerLoadingEvents();
       this._registerRoutes();
       this._createSlideMenu(this.menuContainerNode);
+
+      this._manageConceptDialog = new ManageConceptDialog({
+        parent: this,
+        languageController: this.languageController,
+        listController: this.listController,
+        conceptSchemeController: this.conceptSchemeController
+      });
+      on(this._manageConceptDialog, 'new.concept.save', lang.hitch(this, function(evt) {
+        console.log(evt);
+        this._saveNewConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
+      }));
+      on(this._manageConceptDialog, 'concept.save', lang.hitch(this, function(evt) {
+        console.log(evt);
+        this._saveConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
+      }));
+      this._manageConceptDialog.startup();
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
     },
@@ -185,9 +210,40 @@ define([
       // TODO add route for conceptscheme
     },
 
+
     _createConcept: function(evt) {
-      evt.preventDefault();
+      evt ? evt.preventDefault() : null;
       console.debug('AppUi::_createConcept');
+
+      this._manageConceptDialog.showDialog(this._selectedSchemeId, 'add');
+    },
+
+    _createAddSubordinateArrayConcept: function(concept, schemeId) {
+      var newConcept = {
+        superordinates: [],
+        type: 'collection'
+      };
+      newConcept.superordinates.push(concept);
+      console.log(newConcept);
+      this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
+    },
+
+    _createAddNarrowerConcept: function(concept, schemeId) {
+      var newConcept = {
+        broader: [],
+        type: 'concept'
+      };
+      newConcept.broader.push(concept);
+      this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
+    },
+
+    _createAddMemberConcept: function(concept, schemeId) {
+      var newConcept = {
+        member_of: [],
+        type: 'concept'
+      };
+      newConcept.member_of.push(concept);
+      this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
     },
 
     _importConcept  : function(evt) {
@@ -242,6 +298,12 @@ define([
           on(conceptDetail, 'concept.save', lang.hitch(this, function(evt) {
             this._saveConcept(conceptDetail, evt.concept, evt.schemeId);
           }));
+          on(conceptDetail, 'concept.delete', lang.hitch(this, function(evt) {
+            this._deleteConcept(conceptDetail, evt.concept, evt.schemeId);
+          }));
+          on(conceptDetail, 'concept.edit', lang.hitch(this, function(evt) {
+            this._editConcept(conceptDetail, evt.concept, evt.schemeId);
+          }))
           conceptDetail.startup();
           this._addTab(conceptDetail);
         }));
@@ -258,6 +320,42 @@ define([
           this._openConcept(evt.data.id, evt.scheme);
         }))
       );
+      on(this._searchPane, 'scheme.changed', lang.hitch(this, function (evt) {
+        this._selectedSchemeId = evt.schemeId;
+      }));
+      on(this._searchPane, 'concept.create', lang.hitch(this, function (evt) {
+        this._createConcept();
+      }));
+      on(this._searchPane, 'concept.edit', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._editConcept(null, data, this._selectedSchemeId);
+          }));
+      }));
+      on(this._searchPane, 'concept.delete', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._deleteConcept(this._getTab(this._selectedSchemeId + '_' + data.id), data, this._selectedSchemeId);
+          }));
+      }));
+      on(this._searchPane, 'concept.addnarrower', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._createAddNarrowerConcept(data, this._selectedSchemeId);
+          }));
+      }));
+      on(this._searchPane, 'concept.addsubarray', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._createAddSubordinateArrayConcept(data, this._selectedSchemeId);
+          }));
+      }));
+      on(this._searchPane, 'concept.addmember', lang.hitch(this, function (evt) {
+        this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
+          lang.hitch(this, function (data) {
+            this._createAddMemberConcept(data, this._selectedSchemeId);
+          }));
+      }));
     },
 
     /* Tab container functions*/
@@ -325,13 +423,60 @@ define([
       }
     },
 
+    _editConcept: function(view, concept, schemeId) {
+      console.debug('AppUi::_editConcept');
+
+      this._manageConceptDialog.showDialog(schemeId, concept, 'edit');
+    },
+
+    _deleteConcept: function(view, concept, schemeId) {
+      var content = '<p style="font-size: 15px;">Are you sure you want to remove <strong>'+ concept.label +
+        '</strong> (ID: ' + concept.id + ') from scheme <strong>' + schemeId + '</strong>?</p>';
+      var confirmationDialog = new ConfirmDialog({
+        title: 'Delete concept',
+        content: content,
+        baseClass: 'confirm-dialog'
+      });
+      query('.dijitButton', confirmationDialog.domNode).addClass('button tiny');
+      confirmationDialog.closeText.innerHTML = '<i class="fa fa-times"></i>';
+
+      on(confirmationDialog, 'close', function() {
+        confirmationDialog.destroy();
+      });
+      on(confirmationDialog, 'execute', lang.hitch(this, function () {
+        this._showLoading('Removing concept..');
+        this.conceptController.deleteConcept(concept, schemeId).then(
+          lang.hitch(this, function(result) {
+            console.log('delete concept results', result);
+            if (view) {
+              this._closeTab(view);
+            }
+            this._hideLoading();
+          }),
+          lang.hitch(this, function (error) {
+            console.error('delete concept error', error);
+            var parsedError = errorUtils.parseError(error);
+            this._hideLoading();
+            topic.publish('dGrowl', parsedError.message, {
+              'title': parsedError.title,
+              'sticky': true,
+              'channel': 'error'
+            });
+          })
+        );
+      }));
+
+      confirmationDialog.show();
+    },
+
     _saveConcept: function(view, concept, schemeId) {
       console.debug('ConceptContainer::_saveConcept', concept);
 
-      this.conceptController.saveConcept(concept, schemeId).then(lang.hitch(this, function(res) {
+      this.conceptController.saveConcept(concept, schemeId, 'PUT').then(lang.hitch(this, function(res) {
         // save successful
-        view._closeEditDialog();
-        this._closeTab(view);
+        view._close();
+        var tab = this._getTab(schemeId + '_' + concept.id);
+        this._closeTab(tab);
         this._openConcept(res.id, schemeId);
         topic.publish('dGrowl', 'The concept was successfully saved.', {
           'title': 'Save successful',
@@ -346,6 +491,33 @@ define([
           'channel': 'error'
         });
       });
+    },
+
+    _saveNewConcept: function(view, concept, schemeId) {
+      this.conceptController.saveConcept(concept, schemeId, 'POST').then(lang.hitch(this, function(res) {
+        // save successful
+        view._close();
+        this._openConcept(res.id, schemeId);
+        topic.publish('dGrowl', 'The concept was successfully saved.', {
+          'title': 'Save successful',
+          'sticky': false,
+          'channel': 'info'
+        });
+      }), function(err) {
+        var parsedError = errorUtils.parseError(err);
+        topic.publish('dGrowl', parsedError.message, {
+          'title': parsedError.title,
+          'sticky': true,
+          'channel': 'error'
+        });
+      });
+    },
+
+    _closeEditDialog: function() {
+      if (this._editDialog) {
+        this._editDialog._close();
+        this._editDialog.destroyRecursive();
+      }
     }
   });
 });

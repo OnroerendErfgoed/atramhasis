@@ -9,6 +9,9 @@ define([
   'dgrid/OnDemandGrid',
   'dgrid/Keyboard',
   'dgrid/Selection',
+  'dijit/Menu',
+  'dijit/MenuItem',
+  'dijit/MenuSeparator',
   'dojo/dom-construct',
   'dojo/topic',
   'dojo/on',
@@ -26,6 +29,9 @@ define([
   OnDemandGrid,
   Keyboard,
   Selection,
+  Menu,
+  MenuItem,
+  MenuSeparator,
   domConstruct,
   topic,
   on,
@@ -85,31 +91,36 @@ define([
         sort: {
           property: 'label'
         },
-        selectionMode: 'extended',
+        selectionMode: 'single',
         cellNavigation: false,
         loadingMessage: 'Loading data...',
         noDataMessage: 'No results found.',
         collection: null
       }, node);
 
-      grid.on('dgrid-select', lang.hitch(this, function (event) {
-        console.debug('SearchPane row selected: ', event.rows);
-        array.forEach(event.rows, function (row) {
-          this._rowSelect(row);
-        }, this);
+      var contextMenu = this._createContextMenu();
+      var collectionContextMenu = this._createCollectionContextMenu();
 
-        // Iterate through all currently-selected items
-        //for (var id in grid.selection) {
-        //    if (grid.selection[id]) {
-        // ...
-        //}
-        //}
+      grid.on('.dgrid-content .dgrid-row:click', lang.hitch(this, function (event) {
+        console.debug('SearchPane row selected: ', event);
+        var row = grid.row(event);
+        if (row) {
+          this._rowSelect(row);
+        }
       }));
-      grid.on('dgrid-deselect', lang.hitch(this, function (event) {
-        console.debug('SearchPane row de-selected: ', event.rows);
-        array.forEach(event.rows, function (row) {
-          this._rowDeSelect(row);
-        }, this);
+
+      grid.on('.dgrid-row:contextmenu', lang.hitch(this, function(evt){
+        evt.preventDefault(); // prevent default browser context menu
+        var type = grid.row(evt).data.type;
+        if (type && type === 'concept') {
+          contextMenu.selectedGridItem = grid.row(evt).data;
+          // security can be added here
+          contextMenu._scheduleOpen(this, null, {x: evt.pageX, y: evt.pageY});
+        } else {
+          collectionContextMenu.selectedGridItem = grid.row(evt).data;
+          // security can be added here
+          collectionContextMenu._scheduleOpen(this, null, {x: evt.pageX, y: evt.pageY});
+        }
       }));
     },
 
@@ -137,7 +148,102 @@ define([
         idProperty: 'id',
         labelProperty: 'name'
       });
+
+      this.own(
+        on(this.conceptSchemeSelect, 'change', lang.hitch(this, function() {
+          this.emit('scheme.changed', {
+            schemeId: this.conceptSchemeSelect.value
+          });
+        }))
+      );
     },
+
+    _createContextMenu: function () {
+      var contextMenu = new Menu({});
+      var pane = this;
+
+      contextMenu.addChild(new MenuItem({
+        label: 'Add narrower concept',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.addnarrower', {
+            conceptId: contextMenu.selectedGridItem.id
+          });
+        })
+      }));
+      contextMenu.addChild(new MenuItem({
+        label: 'Add subordinate array',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.addsubarray', {
+            conceptId: contextMenu.selectedGridItem.id
+          });
+        })
+      }));
+      contextMenu.addChild(new MenuItem({
+        label: 'Edit',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.edit', {
+            conceptId: contextMenu.selectedGridItem.id
+          });
+        })
+      }));
+      contextMenu.addChild(new MenuItem({
+        label: 'Delete',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.delete', {
+            conceptId: contextMenu.selectedGridItem.id
+          });
+        })
+      }));
+      contextMenu.addChild(new MenuSeparator());
+      contextMenu.addChild(new MenuItem({
+        label: 'Add concept or collection',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.create');
+        })
+      }));
+
+      return contextMenu;
+    },
+
+    _createCollectionContextMenu: function () {
+      var contextMenu = new Menu({});
+      var pane = this;
+
+      contextMenu.addChild(new MenuItem({
+        label: 'Add member',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.addmember', {
+            conceptId: contextMenu.selectedGridItem.id
+          });
+        })
+      }));
+      contextMenu.addChild(new MenuItem({
+        label: 'Edit',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.edit', {
+            conceptId: contextMenu.selectedGridItem.id
+          });
+        })
+      }));
+      contextMenu.addChild(new MenuItem({
+        label: 'Delete',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.delete', {
+            conceptId: contextMenu.selectedGridItem.id
+          });
+        })
+      }));
+      contextMenu.addChild(new MenuSeparator());
+      contextMenu.addChild(new MenuItem({
+        label: 'Add concept or collection',
+        onClick: lang.hitch(this, function () {
+          pane.emit('concept.create');
+        })
+      }));
+
+      return contextMenu;
+    },
+
 
     _search: function (evt) {
       evt.preventDefault();
@@ -155,7 +261,7 @@ define([
       var store = this.appUi.conceptController.getConceptStore(schemeId).filter(filter);
       this.init(schemeId, store);
       this.appUi._slideMenu._slideOpen();
-      this._resetSearchInputs();
+      //this._resetSearchInputs();
     },
 
     _resetSearchInputs: function () {

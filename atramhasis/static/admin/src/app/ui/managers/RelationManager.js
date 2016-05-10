@@ -57,48 +57,63 @@ define([
     _relatedGrid: null,
     _memberOfStore: null,
     _memberOfGrid: null,
+    _membersStore: null,
+    _membersGrid: null,
     _subordinateStore: null,
     _subordinateGrid: null,
+    _superordinatesCollStore: null,
+    _superordinatesCollGrid: null,
     _index: 0,
+    _isCollection: null,
     _relationStore: null,
     _addRelationDialog: null,
 
     postCreate: function () {
       this.inherited(arguments);
       console.debug('RelationManager::postCreate');
-      var TrackableMemory = declare([Memory, Trackable]);
+      this.trackableMemory = declare([Memory, Trackable]);
 
-      this._broaderStore = new TrackableMemory({ data: this.concept.broader });
+      this._broaderStore = new this.trackableMemory({ data: this.concept ? this.concept.broader : [] });
       this._broaderGrid = this._createGrid({
         collection: this._broaderStore
       }, this.broaderGridNode);
 
-      this._narrowerStore = new TrackableMemory({ data: this.concept.narrower });
+      this._narrowerStore = new this.trackableMemory({ data: this.concept ? this.concept.narrower : [] });
       this._narrowerGrid = this._createGrid({
         collection: this._narrowerStore
       }, this.narrowerGridNode);
 
-      this._relatedStore = new TrackableMemory({ data: this.concept.related });
+      this._relatedStore = new this.trackableMemory({ data: this.concept ? this.concept.related : [] });
       this._relatedGrid = this._createGrid({
         collection: this._relatedStore
       }, this.relatedGridNode);
 
-      this._memberOfStore = new TrackableMemory({ data: this.concept.member_of });
+      this._memberOfStore = new this.trackableMemory({ data: this.concept ? this.concept.member_of : [] });
       this._memberOfGrid = this._createGrid({
         collection: this._memberOfStore
       }, this.memberOfGridNode);
 
-      this._subordinateStore = new TrackableMemory({ data: this.concept.subordinate_arrays });
+      this._membersStore = new this.trackableMemory({ data: this.concept ? this.concept.members : [] });
+      this._membersGrid = this._createGrid({
+        collection: this._membersStore
+      }, this.membersGridNode);
+
+      this._subordinateStore = new this.trackableMemory({ data: this.concept ? this.concept.subordinate_arrays : [] });
       this._subordinateGrid = this._createGrid({
         collection: this._subordinateStore
       }, this.subordinateGridNode);
 
-      this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme)
+      this._superordinatesCollStore = new this.trackableMemory({ data: this.concept ? this.concept.superordinates : [] });
+      this._superordinatesCollGrid = this._createGrid({
+        collection: this._superordinatesCollStore
+      }, this.superordinatesCollGridNode);
+
+      this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme);
       this._addRelationDialog = new AddRelationDialog({
         parentNode: this,
         relationStore: this._relationStore,
-        scheme: this.scheme,
-        concept: this.concept
+        concept: this.concept,
+        scheme: this.scheme
       });
       this._addRelationDialog.startup();
       this.own(
@@ -107,6 +122,11 @@ define([
         }))
       );
 
+      if (this.concept && this.concept.type === 'collection') {
+        this.setCollectionTypes();
+      } else {
+        this.setConceptTypes();
+      }
     },
 
     startup: function () {
@@ -116,7 +136,67 @@ define([
       this._narrowerGrid.startup();
       this._relatedGrid.startup();
       this._memberOfGrid.startup();
+      this._membersGrid.startup();
       this._subordinateGrid.startup();
+      this._superordinatesCollGrid.startup();
+    },
+
+    setScheme: function (scheme) {
+      this.scheme = scheme;
+      this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme);
+      this._addRelationDialog.setScheme(scheme);
+    },
+
+    reset: function() {
+      var TrackableMemory = declare([Memory, Trackable]);
+      this._broaderStore = new TrackableMemory({ data: [] });
+      this._broaderGrid.set('collection', this._broaderStore);
+      this._narrowerStore = new TrackableMemory({ data: [] });
+      this._narrowerGrid.set('collection', this._narrowerStore);
+      this._relatedStore = new TrackableMemory({ data: [] });
+      this._relatedGrid.set('colleciton', this._relatedStore);
+      this._memberOfStore = new TrackableMemory({ data: [] });
+      this._memberOfGrid.set('collection', this._memberOfStore);
+      this._subordinateStore = new TrackableMemory({ data: [] });
+      this._subordinateGrid.set('collection', this._subordinateStore);
+      this._superordinatesCollStore = new TrackableMemory({ data: [] });
+      this._superordinatesCollGrid.set('collection', this._superordinatesCollStore);
+    },
+
+    setCollectionTypes: function() {
+      this._isCollection = true;
+      console.log('collection');
+      this.broaderContainerNode.style.display = 'none';
+      this.broaderGridNode.style.display = 'none';
+      this.narrowerContainerNode.style.display = 'none';
+      this.narrowerGridNode.style.display = 'none';
+      this.relatedContainerNode.style.display = 'none';
+      this.relatedGridNode.style.display = 'none';
+      this.subordinateArraysContainerNode.style.display = 'none';
+      this.subordinateGridNode.style.display = 'none';
+
+      this.superordinatesCollContainerNode.style.display = 'block';
+      this.superordinatesCollGridNode.style.display = 'block';
+      this.membersContainerNode.style.display = 'block';
+      this.membersGridNode.style.display = 'block';
+    },
+
+    setConceptTypes: function() {
+      this._isCollection = false;
+      console.log('concept');
+      this.broaderContainerNode.style.display = 'block';
+      this.broaderGridNode.style.display = 'block';
+      this.narrowerContainerNode.style.display = 'block';
+      this.narrowerGridNode.style.display = 'block';
+      this.relatedContainerNode.style.display = 'block';
+      this.relatedGridNode.style.display = 'block';
+      this.subordinateArraysContainerNode.style.display = 'block';
+      this.subordinateGridNode.style.display = 'block';
+
+      this.membersContainerNode.style.display = 'none';
+      this.membersGridNode.style.display = 'none';
+      this.superordinatesCollContainerNode.style.display = 'none';
+      this.superordinatesCollGridNode.style.display = 'none';
     },
 
     _createGrid: function(options, node) {
@@ -164,28 +244,44 @@ define([
 
     getData: function() {
       var relations = {};
-      relations.related = array.map(this._relatedStore.data, function(item) {
-        var con = {};
-        con.id = item.id;
-        return con;
-      }, this);
-      relations.narrower = array.map(this._narrowerStore.data, function(item) {
-        var con = {};
-        con.id = item.id;
-        return con;
-      }, this);
-      relations.broader = array.map(this._broaderStore.data, function(item) {
-        var con = {};
-        con.id = item.id;
-        return con;
-      }, this);
+      if (!this._isCollection) {
+        relations.related = array.map(this._relatedStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        relations.narrower = array.map(this._narrowerStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        relations.broader = array.map(this._broaderStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        /* jshint -W106 */
+        relations.subordinate_arrays = array.map(this._subordinateStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        /* jshint +W106 */
+      } else {
+        relations.members = array.map(this._membersStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+        relations.superordinates = array.map(this._superordinatesCollStore.data, function (item) {
+          var con = {};
+          con.id = item.id;
+          return con;
+        }, this);
+      }
+
       /* jshint -W106 */
       relations.member_of = array.map(this._memberOfStore.data, function(item) {
-        var con = {};
-        con.id = item.id;
-        return con;
-      }, this);
-      relations.subordinate_arrays = array.map(this._subordinateStore.data, function(item) {
         var con = {};
         con.id = item.id;
         return con;
@@ -208,29 +304,65 @@ define([
       return false;
     },
 
+    setConcept: function(concept) {
+      if (concept) {
+        this.concept = concept;
+        this._broaderStore = new this.trackableMemory({data: this.concept ? this.concept.broader : []});
+        this._broaderGrid.set('collection', this._broaderStore);
+        this._narrowerStore = new this.trackableMemory({data: this.concept ? this.concept.narrower : []});
+        this._narrowerGrid.set('collection', this._narrowerStore);
+        this._relatedStore = new this.trackableMemory({data: this.concept ? this.concept.related : []});
+        this._relatedGrid.set('collection', this._relatedStore);
+        this._memberOfStore = new this.trackableMemory({data: this.concept ? this.concept.member_of : []});
+        this._memberOfGrid.set('collection', this._memberOfStore);
+        this._membersStore = new this.trackableMemory({data: this.concept ? this.concept.members : []});
+        this._membersGrid.set('collection', this._membersStore);
+        this._subordinateStore = new this.trackableMemory({data: this.concept ? this.concept.subordinate_arrays : []});
+        this._subordinateGrid.set('collection', this._subordinateStore);
+        this._superordinatesCollStore = new this.trackableMemory({data: this.concept ? this.concept.superordinates : []});
+        this._superordinatesCollGrid.set('collection', this._superordinatesCollStore);
+
+        if (this.concept.type === 'collection') {
+          this.setCollectionTypes();
+        } else {
+          this.setConceptTypes();
+        }
+      }
+    },
+
     _addBroader: function(evt) {
       evt ? evt.preventDefault() : null;
-      this._addRelationDialog.show(this._broaderStore);
+      this._addRelationDialog.show(this._broaderStore, this._relationStore);
     },
 
     _addNarrower: function(evt) {
       evt ? evt.preventDefault() : null;
-      this._addRelationDialog.show(this._narrowerStore);
+      this._addRelationDialog.show(this._narrowerStore, this._relationStore);
     },
 
     _addRelated: function(evt) {
       evt ? evt.preventDefault() : null;
-      this._addRelationDialog.show(this._relatedStore);
+      this._addRelationDialog.show(this._relatedStore, this._relationStore);
     },
 
     _addMemberOf: function(evt) {
       evt ? evt.preventDefault() : null;
-      this._addRelationDialog.show(this._memberOfStore);
+      this._addRelationDialog.show(this._memberOfStore, this._relationStore);
+    },
+
+    _addMembers: function(evt) {
+      evt ? evt.preventDefault() : null;
+      this._addRelationDialog.show(this._membersStore, this._relationStore);
     },
 
     _addSubordinateArray: function(evt) {
       evt ? evt.preventDefault(): null;
-      this._addRelationDialog.show(this._subordinateStore);
+      this._addRelationDialog.show(this._subordinateStore, this._relationStore);
+    },
+
+    _addSuperordinates: function(evt) {
+      evt ? evt.preventDefault(): null;
+      this._addRelationDialog.show(this._superordinatesCollStore, this._relationStore);
     },
 
     _removeRow: function(rowId, store) {

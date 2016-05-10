@@ -68,15 +68,32 @@ define([
       return this._stores[schemeId];
     },
 
-    saveConcept: function(concept, schemeId) {
+    saveConcept: function(concept, schemeId, method) {
       console.debug('ConceptController::saveConcept', concept);
 
-      var method = 'PUT';
-      var url = this._target.replace('{schemeId}', schemeId) + concept.id;
+      var url = this._target.replace('{schemeId}', schemeId);
+
+      if (method === 'PUT') {
+        url = this._target.replace('{schemeId}', schemeId) + concept.id;
+      }
 
       return request(url, {
         method: method,
         data: json.stringify(concept),
+        handleAs: 'json',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'X-Requested-With': ''
+        }
+      });
+    },
+
+    deleteConcept: function(concept, schemeId) {
+      console.debug('ConceptController::deleteConcept', concept);
+      var url = this._target.replace('{schemeId}', schemeId) + concept.id;
+      return request(url, {
+        method: 'DELETE',
         handleAs: 'json',
         headers: {
           'Accept': 'application/json',

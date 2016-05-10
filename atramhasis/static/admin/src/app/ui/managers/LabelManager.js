@@ -55,12 +55,14 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       console.debug('LabelManager::postCreate');
-      var TrackableMemory = declare([Memory, Trackable]);
-      this._labelStore = new TrackableMemory({ data: [] });
-      array.forEach(this.concept.labels, lang.hitch(this, function(item){
-        item.id = this._index++;
-        this._labelStore.put(item);
-      }));
+      this.trackableMemory = declare([Memory, Trackable]);
+      this._labelStore = new this.trackableMemory({ data: [] });
+      if (this.concept) {
+        array.forEach(this.concept.labels, lang.hitch(this, function (item) {
+          item.id = this._index++;
+          this._labelStore.put(item);
+        }));
+      }
       this._createGrid({
         collection: this._labelStore
       }, this.labelGridNode);
@@ -83,6 +85,13 @@ define([
       console.debug('LabelManager::startup');
       this._labelGrid.startup();
       this._labelGrid.resize();
+    },
+
+    reset: function() {
+      if (this._labelDialog) { this._labelDialog.reset(); }
+      var TrackableMemory = declare([Memory, Trackable]);
+      this._labelStore = new TrackableMemory({ data: [] });
+      this._labelGrid.set('collection', this._labelStore);
     },
 
     _createGrid: function(options, node) {
@@ -164,6 +173,18 @@ define([
         labels: this._labelStore.data
       }
       return labels;
+    },
+
+    setConcept: function(concept) {
+      if (concept) {
+        this.concept = concept;
+        this._labelStore = new this.trackableMemory({ data: [] });
+        array.forEach(this.concept.labels, lang.hitch(this, function (item) {
+          item.id = this._index++;
+          this._labelStore.put(item);
+        }));
+        this._labelGrid.set('collection', this._labelStore);
+      }
     },
 
     _addLabel: function(evt) {

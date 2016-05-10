@@ -42,7 +42,6 @@ define([
 
     startup: function () {
       this.inherited(arguments);
-
     },
 
     setData: function(label) {
@@ -53,12 +52,12 @@ define([
 
     hide: function () {
       this.inherited(arguments);
-      this._reset();
+      this.reset();
     },
 
     show: function (label) {
       this.inherited(arguments);
-      this._reset();
+      this.reset();
       if (label) {
         this.setData(label);
         this.set('title', 'Edit label');
@@ -106,7 +105,7 @@ define([
       this.hide();
     },
 
-    _reset: function () {
+    reset: function () {
       this.labelInputNode.value = '';
       this.langSelectNode.selectedIndex = 0;
       this.typeSelectNode.selectedIndex = 0;
