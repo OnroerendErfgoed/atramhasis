@@ -108,7 +108,11 @@ define([
             var lang = array.filter(this.languageList, function (obj) {
               return obj.id === value;
             })[0];
-            return lang.name;
+            if (lang) {
+              return lang.name;
+            } else {
+              return '-';
+            }
           })
         },
         type: {
