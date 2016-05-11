@@ -29,7 +29,7 @@ define([
 
     getLanguageStore: function () {
       if (!this._langStore) {
-        var trackStore = new Rest({
+        var trackStore = new this.TrackableRest({
           target: this._baseUrl + this._target,
           idProperty: 'id',
           sortParam: 'sort',
@@ -37,7 +37,7 @@ define([
           accepts: 'application/json'
         });
         this._langStore = Cache.create(trackStore, {
-          cachingStore: new (Memory.createSubclass(Trackable))(),
+          cachingStore: new Memory(),
           isValidFetchCache: true
         });
       }

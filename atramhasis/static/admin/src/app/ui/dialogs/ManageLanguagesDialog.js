@@ -133,6 +133,7 @@ define([
               'channel': 'info'
             });
             this.languageController.updateLanguageStore();
+            this._langGrid.refresh();
             this._reset();
           }),
           function (error) {
@@ -171,7 +172,6 @@ define([
     },
 
     _reset: function () {
-      this._langGrid.set('collection', this.languageController.getLanguageStore()); // grid.refresh didn't do the trick.. :/
       this._langGrid.resize();
       this.codeInputNode.value = '';
       this.nameInputNode.value = '';
@@ -202,6 +202,7 @@ define([
       on(confirmationDialog, 'execute', lang.hitch(this, function () {
         this._langStore.remove(language.id);
         this.languageController.updateLanguageStore();
+        this._langGrid.refresh();
         this._reset();
       }));
 
