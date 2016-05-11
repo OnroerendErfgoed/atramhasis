@@ -410,7 +410,7 @@ a.admin-button:hover {
   width: 450px;
 }
 
-.matches-dialog {
+.matches-dialog, .import-concept-dialog {
   width: 800px;
   height: 635px;
 
@@ -439,6 +439,10 @@ a.admin-button:hover {
       background-color: #cee6fa;
     }
   }
+}
+
+.import-concept-dialog {
+  height: 580px;
 }
 
 .notes-dialog, .sources-dialog {
