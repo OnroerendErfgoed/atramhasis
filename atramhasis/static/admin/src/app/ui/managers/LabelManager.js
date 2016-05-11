@@ -103,17 +103,21 @@ define([
         language: {
           label: "Language",
           field: "language",
-          formatter: lang.hitch(this, function (value, object) {
+          formatter: lang.hitch(this, function (value) {
             var lang = array.filter(this.languageList, function (obj) {
               return obj.id === value;
             })[0];
-            return lang.name;
+            if (lang) {
+              return lang.name;
+            } else {
+              return '-';
+            }
           })
         },
         type: {
           label: "Type",
           field: "type",
-          formatter: lang.hitch(this, function (value, object) {
+          formatter: lang.hitch(this, function (value) {
             var lang = array.filter(this.listController.getLabelTypes(), function (obj) {
               return obj.value === value;
             })[0];
@@ -184,6 +188,13 @@ define([
           this._labelStore.put(item);
         }));
         this._labelGrid.set('collection', this._labelStore);
+      }
+    },
+
+    updateLanguages: function(languages) {
+      if (languages) {
+        this.languageList = languages;
+        this._labelDialog.updateLanguages(languages);
       }
     },
 

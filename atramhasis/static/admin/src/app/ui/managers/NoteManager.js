@@ -188,6 +188,13 @@ define([
       }
     },
 
+    updateLanguages: function(languages) {
+      if (languages) {
+        this.languageList = languages;
+        this._notesDialog.updateLanguages(languages);
+      }
+    },
+
     _addNote: function(evt) {
       evt ? evt.preventDefault() : null;
       this._notesDialog.show();

@@ -4,6 +4,7 @@ define([
   'dijit/_WidgetsInTemplateMixin',
   'dijit/Dialog',
   'dojo/topic',
+  'dojo/dom-construct',
   'dojo/text!./templates/LabelsDialog.html',
   '../../utils/DomUtils'
 ], function (
@@ -12,6 +13,7 @@ define([
   _WidgetsInTemplateMixin,
   Dialog,
   topic,
+  domConstruct,
   template,
   DomUtils
 ) {
@@ -69,6 +71,17 @@ define([
         this.okButtonNode.innerHTML = 'Add';
         this.edit = false;
       }
+    },
+
+    updateLanguages: function(langs) {
+      // update languagelist and refresh select list
+      this.langList = langs;
+      domConstruct.empty(this.langSelectNode);
+      DomUtils.addOptionsToSelect(this.langSelectNode, {
+        data: this.langList,
+        idProperty: 'id',
+        labelProperty: 'name'
+      });
     },
 
     _okClick: function (evt) {

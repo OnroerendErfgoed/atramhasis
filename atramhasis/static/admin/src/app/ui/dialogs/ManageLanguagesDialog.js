@@ -132,6 +132,7 @@ define([
               'sticky': false,
               'channel': 'info'
             });
+            this.languageController.updateLanguageStore();
             this._reset();
           }),
           function (error) {
@@ -156,10 +157,10 @@ define([
         );
       } else {
         topic.publish('dGrowl', '-Please fill in a language code and name to add a new language.', {
-              'title': 'Invalid values',
-              'sticky': true,
-              'channel': 'error'
-            });
+          'title': 'Invalid values',
+          'sticky': true,
+          'channel': 'error'
+        });
       }
     },
 
@@ -170,7 +171,8 @@ define([
     },
 
     _reset: function () {
-      this._langGrid.refresh();
+      this._langGrid.set('collection', this.languageController.getLanguageStore()); // grid.refresh didn't do the trick.. :/
+      this._langGrid.resize();
       this.codeInputNode.value = '';
       this.nameInputNode.value = '';
     },
@@ -199,6 +201,8 @@ define([
       });
       on(confirmationDialog, 'execute', lang.hitch(this, function () {
         this._langStore.remove(language.id);
+        this.languageController.updateLanguageStore();
+        this._reset();
       }));
 
       confirmationDialog.show();
