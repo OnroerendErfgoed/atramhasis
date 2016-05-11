@@ -27,12 +27,12 @@
         </div>
       </div>
       <div class="large-2 columns" style="padding: 0;">
-        <a href="#" data-dojo-attach-point="addButtonNode" style="float: right; height: 39px;" class="button tiny">Add&nbsp;&nbsp;<i class="fa fa-plus"></i></a>
+        <a href="#" data-dojo-attach-event="onClick: _addLangClick" data-dojo-attach-point="addButtonNode" style="float: left; height: 39px;" class="button tiny">Add&nbsp;&nbsp;<i class="fa fa-plus"></i></a>
       </div>
     </div>
     <div class="row">
       <div class="large-12 columns">
-        <h5 style="margin-top: 0;">You can use <a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry" style="text-decoration: underline;">this</a> list as a reference.</h5>
+        <h5 style="margin-top: 0; margin-bottom: 10px;">You can use <a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry" target="_blank" style="text-decoration: underline;">this</a> list as a reference.</h5>
       </div>
     </div>
     <div class="row">
@@ -43,8 +43,8 @@
     </div>
     <div class="row footerButtons">
       <div class="large-12 columns text-center">
-        <a href="#" data-dojo-attach-event="onClick: _okClick" data-dojo-attach-point="okButtonNode" class="button tiny">Ok</a>
-        <a href="#" data-dojo-attach-event="onClick: _cancelClick" class="button tiny">Cancel</a>
+        <!--?<a href="#" data-dojo-attach-event="onClick: _okClick" data-dojo-attach-point="okButtonNode" class="button tiny">OK</a>-->
+        <a href="#" data-dojo-attach-event="onClick: _cancelClick" class="button tiny">Close</a>
       </div>
     </div>
   </div>

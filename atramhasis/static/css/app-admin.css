@@ -14823,73 +14823,92 @@ a.admin-button:hover {
   padding-bottom: 10px !important;
 }
 
-/* line 525, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 529, ../scss/atramhasis/_atramhasis-admin.scss */
+.manage-languages-dialog .dgrid .dgrid-column-id {
+  width: 120px;
+}
+/* line 533, ../scss/atramhasis/_atramhasis-admin.scss */
+.manage-languages-dialog .dgrid .dgrid-row-table {
+  margin: 0;
+}
+/* line 537, ../scss/atramhasis/_atramhasis-admin.scss */
+.manage-languages-dialog .dgrid .dgrid-cell {
+  padding: 5px;
+}
+/* line 541, ../scss/atramhasis/_atramhasis-admin.scss */
+.manage-languages-dialog .dgrid .dgrid-column-actions {
+  width: 50px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* line 549, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogUnderlay {
   background: rgba(72, 72, 72, 0.8) !important;
   opacity: 1 !important;
 }
 
-/* line 526, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 550, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogTitle {
   font-size: 18px;
   color: #753f7f;
 }
 
-/* line 527, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 551, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogCloseIcon {
   background: none !important;
   font-size: 22px;
   font-weight: bold;
 }
 
-/* line 528, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 552, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .closeText {
   display: block;
   color: #989898;
 }
 
-/* line 529, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 553, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog {
   background-color: #FFFFFF;
 }
 
-/* line 530, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 554, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogPaneContent {
   padding: 25px;
 }
 
-/* line 531, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 555, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogTitleBar {
   padding: 10px !important;
   background-color: #FFFFFF !important;
 }
 
-/* line 532, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 556, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogTitleBar .dijitDialogTitle strong {
   color: black;
   text-transform: uppercase;
 }
 
-/* line 534, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 558, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabContainerTop-dijitContentPane {
   padding: 5px 0 0 0 !important;
 }
 
-/* line 539, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 563, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dgrid {
   border-color: #f0f1f3 !important;
 }
-/* line 542, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 566, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dgrid .dgrid-cell {
   border-color: #f0f1f3 !important;
 }
 
-/* line 547, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 571, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar {
   text-align: center !important;
   padding-bottom: 15px !important;
 }
-/* line 551, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 575, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar .dijitButtonNode {
   background: transparent none !important;
   border: none !important;
@@ -14898,11 +14917,11 @@ a.admin-button:hover {
   -webkit-box-shadow: none !important;
   color: white !important;
 }
-/* line 559, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 583, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar .dijitButtonHover .dijitButtonNode {
   color: #f77f00 !important;
 }
-/* line 563, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 587, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar *:focus {
   outline: none !important;
 }
