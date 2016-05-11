@@ -84,6 +84,10 @@ define([
         this.updateScheme(evt.target.value);
       }));
 
+      topic.subscribe('languages.updated', lang.hitch(this, function() {
+        this.updateLanguages();
+      }));
+
       this.scheme = this.schemeNode.value;
 
       this._createLabelsTab();
@@ -141,6 +145,13 @@ define([
     updateScheme: function(newScheme) {
       this.scheme = newScheme;
       this.relationManager.setScheme(newScheme);
+    },
+
+    updateLanguages: function() {
+      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(langs) {
+        this.noteManager.updateLanguages(langs);
+        this.labelManager.updateLanguages(langs);
+      }))
     },
 
     _toggleMatches: function(type) {
@@ -262,33 +273,27 @@ define([
     },
 
     _createRelationsTab: function(concept) {
-      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(languages) {
-        this.relationManager = new RelationManager({
-          languageController: this.languageController,
-          listController: this.listController,
-          conceptSchemeController: this.conceptSchemeController,
-          languageList: languages,
-          scheme: this.scheme,
-          concept: concept,
-        }, this.relationsNode);
-        this.relationManager.startup();
-        this.updateScheme(this.schemeNode.value);
-      }));
+      this.relationManager = new RelationManager({
+        languageController: this.languageController,
+        listController: this.listController,
+        conceptSchemeController: this.conceptSchemeController,
+        scheme: this.scheme,
+        concept: concept,
+      }, this.relationsNode);
+      this.relationManager.startup();
+      this.updateScheme(this.schemeNode.value);
     },
 
     _createMatchesTab: function(concept) {
-      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(languages) {
-        this.matchesManager = new MatchesManager({
-          languageController: this.languageController,
-          listController: this.listController,
-          conceptSchemeController: this.conceptSchemeController,
-          languageList: languages,
-          scheme: this.scheme,
-          concept: concept,
-          matchTypes: this.listController.getMatchTypes()
-        }, this.matchesNode);
-        this.matchesManager.startup();
-      }));
+      this.matchesManager = new MatchesManager({
+        languageController: this.languageController,
+        listController: this.listController,
+        conceptSchemeController: this.conceptSchemeController,
+        scheme: this.scheme,
+        concept: concept,
+        matchTypes: this.listController.getMatchTypes()
+      }, this.matchesNode);
+      this.matchesManager.startup();
     }
   });
 });

@@ -48,7 +48,6 @@ define([
     conceptSchemeController: null,
     concept: null,
     scheme: null,
-    languageList: null,
     _broaderStore: null,
     _broaderGrid: null,
     _narrowerStore: null,
@@ -165,7 +164,6 @@ define([
 
     setCollectionTypes: function() {
       this._isCollection = true;
-      console.log('collection');
       this.broaderContainerNode.style.display = 'none';
       this.broaderGridNode.style.display = 'none';
       this.narrowerContainerNode.style.display = 'none';
@@ -183,7 +181,6 @@ define([
 
     setConceptTypes: function() {
       this._isCollection = false;
-      console.log('concept');
       this.broaderContainerNode.style.display = 'block';
       this.broaderGridNode.style.display = 'block';
       this.narrowerContainerNode.style.display = 'block';

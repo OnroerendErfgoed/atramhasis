@@ -108,7 +108,11 @@ define([
             var lang = array.filter(this.languageList, function (obj) {
               return obj.id === value;
             })[0];
-            return lang.name;
+            if (lang) {
+              return lang.name;
+            } else {
+              return '-';
+            }
           })
         },
         type: {
@@ -185,6 +189,13 @@ define([
           this._noteStore.put(item);
         }));
         this._noteGrid.set('collection', this._noteStore);
+      }
+    },
+
+    updateLanguages: function(languages) {
+      if (languages) {
+        this.languageList = languages;
+        this._notesDialog.updateLanguages(languages);
       }
     },
 

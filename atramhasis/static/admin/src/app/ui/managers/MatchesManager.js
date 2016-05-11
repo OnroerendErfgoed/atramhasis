@@ -49,7 +49,6 @@ define([
     concept: null,
     scheme: null,
     matchTypes: null,
-    languageList: null,
     _broadStore: null,
     _broadGrid: null,
     _narrowStore: null,

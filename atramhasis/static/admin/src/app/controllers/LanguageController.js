@@ -1,11 +1,17 @@
 define([
   'dojo/_base/declare',
   'dstore/Rest',
-  'dstore/Trackable'
+  'dstore/Trackable',
+  'dstore/Cache',
+  'dstore/Memory',
+  'dojo/topic'
 ], function (
   declare,
   Rest,
-  Trackable
+  Trackable,
+  Cache,
+  Memory,
+  topic
 ) {
   return declare(null, {
 
@@ -13,6 +19,7 @@ define([
     TrackableRest: null,
     _baseUrl: '',
     _langStore: null,
+    _langList: null,
 
     constructor: function (args) {
       console.debug('LangController::constructor');
@@ -21,18 +28,26 @@ define([
     },
 
     getLanguageStore: function () {
-      //check if store has been cached already
       if (!this._langStore) {
-        this._langStore = new this.TrackableRest({
+        var trackStore = new this.TrackableRest({
           target: this._baseUrl + this._target,
           idProperty: 'id',
           sortParam: 'sort',
           useRangeHeaders: true,
           accepts: 'application/json'
         });
+        this._langStore = Cache.create(trackStore, {
+          cachingStore: new Memory(),
+          isValidFetchCache: true
+        });
       }
       return this._langStore;
-    }
+    },
 
+    updateLanguageStore: function() {
+      // invalidate cache after add/remove and send event to update select lists
+      this.getLanguageStore().invalidate();
+      topic.publish('languages.updated');
+    }
   });
 });
