@@ -311,7 +311,7 @@ a.admin-button:hover {
   }
 }
 
-.label-manager, .note-manager {
+.label-manager, .note-manager, .sources-manager {
   height: 402px;
 
   .dgrid .dgrid-column-language {
@@ -441,7 +441,7 @@ a.admin-button:hover {
   }
 }
 
-.notes-dialog {
+.notes-dialog, .sources-dialog {
 
   .htmlEditor .dijitToolbar{
     border: 1px #d5d5d5 solid;
@@ -456,6 +456,10 @@ a.admin-button:hover {
     overflow-y: scroll;
     overflow-x: hidden;
   }
+}
+
+.sources-dialog {
+  width: 600px;
 }
 
 .footerButtons {

@@ -235,6 +235,17 @@ define([
       } else {
         domConstruct.destroy(this.scopeNoteNode);
       }
+
+      // SOURCES
+      if (concept.sources && concept.sources.length > 0) {
+         array.forEach(concept.sources, lang.hitch(this, function(source) {
+          domConstruct.create('li', {
+            innerHTML: source.citation
+          }, this.sourcesNode, 'last');
+        }));
+      }else {
+        domConstruct.destroy(this.sourcesNode);
+      }
     },
 
     _capitalize: function (s) {

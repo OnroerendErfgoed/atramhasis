@@ -54,15 +54,25 @@
               {% endif %}
             {% endif %}
           </ul>
+          <ul class="scopeNote">
+            {% if concept.sources|length > 0 %}
+              <h3>{% trans %}sources{% endtrans %}</h3>
+              {%- for source in concept.sources %}
+                <li>
+                  {{ source.citation|safe }}
+                </li>
+              {%- endfor %}
+            {% endif %}
+          </ul>
           {% if request.has_permission('edit') %}
-          <div class="row">
-            <div class="large-2 columns right">
-              <a href="{{ request.route_path('admin') }}#/conceptschemes/{{ scheme_id }}/c/{{ concept.concept_id }}"
-                 class="fa fa-pencil editIcon"
-                 title="Edit concept">
-              </a>
+            <div class="row">
+              <div class="large-2 columns right">
+                <a href="{{ request.route_path('admin') }}#/conceptschemes/{{ scheme_id }}/c/{{ concept.concept_id }}"
+                   class="fa fa-pencil editIcon"
+                   title="Edit concept">
+                </a>
+              </div>
             </div>
-          </div>
           {% endif %}
         </div>
         <ul class="tabs tabnav" data-tab role="tablist" style="width:100%">
@@ -142,7 +152,7 @@
 
           <section role="tabpanel" aria-hidden="true" class="content" id="panel2-2">
             <div id="treetab" style="padding: 10px 50px 0px 50px;">
-                {% include "tree.jinja2" %}
+              {% include "tree.jinja2" %}
             </div>
           </section>
         </div>
