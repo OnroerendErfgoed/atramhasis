@@ -13,6 +13,7 @@ define([
   '../managers/NoteManager',
   '../managers/RelationManager',
   '../managers/MatchesManager',
+  '../managers/SourcesManager',
   '../../utils/DomUtils',
   'dojo/text!./templates/ManageConceptDialog.html',
   'dijit/layout/TabContainer',
@@ -32,6 +33,7 @@ define([
   NoteManager,
   RelationManager,
   MatchesManager,
+  SourcesManager,
   domUtils,
   template
 ) {
@@ -90,6 +92,7 @@ define([
 
       this._createLabelsTab();
       this._createNotesTab();
+      this._createSourcesTab();
       this._createRelationsTab();
       this._createMatchesTab();
     },
@@ -125,6 +128,7 @@ define([
           this.labelManager.setConcept(concept);
           this.noteManager.setConcept(concept);
           this.matchesManager.setConcept(concept);
+          this.sourcesManager.setConcept(concept);
           this.concept = concept;
           this.typeNode.value = concept.type;
 
@@ -197,6 +201,9 @@ define([
       var noteData = this.noteManager.getData();
       lang.mixin(concept, noteData);
 
+      var sourceData = this.sourcesManager.getData();
+      lang.mixin(concept, sourceData);
+
       var relationData = this.relationManager.getData();
       lang.mixin(concept, relationData);
 
@@ -255,6 +262,14 @@ define([
         }, this.notesNode);
         this.noteManager.startup();
       }));
+    },
+
+    _createSourcesTab: function(concept) {
+      this.sourcesManager = new SourcesManager({
+        listController: this.listController,
+        concept: concept
+      }, this.sourcesNode);
+      this.sourcesManager.startup();
     },
 
     _createRelationsTab: function(concept) {
