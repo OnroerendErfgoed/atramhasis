@@ -9740,15 +9740,15 @@ th.hide-for-touch {
   }
 }
 /*!
- *  Font Awesome 4.6.1 by @davegandy - http://fontawesome.io - @fontawesome
+ *  Font Awesome 4.6.2 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
 /* FONT PATH
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url("../bower_components/font-awesome/fonts/fontawesome-webfont.eot?v=4.6.1");
-  src: url("../bower_components/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.6.1") format("embedded-opentype"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.1") format("woff2"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.woff?v=4.6.1") format("woff"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.ttf?v=4.6.1") format("truetype"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.svg?v=4.6.1#fontawesomeregular") format("svg");
+  src: url("../bower_components/font-awesome/fonts/fontawesome-webfont.eot?v=4.6.2");
+  src: url("../bower_components/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.6.2") format("embedded-opentype"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.2") format("woff2"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.woff?v=4.6.2") format("woff"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.ttf?v=4.6.2") format("truetype"), url("../bower_components/font-awesome/fonts/fontawesome-webfont.svg?v=4.6.2#fontawesomeregular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -11952,7 +11952,7 @@ th.hide-for-touch {
 }
 
 /* line 441, ../bower_components/font-awesome/scss/_icons.scss */
-.fa-pied-piper:before {
+.fa-pied-piper-pp:before {
   content: "";
 }
 
@@ -12154,1065 +12154,1086 @@ th.hide-for-touch {
 
 /* line 490, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-ra:before,
+.fa-resistance:before,
 .fa-rebel:before {
   content: "";
 }
 
-/* line 492, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 493, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-ge:before,
 .fa-empire:before {
   content: "";
 }
 
-/* line 494, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 495, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-git-square:before {
   content: "";
 }
 
-/* line 495, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 496, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-git:before {
   content: "";
 }
 
-/* line 496, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 497, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-y-combinator-square:before,
 .fa-yc-square:before,
 .fa-hacker-news:before {
   content: "";
 }
 
-/* line 499, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 500, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-tencent-weibo:before {
   content: "";
 }
 
-/* line 500, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 501, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-qq:before {
   content: "";
 }
 
-/* line 501, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 502, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-wechat:before,
 .fa-weixin:before {
   content: "";
 }
 
-/* line 503, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 504, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-send:before,
 .fa-paper-plane:before {
   content: "";
 }
 
-/* line 505, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 506, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-send-o:before,
 .fa-paper-plane-o:before {
   content: "";
 }
 
-/* line 507, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 508, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-history:before {
   content: "";
 }
 
-/* line 508, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 509, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-circle-thin:before {
   content: "";
 }
 
-/* line 509, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 510, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-header:before {
   content: "";
 }
 
-/* line 510, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 511, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-paragraph:before {
   content: "";
 }
 
-/* line 511, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 512, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-sliders:before {
   content: "";
 }
 
-/* line 512, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 513, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-share-alt:before {
   content: "";
 }
 
-/* line 513, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 514, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-share-alt-square:before {
   content: "";
 }
 
-/* line 514, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 515, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-bomb:before {
   content: "";
 }
 
-/* line 515, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 516, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-soccer-ball-o:before,
 .fa-futbol-o:before {
   content: "";
 }
 
-/* line 517, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 518, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-tty:before {
   content: "";
 }
 
-/* line 518, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 519, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-binoculars:before {
   content: "";
 }
 
-/* line 519, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 520, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-plug:before {
   content: "";
 }
 
-/* line 520, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 521, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-slideshare:before {
   content: "";
 }
 
-/* line 521, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 522, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-twitch:before {
   content: "";
 }
 
-/* line 522, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 523, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-yelp:before {
   content: "";
 }
 
-/* line 523, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 524, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-newspaper-o:before {
   content: "";
 }
 
-/* line 524, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 525, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-wifi:before {
   content: "";
 }
 
-/* line 525, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 526, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-calculator:before {
   content: "";
 }
 
-/* line 526, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 527, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-paypal:before {
   content: "";
 }
 
-/* line 527, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 528, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-google-wallet:before {
   content: "";
 }
 
-/* line 528, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 529, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc-visa:before {
   content: "";
 }
 
-/* line 529, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 530, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc-mastercard:before {
   content: "";
 }
 
-/* line 530, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 531, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc-discover:before {
   content: "";
 }
 
-/* line 531, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 532, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc-amex:before {
   content: "";
 }
 
-/* line 532, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 533, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc-paypal:before {
   content: "";
 }
 
-/* line 533, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 534, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc-stripe:before {
   content: "";
 }
 
-/* line 534, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 535, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-bell-slash:before {
   content: "";
 }
 
-/* line 535, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 536, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-bell-slash-o:before {
   content: "";
 }
 
-/* line 536, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 537, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-trash:before {
   content: "";
 }
 
-/* line 537, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 538, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-copyright:before {
   content: "";
 }
 
-/* line 538, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 539, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-at:before {
   content: "";
 }
 
-/* line 539, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 540, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-eyedropper:before {
   content: "";
 }
 
-/* line 540, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 541, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-paint-brush:before {
   content: "";
 }
 
-/* line 541, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 542, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-birthday-cake:before {
   content: "";
 }
 
-/* line 542, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 543, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-area-chart:before {
   content: "";
 }
 
-/* line 543, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 544, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-pie-chart:before {
   content: "";
 }
 
-/* line 544, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 545, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-line-chart:before {
   content: "";
 }
 
-/* line 545, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 546, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-lastfm:before {
   content: "";
 }
 
-/* line 546, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 547, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-lastfm-square:before {
   content: "";
 }
 
-/* line 547, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 548, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-toggle-off:before {
   content: "";
 }
 
-/* line 548, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 549, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-toggle-on:before {
   content: "";
 }
 
-/* line 549, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 550, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-bicycle:before {
   content: "";
 }
 
-/* line 550, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 551, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-bus:before {
   content: "";
 }
 
-/* line 551, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 552, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-ioxhost:before {
   content: "";
 }
 
-/* line 552, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 553, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-angellist:before {
   content: "";
 }
 
-/* line 553, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 554, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc:before {
   content: "";
 }
 
-/* line 554, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 555, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-shekel:before,
 .fa-sheqel:before,
 .fa-ils:before {
   content: "";
 }
 
-/* line 557, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 558, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-meanpath:before {
   content: "";
 }
 
-/* line 558, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 559, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-buysellads:before {
   content: "";
 }
 
-/* line 559, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 560, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-connectdevelop:before {
   content: "";
 }
 
-/* line 560, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 561, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-dashcube:before {
   content: "";
 }
 
-/* line 561, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 562, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-forumbee:before {
   content: "";
 }
 
-/* line 562, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 563, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-leanpub:before {
   content: "";
 }
 
-/* line 563, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 564, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-sellsy:before {
   content: "";
 }
 
-/* line 564, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 565, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-shirtsinbulk:before {
   content: "";
 }
 
-/* line 565, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 566, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-simplybuilt:before {
   content: "";
 }
 
-/* line 566, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 567, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-skyatlas:before {
   content: "";
 }
 
-/* line 567, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 568, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cart-plus:before {
   content: "";
 }
 
-/* line 568, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 569, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cart-arrow-down:before {
   content: "";
 }
 
-/* line 569, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 570, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-diamond:before {
   content: "";
 }
 
-/* line 570, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 571, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-ship:before {
   content: "";
 }
 
-/* line 571, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 572, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-user-secret:before {
   content: "";
 }
 
-/* line 572, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 573, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-motorcycle:before {
   content: "";
 }
 
-/* line 573, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 574, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-street-view:before {
   content: "";
 }
 
-/* line 574, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 575, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-heartbeat:before {
   content: "";
 }
 
-/* line 575, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 576, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-venus:before {
   content: "";
 }
 
-/* line 576, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 577, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-mars:before {
   content: "";
 }
 
-/* line 577, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 578, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-mercury:before {
   content: "";
 }
 
-/* line 578, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 579, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-intersex:before,
 .fa-transgender:before {
   content: "";
 }
 
-/* line 580, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 581, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-transgender-alt:before {
   content: "";
 }
 
-/* line 581, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 582, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-venus-double:before {
   content: "";
 }
 
-/* line 582, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 583, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-mars-double:before {
   content: "";
 }
 
-/* line 583, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 584, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-venus-mars:before {
   content: "";
 }
 
-/* line 584, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 585, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-mars-stroke:before {
   content: "";
 }
 
-/* line 585, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 586, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-mars-stroke-v:before {
   content: "";
 }
 
-/* line 586, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 587, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-mars-stroke-h:before {
   content: "";
 }
 
-/* line 587, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 588, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-neuter:before {
   content: "";
 }
 
-/* line 588, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 589, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-genderless:before {
   content: "";
 }
 
-/* line 589, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 590, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-facebook-official:before {
   content: "";
 }
 
-/* line 590, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 591, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-pinterest-p:before {
   content: "";
 }
 
-/* line 591, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 592, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-whatsapp:before {
   content: "";
 }
 
-/* line 592, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 593, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-server:before {
   content: "";
 }
 
-/* line 593, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 594, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-user-plus:before {
   content: "";
 }
 
-/* line 594, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 595, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-user-times:before {
   content: "";
 }
 
-/* line 595, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 596, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hotel:before,
 .fa-bed:before {
   content: "";
 }
 
-/* line 597, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 598, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-viacoin:before {
   content: "";
 }
 
-/* line 598, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 599, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-train:before {
   content: "";
 }
 
-/* line 599, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 600, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-subway:before {
   content: "";
 }
 
-/* line 600, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 601, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-medium:before {
   content: "";
 }
 
-/* line 601, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 602, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-yc:before,
 .fa-y-combinator:before {
   content: "";
 }
 
-/* line 603, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 604, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-optin-monster:before {
   content: "";
 }
 
-/* line 604, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 605, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-opencart:before {
   content: "";
 }
 
-/* line 605, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 606, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-expeditedssl:before {
   content: "";
 }
 
-/* line 606, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 607, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-battery-4:before,
 .fa-battery-full:before {
   content: "";
 }
 
-/* line 608, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 609, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-battery-3:before,
 .fa-battery-three-quarters:before {
   content: "";
 }
 
-/* line 610, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 611, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-battery-2:before,
 .fa-battery-half:before {
   content: "";
 }
 
-/* line 612, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 613, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-battery-1:before,
 .fa-battery-quarter:before {
   content: "";
 }
 
-/* line 614, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 615, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-battery-0:before,
 .fa-battery-empty:before {
   content: "";
 }
 
-/* line 616, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 617, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-mouse-pointer:before {
   content: "";
 }
 
-/* line 617, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 618, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-i-cursor:before {
   content: "";
 }
 
-/* line 618, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 619, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-object-group:before {
   content: "";
 }
 
-/* line 619, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 620, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-object-ungroup:before {
   content: "";
 }
 
-/* line 620, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 621, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-sticky-note:before {
   content: "";
 }
 
-/* line 621, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 622, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-sticky-note-o:before {
   content: "";
 }
 
-/* line 622, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 623, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc-jcb:before {
   content: "";
 }
 
-/* line 623, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 624, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-cc-diners-club:before {
   content: "";
 }
 
-/* line 624, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 625, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-clone:before {
   content: "";
 }
 
-/* line 625, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 626, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-balance-scale:before {
   content: "";
 }
 
-/* line 626, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 627, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hourglass-o:before {
   content: "";
 }
 
-/* line 627, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 628, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hourglass-1:before,
 .fa-hourglass-start:before {
   content: "";
 }
 
-/* line 629, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 630, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hourglass-2:before,
 .fa-hourglass-half:before {
   content: "";
 }
 
-/* line 631, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 632, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hourglass-3:before,
 .fa-hourglass-end:before {
   content: "";
 }
 
-/* line 633, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 634, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hourglass:before {
   content: "";
 }
 
-/* line 634, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 635, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hand-grab-o:before,
 .fa-hand-rock-o:before {
   content: "";
 }
 
-/* line 636, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 637, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hand-stop-o:before,
 .fa-hand-paper-o:before {
   content: "";
 }
 
-/* line 638, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 639, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hand-scissors-o:before {
   content: "";
 }
 
-/* line 639, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 640, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hand-lizard-o:before {
   content: "";
 }
 
-/* line 640, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 641, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hand-spock-o:before {
   content: "";
 }
 
-/* line 641, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 642, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hand-pointer-o:before {
   content: "";
 }
 
-/* line 642, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 643, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hand-peace-o:before {
   content: "";
 }
 
-/* line 643, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 644, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-trademark:before {
   content: "";
 }
 
-/* line 644, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 645, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-registered:before {
   content: "";
 }
 
-/* line 645, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 646, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-creative-commons:before {
   content: "";
 }
 
-/* line 646, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 647, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-gg:before {
   content: "";
 }
 
-/* line 647, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 648, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-gg-circle:before {
   content: "";
 }
 
-/* line 648, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 649, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-tripadvisor:before {
   content: "";
 }
 
-/* line 649, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 650, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-odnoklassniki:before {
   content: "";
 }
 
-/* line 650, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 651, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-odnoklassniki-square:before {
   content: "";
 }
 
-/* line 651, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 652, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-get-pocket:before {
   content: "";
 }
 
-/* line 652, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 653, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-wikipedia-w:before {
   content: "";
 }
 
-/* line 653, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 654, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-safari:before {
   content: "";
 }
 
-/* line 654, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 655, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-chrome:before {
   content: "";
 }
 
-/* line 655, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 656, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-firefox:before {
   content: "";
 }
 
-/* line 656, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 657, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-opera:before {
   content: "";
 }
 
-/* line 657, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 658, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-internet-explorer:before {
   content: "";
 }
 
-/* line 658, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 659, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-tv:before,
 .fa-television:before {
   content: "";
 }
 
-/* line 660, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 661, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-contao:before {
   content: "";
 }
 
-/* line 661, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 662, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-500px:before {
   content: "";
 }
 
-/* line 662, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 663, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-amazon:before {
   content: "";
 }
 
-/* line 663, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 664, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-calendar-plus-o:before {
   content: "";
 }
 
-/* line 664, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 665, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-calendar-minus-o:before {
   content: "";
 }
 
-/* line 665, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 666, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-calendar-times-o:before {
   content: "";
 }
 
-/* line 666, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 667, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-calendar-check-o:before {
   content: "";
 }
 
-/* line 667, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 668, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-industry:before {
   content: "";
 }
 
-/* line 668, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 669, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-map-pin:before {
   content: "";
 }
 
-/* line 669, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 670, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-map-signs:before {
   content: "";
 }
 
-/* line 670, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 671, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-map-o:before {
   content: "";
 }
 
-/* line 671, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 672, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-map:before {
   content: "";
 }
 
-/* line 672, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 673, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-commenting:before {
   content: "";
 }
 
-/* line 673, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 674, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-commenting-o:before {
   content: "";
 }
 
-/* line 674, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 675, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-houzz:before {
   content: "";
 }
 
-/* line 675, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 676, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-vimeo:before {
   content: "";
 }
 
-/* line 676, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 677, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-black-tie:before {
   content: "";
 }
 
-/* line 677, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 678, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-fonticons:before {
   content: "";
 }
 
-/* line 678, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 679, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-reddit-alien:before {
   content: "";
 }
 
-/* line 679, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 680, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-edge:before {
   content: "";
 }
 
-/* line 680, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 681, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-credit-card-alt:before {
   content: "";
 }
 
-/* line 681, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 682, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-codiepie:before {
   content: "";
 }
 
-/* line 682, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 683, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-modx:before {
   content: "";
 }
 
-/* line 683, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 684, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-fort-awesome:before {
   content: "";
 }
 
-/* line 684, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 685, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-usb:before {
   content: "";
 }
 
-/* line 685, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 686, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-product-hunt:before {
   content: "";
 }
 
-/* line 686, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 687, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-mixcloud:before {
   content: "";
 }
 
-/* line 687, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 688, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-scribd:before {
   content: "";
 }
 
-/* line 688, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 689, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-pause-circle:before {
   content: "";
 }
 
-/* line 689, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 690, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-pause-circle-o:before {
   content: "";
 }
 
-/* line 690, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 691, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-stop-circle:before {
   content: "";
 }
 
-/* line 691, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 692, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-stop-circle-o:before {
   content: "";
 }
 
-/* line 692, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 693, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-shopping-bag:before {
   content: "";
 }
 
-/* line 693, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 694, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-shopping-basket:before {
   content: "";
 }
 
-/* line 694, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 695, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-hashtag:before {
   content: "";
 }
 
-/* line 695, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 696, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-bluetooth:before {
   content: "";
 }
 
-/* line 696, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 697, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-bluetooth-b:before {
   content: "";
 }
 
-/* line 697, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 698, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-percent:before {
   content: "";
 }
 
-/* line 698, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 699, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-gitlab:before {
   content: "";
 }
 
-/* line 699, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 700, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-wpbeginner:before {
   content: "";
 }
 
-/* line 700, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 701, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-wpforms:before {
   content: "";
 }
 
-/* line 701, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 702, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-envira:before {
   content: "";
 }
 
-/* line 702, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 703, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-universal-access:before {
   content: "";
 }
 
-/* line 703, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 704, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-wheelchair-alt:before {
   content: "";
 }
 
-/* line 704, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 705, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-question-circle-o:before {
   content: "";
 }
 
-/* line 705, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 706, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-blind:before {
   content: "";
 }
 
-/* line 706, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 707, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-audio-description:before {
   content: "";
 }
 
-/* line 707, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 708, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-volume-control-phone:before {
   content: "";
 }
 
-/* line 708, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 709, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-braille:before {
   content: "";
 }
 
-/* line 709, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 710, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-assistive-listening-systems:before {
   content: "";
 }
 
-/* line 710, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 711, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-asl-interpreting:before,
 .fa-american-sign-language-interpreting:before {
   content: "";
 }
 
-/* line 712, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 713, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-deafness:before,
 .fa-hard-of-hearing:before,
 .fa-deaf:before {
   content: "";
 }
 
-/* line 715, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 716, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-glide:before {
   content: "";
 }
 
-/* line 716, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 717, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-glide-g:before {
   content: "";
 }
 
-/* line 717, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 718, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-signing:before,
 .fa-sign-language:before {
   content: "";
 }
 
-/* line 719, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 720, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-low-vision:before {
   content: "";
 }
 
-/* line 720, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 721, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-viadeo:before {
   content: "";
 }
 
-/* line 721, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 722, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-viadeo-square:before {
   content: "";
 }
 
-/* line 722, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 723, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-snapchat:before {
   content: "";
 }
 
-/* line 723, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 724, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-snapchat-ghost:before {
   content: "";
 }
 
-/* line 724, ../bower_components/font-awesome/scss/_icons.scss */
+/* line 725, ../bower_components/font-awesome/scss/_icons.scss */
 .fa-snapchat-square:before {
   content: "";
+}
+
+/* line 726, ../bower_components/font-awesome/scss/_icons.scss */
+.fa-pied-piper:before {
+  content: "";
+}
+
+/* line 727, ../bower_components/font-awesome/scss/_icons.scss */
+.fa-first-order:before {
+  content: "";
+}
+
+/* line 728, ../bower_components/font-awesome/scss/_icons.scss */
+.fa-yoast:before {
+  content: "";
+}
+
+/* line 729, ../bower_components/font-awesome/scss/_icons.scss */
+.fa-themeisle:before {
+  content: "";
 }
 
 /* line 4, ../bower_components/font-awesome/scss/_screen-reader.scss */
@@ -14734,15 +14755,20 @@ a.admin-button:hover {
   width: 100px;
 }
 /* line 433, ../scss/atramhasis/_atramhasis-admin.scss */
+.matches-dialog .dgrid .dgrid-column-link {
+  width: 35px;
+  text-align: center;
+}
+/* line 438, ../scss/atramhasis/_atramhasis-admin.scss */
 .matches-dialog .dgrid .dgrid-selected .dgrid-row-table {
   background-color: #cee6fa;
 }
 
-/* line 441, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 446, ../scss/atramhasis/_atramhasis-admin.scss */
 .notes-dialog .htmlEditor .dijitToolbar, .sources-dialog .htmlEditor .dijitToolbar {
   border: 1px #d5d5d5 solid;
 }
-/* line 445, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 450, ../scss/atramhasis/_atramhasis-admin.scss */
 .notes-dialog .htmlEditor textarea, .sources-dialog .htmlEditor textarea {
   height: 300px;
   border: 1px #d5d5d5 solid;
@@ -14753,17 +14779,17 @@ a.admin-button:hover {
   overflow-x: hidden;
 }
 
-/* line 456, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 461, ../scss/atramhasis/_atramhasis-admin.scss */
 .sources-dialog {
   width: 600px;
 }
 
-/* line 460, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 465, ../scss/atramhasis/_atramhasis-admin.scss */
 .footerButtons {
   margin-top: 20px;
 }
 
-/* line 464, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 469, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail {
   background-color: white;
   padding-right: 20px;
@@ -14771,131 +14797,131 @@ a.admin-button:hover {
   overflow-y: auto;
   width: 100%;
 }
-/* line 471, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 476, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .concept-title-info {
   padding-top: 10px;
   margin-right: 20px;
   font-size: 0.8rem;
   float: left;
 }
-/* line 478, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 483, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .concept-hr {
   margin-left: 1.25rem;
 }
-/* line 482, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 487, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .no-top-padding {
   padding-top: 0;
   margin-top: 0;
 }
-/* line 487, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 492, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .label-relation-block {
   margin-bottom: 20px;
 }
-/* line 491, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 496, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .label-relation-block .dllist {
   font-size: 1em;
   padding: 0;
   margin: 10px 0 0 0;
 }
-/* line 497, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 502, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .label-relation-block .dllist dt {
   font-size: 1.2em;
   padding-top: 5px;
   margin: 0;
 }
-/* line 503, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 508, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .label-relation-block .dllist dd {
   margin-left: 120px;
   margin-top: -20px;
   min-height: 19px;
   font-size: 13px;
 }
-/* line 510, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 515, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .label-relation-block {
   max-height: 200px;
   overflow-y: auto;
 }
-/* line 515, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 520, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .scopeNote {
   border: 0 !important;
   font-size: 1.1em;
 }
-/* line 519, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 524, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .scopeNote h3 {
   margin-bottom: 20px;
 }
-/* line 523, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 528, ../scss/atramhasis/_atramhasis-admin.scss */
 .concept-detail .scopeNote li {
   padding-bottom: 10px !important;
 }
 
-/* line 529, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 534, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogUnderlay {
   background: rgba(72, 72, 72, 0.8) !important;
   opacity: 1 !important;
 }
 
-/* line 530, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 535, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogTitle {
   font-size: 18px;
   color: #753f7f;
 }
 
-/* line 531, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 536, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogCloseIcon {
   background: none !important;
   font-size: 22px;
   font-weight: bold;
 }
 
-/* line 532, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 537, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .closeText {
   display: block;
   color: #989898;
 }
 
-/* line 533, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 538, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog {
   background-color: #FFFFFF;
 }
 
-/* line 534, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 539, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogPaneContent {
   padding: 25px;
 }
 
-/* line 535, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 540, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialogTitleBar {
   padding: 10px !important;
   background-color: #FFFFFF !important;
 }
 
-/* line 536, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 541, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitDialog .dijitDialogTitleBar .dijitDialogTitle strong {
   color: black;
   text-transform: uppercase;
 }
 
-/* line 538, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 543, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dijitTabContainerTop-dijitContentPane {
   padding: 5px 0 0 0 !important;
 }
 
-/* line 543, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 548, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dgrid {
   border-color: #f0f1f3 !important;
 }
-/* line 546, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 551, ../scss/atramhasis/_atramhasis-admin.scss */
 .claro .dgrid .dgrid-cell {
   border-color: #f0f1f3 !important;
 }
 
-/* line 551, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 556, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar {
   text-align: center !important;
   padding-bottom: 15px !important;
 }
-/* line 555, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 560, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar .dijitButtonNode {
   background: transparent none !important;
   border: none !important;
@@ -14904,11 +14930,11 @@ a.admin-button:hover {
   -webkit-box-shadow: none !important;
   color: white !important;
 }
-/* line 563, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 568, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar .dijitButtonHover .dijitButtonNode {
   color: #f77f00 !important;
 }
-/* line 567, ../scss/atramhasis/_atramhasis-admin.scss */
+/* line 572, ../scss/atramhasis/_atramhasis-admin.scss */
 .confirm-dialog .dijitDialogPaneActionBar *:focus {
   outline: none !important;
 }
