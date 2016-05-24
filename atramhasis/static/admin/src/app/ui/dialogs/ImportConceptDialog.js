@@ -127,7 +127,8 @@ define([
 
       if (selected) {
         this.emit('concept.import', {
-          concept: selected
+          concept: selected,
+          schemeId: this.externalSchemeSelect.value
         });
         this.hide();
       } else {

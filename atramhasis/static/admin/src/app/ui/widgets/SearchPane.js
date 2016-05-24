@@ -13,6 +13,7 @@ define([
   'dijit/MenuItem',
   'dijit/MenuSeparator',
   'dojo/dom-construct',
+  'dojo/dom-attr',
   'dojo/topic',
   'dojo/on',
   'dojo/dom-style',
@@ -33,6 +34,7 @@ define([
   MenuItem,
   MenuSeparator,
   domConstruct,
+  domAttr,
   topic,
   on,
   domStyle,
@@ -151,10 +153,19 @@ define([
 
       this.own(
         on(this.conceptSchemeSelect, 'change', lang.hitch(this, function() {
-          this.emit('scheme.changed', {
-            schemeId: this.conceptSchemeSelect.value
-          });
-          this._search();
+
+          // toggle buttons for add and import
+          if (this.conceptSchemeSelect.value !== '-1') {
+            this.emit('scheme.changed', {
+              schemeId: this.conceptSchemeSelect.value
+            });
+            domAttr.set(this.addConceptButton, 'disabled', false);
+            domAttr.set(this.importConceptButton, 'disabled', false);
+            this._search();
+          } else {
+            domAttr.set(this.addConceptButton, 'disabled', true);
+            domAttr.set(this.importConceptButton, 'disabled', true);
+          }
         }))
       );
     },
@@ -244,7 +255,6 @@ define([
 
       return contextMenu;
     },
-
 
     _search: function (evt) {
       evt ? evt.preventDefault() : null;

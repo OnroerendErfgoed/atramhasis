@@ -65,27 +65,12 @@ define([
       console.log("toggleMenu");
       if (this.menuOpen) {
         this._slideClose(evt);
-        //domClass.remove(this.menuSlideButton, 'fa-chevron-right');
-        //domClass.add(this.menuSlideButton, 'fa-chevron-left');
-        //domClass.remove(this.mobileMenuSlideButton, 'mobile-legend-open');
-        //domClass.add(this.mobileMenuSlideButton, 'mobile-legend-close');
-        //this.menuSlideButton.title = 'Toon legende';
-        //this.mobileMenuSlideButton.title = 'Toon legende';
-        //this.mobileMenuSlideButton.innerHTML = 'Legende';
       } else {
         this._slideOpen(evt);
-        //domClass.remove(this.menuSlideButton, 'fa-chevron-left');
-        //domClass.add(this.menuSlideButton, 'fa-chevron-right');
-        //domClass.add(this.mobileMenuSlideButton, 'mobile-legend-open');
-        //domClass.remove(this.mobileMenuSlideButton, 'mobile-legend-close');
-        //this.menuSlideButton.title = 'Verberg legende';
-        //this.mobileMenuSlideButton.title = 'Verberg legende';
-        //this.mobileMenuSlideButton.innerHTML = '<i class="fa fa-times"></i>';
       }
     },
 
     _slideOpen: function (evt) {
-      //console.debug('SlideLegend::_slideOpen');
       evt ? evt.preventDefault() : null;
       domClass.remove(this.menuContainer, 'slidemenu-close');
       domClass.add(this.menuContainer, 'slidemenu-open');
@@ -95,7 +80,6 @@ define([
     },
 
     _slideClose: function (evt) {
-      //console.debug('SlideLegend::_slideClose');
       evt ? evt.preventDefault() : null;
       domClass.remove(this.menuContainer, 'slidemenu-open');
       domClass.add(this.menuContainer, 'slidemenu-close');
@@ -103,6 +87,5 @@ define([
       domClass.add(this.overlayContainer, 'slideoverlay-close');
       this.menuOpen = false;
     }
-
   });
 });

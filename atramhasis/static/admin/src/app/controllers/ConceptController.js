@@ -101,6 +101,18 @@ define([
           'X-Requested-With': ''
         }
       });
+    },
+
+    getConceptByUri: function(uri) {
+      return request(uri, {
+        method: 'GET',
+        handleAs: 'json',
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'X-Requested-With': ''
+        }
+      });
     }
   })
 });

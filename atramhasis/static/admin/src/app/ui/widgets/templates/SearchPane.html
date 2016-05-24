@@ -4,7 +4,7 @@
     <form data-dojo-attach-point="labelSearchForm" data-dojo-attach-event="onsubmit: _search">
         <div class="large-10 columns">
           <select data-dojo-attach-point="conceptSchemeSelect">
-            <option value="-1" selected>Select Thesaurus</option>
+            <option value="-1" selected disabled>Select Thesaurus</option>
           </select>
         </div>
         <div class="large-2 columns edit-scheme-button">
@@ -38,10 +38,12 @@
 
   <div class="search-footer-buttons text-center large-8 columns large-offset-2">
     <div class="large-4 columns">
-      <a class="button tiny" href="#/concept/new" data-dojo-attach-event="onClick: _createConcept">+Add</a>
+      <button class="button tiny" href="#/concept/new" data-dojo-attach-event="onClick: _createConcept"
+              data-dojo-attach-point="addConceptButton" disabled>+Add</button>
     </div>
     <div class="large-4 columns">
-      <a class="button tiny" href="#/concept/import" data-dojo-attach-event="onClick: _importConcept">Import</a>
+      <button class="button tiny" href="#/concept/import" data-dojo-attach-event="onClick: _importConcept"
+              data-dojo-attach-point="importConceptButton" disabled>Import</button>
     </div>
     <div class="large-4 columns">
       <a class="button tiny" href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a>

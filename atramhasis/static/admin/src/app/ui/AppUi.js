@@ -112,6 +112,9 @@ define([
         conceptSchemeController: this.conceptSchemeController
       });
       this._importConceptDialog.startup();
+      on(this._importConceptDialog, 'concept.import', lang.hitch(this, function(evt) {
+        this._createImportConcept(evt.schemeId, evt.concept);
+      }));
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
     },
@@ -264,6 +267,14 @@ define([
       this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
     },
 
+    _createImportConcept: function(schemeId, concept) {
+      this.conceptSchemeController.getConcept(schemeId, concept.uri).then(lang.hitch(this, function(result) {
+        var newConcept = result;
+        console.log(result);
+        this._manageConceptDialog.showDialog(this._selectedSchemeId, newConcept, 'add');
+      }));
+    },
+
     _importConcept  : function(evt) {
       evt.preventDefault();
       console.debug('AppUi::_importConcept');
@@ -334,42 +345,48 @@ define([
         conceptSchemeList: this.conceptSchemeController.conceptSchemeList,
         appUi: this
       }, node);
-      this.own(
-        on(this._searchPane, 'row-select', lang.hitch(this, function (evt) {
-          console.debug('catch select event', evt);
-          this._openConcept(evt.data.id, evt.scheme);
-        }))
-      );
+
+      on(this._searchPane, 'row-select', lang.hitch(this, function (evt) {
+        console.debug('catch select event', evt);
+        this._openConcept(evt.data.id, evt.scheme);
+      }));
+
       on(this._searchPane, 'scheme.changed', lang.hitch(this, function (evt) {
         this._selectedSchemeId = evt.schemeId;
       }));
+
       on(this._searchPane, 'concept.create', lang.hitch(this, function (evt) {
         this._createConcept();
       }));
+
       on(this._searchPane, 'concept.edit', lang.hitch(this, function (evt) {
         this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
           lang.hitch(this, function (data) {
             this._editConcept(null, data, this._selectedSchemeId);
           }));
       }));
+
       on(this._searchPane, 'concept.delete', lang.hitch(this, function (evt) {
         this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
           lang.hitch(this, function (data) {
             this._deleteConcept(this._getTab(this._selectedSchemeId + '_' + data.id), data, this._selectedSchemeId);
           }));
       }));
+
       on(this._searchPane, 'concept.addnarrower', lang.hitch(this, function (evt) {
         this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
           lang.hitch(this, function (data) {
             this._createAddNarrowerConcept(data, this._selectedSchemeId);
           }));
       }));
+
       on(this._searchPane, 'concept.addsubarray', lang.hitch(this, function (evt) {
         this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
           lang.hitch(this, function (data) {
             this._createAddSubordinateArrayConcept(data, this._selectedSchemeId);
           }));
       }));
+
       on(this._searchPane, 'concept.addmember', lang.hitch(this, function (evt) {
         this.conceptController.getConcept(this._selectedSchemeId, evt.conceptId).then(
           lang.hitch(this, function (data) {
