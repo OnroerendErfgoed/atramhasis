@@ -559,6 +559,24 @@ a.admin-button:hover {
   }
 }
 
+// not working???
+.placeholder-container {
+  .no-arrow-select select {
+    /*for firefox*/
+    -moz-appearance: none !important;
+    /*for chrome*/
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    text-indent: 0.01px;
+    text-overflow: '';
+  }
+
+  /*for IE*/
+  .no-arrow-select select::-ms-expand {
+    display: none !important;
+  }
+}
+
 .claro .dijitDialogUnderlay { background: rgba(72, 72, 72, 0.8) !important; opacity: 1 !important; }
 .claro .dijitDialog .dijitDialogTitle { font-size: 18px; color: #753f7f; }
 .claro .dijitDialogCloseIcon { background: none !important;  font-size: 22px; font-weight: bold; }

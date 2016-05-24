@@ -153,19 +153,13 @@ define([
 
       this.own(
         on(this.conceptSchemeSelect, 'change', lang.hitch(this, function() {
-
-          // toggle buttons for add and import
-          if (this.conceptSchemeSelect.value !== '-1') {
-            this.emit('scheme.changed', {
-              schemeId: this.conceptSchemeSelect.value
-            });
-            domAttr.set(this.addConceptButton, 'disabled', false);
-            domAttr.set(this.importConceptButton, 'disabled', false);
-            this._search();
-          } else {
-            domAttr.set(this.addConceptButton, 'disabled', true);
-            domAttr.set(this.importConceptButton, 'disabled', true);
-          }
+          this.emit('scheme.changed', {
+            schemeId: this.conceptSchemeSelect.value
+          });
+          // activate buttons for add and import
+          domAttr.set(this.addConceptButton, 'disabled', false);
+          domAttr.set(this.importConceptButton, 'disabled', false);
+          this._search();
         }))
       );
     },
