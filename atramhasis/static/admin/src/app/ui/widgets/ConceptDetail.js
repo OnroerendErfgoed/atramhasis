@@ -63,6 +63,16 @@ define([
       });
     },
 
+    _openMergeDialog: function(evt) {
+      console.debug('ConceptDetail::_openMergeDialog');
+      evt ? evt.preventDefault() : null;
+
+      this.emit('concept.merge', {
+        concept: this.concept,
+        schemeId: this.scheme
+      });
+    },
+
     _deleteConcept: function(evt) {
       console.debug('ConceptDetail::_deleteConcept');
       evt ? evt.preventDefault() : null;

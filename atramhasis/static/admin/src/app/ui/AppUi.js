@@ -314,6 +314,9 @@ define([
           on(conceptDetail, 'concept.edit', lang.hitch(this, function(evt) {
             this._editConcept(conceptDetail, evt.concept, evt.schemeId);
           }))
+          on(conceptDetail, 'concept.merge', lang.hitch(this, function(evt) {
+            this._mergeConcept(conceptDetail, evt.concept, evt.schemeId);
+          }))
           conceptDetail.startup();
           this._addTab(conceptDetail);
         }));
@@ -437,6 +440,10 @@ define([
       console.debug('AppUi::_editConcept');
 
       this._manageConceptDialog.showDialog(schemeId, concept, 'edit');
+    },
+
+    _mergeConcept: function(view, concept, schemeId) {
+      console.log(concept, schemeId);
     },
 
     _deleteConcept: function(view, concept, schemeId) {
