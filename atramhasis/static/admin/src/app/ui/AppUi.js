@@ -27,6 +27,7 @@ define([
   './dialogs/ManageConceptDialog',
   './dialogs/ManageLanguagesDialog',
   './dialogs/ImportConceptDialog',
+  './dialogs/MergeConceptDialog',
   '../utils/ErrorUtils',
   'dojo/NodeList-manipulate'
 ], function (
@@ -55,6 +56,7 @@ define([
   ManageConceptDialog,
   ManageLanguagesDialog,
   ImportConceptDialog,
+  MergeConceptDialog,
   errorUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -72,6 +74,7 @@ define([
     _manageConceptDialog: null,
     _manageLanguagesDialog: null,
     _importConceptDialog: null,
+    _mergeConceptDialog: null,
     _selectedSchemeId: null,
 
     /**
@@ -114,6 +117,14 @@ define([
       this._importConceptDialog.startup();
       on(this._importConceptDialog, 'concept.import', lang.hitch(this, function(evt) {
         this._createImportConcept(evt.schemeId, evt.concept);
+      }));
+
+      this._mergeConceptDialog = new MergeConceptDialog({
+        externalSchemeStore: this.conceptSchemeController.getExternalSchemeStore(),
+      });
+      this._mergeConceptDialog.startup();
+      on(this._mergeConceptDialog, 'concept.merge', lang.hitch(this, function(evt) {
+        console.log('MERGE THAT SHIT');
       }));
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
@@ -470,7 +481,9 @@ define([
     },
 
     _mergeConcept: function(view, concept, schemeId) {
-      console.log(concept, schemeId);
+      if (concept.matches) {
+        this._mergeConceptDialog.show(concept, schemeId);
+      }
     },
 
     _deleteConcept: function(view, concept, schemeId) {
