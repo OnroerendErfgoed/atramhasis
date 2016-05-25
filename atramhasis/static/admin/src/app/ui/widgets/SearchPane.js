@@ -13,6 +13,7 @@ define([
   'dijit/MenuItem',
   'dijit/MenuSeparator',
   'dojo/dom-construct',
+  'dojo/dom-attr',
   'dojo/topic',
   'dojo/on',
   'dojo/dom-style',
@@ -33,6 +34,7 @@ define([
   MenuItem,
   MenuSeparator,
   domConstruct,
+  domAttr,
   topic,
   on,
   domStyle,
@@ -154,6 +156,9 @@ define([
           this.emit('scheme.changed', {
             schemeId: this.conceptSchemeSelect.value
           });
+          // activate buttons for add and import
+          domAttr.set(this.addConceptButton, 'disabled', false);
+          domAttr.set(this.importConceptButton, 'disabled', false);
           this._search();
         }))
       );
@@ -244,7 +249,6 @@ define([
 
       return contextMenu;
     },
-
 
     _search: function (evt) {
       evt ? evt.preventDefault() : null;
