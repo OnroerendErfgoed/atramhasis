@@ -80,9 +80,9 @@ define([
         idProperty: 'id',
         labelProperty: 'name'
       });
-      on(this.schemeNode, 'change', lang.hitch(this, function(evt) {
-        this.updateScheme(evt.target.value);
-      }));
+      //on(this.schemeNode, 'change', lang.hitch(this, function(evt) {
+      //  this.updateScheme(evt.target.value);
+      //}));
 
       topic.subscribe('languages.updated', lang.hitch(this, function() {
         this.updateLanguages();
@@ -117,13 +117,11 @@ define([
         this.schemeNode.value = scheme;
         this.updateScheme(scheme);
         this.dialog.set('title', 'Add new concept or collection');
-        domAttr.set(this.schemeNode, 'disabled', false);
 
         if (concept) {
           if (concept.id) {
             this.dialog.set('title', 'Edit <strong>' + concept.label + '</strong>');
           }
-          domAttr.set(this.schemeNode, 'disabled', true);
           this.relationManager.setConcept(concept);
           this.labelManager.setConcept(concept);
           this.noteManager.setConcept(concept);

@@ -134,7 +134,7 @@ define([
       this._exactStore = new TrackableMemory({ data: [] });
       this._exactGrid.set('collection', this._exactStore);
       this._closeStore = new TrackableMemory({ data: [] });
-      this._closeGrid.set('collection', this._exactStore);
+      this._closeGrid.set('collection', this._closeStore);
 
       if (this._matchesDialog) { this._matchesDialog.reset(); }
     },
