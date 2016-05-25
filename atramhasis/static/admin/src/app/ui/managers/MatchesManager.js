@@ -166,12 +166,12 @@ define([
             var div = domConstruct.create('div', {'class': 'dGridHyperlink'});
             domConstruct.create('a', {
               href: '#',
-              title: 'Remove note',
+              title: 'Remove match',
               className: 'fa fa-trash',
               innerHTML: '',
               onclick: lang.hitch(this, function (evt) {
                 evt.preventDefault();
-                this._removeRow(object.id, options.collection);
+                this._removeRow(object.id, object.type);
               })
             }, div);
             return div;
@@ -329,8 +329,24 @@ define([
       this._matchesDialog.show();
     },
 
-    _removeRow: function(rowId, store) {
-      store.remove(rowId);
+    _removeRow: function(rowId, type) {
+      console.log(rowId, this._relatedStore);
+      var store = null;
+      switch(type) {
+        case 'broad': store = this._broadStore;
+          break;
+        case 'close': store = this._closeStore;
+          break;
+        case 'exact': store = this._exactStore;
+          break;
+        case 'narrow': store = this._narrowStore;
+          break;
+        case 'related': store = this._relatedStored;
+          break;
+      }
+      if (store) {
+        store.remove(rowId);
+      }
     }
   });
 });
