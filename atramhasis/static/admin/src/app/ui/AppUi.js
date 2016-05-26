@@ -95,11 +95,9 @@ define([
         conceptSchemeController: this.conceptSchemeController
       });
       on(this._manageConceptDialog, 'new.concept.save', lang.hitch(this, function(evt) {
-        console.log(evt);
         this._saveNewConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
       }));
       on(this._manageConceptDialog, 'concept.save', lang.hitch(this, function(evt) {
-        console.log(evt);
         this._saveConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
       }));
       this._manageConceptDialog.startup();
@@ -124,7 +122,6 @@ define([
       });
       this._mergeConceptDialog.startup();
       on(this._mergeConceptDialog, 'concept.merge', lang.hitch(this, function(evt) {
-        console.log(evt.conceptUri, evt.concept, evt.schemeId);
         this._createMergeConcept(evt.conceptUri, evt.concept, evt.schemeId);
       }));
 
@@ -257,7 +254,6 @@ define([
         type: 'collection'
       };
       newConcept.superordinates.push(concept);
-      console.log(newConcept);
       this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
     },
 
@@ -282,7 +278,6 @@ define([
     _createImportConcept: function(schemeId, concept) {
       this.conceptSchemeController.getConcept(schemeId, concept.uri).then(lang.hitch(this, function(result) {
         var newConcept = result;
-        console.log(result);
         this._manageConceptDialog.showDialog(this._selectedSchemeId, newConcept, 'add');
       }));
     },
@@ -292,7 +287,6 @@ define([
       this.conceptSchemeController.getMergeMatch(conceptUri).then(lang.hitch(this, function (match) {
         var labelsToMerge = match.labels;
         var notesToMerge = match.notes;
-        console.log(labelsToMerge, notesToMerge);
         concept.labels = this._mergeLabels(concept.labels, labelsToMerge);
         concept.notes = this._mergeNotes(concept.notes, notesToMerge);
 
@@ -521,7 +515,7 @@ define([
         this._showLoading('Removing concept..');
         this.conceptController.deleteConcept(concept, schemeId).then(
           lang.hitch(this, function(result) {
-            console.log('delete concept results', result);
+            console.debug('delete concept results', result);
             if (view) {
               this._closeTab(view);
             }
