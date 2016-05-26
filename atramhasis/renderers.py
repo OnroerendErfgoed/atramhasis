@@ -70,10 +70,12 @@ def conceptscheme_adapter(obj, request):
     """
     scheme_id = request.matchdict['scheme_id']
     provider = request.skos_registry.get_provider(scheme_id)
+    language = request.params.get('language', request.locale_name)
+    label = obj.label(language)
     return {
         'id': obj.id,
         'uri': obj.uri,
-        'label': obj.label().label if obj.label() else None,
+        'label': label.label if label else None,
         'subject': provider.metadata['subject'] if provider.metadata['subject'] else [],
         'labels': obj.labels,
         'notes': obj.notes,
@@ -96,19 +98,21 @@ def concept_adapter(obj, request):
         if key not in matches:
             matches[key] = []
         matches[key].append(m.uri)
+    language = request.params.get('language', request.locale_name)
+    label = obj.label(language)
     return {
         'id': obj.concept_id,
         'type': obj.type,
         'uri': obj.uri,
-        'label': obj.label().label if obj.label() else None,
+        'label': label.label if label else None,
         'labels': obj.labels,
         'notes': obj.notes,
         'sources': obj.sources,
-        'broader': [map_relation(c) for c in obj.broader_concepts],
-        'narrower': [map_relation(c) for c in obj.narrower_concepts],
-        'related': [map_relation(c) for c in obj.related_concepts],
-        'member_of': [map_relation(c) for c in obj.member_of],
-        'subordinate_arrays': [map_relation(c) for c in obj.narrower_collections],
+        'broader': [map_relation(c, language) for c in obj.broader_concepts],
+        'narrower': [map_relation(c, language) for c in obj.narrower_concepts],
+        'related': [map_relation(c, language) for c in obj.related_concepts],
+        'member_of': [map_relation(c, language) for c in obj.member_of],
+        'subordinate_arrays': [map_relation(c, language) for c in obj.narrower_collections],
         'matches': matches
     }
 
@@ -121,16 +125,18 @@ def collection_adapter(obj, request):
     :param request: the current request
     :rtype: :class:`dict`
     """
+    language = request.params.get('language', request.locale_name)
+    label = obj.label(language)
     return {
         'id': obj.concept_id,
         'type': obj.type,
         'uri': obj.uri,
-        'label': obj.label().label if obj.label() else None,
+        'label': label.label if label else None,
         'labels': obj.labels,
         'sources': obj.sources,
-        'members': [map_relation(c) for c in obj.members],
-        'member_of': [map_relation(c) for c in obj.member_of],
-        'superordinates': [map_relation(c) for c in obj.broader_concepts]
+        'members': [map_relation(c, language) for c in obj.members],
+        'member_of': [map_relation(c, language) for c in obj.member_of],
+        'superordinates': [map_relation(c, language) for c in obj.broader_concepts]
     }
 
 

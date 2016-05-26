@@ -70,6 +70,7 @@ class TestJsonRenderer(unittest.TestCase):
         self.request = testing.DummyRequest()
         self.request.skos_registry = self.regis
         self.request.matchdict = {'scheme_id': 'TREES'}
+        self.request.locale_name = 'nl'
 
         self.concept.member_of.add(self.collection)
         self.collection.members.add(self.concept)
@@ -102,7 +103,7 @@ class TestJsonRenderer(unittest.TestCase):
     def test_concept_adapter(self):
         from atramhasis.renderers import concept_adapter
         c = self.concept
-        concept = concept_adapter(c, {})
+        concept = concept_adapter(c, self.request)
         self.assertIsInstance(concept, dict)
         self.assertEqual(concept['id'], 101)
         self.assertEqual(concept['type'], 'concept')
@@ -129,7 +130,7 @@ class TestJsonRenderer(unittest.TestCase):
     def test_collection_adapter(self):
         from atramhasis.renderers import collection_adapter
         c = self.collection
-        collection = collection_adapter(c, {})
+        collection = collection_adapter(c, self.request)
         self.assertIsInstance(collection, dict)
         self.assertEqual(collection['id'], 102)
         self.assertEqual(collection['type'], 'collection')
@@ -191,3 +192,11 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(0, len(conceptscheme['subject']))
         self.assertIsInstance(conceptscheme, dict)
 
+    def test_conceptscheme_language_handling(self):
+        from atramhasis.renderers import conceptscheme_adapter
+        c = self.conceptscheme
+        conceptscheme = conceptscheme_adapter(c, self.request)
+        self.assertEqual('een label', conceptscheme['label'])
+        self.request.locale_name = 'en'
+        conceptscheme = conceptscheme_adapter(c, self.request)
+        self.assertIn(conceptscheme['label'], ['other label', 'and some other label'])
