@@ -134,18 +134,18 @@ def collection_adapter(obj, request):
     }
 
 
-def map_relation(thing):
+def map_relation(thing, language='any'):
     """
     Map thing in a relation, leaving out the relations (to avoid circular dependencies)
     :param thing: the thing to map
     :rtype: :class:`dict`
     """
+    label = thing.label(language)
     return {
         'id': thing.concept_id,
         'type': thing.type,
         'uri': thing.uri,
-        'label': thing.label().label if thing.label() else None,
-        'labels': thing.labels
+        'label': label.label if label else None
     }
 
 

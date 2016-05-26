@@ -151,8 +151,6 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(relation['type'], 'concept')
         self.assertEqual(relation['uri'], 'urn:x-atramhasis-demo:TREES:101')
         self.assertIsNotNone(relation['label'], 'een label')
-        self.assertIsInstance(relation['labels'], list)
-        self.assertEqual(len(relation['labels']), 3)
         self.assertRaises(KeyError, lambda: relation['notes'])
         self.assertRaises(KeyError, lambda: relation['member_of'])
         self.assertRaises(KeyError, lambda: relation['narrower'])
@@ -168,8 +166,6 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(relation['type'], 'collection')
         self.assertEqual(relation['uri'], 'urn:x-atramhasis-demo:TREES:102')
         self.assertIsNone(relation['label'])
-        self.assertIsInstance(relation['labels'], list)
-        self.assertEqual(len(relation['labels']), 0)
         self.assertRaises(KeyError, lambda: relation['members'])
         self.assertRaises(KeyError, lambda: relation['member_of'])
 
