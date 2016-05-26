@@ -259,6 +259,7 @@ define([
 
       // SOURCES
       if (concept.sources && concept.sources.length > 0) {
+        console.log(concept.sources.length);
          array.forEach(concept.sources, lang.hitch(this, function(source) {
           domConstruct.create('li', {
             innerHTML: source.citation

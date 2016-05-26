@@ -120,11 +120,12 @@ define([
       }));
 
       this._mergeConceptDialog = new MergeConceptDialog({
-        externalSchemeStore: this.conceptSchemeController.getExternalSchemeStore(),
+        conceptSchemeController: this.conceptSchemeController
       });
       this._mergeConceptDialog.startup();
       on(this._mergeConceptDialog, 'concept.merge', lang.hitch(this, function(evt) {
-        console.log('MERGE THAT SHIT');
+        console.log(evt.conceptUri, evt.concept, evt.schemeId);
+        this._createMergeConcept(evt.conceptUri, evt.concept, evt.schemeId);
       }));
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
@@ -283,6 +284,23 @@ define([
         var newConcept = result;
         console.log(result);
         this._manageConceptDialog.showDialog(this._selectedSchemeId, newConcept, 'add');
+      }));
+    },
+
+    _createMergeConcept: function(conceptUri, concept, schemeId) {
+      this._showLoading('Merging concepts..');
+      this.conceptSchemeController.getMergeMatch(conceptUri).then(lang.hitch(this, function (match) {
+        var labelsToMerge = match.labels;
+        var notesToMerge = match.notes;
+        console.log(labelsToMerge, notesToMerge);
+        concept.labels = this._mergeLabels(concept.labels, labelsToMerge);
+        concept.notes = this._mergeNotes(concept.notes, notesToMerge);
+
+        this._manageConceptDialog.showDialog(schemeId, concept, 'edit');
+      }), function (err) {
+        topic.publish('dGrowl', err, {'title': "Error when looking up match", 'sticky': true, 'channel':'error'});
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
       }));
     },
 
@@ -476,7 +494,6 @@ define([
 
     _editConcept: function(view, concept, schemeId) {
       console.debug('AppUi::_editConcept');
-
       this._manageConceptDialog.showDialog(schemeId, concept, 'edit');
     },
 
@@ -508,19 +525,19 @@ define([
             if (view) {
               this._closeTab(view);
             }
-            this._hideLoading();
           }),
           lang.hitch(this, function (error) {
             console.error('delete concept error', error);
             var parsedError = errorUtils.parseError(error);
-            this._hideLoading();
             topic.publish('dGrowl', parsedError.message, {
               'title': parsedError.title,
               'sticky': true,
               'channel': 'error'
             });
           })
-        );
+        ).always(lang.hitch(this, function() {
+          this._hideLoading();
+        }));
       }));
 
       confirmationDialog.show();
@@ -529,6 +546,7 @@ define([
     _saveConcept: function(view, concept, schemeId) {
       console.debug('ConceptContainer::_saveConcept', concept);
 
+      this._showLoading('Saving concept..');
       this.conceptController.saveConcept(concept, schemeId, 'PUT').then(lang.hitch(this, function(res) {
         // save successful
         view._close();
@@ -547,10 +565,13 @@ define([
           'sticky': true,
           'channel': 'error'
         });
-      });
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
     },
 
     _saveNewConcept: function(view, concept, schemeId) {
+      this._showLoading('Saving concept..')
       this.conceptController.saveConcept(concept, schemeId, 'POST').then(lang.hitch(this, function(res) {
         // save successful
         view._close();
@@ -567,7 +588,9 @@ define([
           'sticky': true,
           'channel': 'error'
         });
-      });
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
     },
 
     _closeEditDialog: function() {
@@ -575,6 +598,56 @@ define([
         this._editDialog._close();
         this._editDialog.destroyRecursive();
       }
+    },
+
+    _mergeLabels: function (currentLabels, labelsToMerge) {
+      var mergedLabels = currentLabels;
+      array.forEach(labelsToMerge, function(labelToMerge) {
+        if (!this._containsLabel(currentLabels, labelToMerge)) {
+          mergedLabels.push(this._verifyPrefLabel(mergedLabels, labelToMerge));
+        }
+      }, this);
+      return mergedLabels;
+    },
+
+    _containsLabel: function (labels, labelToSearch) {
+      return array.some(labels, function(label) {
+        return label.label === labelToSearch.label
+          && label.language === labelToSearch.language
+          && label.type === labelToSearch.type;
+      })
+    },
+
+    _verifyPrefLabel: function (labels, labelToMerge) {
+      if (labelToMerge.type === 'prefLabel' && this._containsPrefLabelOfSameLanguage(labels, labelToMerge)) {
+        labelToMerge.type = 'altLabel';
+      }
+      return labelToMerge;
+    },
+
+    _containsPrefLabelOfSameLanguage: function (labels, labelToSearch) {
+      return array.some(labels, function(label) {
+        return label.type === 'prefLabel'
+          && label.language === labelToSearch.language;
+      })
+    },
+
+    _mergeNotes: function (currentNotes, notesToMerge) {
+      var mergedNotes = currentNotes;
+      array.forEach(notesToMerge, function(noteToMerge) {
+        if (!this._containsNote(currentNotes, noteToMerge)) {
+          mergedNotes.push(noteToMerge);
+        }
+      }, this);
+      return mergedNotes;
+    },
+
+    _containsNote: function (notes, noteToSearch) {
+      return array.some(notes, function(note) {
+        return note.note === noteToSearch.note
+          && note.language === noteToSearch.language
+          && note.type === noteToSearch.type;
+      })
     }
   });
 });

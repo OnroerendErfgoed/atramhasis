@@ -136,6 +136,7 @@ define([
         var scheme = data.concept_scheme.id;
         var call = self.getConcept(scheme, uri);
         return call.then(function(concept) {
+          console.log(concept.labels, concept.notes);
           return {
             labels: concept.labels,
             notes: concept.notes

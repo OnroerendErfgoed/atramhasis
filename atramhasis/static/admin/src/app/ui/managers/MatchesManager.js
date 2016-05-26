@@ -159,7 +159,6 @@ define([
         remove: {
           label: '',
           renderCell: lang.hitch(this, function (object) {
-            console.log(object);
             if (object.id === undefined) {
               return null;
             }
@@ -189,7 +188,7 @@ define([
       }, node);
 
       grid.on('dgrid-error', function(event) {
-        console.log(event.error.message);
+        console.debug(event.error.message);
       });
 
       return grid;
@@ -224,7 +223,6 @@ define([
         if (matches.exact) {
           array.forEach(matches.exact, function (match) {
             this.conceptSchemeController.getMatch(match, 'exact').then(lang.hitch(this, function (matched) {
-              console.log(matched);
               this._addMatch(matched, this._exactStore);
             }));
           }, this);
@@ -330,7 +328,6 @@ define([
     },
 
     _removeRow: function(rowId, type) {
-      console.log(rowId, this._relatedStore);
       var store = null;
       switch(type) {
         case 'broad': store = this._broadStore;
@@ -341,7 +338,7 @@ define([
           break;
         case 'narrow': store = this._narrowStore;
           break;
-        case 'related': store = this._relatedStored;
+        case 'related': store = this._relatedStore;
           break;
       }
       if (store) {
