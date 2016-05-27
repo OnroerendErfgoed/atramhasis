@@ -5,9 +5,10 @@ Atramhasis
         :target: http://badge.fury.io/py/atramhasis
 .. image:: https://readthedocs.org/projects/atramhasis/badge/?version=latest
         :target: https://readthedocs.org/projects/atramhasis/?badge=latest
+
 .. image:: https://travis-ci.org/OnroerendErfgoed/atramhasis.png?branch=master
         :target: https://travis-ci.org/OnroerendErfgoed/atramhasis
-.. image:: https://coveralls.io/repos/OnroerendErfgoed/atramhasis/badge.png?branch=master
+.. image:: https://img.shields.io/coveralls/OnroerendErfgoed/atramhasis.svg
         :target: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 .. image:: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/badges/quality-score.png?b=master
         :target: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/?branch=master
