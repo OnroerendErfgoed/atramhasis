@@ -1,8 +1,8 @@
 Atramhasis
 ==========
 
-.. image:: https://badge.fury.io/py/atramhasis.png
-        :target: http://badge.fury.io/py/atramhasis
+.. image:: https://img.shields.io/pypi/v/atramhasis.svg
+        :target: https://pypi.python.org/pypi/atramhasis
 .. image:: https://readthedocs.org/projects/atramhasis/badge/?version=latest
         :target: https://readthedocs.org/projects/atramhasis/?badge=latest
 
