@@ -14,7 +14,7 @@
   {% endblock %}
 
   <link rel="icon" type="image/x-icon" href="{{request.static_path(app_package + ':static/img/favicon.ico')}}" />
-  <script src="{{request.static_path(app_package + ':static/js/vendor/modernizr.js')}}"></script>
+  <script src="{{request.static_path(app_package + ':static/bower_components/modernizr/modernizr.js')}}"></script>
 
   {% block js_files_head %}
     <script src="{{ request.static_path(app_package + ':static/bower_components/jquery/dist/jquery.js') }}"></script>
