@@ -245,7 +245,7 @@ define([
       evt ? evt.preventDefault() : null;
       console.debug('AppUi::_createConcept');
 
-      this._manageConceptDialog.showDialog(this._selectedSchemeId, 'add');
+      this._manageConceptDialog.showDialog(this._selectedSchemeId, null,  'add');
     },
 
     _createAddSubordinateArrayConcept: function(concept, schemeId) {
