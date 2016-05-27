@@ -110,7 +110,6 @@ define([
      * Toont het dialog
      */
     showDialog: function (scheme, concept, mode) {
-      console.log(mode);
       if (mode) {
         this._mode = mode;
       }
@@ -210,8 +209,6 @@ define([
         var matchesData = this.matchesManager.getData();
         lang.mixin(concept, matchesData);
       }
-
-      console.log(this.mode);
 
       if (this._mode === 'add') {
         // emit save event
