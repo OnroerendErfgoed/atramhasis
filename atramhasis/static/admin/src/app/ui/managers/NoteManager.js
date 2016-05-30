@@ -99,7 +99,13 @@ define([
       var columns = {
         note: {
           label: "Note",
-          field: "note"
+          field: "note",
+          renderCell: function(object) {
+            if (object) {
+              var div = domConstruct.create('div', {innerHTML: object.note});
+              return div;
+            }
+          }
         },
         language: {
           label: "Language",

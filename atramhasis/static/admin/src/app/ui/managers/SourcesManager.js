@@ -98,7 +98,13 @@ define([
       var columns = {
         citation: {
           label: "Citation",
-          field: "citation"
+          field: "citation",
+          renderCell: function(object) {
+            if (object) {
+              var div = domConstruct.create('div', {innerHTML: object.citation});
+              return div;
+            }
+          }
         },
         actions: {
           label: '',
