@@ -410,6 +410,34 @@ a.admin-button:hover {
   width: 450px;
 }
 
+.merge-concept-dialog {
+  width: 600px;
+  height: 400px;
+
+  .dgrid {
+    height: 250px;
+
+    .dgrid-cell {
+      font-size: 13px;
+      padding-bottom: 0;
+      padding-left: 5px;
+    }
+
+    .dgrid-column-link {
+      width: 35px;
+      text-align: center;
+    }
+
+    .dgrid-selected .dgrid-row-table {
+      background-color: #cee6fa;
+    }
+
+    .dgrid-row-table {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .matches-dialog, .import-concept-dialog {
   width: 800px;
   height: 635px;

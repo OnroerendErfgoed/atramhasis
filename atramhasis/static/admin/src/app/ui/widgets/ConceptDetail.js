@@ -6,6 +6,7 @@ define([
   'dojo/dom-construct',
   'dojo/dom-class',
   'dojo/dom-style',
+  'dojo/dom-attr',
   'dojo/json',
   'dojo/on',
   'dijit/_WidgetBase',
@@ -20,6 +21,7 @@ define([
   domConstruct,
   domClass,
   domStyle,
+  domAttr,
   JSON,
   on,
   _WidgetBase,
@@ -43,6 +45,7 @@ define([
     postCreate: function () {
       this.inherited(arguments);
       console.debug('ConceptDetail::postCreate');
+      domAttr.set(this.mergeButton, 'disabled', true);
     },
 
     startup: function () {
@@ -50,7 +53,6 @@ define([
       console.debug('ConceptDetail::startup');
 
       this._setData(this.concept);
-      //domStyle.set(this.conceptDetailNode, 'max-height', (this.maxHeight ? this.maxHeight + 'px' : '500px'));
     },
 
     _openEditDialog: function (evt) {
@@ -58,6 +60,16 @@ define([
       evt ? evt.preventDefault() : null;
 
       this.emit('concept.edit', {
+        concept: this.concept,
+        schemeId: this.scheme
+      });
+    },
+
+    _openMergeDialog: function(evt) {
+      console.debug('ConceptDetail::_openMergeDialog');
+      evt ? evt.preventDefault() : null;
+
+      this.emit('concept.merge', {
         concept: this.concept,
         schemeId: this.scheme
       });
@@ -74,7 +86,6 @@ define([
     },
 
     _setData: function(concept) {
-
       console.log(concept);
       // set view data
       this.conceptTitleViewNode.innerHTML = '<strong>' + this.scheme + ' : ' + concept.label + '</strong>';
@@ -206,20 +217,30 @@ define([
       // MATCHES
       if (concept.matches) {
         var matches = concept.matches;
+        var matchesFound = false;
         if (matches.broad && matches.broad.length > 0) {
           this._loadMatches(matches.broad, 'broad');
+          matchesFound = true;
         }
         if (matches.narrow && matches.narrow.length > 0) {
           this._loadMatches(matches.narrow, 'narrow');
+          matchesFound = true;
         }
         if (matches.exact && matches.exact.length > 0) {
           this._loadMatches(matches.exact, 'exact');
+          matchesFound = true;
         }
         if (matches.close && matches.close.length > 0) {
           this._loadMatches(matches.close, 'close');
+          matchesFound = true;
         }
         if (matches.related && matches.related.length > 0) {
           this._loadMatches(matches.related, 'related');
+          matchesFound = true;
+        }
+        if (matchesFound) {
+          // activate merge button
+          domAttr.set(this.mergeButton, 'disabled', false);
         }
       }
 
@@ -238,6 +259,7 @@ define([
 
       // SOURCES
       if (concept.sources && concept.sources.length > 0) {
+        console.log(concept.sources.length);
          array.forEach(concept.sources, lang.hitch(this, function(source) {
           domConstruct.create('li', {
             innerHTML: source.citation
