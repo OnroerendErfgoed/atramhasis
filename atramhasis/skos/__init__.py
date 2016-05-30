@@ -2,10 +2,14 @@
 
 import logging
 from skosprovider.uri import UriPatternGenerator
-from skosprovider_heritagedata.providers import HeritagedataProvider
-
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
+from skosprovider_heritagedata.providers import HeritagedataProvider
 from skosprovider_getty.providers import AATProvider, TGNProvider
+
+import requests
+from cachecontrol import CacheControl
+from cachecontrol.heuristics import ExpiresAfter
 
 log = logging.getLogger(__name__)
 
@@ -59,27 +63,36 @@ def includeme(config):   # pragma: no cover
 
     # use 'subject': ['external'] for read only external providers (only available in REST service)
 
+    getty_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
+
     AAT = AATProvider(
         {'id': 'AAT', 'subject': ['external']},
+        session=getty_session
     )
 
     TGN = TGNProvider(
-        {'id': 'TGN', 'subject': ['external']}
+        {'id': 'TGN', 'subject': ['external']},
+        session=getty_session
     )
+
+    eh_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
 
     EH_PERIOD = HeritagedataProvider(
         {'id': 'EH_PERIOD', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_period'
+        scheme_uri='http://purl.org/heritagedata/schemes/eh_period',
+        session=eh_session
     )
 
     EH_MONUMENT_TYPE = HeritagedataProvider(
         {'id': 'EH_MONUMENT_TYPE', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2'
+        scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2',
+        session=eh_session
     )
 
     EH_MATERIALS = HeritagedataProvider(
         {'id': 'EH_MATERIALS', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_tbm'
+        scheme_uri='http://purl.org/heritagedata/schemes/eh_tbm',
+        session=eh_session
     )
 
     skosregis = config.get_skos_registry()
