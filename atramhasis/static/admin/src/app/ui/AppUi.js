@@ -27,6 +27,7 @@ define([
   './dialogs/ManageConceptDialog',
   './dialogs/ManageLanguagesDialog',
   './dialogs/ImportConceptDialog',
+  './dialogs/MergeConceptDialog',
   '../utils/ErrorUtils',
   'dojo/NodeList-manipulate'
 ], function (
@@ -55,6 +56,7 @@ define([
   ManageConceptDialog,
   ManageLanguagesDialog,
   ImportConceptDialog,
+  MergeConceptDialog,
   errorUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -72,6 +74,7 @@ define([
     _manageConceptDialog: null,
     _manageLanguagesDialog: null,
     _importConceptDialog: null,
+    _mergeConceptDialog: null,
     _selectedSchemeId: null,
 
     /**
@@ -92,11 +95,9 @@ define([
         conceptSchemeController: this.conceptSchemeController
       });
       on(this._manageConceptDialog, 'new.concept.save', lang.hitch(this, function(evt) {
-        console.log(evt);
         this._saveNewConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
       }));
       on(this._manageConceptDialog, 'concept.save', lang.hitch(this, function(evt) {
-        console.log(evt);
         this._saveConcept(this._manageConceptDialog, evt.concept, evt.schemeId);
       }));
       this._manageConceptDialog.startup();
@@ -114,6 +115,14 @@ define([
       this._importConceptDialog.startup();
       on(this._importConceptDialog, 'concept.import', lang.hitch(this, function(evt) {
         this._createImportConcept(evt.schemeId, evt.concept);
+      }));
+
+      this._mergeConceptDialog = new MergeConceptDialog({
+        conceptSchemeController: this.conceptSchemeController
+      });
+      this._mergeConceptDialog.startup();
+      on(this._mergeConceptDialog, 'concept.merge', lang.hitch(this, function(evt) {
+        this._createMergeConcept(evt.conceptUri, evt.concept, evt.schemeId);
       }));
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
@@ -236,7 +245,7 @@ define([
       evt ? evt.preventDefault() : null;
       console.debug('AppUi::_createConcept');
 
-      this._manageConceptDialog.showDialog(this._selectedSchemeId, 'add');
+      this._manageConceptDialog.showDialog(this._selectedSchemeId, null,  'add');
     },
 
     _createAddSubordinateArrayConcept: function(concept, schemeId) {
@@ -245,7 +254,6 @@ define([
         type: 'collection'
       };
       newConcept.superordinates.push(concept);
-      console.log(newConcept);
       this._manageConceptDialog.showDialog(schemeId, newConcept, 'add');
     },
 
@@ -270,8 +278,23 @@ define([
     _createImportConcept: function(schemeId, concept) {
       this.conceptSchemeController.getConcept(schemeId, concept.uri).then(lang.hitch(this, function(result) {
         var newConcept = result;
-        console.log(result);
         this._manageConceptDialog.showDialog(this._selectedSchemeId, newConcept, 'add');
+      }));
+    },
+
+    _createMergeConcept: function(conceptUri, concept, schemeId) {
+      this._showLoading('Merging concepts..');
+      this.conceptSchemeController.getMergeMatch(conceptUri).then(lang.hitch(this, function (match) {
+        var labelsToMerge = match.labels;
+        var notesToMerge = match.notes;
+        concept.labels = this._mergeLabels(concept.labels, labelsToMerge);
+        concept.notes = this._mergeNotes(concept.notes, notesToMerge);
+
+        this._manageConceptDialog.showDialog(schemeId, concept, 'edit');
+      }), function (err) {
+        topic.publish('dGrowl', err, {'title': "Error when looking up match", 'sticky': true, 'channel':'error'});
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
       }));
     },
 
@@ -334,6 +357,9 @@ define([
           }));
           on(conceptDetail, 'concept.edit', lang.hitch(this, function(evt) {
             this._editConcept(conceptDetail, evt.concept, evt.schemeId);
+          }))
+          on(conceptDetail, 'concept.merge', lang.hitch(this, function(evt) {
+            this._mergeConcept(conceptDetail, evt.concept, evt.schemeId);
           }))
           conceptDetail.startup();
           this._addTab(conceptDetail);
@@ -462,8 +488,13 @@ define([
 
     _editConcept: function(view, concept, schemeId) {
       console.debug('AppUi::_editConcept');
-
       this._manageConceptDialog.showDialog(schemeId, concept, 'edit');
+    },
+
+    _mergeConcept: function(view, concept, schemeId) {
+      if (concept.matches) {
+        this._mergeConceptDialog.show(concept, schemeId);
+      }
     },
 
     _deleteConcept: function(view, concept, schemeId) {
@@ -484,23 +515,23 @@ define([
         this._showLoading('Removing concept..');
         this.conceptController.deleteConcept(concept, schemeId).then(
           lang.hitch(this, function(result) {
-            console.log('delete concept results', result);
+            console.debug('delete concept results', result);
             if (view) {
               this._closeTab(view);
             }
-            this._hideLoading();
           }),
           lang.hitch(this, function (error) {
             console.error('delete concept error', error);
             var parsedError = errorUtils.parseError(error);
-            this._hideLoading();
             topic.publish('dGrowl', parsedError.message, {
               'title': parsedError.title,
               'sticky': true,
               'channel': 'error'
             });
           })
-        );
+        ).always(lang.hitch(this, function() {
+          this._hideLoading();
+        }));
       }));
 
       confirmationDialog.show();
@@ -509,6 +540,7 @@ define([
     _saveConcept: function(view, concept, schemeId) {
       console.debug('ConceptContainer::_saveConcept', concept);
 
+      this._showLoading('Saving concept..');
       this.conceptController.saveConcept(concept, schemeId, 'PUT').then(lang.hitch(this, function(res) {
         // save successful
         view._close();
@@ -527,10 +559,13 @@ define([
           'sticky': true,
           'channel': 'error'
         });
-      });
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
     },
 
     _saveNewConcept: function(view, concept, schemeId) {
+      this._showLoading('Saving concept..')
       this.conceptController.saveConcept(concept, schemeId, 'POST').then(lang.hitch(this, function(res) {
         // save successful
         view._close();
@@ -547,7 +582,9 @@ define([
           'sticky': true,
           'channel': 'error'
         });
-      });
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
     },
 
     _closeEditDialog: function() {
@@ -555,6 +592,56 @@ define([
         this._editDialog._close();
         this._editDialog.destroyRecursive();
       }
+    },
+
+    _mergeLabels: function (currentLabels, labelsToMerge) {
+      var mergedLabels = currentLabels;
+      array.forEach(labelsToMerge, function(labelToMerge) {
+        if (!this._containsLabel(currentLabels, labelToMerge)) {
+          mergedLabels.push(this._verifyPrefLabel(mergedLabels, labelToMerge));
+        }
+      }, this);
+      return mergedLabels;
+    },
+
+    _containsLabel: function (labels, labelToSearch) {
+      return array.some(labels, function(label) {
+        return label.label === labelToSearch.label
+          && label.language === labelToSearch.language
+          && label.type === labelToSearch.type;
+      })
+    },
+
+    _verifyPrefLabel: function (labels, labelToMerge) {
+      if (labelToMerge.type === 'prefLabel' && this._containsPrefLabelOfSameLanguage(labels, labelToMerge)) {
+        labelToMerge.type = 'altLabel';
+      }
+      return labelToMerge;
+    },
+
+    _containsPrefLabelOfSameLanguage: function (labels, labelToSearch) {
+      return array.some(labels, function(label) {
+        return label.type === 'prefLabel'
+          && label.language === labelToSearch.language;
+      })
+    },
+
+    _mergeNotes: function (currentNotes, notesToMerge) {
+      var mergedNotes = currentNotes;
+      array.forEach(notesToMerge, function(noteToMerge) {
+        if (!this._containsNote(currentNotes, noteToMerge)) {
+          mergedNotes.push(noteToMerge);
+        }
+      }, this);
+      return mergedNotes;
+    },
+
+    _containsNote: function (notes, noteToSearch) {
+      return array.some(notes, function(note) {
+        return note.note === noteToSearch.note
+          && note.language === noteToSearch.language
+          && note.type === noteToSearch.type;
+      })
     }
   });
 });
