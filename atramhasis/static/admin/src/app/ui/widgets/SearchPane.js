@@ -70,7 +70,6 @@ define([
       console.debug('SearchPane::init',scheme, store);
       this._scheme = scheme;
       this._grid.set('collection', store);
-      console.log(this._grid.get('collection'));
     },
 
     _createGrid: function (node) {
@@ -156,9 +155,10 @@ define([
           this.emit('scheme.changed', {
             schemeId: this.conceptSchemeSelect.value
           });
-          // activate buttons for add and import
+          // activate buttons for add and import, edit scheme
           domAttr.set(this.addConceptButton, 'disabled', false);
           domAttr.set(this.importConceptButton, 'disabled', false);
+          domAttr.set(this.editSchemeButton, 'disabled', false);
           this._search();
         }))
       );
@@ -262,7 +262,6 @@ define([
         label: this.labelInput.value,
         sort: '+label'
       };
-      console.debug('SearchPane::_search searchParams', schemeId, filter);
       var store = this.appUi.conceptController.getConceptStore(schemeId).filter(filter);
       this.init(schemeId, store);
       this.appUi._slideMenu._slideOpen();

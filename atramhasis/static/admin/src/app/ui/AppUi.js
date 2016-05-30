@@ -28,6 +28,7 @@ define([
   './dialogs/ManageLanguagesDialog',
   './dialogs/ImportConceptDialog',
   './dialogs/MergeConceptDialog',
+  './dialogs/ManageSchemeDialog',
   '../utils/ErrorUtils',
   'dojo/NodeList-manipulate'
 ], function (
@@ -57,6 +58,7 @@ define([
   ManageLanguagesDialog,
   ImportConceptDialog,
   MergeConceptDialog,
+  ManageSchemeDialog,
   errorUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -123,6 +125,17 @@ define([
       this._mergeConceptDialog.startup();
       on(this._mergeConceptDialog, 'concept.merge', lang.hitch(this, function(evt) {
         this._createMergeConcept(evt.conceptUri, evt.concept, evt.schemeId);
+      }));
+
+      this._manageSchemeDialog = new ManageSchemeDialog({
+        parent: this,
+        languageController: this.languageController,
+        listController: this.listController,
+        conceptSchemeController: this.conceptSchemeController
+      });
+      this._manageSchemeDialog.startup();
+      on(this._manageSchemeDialog, 'scheme.save', lang.hitch(this, function(evt) {
+        this._saveConceptScheme(this._manageSchemeDialog, evt.scheme);
       }));
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
@@ -312,7 +325,19 @@ define([
 
     _editConceptScheme: function (evt) {
       evt.preventDefault();
-      console.debug('AppUi::_editConceptScheme');
+      this._showLoading('Loading concept scheme..')
+      // retrieve scheme and open dialog
+      this.conceptSchemeController.getConceptScheme(this._selectedSchemeId).then(lang.hitch(this,
+        function(schemeResult) {
+          console.debug('AppUi::_editConceptScheme', schemeResult);
+          this._manageSchemeDialog.showDialog(schemeResult, 'edit');
+        }
+      ), function (err) {
+        console.log(err);
+        //todo dgrowl
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
     },
 
     _createSlideMenu: function(node) {
@@ -338,6 +363,7 @@ define([
         this._openTab(this._getTab(scheme + '_' + conceptId));
         return;
       }
+      this._showLoading('Loading concept..');
       this.conceptController.getConcept(scheme, conceptId).then(
         lang.hitch(this, function (data) {
           var conceptDetail = new ConceptDetail({
@@ -363,7 +389,9 @@ define([
           }))
           conceptDetail.startup();
           this._addTab(conceptDetail);
-        }));
+        })).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
     },
 
     _createSearchPane: function (node) {
@@ -565,12 +593,33 @@ define([
     },
 
     _saveNewConcept: function(view, concept, schemeId) {
-      this._showLoading('Saving concept..')
+      this._showLoading('Saving concept..');
       this.conceptController.saveConcept(concept, schemeId, 'POST').then(lang.hitch(this, function(res) {
         // save successful
         view._close();
         this._openConcept(res.id, schemeId);
         topic.publish('dGrowl', 'The concept was successfully saved.', {
+          'title': 'Save successful',
+          'sticky': false,
+          'channel': 'info'
+        });
+      }), function(err) {
+        var parsedError = errorUtils.parseError(err);
+        topic.publish('dGrowl', parsedError.message, {
+          'title': parsedError.title,
+          'sticky': true,
+          'channel': 'error'
+        });
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
+    },
+
+    _saveConceptScheme: function(view, scheme) {
+      this._showLoading('Saving concept scheme..');
+      this.conceptSchemeController.editConceptScheme(scheme).then(lang.hitch(this, function(res) {
+        view._close();
+        topic.publish('dGrowl', 'The concept scheme was successfully saved.', {
           'title': 'Save successful',
           'sticky': false,
           'channel': 'info'
