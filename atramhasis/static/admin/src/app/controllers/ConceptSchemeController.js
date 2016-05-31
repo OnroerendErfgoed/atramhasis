@@ -62,7 +62,7 @@ define([
           handleAs: "json",
           method: "PUT",
           data: jData,
-          headers:{'Content-Type': 'application/json', "Accept": "application/json"}
+          headers:{'Content-Type': 'application/json', 'Accept': "application/json"}
         });
     },
 
