@@ -8,6 +8,7 @@ define([
   'dojo/json',
   'dojo/topic',
   'dojo/on',
+  'dojo/promise/all',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/MatchesManager.html',
@@ -28,6 +29,7 @@ define([
   JSON,
   topic,
   on,
+  all,
   _WidgetBase,
   _TemplatedMixin,
   template,
@@ -49,6 +51,7 @@ define([
     concept: null,
     scheme: null,
     matchTypes: null,
+    _loaded: false,
     _broadStore: null,
     _broadGrid: null,
     _narrowStore: null,
@@ -206,64 +209,79 @@ define([
 
     _loadMatches: function(matches) {
       if (matches) {
+        var promises = [];
+        this.loadingMatchesNode.style.display = 'inline-block';
         if (matches.broad) {
           array.forEach(matches.broad, function (match) {
-            this.conceptSchemeController.getMatch(match, 'broad').then(lang.hitch(this, function (matched) {
+            promises.push(this.conceptSchemeController.getMatch(match, 'broad').then(lang.hitch(this, function (matched) {
               this._addMatch(matched, this._broadStore);
-            }));
+            })));
           }, this);
         }
         if (matches.close) {
           array.forEach(matches.close, function (match) {
-            this.conceptSchemeController.getMatch(match, 'close').then(lang.hitch(this, function (matched) {
+            promises.push(this.conceptSchemeController.getMatch(match, 'close').then(lang.hitch(this, function (matched) {
               this._addMatch(matched, this._closeStore);
-            }));
+            })));
           }, this);
         }
         if (matches.exact) {
           array.forEach(matches.exact, function (match) {
-            this.conceptSchemeController.getMatch(match, 'exact').then(lang.hitch(this, function (matched) {
+            promises.push(this.conceptSchemeController.getMatch(match, 'exact').then(lang.hitch(this, function (matched) {
               this._addMatch(matched, this._exactStore);
-            }));
+            })));
           }, this);
         }
         if (matches.narrow) {
           array.forEach(matches.narrow, function (match) {
-            this.conceptSchemeController.getMatch(match, 'narrow').then(lang.hitch(this, function (matched) {
+            promises.push(this.conceptSchemeController.getMatch(match, 'narrow').then(lang.hitch(this, function (matched) {
               this._addMatch(matched, this._narrowStore);
-            }));
+            })));
           }, this);
         }
         if (matches.related) {
           array.forEach(matches.related, function (match) {
-            this.conceptSchemeController.getMatch(match, 'related').then(lang.hitch(this, function (matched) {
+            promises.push(this.conceptSchemeController.getMatch(match, 'related').then(lang.hitch(this, function (matched) {
               this._addMatch(matched, this._relatedStore);
-            }));
+            })));
           }, this);
         }
+
+        all(promises).then(lang.hitch(this, function(res) {
+          this.loadingMatchesNode.style.display = 'none';
+          this._loaded = true;
+        }));
       }
     },
 
     getData: function() {
       var data = {};
 
-      var matches = {};
-      matches.narrow = array.map(this._narrowStore.data, function(item) {
-        return item.data.uri;
-      });
-      matches.broad = array.map(this._broadStore.data, function(item) {
-        return item.data.uri;
-      });
-      matches.related = array.map(this._relatedStore.data, function(item) {
-        return item.data.uri;
-      });
-      matches.close = array.map(this._closeStore.data, function(item) {
-        return item.data.uri;
-      });
-      matches.exact = array.map(this._exactStore.data, function(item) {
-        return item.data.uri;
-      });
-      data.matches = matches;
+      if (this._loaded) {
+        var matches = {};
+        matches.narrow = array.map(this._narrowStore.data, function (item) {
+          return item.data.uri;
+        });
+        matches.broad = array.map(this._broadStore.data, function (item) {
+          return item.data.uri;
+        });
+        matches.related = array.map(this._relatedStore.data, function (item) {
+          return item.data.uri;
+        });
+        matches.close = array.map(this._closeStore.data, function (item) {
+          return item.data.uri;
+        });
+        matches.exact = array.map(this._exactStore.data, function (item) {
+          return item.data.uri;
+        });
+        data.matches = matches;
+      } else { // when not all matches are loaded into store => return existing matches
+        if (this.concept && this.concept.matches) {
+          data.matches = this.concept.matches;
+        } else {
+          data.matches = [];
+        }
+      }
 
       return data;
     },
@@ -303,19 +321,6 @@ define([
       });
       if (!found) {
         store.add(match);
-        return true;
-      }
-      return false;
-    },
-
-    _addRelation: function(id, label, path, relation) {
-      var store = relation;
-
-      var found = array.some(store.data, function (item) {
-        return item.id == id;
-      });
-      if (!found) {
-        store.add({id: id, label: label, path: path});
         return true;
       }
       return false;
