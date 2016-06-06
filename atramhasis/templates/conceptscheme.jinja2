@@ -48,6 +48,19 @@
             {% endif %}
           </ul>
         {% endif %}
+
+        {% if conceptscheme.sources %}
+          <ul class="scopeNote">
+            {% if conceptscheme.sources|length > 0 %}
+              <h3>{% trans %}sources{% endtrans %}</h3>
+              {%- for source in conceptscheme.sources %}
+                <li>
+                  {{ source.citation|safe }}
+                </li>
+              {%- endfor %}
+            {% endif %}
+          </ul>
+        {% endif %}
         <div class="row">
           <div class="large-2 columns right">
             <a href="{{ request.route_path('admin') }}"
