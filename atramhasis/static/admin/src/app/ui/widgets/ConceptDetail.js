@@ -8,11 +8,14 @@ define([
   'dojo/dom-style',
   'dojo/dom-attr',
   'dojo/json',
+  'dojo/query',
   'dojo/on',
+  'dojo/dom',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dojo/text!./templates/ConceptDetail.html',
-  '../dialogs/ConceptEditDialog'
+  '../dialogs/ConceptEditDialog',
+  'dojo/NodeList-traverse'
 ], function (
   declare,
   array,
@@ -23,7 +26,9 @@ define([
   domStyle,
   domAttr,
   JSON,
+  query,
   on,
+  dom,
   _WidgetBase,
   _TemplatedMixin,
   template,
@@ -259,8 +264,7 @@ define([
 
       // SOURCES
       if (concept.sources && concept.sources.length > 0) {
-        console.log(concept.sources.length);
-         array.forEach(concept.sources, lang.hitch(this, function(source) {
+        array.forEach(concept.sources, lang.hitch(this, function(source) {
           domConstruct.create('li', {
             innerHTML: source.citation
           }, this.sourcesNode, 'last');
@@ -276,21 +280,46 @@ define([
     },
 
     _loadMatches: function(matches, matchType) {
-      var dt = domConstruct.create('dt', { innerHTML: this.capitalize(matchType) }, this.matchesListNode, 'last');
+      var dt = domConstruct.create('dt', { innerHTML: this.capitalize(matchType), id: matchType }, this.matchesListNode, 'last');
       var matchString = '';
+      //var promises = [];
+      //array.forEach(matches, function (match) {
+      //  promises.push(this.conceptSchemeController.getMatch(match, matchType).then(lang.hitch(this, function (matched) {
+      //    matchString += '<a href="' + matched.data.uri + '" target="_blank" >' + matched.data.label + '</a>, '
+      //  })));
+      //}, this);
+      //
+      //all(promises).then(function(res) {
+      //  if (matchString.length > 2) {
+      //    matchString = matchString.substring(0, matchString.length - 2);
+      //  }
+      //  domConstruct.create('dd', {innerHTML: matchString}, dt);
+      //})
       var promises = [];
+      var dd = domConstruct.create('dd', {innerHTML: ''}, dt);
       array.forEach(matches, function (match) {
+        domConstruct.create('span', {id: match,
+          innerHTML: match + '&nbsp;<i class="fa fa-spinner fa-pulse"></i>&nbsp; '}, dd);
         promises.push(this.conceptSchemeController.getMatch(match, matchType).then(lang.hitch(this, function (matched) {
-          matchString += '<a href="' + matched.data.uri + '" target="_blank" >' + matched.data.label + '</a>, '
-        })));
+          dom.byId(matched.data.uri).innerHTML = '<a href="' + matched.data.uri + '" target="_blank" >'
+            + matched.data.label + '</a>, '
+          domClass.set(dom.byId(matched.data.uri), 'matched');
+        }), function(err) {
+          console.debug(err);
+        }));
       }, this);
 
       all(promises).then(function(res) {
-        if (matchString.length > 2) {
-          matchString = matchString.substring(0, matchString.length - 2);
-        }
-        domConstruct.create('dd', {innerHTML: matchString}, dt);
-      })
+        console.log(res);
+        //query('span:not(.matched)', dom.byId(matchType)).forEach(function(item) {
+        //  domConstruct.destroy(item);
+        //});
+        //var lastspan = query('span', dom.byId(matchType)).last();
+        //console.log(lastspan);
+        //lastInnerhtml = lastspan.innerHTML;
+        //console.log(lastInnerHTML);
+        //laststpan.innerHTML = lastInnerhtml.substring(0, lastInnerhtml.length - 1);
+      });
     },
 
     capitalize: function(string) {
