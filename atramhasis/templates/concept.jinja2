@@ -81,71 +81,75 @@
         </ul>
         <div class="tabs-content">
           <section role="tabpanel" aria-hidden="false" class="content active" id="panel2-1">
-            <div class="clearfix">
-              <h3 class="relations-title">{% trans %}relations{% endtrans %}</h3>
-              {% if conceptType == 'Concept' %}
-                {#            // broader#}
-                {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
-                  <div class="clearfix">
-                    <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
-                    {% if concept.broader_concepts|length > 0 %}
-                      {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
-                    {% endif %}
-                    {% if concept.member_of|length > 0 %}
-                      {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
-                    {% endif %}
-                  </div>
+            <div class="row">
+              <div class="large-12 columns">
+                <h3 class="relations-title">{% trans %}relations{% endtrans %}</h3>
+                {% if conceptType == 'Concept' %}
+                  {#            // broader#}
+                  {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
+                      {% if concept.broader_concepts|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+                      {% endif %}
+                      {% if concept.member_of|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+
+                  {#            // narrower#}
+                  {% if concept.narrower_concepts|length > 0 or concept.narrower_collections|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
+                      {% if concept.narrower_concepts|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.narrower_concepts, scheme_id) }}
+                      {% endif %}
+                      {% if concept.narrower_collections|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.narrower_collections, scheme_id) }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+
+                  {#            // related#}
+                  {% if concept.related_concepts|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}related{% endtrans %}</h4>
+                      {{ render_relaties_lijst(request, concept.related_concepts, scheme_id) }}
+                    </div>
+                  {% endif %}
                 {% endif %}
 
-                {#            // narrower#}
-                {% if concept.narrower_concepts|length > 0 or concept.narrower_collections|length > 0 %}
-                  <div class="clearfix">
-                    <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
-                    {% if concept.narrower_concepts|length > 0 %}
-                      {{ render_relaties_lijst(request, concept.narrower_concepts, scheme_id) }}
-                    {% endif %}
-                    {% if concept.narrower_collections|length > 0 %}
-                      {{ render_relaties_lijst(request, concept.narrower_collections, scheme_id) }}
-                    {% endif %}
-                  </div>
+                {% if conceptType == 'Collection' %}
+                  {#            // broader#}
+                  {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
+                      {% if concept.broader_concepts|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+                      {% endif %}
+                      {% if concept.member_of|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  {#            // narrower#}
+                  {% if concept.members|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
+                      {{ render_relaties_lijst(request, concept.members, scheme_id) }}
+                    </div>
+                  {% endif %}
                 {% endif %}
-
-                {#            // related#}
-                {% if concept.related_concepts|length > 0 %}
-                  <div class="clearfix">
-                    <h4 class="relations-subtitle">{% trans %}related{% endtrans %}</h4>
-                    {{ render_relaties_lijst(request, concept.related_concepts, scheme_id) }}
-                  </div>
-                {% endif %}
-              {% endif %}
-
-              {% if conceptType == 'Collection' %}
-                {#            // broader#}
-                {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
-                  <div class="clearfix">
-                    <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
-                    {% if concept.broader_concepts|length > 0 %}
-                      {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
-                    {% endif %}
-                    {% if concept.member_of|length > 0 %}
-                      {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
-                    {% endif %}
-                  </div>
-                {% endif %}
-                {#            // narrower#}
-                {% if concept.members|length > 0 %}
-                  <div class="clearfix">
-                    <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
-                    {{ render_relaties_lijst(request, concept.members, scheme_id) }}
-                  </div>
-                {% endif %}
-              {% endif %}
+              </div>
             </div>
             {#        // matches#}
             {% if concept.matches|length > 0 %}
-              <div class="clearfix">
-                <h3 class="relations-title">{% trans %}matches{% endtrans %}</h3>
-                {{ render_matches(concept.matches, request) }}
+              <div class="row">
+                <div class="large-12 columns">
+                  <h3 class="relations-title">{% trans %}matches{% endtrans %}</h3>
+                  {{ render_matches(concept.matches, request) }}
+                </div>
               </div>
             {% endif %}
           </section>
