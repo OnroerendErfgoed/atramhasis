@@ -282,43 +282,25 @@ define([
     _loadMatches: function(matches, matchType) {
       var dt = domConstruct.create('dt', { innerHTML: this.capitalize(matchType), id: matchType }, this.matchesListNode, 'last');
       var matchString = '';
-      //var promises = [];
-      //array.forEach(matches, function (match) {
-      //  promises.push(this.conceptSchemeController.getMatch(match, matchType).then(lang.hitch(this, function (matched) {
-      //    matchString += '<a href="' + matched.data.uri + '" target="_blank" >' + matched.data.label + '</a>, '
-      //  })));
-      //}, this);
-      //
-      //all(promises).then(function(res) {
-      //  if (matchString.length > 2) {
-      //    matchString = matchString.substring(0, matchString.length - 2);
-      //  }
-      //  domConstruct.create('dd', {innerHTML: matchString}, dt);
-      //})
       var promises = [];
       var dd = domConstruct.create('dd', {innerHTML: ''}, dt);
-      array.forEach(matches, function (match) {
+      array.forEach(matches, function (match, index) {
         domConstruct.create('span', {id: match,
-          innerHTML: match + '&nbsp;<i class="fa fa-spinner fa-pulse"></i>&nbsp; '}, dd);
+          innerHTML: match + '&nbsp;<i class="fa fa-spinner fa-pulse"></i>&nbsp;'}, dd);
         promises.push(this.conceptSchemeController.getMatch(match, matchType).then(lang.hitch(this, function (matched) {
-          dom.byId(matched.data.uri).innerHTML = '<a href="' + matched.data.uri + '" target="_blank" >'
-            + matched.data.label + '</a>, '
-          domClass.set(dom.byId(matched.data.uri), 'matched');
+          var matchSpan = dom.byId(matched.data.uri);
+          matchSpan.innerHTML = '<a href="' + matched.data.uri + '" target="_blank" >' +
+            matched.data.label + '</a>' + (index === matches.length - 1 ? '' : ', ');
+          domClass.set(matchSpan, 'matched');
         }), function(err) {
           console.debug(err);
         }));
       }, this);
 
       all(promises).then(function(res) {
-        console.log(res);
-        //query('span:not(.matched)', dom.byId(matchType)).forEach(function(item) {
-        //  domConstruct.destroy(item);
-        //});
-        //var lastspan = query('span', dom.byId(matchType)).last();
-        //console.log(lastspan);
-        //lastInnerhtml = lastspan.innerHTML;
-        //console.log(lastInnerHTML);
-        //laststpan.innerHTML = lastInnerhtml.substring(0, lastInnerhtml.length - 1);
+        query('span:not(.matched)', dom.byId(matchType)).forEach(function(item) {
+          domConstruct.destroy(item);
+        });
       });
     },
 
