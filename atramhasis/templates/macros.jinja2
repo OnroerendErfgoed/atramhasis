@@ -49,7 +49,7 @@
           {%- for value in sorted_matches[matchtype] %}
             {%- set matchValue = request.skos_registry.get_by_uri(value.uri) %}
             {%- if matchValue %}
-              <div class="large-3 large-3-pad columns result-grid"><a href="{{ matchValue.uri }}"><h5>{{ matchValue.label(request.locale_name).label }}</h5> <span>[ id: {{ matchValue.id }} ]</span> <br><small>{{ matchValue.type }}</small></a></div>
+              <div class="large-3 large-3-pad columns result-grid"><a href="{{ matchValue.uri }}"><h5>{{ matchValue.label(request.locale_name).label }}</h5> <span>[ id: {{ matchValue.id }} ]</span> <br><small>{{ matchValue.concept_scheme.label(request.locale_name).label }}</small></a></div>
             {%- endif %}
           {%- endfor %}
         </div>
