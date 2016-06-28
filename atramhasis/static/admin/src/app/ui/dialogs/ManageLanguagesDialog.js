@@ -16,6 +16,7 @@ define([
   'dojo/text!./templates/ManageLanguagesDialog.html',
   'dijit/ConfirmDialog',
   '../../utils/DomUtils',
+  './LanguageDialog',
   'dojo/NodeList-manipulate'
 ], function (
   declare,
@@ -34,7 +35,8 @@ define([
   ColumnResizer,
   template,
   ConfirmDialog,
-  DomUtils
+  DomUtils,
+  LanguageDialog
 ) {
   return declare([Dialog, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
@@ -53,6 +55,15 @@ define([
       this._langGrid = this._createGrid({
         collection: this._langStore
       }, this.langGridNode);
+
+      this._editLanguageDialog = new LanguageDialog({
+        edit: true
+      });
+      this._editLanguageDialog.startup();
+
+      on(this._editLanguageDialog, 'edit.language', lang.hitch(this, function(evt) {
+        this._editLanguage(evt.language);
+      }));
     },
 
     startup: function () {
@@ -80,9 +91,21 @@ define([
             var div = domConstruct.create('div', {'class': 'dGridHyperlink'});
             domConstruct.create('a', {
               href: '#',
+              title: 'Edit language',
+              className: 'fa fa-pencil',
+              innerHTML: '',
+              onclick: lang.hitch(this, function (evt) {
+                evt.preventDefault();
+                this._showEditLanguageDialog(object);
+              })
+            }, div);
+
+            domConstruct.create('a', {
+              href: '#',
               title: 'Remove language',
               className: 'fa fa-trash',
               innerHTML: '',
+              style: 'margin-left: 10px;',
               onclick: lang.hitch(this, function (evt) {
                 evt.preventDefault();
                 this._removeRow(object);
@@ -157,7 +180,7 @@ define([
           }
         );
       } else {
-        topic.publish('dGrowl', '-Please fill in a language code and name to add a new language.', {
+        topic.publish('dGrowl', '-Please fill in a language code to add a new language.', {
           'title': 'Invalid values',
           'sticky': true,
           'channel': 'error'
@@ -207,6 +230,48 @@ define([
       }));
 
       confirmationDialog.show();
+    },
+
+    _showEditLanguageDialog: function(language) {
+      if (this._editLanguageDialog) {
+        this._editLanguageDialog.show(language);
+      }
+    },
+
+    _editLanguage: function(language) {
+      when(this._langStore.add(language)).then(
+        lang.hitch(this, function (lang) {
+          var message = 'Language edited: ' + lang.name;
+          topic.publish('dGrowl', message, {
+            'title': 'Languages',
+            'sticky': false,
+            'channel': 'info'
+          });
+          this.languageController.updateLanguageStore();
+          this._langGrid.refresh();
+          this._reset();
+        }),
+        function (error) {
+          var errorJson = JSON.parse(error.response.data);
+          var message = "",
+            prop = null;
+          array.forEach(errorJson.errors, function (errorObj) {
+            for (prop in errorObj) {
+              message += "-<em>";
+              message += prop;
+              message += "</em>: ";
+              message += errorObj[prop];
+              message += "<br>";
+            }
+          });
+          topic.publish('dGrowl', message, {
+            'title': errorJson.message,
+            'sticky': true,
+            'channel': 'error'
+          });
+        }
+      );
     }
+
   });
 });
