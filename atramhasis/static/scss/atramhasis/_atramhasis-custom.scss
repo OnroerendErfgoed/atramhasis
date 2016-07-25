@@ -38,19 +38,21 @@ h4 {font-size:0.6em;text-transform:uppercase;letter-spacing:4px;color:$steel;mar
 
 
 ul.no_bullet {
-list-style-type: none;
-padding: 0 ;
-margin: 0 ;
+  list-style-type: none;
+  padding: 0 ;
+  margin: 0 ;
 }
 
 li.cube {
-background: url(listitem.png) no-repeat 0 6px;padding:0 0 15px 15px;
+  background: url(listitem.png) no-repeat 0 6px;padding:0 0 15px 15px;
 }
-
-
 
 /*padding fix result page*/
 .large-3-pad {padding:0;}
+
+.large-3-pad.columns:last-child {
+  float: left;
+}
 
 /*download top*/
 ul.downloadtop {margin:30px 0 0 0;padding:0;}
