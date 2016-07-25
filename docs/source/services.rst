@@ -12,8 +12,8 @@ information or writing it.
 Pyramid_skosprovider
 ====================
 
-.. include:: ../../env/src/pyramid-skosprovider/docs/services.rst
-    :start-line: 5
+.. include:: ../external/pyramid_skosprovider/services.rst
+   :start-line: 5
 
 Atramhasis
 ==========
@@ -37,6 +37,7 @@ edit them and delete them.
         POST /conceptschemes/TREES/c HTTP/1.1
         Host: demo.atramhasis.org
         Accept: application/json
+        Content-Type: application/json
 
         {
             "type": "concept",
@@ -85,6 +86,7 @@ edit them and delete them.
         POST /conceptschemes/TAUNTS/c HTTP/1.1
         Host: demo.atramhasis.org
         Accept: application/json
+        Content-Type: application/json
 
         {
             "type": "concept",
@@ -147,6 +149,7 @@ edit them and delete them.
         PUT /conceptschemes/TREES/c/1 HTTP/1.1
         Host: demo.atramhasis.org
         Accept: application/json
+        Content-Type: application/json
 
         {
             "type": "concept",
@@ -157,7 +160,7 @@ edit them and delete them.
                 {
                     "type": "prefLabel",
                     "language": "en",
-                    "label: "The Larch"
+                    "label": "The Larch"
                 }, {
                     "type": "prefLabel",
                     "language": "nl",
@@ -185,7 +188,7 @@ edit them and delete them.
                 {
                     "type": "prefLabel",
                     "language": "en",
-                    "label: "The Larch"
+                    "label": "The Larch"
                 }, {
                     "type": "prefLabel",
                     "language": "nl",
@@ -243,7 +246,7 @@ edit them and delete them.
                 {
                     "type": "prefLabel",
                     "language": "en",
-                    "label: "The Larch"
+                    "label": "The Larch"
                 }, {
                     "type": "prefLabel",
                     "language": "nl",
@@ -375,6 +378,7 @@ deal with languages.
         PUT /languages/nl-BE HTTP/1.1
         Host: demo.atramhasis.org
         Accept: application/json
+        Content-Type: application/json
 
         {
             "id": "nl-BE",
