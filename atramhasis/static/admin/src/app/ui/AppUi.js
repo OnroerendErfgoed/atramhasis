@@ -250,9 +250,20 @@ define([
         router.go('#');
       }));
 
-      // TODO add route for conceptscheme
-    },
+      router.register('/conceptschemes/:schemeId', lang.hitch(this, function(evt){
+        if (!evt.params.schemeId) { return; }
+        this._openEditConceptScheme(evt.params.schemeId);
+        this._closeMenu();
+        router.go('#');
+      }));
 
+      router.register('/conceptschemes/:schemeId/', lang.hitch(this, function(evt){
+        if (!evt.params.schemeId) { return; }
+        this._openEditConceptScheme(evt.params.schemeId);
+        this._closeMenu();
+        router.go('#');
+      }));
+    },
 
     _createConcept: function(evt) {
       evt ? evt.preventDefault() : null;
@@ -333,8 +344,22 @@ define([
           this._manageSchemeDialog.showDialog(schemeResult, 'edit');
         }
       ), function (err) {
-        console.log(err);
-        //todo dgrowl
+        console.error(err);
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
+    },
+
+    _openEditConceptScheme: function(schemeId) {
+      this._showLoading('Loading concept scheme..')
+      // retrieve scheme and open dialog
+      this.conceptSchemeController.getConceptScheme(schemeId).then(lang.hitch(this,
+        function(schemeResult) {
+          console.debug('AppUi::_editConceptScheme', schemeResult);
+          this._manageSchemeDialog.showDialog(schemeResult, 'edit');
+        }
+      ), function (err) {
+        console.error(err);
       }).always(lang.hitch(this, function() {
         this._hideLoading();
       }));
