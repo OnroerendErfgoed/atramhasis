@@ -1,0 +1,27 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="mergeConceptDialog_title">
+  <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+		<span data-dojo-attach-point="titleNode" class="dijitDialogTitle" role="heading"></span>
+		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
+          data-dojo-attach-event="ondijitclick: onCancel" title="Annuleren" role="button" tabIndex="-1">
+			<span data-dojo-attach-point="closeText" class="closeText" title="Annuleren" tabIndex="-1">
+        <i class="fa fa-times"></i></span>
+		</span>
+  </div>
+
+  <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+    <div class="row">
+      <div class="large-12 columns" data-dojo-attach-point="loadingMatchesContainer" style="height: 250px;">
+        <h4><i class="fa fa-spinner fa-pulse"></i>&nbsp;&nbsp;Loading matches..</h4>
+      </div>
+      <div class="large-12 columns" data-dojo-attach-point="mergeGridContainer">
+        <div data-dojo-attach-point="mergeConceptGridNode"></div>
+      </div>
+    </div>
+    <div class="row footerButtons">
+      <div class="large-12 columns text-center">
+        <a href="#" data-dojo-attach-event="onClick: _okClick" class="button tiny">Merge</a>
+        <a href="#" data-dojo-attach-event="onClick: _cancelClick" class="button tiny">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>

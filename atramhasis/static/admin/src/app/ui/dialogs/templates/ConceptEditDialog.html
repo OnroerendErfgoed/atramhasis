@@ -1,0 +1,53 @@
+<div>
+  <div class="large-12 columns">
+    <div class="large-4 columns">
+      <div class="placeholder-container">
+        <label>SCHEME</label>
+        <input type="text" data-dojo-attach-point="schemeNode" disabled />
+      </div>
+    </div>
+    <div class="large-4 columns">
+      <div class="placeholder-container">
+        <label>TYPE</label>
+        <select data-dojo-attach-point="typeNode"></select>
+      </div>
+    </div>
+  </div>
+  <hr class="concept-hr">
+  <div class="large-12 columns" style="padding-bottom: 20px;">
+    <div data-dojo-type="dijit/layout/TabContainer"
+         data-dojo-attach-point="tabContainer"
+         data-dojo-props="doLayout:false"
+         class="">
+
+      <div data-dojo-type="dijit/layout/ContentPane"
+           title="Labels"
+           data-dojo-attach-point="tabLabels"
+           data-dojo-props="selected:true">
+        <div data-dojo-attach-point="labelsNode">[ LABELS ]</div>
+      </div>
+
+      <div data-dojo-type="dijit/layout/ContentPane"
+           title="Notes"
+           data-dojo-attach-point="tabNotes">
+        <div data-dojo-attach-point="notesNode">[ NOTES ]</div>
+      </div>
+      <div data-dojo-type="dijit/layout/ContentPane"
+           title="Relations"
+           data-dojo-attach-point="tabRelations"
+           style="max-height: 408px; overflow-y: auto;">
+        <div data-dojo-attach-point="relationsNode">[ RELATIONS ]</div>
+      </div>
+      <div data-dojo-type="dijit/layout/ContentPane"
+           title="Matches"
+           data-dojo-attach-point="tabMatches"
+           style="max-height: 408px; overflow-y: auto;">
+        <div data-dojo-attach-point="matchesNode">[ MATCHES ]</div>
+      </div>
+    </div>
+  </div>
+  <div class="large-12 columns text-center" style="margin-top: 30px; margin-bottom: 20px;">
+    <a href="#" class="button tiny" data-dojo-attach-event="onClick: _saveConcept">Save</a>
+    <a href="#" class="button tiny" data-dojo-attach-event="onClick: _cancel">Cancel</a>
+  </div>
+</div>

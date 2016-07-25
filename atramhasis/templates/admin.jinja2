@@ -5,6 +5,7 @@
 	{% set release_dir = app_package + ':static/admin/src' %}
 {% endif %}
 
+<!DOCTYPE html>
 <html>
 <head>
   <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/css/app-admin.css') }}" />
@@ -32,7 +33,7 @@
     <div><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
 	</div>
 
-	<div id='appDiv'></div>
+	<div id="appDiv"></div>
 
   <script src="{{ request.static_path(release_dir + '/dojoConfig.js') }}"></script>
 	<script type="text/javascript">

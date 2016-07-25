@@ -1,4 +1,4 @@
-{% extends 'layout-page.jinja2' %}
+{% extends 'layout.jinja2' %}
 
 {% block html_title %}Concept schemes{% endblock %}
 
@@ -37,28 +37,49 @@
         </dl>
 
         {% if conceptscheme.notes %}
-          <dt>{% trans %}notes{% endtrans %}</dt>
-          <dd>
-            {%- for note in conceptscheme.notes %}
-              <span>{{ note.notetype_id }} <em>({{ note.language }})</em> {{ note.note}}</span><br>
-            {%- endfor %}
-          </dd>
+          <ul class="scopeNote">
+            {% if conceptscheme.notes|length > 0 %}
+              <h3>{% trans %}notes{% endtrans %}</h3>
+              {%- for note in conceptscheme.notes %}
+                <li lang="{{ note.language }}">
+                  <strong>{{ note.type|capitalize }}</strong> <em>({{ note.language }})</em>: {{ note.note|safe }}
+                </li>
+              {%- endfor %}
+            {% endif %}
+          </ul>
         {% endif %}
-        <div class="row">
-          <div class="large-2 columns right">
-            <a href="{{ request.route_path('admin') }}"
-               class="fa fa-pencil editIcon"
-               title="Edit concept">
-            </a>
+
+        {% if conceptscheme.sources %}
+          <ul class="scopeNote">
+            {% if conceptscheme.sources|length > 0 %}
+              <h3>{% trans %}sources{% endtrans %}</h3>
+              {%- for source in conceptscheme.sources %}
+                <li>
+                  {{ source.citation|safe }}
+                </li>
+              {%- endfor %}
+            {% endif %}
+          </ul>
+        {% endif %}
+        {% if request.has_permission('edit') %}
+          <div class="row">
+            <div class="large-2 columns right">
+              <a href="{{ request.route_path('admin') + '#/conceptschemes/' + conceptscheme.scheme_id }}"
+                 class="fa fa-pencil editIcon"
+                 title="Edit concept">
+              </a>
+            </div>
           </div>
-        </div>
+        {% endif %}
       </div>
 
       {% if conceptscheme.top_concepts %}
-        <div class="clearfix">
-          <h3 style="margin-top: 20px;">top {% trans %}type_concept{% endtrans %}</h3>
+        <div class="row">
+          <div class="large-12 columns">
+            <h3>top {% trans %}type_concept{% endtrans %}</h3>
+            {{ print_concepts(request, conceptscheme.top_concepts, conceptscheme) }}
+          </div>
         </div>
-        {{ print_concepts(request, conceptscheme.top_concepts, conceptscheme) }}
       {% endif %}
     </div>
   </div>

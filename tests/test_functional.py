@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import unittest
+
+import logging
+logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 
 import six
 from pyramid.config import Configurator
@@ -43,7 +47,12 @@ json_value = {
             "label": "The Larch"
         }
     ],
-    "notes": []
+    "notes": [],
+    "sources": [
+        {
+            "citation": "Python, M.: Episode Three: How to recognise different types of trees from quite a long way away."
+        }
+    ]
 }
 
 json_value_relations = {
@@ -131,6 +140,7 @@ class FunctionalTests(unittest.TestCase):
 
         with transaction.manager:
             local_session = self.session_maker()
+
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2), local_session)
@@ -138,8 +148,6 @@ class FunctionalTests(unittest.TestCase):
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
-            local_session.add(Language('nl', 'Dutch'))
-            local_session.add(Language('en', 'English'))
 
             local_session.add(MatchType('broadMatch', ''))
             local_session.add(MatchType('closeMatch', ''))
@@ -399,7 +407,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 3)
+        self.assertEqual(len(res.json), 4)
 
     def test_get_languages_sort(self):
         res = self.testapp.get('/languages', headers=self._get_default_headers(),
@@ -407,7 +415,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 3)
+        self.assertEqual(len(res.json), 4)
 
     def test_get_languages_sort_desc(self):
         res = self.testapp.get('/languages', headers=self._get_default_headers(),
@@ -415,7 +423,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 3)
+        self.assertEqual(len(res.json), 4)
 
     def test_get_language(self):
         res = self.testapp.get('/languages/de', headers=self._get_default_headers())

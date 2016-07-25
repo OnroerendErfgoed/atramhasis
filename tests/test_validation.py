@@ -140,6 +140,9 @@ class TestValidation(unittest.TestCase):
                           "type": "note",
                           "language": "nl"
                       }],
+            "sources": [{
+                "citation": "Van Daele K. 2014"
+            }],
             "member_of": [{"id": 666}]
         }
         self.json_collection = {
@@ -170,7 +173,10 @@ class TestValidation(unittest.TestCase):
                           "note": "een notitie",
                           "type": "note",
                           "language": "nl"
-                      }]
+                      }],
+            "sources": [{
+                "citation": "Van Daele K. 2014"
+            }]
         }
 
     def tearDown(self):
@@ -181,6 +187,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNotNone(validated_conceptscheme)
         self.assertEqual(1, len(validated_conceptscheme['labels']))
         self.assertEqual(1, len(validated_conceptscheme['notes']))
+        self.assertEqual(1, len(validated_conceptscheme['sources']))
 
     def test_invalid_conceptscheme(self):
         self.json_conceptscheme.pop('labels')
@@ -197,6 +204,7 @@ class TestValidation(unittest.TestCase):
         self.assertIsNotNone(validated_concept)
         self.assertEqual(1, len(validated_concept['labels']))
         self.assertEqual(1, len(validated_concept['notes']))
+        self.assertEqual(1, len(validated_concept['sources']))
         self.assertEqual(3, len(validated_concept['narrower']))
         self.assertEqual(1, len(validated_concept['broader']))
         self.assertEqual(1, len(validated_concept['related']))

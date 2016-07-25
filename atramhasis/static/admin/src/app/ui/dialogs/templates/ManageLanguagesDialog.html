@@ -1,0 +1,51 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="manageLanguagesDialog_title">
+  <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+    <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" role="heading"></span>
+		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
+          data-dojo-attach-event="ondijitclick: onCancel" title="Annuleren" role="button" tabIndex="-1">
+			<span data-dojo-attach-point="closeText" class="closeText" title="Annuleren" tabIndex="-1">
+        <i class="fa fa-times"></i></span>
+		</span>
+  </div>
+  <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+    <div class="row">
+      <div class="large-12 columns">
+        <h5 style="margin-top: 0;">Add a language</h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-3 columns">
+        <div class="placeholder-container">
+          <label for="codeInputNode-${id}">Code</label>
+          <input type="text" id="codeInputNode-${id}" data-dojo-attach-point="codeInputNode" />
+        </div>
+      </div>
+      <div class="large-7 columns">
+        <div class="placeholder-container">
+          <label for="nameInputNode-${id}">Name</label>
+          <input type="text" id="nameInputNode-${id}" data-dojo-attach-point="nameInputNode" />
+        </div>
+      </div>
+      <div class="large-2 columns" style="padding: 0;">
+        <a href="#" data-dojo-attach-event="onClick: _addLangClick" data-dojo-attach-point="addButtonNode" style="float: left; height: 39px;" class="button tiny">Add&nbsp;&nbsp;<i class="fa fa-plus"></i></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <h5 style="margin-top: 0; margin-bottom: 10px;">You can use <a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry" target="_blank" style="text-decoration: underline;">this</a> list as a reference.</h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <div data-dojo-attach-point="langGridNode">
+        </div>
+      </div>
+    </div>
+    <div class="row footerButtons">
+      <div class="large-12 columns text-center">
+        <!--?<a href="#" data-dojo-attach-event="onClick: _okClick" data-dojo-attach-point="okButtonNode" class="button tiny">OK</a>-->
+        <a href="#" data-dojo-attach-event="onClick: _cancelClick" class="button tiny">Close</a>
+      </div>
+    </div>
+  </div>
+</div>

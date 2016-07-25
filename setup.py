@@ -82,19 +82,19 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='0.4.4',
+      version='0.5.0.dev0',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
-          "Development Status :: 3 - Alpha",
+          "Development Status :: 4 - Beta",
           "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
           "Programming Language :: Python",
           "Framework :: Pyramid",
           "Topic :: Internet :: WWW/HTTP",
           "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
           "Programming Language :: Python :: 2.7",
-          "Programming Language :: Python :: 3.3",
-          "Programming Language :: Python :: 3.4"
+          "Programming Language :: Python :: 3.4",
+          "Programming Language :: Python :: 3.5"
       ],
       author='Flanders Heritage Agency',
       author_email='ict@onroerenderfgoed.be',

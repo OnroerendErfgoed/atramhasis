@@ -1,12 +1,14 @@
 {% macro render_relaties_lijst(request, relaties, scheme_id) %}
   {% if relaties|length > 0 %}
     {%- set counter = 0  %}
-    {%- for c in relaties|sort(attribute='label') %}
-      {%- set counter = counter + 1 %}
-      <div class="large-3 large-3-pad columns result-grid" {% if counter == relaties|length %}style="float: left;"{% endif %}>
-        <a href="{{ request.route_path('concept', scheme_id = scheme_id, c_id = c.concept_id) }}"><h5>{{ c.label(request.locale_name).label }}</h5> <span> [ ID : {{ c.id }} ]</span><br><small>{{ c.type }}</small></a>
-      </div>
-    {%- endfor %}
+    <div class="large-12 columns">
+      {%- for c in relaties|sort(attribute='label') %}
+        {%- set counter = counter + 1 %}
+        <div class="large-3 large-3-pad columns result-grid" {% if counter == relaties|length %}style="float: left;"{% endif %}>
+          <a href="{{ request.route_path('concept', scheme_id = scheme_id, c_id = c.concept_id) }}"><h5>{{ c.label(request.locale_name).label }}</h5> <span> [ ID : {{ c.id }} ]</span><br><small>{{ c.type }}</small></a>
+        </div>
+      {%- endfor %}
+    </div>
   {% endif %}
 {% endmacro %}
 
@@ -42,10 +44,15 @@
   {% if sorted_matches|length > 0 %}
     {%- for matchtype in sorted_matches %}
       {% if sorted_matches[matchtype]|length > 0 %}
-        <h4 class="relations-subtitle">{{ matchtype }}</h4>
+        <div class="large-12 columns">
+          <h4 class="relations-subtitle">{{ matchtype }}</h4>
           {%- for value in sorted_matches[matchtype] %}
-             <div class="large-3 large-3-pad columns result-grid"><a href="{{ value.uri }}"><h5>{{ value.concept.label(request.locale_name).label }}</h5> <span>[ id: {{ value.concept.id }} ]</span> <br><small>{{ value.concept.type }}</small></a></div>
+            {%- set matchValue = request.skos_registry.get_by_uri(value.uri) %}
+            {%- if matchValue %}
+              <div class="large-3 large-3-pad columns result-grid"><a href="{{ matchValue.uri }}"><h5>{{ matchValue.label(request.locale_name).label }}</h5> <span>[ id: {{ matchValue.id }} ]</span> <br><small>{{ matchValue.concept_scheme.label(request.locale_name).label }}</small></a></div>
+            {%- endif %}
           {%- endfor %}
+        </div>
       {% endif %}
     {%- endfor %}
   {% endif %}
@@ -55,8 +62,8 @@
   <!-- Google Analytics -->
   <script type="text/javascript">
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
     ga('create', '{{ ga_key }}', 'auto');
@@ -126,10 +133,14 @@
 {% endmacro %}
 
 {% macro popular_concepts(request, scheme_id, max) %}
-    {% for c in request.data_managers['audit_manager'].get_most_popular_concepts_for_conceptscheme(scheme_id, max) %}
-        <ul class="no_bullet">
-            <li class="cube"><a href="{{ request.route_path('atramhasis.get_concept', scheme_id=scheme_id, c_id=c.concept_id) }}">
-                {{ request.skos_registry.get_provider(scheme_id).get_by_id(c.concept_id).label().label|capitalize() }}</a></li>
-        </ul>
-    {% endfor %}
+  {% for c in request.data_managers['audit_manager'].get_most_popular_concepts_for_conceptscheme(scheme_id, max) %}
+    {% set conceptLabel = request.skos_registry.get_provider(scheme_id).get_by_id(c['concept_id']) %}
+    {% if conceptLabel and conceptLabel.label() %}
+      <ul class="no_bullet">
+        <li class="cube"><a href="{{ request.route_path('atramhasis.get_concept', scheme_id=scheme_id, c_id=c['concept_id']) }}">
+          {{ conceptLabel.label().label|capitalize() }}
+        </a></li>
+      </ul>
+    {% endif %}
+  {% endfor %}
 {% endmacro %}

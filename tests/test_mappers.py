@@ -10,7 +10,16 @@ try:
 except ImportError:
     from mock import Mock  # pragma: no cover
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Label, Collection, MatchType, Match, Thing, ConceptScheme
+from skosprovider_sqlalchemy.models import (
+    Thing,
+    ConceptScheme,
+    Concept,
+    Collection,
+    Label,
+    Source,
+    MatchType,
+    Match,
+)
 from atramhasis.mappers import map_concept, map_conceptscheme
 
 test_json = {
@@ -34,7 +43,10 @@ test_json = {
                   "note": "een notitie",
                   "type": "note",
                   "language": "nl"
-              }]
+              }],
+    "sources": [{
+        "citation": "Atlas."
+    }]
 }
 json_collection = {
     "id": 0,
@@ -64,7 +76,10 @@ test_json_conceptscheme = {
                   "note": "een notitie",
                   "type": "note",
                   "language": "nl"
-              }]
+              }],
+    "sources": [{
+        "citation": "Atlas."
+    }]
 }
 
 
@@ -150,6 +165,7 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_concept.member_of))
         self.assertEqual(2, len(result_concept.labels))
         self.assertEqual(1, len(result_concept.notes))
+        self.assertEqual(1, len(result_concept.sources))
         self.assertFalse(hasattr(result_concept, 'members'))
 
     def test_mapping_collections_filled(self):
@@ -157,6 +173,10 @@ class TestMappers(unittest.TestCase):
         self.concept.labels.append(label)
         related_concept = Concept(concept_id=6, conceptscheme_id=1)
         self.concept.related_concepts.add(related_concept)
+        source = Source(citation='testCitation')
+        self.concept.sources.append(source)
+        source = Source(citation='AnotherTestCitation')
+        self.concept.sources.append(source)
         result_concept = map_concept(self.concept, test_json, self.skos_manager)
         self.assertEqual(3, len(result_concept.narrower_concepts))
         self.assertEqual(2, len(result_concept.broader_concepts))
@@ -164,6 +184,7 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_concept.member_of))
         self.assertEqual(2, len(result_concept.labels))
         self.assertEqual(1, len(result_concept.notes))
+        self.assertEqual(1, len(result_concept.sources))
 
     def test_mapping_check_db_lookup(self):
         result_concept = map_concept(self.concept, test_json, self.skos_manager)
@@ -234,3 +255,4 @@ class TestMappers(unittest.TestCase):
         self.assertIsNotNone(result_conceptscheme)
         self.assertEqual(1, len(result_conceptscheme.labels))
         self.assertEqual(1, len(result_conceptscheme.notes))
+        self.assertEqual(1, len(result_conceptscheme.sources))

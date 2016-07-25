@@ -30,9 +30,9 @@ def get_definition(notes):
 
 @view_defaults(accept='text/html')
 class AtramhasisView(object):
-    '''
+    """
     This object groups HTML views part of the public user interface.
-    '''
+    """
 
     def __init__(self, request):
         self.request = request
@@ -53,11 +53,9 @@ class AtramhasisView(object):
 
     @view_config(name='favicon.ico')
     def favicon_view(self):
-        '''
+        """
         This view returns the favicon when requested from the web root.
-
-        :param request: A :class:`pyramid.request.Request`
-        '''
+        """
         here = os.path.dirname(__file__)
         icon = os.path.join(os.path.dirname(here), 'static', 'img', 'favicon.ico')
         response = FileResponse(
@@ -69,11 +67,9 @@ class AtramhasisView(object):
 
     @view_config(route_name='home', renderer='atramhasis:templates/home.jinja2')
     def home_view(self):
-        '''
+        """
         This view displays the homepage.
-
-        :param request: A :class:`pyramid.request.Request`
-        '''
+        """
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
@@ -85,11 +81,9 @@ class AtramhasisView(object):
 
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
-        '''
+        """
         This view displays a list of available conceptschemes.
-
-        :param request: A :class:`pyramid.request.Request`
-        '''
+        """
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
@@ -102,29 +96,27 @@ class AtramhasisView(object):
     @audit
     @view_config(route_name='conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
     def conceptscheme_view(self):
-        '''
+        """
         This view displays conceptscheme details.
-
-        :param request: A :class:`pyramid.request.Request`
-        '''
+        """
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
-        conceptScheme = provider.concept_scheme
-        title = conceptScheme.label().label if (conceptScheme.label()) else scheme_id
+        conceptscheme = provider.concept_scheme
+        title = conceptscheme.label().label if (conceptscheme.label()) else scheme_id
 
         scheme = {
             'scheme_id': scheme_id,
             'title': title,
-            'uri': conceptScheme.uri,
-            'labels': conceptScheme.labels,
-            'notes': conceptScheme.notes,
+            'uri': conceptscheme.uri,
+            'labels': conceptscheme.labels,
+            'notes': conceptscheme.notes,
             'top_concepts': provider.get_top_concepts()
         }
 
@@ -133,17 +125,15 @@ class AtramhasisView(object):
     @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
-        '''
+        """
         This view displays the concept details
-
-        :param request: A :class:`pyramid.request.Request`
-        '''
+        """
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
@@ -167,17 +157,15 @@ class AtramhasisView(object):
 
     @view_config(route_name='search_result', renderer='atramhasis:templates/search_result.jinja2')
     def search_result(self):
-        '''
+        """
         This view displays the search results
-
-        :param request: A :class:`pyramid.request.Request`
-        '''
+        """
         conceptschemes = [
             {'id': x.get_metadata()['id'],
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
@@ -195,11 +183,9 @@ class AtramhasisView(object):
 
     @view_config(route_name='locale')
     def set_locale_cookie(self):
-        '''
+        """
         This view will set a language cookie
-
-        :param request: A :class:`pyramid.request.Request`
-        '''
+        """
         settings = get_current_registry().settings
         default_lang = settings.get('pyramid.default_locale_name')
         available_languages = settings.get('available_languages', default_lang).split()
@@ -308,7 +294,8 @@ class AtramhasisView(object):
 
         return dict_thing
 
-    def create_treeid(self, parent_tree_id, concept_id):
+    @staticmethod
+    def create_treeid(parent_tree_id, concept_id):
         if parent_tree_id is None:
             return str(concept_id)
         else:
@@ -322,9 +309,9 @@ class AtramhasisView(object):
 
 @view_defaults(accept='application/json', renderer='json')
 class AtramhasisListView(object):
-    '''
+    """
     This object groups list views part for the user interface.
-    '''
+    """
 
     def __init__(self, request):
         self.request = request
@@ -348,9 +335,9 @@ class AtramhasisListView(object):
 
 @view_defaults(accept='text/html')
 class AtramhasisAdminView(object):
-    '''
+    """
     This object groups HTML views part of the admin user interface.
-    '''
+    """
 
     def __init__(self, request):
         self.request = request

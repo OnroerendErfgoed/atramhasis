@@ -11,7 +11,7 @@ any user with access to a web browser to consult the thesauri and if so wanted,
 to edit them.
 
 Atramhasis is also intended to be one of the focal points in a 
-:term:`Service Oriented Architecture <SOA>`. It exposes as much of it's 
+:term:`Service Oriented Architecture <SOA>`. It exposes as much of its 
 functionalities as possible through :term:`REST` services. Both reading from
 and writing to concept schemes is possible with Atramhasis.
 

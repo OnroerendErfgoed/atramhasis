@@ -31,24 +31,28 @@ input.search-input-top:hover {background:#fff;border:1px solid #fff !important}
 
 // submenu
 .nostyleList {list-style:none;margin-left: 0;padding-left: 0 }
+h1 {font-size:0.9em;text-transform:uppercase;letter-spacing:4px;color:black;margin:30px 0;}
+h2 {font-size:0.8em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 0;}
 h3 {font-size:0.7em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 0;}
 h4 {font-size:0.6em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 20px;}
 
 
 ul.no_bullet {
-list-style-type: none;
-padding: 0 ;
-margin: 0 ;
+  list-style-type: none;
+  padding: 0 ;
+  margin: 0 ;
 }
 
 li.cube {
-background: url(listitem.png) no-repeat 0 6px;padding:0 0 15px 15px;
+  background: url(listitem.png) no-repeat 0 6px;padding:0 0 15px 15px;
 }
-
-
 
 /*padding fix result page*/
 .large-3-pad {padding:0;}
+
+.large-3-pad.columns:last-child {
+  float: left;
+}
 
 /*download top*/
 ul.downloadtop {margin:30px 0 0 0;padding:0;}

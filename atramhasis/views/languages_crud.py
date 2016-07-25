@@ -10,9 +10,9 @@ from atramhasis.validators import LanguageTag, languagetag_validator
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
 class LanguagesCrud(object):
-    '''
+    """
     This object groups CRUD REST views for languages.
-    '''
+    """
 
     def __init__(self, context, request):
         self.request = request
@@ -22,7 +22,7 @@ class LanguagesCrud(object):
 
     def _get_json_body(self):
         json_body = self.request.json_body
-        if 'l_id' in self.request.matchdict and not 'id' in json_body:
+        if 'l_id' in self.request.matchdict and 'id' not in json_body:
             json_body['id'] = self.request.matchdict['l_id']
         return json_body
 
@@ -43,11 +43,11 @@ class LanguagesCrud(object):
 
     @view_config(route_name='atramhasis.list_languages', permission='edit')
     def list_languages(self):
-        '''
+        """
         Get all existing languages
 
         :return: list of languages
-        '''
+        """
         if 'sort' in self.request.params:
             sort = self.request.params['sort']
             sort_desc = (sort[0:1] == '-')
@@ -60,12 +60,12 @@ class LanguagesCrud(object):
 
     @view_config(route_name='atramhasis.get_language', permission='edit')
     def get_language(self):
-        '''
+        """
         Get an existing language
 
         :raises atramhasis.errors.LanguageNotFoundException: If the language can't be found
         :return the corresponding language
-        '''
+        """
         l_id = self.request.matchdict['l_id']
         try:
             language = self.languages_manager.get(l_id)
@@ -77,11 +77,11 @@ class LanguagesCrud(object):
 
     @view_config(route_name='atramhasis.edit_language', permission='edit')
     def edit_language(self):
-        '''
+        """
         Edit an existing language or create when not found
 
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
-        '''
+        """
         l_id = self.request.matchdict['l_id']
         json_body = self._get_json_body()
         json_body['id'] = l_id
@@ -99,11 +99,11 @@ class LanguagesCrud(object):
 
     @view_config(route_name='atramhasis.delete_language', permission='edit')
     def delete_language(self):
-        '''
+        """
         Delete an existing concept
 
-        :raises atramhasis.errors.ConceptNotFoundException: If the concept can't be found
-        '''
+        :raises atramhasis.errors.LanguageNotFoundException: If the language can't be found
+        """
         l_id = self.request.matchdict['l_id']
         try:
             language = self.languages_manager.get(l_id)

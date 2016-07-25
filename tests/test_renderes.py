@@ -1,5 +1,5 @@
 import unittest
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Match, MatchType, Language, ConceptScheme
+from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Source, Match, MatchType, Language, ConceptScheme
 from pyramid import testing
 from fixtures.data import trees
 from skosprovider.registry import Registry
@@ -31,6 +31,11 @@ class TestJsonRenderer(unittest.TestCase):
         labels.append(label3)
         self.concept.labels = labels
 
+        sources = []
+        source = Source('Van Daele K. 2009')
+        sources.append(source)
+        self.concept.sources = sources
+
         matches = []
         match = Match()
         match.matchtype = MatchType(name='closeMatch', description='test')
@@ -57,6 +62,7 @@ class TestJsonRenderer(unittest.TestCase):
         self.conceptscheme.id = 1
         self.conceptscheme.labels = labels
         self.conceptscheme.notes = notes
+        self.conceptscheme.sources = sources
         self.conceptscheme.uri = None
 
         self.regis = Registry()
@@ -64,6 +70,7 @@ class TestJsonRenderer(unittest.TestCase):
         self.request = testing.DummyRequest()
         self.request.skos_registry = self.regis
         self.request.matchdict = {'scheme_id': 'TREES'}
+        self.request.locale_name = 'nl'
 
         self.concept.member_of.add(self.collection)
         self.collection.members.add(self.concept)
@@ -86,10 +93,17 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(note['type'], 'example')
         self.assertEqual(note['language'], 'en')
 
+    def test_source_adapter(self):
+        from atramhasis.renderers import source_adapter
+        s = self.concept.sources[0]
+        source = source_adapter(s, {})
+        self.assertIsInstance(source, dict)
+        self.assertEqual(source['citation'], 'Van Daele K. 2009')
+
     def test_concept_adapter(self):
         from atramhasis.renderers import concept_adapter
         c = self.concept
-        concept = concept_adapter(c, {})
+        concept = concept_adapter(c, self.request)
         self.assertIsInstance(concept, dict)
         self.assertEqual(concept['id'], 101)
         self.assertEqual(concept['type'], 'concept')
@@ -99,6 +113,8 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(len(concept['labels']), 3)
         self.assertIsInstance(concept['notes'], list)
         self.assertEqual(len(concept['notes']), 2)
+        self.assertIsInstance(concept['sources'], list)
+        self.assertEqual(len(concept['sources']), 1)
         self.assertIsInstance(concept['member_of'], list)
         self.assertEqual(len(concept['member_of']), 1)
         self.assertIsInstance(concept['narrower'], list)
@@ -114,7 +130,7 @@ class TestJsonRenderer(unittest.TestCase):
     def test_collection_adapter(self):
         from atramhasis.renderers import collection_adapter
         c = self.collection
-        collection = collection_adapter(c, {})
+        collection = collection_adapter(c, self.request)
         self.assertIsInstance(collection, dict)
         self.assertEqual(collection['id'], 102)
         self.assertEqual(collection['type'], 'collection')
@@ -136,8 +152,6 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(relation['type'], 'concept')
         self.assertEqual(relation['uri'], 'urn:x-atramhasis-demo:TREES:101')
         self.assertIsNotNone(relation['label'], 'een label')
-        self.assertIsInstance(relation['labels'], list)
-        self.assertEqual(len(relation['labels']), 3)
         self.assertRaises(KeyError, lambda: relation['notes'])
         self.assertRaises(KeyError, lambda: relation['member_of'])
         self.assertRaises(KeyError, lambda: relation['narrower'])
@@ -153,8 +167,6 @@ class TestJsonRenderer(unittest.TestCase):
         self.assertEqual(relation['type'], 'collection')
         self.assertEqual(relation['uri'], 'urn:x-atramhasis-demo:TREES:102')
         self.assertIsNone(relation['label'])
-        self.assertIsInstance(relation['labels'], list)
-        self.assertEqual(len(relation['labels']), 0)
         self.assertRaises(KeyError, lambda: relation['members'])
         self.assertRaises(KeyError, lambda: relation['member_of'])
 
@@ -173,9 +185,18 @@ class TestJsonRenderer(unittest.TestCase):
         conceptscheme = conceptscheme_adapter(c, self.request)
         self.assertGreater(len(conceptscheme['notes']), 0)
         self.assertGreater(len(conceptscheme['labels']), 0)
+        self.assertGreater(len(conceptscheme['sources']), 0)
         self.assertIsNone(conceptscheme['uri'])
         self.assertEqual('een label', conceptscheme['label'])
         self.assertEqual(1, conceptscheme['id'])
         self.assertEqual(0, len(conceptscheme['subject']))
         self.assertIsInstance(conceptscheme, dict)
 
+    def test_conceptscheme_language_handling(self):
+        from atramhasis.renderers import conceptscheme_adapter
+        c = self.conceptscheme
+        conceptscheme = conceptscheme_adapter(c, self.request)
+        self.assertEqual('een label', conceptscheme['label'])
+        self.request.locale_name = 'en'
+        conceptscheme = conceptscheme_adapter(c, self.request)
+        self.assertIn(conceptscheme['label'], ['other label', 'and some other label'])

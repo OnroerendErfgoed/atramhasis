@@ -56,6 +56,35 @@
 @import "foundation/functions";
 $fa-font-path: "../bower_components/font-awesome/fonts";
 
+$primary-color: #944EA1 !default;
+$secondary-color: #e7e7e7 !default;
+$alert-color: #FF0000 !default;
+$success-color: #43AC6A !default;
+$warning-color: #f08a24 !default;
+$info-color: #a0d3e8 !default;
+$custom-color:#FFFFCC !default;
+
+
+$dark-purple    : rgb(117,63,127); 	// #753F7F
+$mid-purple     : rgb(148,78,161); 	// #944EA1
+$light-purple   : rgb(176,93,191); 	// #B05DBF
+$white          : rgb(255,255,255); // #FFFFFF
+$black          : rgb(0, 0, 0);		// #000000
+$dark-gray      : rgb(63,56,64); 	// #3F3840
+$mid-gray       : rgb(229,229,229); // #E5E5E5
+$light-gray     : rgb(237,237,237); // #EDEDED
+$gray           : rgb(213,213,213); // #D5D5D5
+$silver         : rgb(152,152,152); // #989898
+$steel          : #666666 !default;
+$jet            : #333333 !default;
+$ghost          : #FAFAFA;
+$aluminum       : #efefef;
+$white-gray     : #fbfbfb; // hover color
+$jumbo       	: #888888;
+
+$fresh-blue     : #2da3ce;
+$gray-blue      : #86abbe;
+
 // The default font-size is set to 100% of the browser style sheet (usually 16px)
 // for compatibility with browser-based text zoom or user-set defaults.
 
