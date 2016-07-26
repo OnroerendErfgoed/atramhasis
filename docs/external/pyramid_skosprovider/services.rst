@@ -220,7 +220,7 @@ The following API can be used by clients:
 
     -.. sourcecode:: http
 
-        GET /conceptschemes/PLANTS
+        GET /conceptschemes/PLANTS HTTP/1.1
         Host: localhost:6543
         Accept: application/json
 
