@@ -122,7 +122,7 @@ class FunctionalTests(unittest.TestCase):
         )
 
     def setUp(self):
-        self.config = Configurator(settings=settings)
+        self.config = Configurator(settings=settings, package='tests')
         self.config.add_route('login', '/auth/login')
         self.config.add_route('logout', '/auth/logout')
         includeme(self.config)
@@ -143,7 +143,7 @@ class FunctionalTests(unittest.TestCase):
 
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
-            import_provider(geo, ConceptScheme(id=2), local_session)
+            import_provider(geo, ConceptScheme(id=2, uri='urn:x-vioe:geography'), local_session)
             local_session.add(ConceptScheme(id=3))
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
@@ -163,7 +163,8 @@ class FunctionalTests(unittest.TestCase):
 
         GEO = SQLAlchemyProvider(
             {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
-            self.config.registry.dbmaker
+            self.config.registry.dbmaker,
+            uri_generator=UriPatternGenerator('urn:x-vioe:geography:%s')
         )
 
         STYLES = SQLAlchemyProvider(
