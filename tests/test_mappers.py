@@ -250,6 +250,10 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_collection.broader_concepts))
         self.assertEqual([c for c in result_collection.broader_concepts][0].concept_id, 12)
 
+    def test_mapping_concept_to_collection(self):
+        result_collection = map_concept(self.concept, json_collection, self.skos_manager)
+        self.assertIsNotNone(result_collection)
+
     def test_mapping_conceptscheme(self):
         result_conceptscheme = map_conceptscheme(self.conceptscheme, test_json_conceptscheme)
         self.assertIsNotNone(result_conceptscheme)
