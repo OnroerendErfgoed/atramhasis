@@ -87,7 +87,7 @@ define([
 
     _cancelClick: function (evt) {
       console.debug('languageDialog::_cancelClick');
-      evt.preventDefault();
+      evt ? evt.preventDefault() : null;
       this.hide();
     },
 

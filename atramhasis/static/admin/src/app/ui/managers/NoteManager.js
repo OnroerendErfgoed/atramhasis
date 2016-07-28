@@ -206,7 +206,7 @@ define([
     },
 
     _addNote: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._notesDialog.show();
     },
 

@@ -199,7 +199,7 @@ define([
     },
 
     _addLabel: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._labelDialog.show();
     },
 

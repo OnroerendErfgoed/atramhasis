@@ -327,7 +327,7 @@ define([
     },
 
     _addMatches: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       // open dialog
       this._matchesDialog.show();
     },

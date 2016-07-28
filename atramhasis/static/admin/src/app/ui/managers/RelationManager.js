@@ -328,37 +328,37 @@ define([
     },
 
     _addBroader: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._addRelationDialog.show(this._broaderStore, this._relationStore);
     },
 
     _addNarrower: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._addRelationDialog.show(this._narrowerStore, this._relationStore);
     },
 
     _addRelated: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._addRelationDialog.show(this._relatedStore, this._relationStore);
     },
 
     _addMemberOf: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._addRelationDialog.show(this._memberOfStore, this._relationStore);
     },
 
     _addMembers: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._addRelationDialog.show(this._membersStore, this._relationStore);
     },
 
     _addSubordinateArray: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._addRelationDialog.show(this._subordinateStore, this._relationStore);
     },
 
     _addSuperordinates: function(evt) {
-      if (evt) { evt.preventDefault(); }
+      evt ? evt.preventDefault(): null;
       this._addRelationDialog.show(this._superordinatesCollStore, this._relationStore);
     },
 
