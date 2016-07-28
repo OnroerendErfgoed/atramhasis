@@ -5,7 +5,6 @@ import sys
 import unittest
 
 import logging
-logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 
 import six
 from pyramid.config import Configurator
@@ -31,6 +30,7 @@ from atramhasis.protected_resources import ProtectedResourceException, Protected
 from fixtures.data import trees, geo, larch, chestnut, species
 from fixtures.materials import materials
 
+logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
@@ -61,10 +61,10 @@ json_value_relations = {
     "related": [],
     "type": "concept",
     "labels": [{
-                   "label": "koperlegeringen",
-                   "language": "nl",
-                   "type": "prefLabel"
-               }],
+        "label": "koperlegeringen",
+        "language": "nl",
+        "type": "prefLabel"
+    }],
     "label": "koperlegeringen",
     "notes": [],
     "narrower": [{"id": 15}, {"id": 14}]
@@ -87,18 +87,18 @@ json_value_invalid = """{
 
 json_collection_value = {
     "labels": [{
-                   "language": "nl",
-                   "label": "Test verzameling",
-                   "type": "prefLabel"
-               }],
+        "language": "nl",
+        "label": "Test verzameling",
+        "type": "prefLabel"
+    }],
     "type": "collection",
     "label": "Test verzameling",
     "members": [{"id": 333}, {"id": 7}],
     "notes": [{
-                  "note": "een notitie",
-                  "type": "note",
-                  "language": "nl"
-              }]
+        "note": "een notitie",
+        "type": "note",
+        "language": "nl"
+    }]
 }
 
 TEST = DictionaryProvider(
@@ -122,7 +122,7 @@ class FunctionalTests(unittest.TestCase):
         )
 
     def setUp(self):
-        self.config = Configurator(settings=settings)
+        self.config = Configurator(settings=settings, package='tests')
         self.config.add_route('login', '/auth/login')
         self.config.add_route('logout', '/auth/logout')
         includeme(self.config)
@@ -143,7 +143,7 @@ class FunctionalTests(unittest.TestCase):
 
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
-            import_provider(geo, ConceptScheme(id=2), local_session)
+            import_provider(geo, ConceptScheme(id=2, uri='urn:x-vioe:geography'), local_session)
             local_session.add(ConceptScheme(id=3))
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
@@ -163,7 +163,8 @@ class FunctionalTests(unittest.TestCase):
 
         GEO = SQLAlchemyProvider(
             {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
-            self.config.registry.dbmaker
+            self.config.registry.dbmaker,
+            uri_generator=UriPatternGenerator('urn:x-vioe:geography:%s')
         )
 
         STYLES = SQLAlchemyProvider(
