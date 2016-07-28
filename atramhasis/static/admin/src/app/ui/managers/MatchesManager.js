@@ -279,7 +279,7 @@ define([
         if (this.concept && this.concept.matches) {
           data.matches = this.concept.matches;
         } else {
-          data.matches = [];
+          data.matches = {};
         }
       }
 
