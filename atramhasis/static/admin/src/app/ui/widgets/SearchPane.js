@@ -130,7 +130,7 @@ define([
       var footerheight = 30;
       var headerheight = 60;
       var menuheight = win.h - footerheight - headerheight;
-      var form = 250;
+      var form = 270;
       var buttons = 80;
       domStyle.set(this.searchResultsNode, 'height', menuheight - form - buttons + 'px');
     },
