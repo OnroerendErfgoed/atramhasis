@@ -328,37 +328,37 @@ define([
     },
 
     _addBroader: function(evt) {
-      evt ? evt.preventDefault() : null;
+      if (evt) { evt.preventDefault(); }
       this._addRelationDialog.show(this._broaderStore, this._relationStore);
     },
 
     _addNarrower: function(evt) {
-      evt ? evt.preventDefault() : null;
+      if (evt) { evt.preventDefault(); }
       this._addRelationDialog.show(this._narrowerStore, this._relationStore);
     },
 
     _addRelated: function(evt) {
-      evt ? evt.preventDefault() : null;
+      if (evt) { evt.preventDefault(); }
       this._addRelationDialog.show(this._relatedStore, this._relationStore);
     },
 
     _addMemberOf: function(evt) {
-      evt ? evt.preventDefault() : null;
+      if (evt) { evt.preventDefault(); }
       this._addRelationDialog.show(this._memberOfStore, this._relationStore);
     },
 
     _addMembers: function(evt) {
-      evt ? evt.preventDefault() : null;
+      if (evt) { evt.preventDefault(); }
       this._addRelationDialog.show(this._membersStore, this._relationStore);
     },
 
     _addSubordinateArray: function(evt) {
-      evt ? evt.preventDefault(): null;
+      if (evt) { evt.preventDefault(); }
       this._addRelationDialog.show(this._subordinateStore, this._relationStore);
     },
 
     _addSuperordinates: function(evt) {
-      evt ? evt.preventDefault(): null;
+      if (evt) { evt.preventDefault(); }
       this._addRelationDialog.show(this._superordinatesCollStore, this._relationStore);
     },
 

@@ -68,7 +68,7 @@ define([
         this.language.name = this.descriptionInputNode.value;
         if (this.edit) {
           this.emit('edit.language', {
-            language: this.language,
+            language: this.language
           });
         } else {
           this.emit('add.language', {

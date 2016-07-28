@@ -174,7 +174,7 @@ define([
     },
 
     _addSource: function(evt) {
-      evt ? evt.preventDefault() : null;
+      if (evt) { evt.preventDefault(); }
       this._sourcesDialog.show();
     },
 
