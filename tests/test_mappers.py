@@ -253,6 +253,18 @@ class TestMappers(unittest.TestCase):
     def test_mapping_concept_to_collection(self):
         result_collection = map_concept(self.concept, json_collection, self.skos_manager)
         self.assertIsNotNone(result_collection)
+        self.assertTrue(hasattr(result_collection, 'members'))
+        self.assertEqual(0, len(result_collection.related_concepts))
+        self.assertEqual(0, len(result_collection.narrower_concepts))
+        self.assertEqual(0, len(result_collection.narrower_collections))
+
+    def test_mapping_collection_to_concept(self):
+        result_concept = map_concept(self.collection, test_json, self.skos_manager)
+        self.assertIsNotNone(result_concept)
+        self.assertEqual(0, len(result_concept.members))
+        self.assertTrue(hasattr(result_concept, 'related_concepts'))
+        self.assertTrue(hasattr(result_concept, 'narrower_concepts'))
+        self.assertTrue(hasattr(result_concept, 'narrower_collections'))
 
     def test_mapping_conceptscheme(self):
         result_conceptscheme = map_conceptscheme(self.conceptscheme, test_json_conceptscheme)
