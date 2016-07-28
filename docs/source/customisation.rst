@@ -4,9 +4,9 @@
 Customisation
 =============
 
-Out of the box Atramhasis tries to make as few assumptions as possible about 
+Out of the box Atramhasis tries to make as few assumptions as possible about
 setup. We have taken care to ensure that significant parts of the application
-are easy to customise and expect most installations to have custom code. We've 
+are easy to customise and expect most installations to have custom code. We've
 shipped Atramhasis with sane defaults so you can get a quick feel for the
 capabilities of the software. However, we do not advise running a production
 instance with only these default settings.
@@ -20,11 +20,11 @@ Whenever you want to run an instance of Atramhasis, you start by creating your
 own project. This is the place where you will maintain and develop your own
 custom templates, static assets such as stylesheets, your security implementation
 and other general configuration. To make it easier on you to get started, we
-provide a scaffold just for this. As always, we advise working in a 
+provide a scaffold just for this. As always, we advise working in a
 virtual environment.
 
-.. code-block:: bash    
-    
+.. code-block:: bash
+
     $ mkvirtualenv my_thesaurus
     $ pip install atramhasis
     $ pcreate -s atramhasis_scaffold my_thesaurus
@@ -36,16 +36,16 @@ virtual environment.
 This gives you a clean slate to start your customisations on. By default the
 scaffold comes with a simple SQLite database. This is more than enough for
 your first experiments and can even be used in production environment if your
-needs are modest. You can always instruct Atramhasis to use 
+needs are modest. You can always instruct Atramhasis to use
 some other database engine, as long as SQLAlchemy supports it. Configure the
 `sqlalchemy.url` configuration option in :file:`development.ini` to change
-the database. See the documentation of SQLAlchemy for more information about 
+the database. See the documentation of SQLAlchemy for more information about
 this connection url. After settings this url, run :command:`alembic` to
 initialise and migrate the database to the latest version.
 
 .. code-block:: bash
 
-    # Create or update database based on 
+    # Create or update database based on
     # the configuration in development.ini
     $ alembic upgrade head
 
@@ -57,14 +57,14 @@ and point your browser to `http://localhost:6543` to see the result.
     $ pserve development.ini
 
 Of course, this does not do very much since your Atramhasis is now running,
-but does not contain any ConceptSchemes. You will need to configure this by 
+but does not contain any ConceptSchemes. You will need to configure this by
 entering a database record for the ConceptScheme and writing a small piece
 of code.
 
-To enter the database record, you need to enter a record in the table 
+To enter the database record, you need to enter a record in the table
 `conceptscheme`. In this table you need to register an id for the conceptscheme
 and a uri. The id is for internal database use and has no other meaning. The
-uri can be used externally. To register a new ConceptScheme in the sqlite 
+uri can be used externally. To register a new ConceptScheme in the sqlite
 database that was created:
 
 .. code-block:: bash
@@ -89,38 +89,38 @@ this code just below the logging configuration:
 Then you need to instantiate such a provider within the includeme function in
 this file. This provider needs a few arguments: an id for the provider, an id
 for the conceptscheme it's working with and a function that knows how the
-provide a database session. The id for the provider is often a text string 
-and will appear in certain url's and might popup in the user interface from 
-time to time. The database sessionmaker can be found at 
-`config.registry.dbmaker`. Finally, you need to register this provider with 
+provide a database session. The id for the provider is often a text string
+and will appear in certain url's and might popup in the user interface from
+time to time. The database sessionmaker can be found at
+`config.registry.dbmaker`. Finally, you need to register this provider with
 the :class:`skosprovider.registry.Registry`.
 
 .. code-block:: python
 
-    STUFF = SQLAlchemyProvider(                                                 
+    STUFF = SQLAlchemyProvider(
         {
             'id': 'STUFF',
             'conceptscheme_id': 1
-        },                                 
+        },
         config.registry.dbmaker
     )
 
     skosregis.register_provider(STUFF)
 
-After having registered your provider, the file should look more or less like 
+After having registered your provider, the file should look more or less like
 this:
 
 .. code-block:: python
 
-    # -*- coding: utf-8 -*- 
+    # -*- coding: utf-8 -*-
 
     import logging
     log = logging.getLogger(__name__)
-                 
+
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
-                                                           
-    def includeme(config):                                                 
+
+    def includeme(config):
         STUFF = SQLAlchemyProvider(
             {
                 'id': 'STUFF',
@@ -128,20 +128,20 @@ this:
             },
             config.registry.dbmaker
         )
-        
-        skosregis = config.get_skos_registry()                                      
-        
+
+        skosregis = config.get_skos_registry()
+
         skosregis.register_provider(STUFF)
 
 Now you can restart your server and then you front page will show you a new,
 but empty thesaurus. You can now start creating concepts and collections by
 going to the admin interface at `http://localhost:6543/admin`.
 
-You will notice that any concepts or collections you create wil get a 
+You will notice that any concepts or collections you create wil get a
 :term:`URI` similar to `urn:x-skosprovider:STUFF:1`. This is due to the fact
 that your :class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
 has a :class:`~skosprovider.uri.UriGenerator` that generates uris for the
-provider. By default, the provider configures a 
+provider. By default, the provider configures a
 :class:`~skosprovider.uri.DefaultUrnGenerator`, but it's expected that you
 will want to override this.
 
@@ -149,16 +149,16 @@ will want to override this.
 
    The :class:`~skosprovider.uri.UriGenerator` that you configure only generates
    URI's when creating new concepts or collections. When importing existing
-   vocabularies, please be sure to create the URI's before or during import 
+   vocabularies, please be sure to create the URI's before or during import
    (possbily by using a relevant generator yourself).
 
-Suppose you have decided that your URI's should look like this: 
+Suppose you have decided that your URI's should look like this:
 `http://id.mydata.org/thesauri/stuff/[id]`. You can do this by registering
 a :class:`~skosprovider.uri.UriPatternGenerator` with your provider:
 
 .. code-block:: python
 
-    STUFF = SQLAlchemyProvider(                                 
+    STUFF = SQLAlchemyProvider(
         {
             'id': 'STUFF',
             'conceptscheme_id': 1
@@ -180,17 +180,17 @@ Your final file should look similar to this:
 
 .. code-block:: python
 
-    # -*- coding: utf-8 -*- 
+    # -*- coding: utf-8 -*-
 
     import logging
     log = logging.getLogger(__name__)
-                 
+
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     from skosprovider.uri import UriPatternGenerator
 
-                                                           
-    def includeme(config):                                                 
-        STUFF = SQLAlchemyProvider(                                 
+
+    def includeme(config):
+        STUFF = SQLAlchemyProvider(
             {
                 'id': 'STUFF',
                 'conceptscheme_id': 1
@@ -200,9 +200,9 @@ Your final file should look similar to this:
                 'http://id.mydata.org/thesauri/stuff/%s'
             )
         )
-        
-        skosregis = config.get_skos_registry()                                      
-        
+
+        skosregis = config.get_skos_registry()
+
         skosregis.register_provider(STUFF)
 
 If you need more complicated URI's, you can easily write you own generator
@@ -218,17 +218,17 @@ Appearance
 By implementing a few simple techniques from the :term:`Pyramid` web framework,
 it's very easy to customise the look and feel of the public user interface. The
 default implementation is a very neutral implementation based on the basic
-elements in the Foundation framework. Customising and overriding this style is 
+elements in the Foundation framework. Customising and overriding this style is
 possible if you have a bit of knowledge about :term:`HTML` and :term:`CSS`.
 
 You can also override the :term:`HTML` templates that Atramhasis uses without
 needing to alter the originals so that future updates to the system will not
 override your modifications.
 
-One very easy technique to use, is :term:`Pyramid`'s 
-:ref:`override assets mechanism <pyramid:overriding_assets_section>`. 
+One very easy technique to use, is :term:`Pyramid`'s
+:ref:`override assets mechanism <pyramid:overriding_assets_section>`.
 This allows you to override a core Atramhasis template with your own template.
-Suppose we want to change the text on the Atramhasis homepage to welcome visitors 
+Suppose we want to change the text on the Atramhasis homepage to welcome visitors
 to your instances. This text can be found in :file:`atramhasis/templates/welcome.jinja2`.
 
 Assuming that you created your project as `my_thesaurus`, we can now create our
@@ -237,20 +237,20 @@ the :term:`Jinja2` documentation if you need help with this.
 
 Once you've created your template file, you just need to tell your project to
 override the default :file:`welcome.jinja2` with your version. To do this you
-need to configure the :term:`Pyramid` config object found in 
+need to configure the :term:`Pyramid` config object found in
 :file:`my_thesaurus.__init__.py`.
 
 .. code-block:: python
 
-    config.override_asset(                                                      
-        to_override='atramhasis:templates/welcome.jinja2',                   
-        override_with='templates/my_welcome.jinja2'                   
+    config.override_asset(
+        to_override='atramhasis:templates/welcome.jinja2',
+        override_with='templates/my_welcome.jinja2'
     )
 
 .. note::
 
     Normally, to see the effect of the changes you made, you would need to
-    restart your webserver. When developing, you can make use of the 
+    restart your webserver. When developing, you can make use of the
     :command:`pserve` command's auto-reload feature. To do this, start your
     server like this:
 
@@ -264,8 +264,8 @@ Security
 ========
 
 We assume that every deployment of Atramhasis has different needs when it comes
-to security. Some instances will run on a simple laptop for testing and 
-evaluation purposes, others might need a simple standalone database of users 
+to security. Some instances will run on a simple laptop for testing and
+evaluation purposes, others might need a simple standalone database of users
 and certain deployments might need to integrate with enterprise authentication
 systems like LDAP, Active Directory, Single Sign On, ...
 
@@ -293,14 +293,14 @@ The login and logout views, the groupfinder and rootfactory are implemented in t
 Foreign Keys
 ============
 
-Atramhasis will often function as a central part of a :term:`SOA` in an 
-organisation. :class:`~skosprovider.skos.Concept` and maybe 
-:class:`~skosprovider.skos.Collection` objects will be used by other applications. 
-One of the riskier aspects of this is that someone might delete a concept in a 
-certain scheme that is still being used by another application. Even worse, the 
-user approving the delete might not even have a clue that the concept is being 
+Atramhasis will often function as a central part of a :term:`SOA` in an
+organisation. :class:`~skosprovider.skos.Concept` and maybe
+:class:`~skosprovider.skos.Collection` objects will be used by other applications.
+One of the riskier aspects of this is that someone might delete a concept in a
+certain scheme that is still being used by another application. Even worse, the
+user approving the delete might not even have a clue that the concept is being
 used by some external application. While in the decentralised world that is the
-world wide web, we can never be sure that nobody is using our concept any more, 
+world wide web, we can never be sure that nobody is using our concept any more,
 we can take some steps to at least control what happens within other applications
 that are within our control.
 
@@ -310,18 +310,18 @@ from Atramhasis. We have therefor provided the necessary hooks for you that can
 help you deal with the sort of situation. But the actual implementation is left
 up to you.
 
-We have added a decorator :func:`~atramhasis.protected_resources.protected_operation`. 
-When you add this decorator to a view, this view will emit a 
+We have added a decorator :func:`~atramhasis.protected_resources.protected_operation`.
+When you add this decorator to a view, this view will emit a
 :class:`~atramhasis.protected_resources.ProtectedResourceEvent`. By default we
-have added this decorator the :meth:`~atramhasis.views.AtramhasisCrud.delete_concept` 
+have added this decorator the :meth:`~atramhasis.views.AtramhasisCrud.delete_concept`
 view.
 
-In you own code, you can subscribe to this 
+In you own code, you can subscribe to this
 :class:`~atramhasis.protected_resources.ProtectedResourceEvent` through the
-usual :func:`pyramid.events.subscriber`. In this event handler you are then 
-free to implement whatever check you need to do. If you find that the resource 
+usual :func:`pyramid.events.subscriber`. In this event handler you are then
+free to implement whatever check you need to do. If you find that the resource
 in question is being used somewhere and this operation
-should thus not be allowed to proceed, you simply need to raise a 
+should thus not be allowed to proceed, you simply need to raise a
 :class:`atramhasis.protected_resources.ProtectedResourceException`. Into this
 exception you can also pass a list of :term:`URI` that might provide the
 user with some feedback as to where this concept might be used.
@@ -355,9 +355,9 @@ All you need to do is add you Web Property ID to :file:`development.ini`.
     ga.tracker_key = UA-12345678-9
 
 This will add basic analytics to every page, using a Jinja2 macro. If you need
-more control over the code, you can override this macro in your own project. 
+more control over the code, you can override this macro in your own project.
 Suppose you always want to use SSL when sending data. First, you would create
-you own macro, eg. in :file:`my_macros.jinja2` in the templates directory 
+you own macro, eg. in :file:`my_macros.jinja2` in the templates directory
 of your :ref:`own project <own_project>`.
 
 .. code-block:: jinja
@@ -383,9 +383,9 @@ project. To do that, add the following to your project's main function:
 
 .. code-block:: python
 
-    config.override_asset(                                                      
-        to_override='atramhasis:templates/base.jinja2',                   
-        override_with='templates/base.jinja2'                   
+    config.override_asset(
+        to_override='atramhasis:templates/base.jinja2',
+        override_with='templates/base.jinja2'
     )
 
 In this file, you can now choose what should appear within the ga block defined
@@ -411,39 +411,39 @@ Within your Atramhasis instance you can make use of external providers. These
 are other systems serving up thesauri that you can interact with. Within the
 admin interface you can create links to these thesauri as :term:`SKOS` matches.
 This way you can state that a concept within your thesauri is the same as
-or similar to a concept in the external thesaurus. And, more interestingly, 
-you can also import concepts from such a thesaurus into your own vocabulary. 
-Importing a concept like this will automatically create a :term:`SKOS` match 
+or similar to a concept in the external thesaurus. And, more interestingly,
+you can also import concepts from such a thesaurus into your own vocabulary.
+Importing a concept like this will automatically create a :term:`SKOS` match
 for you. Once a match is in place, you can also update your local concept with
 information from the external concept by performing a merge.
 
-To enable all this power, you again need to configure a provider in you 
+To enable all this power, you again need to configure a provider in you
 application. Continuing with our :ref:`example project <own_project>`, we need
 to go back to our :file:`my_thesaurus/skos/__init__.py`. In this file you need
-to register other instances of 
+to register other instances of
 :class:`skosprovider.providers.VocabularyProvider`. Currently providers
 have already been written for Getty Vocabularies, English Heritage vocabularies
 and Flanders Heritage Vocabularies. Depending on the system you're trying to
 interact with, writing a new provider is fairly simple. For this example, we'll
-assume that you want to integrate the wealth of information that the 
+assume that you want to integrate the wealth of information that the
 `Art and Architecture Thesaurus (AAT)` vocabulary offers you.
 
-The :class:`~skosprovider_getty.providers.AATProvider` for this 
-(and other Getty vocabularies) is available as skosprovider_getty_ and is 
-installed by default in an Atramhasis instance. All you need to do is configure 
-it. First, we need to import the provider. Place this code at the top 
+The :class:`~skosprovider_getty.providers.AATProvider` for this
+(and other Getty vocabularies) is available as skosprovider_getty_ and is
+installed by default in an Atramhasis instance. All you need to do is configure
+it. First, we need to import the provider. Place this code at the top
 of :file:`my_thesaurus/skos/__init__.py`.
 
 .. code-block:: python
-    
+
     from skosprovider_getty.providers import AATProvider
 
 Once this is done, we need to instantiate the provider within the `includeme`
 function and register it with the :class:`skosprovider.registry.Registry`. This
-is all quite similar to registering your own 
+is all quite similar to registering your own
 :class:`skosprovider_sqlalchemy.providers.SQLAlchemyProvider`. One thing you do
 need to do, is tagging this provider with a subject. By adding the `external`
-subject to the provider, we let Atramhasis know that this is not a regular, 
+subject to the provider, we let Atramhasis know that this is not a regular,
 internal provider that can be stored in our database, but a special external
 one that can only be used for making matches. As such, it will not be present
 and visible to the public among your regular vocabularies.
@@ -455,10 +455,10 @@ and visible to the public among your regular vocabularies.
     )
     skosregis.register_provider(AAT)
 
-That's all. You can do the same with the 
-:class:`~skosprovider_getty.providers.TGNProvider` for the 
-`Thesaurus of Geographic Names (TGN)` or any of the providers for 
-`heritagedata.org <http://heritagedata.org>`_ that can be found in 
+That's all. You can do the same with the
+:class:`~skosprovider_getty.providers.TGNProvider` for the
+`Thesaurus of Geographic Names (TGN)` or any of the providers for
+`heritagedata.org <http://heritagedata.org>`_ that can be found in
 skosprovider_heritagedata_.
 
 In the end your :file:`my_thesaurus/skos/__init__.py` should look somewhat like
@@ -466,18 +466,18 @@ this:
 
 .. code-block:: python
 
-    # -*- coding: utf-8 -*- 
+    # -*- coding: utf-8 -*-
 
     import logging
     log = logging.getLogger(__name__)
-                 
+
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     from skosprovider_getty.providers import AATProvider
     from skosprovider.uri import UriPatternGenerator
 
-                                                           
-    def includeme(config):                                                 
-        STUFF = SQLAlchemyProvider(                                 
+
+    def includeme(config):
+        STUFF = SQLAlchemyProvider(
             {
                 'id': 'STUFF',
                 'conceptscheme_id': 1
@@ -494,35 +494,41 @@ this:
                 'subject': ['external']
             }
         )
-        
-        skosregis = config.get_skos_registry()                                      
-        
+
+        skosregis = config.get_skos_registry()
+
         skosregis.register_provider(STUFF)
         skosregis.register_provider(AAT)
 
-Now you'll be able to import from the AAT to your heart's delight. For an 
+Now you'll be able to import from the AAT to your heart's delight. For an
 extended example that adds even more providers, you could have a look at the
 `demo` scaffold that comes with Atramhasis.
 
 .. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
 .. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
 
-Adding providers from files
-===========================
+Import a controlled vocabulary
+==============================
 
-The Atramhasis module includes a script `atramhasis.scripts.import_file` which makes
-it possible to add providers to your project including data from files.
+Atramhasis includes a script :file:`atramhasis/scripts/import_file.py` which
+helps you import an existing vocabulary from a file. It supports a few
+different file types, but not every file type supports the full Atramhasis
+datamodel.
 
-The supported file types are:
+The supported file types:
 
 - RDF (.html, .hturtle, .mdata, .microdata, .n3, .nquads, .nt, .rdfa, .rdfa1.0, .rdfa1.1, .trix, .turtle, .xml)
-  using :class:`~skosprovider_rdf.providers.RDFProvider`
+  using :class:`~skosprovider_rdf.providers.RDFProvider`. This provider supports
+  the full datamodel.
 - CSV (.csv) using :class:`~skosprovider.providers.SimpleCsvProvider`.
-  The provider only supports id, prefLabel and note.
-- JSON (.json) using :class:`~skosprovider.providers.DictionaryProvider`
+  The provider only supports importing and id, a prefLabel, a note and a source.
+  It will work well when importing a simple flat list, but not for complex
+  hierarchies.
+- JSON (.json) using :class:`~skosprovider.providers.DictionaryProvider`. This
+  provider supports the full datamodel.
 
-The script can be called through commandline in the project virtual environment. The
-usage and possible arguments are returned with the `help` argument
+The script can be called through the commandline in the project virtual environment.
+Call it with the `help` argument to see the possible arguments.
 
 .. code-block:: bash
 
@@ -542,24 +548,26 @@ usage and possible arguments are returned with the `help` argument
                             Label of the conceptscheme
 
 
-The location of the input path is add to the `from` argument, for example
-'atramhasis/scripts/my_file'. The `from` argument is required.
+The `from` argument is required and details where the file you want to import is
+located, for example :file:`my_thesaurus/data/trees.json`. It is relative to your
+current location.
 
 The `to` argument contains the connection string of output database. Only
-PostGreSQL an SQLite are supported. The structure is either
-'postgresql://username:password@host:port/db_name' or
-either 'sqlite:///path/db_name.sqlite'. The default value is 'sqlite:///atramhasis.sqlite'
+PostGreSQL and SQLite are supported. The structure is either
+`postgresql://username:password@host:port/db_name` or
+either `sqlite:///path/db_name.sqlite`. The default value is `sqlite:///atramhasis.sqlite`.
 
 The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. The
 conceptscheme needs a label. The label can be added to the `conceptscheme_label`
 argument. The default label is the name of the file.
 
 Once the data is loaded in the database, the configuration of the added provider must be
-included in the :file:`my_thesaurus/skos/__init__.py`. A suggestion of the lines to add
-to the file are already given at the end of a successful run of the import script.
-It contains the right ConceptScheme ID.
+included in the :file:`my_thesaurus/skos/__init__.py`. A successfull run of the
+script will give a suggestion of the code to add to this file. Make sure to use
+the same ConceptSchem ID since it is needed to connect your provider and the
+conceptscheme in the database.
 
-For example, to insert next file:
+For example, to insert this file:
 
 .. code-block:: json
 
@@ -624,14 +632,14 @@ For example, to insert next file:
       "type": "collection",
       "uri": "http://id.trees.org/3"}]
 
-run following command:
+We run the following command:
 
 .. code-block:: bash
 
     $ workon my_thesarus
     $ import_file --from my_thesaurus/data/trees.json --to sqlite:///my_thesaurus.sqlite --conceptscheme_label Trees
 
-which returns:
+This will return the following output:
 
 .. code-block:: bash
 
@@ -715,7 +723,7 @@ which returns:
     sqlalchemy.engine.base.Engine (3548,)
 
 
-    *** The import of the my_thesaurus/data/trees.json file with conceptscheme label 'Trees' is successfully imported to sqlite:///my_thesaurus.sqlite. ***
+    *** The import of the my_thesaurus/data/trees.json file with conceptscheme label 'Trees' to sqlite:///my_thesaurus.sqlite was successfull. ***
 
     To use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.
     Add next lines:
@@ -728,7 +736,7 @@ which returns:
             skosregis = config.get_skos_registry()
             skosregis.register_provider(TREES)
 
-So do what you're told and edit your :file:`my_thesaurus/skos/__init__.py` like this:
+Just follow these instructions and edit your :file:`my_thesaurus/skos/__init__.py` like this:
 
 .. code-block:: python
 
@@ -747,7 +755,8 @@ So do what you're told and edit your :file:`my_thesaurus/skos/__init__.py` like 
         skosregis = config.get_skos_registry()
         skosregis.register_provider(TREES)
 
-Now you can use the data of the file in your thesaurus application.
+Now your thesaurus has been successfully imported and is ready to be browsed,
+expanded and edited.
 
 SessionFactory
 ==============
