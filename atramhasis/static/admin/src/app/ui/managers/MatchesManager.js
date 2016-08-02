@@ -279,7 +279,7 @@ define([
         if (this.concept && this.concept.matches) {
           data.matches = this.concept.matches;
         } else {
-          data.matches = [];
+          data.matches = {};
         }
       }
 
@@ -327,7 +327,7 @@ define([
     },
 
     _addMatches: function(evt) {
-      evt ? evt.preventDefault() : null;
+      evt ? evt.preventDefault(): null;
       // open dialog
       this._matchesDialog.show();
     },

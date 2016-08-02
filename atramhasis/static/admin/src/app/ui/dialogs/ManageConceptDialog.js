@@ -276,7 +276,7 @@ define([
         listController: this.listController,
         conceptSchemeController: this.conceptSchemeController,
         scheme: this.scheme,
-        concept: concept,
+        concept: concept
       }, this.relationsNode);
       this.relationManager.startup();
       this.updateScheme(this.schemeNode.value);

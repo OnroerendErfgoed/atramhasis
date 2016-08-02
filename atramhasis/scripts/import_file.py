@@ -219,7 +219,7 @@ def main(argv=sys.argv):
         filter(Label.label == cs_label). \
         first(). \
         conceptscheme.id
-    print("\n\n*** The import of the {0} file with conceptscheme label '{1}' is successfully imported to {2}. ***\
+    print("\n\n*** The import of the {0} file with conceptscheme label '{1}' to {2} was succesfull. ***\
           \n\nTo use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.\
           \nAdd next lines: \
           \n\ndef includeme(config):\
