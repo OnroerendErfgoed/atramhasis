@@ -152,6 +152,16 @@ class TestMappers(unittest.TestCase):
         self.collection.conceptscheme_id = 1
         self.conceptscheme = ConceptScheme()
         self.conceptscheme.id = 1
+        member_concept_1 = Concept()
+        member_concept_1.concept_id = 5
+        member_concept_1.conceptscheme_id = 1
+        member_concept_2 = Collection()
+        member_concept_2.concept_id = 6
+        member_concept_2.conceptscheme_id = 1
+        self.collection.members.add(member_concept_1)
+        self.collection.members.add(member_concept_2)
+        self.concept.narrower_concepts.add(member_concept_1)
+        self.concept.narrower_collections.add(member_concept_2)
 
     def tearDown(self):
         self.concept = None
@@ -254,14 +264,14 @@ class TestMappers(unittest.TestCase):
         result_collection = map_concept(self.concept, json_collection, self.skos_manager)
         self.assertIsNotNone(result_collection)
         self.assertTrue(hasattr(result_collection, 'members'))
-        self.assertEqual(0, len(result_collection.related_concepts))
-        self.assertEqual(0, len(result_collection.narrower_concepts))
-        self.assertEqual(0, len(result_collection.narrower_collections))
+        self.assertFalse(hasattr(result_collection, 'related_concepts'))
+        self.assertFalse(hasattr(result_collection, 'narrower_concepts'))
+        self.assertFalse(hasattr(result_collection, 'narrower_collections'))
 
     def test_mapping_collection_to_concept(self):
         result_concept = map_concept(self.collection, test_json, self.skos_manager)
         self.assertIsNotNone(result_concept)
-        self.assertEqual(0, len(result_concept.members))
+        self.assertFalse(hasattr(result_concept, 'members'))
         self.assertTrue(hasattr(result_concept, 'related_concepts'))
         self.assertTrue(hasattr(result_concept, 'narrower_concepts'))
         self.assertTrue(hasattr(result_concept, 'narrower_collections'))

@@ -8,6 +8,7 @@ that abstract all interactions with the database away from the views.
 from datetime import datetime, date
 
 import dateutil.relativedelta
+import transaction
 from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language, MatchType, Match, \
     LabelType
 from sqlalchemy import desc, func, and_
@@ -148,6 +149,16 @@ class SkosManager(DataManager):
         """
         self.session.add(thing)
         self.session.flush()
+        return thing
+
+    def change_type(self, thing, concept_id, conceptscheme_id, new_type):
+        self.delete_thing(thing)
+        self.session.flush()
+        thing = Concept() if new_type == 'concept' else Collection()
+        thing.type = new_type
+        thing.concept_id = concept_id
+        thing.conceptscheme_id = conceptscheme_id
+        self.save(thing)
         return thing
 
     def delete_thing(self, thing):
