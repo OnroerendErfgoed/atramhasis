@@ -91,8 +91,8 @@ def parse_argv_for_import(argv):
     cmd = os.path.basename(argv[0])
     parser = argparse.ArgumentParser(
         description='Import file to a database',
-        usage='{0} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label]\n '
-              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels")'.format(
+        usage='{0} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label] [--conceptscheme_uri cs_uri]\n '
+              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels --conceptscheme_uri urn:x-skosprovider:trees")'.format(
             cmd, cmd)
     )
     parser.add_argument('--from',
@@ -112,6 +112,13 @@ def parse_argv_for_import(argv):
                         dest='cs_label',
                         type=str,
                         help='Label of the conceptscheme',
+                        required=False,
+                        default=None
+                        )
+    parser.add_argument('--conceptscheme_uri',
+                        dest='cs_uri',
+                        type=str,
+                        help='URI of the conceptscheme',
                         required=False,
                         default=None
                         )
@@ -163,12 +170,12 @@ def conn_str_to_session(conn_str):
     )()
 
 
-def create_conceptscheme(conceptscheme_label):
+def create_conceptscheme(conceptscheme_label, conceptscheme_uri):
     """
     configure output conceptscheme
     """
-    cs = ConceptScheme()
-    l = Label(conceptscheme_label, 'prefLabel', 'nl')
+    cs = ConceptScheme(uri=conceptscheme_uri)
+    l = Label(conceptscheme_label, 'prefLabel', 'und')
     cs.labels.append(l)
     return cs
 
@@ -185,7 +192,7 @@ def provider_to_db(provider, conceptscheme, session):
 def main(argv=sys.argv):
     """
     Documentation: import -h
-    Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <cs_label>
+    Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <cs_label> --conceptscheme_uri <cs_uri>
 
     example path_input_file:
      atramhasis/scripts/my_file
@@ -209,7 +216,8 @@ def main(argv=sys.argv):
                                  if input_ext in supported_types[filetype]['extensions']][0]
     provider = file_to_provider_function(args.input_file)
     cs_label = args.cs_label if args.cs_label else input_name.capitalize()
-    cs = create_conceptscheme(cs_label)
+    cs_uri = args.cs_uri if args.cs_uri else 'urn:x-skosprovider:{0}'.format(input_name)
+    cs = create_conceptscheme(cs_label, cs_uri)
     provider_to_db(provider, cs, session)
 
     # Get info to return to the user

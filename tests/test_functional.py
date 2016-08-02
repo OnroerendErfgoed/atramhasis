@@ -144,7 +144,7 @@ class FunctionalTests(unittest.TestCase):
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
             import_provider(geo, ConceptScheme(id=2, uri='urn:x-vioe:geography'), local_session)
-            local_session.add(ConceptScheme(id=3))
+            local_session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
