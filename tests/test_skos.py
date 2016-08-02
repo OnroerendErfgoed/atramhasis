@@ -37,8 +37,8 @@ class TestSkos(unittest.TestCase):
             local_session = session_maker()
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
             import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
-            import_provider(geo, ConceptScheme(id=2), local_session)
-            import_provider(styles_and_cultures, ConceptScheme(id=3), local_session)
+            import_provider(geo, ConceptScheme(id=2, uri='urn:x-vioe:geo'), local_session)
+            import_provider(styles_and_cultures, ConceptScheme(id=3, uri='urn:x-vioe:styles'), local_session)
 
     def tearDown(self):
         testing.tearDown()
