@@ -78,7 +78,7 @@ def data_integrity(exc, request):
 
 
 @view_config(context=Exception, renderer='json')
-def failed(exc, request):
+def failed(exc, request):  # pragma no cover
     """
     View invoked when bad data was submitted to Atramhasis.
     """
@@ -95,4 +95,3 @@ def failed_not_method_not_allowed(exc, request):
     log.debug(exc.explanation)
     request.response.status_int = 405
     return {'message': exc.explanation}
-

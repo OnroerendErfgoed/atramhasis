@@ -2,6 +2,7 @@
 """
 Module containing mapping functions used by Atramhasis.
 """
+import copy
 
 from skosprovider_sqlalchemy.models import Label, Note, Source, Concept, Collection, Match
 from sqlalchemy.orm.exc import NoResultFound
@@ -19,7 +20,36 @@ def map_concept(concept, concept_json, skos_manager):
     :returns: The :class:`skosprovider_sqlalchemy.models.Thing` enhanced
         with the information from the json object.
     """
-    concept.type = concept_json.get('type', None)
+    concept_json_type = concept_json.get('type', None)
+    if concept.type != concept_json_type:
+
+        if concept_json_type == 'concept':
+            members = concept.members
+            concept = skos_manager.change_type(concept,
+                                               concept.concept_id,
+                                               concept.conceptscheme_id,
+                                               concept_json_type)
+            for member in members:
+                if member.type == 'concept':
+                    concept.narrower_concepts.add(member)
+                elif member.type == 'collection':
+                    concept.narrower_collections.add(member)
+        elif concept_json_type == 'collection':
+            narrower_concepts = concept.narrower_concepts
+            narrower_collections = concept.narrower_collections
+            concept = skos_manager.change_type(concept,
+                                               concept.concept_id,
+                                               concept.conceptscheme_id,
+                                               concept_json_type)
+            for narrower_concept in narrower_concepts:
+                concept.members.add(narrower_concept)
+            for narrower_collection in narrower_collections:
+                concept.members.add(narrower_collection)
+    elif concept_json_type == 'collection':
+        concept.members.clear()
+    elif concept_json_type == 'concept':
+        concept.narrower_collections.clear()
+        concept.narrower_concepts.clear()
     if concept.type in ('concept', 'collection'):
         concept.labels[:] = []
         labels = concept_json.get('labels', [])
@@ -59,7 +89,6 @@ def map_concept(concept, concept_json, skos_manager):
                 except NoResultFound:
                     related_concept = Concept(concept_id=related['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.related_concepts.add(related_concept)
-            concept.narrower_concepts.clear()
 
             concept.broader_concepts.clear()
             broader = concept_json.get('broader', [])
@@ -98,7 +127,6 @@ def map_concept(concept, concept_json, skos_manager):
                     matches.append(match)
             concept.matches = matches
 
-            concept.narrower_collections.clear()
             narrower_collections = concept_json.get('subordinate_arrays', [])
             for narrower in narrower_collections:
                 try:
@@ -111,7 +139,6 @@ def map_concept(concept, concept_json, skos_manager):
                 concept.narrower_collections.add(narrower_collection)
 
         if concept.type == 'collection':
-            concept.members.clear()
             members = concept_json.get('members', [])
             for member in members:
                 try:
@@ -132,7 +159,6 @@ def map_concept(concept, concept_json, skos_manager):
                 except NoResultFound:
                     broader_concept = Concept(concept_id=broader['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.broader_concepts.add(broader_concept)
-
     return concept
 
 

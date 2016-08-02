@@ -389,14 +389,6 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertEqual('urn:x-vioe:materials:51', res.json['uri'])
 
-    def test_general_exception_view(self):
-        self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
-                               params=json_collection_value)
-        res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/1', headers=self._get_default_headers(),
-                                    params=json_collection_value, expect_errors=True)
-        self.assertEqual('500 Internal Server Error', res.status)
-        self.assertIn("unexpected server error", res)
-
     def test_provider_unavailable_view(self):
         res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/55', headers=self._get_default_headers()
                                   , expect_errors=True)

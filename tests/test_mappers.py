@@ -152,6 +152,16 @@ class TestMappers(unittest.TestCase):
         self.collection.conceptscheme_id = 1
         self.conceptscheme = ConceptScheme()
         self.conceptscheme.id = 1
+        member_concept_1 = Concept()
+        member_concept_1.concept_id = 5
+        member_concept_1.conceptscheme_id = 1
+        member_concept_2 = Collection()
+        member_concept_2.concept_id = 6
+        member_concept_2.conceptscheme_id = 1
+        self.collection.members.add(member_concept_1)
+        self.collection.members.add(member_concept_2)
+        self.concept.narrower_concepts.add(member_concept_1)
+        self.concept.narrower_collections.add(member_concept_2)
 
     def tearDown(self):
         self.concept = None
@@ -249,6 +259,22 @@ class TestMappers(unittest.TestCase):
         self.assertTrue(hasattr(result_collection, 'broader_concepts'))
         self.assertEqual(1, len(result_collection.broader_concepts))
         self.assertEqual([c for c in result_collection.broader_concepts][0].concept_id, 12)
+
+    def test_mapping_concept_to_collection(self):
+        result_collection = map_concept(self.concept, json_collection, self.skos_manager)
+        self.assertIsNotNone(result_collection)
+        self.assertTrue(hasattr(result_collection, 'members'))
+        self.assertFalse(hasattr(result_collection, 'related_concepts'))
+        self.assertFalse(hasattr(result_collection, 'narrower_concepts'))
+        self.assertFalse(hasattr(result_collection, 'narrower_collections'))
+
+    def test_mapping_collection_to_concept(self):
+        result_concept = map_concept(self.collection, test_json, self.skos_manager)
+        self.assertIsNotNone(result_concept)
+        self.assertFalse(hasattr(result_concept, 'members'))
+        self.assertTrue(hasattr(result_concept, 'related_concepts'))
+        self.assertTrue(hasattr(result_concept, 'narrower_concepts'))
+        self.assertTrue(hasattr(result_concept, 'narrower_collections'))
 
     def test_mapping_conceptscheme(self):
         result_conceptscheme = map_conceptscheme(self.conceptscheme, test_json_conceptscheme)
