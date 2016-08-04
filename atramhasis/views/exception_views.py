@@ -72,7 +72,7 @@ def data_integrity(exc, request):
     """
     View invoked when IntegrityError was raised.
     """
-    log.error(exc, exc_info=sys.exc_info())
+    log.warn(exc)
     request.response.status_int = 409
     return {'message': 'this operation violates the data integrity and could not be executed '}
 
