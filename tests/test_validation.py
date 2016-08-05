@@ -611,7 +611,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         self.json_concept['notes'].append({
             "label": "een notitie",
-            "type": "note",
+            "type": 5,
             "language": "nl"
         })
         try:
