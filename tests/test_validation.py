@@ -611,7 +611,7 @@ class TestValidation(unittest.TestCase):
         validated_concept = None
         self.json_concept['notes'].append({
             "label": "een notitie",
-            "type": "note",
+            "type": 5,
             "language": "nl"
         })
         try:
@@ -1065,3 +1065,29 @@ class TestValidation(unittest.TestCase):
                           'superordinates': 'The superordinates of a collection must not itself be a member of the collection being edited.'},
                       error.errors)
 
+    def test_html_in_notes(self):
+        json_concept = {
+            "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
+            "label": "Belgium",
+            "type": "concept",
+            "id": 4,
+            "broader": [{"id": 2}],
+            "related": [{"id": 5}],
+            "labels": [{
+                "label": "Belgium",
+                "type": "prefLabel",
+                "language": "en"
+            }],
+            "notes": [{
+                "note": "een <strong><h2>notitie</h2></strong>",
+                "type": "note",
+                "language": "nl"
+            }],
+            "sources": [{
+                "citation": "Van Daele K. 2014"
+            }],
+            "member_of": [{"id": 666}]
+        }
+        validated_json = self.concept_schema.deserialize(json_concept)
+        note = validated_json['notes'][0]
+        self.assertEqual("een <strong>notitie</strong>", note['note'])

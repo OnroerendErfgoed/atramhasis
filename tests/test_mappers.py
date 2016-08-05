@@ -81,6 +81,32 @@ test_json_conceptscheme = {
         "citation": "Atlas."
     }]
 }
+test_json_html={
+    "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
+    "label": "Belgium",
+    "type": "concept",
+    "id": 4,
+    "broader": [{"id": 2}, {"id": 11}],
+    "related": [{"id": 5}, {"id": 12}],
+    "member_of": [{"id": 999}],
+    "labels": [{
+                   "label": "Belgium",
+                   "type": "prefLabel",
+                   "language": "en"
+               }, {
+                   "label": "België",
+                   "type": "prefLabel",
+                   "language": "nl"
+               }],
+    "notes": [{
+                  "note": "een <a href='#'>notitie</a>",
+                  "type": "note",
+                  "language": "nl"
+              }],
+    "sources": [{
+        "citation": "Atlas."
+    }]
+}
 
 
 
@@ -177,6 +203,7 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_concept.notes))
         self.assertEqual(1, len(result_concept.sources))
         self.assertFalse(hasattr(result_concept, 'members'))
+        self.assertIsNone(result_concept.notes[0].markup)
 
     def test_mapping_collections_filled(self):
         label = Label(label='test', labeltype_id='altLabel', language_id='nl')
@@ -282,3 +309,17 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_conceptscheme.labels))
         self.assertEqual(1, len(result_conceptscheme.notes))
         self.assertEqual(1, len(result_conceptscheme.sources))
+
+
+    def test_mapping_html_note(self):
+        result_concept = map_concept(self.concept, test_json_html, self.skos_manager)
+        self.assertIsNotNone(result_concept)
+        self.assertEqual(3, len(result_concept.narrower_concepts))
+        self.assertEqual(2, len(result_concept.broader_concepts))
+        self.assertEqual(2, len(result_concept.related_concepts))
+        self.assertEqual(1, len(result_concept.member_of))
+        self.assertEqual(2, len(result_concept.labels))
+        self.assertEqual(1, len(result_concept.notes))
+        self.assertEqual(1, len(result_concept.sources))
+        self.assertFalse(hasattr(result_concept, 'members'))
+        self.assertEqual('HTML', result_concept.notes[0].markup)
