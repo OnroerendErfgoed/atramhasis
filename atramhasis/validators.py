@@ -5,6 +5,7 @@ Module that validates incoming JSON.
 
 import copy
 
+import bleach
 import colander
 from language_tags import tags
 from skosprovider_sqlalchemy.models import (
@@ -27,9 +28,14 @@ class Label(colander.MappingSchema):
     )
 
 
+def note_html_preparer(value):
+    return bleach.clean(value, tags=['strong', 'em', 'a'], strip=True)
+
+
 class Note(colander.MappingSchema):
     note = colander.SchemaNode(
-        colander.String()
+        colander.String(),
+        preparer=note_html_preparer
     )
     type = colander.SchemaNode(
         colander.String()
