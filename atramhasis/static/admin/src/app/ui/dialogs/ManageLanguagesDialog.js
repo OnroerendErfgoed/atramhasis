@@ -241,7 +241,7 @@ define([
               'channel': 'warn'
             });
           }
-        });l
+        });
 
       }));
 
