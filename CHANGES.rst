@@ -1,11 +1,27 @@
-0.5.0 (??-??-2015)
+0.5.0 (??-??-2016)
 ------------------
 
-- Added the idea of private conceptschemes
-- Importing an entire vocabulary
-- Collect usage stats
-- Added a SessionFactory to keep some small data on the session
-- ...
+This release is a major update based on the `skosprovider`_ `0.6.0` line
+of libraries. The most visible change is with the public and admin interfaces.
+These have been completely overhauled to provide a more pleasing user
+experience. Among other things visitors are now pointed towards popular concepts
+and concepts they have recently visited. Browsing an entire conceptscheme tree
+has been redesigned.
+
+The adming interface now offers users an option to edit certain aspects of a
+conceptscheme such as the labels, notes and sources. Editing in general has been
+update and improved. Links between the public interface and the admin interface
+have been added to make switching from one to the other easier. Notes and
+sources can now contain certain HTML tags, allowing greater flexibility in
+defining concepts and collections.
+
+A command line script was added to make it easy to import an entire
+conceptscheme, eg. when migrating from another system. It is now possible to
+import a RDF, CSV or JSON file on the command line in your Atramhasis instance.
+With earlier versions you had to script this yourself.
+
+As always, bugs have been fixed, code has been rewritten and documenation has
+been updated.
 
 
 0.4.4 (04-06-2015)
