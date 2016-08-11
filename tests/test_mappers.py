@@ -104,7 +104,7 @@ test_json_html={
                   "language": "nl"
               }],
     "sources": [{
-        "citation": "Atlas."
+        "citation": "<em>Atlas.</em>"
     }]
 }
 
@@ -310,7 +310,6 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_conceptscheme.notes))
         self.assertEqual(1, len(result_conceptscheme.sources))
 
-
     def test_mapping_html_note(self):
         result_concept = map_concept(self.concept, test_json_html, self.skos_manager)
         self.assertIsNotNone(result_concept)
@@ -323,3 +322,4 @@ class TestMappers(unittest.TestCase):
         self.assertEqual(1, len(result_concept.sources))
         self.assertFalse(hasattr(result_concept, 'members'))
         self.assertEqual('HTML', result_concept.notes[0].markup)
+        self.assertEqual('HTML', result_concept.sources[0].markup)

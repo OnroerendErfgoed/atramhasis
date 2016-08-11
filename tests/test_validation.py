@@ -5,7 +5,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from atramhasis.data.datamanagers import SkosManager, LanguagesManager, ConceptSchemeManager
 from atramhasis.errors import ValidationError
 
-
 try:
     from unittest.mock import Mock
 except ImportError:
@@ -131,15 +130,15 @@ class TestValidation(unittest.TestCase):
             "broader": [{"id": 2}],
             "related": [{"id": 5}],
             "labels": [{
-                           "label": "Belgium",
-                           "type": "prefLabel",
-                           "language": "en"
-                       }],
+                "label": "Belgium",
+                "type": "prefLabel",
+                "language": "en"
+            }],
             "notes": [{
-                          "note": "een notitie",
-                          "type": "note",
-                          "language": "nl"
-                      }],
+                "note": "een notitie",
+                "type": "note",
+                "language": "nl"
+            }],
             "sources": [{
                 "citation": "Van Daele K. 2014"
             }],
@@ -148,32 +147,32 @@ class TestValidation(unittest.TestCase):
         self.json_collection = {
             "id": 0,
             "labels": [{
-                           "language": "nl-BE",
-                           "label": "Stijlen en culturen",
-                           "type": "prefLabel"
-                       }],
+                "language": "nl-BE",
+                "label": "Stijlen en culturen",
+                "type": "prefLabel"
+            }],
             "type": "collection",
             "label": "Stijlen en culturen",
             "members": [{"id": 61}, {"id": 60}],
             "notes": [{
-                          "note": "een notitie",
-                          "type": "note",
-                          "language": "nl"
-                      }],
+                "note": "een notitie",
+                "type": "note",
+                "language": "nl"
+            }],
             "member_of": [{"id": 666}]
         }
         self.json_conceptscheme = {
             "labels": [{
-                           "language": "nl-BE",
-                           "label": "Stijlen en culturen",
-                           "type": "prefLabel"
-                       }],
+                "language": "nl-BE",
+                "label": "Stijlen en culturen",
+                "type": "prefLabel"
+            }],
             "label": "Stijlen en culturen",
             "notes": [{
-                          "note": "een notitie",
-                          "type": "note",
-                          "language": "nl"
-                      }],
+                "note": "een notitie",
+                "type": "note",
+                "language": "nl"
+            }],
             "sources": [{
                 "citation": "Van Daele K. 2014"
             }]
@@ -400,7 +399,6 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(isinstance(error, ValidationError))
         self.assertIn({'narrower': 'Concept not found, check concept_id. Please be aware members'
                                    ' should be within one scheme'}, error.errors)
-
 
     def test_narrower_concept_to_self(self):
         self.json_concept['narrower'].append({"id": 4})
@@ -787,10 +785,10 @@ class TestValidation(unittest.TestCase):
             "broader": [{"id": 2}],
             "related": [{"id": 5}],
             "notes": [{
-                          "note": "een notitie",
-                          "type": "note",
-                          "language": "nl"
-                      }],
+                "note": "een notitie",
+                "type": "note",
+                "language": "nl"
+            }],
             "member_of": [{"id": 666}]
         }
         error = None
@@ -811,10 +809,10 @@ class TestValidation(unittest.TestCase):
         json_concept = {
             "type": "collection",
             "labels": [{
-                           "language": "nl",
-                           "label": "Stijlen en culturen",
-                           "type": "prefLabel"
-                       }],
+                "language": "nl",
+                "label": "Stijlen en culturen",
+                "type": "prefLabel"
+            }],
             "id": 4,
             "members": [{"id": 666}],
             "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:somewhere:93"]}
@@ -837,10 +835,10 @@ class TestValidation(unittest.TestCase):
         json_concept = {
             "type": "concept",
             "labels": [{
-                           "language": "nl",
-                           "label": "Stijlen en culturen",
-                           "type": "prefLabel"
-                       }],
+                "language": "nl",
+                "label": "Stijlen en culturen",
+                "type": "prefLabel"
+            }],
             "id": 4,
             "member_of": [{"id": 666}],
             "matches": {"exact": ["urn:sample:666"], "broad": ["urn:sample:666"]}
@@ -863,10 +861,10 @@ class TestValidation(unittest.TestCase):
         json_concept = {
             "type": "concept",
             "labels": [{
-                           "language": "nl",
-                           "label": "Stijlen en culturen",
-                           "type": "prefLabel"
-                       }],
+                "language": "nl",
+                "label": "Stijlen en culturen",
+                "type": "prefLabel"
+            }],
             "id": 4,
             "member_of": [{"id": 666}],
             "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:sample:93"]}
@@ -1004,8 +1002,8 @@ class TestValidation(unittest.TestCase):
         self.assertIsNone(validated_json)
         self.assertIsNotNone(error)
         self.assertIn({
-                          'subordinate_arrays': 'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.'},
-                      error.errors)
+            'subordinate_arrays': 'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.'},
+            error.errors)
 
     def test_superordinates(self):
         error_raised = False
@@ -1062,8 +1060,8 @@ class TestValidation(unittest.TestCase):
         self.assertIsNone(validated_json)
         self.assertIsNotNone(error)
         self.assertIn({
-                          'superordinates': 'The superordinates of a collection must not itself be a member of the collection being edited.'},
-                      error.errors)
+            'superordinates': 'The superordinates of a collection must not itself be a member of the collection being edited.'},
+            error.errors)
 
     def test_html_in_notes(self):
         json_concept = {
@@ -1091,3 +1089,30 @@ class TestValidation(unittest.TestCase):
         validated_json = self.concept_schema.deserialize(json_concept)
         note = validated_json['notes'][0]
         self.assertEqual("een <strong>notitie</strong>", note['note'])
+
+    def test_html_in_sources(self):
+        json_concept = {
+            "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
+            "label": "Belgium",
+            "type": "concept",
+            "id": 4,
+            "broader": [{"id": 2}],
+            "related": [{"id": 5}],
+            "labels": [{
+                "label": "Belgium",
+                "type": "prefLabel",
+                "language": "en"
+            }],
+            "notes": [{
+                "note": "een notitie",
+                "type": "note",
+                "language": "nl"
+            }],
+            "sources": [{
+                "citation": "Van Daele K. <strong><h2>2014</h2></strong>"
+            }],
+            "member_of": [{"id": 666}]
+        }
+        validated_json = self.concept_schema.deserialize(json_concept)
+        source = validated_json['sources'][0]
+        self.assertEqual("Van Daele K. <strong>2014</strong>", source['citation'])
