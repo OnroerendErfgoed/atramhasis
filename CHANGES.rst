@@ -23,6 +23,9 @@ With earlier versions you had to script this yourself.
 As always, bugs have been fixed, code has been rewritten and documenation has
 been updated.
 
+See https://github.com/OnroerendErfgoed/atramhasis/milestone/8?closed=1 for the
+full list of changes.
+
 
 0.4.4 (04-06-2015)
 ------------------
