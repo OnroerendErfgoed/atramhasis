@@ -12,7 +12,7 @@ def is_html(value):
     Check if a value has html inside. Only tags checked <strong> <em> <a>.
 
     :param value: a string
-    :return: a boolean
+    :return: a boolean (True, HTML present | False, no HTML present)
     """
     tag_list = ['<strong>', '<em>', '<a>', '</strong>', '</em>', '</a>', '<a']
     return any(tag in value for tag in tag_list)
@@ -77,6 +77,8 @@ def map_concept(concept, concept_json, skos_manager):
         sources = concept_json.get('sources', [])
         for s in sources:
             source = Source(citation=s.get('citation', ''))
+            if is_html(source.citation):
+                source.markup = 'HTML'
             concept.sources.append(source)
 
         concept.member_of.clear()

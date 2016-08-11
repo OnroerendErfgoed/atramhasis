@@ -28,14 +28,14 @@ class Label(colander.MappingSchema):
     )
 
 
-def note_html_preparer(value):
+def html_preparer(value):
     return bleach.clean(value, tags=['strong', 'em', 'a'], strip=True)
 
 
 class Note(colander.MappingSchema):
     note = colander.SchemaNode(
         colander.String(),
-        preparer=note_html_preparer
+        preparer=html_preparer
     )
     type = colander.SchemaNode(
         colander.String()
@@ -47,7 +47,8 @@ class Note(colander.MappingSchema):
 
 class Source(colander.MappingSchema):
     citation = colander.SchemaNode(
-        colander.String()
+        colander.String(),
+        preparer=html_preparer
     )
 
 
