@@ -4,7 +4,7 @@ pyramid-tm==0.12.1
 pyramid_rewrite==0.2
 
 skosprovider==0.6.0
--e git+https://github.com/koenedaele/skosprovider.git#egg=skosprovider
+#-e git+https://github.com/koenedaele/skosprovider.git#egg=skosprovider
 #skosprovider_sqlalchemy==0.4.2
 -e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git#egg=skosprovider_sqlalchemy
 #pyramid_skosprovider==0.6.0
