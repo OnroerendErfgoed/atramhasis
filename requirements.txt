@@ -17,7 +17,7 @@ pyramid_rewrite==0.2
 -e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata.git#egg=skosprovider_heritagedata
 
 #language-tags
-language-tags==0.4.1
+language-tags==0.4.2
 
 # sqlalchemy
 sqlalchemy==1.0.13
