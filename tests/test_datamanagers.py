@@ -44,6 +44,7 @@ class DatamangersTests(unittest.TestCase):
         with transaction.manager:
             local_session = self.session_maker()
             local_session.add(Language('nl', 'Dutch'))
+            local_session.add(Language('nl-BE', 'Dutch'))
             local_session.add(Language('en', 'English'))
 
             import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
@@ -178,7 +179,7 @@ class LanguagesManagerTest(DatamangersTests):
 
     def test_get_all(self):
         res = self.language_manager.get_all()
-        self.assertEqual(3, len(res))
+        self.assertGreaterEqual(len(res), 3)
 
     def test_get_all_sorted(self):
         res = self.language_manager.get_all_sorted('id', False)
@@ -186,7 +187,7 @@ class LanguagesManagerTest(DatamangersTests):
 
     def test_get_all_sorted_desc(self):
         res = self.language_manager.get_all_sorted('id', True)
-        self.assertEqual('nl', res[0].id)
+        self.assertEqual('nl-BE', res[0].id)
 
     def test_count_languages(self):
         res = self.language_manager.count_languages('nl')

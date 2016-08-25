@@ -223,10 +223,26 @@ define([
         confirmationDialog.destroy();
       });
       on(confirmationDialog, 'execute', lang.hitch(this, function () {
-        this._langStore.remove(language.id);
-        this.languageController.updateLanguageStore();
-        this._langGrid.refresh();
-        this._reset();
+        this._langStore.remove(language.id).then(function(removedLang) {
+          topic.publish('dGrowl', 'Language removed: ' + removedLang.name + ' (' + removedLang.id + ')', {
+            'title': 'Languages',
+            'sticky': false,
+            'channel': 'info'
+          });
+          this.languageController.updateLanguageStore();
+          this._langGrid.refresh();
+          this._reset();
+        }, function(err) {
+          if (err.response && err.response.status === '409' || err.response.status === 409) {
+            topic.publish('dGrowl', language.name + ' (' + language.id +
+              ') is in use and can\'t be removed', {
+              'title': 'Languages',
+              'sticky': false,
+              'channel': 'warn'
+            });
+          }
+        });
+
       }));
 
       confirmationDialog.show();

@@ -400,7 +400,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 4)
+        self.assertEqual(len(res.json), 5)
 
     def test_get_languages_sort(self):
         res = self.testapp.get('/languages', headers=self._get_default_headers(),
@@ -408,7 +408,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 4)
+        self.assertEqual(len(res.json), 5)
 
     def test_get_languages_sort_desc(self):
         res = self.testapp.get('/languages', headers=self._get_default_headers(),
@@ -416,7 +416,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 4)
+        self.assertEqual(len(res.json), 5)
 
     def test_get_language(self):
         res = self.testapp.get('/languages/de', headers=self._get_default_headers())
