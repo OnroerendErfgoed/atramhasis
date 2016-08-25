@@ -1,0 +1,48 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="addMatchesDialog_title">
+  <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+    <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" role="heading"></span>
+		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
+          data-dojo-attach-event="ondijitclick: onCancel" title="Annuleren" role="button" tabIndex="-1">
+			<span data-dojo-attach-point="closeText" class="closeText" title="Annuleren" tabIndex="-1">
+        <i class="fa fa-times"></i></span>
+		</span>
+  </div>
+
+  <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+    <div class="row">
+      <div class="large-12 columns">
+        <p style="margin-top: 0; padding-top: 0;">Select an external scheme and enter a label to search for a match:</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-6 columns">
+        <select data-dojo-attach-point="externalSchemeSelect"></select>
+      </div>
+      <div class="large-5 columns">
+        <input type="search" style="float: right" data-dojo-attach-point="searchLabelInput" placeholder="Enter a label .." />
+      </div>
+      <div class="large-1 columns">
+        <a href="#" class="button tiny" style="float: right" data-dojo-attach-event="onClick: _searchMatches"><i class="fa fa-search"></i></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <div data-dojo-attach-point="addMatchesGridNode" style="height: 330px; width: 100%"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="large-6 columns">
+        <div class="placeholder-container" style="margin-top: 15px;">
+          <label for="matchType-${id}" style="width: 60%;">Select the type of match</label>
+          <select id="matchType-${id}" data-dojo-attach-point="matchTypeSelectNode"></select>
+        </div>
+      </div>
+    </div>
+    <div class="row footerButtons">
+      <div class="large-12 columns text-center">
+        <a href="#" data-dojo-attach-event="onClick: _okClick" class="button tiny">Add</a>
+        <a href="#" data-dojo-attach-event="onClick: _cancelClick" class="button tiny">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>

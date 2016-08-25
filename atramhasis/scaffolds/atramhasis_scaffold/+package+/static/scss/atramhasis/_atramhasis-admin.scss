@@ -1,0 +1,649 @@
+// DOJO imports
+@import '../admin/src/dojo/resources/dojo.css';
+@import '../admin/src/dgrid/css/dgrid.css';
+//@import '../admin/src/dijit/themes/claro/claro.css'; // messes with dialogs :/
+@import '../admin/src/dGrowl/dGrowl.css';
+
+$animationSpeed: 0.8s;
+$menu-width: 50px;
+$menu-width-open: 480px;
+
+/* main html layout */
+html, body { width: 100%;  height: 100%;  margin: 0; overflow:hidden; }
+
+.app-content-container, #appDiv, #appContainer { width: 100%; height: 100%; background: #f3f3f3; }
+.appBody { width: 100%; height: 100%; padding: 20px 80px 10px 20px; }
+
+//Tab container
+.claro .dijitTabSpacer { border: none; height: 0; }
+.claro .dijitTabPaneWrapper { border: none; border-radius: 0; }
+.claro .dijitTabContainerBottom-tabs { border: 0; font-size:14px;}
+.claro .dijitTabContainerBottom-tabs .dijitTab { border: 1px solid #efefef; border-top: none; background: #ffffff none; border-radius: 0; }
+.claro .dijitTab .tabLabel, .claro .dijitTabCloseButton:before { color: $gray; }
+.claro .dijitTabCloseButton { background: none !important; width: 15px; height: 100%; padding-top: 0; }
+.claro .dijitTabCloseButton:before { content: "\f00d"; font-family: FontAwesome; }
+.claro .dijitTabContainerBottom-tabs .dijitTabContainerBottom-tabs .dijitTabChecked { border: none; background: #ffffff none; }
+.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked .dijitTabCloseButton{ cursor: pointer; padding-top: 0;}
+.claro .dijitTabContainerBottom-tabs .dijitTab.dijitTabChecked { padding-bottom: 3px; }
+.claro .dijitTabContainerBottom-tabs .dijitTabChecked .tabLabel,
+.claro .dijitTabContainerBottom-tabs .dijitTabHover .tabLabel,
+.claro .dijitTabContainerBottom-tabs .dijitTabChecked .dijitTabCloseButton:before,
+.claro .dijitTabContainerBottom-tabs .dijitTabHover .dijitTabCloseButtonHover:before { color: $blue; }
+
+.claro .dijitTabContainerTop-tabs { text-align: center; width: 100% !important; padding: 0; border: 0; height: 50px; }
+.claro .dijitTabContainerTop-tabs .dijitTab { background: $blue none !important; border: 1px solid $light-gray; border-radius: 0; color: $white; font-size: 0.6875rem; padding: 0.625rem 1.25rem !important; text-transform: uppercase; line-height: normal; margin: 0 1px 1.25rem 0 !important; }
+.claro .dijitTabContainerTop-tabs .dijitTabDisabled { background: $gray !important; }
+.claro .dijitTabContainerTop-tabs .dijitTabDisabled .tabLabel { color: $dark-gray !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab:hover:not(.dijitTabChecked):not(.dijitTabDisabled) { background-color: #763e81 !important; color: $orange !important; }
+.claro .dijitTabContainerTop-tabs .dijitTab.dijitTabChecked { background: $orange none !important; }
+.claro .dijitTabContainer .tabStripButton { height: 100% !important; }
+.claro .dijitTabPaneWrapper .dijitTabContainerBottomChildWrapper { overflow-y: auto; height: 100%; }
+
+#appDiv footer {
+  height: 30px;
+  background-color: $topbar-bg-color;
+  padding: 5px 10px;
+  margin-top: 0;
+}
+
+#appDiv header {
+  background-color: $topbar-bg-color;
+
+  nav {
+    border-bottom: 1px solid #f0f1f3;
+  }
+
+  .top-bar-section li select {
+    height: 3.65rem !important;
+    cursor: pointer;
+  }
+
+  .top-bar-section .menu-button {
+    height: 3.65rem !important;
+    cursor: pointer;
+    top: auto;
+    background-color: white;
+    border: 0;
+    width: 100%;
+    color: #666666;
+  }
+
+  .top-bar-section .menu-button:hover {
+    background-color: #666666;
+  }
+
+  .top-bar-section .menu-button i {
+    width: 100%;
+    font-size: 20px;
+    padding: 5px;
+  }
+}
+
+.claro .dijitContentPane {
+  padding: 0 !important;
+}
+
+/* Custom notification styles! */
+.dGrowl-channel {
+  width: 350px !important;
+}
+.dGrowl-notification {
+  width: 320px !important;
+}
+
+/* 'Warning' Channel */
+.dGrowl-channel-warn .dGrowl-notification {
+  background-color: rgb(255, 217, 162);
+  border: 1px solid rgb(233, 123, 20);
+}
+
+/* buttons */
+a.button {
+  color: $white;
+  background-color: $blue;
+  border: 1px solid $light-gray;
+  padding: 0.1rem 0.5rem 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+a.admin-button:hover {
+  background-color: scale-color($blue, $lightness: -15%);
+  color: $white !important;
+}
+
+/* noscript div */
+.noscript { top: 0; left: 0; position: absolute; width: 100%; height: 100%; z-index: 1002; display: block; background-color: $body-bg; text-align: center; padding: 25px}
+
+/* Loading overlay */
+.pageOverlay { top: 0; left: 0; position: absolute; height: 100%; width: 100%; z-index: 1001; display: block; background-color: $steel; text-align: center; color: $light-gray;}
+.loadingMessage {font-size: 1em; margin: 30px; color: $light-gray;}
+
+// slide menu
+.slidemenu-container {
+  min-height: 300px;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 10;
+  border-left: 1px solid $gray;
+  box-shadow: -1px 0px 2px 0px $gray;
+}
+
+.slidemenu-overlay {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  background-color: black;
+  height: 100%;
+  width: 100%;
+}
+
+.slidemenu-inner {
+  float: left;
+  display: inline-block;
+  text-align: left;
+  padding-left: 5px;
+  padding-top: 20px;
+  padding-right: 15px;
+  width: $menu-width-open;
+  height: 100%;
+}
+
+.slidemenu-open {
+  -webkit-transition: width $animationSpeed ease-in-out;
+  -moz-transition: width $animationSpeed ease-in-out;
+  -o-transition: width $animationSpeed ease-in-out;
+  transition: width $animationSpeed ease-in-out;
+  width: $menu-width-open;
+}
+
+.slidemenu-close .slidemenu-inner {
+  overflow-y: hidden;
+}
+
+.slideoverlay-open.slidemenu-overlay {
+  -webkit-transition: opacity $animationSpeed ease-in-out;
+  -moz-transition: opacity $animationSpeed ease-in-out;
+  -o-transition: opacity $animationSpeed ease-in-out;
+  transition: opacity $animationSpeed ease-in-out;
+  opacity: 0.3;
+  visibility: visible;
+}
+
+.slideoverlay-close.slidemenu-overlay {
+  transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -moz-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -webkit-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -o-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.slidemenu-open .slidemenu-inner:not(.slidemenu-control) {
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.slidemenu-close {
+  -webkit-transition: width $animationSpeed ease-in-out;
+  -moz-transition: width $animationSpeed ease-in-out;
+  -o-transition: width $animationSpeed ease-in-out;
+  transition: width $animationSpeed ease-in-out;
+  width: $menu-width;
+}
+
+.slidemenu-close .search-form, .slidemenu-close .search-footer-buttons {
+  transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -moz-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -webkit-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  -o-transition: visibility $animationSpeed, opacity $animationSpeed ease-in-out;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.slidemenu-open .search-form, .slidemenu-open .search-footer-buttons {
+  -webkit-transition: opacity $animationSpeed ease-in-out;
+  -moz-transition: opacity $animationSpeed ease-in-out;
+  -o-transition: opacity $animationSpeed ease-in-out;
+  transition: opacity $animationSpeed ease-in-out;
+  opacity: 1;
+  visibility: visible;
+}
+
+.slidemenu-container {
+
+  .search-pane {
+    height: 100%;
+  }
+
+  .search-results {
+    padding-left: 15px;
+  }
+
+  .search-results .dgrid {
+    width: 100%;
+    border-color: #f0f1f3;
+    height: 100%;
+  }
+
+  .search-results table {
+    margin: 0;
+  }
+
+  .search-results table tr th,
+  .search-results table tr td {
+    font-size: 11px !important;
+  }
+
+  .search-results .dgrid-header table .dgrid-cell {
+    padding: 5px;
+  }
+
+  .search-results table .dgrid-cell {
+    padding-left: 5px;
+    border-color: #f0f1f3;
+  }
+
+  .search-results .dgrid .dgrid-column-id {
+    width: 45px;
+  }
+
+  .search-results .dgrid .dgrid-content .dgrid-column-id {
+    vertical-align: middle;
+  }
+
+  .search-results .slideMenuGridCell {
+    word-break: keep-all;
+    white-space: normal;
+  }
+
+  .search-results .slideMenuGridCell h3 {
+    margin-bottom: 3px;
+    color: #753f7f !important;
+    font-weight: bold !important;
+    margin-top: 0 !important;
+  }
+
+  .search-results .slideMenuGridCell p {
+    padding: 0;
+    margin: 0;
+    color: $jumbo;
+    font-size: 11px;
+  }
+
+  .search-form {
+    margin-bottom: 15px;
+    display: inline-block;
+
+    .scheme-select {
+      display: inline-block;
+      width: 100%;
+    }
+
+    .search-button {
+      background-color: $mid-gray;
+      border: 0;
+      padding: 10px 45px 15px 40px;
+    }
+
+    .search-button:hover {
+      background-color: $light-gray;
+    }
+
+    .search-button span {
+      margin: 0;
+    }
+
+    .edit-scheme-button {
+      margin-left: 0;
+      padding-left: 0;
+    }
+  }
+
+  .search-footer-buttons {
+    margin-top: 20px;
+    height: 60px;
+  }
+}
+
+.label-manager, .note-manager, .sources-manager {
+  height: 402px;
+
+  .dgrid .dgrid-column-language {
+    width: 160px;
+  }
+
+  .dgrid .dgrid-column-label,
+  .dgrid .dgrid-column-note {
+    width: 380px;
+  }
+
+  .dgrid-row-table {
+    margin: 0;
+  }
+
+  .dgrid-cell {
+    padding: 5px;
+  }
+
+  .dgrid-column-actions {
+    width: 90px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .dGridHyperlink {
+    text-align: center;
+  }
+
+  .dGridHyperlink a {
+    font-size: 18px;
+  }
+
+}
+
+.relation-row {
+  vertical-align: middle;
+  background-color: #f0f1f3;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.relation-manager, .matches-manager {
+  height: 402px;
+
+  .relation-row p {
+    margin-top: 0;
+    color: black;
+    margin-top: 7px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .relation-row .large-1 {
+    padding-right: 0;
+  }
+
+  .dgrid {
+    margin-bottom: 5px;
+
+    .dgrid-cell {
+      padding-left: 15px;
+    }
+
+    .dgrid-row-table {
+      margin: 0;
+    }
+
+    .dgrid-column-remove,
+    .dgrid-column-actions {
+      width: 60px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .dGridHyperlink {
+      text-align: center;
+    }
+
+    .dGridHyperlink a {
+      width: 100%;
+      font-size: 18px;
+    }
+  }
+}
+
+.matches-manager .dgrid .dgrid-column-uri {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+
+.relation-dialog {
+  height: 500px;
+  width: 450px;
+}
+
+.merge-concept-dialog {
+  width: 600px;
+  height: 400px;
+
+  .dgrid {
+    height: 250px;
+
+    .dgrid-cell {
+      font-size: 13px;
+      padding-bottom: 0;
+      padding-left: 5px;
+    }
+
+    .dgrid-column-link {
+      width: 35px;
+      text-align: center;
+    }
+
+    .dgrid-selected .dgrid-row-table {
+      background-color: #cee6fa;
+    }
+
+    .dgrid-row-table {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.matches-dialog, .import-concept-dialog {
+  width: 800px;
+  height: 635px;
+
+  .dgrid {
+    .dgrid-cell {
+      font-size: 13px;
+      padding-bottom: 0;
+      padding-left: 5px;
+    }
+
+    .dgrid-row-table {
+      margin: 0;
+    }
+
+    .dgrid-column-id,
+    .dgrid-column-type {
+      width: 100px;
+    }
+
+    .dgrid-column-link {
+      width: 35px;
+      text-align: center;
+    }
+
+    .dgrid-selected .dgrid-row-table {
+      background-color: #cee6fa;
+    }
+  }
+}
+
+.import-concept-dialog {
+  height: 580px;
+}
+
+.notes-dialog, .sources-dialog {
+
+  .htmlEditor .dijitToolbar{
+    border: 1px #d5d5d5 solid;
+  }
+
+  .htmlEditor textarea {
+    height: 300px;
+    border: 1px #d5d5d5 solid;
+    width: 99.8%;
+    padding: 5px;
+    resize: vertical;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
+
+.sources-dialog {
+  width: 600px;
+}
+
+.footerButtons {
+  margin-top: 20px;
+}
+
+.concept-detail {
+  background-color: $white;
+  padding-right: 20px;
+  display: inline-block;
+  overflow-y: auto;
+  width: 100%;
+
+  .concept-title-info {
+    padding-top: 10px;
+    margin-right: 20px;
+    font-size: 0.8rem;
+    float: left;
+  }
+
+  .concept-hr {
+    margin-left: 1.25rem;
+  }
+
+  .no-top-padding {
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .label-relation-block {
+    margin-bottom: 20px;
+  }
+
+  .label-relation-block .dllist {
+    font-size: 1em;
+    padding: 0;
+    margin: 10px 0 0 0;
+  }
+
+  .label-relation-block .dllist dt {
+    font-size:1.2em;
+    padding-top:5px;
+    margin:0;
+  }
+
+  .label-relation-block .dllist dd {
+    margin-left:120px;
+    margin-top:-20px;
+    min-height: 19px;
+    font-size: 13px;
+  }
+
+  .label-relation-block {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .scopeNote {
+    border: 0 !important;
+    font-size: 1.1em;
+
+    h3 {
+      margin-bottom: 20px;
+    }
+
+    li {
+      padding-bottom: 10px !important;
+    }
+  }
+}
+
+.manage-languages-dialog {
+
+  .dgrid {
+
+    .dgrid-column-id {
+      width: 120px;
+    }
+
+    .dgrid-row-table {
+      margin: 0;
+    }
+
+    .dgrid-cell {
+      padding: 5px;
+    }
+
+    .dgrid-column-actions {
+      width: 50px;
+      text-align: center;
+      vertical-align: middle;
+    }
+  }
+}
+
+// not working???
+.placeholder-container {
+  .no-arrow-select select {
+    /*for firefox*/
+    -moz-appearance: none !important;
+    /*for chrome*/
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    text-indent: 0.01px;
+    text-overflow: '';
+  }
+
+  /*for IE*/
+  .no-arrow-select select::-ms-expand {
+    display: none !important;
+  }
+}
+
+.claro .dijitDialogUnderlay { background: rgba(72, 72, 72, 0.8) !important; opacity: 1 !important; }
+.claro .dijitDialog .dijitDialogTitle { font-size: 18px; color: #753f7f; }
+.claro .dijitDialogCloseIcon { background: none !important;  font-size: 22px; font-weight: bold; }
+.claro .dijitDialog .closeText { display: block; color: $silver }
+.claro .dijitDialog { background-color: #FFFFFF; }
+.claro .dijitDialog .dijitDialogPaneContent { padding: 25px; }
+.claro .dijitDialogTitleBar { padding: 10px !important; background-color: #FFFFFF !important;}
+.claro .dijitDialog .dijitDialogTitleBar .dijitDialogTitle strong { color: black; text-transform: uppercase; }
+
+.claro .dijitTabContainerTop-dijitContentPane {
+  padding: 5px 0 0 0 !important;
+}
+
+// overwrites for dgrid border color
+.claro .dgrid {
+  border-color: #f0f1f3 !important;
+
+  .dgrid-cell {
+    border-color: #f0f1f3 !important;
+  }
+}
+
+.confirm-dialog .dijitDialogPaneActionBar {
+  text-align: center !important;
+  padding-bottom: 15px !important;
+
+  .dijitButtonNode {
+    background: transparent none !important;
+    border: none !important;
+    box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    color: $white !important;
+  }
+  .dijitButtonHover .dijitButtonNode {
+    color: $orange !important;
+  }
+
+  *:focus {
+    outline: none !important;
+  }
+}

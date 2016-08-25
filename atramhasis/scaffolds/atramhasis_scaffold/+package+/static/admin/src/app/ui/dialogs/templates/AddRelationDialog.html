@@ -1,0 +1,24 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="addRelationDialog_title">
+  <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+		<span data-dojo-attach-point="titleNode" class="dijitDialogTitle" role="heading"></span>
+		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
+          data-dojo-attach-event="ondijitclick: onCancel" title="Annuleren" role="button" tabIndex="-1">
+			<span data-dojo-attach-point="closeText" class="closeText" title="Annuleren" tabIndex="-1">
+        <i class="fa fa-times"></i></span>
+		</span>
+  </div>
+
+  <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+    <div class="row">
+      <div class="large-12 columns">
+        <div data-dojo-attach-point="addRelationContainerNode" style="height: 330px; overflow-y: scroll; width: 100%"></div>
+      </div>
+    </div>
+    <div class="row footerButtons">
+      <div class="large-12 columns text-center">
+        <a href="#" data-dojo-attach-event="onClick: _okClick" class="button tiny">Add</a>
+        <a href="#" data-dojo-attach-event="onClick: _cancelClick" class="button tiny">Cancel</a>
+      </div>
+    </div>
+  </div>
+</div>

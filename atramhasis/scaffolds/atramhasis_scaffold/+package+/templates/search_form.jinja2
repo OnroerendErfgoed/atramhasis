@@ -1,0 +1,36 @@
+{% from "macros.jinja2" import
+	get_conceptscheme_label
+  %}
+{% set app_package = app_package|default('atramhasis', true) %}
+
+<div class="large-6 columns home-search-placer">
+  <div class="home-img_position">
+    <form id="search-form" action="#" method="get" name="searchForm">
+
+      <select id="scheme">
+        <option value="" selected>{% trans %}select_scheme{% endtrans %}</option>
+        {% for item in conceptschemes %}
+          <option value="{{ request.route_path('search_result', scheme_id=item.id) }}">
+            {{ get_conceptscheme_label(item.conceptscheme, request.locale_name) }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <select id="ctype"  name="ctype" >
+        <option value="all" selected>{% trans %}select_type{% endtrans %}</option>
+        <option value="all">{% trans %}type_all{% endtrans %}</option>
+        <option value="concept">{% trans %}type_concept{% endtrans %}</option>
+        <option value="collection">{% trans %}type_collection{% endtrans %}</option>
+      </select>
+
+      <input type="text" name="label" id="label" placeholder="{% trans %}search_for{% endtrans %} {% trans %}labels{% endtrans %}">
+
+      <div class="text-center">
+        <a onclick="document.searchForm.submit();"><span class="ico ico-mglass-large"></span></a>
+      </div>
+    </form>
+    <div class="text-center">
+      <img src="{{ request.static_path(app_package + ':static/img/headimg.png') }}" width="230">
+    </div>
+  </div>
+</div>

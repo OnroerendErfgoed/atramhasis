@@ -1,0 +1,89 @@
+@import '../../dojo/resources/dojo.css';
+@import '../../dijit/themes/claro/claro.css';
+@import '../../dgrid/css/dgrid.css';
+@import '../../dgrid/css/skins/claro.css';
+@import '../../dGrowl/dGrowl.css';
+
+/*@import 'FilteredGrid.css';*/
+/*@import 'ConceptForm.css';*/
+/*@import 'ConceptDetail.css';*/
+/*@import 'ExternalSchemeForm.css';*/
+
+/*html, body {*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*margin: 0;*/
+/*}*/
+
+/*#appHeader {*/
+    /*background-color: #333333;*/
+    /*height: 45px;*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+/*}*/
+
+/*#appHeader h1 {*/
+    /*padding: 0 15px;*/
+    /*line-height: 45px;*/
+    /*margin: 0;*/
+/*}*/
+
+/*#appHeader h1 a {*/
+    /*font-size: 17px;*/
+    /*text-decoration: none;*/
+    /*color: white;*/
+/*}*/
+
+/*#appMenu {*/
+    /*width: 40%;*/
+    /*background-color: #f2f2f2;*/
+/*}*/
+
+/*#appContainer {*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*overflow: hidden;*/
+    /*border: none;*/
+/*}*/
+
+/*#select-wrapper {*/
+    /*font-size: 14px;*/
+    /*padding: 10px;*/
+/*}*/
+
+/*.plusIcon {*/
+    /*background-image: url('../../dijit/themes/claro/images/dnd.png');*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: 0 0;*/
+    /*background-size: 100%;*/
+    /*width: 11px;*/
+    /*height: 11px;*/
+/*}*/
+
+/*.minIcon {*/
+    /*background-image: url('../../dijit/themes/claro/images/dnd.png');*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: 0 -71px;*/
+    /*background-size: 100%;*/
+    /*width: 11px;*/
+    /*height: 11px;*/
+/*}*/
+
+/*.dGrowl-channel-warn .dGrowl-notification {*/
+	/*background-color: rgb(250, 217, 95);*/
+    /*border: 1px solid #b97422;*/
+/*}*/
+
+/*.dGrowl-notification {*/
+	/*width: 250px;*/
+/*}*/
+
+/*.dGrowl-channel {*/
+	/*width: 280px;*/
+/*}*/
+
+/*h2.dialogHeader {*/
+    /*margin: 5px 0;*/
+    /*border-bottom: 1px solid #d3d3d3;*/
+/*}*/
+

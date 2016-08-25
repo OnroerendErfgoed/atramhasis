@@ -1,0 +1,40 @@
+{% from "macros.jinja2" import popular_concepts, get_conceptscheme_label %}
+
+<div class="row">
+  {% set topSchemes = request.registry.settings.get('layout.focus_conceptschemes') %}
+  {% set schemes = [] %}
+  {% if topSchemes|length > 0 %}
+    {% for s in topSchemes %}
+      {% for c in conceptschemes %}
+        {% if c.id == s %}
+          {% do schemes.append(c) %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  {% else %}
+    {% set schemes = conceptschemes %}
+  {% endif %}
+  {% if schemes|length > 0 %}
+    {% if schemes|length >= 4 %}
+      {% set maxLength = 4 %}
+    {% else %}
+      {% set maxLength = schemes|length %}
+    {% endif %}
+    {% for x in range(0, maxLength) %}
+      {% set conceptscheme = schemes|random %}
+      {% do schemes.remove(conceptscheme) %}
+      {% if loop.last %}
+        {% if maxLength >= 4 %}
+          <div class="large-3 columns subfooterright">
+        {% else %}
+          <div class="large-3 columns subfooterright left">
+        {% endif %}
+      {% else %}
+        <div class="large-3 columns subfooter">
+      {% endif %}
+    <h3>{{ get_conceptscheme_label(conceptscheme.conceptscheme, request.locale_name) }}</h3>
+    {{ popular_concepts(request, conceptscheme.id, 3) }}
+    </div>
+    {% endfor %}
+  {% endif %}
+</div>

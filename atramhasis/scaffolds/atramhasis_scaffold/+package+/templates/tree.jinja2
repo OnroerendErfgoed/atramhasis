@@ -1,0 +1,252 @@
+<div id="tree">
+  <div id="loadingOverlay" class="pageOverlay">
+{#    <div class="loadingMessage">Loading..</div>#}
+    <div><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
+  </div>
+</div>
+<style>
+
+  .node {
+    cursor: pointer;
+  }
+
+  .node circle {
+    fill: #fff;
+    stroke: rgb(247, 127, 0);
+    stroke-width: 1.5px;
+  }
+
+  .node text {
+    font-size: 12px;
+    font-family: 'Noto+Sans', 'Helvetica Neue', Helvetica, Arial;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+  }
+
+</style>
+<script>
+
+  var depth = 140;
+
+  var margin = {top: 20, right: 150, bottom: 20, left: 120},
+          width = 1020 - margin.right - margin.left,
+          height = 800 - margin.top - margin.bottom;
+
+  var i = 0,
+          duration = 750,
+          root;
+
+  var tree = d3.layout.tree()
+          .size([height, width]);
+
+  var diagonal = d3.svg.diagonal()
+          .projection(function(d) { return [d.y, d.x]; });
+
+  var svg = d3.select("#tree").append("svg")
+          .attr("width", width + margin.right + margin.left)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var scheme_label = '{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name)|trim }}';
+  var scheme_id = '{{ scheme_id }}';
+  var current = '{{ concept.concept_id }}';
+
+  var currentIds = null;
+
+  d3.json('{{ request.route_path("scheme_tree", scheme_id = scheme_id ) }}', function(error, flare) {
+    if (error) throw error;
+
+    root = { label: scheme_label, scheme_id: scheme_id };
+    root.children = flare;
+    root.id = -1;
+    root.x0 = height / 2;
+    root.y0 = 0;
+
+    function collapse(d) {
+      if (d.children) {
+        d._children = d.children;
+        d._children.forEach(collapse);
+        d.children = null;
+      }
+    }
+
+    root.children.forEach(collapse);
+    root.children.forEach(function(item) {
+      expandToCurrent(item, current);
+    });
+
+    console.log(root);
+    update(root);
+
+    // hide loading
+    $('#loadingOverlay').hide();
+  });
+
+  d3.select(self.frameElement).style("height", "850px");
+
+  function update(source) {
+
+    if (currentIds) {
+      if (currentIds.length > 4) {
+        depth = width / currentIds.length;
+      }
+    }
+
+    // Compute the new tree layout.
+    var nodes = tree.nodes(root).reverse(),
+            links = tree.links(nodes);
+
+    // Normalize for fixed-depth.
+    nodes.forEach(function(d) { d.y = d.depth * depth; });
+
+    // Update the nodes…
+    var node = svg.selectAll("g.node")
+            .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+    // Enter any new nodes at the parent's previous position.
+    var nodeEnter = node.enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+            .on("click", click)
+            .on("dblclick", openConcept);
+
+
+    nodeEnter.append("circle")
+            .attr("r", 1e-6)
+            .style("fill-opacity", 0.8)
+            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5)"; });
+
+    nodeEnter.append("text")
+            .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+            .attr("dy", ".35em")
+            .attr("text-anchor", function(d) {return (d.children || d._children) ? "end" : "start"; })
+            .text(function(d) { return d.label; })
+            .style("fill-opacity", 1e-6)
+            .style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" })
+            .on("mouseover", function(d) {
+              d3.select(this).style("fill", "rgb(27, 69, 97)");
+            })
+            .on("mouseout", function(d) {
+              d3.select(this).style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" });
+            });
+
+    // Transition nodes to their new position.
+    var nodeUpdate = node.transition()
+            .duration(duration)
+            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+    nodeUpdate.select("circle")
+            .attr("r", 4.5)
+            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5)"; });
+
+    nodeUpdate.select("text")
+            .style("fill-opacity", 1);
+
+    // Transition exiting nodes to the parent's new position.
+    var nodeExit = node.exit().transition()
+            .duration(duration)
+            .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+            .remove();
+
+    nodeExit.select("circle")
+            .attr("r", 1e-6);
+
+    nodeExit.select("text")
+            .style("fill-opacity", 1e-6);
+
+    // Update the links…
+    var link = svg.selectAll("path.link")
+            .data(links, function(d) { return d.target.id; });
+
+    // Enter any new links at the parent's previous position.
+    link.enter().insert("path", "g")
+            .attr("class", "link")
+            .attr("d", function(d) {
+              var o = {x: source.x0, y: source.y0};
+              return diagonal({source: o, target: o});
+            });
+
+    // Transition links to their new position.
+    link.transition()
+            .duration(duration)
+            .attr("d", diagonal);
+
+    // Transition exiting nodes to the parent's new position.
+    link.exit().transition()
+            .duration(duration)
+            .attr("d", function(d) {
+              var o = {x: source.x, y: source.y};
+              return diagonal({source: o, target: o});
+            })
+            .remove();
+
+    // highlight path of current node
+    link.style("stroke", function(d) { return d.target.highlight ? "rgba(247, 127, 0, 0.4)" : null });
+
+    // Stash the old positions for transition.
+    nodes.forEach(function(d) {
+      d.x0 = d.x;
+      d.y0 = d.y;
+    });
+  }
+
+  // Toggle children on click.
+  function click(d) {
+    setTimeout(function() {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      update(d);
+    }, 300); //timeout to let doubleclick finish
+  }
+
+  function expandToCurrent(node, current) {
+    if (node.concept_id == current) {
+      node.highlight = true;
+    } else {
+      node._children.forEach(function (item, index) {
+        if (item.concept_id == current) {
+          expandPath(item.id);
+          item.highlight = true;
+        }
+        else {
+          expandToCurrent(item, current);
+        }
+      });
+    }
+  }
+
+  function expandPath(id) {
+    var ids = id.split('.');
+    currentIds = ids;
+    var childrenArray = root.children;
+    for (i = 0; i < (ids.length - 1); ++i) {
+      var child = $.grep(childrenArray, function(child){ return child.concept_id == ids[i]; });
+      child[0].children = child[0]._children;
+      child[0].highlight = true;
+      child[0]._children = null;
+      childrenArray = child[0].children;
+    }
+  }
+
+  function openConcept(d) {
+    if (d.concept_id) {
+      var basepath = '{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}';
+      window.location.href = basepath + d.concept_id;
+    }
+    else {
+      if (d.scheme_id) {
+        window.location.href = '/conceptschemes/' + d.scheme_id;
+      }
+    }
+  }
+</script>

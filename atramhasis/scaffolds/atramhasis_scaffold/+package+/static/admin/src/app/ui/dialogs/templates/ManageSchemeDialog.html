@@ -1,0 +1,33 @@
+<div>
+  <div class="large-12 columns" style="padding-bottom: 20px;">
+    <div data-dojo-type="dijit/layout/TabContainer"
+         data-dojo-attach-point="tabContainer"
+         data-dojo-props="doLayout:false"
+         class="">
+
+      <div data-dojo-type="dijit/layout/ContentPane"
+           title="Labels"
+           data-dojo-attach-point="tabLabels"
+           data-dojo-props="selected:true">
+        <div data-dojo-attach-point="labelsNode">[ LABELS ]</div>
+      </div>
+
+      <div data-dojo-type="dijit/layout/ContentPane"
+           title="Notes"
+           data-dojo-attach-point="tabNotes">
+        <div data-dojo-attach-point="notesNode">[ NOTES ]</div>
+      </div>
+
+      <div data-dojo-type="dijit/layout/ContentPane"
+           title="Sources"
+           data-dojo-attach-point="tabSources">
+        <div data-dojo-attach-point="sourcesNode">[ SOURCES ]</div>
+      </div>
+      <!--? todo add languages tab -->
+    </div>
+  </div>
+  <div class="large-12 columns text-center" style="margin-top: 30px; margin-bottom: 20px;">
+    <a href="#" class="button tiny" data-dojo-attach-event="onClick: _saveScheme">Save</a>
+    <a href="#" class="button tiny" data-dojo-attach-event="onClick: _cancel">Cancel</a>
+  </div>
+</div>

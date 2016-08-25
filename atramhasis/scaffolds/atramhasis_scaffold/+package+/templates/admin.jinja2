@@ -1,0 +1,49 @@
+{% set app_package = app_package|default('atramhasis', true) -%}
+{% if request.registry.settings['dojo.mode'] == 'dist' %}
+	{% set release_dir = app_package + ':static/admin/dist' %}
+{% else %}
+	{% set release_dir = app_package + ':static/admin/src' %}
+{% endif %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/css/app-admin.css') }}" />
+  <link rel="stylesheet" href="{{ request.static_path(release_dir + '/app/resources/App.css') }}" />
+  <title>Atramhasis Admin</title>
+  {% block ga %}
+    {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
+    {% from 'macros.jinja2' import ga_tracker %}
+      {% if ga_key %}
+          {{ ga_tracker(ga_key) }}
+      {% endif %}
+  {% endblock %}
+</head>
+
+<body class="claro">
+
+  <noscript>
+  <div class="noscript">
+    Please enable JavaScript to use this application.
+  </div>
+  </noscript>
+
+	<div id="loadingOverlay" class="pageOverlay">
+		<div class="loadingMessage">Loading...</div>
+    <div><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
+	</div>
+
+	<div id="appDiv"></div>
+
+  <script src="{{ request.static_path(release_dir + '/dojoConfig.js') }}"></script>
+	<script type="text/javascript">
+		dojoConfig.baseUrl = '{{ request.static_path(release_dir) }}';
+    var staticAppPath = "{{ request.static_path(app_package + ':static/') }}"
+	</script>
+  <script src="{{ request.static_path(release_dir + '/dojo/dojo.js') }}"></script>
+	<script type="text/javascript">
+		require(dojoConfig, ['app']);
+	</script>
+
+</body>
+</html>

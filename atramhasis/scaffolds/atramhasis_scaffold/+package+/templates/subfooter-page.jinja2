@@ -1,0 +1,30 @@
+{% from "macros.jinja2" import popular_concepts %}
+
+<div class="row">
+  <div class="large-4 columns">
+    <div class="subfooter-page">
+      <h5>{% trans %}popular_category{% endtrans %}</h5>
+        {{ popular_concepts(request, request.matchdict['scheme_id'], 4) }}
+    </div>
+  </div>
+  <div class="large-4 columns">
+    <div class="subfooter-page">
+      <h5>{% trans %}recently_viewed{% endtrans %}</h5>
+      <ul class="no_bullet">
+        {% for c in request.session['last_visited']|reverse() %}
+          <li class="cube"><a href="{{ c.url }}">{{ c.label|capitalize() }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="large-4 columns">
+    <div class="subfooter-page">
+      <h5>{% trans %}follow{% endtrans %}</h5>
+      <ul class="no_bullet">
+        <li class="cube"><a href="https://groups.google.com/d/forum/atramhasis">{% trans %}discussion_forum{% endtrans %}</a></li>
+        <li class="cube"><a href="https://atramhasis.readthedocs.org">{% trans %}online_documentation{% endtrans %}</a></li>
+        <li class="cube"><a href="https://github.com/OnroerendErfgoed/atramhasis">{% trans %}issue_tracker{% endtrans %}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

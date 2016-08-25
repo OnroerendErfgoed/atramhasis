@@ -1,0 +1,29 @@
+{% extends 'layout.jinja2' %}
+
+{% block html_title %}Search{% endblock %}
+
+{% block content %}
+  <div class="large-12 columns">
+    <div class="row">
+      <div class="clearfix">
+        <h3 class="left">
+          {% trans count=concepts|length %}There is {{ count }} result:{% pluralize %}There are {{ count }} results:{% endtrans %}
+        </h3>
+        <ul class="downloadtop right">
+          <li>DOWNLOAD</li>
+          <li><a href="{{ request.path }}.csv?{{ request.query_string }}">CSV</a></li>
+        </ul>
+      </div>
+      {%- for c in concepts|sort(attribute='label') %}
+        <div class="large-3 large-3-pad columns result-grid"><a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}"><h5>{{ c.label }}</h5> <span> [ ID : {{ c.id }} ]</span><br><small>{{ c.type }}</small></a></div>
+      {%- endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block subfooter %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer-page.jinja2' %}
+{% endblock %}

@@ -1,0 +1,54 @@
+<div>
+
+  <div class="search-form">
+    <form data-dojo-attach-point="labelSearchForm" data-dojo-attach-event="onsubmit: _search">
+        <div class="large-10 columns">
+          <select data-dojo-attach-point="conceptSchemeSelect">
+            <option value="-1" selected disabled>Select thesaurus</option>
+          </select>
+        </div>
+        <div class="large-2 columns edit-scheme-button">
+          <button type="button" class="button tiny" href="#/conceptscheme/edit" data-dojo-attach-point="editSchemeButton"
+                  data-dojo-attach-event="onClick: _editConceptScheme" disabled>Edit</button>
+        </div>
+      <div class="large-12 columns">
+        <div class="placeholder-container">
+          <label for="labelfilter-${id}">Filter by label</label>
+          <input id="labelfilter-${id}" data-dojo-attach-point="labelInput" type="text"/>
+        </div>
+      </div>
+      <div class="large-12 columns">
+        <div class="placeholder-container">
+          <label for="typefilter-${id}">Filter by type</label>
+          <select id="typefilter-${id}" data-dojo-attach-point="conceptTypeSelect">
+            <option value="all">all types</option>
+            <option value="concept">concepts</option>
+            <option value="collection">collections</option>
+          </select>
+        </div>
+      </div>
+      <div class="text-center large-12 columns">
+        <button href="#/search" class="button tiny search-button" data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass"></span></button>
+      </div>
+    </form>
+  </div>
+
+  <div class="search-results" data-dojo-attach-point="searchResultsNode">
+    <div data-dojo-attach-point="gridNode"></div>
+  </div>
+
+  <div class="search-footer-buttons text-center large-8 columns large-offset-2">
+    <div class="large-4 columns">
+      <button class="button tiny" href="#/concept/new" data-dojo-attach-event="onClick: _createConcept"
+              data-dojo-attach-point="addConceptButton" disabled>+Add</button>
+    </div>
+    <div class="large-4 columns">
+      <button class="button tiny" href="#/concept/import" data-dojo-attach-event="onClick: _importConcept"
+              data-dojo-attach-point="importConceptButton" disabled>Import</button>
+    </div>
+    <div class="large-4 columns">
+      <a class="button tiny" href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a>
+    </div>
+  </div>
+
+</div>

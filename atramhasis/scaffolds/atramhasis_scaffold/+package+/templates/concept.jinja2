@@ -1,0 +1,166 @@
+{% extends 'layout.jinja2' %}
+
+{% block html_title %}Detail{% endblock %}
+
+{% from "macros.jinja2" import
+    render_relaties_lijst,
+    print_labels,
+	  render_matches,
+	  get_conceptscheme_label,
+    print_concepts
+  %}
+
+{% block content %}
+  <div class="large-12 columns">
+    <div class="row">
+      <div class="clearfix">
+        <ul class="downloadtop right">
+          <li>DOWNLOAD</li>
+          <li><a href="{{ request.route_path('atramhasis.rdf_individual_export_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">RDF/XML</a></li>
+          <li><a href="{{ request.route_path('atramhasis.rdf_individual_export_turtle_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">N3/Turtle</a></li>
+        </ul>
+      </div>
+      {% if concept %}
+        <div class="large-12 columns panel">
+          <h1 class="panel-header left">{{ concept.label(request.locale_name).label|title }}</h1>
+          <h2 class="id-header right">[ ID : {{ concept.concept_id }} ]</h2>
+          <hr>
+          <dl class="infolist clearfix">
+            <dt>type</dt>
+            {% if conceptType == 'Concept' %}
+              <dd>{% trans %}concept{% endtrans %}</dd>
+            {% elif conceptType == 'Collection' %}
+              <dd>{% trans %}collection{% endtrans %}</dd>
+            {% endif %}
+            <dt>uri</dt>
+            {% if concept.uri %}
+              <dd><a href="{{ concept.uri }}">{{ concept.uri }}</a></dd>
+            {% endif %}
+            <dt>schema</dt>
+            <dd><a href="{{ request.route_path('conceptscheme', scheme_id=scheme_id) }}">{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name) }}</a></dd>
+            {% if concept.labels %}
+              {{ print_labels(concept.labels) }}
+            {% endif %}
+          </dl>
+          <ul class="scopeNote">
+            {% if conceptType == 'Concept' %}
+              {% if concept.notes|length > 0 %}
+                <h3>{% trans %}notes{% endtrans %}</h3>
+                {%- for note in concept.notes %}
+                  <li lang="{{ note.language }}">
+                    <strong>{{ note.notetype_id|capitalize }}</strong> <em>({{ note.language }})</em>: {{ note.note|safe }}
+                  </li>
+                {%- endfor %}
+              {% endif %}
+            {% endif %}
+          </ul>
+          <ul class="scopeNote">
+            {% if concept.sources|length > 0 %}
+              <h3>{% trans %}sources{% endtrans %}</h3>
+              {%- for source in concept.sources %}
+                <li>
+                  {{ source.citation|safe }}
+                </li>
+              {%- endfor %}
+            {% endif %}
+          </ul>
+          {% if request.has_permission('edit') %}
+            <div class="row">
+              <div class="large-2 columns right">
+                <a href="{{ request.route_path('admin') }}#/conceptschemes/{{ scheme_id }}/c/{{ concept.concept_id }}"
+                   class="fa fa-pencil editIcon"
+                   title="Edit concept">
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <ul class="tabs tabnav" data-tab role="tablist" style="width:100%">
+          <li class="tab-title active" role="presentation" style="width:50%;"><a href="#panel2-1" role="tab" tabindex="0" aria-selected="true" aria-controls="panel2-1">{% trans %}view_relations{% endtrans %}</a></li>
+          <li class="tab-title" role="presentation" style="width:50%;"><a href="#panel2-2" role="tab" tabindex="0" aria-selected="false" aria-controls="panel2-2" style="border-left: 0;">{% trans %}view_tree{% endtrans %}</a></li>
+        </ul>
+        <div class="tabs-content">
+          <section role="tabpanel" aria-hidden="false" class="content active" id="panel2-1">
+            <div class="row">
+              <div class="large-12 columns">
+                <h3 class="relations-title">{% trans %}relations{% endtrans %}</h3>
+                {% if conceptType == 'Concept' %}
+                  {#            // broader#}
+                  {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
+                      {% if concept.broader_concepts|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+                      {% endif %}
+                      {% if concept.member_of|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+
+                  {#            // narrower#}
+                  {% if concept.narrower_concepts|length > 0 or concept.narrower_collections|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
+                      {% if concept.narrower_concepts|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.narrower_concepts, scheme_id) }}
+                      {% endif %}
+                      {% if concept.narrower_collections|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.narrower_collections, scheme_id) }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+
+                  {#            // related#}
+                  {% if concept.related_concepts|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}related{% endtrans %}</h4>
+                      {{ render_relaties_lijst(request, concept.related_concepts, scheme_id) }}
+                    </div>
+                  {% endif %}
+                {% endif %}
+
+                {% if conceptType == 'Collection' %}
+                  {#            // broader#}
+                  {% if concept.broader_concepts|length > 0 or concept.member_of|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
+                      {% if concept.broader_concepts|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+                      {% endif %}
+                      {% if concept.member_of|length > 0 %}
+                        {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  {#            // narrower#}
+                  {% if concept.members|length > 0 %}
+                    <div class="clearfix">
+                      <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
+                      {{ render_relaties_lijst(request, concept.members, scheme_id) }}
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+            {#        // matches#}
+            {% if concept.matches|length > 0 %}
+              <div class="row">
+                <div class="large-12 columns">
+                  <h3 class="relations-title">{% trans %}matches{% endtrans %}</h3>
+                  {{ render_matches(concept.matches, request) }}
+                </div>
+              </div>
+            {% endif %}
+          </section>
+
+          <section role="tabpanel" aria-hidden="true" class="content" id="panel2-2">
+            <div id="treetab" style="padding: 10px 50px 0px 50px;">
+              {% include "tree.jinja2" %}
+            </div>
+          </section>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

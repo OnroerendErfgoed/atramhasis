@@ -1,0 +1,30 @@
+{% extends "staticlayout.jinja2" %}
+
+{% set app_package = app_package|default('atramhasis', true) %}
+
+{% block html_title %}Home{% endblock %}
+
+{% block header %}
+  {% include 'header-main.jinja2' %}
+{% endblock %}
+
+{% block content %}
+  <div class="bgcontainer">
+    <div class="row">
+      {% include 'welcome.jinja2' %}
+      {% include 'search_form.jinja2' %}
+      {#    {% include 'd3cloud.jinja2' %}#}
+    </div>
+  </div>
+{% endblock %}
+
+{% block subfooter %}
+  {% include 'subfooter-main.jinja2' %}
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer-main.jinja2' %}
+{% endblock %}
+
+{% block custom_js %}{% endblock %}
+

@@ -1,0 +1,22 @@
+{% extends 'layout.jinja2' %}
+
+{% from "macros.jinja2" import
+	get_conceptscheme_label
+  %}
+
+{% block html_title %}Concept schemes{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="large-12 columns">
+      <div class="row">
+        <h3 class="concept">{% trans %}select_scheme{% endtrans %}</h3>
+        {% for item in conceptschemes %}
+          <div class="large-3 large-3-pad columns result-grid"><a href="{{ request.route_path('conceptscheme', scheme_id=item.id) }}"><h5>{{ get_conceptscheme_label(item.conceptscheme, request.locale_name) }}</h5> <span> [ ID : {{ item.id }} ]</span><br><small>{{ item.type }}</small></a></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block subfooter %}{% endblock %}
