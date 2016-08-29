@@ -35,6 +35,13 @@ persona.audiences = http://localhost:6543
 # '127.0.0.1' and '::1'.
 # debugtoolbar.hosts = 127.0.0.1 ::1
 
+
+layout.focus_conceptschemes =
+  HERITAGETYPE
+  PERIOD
+  GEOGRAPHY
+  MATERIALS
+
 ###
 # wsgi server configuration
 ###

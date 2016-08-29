@@ -34,6 +34,12 @@ jinja2.i18n.domain = atramhasis
 # wsgi server configuration
 ###
 
+layout.focus_conceptschemes =
+  HERITAGETYPE
+  PERIOD
+  GEOGRAPHY
+  MATERIALS
+
 [server:main]
 use = egg:waitress#main
 host = 0.0.0.0
