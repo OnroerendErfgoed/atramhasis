@@ -1,0 +1,11 @@
+{
+  "name": "{{package}}",
+  "version": "0.5.0",
+  "private": "true",
+  "dependencies": {
+    "foundation": "~5.5.0",
+    "font-awesome": "~4.6.1",
+    "d3": "~3.5.6",
+    "jquery": "~2.1.4"
+  }
+}
