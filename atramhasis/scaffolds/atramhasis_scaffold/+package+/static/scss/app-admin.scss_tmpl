@@ -13,3 +13,4 @@
 @import "atramhasis/atramhasis-forms";
 @import "atramhasis/atramhasis-admin";
 @import "atramhasis";
+@import "{{package}}-admin";
