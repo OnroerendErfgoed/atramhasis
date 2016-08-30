@@ -21,7 +21,9 @@
 {% endblock %}
 
 {% block footer %}
-  {% include 'footer-page.jinja2' %}
+  {% with copyright_year = copyright_year %}
+    {% include 'footer-page.jinja2' %}
+  {% endwith %}
 {% endblock %}
 
 {% block custom_js %}{% endblock %}
