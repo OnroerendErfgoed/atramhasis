@@ -1,5 +1,6 @@
 @import "atramhasis/settings";
 @import "atramhasis/atramhasis-settings";
+@import "{{package}}-settings";
 @import "foundation";
 @import "font-awesome";
 @import "atramhasis/atramhasis-header";

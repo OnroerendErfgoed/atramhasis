@@ -1,5 +1,7 @@
 {% extends "staticlayout.jinja2" %}
 
+{% set app_name = app_name|default('Atramhasis') %}
+
 {% block js_files_head %}
   <script src="{{ request.static_path(app_package + ':static/bower_components/jquery/dist/jquery.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/bower_components/jquery.cookie/jquery.cookie.js') }}"></script>

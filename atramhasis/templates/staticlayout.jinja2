@@ -2,11 +2,12 @@
 <html class="no-js" lang="{{ request.locale_name }}">
 
 {% set app_package = app_package|default('atramhasis', true) -%}
+{% set app_name = app_name|default('Atramhasis') %}
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Atramhasis - {% block html_title %}Base{% endblock %}</title>
+  <title>{{ app_name }} - {% block html_title %}Base{% endblock %}</title>
 
   {% block css_files %}
     <link rel="stylesheet" href="{{request.static_path(app_package + ':static/css/app.css')}}" />
