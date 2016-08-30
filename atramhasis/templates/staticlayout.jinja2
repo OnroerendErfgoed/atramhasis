@@ -32,6 +32,8 @@
   {% endblock %}
 </head>
 <body>
+{% block vl_header %}
+{% endblock %}
 
 {% block header %}
 {% endblock %}
@@ -48,6 +50,9 @@
 {% block js_files %}
   <script src="{{ request.static_path(app_package + ':static/bower_components/foundation/js/foundation.min.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/js/app.js') }}"></script>
+{% endblock %}
+
+{% block vl_footer %}
 {% endblock %}
 
 {% block custom_js %}{% endblock %}
