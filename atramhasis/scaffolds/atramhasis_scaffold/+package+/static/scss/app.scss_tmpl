@@ -11,5 +11,4 @@
 @import "atramhasis/atramhasis-article";
 //@import "atramhasis/atramhasis-topbar";
 @import "atramhasis/atramhasis-mquery";
-@import "atramhasis";
 @import "{{package}}";

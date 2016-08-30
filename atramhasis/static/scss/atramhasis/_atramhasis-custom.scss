@@ -72,3 +72,34 @@ ul.downloadtop {margin:30px 0 0 0;padding:0;}
 
 /* home form */
 .home-search-placer {padding:0 0 0 30px;}
+
+
+/* various small styles */
+ul.no_bullet {
+  list-style-type: none;
+  padding: 0 ;
+  margin: 0 ;
+}
+
+li.cube {
+  background: url('../img/listitem.png') no-repeat 0 6px;
+  padding:0 0 15px 15px;
+  font-size:0.8rem;
+}
+
+h3.relations-title {
+  margin-bottom: 0px;
+}
+
+h4.relations-subtitle {
+  margin: 20px 20px;
+}
+
+.pageOverlay { text-align: center;}
+.loadingMessage {font-size: 1em; margin: 30px; color: #999; }
+
+.editIcon {
+  float: right;
+  font-size: 20px;
+  margin: 10px 5px;
+}
