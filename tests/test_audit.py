@@ -13,8 +13,11 @@ except ImportError:
 log = logging.getLogger('')
 
 
-class RecordingManager(object):
+cs_mock = MagicMock()
+cs_mock.get_metadata = Mock(return_value={'subject': ['external']})
 
+
+class RecordingManager(object):
     def __init__(self):
         self.saved_objects = []
 
@@ -23,7 +26,6 @@ class RecordingManager(object):
 
 
 class DummyParent(object):
-
     def __init__(self):
         self.request = MagicMock()
 
@@ -36,9 +38,7 @@ class DummyParent(object):
         return Response(content_type='application/rdf+xml')
 
 
-
 class AuditTests(unittest.TestCase):
-
     def setUp(self):
         self.audit_manager = RecordingManager()
         self.dummy_parent = DummyParent()
@@ -51,9 +51,9 @@ class AuditTests(unittest.TestCase):
 
     def _check(self, nr, origin, type_id_list):
         self.assertEqual(nr, len(self.audit_manager.saved_objects))
-        self.assertEqual(origin, self.audit_manager.saved_objects[nr-1].origin)
+        self.assertEqual(origin, self.audit_manager.saved_objects[nr - 1].origin)
         for type_id in type_id_list:
-            self.assertEqual('1', getattr(self.audit_manager.saved_objects[nr-1], type_id))
+            self.assertEqual('1', getattr(self.audit_manager.saved_objects[nr - 1], type_id))
 
     def test_audit_rest(self):
         self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
@@ -103,6 +103,17 @@ class AuditTests(unittest.TestCase):
         self.dummy_parent.dummy()
         self._check(2, None, ['conceptscheme_id', 'concept_id'])
 
+    def test_audit_do_not_record_external(self):
+        self.dummy_parent.request.url = "http://host/conceptschemes/EXT"
+        self.dummy_parent.request.accept = ['application/octet-stream']
+        self.dummy_parent.request.matchdict = {'scheme_id': '1'}
+        self.dummy_parent.request.skos_registry.get_provider = Mock(return_value=cs_mock)
+        self.dummy_parent.dummy()
+        self.assertEqual(0, len(self.audit_manager.saved_objects))
+        self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
+        self.dummy_parent.dummy()
+        self.assertEqual(0, len(self.audit_manager.saved_objects))
+
     def test_invalid_use(self):
         with LogCapture() as logs:
             self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
@@ -114,4 +125,3 @@ class AuditTests(unittest.TestCase):
     def test_origin_from_response_None(self):
         res = Response(content_type='application/octet-stream')
         self.assertIsNone(_origin_from_response(res))
-
