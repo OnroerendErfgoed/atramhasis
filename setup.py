@@ -81,7 +81,7 @@ class PrepareScaffold(Command):
         pass
 
     def run(self):
-        # dojo_build()
+        dojo_build()
         copy_files_scaffolds("requirements.txt", "atramhasis_demo")
         copy_files_scaffolds("requirements-dev.txt", "atramhasis_demo")
         copy_files_scaffolds("requirements.txt", "atramhasis_scaffold")
