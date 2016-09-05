@@ -17,6 +17,9 @@ pyramid.includes =
 jinja2.directories =
 	atramhasis:templates
     {{package}}:templates
+jinja2.extensions =
+    jinja2.ext.do
+    jinja2.ext.with_
 available_languages = en nl fr
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 

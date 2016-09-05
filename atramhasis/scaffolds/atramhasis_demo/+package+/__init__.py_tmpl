@@ -1,5 +1,7 @@
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.config import Configurator
+from pyramid.settings import aslist
+
 from sqlalchemy import engine_from_config
 
 from atramhasis.data.models import Base
@@ -13,6 +15,9 @@ def main(global_config, **settings):
     # Set up sqlalchemy
     engine = engine_from_config(settings, 'sqlalchemy.')
     Base.metadata.bind = engine
+
+    # update settings
+    settings['layout.focus_conceptschemes'] = aslist(settings['layout.focus_conceptschemes'], flatten=False)
 
     # Set up pyramid
     config = Configurator(settings=settings)
