@@ -1,5 +1,8 @@
 {% extends "staticlayout.jinja2" %}
 
+{% set app_name = app_name|default('Atramhasis') %}
+{% set copyright_year = copyright_year|default('2016-2017') %}
+
 {% block js_files_head %}
   <script src="{{ request.static_path(app_package + ':static/bower_components/jquery/dist/jquery.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/bower_components/jquery.cookie/jquery.cookie.js') }}"></script>
@@ -18,7 +21,9 @@
 {% endblock %}
 
 {% block footer %}
-  {% include 'footer-page.jinja2' %}
+  {% with copyright_year = copyright_year %}
+    {% include 'footer-page.jinja2' %}
+  {% endwith %}
 {% endblock %}
 
 {% block custom_js %}{% endblock %}

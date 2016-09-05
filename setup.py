@@ -1,8 +1,9 @@
 import os
-import distutils.file_util
+import distutils.file_util as file_util
+import distutils.dir_util as dir_util
 import subprocess
 
-from setuptools import setup, find_packages, distutils, Command
+from setuptools import setup, find_packages, Command
 
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst')) as f:
@@ -14,11 +15,42 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
 def copy_files_scaffolds(filename, output_dir):
     source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
     dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, filename + '_tmpl')
-    distutils.file_util.copy_file(source_dir, dest_dir, update=True)
+    file_util.copy_file(source_dir, dest_dir, update=True)
+
+
+def copy_static_scaffold(output_dir):
+    source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'atramhasis', 'static'))
+    dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, '+package+', 'static')
+    dir_util.copy_tree(os.path.join(source_dir, 'css'), os.path.join(dest_dir, 'css'), update=True)
+    dir_util.copy_tree(os.path.join(source_dir, 'img'), os.path.join(dest_dir, 'img'), update=True)
+    dir_util.copy_tree(os.path.join(source_dir, 'js'), os.path.join(dest_dir, 'js'), update=True)
+    dir_util.copy_tree(os.path.join(source_dir, 'scss', 'atramhasis'), os.path.join(dest_dir, 'scss', 'atramhasis'),
+                       update=True)
+    dir_util.mkpath(os.path.join(dest_dir, 'admin'))
+    file_util.copy_file(
+        os.path.join(source_dir, 'admin', '.bowerrc'),
+        os.path.join(dest_dir, 'admin', '.bowerrc'),
+        update=True
+    )
+    file_util.copy_file(
+        os.path.join(source_dir, 'admin', 'bower.json'),
+        os.path.join(dest_dir, 'admin', 'bower.json'),
+        update=True
+    )
+    file_util.copy_file(
+        os.path.join(source_dir, 'admin', 'Gruntfile.js'),
+        os.path.join(dest_dir, 'admin', 'Gruntfile.js'),
+        update=True
+    )
+    file_util.copy_file(
+        os.path.join(source_dir, 'admin', 'package.json'),
+        os.path.join(dest_dir, 'admin', 'package.json'),
+        update=True
+    )
 
 
 def dojo_build():
-    print('-'*50)
+    print('-' * 50)
     print('==> check npm dependencies')
     libs = str(subprocess.check_output(["npm", "list", "-g", "bower", "grunt-cli"]))
     if 'bower' in libs:
@@ -36,11 +68,10 @@ def dojo_build():
     if bower and gruntcli:
         print('==> running grunt build')
         subprocess.call(["grunt", "-v", "build"], cwd="atramhasis/static/admin")
-    print('-'*50)
+    print('-' * 50)
 
 
 class PrepareScaffold(Command):
-
     user_options = []
 
     def initialize_options(self):
@@ -50,11 +81,13 @@ class PrepareScaffold(Command):
         pass
 
     def run(self):
+        dojo_build()
         copy_files_scaffolds("requirements.txt", "atramhasis_demo")
         copy_files_scaffolds("requirements-dev.txt", "atramhasis_demo")
         copy_files_scaffolds("requirements.txt", "atramhasis_scaffold")
         copy_files_scaffolds("requirements-dev.txt", "atramhasis_scaffold")
-        dojo_build()
+        copy_static_scaffold("atramhasis_scaffold")
+        copy_static_scaffold("atramhasis_demo")
 
 
 requires = [
@@ -119,4 +152,4 @@ setup(name='atramhasis',
       cmdclass={
           'prepare': PrepareScaffold
       }
-)
+      )

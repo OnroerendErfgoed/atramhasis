@@ -16,6 +16,9 @@ pyramid.includes =
     pyramid_tm
 jinja2.directories =
 	atramhasis:templates
+jinja2.extensions =
+    jinja2.ext.do
+    jinja2.ext.with_
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 atramhasis.session_factory.secret = test123
@@ -33,6 +36,12 @@ jinja2.i18n.domain = atramhasis
 ###
 # wsgi server configuration
 ###
+
+layout.focus_conceptschemes =
+  HERITAGETYPE
+  PERIOD
+  GEOGRAPHY
+  MATERIALS
 
 [server:main]
 use = egg:waitress#main
