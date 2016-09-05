@@ -32,6 +32,7 @@ def _origin_from_response(response):
 def audit(fn):
     """
     use this decorator to audit an operation and to log the visit
+    external conceptschemes won't be logged
 
     * CSV routes with .csv extensions accept all mime types,
       the response is not of the `pyramid.response.Response` type,
@@ -46,24 +47,29 @@ def audit(fn):
         request = parent_object.request
         audit_manager = request.data_managers['audit_manager']
 
-        if 'c_id' in request.matchdict.keys():
-            visit_log = ConceptVisitLog(
-                concept_id=request.matchdict['c_id'],
-                conceptscheme_id=request.matchdict['scheme_id']
-            )
-        elif 'scheme_id' not in request.matchdict.keys():
+        if 'scheme_id' not in request.matchdict.keys():
             log.error('Misuse of the audit decorator. The url must at least contain a {scheme_id} parameter')
             return fn(parent_object, *args, **kw)
-        else:
-            visit_log = ConceptschemeVisitLog(conceptscheme_id=request.matchdict['scheme_id'])
-        response = fn(parent_object, *args, **kw)
 
-        if isinstance(response, Response):
-            visit_log.origin = _origin_from_response(response)
+        provider = request.skos_registry.get_provider(request.matchdict['scheme_id'])
+        if not provider or 'external' in provider.get_metadata()['subject']:
+            return fn(parent_object, *args, **kw)
         else:
-            visit_log.origin = _origin_from_request(request)
+            if 'c_id' in request.matchdict.keys():
+                visit_log = ConceptVisitLog(
+                    concept_id=request.matchdict['c_id'],
+                    conceptscheme_id=request.matchdict['scheme_id']
+                )
+            else:
+                visit_log = ConceptschemeVisitLog(conceptscheme_id=request.matchdict['scheme_id'])
+            response = fn(parent_object, *args, **kw)
 
-        audit_manager.save(visit_log)
+            if isinstance(response, Response):
+                visit_log.origin = _origin_from_response(response)
+            else:
+                visit_log.origin = _origin_from_request(request)
+
+            audit_manager.save(visit_log)
 
         return response
 
