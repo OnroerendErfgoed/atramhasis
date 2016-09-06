@@ -210,6 +210,26 @@ with a small piece of python code. You just need to follow the interface
 provided by :class:`skosprovider.uri.UriGenerator`.
 
 
+.. _i18n:
+
+Internationalisation
+====================
+
+When you create a new empty project with the `atramhasis` scaffold, you get an
+English only version. The standard version of Atramhasis has been
+translated in Dutch and French. If you desire, you can activate these by editing
+your project's :file:`development.ini`
+
+.. code-block:: ini
+
+    # Edit and uncomment to activate nl and fr language support or other languages
+    # you have added yourself.
+    available_languages = en nl fr
+
+Available languages should be a space separated list of IANA language codes. If
+you add new languages, please consider contributing them back to the project.
+
+
 .. _appearance:
 
 Appearance
