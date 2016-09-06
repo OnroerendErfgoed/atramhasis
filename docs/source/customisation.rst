@@ -245,6 +245,9 @@ You can also override the :term:`HTML` templates that Atramhasis uses without
 needing to alter the originals so that future updates to the system will not
 override your modifications.
 
+Overriding templates
+--------------------
+
 One very easy technique to use, is :term:`Pyramid`'s
 :ref:`override assets mechanism <pyramid:overriding_assets_section>`.
 This allows you to override a core Atramhasis template with your own template.
@@ -277,6 +280,25 @@ need to configure the :term:`Pyramid` config object found in
     .. code-block:: bash
 
         $ pserve --reload development.ini
+
+Changing the focal conceptschemes
+---------------------------------
+
+An Atramhasis instance should contain one or more conceptschemes. Four of your
+conceptschemes can be picked to receive a little more attention and focus than
+the other ones. These conceptschemes will appear on the homepagina with a list
+of recently visited concepts in those schemes.
+
+Selecting which conceptschemes receive this focus is done in your
+:file:`development.ini` file.
+
+.. code-block:: ini
+
+    layout.focus_conceptschemes = 
+      STUFF
+
+This should be a space or newline delimited list, limited to 4 entries.
+
 
 .. _security:
 
