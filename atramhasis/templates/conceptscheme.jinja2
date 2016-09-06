@@ -4,7 +4,8 @@
 
 {% from "macros.jinja2" import
     print_labels,
-    print_concepts
+    print_concepts,
+    get_conceptscheme_label
   %}
 
 {% block content %}
@@ -73,14 +74,10 @@
         {% endif %}
       </div>
 
-      {% if conceptscheme.top_concepts %}
-        <div class="row">
-          <div class="large-12 columns">
-            <h3>top {% trans %}type_concept{% endtrans %}</h3>
-            {{ print_concepts(request, conceptscheme.top_concepts, conceptscheme) }}
-          </div>
-        </div>
-      {% endif %}
+      <div class="row">
+        {% include "tree.jinja2" %}
+      </div>
+
     </div>
   </div>
 {% endblock %}
