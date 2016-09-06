@@ -23,6 +23,10 @@ sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 atramhasis.session_factory.secret = test123
 
+# Edit and uncomment to activate nl and fr language support or other languages
+# you have added yourself.
+# available_languages = en nl fr
+
 # Run dojo from source (src) or distribution (dist)
 # If unspecified, defaults to src.
 dojo.mode = dist
@@ -37,11 +41,13 @@ jinja2.i18n.domain = atramhasis
 # wsgi server configuration
 ###
 
+# Edit this to be a list of ids of conceptschemes. Concepts from these schemes
+# will be presented on the homepage
 layout.focus_conceptschemes =
-  HERITAGETYPE
-  PERIOD
-  GEOGRAPHY
-  MATERIALS
+  STUFF
+  MORE_STUFF
+  EVEN_MORE_STUFF
+  THINGS
 
 [server:main]
 use = egg:waitress#main
