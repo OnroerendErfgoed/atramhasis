@@ -13453,24 +13453,24 @@ li.cube {
 }
 
 /*padding fix result page*/
-/* line 53, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 51, ../scss/atramhasis/_atramhasis-custom.scss */
 .large-3-pad {
   padding: 0;
 }
 
-/* line 55, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 53, ../scss/atramhasis/_atramhasis-custom.scss */
 .large-3-pad.columns:last-child {
   float: left;
 }
 
 /*download top*/
-/* line 60, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 58, ../scss/atramhasis/_atramhasis-custom.scss */
 ul.downloadtop {
   margin: 30px 0 0 0;
   padding: 0;
 }
 
-/* line 61, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 59, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li {
   list-style-type: none;
   font-size: 0.6em;
@@ -13479,20 +13479,20 @@ ul.downloadtop {
   float: left;
 }
 
-/* line 62, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 60, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li a {
   border: 1px solid #d6d6d6;
   background: white;
   padding: 8px 15px;
 }
 
-/* line 63, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 61, ../scss/atramhasis/_atramhasis-custom.scss */
 .downloadtop li:first-child {
   padding: 0;
 }
 
 /*tab nav*/
-/* line 67, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 65, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav li {
   list-style-type: none;
   float: left;
@@ -13500,39 +13500,83 @@ ul.downloadtop {
   margin-top: 20px;
 }
 
-/* line 68, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 66, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav li a {
   border: 1px solid #d6d6d6;
   background: white;
   color: #2b709d !important;
 }
 
-/* line 69, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 67, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav li a:hover {
   color: #f77f00 !important;
   background-color: white !important;
 }
 
-/* line 70, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 68, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav li:first-child {
   padding: 0;
 }
 
-/* line 71, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 69, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav .tab-title > a {
   background-color: #efefef !important;
 }
 
-/* line 72, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 70, ../scss/atramhasis/_atramhasis-custom.scss */
 .tabnav .tab-title.active > a {
   background-color: white !important;
   color: black !important;
 }
 
 /* home form */
-/* line 76, ../scss/atramhasis/_atramhasis-custom.scss */
+/* line 74, ../scss/atramhasis/_atramhasis-custom.scss */
 .home-search-placer {
   padding: 0 0 0 30px;
+}
+
+/* various small styles */
+/* line 78, ../scss/atramhasis/_atramhasis-custom.scss */
+ul.no_bullet {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* line 84, ../scss/atramhasis/_atramhasis-custom.scss */
+li.cube {
+  background: url("../img/listitem.png") no-repeat 0 6px;
+  padding: 0 0 15px 15px;
+  font-size: 0.8rem;
+}
+
+/* line 90, ../scss/atramhasis/_atramhasis-custom.scss */
+h3.relations-title {
+  margin-bottom: 0px;
+}
+
+/* line 94, ../scss/atramhasis/_atramhasis-custom.scss */
+h4.relations-subtitle {
+  margin: 20px 20px;
+}
+
+/* line 98, ../scss/atramhasis/_atramhasis-custom.scss */
+.pageOverlay {
+  text-align: center;
+}
+
+/* line 99, ../scss/atramhasis/_atramhasis-custom.scss */
+.loadingMessage {
+  font-size: 1em;
+  margin: 30px;
+  color: #999;
+}
+
+/* line 101, ../scss/atramhasis/_atramhasis-custom.scss */
+.editIcon {
+  float: right;
+  font-size: 20px;
+  margin: 10px 5px;
 }
 
 /* logo */
@@ -13958,47 +14002,4 @@ ul.downloadtop {
     width: 250px;
     word-break: break-word;
   }
-}
-/* line 1, ../scss/_atramhasis.scss */
-ul.no_bullet {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* line 7, ../scss/_atramhasis.scss */
-li.cube {
-  background: url("../img/listitem.png") no-repeat 0 6px;
-  padding: 0 0 15px 15px;
-  font-size: 0.8rem;
-}
-
-/* line 13, ../scss/_atramhasis.scss */
-h3.relations-title {
-  margin-bottom: 0px;
-}
-
-/* line 17, ../scss/_atramhasis.scss */
-h4.relations-subtitle {
-  margin: 20px 20px;
-}
-
-/* line 21, ../scss/_atramhasis.scss */
-.pageOverlay {
-  text-align: center;
-}
-
-/* line 22, ../scss/_atramhasis.scss */
-.loadingMessage {
-  font-size: 1em;
-  margin: 30px;
-  color: #999;
-}
-
-/* line 24, ../scss/_atramhasis.scss */
-.editIcon {
-  float: right;
-  font-size: 20px;
-  margin-bottom: 10px;
-  margin-right: 5px;
 }

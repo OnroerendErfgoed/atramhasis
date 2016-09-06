@@ -17,6 +17,9 @@ pyramid.includes =
 jinja2.directories =
 	atramhasis:templates
     {{package}}:templates
+jinja2.extensions =
+    jinja2.ext.do
+    jinja2.ext.with_
 available_languages = en nl fr
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
@@ -34,6 +37,13 @@ persona.audiences = http://localhost:6543
 # By default, the toolbar only appears for clients from IP addresses
 # '127.0.0.1' and '::1'.
 # debugtoolbar.hosts = 127.0.0.1 ::1
+
+
+layout.focus_conceptschemes =
+  HERITAGETYPE
+  PERIOD
+  GEOGRAPHY
+  MATERIALS
 
 ###
 # wsgi server configuration
