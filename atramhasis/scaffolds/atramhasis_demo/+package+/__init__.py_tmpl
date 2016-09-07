@@ -45,6 +45,12 @@ def main(global_config, **settings):
     # Set up translations
     config.add_translation_dirs('{{package}}:locale/')
 
+    # Override assets
+    config.override_asset(
+        to_override='atramhasis:static/',
+        override_with='{{package}}:static/'
+    )
+
     config.scan()
 
     return config.make_wsgi_app()

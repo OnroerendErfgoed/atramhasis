@@ -28,6 +28,7 @@ virtual environment.
     $ mkvirtualenv my_thesaurus
     $ pip install atramhasis
     $ pcreate -s atramhasis_scaffold my_thesaurus
+    $ cd my_thesaurus
     # Install dependencies
     $ pip install -r requirements-dev.txt
     # compile the Message Catalog Files
