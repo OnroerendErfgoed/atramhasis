@@ -1,7 +1,10 @@
+{% from "macros.jinja2" import
+	  get_conceptscheme_label
+  %}
+
 <div id="tree">
   <div id="loadingOverlay" class="pageOverlay">
-{#    <div class="loadingMessage">Loading..</div>#}
-    <div><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
+    <div style="padding-top: 20px;"><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
   </div>
 </div>
 <style>
@@ -30,34 +33,61 @@
 </style>
 <script>
 
-  var depth = 140;
+  var depth = 160;
 
-  var margin = {top: 20, right: 150, bottom: 20, left: 120},
-          width = 1020 - margin.right - margin.left,
-          height = 800 - margin.top - margin.bottom;
+  {% if conceptscheme %}
+    {% set scheme_id = conceptscheme.scheme_id %}
+  {% endif %}
+
+  var topDisplay = '{{ request.skos_registry.get_provider(scheme_id).get_top_display()|length }}';
+  var topDisplayHeight = 15 * topDisplay;
+
+  var margin = {top: 20, right: 50, bottom: 20, left: 50};
+
+  var width = window.innerWidth - (window.innerWidth * 0.28);
+
+  var height = 800 + margin.bottom;
+  if (height < topDisplayHeight) {
+    height = topDisplayHeight + margin.bottom;
+  }
+
+  {% if concept %}
+    var scheme_label = '{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name)|trim }}';
+    var scheme_id = '{{ scheme_id }}';
+    var current = '{{ concept.concept_id }}';
+  {% else %}
+    var scheme_label = '{{ conceptscheme.title|trim }}';
+    var scheme_id = '{{ conceptscheme.scheme_id }}';
+    var current = '{{ conceptscheme.scheme_id }}';
+  {% endif %}
+
+  function getTextWidth(text, font) {
+    var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+  }
+
+  var textWidth = getTextWidth(scheme_label, '12pt arial'); // width of conceptscheme label
 
   var i = 0,
-          duration = 750,
-          root;
+    duration = 750,
+    root;
 
   var tree = d3.layout.tree()
-          .size([height, width]);
+    .size([height, width]);
 
   var diagonal = d3.svg.diagonal()
-          .projection(function(d) { return [d.y, d.x]; });
+    .projection(function(d) { return [d.y, d.x]; });
 
   var svg = d3.select("#tree").append("svg")
-          .attr("width", width + margin.right + margin.left)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  var scheme_label = '{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name)|trim }}';
-  var scheme_id = '{{ scheme_id }}';
-  var current = '{{ concept.concept_id }}';
+    .attr("width", width)
+    .attr("height", height + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + textWidth + "," + margin.top + ")");
 
   var currentIds = null;
-
   d3.json('{{ request.route_path("scheme_tree", scheme_id = scheme_id ) }}', function(error, flare) {
     if (error) throw error;
 
@@ -80,14 +110,13 @@
       expandToCurrent(item, current);
     });
 
-    console.log(root);
     update(root);
 
     // hide loading
     $('#loadingOverlay').hide();
   });
 
-  d3.select(self.frameElement).style("height", "850px");
+  d3.select(self.frameElement).style("height", height + 'px');
 
   function update(source) {
 
@@ -99,91 +128,91 @@
 
     // Compute the new tree layout.
     var nodes = tree.nodes(root).reverse(),
-            links = tree.links(nodes);
+      links = tree.links(nodes);
 
     // Normalize for fixed-depth.
     nodes.forEach(function(d) { d.y = d.depth * depth; });
 
     // Update the nodes…
     var node = svg.selectAll("g.node")
-            .data(nodes, function(d) { return d.id || (d.id = ++i); });
+      .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
     // Enter any new nodes at the parent's previous position.
     var nodeEnter = node.enter().append("g")
-            .attr("class", "node")
-            .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-            .on("click", click)
-            .on("dblclick", openConcept);
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+      .on("click", click)
+      .on("dblclick", openConcept);
 
 
     nodeEnter.append("circle")
-            .attr("r", 1e-6)
-            .style("fill-opacity", 0.8)
-            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5)"; });
+      .attr("r", 1e-6)
+      .style("fill-opacity", 0.8)
+      .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5)"; });
 
     nodeEnter.append("text")
-            .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
-            .attr("dy", ".35em")
-            .attr("text-anchor", function(d) {return (d.children || d._children) ? "end" : "start"; })
-            .text(function(d) { return d.label; })
-            .style("fill-opacity", 1e-6)
-            .style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" })
-            .on("mouseover", function(d) {
-              d3.select(this).style("fill", "rgb(27, 69, 97)");
-            })
-            .on("mouseout", function(d) {
-              d3.select(this).style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" });
-            });
+      .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+      .attr("dy", ".35em")
+      .attr("text-anchor", function(d) {return (d.children || d._children) ? "end" : "start"; })
+      .text(function(d) { return d.label; })
+      .style("fill-opacity", 1e-6)
+      .style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" })
+      .on("mouseover", function(d) {
+        d3.select(this).style("fill", "rgb(27, 69, 97)");
+      })
+      .on("mouseout", function(d) {
+        d3.select(this).style("fill", function(d) { return d.highlight ? "rgb(247, 127, 0)" : "rgb(43, 112, 157)" });
+      });
 
     // Transition nodes to their new position.
     var nodeUpdate = node.transition()
-            .duration(duration)
-            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+      .duration(duration)
+      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
     nodeUpdate.select("circle")
-            .attr("r", 4.5)
-            .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5)"; });
+      .attr("r", 4.5)
+      .style("fill", function(d) { return (d._children && d._children.length > 0) ? "rgb(247, 127, 0)" : "rgba(255, 255, 255, 0.5)"; });
 
     nodeUpdate.select("text")
-            .style("fill-opacity", 1);
+      .style("fill-opacity", 1);
 
     // Transition exiting nodes to the parent's new position.
     var nodeExit = node.exit().transition()
-            .duration(duration)
-            .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
-            .remove();
+      .duration(duration)
+      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+      .remove();
 
     nodeExit.select("circle")
-            .attr("r", 1e-6);
+      .attr("r", 1e-6);
 
     nodeExit.select("text")
-            .style("fill-opacity", 1e-6);
+      .style("fill-opacity", 1e-6);
 
     // Update the links…
     var link = svg.selectAll("path.link")
-            .data(links, function(d) { return d.target.id; });
+      .data(links, function(d) { return d.target.id; });
 
     // Enter any new links at the parent's previous position.
     link.enter().insert("path", "g")
-            .attr("class", "link")
-            .attr("d", function(d) {
-              var o = {x: source.x0, y: source.y0};
-              return diagonal({source: o, target: o});
-            });
+      .attr("class", "link")
+      .attr("d", function(d) {
+        var o = {x: source.x0, y: source.y0};
+        return diagonal({source: o, target: o});
+      });
 
     // Transition links to their new position.
     link.transition()
-            .duration(duration)
-            .attr("d", diagonal);
+      .duration(duration)
+      .attr("d", diagonal);
 
     // Transition exiting nodes to the parent's new position.
     link.exit().transition()
-            .duration(duration)
-            .attr("d", function(d) {
-              var o = {x: source.x, y: source.y};
-              return diagonal({source: o, target: o});
-            })
-            .remove();
+      .duration(duration)
+      .attr("d", function(d) {
+        var o = {x: source.x, y: source.y};
+        return diagonal({source: o, target: o});
+      })
+      .remove();
 
     // highlight path of current node
     link.style("stroke", function(d) { return d.target.highlight ? "rgba(247, 127, 0, 0.4)" : null });
