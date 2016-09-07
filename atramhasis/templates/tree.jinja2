@@ -4,8 +4,7 @@
 
 <div id="tree">
   <div id="loadingOverlay" class="pageOverlay">
-    {#    <div class="loadingMessage">Loading..</div>#}
-    <div style="margin-top: 20px;"><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
+    <div style="padding-top: 20px;"><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
   </div>
 </div>
 <style>
@@ -34,11 +33,43 @@
 </style>
 <script>
 
-  var depth = 140;
+  var depth = 160;
 
-  var margin = {top: 20, right: 150, bottom: 20, left: 120},
-    width = 1020 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
+  {% if conceptscheme %}
+    {% set scheme_id = conceptscheme.scheme_id %}
+  {% endif %}
+
+  var topDisplay = '{{ request.skos_registry.get_provider(scheme_id).get_top_display()|length }}';
+  var topDisplayHeight = 15 * topDisplay;
+
+  var margin = {top: 20, right: 50, bottom: 20, left: 50};
+
+  var width = window.innerWidth - (window.innerWidth * 0.28);
+
+  var height = 800 + margin.bottom;
+  if (height < topDisplayHeight) {
+    height = topDisplayHeight + margin.bottom;
+  }
+
+  {% if concept %}
+    var scheme_label = '{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name)|trim }}';
+    var scheme_id = '{{ scheme_id }}';
+    var current = '{{ concept.concept_id }}';
+  {% else %}
+    var scheme_label = '{{ conceptscheme.title|trim }}';
+    var scheme_id = '{{ conceptscheme.scheme_id }}';
+    var current = '{{ conceptscheme.scheme_id }}';
+  {% endif %}
+
+  function getTextWidth(text, font) {
+    var canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+  }
+
+  var textWidth = getTextWidth(scheme_label, '12pt arial'); // width of conceptscheme label
 
   var i = 0,
     duration = 750,
@@ -51,21 +82,10 @@
     .projection(function(d) { return [d.y, d.x]; });
 
   var svg = d3.select("#tree").append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", width)
+    .attr("height", height + margin.bottom)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  {% if concept %}
-    var scheme_label = '{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name)|trim }}';
-    var scheme_id = '{{ scheme_id }}';
-    var current = '{{ concept.concept_id }}';
-  {% else %}
-    var scheme_label = '{{ conceptscheme.title|trim }}';
-    var scheme_id = '{{ conceptscheme.scheme_id }}';
-    var current = '{{ conceptscheme.scheme_id }}';
-    {% set scheme_id = conceptscheme.scheme_id %}
-  {% endif %}
+    .attr("transform", "translate(" + textWidth + "," + margin.top + ")");
 
   var currentIds = null;
   d3.json('{{ request.route_path("scheme_tree", scheme_id = scheme_id ) }}', function(error, flare) {
@@ -90,14 +110,13 @@
       expandToCurrent(item, current);
     });
 
-    console.log(root);
     update(root);
 
     // hide loading
     $('#loadingOverlay').hide();
   });
 
-  d3.select(self.frameElement).style("height", "850px");
+  d3.select(self.frameElement).style("height", height + 'px');
 
   function update(source) {
 
