@@ -89,9 +89,13 @@ atramhasis/scaffolds/atramhasis_demo/+package+/static/img
 atramhasis/scaffolds/atramhasis_demo/+package+/static/js
 atramhasis/scaffolds/atramhasis_demo/+package+/static/scss/atramhasis
 atramhasis/scaffolds/atramhasis_demo/+package+/static/admin
+atramhasis/scaffolds/atramhasis_demo/atramhasis-requirements-dev.txt_tmpl
+atramhasis/scaffolds/atramhasis_demo/atramhasis-requirements.txt_tmpl
 
 atramhasis/scaffolds/atramhasis_scaffold/+package+/static/css
 atramhasis/scaffolds/atramhasis_scaffold/+package+/static/img
 atramhasis/scaffolds/atramhasis_scaffold/+package+/static/js
 atramhasis/scaffolds/atramhasis_scaffold/+package+/static/scss/atramhasis
 atramhasis/scaffolds/atramhasis_scaffold/+package+/static/admin
+atramhasis/scaffolds/atramhasis_scaffold/atramhasis-requirements-dev.txt_tmpl
+atramhasis/scaffolds/atramhasis_scaffold/atramhasis-requirements.txt_tmpl
