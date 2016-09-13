@@ -12,9 +12,9 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
     CHANGES = f.read()
 
 
-def copy_files_scaffolds(filename, output_dir):
+def copy_files_scaffolds(filename, new_filename, output_dir):
     source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
-    dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, filename + '_tmpl')
+    dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, new_filename + '_tmpl')
     file_util.copy_file(source_dir, dest_dir, update=True)
 
 
@@ -82,10 +82,10 @@ class PrepareScaffold(Command):
 
     def run(self):
         dojo_build()
-        copy_files_scaffolds("requirements.txt", "atramhasis_demo")
-        copy_files_scaffolds("requirements-dev.txt", "atramhasis_demo")
-        copy_files_scaffolds("requirements.txt", "atramhasis_scaffold")
-        copy_files_scaffolds("requirements-dev.txt", "atramhasis_scaffold")
+        copy_files_scaffolds("requirements.txt", "atramhasis-requirements.txt", "atramhasis_demo")
+        copy_files_scaffolds("requirements-dev.txt", "atramhasis-requirements-dev.txt", "atramhasis_demo")
+        copy_files_scaffolds("requirements.txt", "atramhasis-requirements.txt", "atramhasis_scaffold")
+        copy_files_scaffolds("requirements-dev.txt", "atramhasis-requirements-dev.txt", "atramhasis_scaffold")
         copy_static_scaffold("atramhasis_scaffold")
         copy_static_scaffold("atramhasis_demo")
 
