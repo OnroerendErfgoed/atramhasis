@@ -83,3 +83,15 @@ atramhasis/static/admin/src/*
 atramhasis/static/admin/dist
 
 atramhasis/static/admin/node_modules
+
+atramhasis/scaffolds/atramhasis_demo/+package+/static/css
+atramhasis/scaffolds/atramhasis_demo/+package+/static/img
+atramhasis/scaffolds/atramhasis_demo/+package+/static/js
+atramhasis/scaffolds/atramhasis_demo/+package+/static/scss/atramhasis
+atramhasis/scaffolds/atramhasis_demo/+package+/static/admin
+
+atramhasis/scaffolds/atramhasis_scaffold/+package+/static/css
+atramhasis/scaffolds/atramhasis_scaffold/+package+/static/img
+atramhasis/scaffolds/atramhasis_scaffold/+package+/static/js
+atramhasis/scaffolds/atramhasis_scaffold/+package+/static/scss/atramhasis
+atramhasis/scaffolds/atramhasis_scaffold/+package+/static/admin
