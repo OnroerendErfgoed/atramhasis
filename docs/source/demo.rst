@@ -32,6 +32,12 @@ This creates a local demo package you can run with just a few more commands:
     # setup
     $ pip install -r requirements-dev.txt
     $ python setup.py develop
+    # download and install client side libraries
+    $ cd atramhasis_demo/static
+    $ bower install
+    $ cd admin
+    $ bower install
+    $ cd ../../..
     # create or upgrade database
     $ alembic upgrade head
     # intialize sample data
