@@ -1,4 +1,4 @@
-0.5.0 (??-??-2016)
+0.5.0 (14-09-2016)
 ------------------
 
 This release is a major update based on the `skosprovider`_ `0.6.0` line
