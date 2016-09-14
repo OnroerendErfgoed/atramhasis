@@ -23,7 +23,7 @@ class AtramhasisTemplate(PyramidTemplate):
         msg = dedent(
             """
             %(separator)s
-            Documentation: http://atramhasis.readthedocs.org
+            Documentation: http://atramhasis.readthedocs.io
 
             Welcome to Atramhasis.
             %(separator)s
@@ -45,8 +45,8 @@ class AtramhasisDemoTemplate(PyramidTemplate):
         msg = dedent(
             """
             %(separator)s
-            Documentation: http://atramhasis.readthedocs.org
-            Demo instructions: http://atramhasis.readthedocs.org/en/latest/demo.html
+            Documentation: http://atramhasis.readthedocs.io
+            Demo instructions: http://atramhasis.readthedocs.io/en/latest/demo.html
 
             Welcome to Atramhasis Demo.
             %(separator)s
