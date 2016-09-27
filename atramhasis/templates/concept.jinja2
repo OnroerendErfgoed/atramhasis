@@ -22,7 +22,7 @@
       </div>
       {% if concept %}
         <div class="large-12 columns panel">
-          <h1 class="panel-header left">{{ concept.label(request.locale_name).label|title }}</h1>
+          <h1 class="panel-header left word-wrap-element">{{ concept.label(request.locale_name).label|title }}</h1>
           <h2 class="id-header right">[ ID : {{ concept.concept_id }} ]</h2>
           <hr>
           <dl class="infolist clearfix">
@@ -34,7 +34,7 @@
             {% endif %}
             <dt>uri</dt>
             {% if concept.uri %}
-              <dd><a href="{{ concept.uri }}">{{ concept.uri }}</a></dd>
+              <dd class="word-wrap-element"><a href="{{ concept.uri }}">{{ concept.uri }}</a></dd>
             {% endif %}
             <dt>schema</dt>
             <dd><a href="{{ request.route_path('conceptscheme', scheme_id=scheme_id) }}">{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name) }}</a></dd>
@@ -155,9 +155,11 @@
           </section>
 
           <section role="tabpanel" aria-hidden="true" class="content" id="panel2-2">
-            <div id="treetab" style="padding: 10px 50px 0px 50px;">
+            <div class="large-12 columns">
+            <div id="treetab" class="row" title="{% trans %}tree_help{% endtrans %}">
               {% include "tree.jinja2" %}
             </div>
+              </div>
           </section>
         </div>
       {% endif %}
