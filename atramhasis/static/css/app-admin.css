@@ -13582,6 +13582,18 @@ h4.relations-subtitle {
   margin: 10px 5px;
 }
 
+/* line 107, ../scss/atramhasis/_atramhasis-custom.scss */
+.word-wrap-element {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+/* line 112, ../scss/atramhasis/_atramhasis-custom.scss */
+.treeHelpMessage {
+  font-size: 13px;
+  margin-left: 5px;
+}
+
 /* logo */
 /* line 3, ../scss/atramhasis/_atramhasis-home.scss */
 .logo {

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-02-23 21:28+0100\n"
-"PO-Revision-Date: 2016-08-23 13:48+0100\n"
+"PO-Revision-Date: 2016-09-27 14:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -184,6 +184,9 @@ msgstr "Voir dans structure de l'arbre"
 
 msgid "view_relations"
 msgstr "Voir toutes les relations"
+
+msgid "tree_help"
+msgstr "Clic gauche pour étendre les nodes, clic droit pour ouvrir le concept"
 
 #~ msgid "type"
 #~ msgstr "type"
