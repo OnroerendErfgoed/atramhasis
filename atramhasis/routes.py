@@ -16,6 +16,7 @@ def includeme(config):
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')
 
+    config.add_route('atramhasis.rdf_void_turtle_ext', pattern='/void.ttl', accept='text/turtle')
     config.add_route('atramhasis.rdf_full_export_ext', pattern='/conceptschemes/{scheme_id}/c.rdf')
     config.add_route('atramhasis.rdf_full_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c.ttl')
     config.add_route('atramhasis.rdf_conceptscheme_export_ext', pattern='/conceptschemes/{scheme_id}.rdf')

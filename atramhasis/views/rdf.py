@@ -9,6 +9,26 @@ from atramhasis.errors import (
 )
 from atramhasis.audit import audit
 
+from atramhasis.rdf import dataset_dumper
+
+@view_defaults()
+class AtramhasisVoid(object):
+
+    def __init__(self, request):
+        self.request = request
+        if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+            self.skos_registry = self.request.skos_registry
+        else:
+            raise SkosRegistryNotFoundException()   # pragma: no cover
+
+    @view_config(route_name='atramhasis.rdf_void_turtle_ext')
+    def rdf_void_turtle(self):
+        graph = dataset_dumper(self.request, self.skos_registry)
+        response = Response(content_type='text/turtle')
+        response.body = graph.serialize(format='turtle')
+        response.content_disposition = 'attachment; filename="void.ttl"'
+        return response
+
 
 @view_defaults()
 class AtramhasisRDF(object):
