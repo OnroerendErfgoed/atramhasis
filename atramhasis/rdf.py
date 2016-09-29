@@ -69,48 +69,47 @@ def _add_metadataset(graph, subject, metadataset):
     :param dict metadataset: Dictionary with metadata to add to the Dataset.
     :rtype: :class:`rdflib.graph.Graph`
     '''
-
-        mapping = {
-            'creator': {
-                'predicate': DCTERMS.creator,
-                'objecttype': URIRef
-            },
-            'publisher': {
-                'predicate': DCTERMS.publisher,
-                'objecttype': URIRef
-            },
-            'contributor': {
-                'predicate': DCTERMS.contributor,
-                'objecttype': URIRef
-            },
-            'date': {
-                'predicte': DCTERMS.date
-            },
-            'created': {
-                'predicate': DCTERMS.created
-            },
-            'issued': {
-                'predicate': DCTERMS.issued
-            },
-            'license': {
-                'predicate': DCTERMS.license,
-                'objecttype': URIRef
-            }
+    mapping = {
+        'creator': {
+            'predicate': DCTERMS.creator,
+            'objecttype': URIRef
+        },
+        'publisher': {
+            'predicate': DCTERMS.publisher,
+            'objecttype': URIRef
+        },
+        'contributor': {
+            'predicate': DCTERMS.contributor,
+            'objecttype': URIRef
+        },
+        'date': {
+            'predicte': DCTERMS.date
+        },
+        'created': {
+            'predicate': DCTERMS.created
+        },
+        'issued': {
+            'predicate': DCTERMS.issued
+        },
+        'license': {
+            'predicate': DCTERMS.license,
+            'objecttype': URIRef
         }
+    }
 
-        for k, v in mapping.items():
-            if k in metadataset:
-                if 'objecttype' in v:
-                    objecttype = v['objecttype']
-                else:
-                    objecttype = Literal
-                for ko in metadataset[k]:
-                    if objecttype == Literal:
-                        if 'datatype' in v:
-                            o = Literal(ko, datatype=v['datatype'])
-                        else:
-                            o = Literal(ko)
+    for k, v in mapping.items():
+        if k in metadataset:
+            if 'objecttype' in v:
+                objecttype = v['objecttype']
+            else:
+                objecttype = Literal
+            for ko in metadataset[k]:
+                if objecttype == Literal:
+                    if 'datatype' in v:
+                        o = Literal(ko, datatype=v['datatype'])
                     else:
-                        o = objecttype(ko)
-                    graph.add((subject, v['predicate'], o))
-        return graph
+                        o = Literal(ko)
+                else:
+                    o = objecttype(ko)
+                graph.add((subject, v['predicate'], o))
+    return graph
