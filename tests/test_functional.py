@@ -638,6 +638,12 @@ class CacheFunctionalTests(FunctionalTests):
 
 
 class RdfFunctionalTests(FunctionalTests):
+
+    def test_void(self):
+        rdf_response = self.testapp.get('/void.ttl')
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('text/turtle', rdf_response.content_type)
+
     def test_rdf_full_xml(self):
         rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c', headers={'Accept': 'application/rdf+xml'})
         self.assertEqual('200 OK', rdf_response.status)
