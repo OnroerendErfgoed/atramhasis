@@ -9,7 +9,7 @@ from atramhasis.errors import (
 )
 from atramhasis.audit import audit
 
-from atramhasis.rdf import dataset_dumper
+from atramhasis.rdf import void_dumper
 
 @view_defaults()
 class AtramhasisVoid(object):
