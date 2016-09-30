@@ -41,7 +41,7 @@ def void_dumper(request, registry):
     graph.add((dataset, VOID.vocabulary, URIRef(SKOS)))
     graph.add((dataset, VOID.vocabulary, URIRef(SKOS_THES)))
     for p in providers:
-        self._add_provider(graph, p, duri, request)
+        _add_provider(graph, p, dataset, request)
     return graph
 
 
