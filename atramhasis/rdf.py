@@ -82,6 +82,9 @@ def _add_metadataset(graph, subject, metadataset):
             'predicate': DCTERMS.contributor,
             'objecttype': URIRef
         },
+        'language': {
+            'predicate': DCTERMS.language
+        },
         'date': {
             'predicte': DCTERMS.date
         },
