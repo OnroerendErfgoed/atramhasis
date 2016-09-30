@@ -2,13 +2,73 @@
 
 import unittest
 
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from mock import Mock  # pragma: no cover
+
 from rdflib import Graph
 from rdflib.term import URIRef, Literal
-from rdflib.namespace import RDF, VOID, DCTERMS, XSD
+from rdflib.namespace import RDF, VOID, DCTERMS, XSD, FOAF
 
-from atramhasis.rdf import _add_metadataset
+from atramhasis.rdf import _add_metadataset, _add_provider
 
 from datetime import date
+
+
+class AddProviderTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def _get_duri(self):
+        return URIRef('http://test.atramhasis.org/void.ttl#bigdataset')
+
+    def _get_graph(self, duri):
+        g = Graph()
+        g.add((duri, RDF.type, VOID.Dataset))
+        return g
+
+    def _get_provider(self, dataset = {}):
+        provider_mock = Mock()
+        provider_mock.get_vocabulary_id = Mock(return_value='TREES')
+        provider_mock.get_metadata = Mock(return_value={'id': 'TREES', 'subject': [], 'dataset': dataset})
+        cs = Mock()
+        cs.uri = 'urn:x-atramhasis:conceptschemes:trees'
+        cs.labels = []
+        provider_mock.concept_scheme = cs
+        return provider_mock
+
+    def testEmptyProvider(self):
+        duri = self._get_duri()
+        g = self._get_graph(duri)
+        sduri = 'http://test.atramhasis.org/void.ttl#smalldataset'
+        p = self._get_provider({'uri': sduri})
+        homepage = 'http://test.atramhasis.org/conceptschemes/TREES'
+        rdfdump = 'http://test.atramhasis.org/conceptschemes/TREES/c.rdf'
+        ttldump = 'http://test.atramhasis.org/conceptschemes/TREES/c.rdf'
+        req = Mock()
+        req.route_url = Mock()
+        req.route_url.side_effect = [
+            sduri,
+            homepage,
+            'http://test.atramhasis.org/conceptschemes/TREES/c.rdf',
+            'http://test.atramhasis.org/conceptschemes/TREES/c.ttl'
+        ]
+        g = _add_provider(g, p, duri, req)
+        sd = URIRef(sduri)
+        self.assertIn((duri, RDF.type, VOID.Dataset), g)
+        self.assertIn((sd, RDF.type, VOID.Dataset), g)
+        self.assertIn((duri, VOID.subset, sd), g)
+        self.assertIn((sd, DCTERMS.identifier, Literal('TREES')), g)
+        self.assertIn((sd, VOID.rootResource, URIRef(p.concept_scheme.uri)), g)
+        self.assertIn((sd, FOAF.homepage, URIRef(homepage)), g)
+        self.assertIn((sd, VOID.dataDump, URIRef(rdfdump)), g)
+        self.assertIn((sd, VOID.dataDump, URIRef(ttldump)), g)
+
 
 class MetadatasetTests(unittest.TestCase):
     def setUp(self):

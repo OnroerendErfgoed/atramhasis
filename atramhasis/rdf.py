@@ -41,24 +41,40 @@ def void_dumper(request, registry):
     graph.add((dataset, VOID.vocabulary, URIRef(SKOS)))
     graph.add((dataset, VOID.vocabulary, URIRef(SKOS_THES)))
     for p in providers:
-        metadataset = p.metadata.get('dataset', {})
-        duri = metadataset.get('uri', request.route_url('atramhasis.rdf_void_turtle_ext', _anchor=p.get_vocabulary_id()))
-        pd = URIRef(duri)
-        graph.add((pd, RDF.type, VOID.Dataset))
-        graph.add((dataset, VOID.subset, pd))
-        graph.add((pd, DCTERMS.identifier, Literal(p.get_vocabulary_id())))
-        graph.add((pd, VOID.rootResource, URIRef(p.concept_scheme.uri)))
-        graph.add((pd, FOAF.homepage, URIRef(request.route_url('conceptscheme', scheme_id=p.get_vocabulary_id()))))
-        _add_labels(graph, p.concept_scheme, pd)
-        _add_metadataset(graph, pd, metadataset)
-        fmap = [
-            ('rdf', FORMATS.RDF_XML, 'atramhasis.rdf_full_export_ext'),
-            ('ttl', FORMATS.Turtle, 'atramhasis.rdf_full_export_turtle_ext')
-        ]
-        for f in fmap:
-            graph.add((pd, VOID.feature, f[1]))
-            dump_url = request.route_url(f[2], scheme_id=p.get_vocabulary_id())
-            graph.add((pd, VOID.dataDump, URIRef(dump_url)))
+        self._add_provider(graph, p, duri, request)
+    return graph
+
+
+def _add_provider(graph, provider, dataseturi, request):
+    '''
+    :param rdflib.graph.Graph graph: Graph that will contain the Dataset.
+    :param skosprovider.providers.VocabularyProvider provider: Provider to turn into a Dataset.
+    :param rdflib.term.URIRef URIRef: URI of the main dataset this provider will be attached to.
+    :param pyramid.request.Request request:
+    :rtype: :class:`rdflib.graph.Graph`
+    '''
+    pid = provider.get_vocabulary_id()
+    metadataset = provider.get_metadata().get('dataset', {})
+    duri = metadataset.get(
+        'uri',
+        request.route_url('atramhasis.rdf_void_turtle_ext', _anchor=pid)
+    )
+    pd = URIRef(duri)
+    graph.add((pd, RDF.type, VOID.Dataset))
+    graph.add((dataseturi, VOID.subset, pd))
+    graph.add((pd, DCTERMS.identifier, Literal(pid)))
+    graph.add((pd, VOID.rootResource, URIRef(provider.concept_scheme.uri)))
+    graph.add((pd, FOAF.homepage, URIRef(request.route_url('conceptscheme', scheme_id=pid))))
+    _add_labels(graph, provider.concept_scheme, pd)
+    _add_metadataset(graph, pd, metadataset)
+    fmap = [
+        ('rdf', FORMATS.RDF_XML, 'atramhasis.rdf_full_export_ext'),
+        ('ttl', FORMATS.Turtle, 'atramhasis.rdf_full_export_turtle_ext')
+    ]
+    for f in fmap:
+        graph.add((pd, VOID.feature, f[1]))
+        dump_url = request.route_url(f[2], scheme_id=pid)
+        graph.add((pd, VOID.dataDump, URIRef(dump_url)))
     return graph
 
 
