@@ -23,7 +23,7 @@ class AtramhasisVoid(object):
 
     @view_config(route_name='atramhasis.rdf_void_turtle_ext')
     def rdf_void_turtle(self):
-        graph = dataset_dumper(self.request, self.skos_registry)
+        graph = void_dumper(self.request, self.skos_registry)
         response = Response(content_type='text/turtle')
         response.body = graph.serialize(format='turtle')
         response.content_disposition = 'attachment; filename="void.ttl"'

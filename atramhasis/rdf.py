@@ -16,7 +16,7 @@ FORMATS = Namespace('http://www.w3.org/ns/formats/')
 SKOS_THES = Namespace('http://purl.org/iso25964/skos-thes#')
 
 
-def dataset_dumper(request, registry):
+def void_dumper(request, registry):
     '''
     Creates a void file with information about all void Datasets in this Atramhasis instance.
 
