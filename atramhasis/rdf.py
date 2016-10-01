@@ -123,12 +123,6 @@ def _add_metadataset(graph, subject, metadataset):
             else:
                 objecttype = Literal
             for ko in metadataset[k]:
-                if objecttype == Literal:
-                    if 'datatype' in v:
-                        o = Literal(ko, datatype=v['datatype'])
-                    else:
-                        o = Literal(ko)
-                else:
-                    o = objecttype(ko)
+                o = objecttype(ko)
                 graph.add((subject, v['predicate'], o))
     return graph
