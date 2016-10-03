@@ -38,7 +38,6 @@ def main():
     dump_location = options.dump_location
     if dump_location is None:
         dump_location = os.path.abspath(os.path.dirname(config_uri))
-    print(dump_location)
 
     env = bootstrap(config_uri)
     request = env['request']
