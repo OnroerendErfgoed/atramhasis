@@ -24,7 +24,8 @@ def main():
     )
     parser.add_option(
         '-l', '--location', dest='dump_location', type='string',
-        help='Specify where to dump the conceptschemes. Defaults to the location of your ini file.'
+        help='Specify where to dump the conceptschemes. If not specified, this \
+        is set to the atramhasis.dump_location from your ini file.'
     )
 
     options, args = parser.parse_args(sys.argv[1:])
@@ -35,11 +36,15 @@ def main():
 
     config_uri = args[0]
 
+    env = bootstrap(config_uri)
+
     dump_location = options.dump_location
     if dump_location is None:
-        dump_location = os.path.abspath(os.path.dirname(config_uri))
+        dump_location = env['registry'].settings.get(
+            'atramhasis.dump_location',
+            os.path.abspath(os.path.dirname(config_uri))
+        )
 
-    env = bootstrap(config_uri)
     request = env['request']
 
     if hasattr(request, 'skos_registry') and request.skos_registry is not None:

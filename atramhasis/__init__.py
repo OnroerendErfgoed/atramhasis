@@ -1,3 +1,5 @@
+import os
+
 from pyramid.config import Configurator
 from pyramid.settings import aslist
 
@@ -24,6 +26,11 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     settings['layout.focus_conceptschemes'] = aslist(settings['layout.focus_conceptschemes'], flatten=False)
+
+    dump_location = settings['atramhasis.dump_location']
+    if not os.path.exists(dump_location):
+        os.makedirs(dump_location)
+
     config = Configurator(settings=settings)
 
     from pyramid.session import SignedCookieSessionFactory

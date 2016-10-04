@@ -1,4 +1,8 @@
-from pyramid.response import Response
+# -*- coding: utf-8 -*-
+
+import os
+
+from pyramid.response import Response, FileResponse
 from pyramid.view import view_defaults, view_config
 from skosprovider_rdf import utils
 
@@ -52,22 +56,28 @@ class AtramhasisRDF(object):
     @view_config(route_name='atramhasis.rdf_full_export')
     @view_config(route_name='atramhasis.rdf_full_export_ext')
     def rdf_full_export(self):
-        graph = utils.rdf_dumper(self.provider)
-        response = Response(content_type='application/rdf+xml')
-        response.body = graph.serialize(format='xml')
-        response.content_disposition = 'attachment; filename="%s-full.rdf"' % (str(self.scheme_id),)
-        return response
+        dump_location = self.request.registry.settings['atramhasis.dump_location']
+        filename = os.path.join(dump_location, '%s-full.rdf' % self.scheme_id)
+        return FileResponse(
+            filename,
+            request=self.request,
+            content_type='application/rdf+xml',
+            cache_max_age=86400
+        )
 
     @audit
     @view_config(route_name='atramhasis.rdf_full_export_turtle')
     @view_config(route_name='atramhasis.rdf_full_export_turtle_x')
     @view_config(route_name='atramhasis.rdf_full_export_turtle_ext')
     def rdf_full_export_turtle(self):
-        graph = utils.rdf_dumper(self.provider)
-        response = Response(content_type='text/turtle')
-        response.body = graph.serialize(format='turtle')
-        response.content_disposition = 'attachment; filename="%s-full.ttl"' % (str(self.scheme_id),)
-        return response
+        dump_location = self.request.registry.settings['atramhasis.dump_location']
+        filename = os.path.join(dump_location, '%s-full.ttl' % self.scheme_id)
+        return FileResponse(
+            filename,
+            request=self.request,
+            content_type='text/turtle',
+            cache_max_age=86400
+        )
 
     @audit
     @view_config(route_name='atramhasis.rdf_conceptscheme_export')
