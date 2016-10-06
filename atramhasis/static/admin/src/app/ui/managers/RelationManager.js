@@ -74,37 +74,44 @@ define([
 
       this._broaderStore = new this.trackableMemory({ data: this.concept ? this.concept.broader : [] });
       this._broaderGrid = this._createGrid({
-        collection: this._broaderStore
+        collection: this._broaderStore,
+        type: 'broader'
       }, this.broaderGridNode);
 
       this._narrowerStore = new this.trackableMemory({ data: this.concept ? this.concept.narrower : [] });
       this._narrowerGrid = this._createGrid({
-        collection: this._narrowerStore
+        collection: this._narrowerStore,
+        type: 'narrower'
       }, this.narrowerGridNode);
 
       this._relatedStore = new this.trackableMemory({ data: this.concept ? this.concept.related : [] });
       this._relatedGrid = this._createGrid({
-        collection: this._relatedStore
+        collection: this._relatedStore,
+        type: 'related'
       }, this.relatedGridNode);
 
       this._memberOfStore = new this.trackableMemory({ data: this.concept ? this.concept.member_of : [] });
       this._memberOfGrid = this._createGrid({
-        collection: this._memberOfStore
+        collection: this._memberOfStore,
+        type: 'memberOf'
       }, this.memberOfGridNode);
 
       this._membersStore = new this.trackableMemory({ data: this.concept ? this.concept.members : [] });
       this._membersGrid = this._createGrid({
-        collection: this._membersStore
+        collection: this._membersStore,
+        type: 'members'
       }, this.membersGridNode);
 
       this._subordinateStore = new this.trackableMemory({ data: this.concept ? this.concept.subordinate_arrays : [] });
       this._subordinateGrid = this._createGrid({
-        collection: this._subordinateStore
+        collection: this._subordinateStore,
+        type: 'subordinate'
       }, this.subordinateGridNode);
 
       this._superordinatesCollStore = new this.trackableMemory({ data: this.concept ? this.concept.superordinates : [] });
       this._superordinatesCollGrid = this._createGrid({
-        collection: this._superordinatesCollStore
+        collection: this._superordinatesCollStore,
+        type: 'superordinate'
       }, this.superordinatesCollGridNode);
 
       this._relationStore = this.conceptSchemeController.getConceptSchemeTree(this.scheme);
@@ -210,12 +217,13 @@ define([
             var div = domConstruct.create('div', {'class': 'dGridHyperlink'});
             domConstruct.create('a', {
               href: '#',
-              title: 'Remove note',
+              title: 'Remove relation',
               className: 'fa fa-trash',
               innerHTML: '',
               onclick: lang.hitch(this, function (evt) {
                 evt.preventDefault();
-                this._removeRow(object.id, options.collection);
+                console.log(object);
+                this._removeRow(object.id, options.type);
               })
             }, div);
             return div;
@@ -362,8 +370,28 @@ define([
       this._addRelationDialog.show(this._superordinatesCollStore, this._relationStore);
     },
 
-    _removeRow: function(rowId, store) {
-      store.remove(rowId);
+    _removeRow: function(rowId, type) {
+      console.log(rowId, type);
+      var store = null;
+      switch(type) {
+        case 'broader': store = this._broaderStore;
+          break;
+        case 'narrower': store = this._narrowerStore;
+          break;
+        case 'related': store = this._relatedStore;
+          break;
+        case 'memberOf': store = this._memberOfStore;
+          break;
+        case 'members': store = this._membersStore;
+          break;
+        case 'subordinate': store = this._subordinateStore;
+          break;
+        case 'superordinate': store = this._superordinatesCollStore;
+          break;
+      }
+      if (store) {
+        store.remove(rowId);
+      }
     }
   });
 });
