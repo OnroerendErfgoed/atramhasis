@@ -222,7 +222,6 @@ define([
               innerHTML: '',
               onclick: lang.hitch(this, function (evt) {
                 evt.preventDefault();
-                console.log(object);
                 this._removeRow(object.id, options.type);
               })
             }, div);
