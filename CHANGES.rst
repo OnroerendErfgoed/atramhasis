@@ -1,9 +1,10 @@
-0.5.2 (??-10-2016)
+0.5.2 (07-10-2016)
 ------------------
 
 This minor release fixes a bug with the protected resource event. The event should
 give the uri of a concept instead of the url path. In addition to the uri the request
-is added to the event.
+is added to the event. It also fixes the bug with removing relations and updates the 
+requirements for skosprovider_sqlalchemy_.
 
 0.5.1 (04-10-2016)
 ------------------
