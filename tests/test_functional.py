@@ -196,14 +196,14 @@ class FunctionalTests(unittest.TestCase):
 
     @staticmethod
     def mock_event_handler(event):
-        if event.uri == 'http://localhost/conceptschemes/GEOGRAPHY/c/9':
+        if event.uri == 'urn:x-vioe:geography:9':
             referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
             raise ProtectedResourceException('resource {0} is still in use, preventing operation'.format(event.uri),
                                              referenced_in)
 
     @staticmethod
     def mock_event_handler_provider_unavailable(event):
-        if event.uri == 'http://localhost/conceptschemes/GEOGRAPHY/c/55':
+        if event.uri == 'urn:x-vioe:geography:55':
             raise ProviderUnavailableException('test msg')
 
 
@@ -503,7 +503,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
         self.assertEqual(res.json, {
-            "message": "resource http://localhost/conceptschemes/GEOGRAPHY/c/9 is still in use, preventing operation",
+            "message": "resource urn:x-vioe:geography:9 is still in use, preventing operation",
             "referenced_in": ["urn:someobject", "http://test.test.org/object/2"]
         })
 

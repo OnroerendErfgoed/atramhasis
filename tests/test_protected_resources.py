@@ -5,13 +5,14 @@ try:
     from unittest.mock import Mock, MagicMock
 except ImportError:
     from mock import Mock, MagicMock, call  # pragma: no cover
+from atramhasis.errors import ConceptSchemeNotFoundException
 
 
 class DummyParent(object):
 
     def __init__(self):
         self.request = MagicMock()
-        self.request.path_url = 'http://localhost/conceptschemes/GEOGRAPHY/c/9'
+        self.request.path = '/conceptschemes/GEOGRAPHY/c/9'
 
     @protected_operation
     def protected_dummy(self):
@@ -24,8 +25,9 @@ class ProtectedTests(unittest.TestCase):
         pass
 
     def test_protected_resource_event(self):
-        event = ProtectedResourceEvent('urn:test')
+        event = ProtectedResourceEvent('urn:test', 'request')
         self.assertEqual('urn:test', event.uri)
+        self.assertEqual('request', event.request)
 
     def test_protected_resource_exception(self):
         referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
@@ -35,8 +37,18 @@ class ProtectedTests(unittest.TestCase):
 
     def test_protected_event(self):
         dummy = DummyParent()
+        provider = MagicMock()
+        provider.uri_generator.generate = lambda id: 'urn:x-vioe:geography:9'
+        dummy.request.skos_registry.get_provider = lambda scheme_id: provider
         notify_mock = Mock()
         dummy.request.registry.notify = notify_mock
         dummy.protected_dummy()
         notify_call = notify_mock.mock_calls[0]
-        self.assertEqual('http://localhost/conceptschemes/GEOGRAPHY/c/9', notify_call[1][0].uri)
+        self.assertEqual('urn:x-vioe:geography:9', notify_call[1][0].uri)
+
+    def test_protected_event_error(self):
+        dummy = DummyParent()
+        dummy.request.skos_registry.get_provider = lambda scheme_id: None
+        notify_mock = Mock()
+        dummy.request.registry.notify = notify_mock
+        self.assertRaises(ConceptSchemeNotFoundException, dummy.protected_dummy)
