@@ -1,3 +1,11 @@
+0.5.1 (04-10-2016)
+------------------
+
+This minor release fixes a bug with the tree browser. Before it wasn't possible
+to zoom and pan the tree. With certain larger trees this would cause issues as
+content would run off the page.
+
+
 0.5.0 (14-09-2016)
 ------------------
 
