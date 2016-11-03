@@ -4,14 +4,24 @@ import sys
 import os
 import time
 import textwrap
+from datetime import datetime
 
-from pyramid.paster import bootstrap
+from pyramid.paster import bootstrap, setup_logging
 
 from atramhasis.errors import (
     SkosRegistryNotFoundException
 )
 
 from skosprovider_rdf import utils
+
+from datetime import datetime
+
+from rdflib.term import URIRef
+from rdflib.namespace import RDF, SKOS
+
+from atramhasis.data.models import ConceptschemeCounts
+
+import transaction
 
 def main():
     description = """\
@@ -37,6 +47,7 @@ def main():
     config_uri = args[0]
 
     env = bootstrap(config_uri)
+    setup_logging(config_uri)
 
     dump_location = options.dump_location
     if dump_location is None:
@@ -59,6 +70,8 @@ def main():
                                                                 for not_shown in ['external', 'hidden']])
     ]
 
+    counts = []
+
     for p in skos_registry.get_providers():
         if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external', 'hidden']]):
             continue;
@@ -69,6 +82,21 @@ def main():
         filename_rdf = '%s.rdf' % filename
         print('Generating dump for %s' % pid)
         graph = utils.rdf_dumper(p)
+        triples = len(graph)
+        print('Number of triples in Graph: %d' % triples)
+        csuri = URIRef(p.concept_scheme.uri)
+        cs_triples = len(list(graph.predicate_objects(csuri)))
+        print('Number of triples in Conceptscheme: %d' % cs_triples)
+        count_concepts = len(list(graph.subjects(RDF.type, SKOS.Concept)))
+        count_collections = len(list(graph.subjects(RDF.type, SKOS.Collection)))
+        avg_concept_triples = (triples - cs_triples) / (count_concepts + count_collections)
+        counts.append({
+            'conceptscheme_id': pid,
+            'triples': triples,
+            'conceptscheme_triples': cs_triples,
+            'avg_concept_triples': avg_concept_triples
+        })
+        print('Average number of triples per concept: %d' % avg_concept_triples)
         print('Dumping %s to Turtle: %s' % (pid, filename_ttl))
         graph.serialize(destination=filename_ttl, format='turtle')
         print('Dumping %s to RDFxml: %s' % (pid, filename_rdf))
@@ -76,5 +104,16 @@ def main():
         print("--- %s seconds ---" % (time.time() - start_time))
 
     print('All files dumped to %s' % dump_location)
+
+    with transaction.manager:
+        dbsession = request.registry.dbmaker()
+        for c in counts:
+            cs_count = ConceptschemeCounts(
+                conceptscheme_id=c['conceptscheme_id'],
+                triples=c['triples'],
+                conceptscheme_triples=c['conceptscheme_triples'],
+                avg_concept_triples=c['avg_concept_triples']
+            )
+            dbsession.add(cs_count)
 
     env['closer']()

@@ -26,3 +26,13 @@ class ConceptVisitLog(Base):
     conceptscheme_id = Column(String(25), nullable=False)
     visited_at = Column(DateTime, default=func.now(), nullable=False)
     origin = Column(String(25), nullable=False)
+
+
+class ConceptschemeCounts(Base):
+    __tablename__ = 'conceptscheme_counts'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    conceptscheme_id = Column(String(25), nullable=False)
+    counted_at = Column(DateTime, default=func.now(), nullable=False)
+    triples = Column(Integer, nullable=False)
+    conceptscheme_triples = Column(Integer, nullable=False)
+    avg_concept_triples = Column(Integer, nullable=False)
