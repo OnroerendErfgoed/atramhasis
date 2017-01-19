@@ -78,8 +78,6 @@ def main():
             continue;
         start_time = time.time()
         pid = p.get_metadata()['id']
-        if pid == 'HERITAGETYPE':
-            continue
         filename = os.path.join(dump_location, '%s-full' % pid)
         filename_ttl = '%s.ttl' % filename
         filename_rdf = '%s.rdf' % filename
@@ -93,13 +91,13 @@ def main():
         count_concepts = len(list(graph.subjects(RDF.type, SKOS.Concept)))
         count_collections = len(list(graph.subjects(RDF.type, SKOS.Collection)))
         avg_concept_triples = (triples - cs_triples) / (count_concepts + count_collections)
+        print('Average number of triples per concept: %d' % avg_concept_triples)
         counts.append({
             'conceptscheme_id': pid,
             'triples': triples,
             'conceptscheme_triples': cs_triples,
             'avg_concept_triples': avg_concept_triples
         })
-        print('Average number of triples per concept: %d' % avg_concept_triples)
         print('Dumping %s to Turtle: %s' % (pid, filename_ttl))
         graph.serialize(destination=filename_ttl, format='turtle')
         print('Dumping %s to RDFxml: %s' % (pid, filename_rdf))
