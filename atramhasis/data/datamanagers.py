@@ -305,3 +305,32 @@ class AuditManager(DataManager):
             years=1 if period == 'last_year' else 0
         )
         return start_date.strftime("%Y-%m-%d")
+
+
+class CountsManager(DataManager):
+    """
+    A data manager that deals with triple counts.
+    """
+
+    def save(self, counts):
+        """
+        Save a certain counts object
+
+        :param atramhasis.data.models.ConceptschemeCounts counts: Counts object to save
+
+        :return: The saved count
+        """
+        self.session.add(counts)
+        self.session.flush()
+        return counts
+
+    def get_most_recent_count_for_scheme(self, conceptscheme_id):
+        recent = self.session.query(
+            ConceptschemeCounts
+        ).filter_by(
+            conceptscheme_id = conceptscheme_id
+        ).order_by(
+            desc('counted_at')
+        ).one()
+        return recent
+
