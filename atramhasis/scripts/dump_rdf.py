@@ -20,6 +20,7 @@ from rdflib.term import URIRef
 from rdflib.namespace import RDF, SKOS
 
 from atramhasis.data.models import ConceptschemeCounts
+from atramhasis.data.datamanagers import CountsManager
 
 import transaction
 
@@ -77,6 +78,8 @@ def main():
             continue;
         start_time = time.time()
         pid = p.get_metadata()['id']
+        if pid == 'HERITAGETYPE':
+            continue
         filename = os.path.join(dump_location, '%s-full' % pid)
         filename_ttl = '%s.ttl' % filename
         filename_rdf = '%s.rdf' % filename
@@ -107,6 +110,7 @@ def main():
 
     with transaction.manager:
         dbsession = request.registry.dbmaker()
+        manager = CountsManager(dbsession)
         for c in counts:
             cs_count = ConceptschemeCounts(
                 conceptscheme_id=c['conceptscheme_id'],
@@ -114,6 +118,6 @@ def main():
                 conceptscheme_triples=c['conceptscheme_triples'],
                 avg_concept_triples=c['avg_concept_triples']
             )
-            dbsession.add(cs_count)
+            manager.save(cs_count)
 
     env['closer']()
