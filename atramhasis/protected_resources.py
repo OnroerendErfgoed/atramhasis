@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import re
+from atramhasis.errors import ConceptSchemeNotFoundException
+
 """
 Thid module is used when blocking operations on a certain Concept or Collection
 that might be used in external applications.
@@ -12,8 +15,9 @@ class ProtectedResourceEvent(object):
     Event triggered when calling a protected operation on a resource
     """
 
-    def __init__(self, uri):
+    def __init__(self, uri, request):
         self.uri = uri
+        self.request = request
 
 
 def protected_operation(fn):
@@ -23,8 +27,16 @@ def protected_operation(fn):
     """
 
     def advice(parent_object, *args, **kw):
-        uri = parent_object.request.path_url
-        event = ProtectedResourceEvent(uri)
+        request = parent_object.request
+        url = request.path
+        match = re.compile('/conceptschemes/(\w+)/c/(\w+)').match(url)
+        scheme_id = match.group(1)
+        c_id = match.group(2)
+        provider = request.skos_registry.get_provider(scheme_id)
+        if not provider:
+            raise ConceptSchemeNotFoundException(scheme_id)
+        uri = provider.uri_generator.generate(id=c_id)
+        event = ProtectedResourceEvent(uri, request)
         parent_object.request.registry.notify(event)
         return fn(parent_object, *args, **kw)
 
