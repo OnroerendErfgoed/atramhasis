@@ -64,13 +64,6 @@ def main():
     else:
         raise SkosRegistryNotFoundException()   # pragma: no cover
 
-    conceptschemes = [
-        {'id': x.get_metadata()['id'],
-            'conceptscheme': x.concept_scheme}
-        for x in skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
-                                                                for not_shown in ['external', 'hidden']])
-    ]
-
     counts = []
 
     for p in skos_registry.get_providers():
