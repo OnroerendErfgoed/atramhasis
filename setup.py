@@ -146,6 +146,7 @@ setup(name='atramhasis',
       initialize_atramhasis_db = atramhasis.scripts.initializedb:main
       import_file = atramhasis.scripts.import_file:main
       dump_rdf = atramhasis.scripts.dump_rdf:main
+      generate_ldf_config = atramhasis.scripts.generate_ldf_config:main
       [pyramid.scaffold]
         atramhasis_scaffold=atramhasis.scaffolds:AtramhasisTemplate
         atramhasis_demo=atramhasis.scaffolds:AtramhasisDemoTemplate
