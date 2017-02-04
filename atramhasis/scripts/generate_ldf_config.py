@@ -14,6 +14,8 @@ from atramhasis.errors import (
     SkosRegistryNotFoundException
 )
 
+
+
 def main():
     description = """\
     Generate a config file for a LDF server.
@@ -52,6 +54,11 @@ def main():
         os.path.abspath(os.path.dirname(config_uri))
     )
 
+    ldf_baseurl = env['registry'].settings.get(
+        'atramhasis.ldf.baseurl',
+        None
+    )
+
     request = env['request']
 
     if hasattr(request, 'skos_registry') and request.skos_registry is not None:
@@ -62,8 +69,21 @@ def main():
     start_time = time.time()
     ldfconfig = {
         'title': 'Atramhasis LDF server',
-        'datasources': {}
+        'datasources': {},
+        'prefixes': {
+            'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+            'owl': 'http://www.w3.org/2002/07/owl#',
+            'xsd': 'http://www.w3.org/2001/XMLSchema#',
+            'hydra': 'http://www.w3.org/ns/hydra/core#',
+            'void': 'http://rdfs.org/ns/void#',
+            'skos': ' http://www.w3.org/2004/02/skos/core#',
+            'skos-thes': 'http://purl.org/iso25964/skos-thes#'
+        }
     }
+
+    if ldf_baseurl:
+        ldfconfig['baseURL'] = ldf_baseurl
 
     for p in skos_registry.get_providers():
         if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external', 'hidden']]):
