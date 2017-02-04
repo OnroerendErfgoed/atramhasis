@@ -69,12 +69,20 @@ def main():
         if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external', 'hidden']]):
             continue;
         pid = p.get_metadata()['id']
-        filename = os.path.join(dump_location, '%s-full.ttl' % pid)
+        filename = os.path.join(dump_location, '%s-full' % pid)
+        filename_ttl = filename + '.ttl'
+        filename_hdt = filename + '.hdt'
+        if os.path.isfile(filename_hdt):
+            dumptype = 'HdtDatasource'
+            dumpfile = filename_hdt
+        else:
+            dumptype = 'TurtleDatasource'
+            dumpfile = filename_ttl
         sourceconfig = {
             'title': p.concept_scheme.label().label if p.concept_scheme.label() else pid,
-            'type': 'TurtleDatasource',
+            'type': dumptype,
             'settings': {
-                'file': filename
+                'file': dumpfile
             }
         }
         for n in p.concept_scheme.notes:
