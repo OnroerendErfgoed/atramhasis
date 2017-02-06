@@ -4,8 +4,7 @@ Atramhasis
 .. image:: https://img.shields.io/pypi/v/atramhasis.svg
         :target: https://pypi.python.org/pypi/atramhasis
 .. image:: https://readthedocs.org/projects/atramhasis/badge/?version=latest
-        :target: https://readthedocs.org/projects/atramhasis/?badge=latest
-
+        :target: http://atramhasis.readthedocs.io/en/latest/?badge=latest
 .. image:: https://travis-ci.org/OnroerendErfgoed/atramhasis.png?branch=master
         :target: https://travis-ci.org/OnroerendErfgoed/atramhasis?branch=master
 .. image:: https://coveralls.io/repos/github/OnroerendErfgoed/atramhasis/badge.svg?branch=master
