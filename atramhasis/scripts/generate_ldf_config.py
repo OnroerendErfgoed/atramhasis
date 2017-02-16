@@ -28,7 +28,7 @@ def main():
     parser.add_option(
         '-l', '--location', dest='config_location', type='string',
         help='Specify where to put the config file. If not specified, this \
-        is set to the atramhasis.ldf.config_location from your ini file.'
+is set to the atramhasis.ldf.config_location from your ini file.'
     )
 
     options, args = parser.parse_args(sys.argv[1:])
