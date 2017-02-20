@@ -52,6 +52,17 @@ application.
   the vocabularies published by EH, RCAHMS and RCAHMW at 
   `heritagedata.org <http://heritagedata.org>`_.
 
+Atramhasis can easily be set up with a `Linked Data Fragments <http://linkeddatafragments.org>`_ 
+server. This server allows posing simple `triple pattern` queries of your dataset. 
+Combined with a Linked Data Fragments client, similar functionalities to a 
+traditional `SPARQL` endpoint can be achieved. Atramhasis supports Linked Data
+Fragments (LDF) by generating a suitable config file for the Javascript server.
+LDF can use different backends. Out of the box, Atramhasis generates Turtle
+files that can be used by the LDF server. It's also possible to configre
+Atramhasis with a link to the rdf2hdt command (requires a separate
+installation). In this case, everytime the conceptschemes are dumped to RDF, the
+dump files are also written in HDT format.
+
 General installation
 ====================
 
@@ -78,6 +89,8 @@ to the admin module documentation.
     $ alembic upgrade head
     # insert sample data
     $ initialize_atramhasis_db development.ini
+    # generate first RDF download
+    $ dump_rdf development.ini
     # compile the Message Catalog Files
     $ python setup.py compile_catalog
 
@@ -174,6 +187,67 @@ language switcher. If you want to add you new language, you need to edit your
 
 After restarting your server you will now have the option of switching to
 German.
+
+Running a Linked Data Fragments server
+======================================
+
+If you want to add a `Linked Data Fragments <http://linkeddatafragments.org>`_
+server, Atramhasis makes it easy for you. First you need to decide if you want
+to run the server with :term:`hdt` files. If not, you can always use raw `Turtle`
+files, but be aware that the term:`hdt` files offer much better performance.
+
+If you want to use :term:`hdt` files, please install `hdt-cpp`. Be aware that
+you might have to download the source files and compile them yourself. Once
+you have done so, add the rdf2hdt command to your development.ini file.
+Supposing you installed it in :file:`/opt/hdt-cpp/hdt-lib/tools/rdf2hdt`:
+
+.. code-block:: ini
+
+    # Location of rdf2hdt executable
+    atramhasis.rdf2hdt = /opt/hdt-cpp/hdt-lib/tools/rdf2hdt
+
+Now, whenever Atramhasis creates rdf dumps it will also create :term:`hdt`
+files. If you do not have :command:`rdf2hdt` installed, you will still have
+`Turtle` datadumps that can be used by the LDF-server.
+
+.. code-block:: bash
+
+    $ dump_rdf development.ini
+
+Now you're ready to generate the configuration for the LDF server. Out of the
+box this file will be generated in the same directory your
+:file:`development.ini` is located in, but you can override this in your ini
+file by setting `atramhasis.ldf.config_location` or you can pass this on the
+command line
+
+.. code-block:: bash
+
+    # Generate config
+    $ generate_ldf_config development.ini
+    # Generate config and override config_location
+    $ generate_ldf_config development.ini -l /opt/my/ldf/server
+
+Now you're ready to run your LDF server. First we need to install it. It
+requires `Node.js 4.0` or higher and should run on `OSX` and `Linux`. Please
+refer to the LDF server documentation for troubleshooting.
+
+.. code-block:: bash
+
+    # Install ldf-server
+    $ [sudo] npm install -g ldf-server
+    # Run ldf-server
+    $ ldf-server ldf_server_config.json
+
+Now you have an LDF server running at `http://localhost:3000`. Browse there and
+have fun!
+
+When deploying Atramhasis with an LDF server in production, we recommend runnig
+both behind eg. `nginx`. In case you want to do this, you might run Atramhasis
+on port `6543` and LDF server on port `3000`, but serve both through `nginx`.
+You can easily do this by setting the `atramhasis.ldf.baseurl` in your ini file.
+Suppose you want to server both on the host `demo.atramhasis.org` with
+Atramhasis as the root of your domain and the LDF server at `/ldf`. In this
+case, set `atramhasis.ldf.baseurl` to `http://demo.atramhasis.org/ldf`.
 
 
 Contributing

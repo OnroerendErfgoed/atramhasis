@@ -38,6 +38,11 @@ def main():
         help='Specify where to dump the conceptschemes. If not specified, this \
         is set to the atramhasis.dump_location from your ini file.'
     )
+    parser.add_option(
+        '-r', '--rdf2hdt', dest='rdf2hdt', type='string', default=False,
+        help='Specify where the rdf2hdt command can be found. If not specified, this \
+        is set to atramhasis.rdf2hdt from your ini file.'
+    )
 
     options, args = parser.parse_args(sys.argv[1:])
 
@@ -57,6 +62,13 @@ def main():
             os.path.abspath(os.path.dirname(config_uri))
         )
 
+    rdf2hdt = options.rdf2hdt
+    if not rdf2hdt:
+        rdf2hdt = env['registry'].settings.get(
+            'atramhasis.rdf2hdt',
+            False
+        )
+
     request = env['request']
 
     if hasattr(request, 'skos_registry') and request.skos_registry is not None:
@@ -64,14 +76,9 @@ def main():
     else:
         raise SkosRegistryNotFoundException()   # pragma: no cover
 
-    conceptschemes = [
-        {'id': x.get_metadata()['id'],
-            'conceptscheme': x.concept_scheme}
-        for x in skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
-                                                                for not_shown in ['external', 'hidden']])
-    ]
-
     counts = []
+
+    files = []
 
     for p in skos_registry.get_providers():
         if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external', 'hidden']]):
@@ -81,6 +88,7 @@ def main():
         filename = os.path.join(dump_location, '%s-full' % pid)
         filename_ttl = '%s.ttl' % filename
         filename_rdf = '%s.rdf' % filename
+        files.append(filename_ttl)
         print('Generating dump for %s' % pid)
         graph = utils.rdf_dumper(p)
         triples = len(graph)
@@ -105,6 +113,19 @@ def main():
         print("--- %s seconds ---" % (time.time() - start_time))
 
     print('All files dumped to %s' % dump_location)
+
+    if rdf2hdt:
+        from subprocess import check_call, CalledProcessError
+        for f in files:
+            print('Converting %s to hdt' % f)
+            hdtf = f.replace('.ttl', '.hdt')
+            try:
+                check_call([rdf2hdt, '-f', 'turtle', f, hdtf])
+            except CalledProcessError:
+                # Turtle failed, let's try rdfxml
+                rdff = f.replace('.ttl', '.rdf')
+                check_call([rdf2hdt, '-f', 'rdfxml', rdff, hdtf])
+        print('All hdt files dumped to %s' % dump_location)
 
     with transaction.manager:
         dbsession = request.registry.dbmaker()
