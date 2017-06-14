@@ -48,6 +48,11 @@ define([
     languageController: null,
     listController: null,
     conceptSchemeController: null,
+    relationManager: null,
+    labelManager: null,
+    noteManager: null,
+    matchesManager: null,
+    sourcesManager: null,
     _mode: 'add',
 
     /**
@@ -118,6 +123,12 @@ define([
         this.updateScheme(scheme);
         this.dialog.set('title', 'Add new concept or collection');
 
+        this.relationManager.reset();
+        this.labelManager.reset();
+        this.noteManager.reset();
+        this.matchesManager.reset();
+        this.sourcesManager.reset();
+
         if (concept) {
           if (concept.id) {
             this.dialog.set('title', 'Edit <strong>' + concept.label + '</strong>');
@@ -176,7 +187,6 @@ define([
      * @private
      */
     _close: function () {
-
       this._reset();
       this.dialog.hide();
     },
