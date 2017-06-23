@@ -151,7 +151,8 @@ class AtramhasisView(object):
                 return Response('Thing without type: ' + str(c_id), status_int=500)
             url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
             update_last_visited_concepts(self.request, {'label': c.label(self.request.locale_name).label, 'url': url})
-            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
+            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
+                    'conceptschemes': conceptschemes, 'provider': provider}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
