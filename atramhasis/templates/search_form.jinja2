@@ -36,6 +36,7 @@
           document.searchForm.submit();
         } else {
           scheme.addClass('highlightError');
+          $('.highlightErrorText').remove();
           var msg = $('<small class="highlightErrorText">{% trans %}select_scheme_error{% endtrans %}</small>').insertAfter(scheme);
           scheme.one('change', function() {
             scheme.removeClass('highlightError');
