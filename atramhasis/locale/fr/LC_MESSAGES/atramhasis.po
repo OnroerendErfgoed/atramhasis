@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-02-23 21:28+0100\n"
-"PO-Revision-Date: 2016-09-27 14:37+0100\n"
+"PO-Revision-Date: 2017-06-28 16:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: atramhasis/templates/browse_schemes_sidebar.jinja2:7
 msgid "browse"
@@ -187,6 +187,9 @@ msgstr "Voir toutes les relations"
 
 msgid "tree_help"
 msgstr "Clic gauche pour étendre les nodes, clic droit pour ouvrir le concept"
+
+msgid "select_scheme_error"
+msgstr "Veuillez sélectionner un schéma"
 
 #~ msgid "type"
 #~ msgstr "type"
