@@ -26,8 +26,24 @@
       <input type="text" name="label" id="label" placeholder="{% trans %}search_for{% endtrans %} {% trans %}labels{% endtrans %}">
 
       <div class="text-center">
-        <a onclick="document.searchForm.submit();"><span class="ico ico-mglass-large"></span></a>
+        <a onclick="submitForm()"><span class="ico ico-mglass-large"></span></a>
       </div>
+    <script>
+      function submitForm() {
+        var scheme = $("#scheme");
+        var schemeVal = scheme.val();
+        if (schemeVal && schemeVal !== '') {
+          document.searchForm.submit();
+        } else {
+          scheme.addClass("highlightError");
+          var msg = $('<small class="highlightErrorText">{% trans %}select_scheme_error{% endtrans %}</small>').insertAfter(scheme);
+          scheme.one("change", function() {
+            scheme.removeClass("highlightError");
+            msg.remove();
+          })
+        }
+      }
+    </script>
     </form>
     <div class="text-center">
       <img src="{{ request.static_path(app_package + ':static/img/headimg.png') }}" width="230">
