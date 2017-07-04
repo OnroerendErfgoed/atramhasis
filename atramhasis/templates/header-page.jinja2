@@ -41,11 +41,25 @@
         <li class="has-form">
           <div class="row collapse">
             <div class="left"><input name="label" id="label" type="text" class="search-input-top" placeholder="{% trans %}search_for{% endtrans %} {% trans %}labels{% endtrans %}"/></div>
-            <div class="left"><a onclick="document.searchForm.submit();"><span class="ico ico-mglass"></span></a></div>
+            <div class="left"><a onclick="submitForm();"><span class="ico ico-mglass"></span></a></div>
           </div>
         </li>
       </ul>
     </form>
+    <script>
+      function submitForm() {
+        var scheme = $('#scheme');
+        var schemeVal = scheme.val();
+        if (schemeVal && schemeVal !== '') {
+          document.searchForm.submit();
+        } else {
+          scheme.addClass('highlightError');
+          scheme.one('change', function() {
+            scheme.removeClass('highlightError');
+          });
+        }
+      }
+    </script>
   </nav>
 </div>
 
