@@ -11,7 +11,7 @@ from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteT
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.utils import update_last_visited_concepts
-from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
+from atramhasis.cache import tree_region, invalidate_scheme_cache, invalidate_cache
 from atramhasis.audit import audit
 
 
