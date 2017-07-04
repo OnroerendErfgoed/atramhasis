@@ -14,7 +14,8 @@ larch = {
     'uri': 'urn:x-skosprovider:trees/1',
     'labels': [
         {'type': 'prefLabel', 'language': 'en', 'label': 'The Larch'},
-        {'type': 'prefLabel', 'language': 'nl', 'label': 'De Lariks'}
+        {'type': 'prefLabel', 'language': 'nl', 'label': 'De Lariks'},
+        {'type': 'sortLabel', 'language': 'nl', 'label': 'c'}
     ],
     'notes': [
         {'type': 'definition', 'language': 'en', 'note': 'A type of tree.'}
@@ -31,6 +32,7 @@ chestnut = {
         {'type': 'prefLabel', 'language': 'en', 'label': 'The Chestnut'},
         {'type': 'altLabel', 'language': 'nl', 'label': 'De Paardekastanje'},
         {'type': 'altLabel', 'language': 'fr', 'label': 'la châtaigne'},
+        {'type': 'sortLabel', 'language': 'nl', 'label': 'a'}
     ],
     'notes': [
         {
@@ -48,7 +50,8 @@ species = {
     'uri': 'urn:x-skosprovider:trees/3',
     'labels': [
         {'type': 'prefLabel', 'language': 'en', 'label': 'Trees by species'},
-        {'type': 'prefLabel', 'language': 'nl', 'label': 'Bomen per soort'}
+        {'type': 'prefLabel', 'language': 'nl', 'label': 'Bomen per soort'},
+        {'type': 'sortLabel', 'language': 'nl', 'label': 'b'}
     ],
     'type': 'collection',
     'members': ['1', '2']
