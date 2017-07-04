@@ -11,7 +11,7 @@ from paste.deploy.loadwsgi import appconfig
 
 from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, AuditManager
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
-from atramhasis.views import tree_cache_dictionary
+from atramhasis.cache import tree_cache_dictionary
 from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView, \
     labels_to_string, get_definition
 from fixtures.data import trees
