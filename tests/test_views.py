@@ -571,14 +571,15 @@ class TestListViews(unittest.TestCase):
 
     def test_get_list(self):
         request = self.request
-        atramhasisListView = AtramhasisListView(request)
-        labellist = atramhasisListView.get_list(LabelType)
+        atramhasis_list_view = AtramhasisListView(request)
+        labellist = atramhasis_list_view.get_list(LabelType)
         self.assertIsNotNone(labellist)
         self.assertIsNotNone(labellist[0])
 
     def test_labeltype_list_view(self):
         request = self.request
-        atramhasisListView = AtramhasisListView(request)
-        labellist = atramhasisListView.labeltype_list_view()
+        atramhasis_list_view = AtramhasisListView(request)
+        labellist = atramhasis_list_view.labeltype_list_view()
         self.assertIsNotNone(labellist)
-        self.assertEqual(labellist[0].get('key'), 'prefLabel')
+        print(labellist)
+        self.assertIn({'key': 'prefLabel', 'label': u'prefLabel'}, labellist)
