@@ -15,7 +15,7 @@ from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFou
 from atramhasis.mappers import map_concept, map_conceptscheme
 from atramhasis.protected_resources import protected_operation
 from atramhasis.utils import from_thing, internal_providers_only
-from atramhasis.views import invalidate_scheme_cache
+from atramhasis.cache import invalidate_scheme_cache
 from atramhasis.audit import audit
 from pyramid_skosprovider.views import ProviderView
 

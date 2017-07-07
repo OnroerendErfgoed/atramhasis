@@ -9,10 +9,12 @@ from sqlalchemy.orm.exc import NoResultFound
 import transaction
 from zope.sqlalchemy import ZopeTransactionExtension
 from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType, Concept, NoteType, Match
-from atramhasis.data.models import Base as VisitLogBase
-from atramhasis.data.datamanagers import ConceptSchemeManager, SkosManager, LanguagesManager, AuditManager
+from atramhasis.data.models import Base as VisitLogBase, ConceptschemeCounts
+from atramhasis.data.datamanagers import ConceptSchemeManager, SkosManager, LanguagesManager, AuditManager, \
+    CountsManager
 from fixtures.materials import materials
 from fixtures.data import trees, geo
+
 try:
     from unittest.mock import Mock, patch
 except:
@@ -80,7 +82,6 @@ class DatamangersTests(unittest.TestCase):
 
 
 class ConceptSchemeManagerTest(DatamangersTests):
-
     def setUp(self):
         super(ConceptSchemeManagerTest, self).setUp()
         self.conceptscheme_manager = ConceptSchemeManager(self.session_maker())
@@ -115,7 +116,6 @@ class ConceptSchemeManagerTest(DatamangersTests):
 
 
 class SkosManagerTest(DatamangersTests):
-
     def setUp(self):
         super(SkosManagerTest, self).setUp()
         self.skos_manager = SkosManager(self.session_maker())
@@ -141,7 +141,7 @@ class SkosManagerTest(DatamangersTests):
         self.assertEqual(3, len(res))
 
     def test_get_match_type(self):
-        matchType= self.skos_manager.get_match_type('narrowMatch')
+        matchType = self.skos_manager.get_match_type('narrowMatch')
         self.assertEqual('narrowMatch', matchType.name)
 
     def test_get_match(self):
@@ -158,7 +158,6 @@ class SkosManagerTest(DatamangersTests):
 
 
 class LanguagesManagerTest(DatamangersTests):
-
     def setUp(self):
         super(LanguagesManagerTest, self).setUp()
         self.language_manager = LanguagesManager(self.session_maker())
@@ -195,7 +194,6 @@ class LanguagesManagerTest(DatamangersTests):
 
 
 class AuditManagerTest(DatamangersTests):
-
     def setUp(self):
         super(AuditManagerTest, self).setUp()
         self.audit_manager = AuditManager(self.session_maker())
@@ -217,3 +215,21 @@ class AuditManagerTest(DatamangersTests):
                              self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 1, 'last_month'))
         self.assertListEqual([],
                              self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_day'))
+
+
+class CountsManagerTest(DatamangersTests):
+    def setUp(self):
+        super(CountsManagerTest, self).setUp()
+        self.counts_manager = CountsManager(self.session_maker())
+
+    def test_count_for_scheme(self):
+        counts = ConceptschemeCounts()
+        counts.conceptscheme_id = 'TREES'
+        counts.counted_at = datetime.now()
+        counts.triples = 3
+        counts.conceptscheme_triples = 2
+        counts.avg_concept_triples = 1
+        self.counts_manager.save(counts)
+        res = self.counts_manager.get_most_recent_count_for_scheme('TREES')
+        self.assertIsNotNone(res)
+        self.assertEqual(3, res.triples)
