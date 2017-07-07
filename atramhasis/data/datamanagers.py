@@ -8,14 +8,13 @@ that abstract all interactions with the database away from the views.
 from datetime import datetime, date
 
 import dateutil.relativedelta
-import transaction
 from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language, MatchType, Match, \
     LabelType
 from sqlalchemy import desc, func, and_
 from sqlalchemy.orm import joinedload
 
 from atramhasis.data import popular_concepts
-from atramhasis.data.models import ConceptVisitLog
+from atramhasis.data.models import ConceptVisitLog, ConceptschemeCounts
 
 
 class DataManager(object):
@@ -75,11 +74,10 @@ class ConceptSchemeManager(DataManager):
         """
         return self.session \
             .query(Concept) \
-            .filter(
-            Concept.conceptscheme_id == conceptscheme_id,
-            ~Concept.broader_concepts.any(),
-            ~Collection.member_of.any()
-        ).all()
+            .filter(Concept.conceptscheme_id == conceptscheme_id,
+                    ~Concept.broader_concepts.any(),
+                    ~Collection.member_of.any()
+                    ).all()
 
     def get_collections_for_scheme_tree(self, conceptscheme_id):
         """
@@ -89,11 +87,10 @@ class ConceptSchemeManager(DataManager):
         """
         return self.session \
             .query(Collection) \
-            .filter(
-            Collection.conceptscheme_id == conceptscheme_id,
-            ~Collection.broader_concepts.any(),
-            ~Collection.member_of.any()
-        ).all()
+            .filter(Collection.conceptscheme_id == conceptscheme_id,
+                    ~Collection.broader_concepts.any(),
+                    ~Collection.member_of.any()
+                    ).all()
 
     def get_all(self, conceptscheme_id):
         """
@@ -328,9 +325,8 @@ class CountsManager(DataManager):
         recent = self.session.query(
             ConceptschemeCounts
         ).filter_by(
-            conceptscheme_id = conceptscheme_id
+            conceptscheme_id=conceptscheme_id
         ).order_by(
             desc('counted_at')
         ).one()
         return recent
-

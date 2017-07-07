@@ -544,6 +544,14 @@ class TestAdminView(unittest.TestCase):
         self.assertIsNotNone(info)
         self.assertTrue('admin' in info)
 
+    def test_invalidate_scheme_tree(self):
+        request = testing.DummyRequest()
+        request.matchdict['scheme_id'] = 'TREES'
+        request.skos_registry = self.regis
+        atramhasisAdminview = AtramhasisAdminView(request)
+        info = atramhasisAdminview.invalidate_scheme_tree()
+        self.assertIsNotNone(info)
+
 
 class TestViewFunctions(unittest.TestCase):
     def test_labels_to_string(self):
@@ -581,5 +589,4 @@ class TestListViews(unittest.TestCase):
         atramhasis_list_view = AtramhasisListView(request)
         labellist = atramhasis_list_view.labeltype_list_view()
         self.assertIsNotNone(labellist)
-        print(labellist)
         self.assertIn({'key': 'prefLabel', 'label': u'prefLabel'}, labellist)
