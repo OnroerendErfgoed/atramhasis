@@ -64,20 +64,22 @@ class ImportTests(unittest.TestCase):
         self.assertDictEqual(obj_1['notes'][0],
                              {'language': 'en', 'note': 'A different type of tree.', 'type': 'definition', 'markup': None})
 
-    def _check_menu(self):
+    def _check_menu(self, uri_pattern=None):
+        if not uri_pattern:
+            uri_pattern = 'urn:x-skosprovider:menu:%s'
         sql_prov = SQLAlchemyProvider({'id': 'MENU', 'conceptscheme_id': 1}, self.session_maker)
         self.assertEqual(11, len(sql_prov.get_all()))
         eb = sql_prov.get_by_id(1)
         self.assertIsInstance(eb, Concept)
         self.assertEqual(1, eb.id)
-        self.assertEqual('urn:x-skosprovider:menu:1', eb.uri)
+        self.assertEqual(uri_pattern % '1', eb.uri)
         self.assertEqual('Egg and Bacon', eb.label().label)
         self.assertEqual('prefLabel', eb.label().type)
         self.assertEqual([], eb.notes)
-        eb = sql_prov.get_by_uri('urn:x-skosprovider:menu:3')
+        eb = sql_prov.get_by_uri(uri_pattern % '3')
         self.assertIsInstance(eb, Concept)
         self.assertEqual(3, eb.id)
-        self.assertEqual('urn:x-skosprovider:menu:3', eb.uri)
+        self.assertEqual(uri_pattern % '3', eb.uri)
         spam = sql_prov.find({'label': 'Spam'})
         self.assertEqual(8, len(spam))
         eb = sql_prov.get_by_id(11)
@@ -96,7 +98,8 @@ class ImportTests(unittest.TestCase):
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json,
                     '--to', settings['sqlalchemy.url'],
-                    '--conceptscheme_label', 'Trees Conceptscheme']
+                    '--conceptscheme_label', 'Trees Conceptscheme', '--conceptscheme_uri', 'http://id.trees.org',
+                    '--uri_pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
         self._check_trees('Trees Conceptscheme')
 
@@ -104,6 +107,13 @@ class ImportTests(unittest.TestCase):
         sys.argv = ['import_file', '--from', test_data_csv, '--to', settings['sqlalchemy.url']]
         import_file.main(sys.argv)
         self._check_menu()
+
+    def test_import_csv_uri_generator(self):
+        sys.argv = ['import_file', '--from', test_data_csv, '--to', settings['sqlalchemy.url'],
+                    '--conceptscheme_label', 'Menu Conceptscheme', '--conceptscheme_uri', 'http://id.menu.org',
+                    '--uri_pattern', 'http://id.menu.org/%s']
+        import_file.main(sys.argv)
+        self._check_menu('http://id.menu.org/%s')
 
 
 
