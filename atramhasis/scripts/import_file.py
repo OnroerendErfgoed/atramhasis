@@ -8,6 +8,7 @@ from rdflib import Graph
 from rdflib.util import guess_format
 
 from skosprovider.providers import SimpleCsvProvider
+from skosprovider.uri import UriPatternGenerator
 import csv
 
 from skosprovider.providers import DictionaryProvider
@@ -25,10 +26,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import url
 
 
-def file_to_rdf_provider(input_file):
+def file_to_rdf_provider(**kwargs):
     """
     Create RDF provider from the input file
     """
+    input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     graph = Graph()
     graph.parse(input_file, format=guess_format(input_ext))
@@ -38,29 +40,37 @@ def file_to_rdf_provider(input_file):
     )
 
 
-def file_to_csv_provider(input_file):
+def file_to_csv_provider(**kwargs):
     """
     Create CSV provider from the input file
     """
+    input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     with open(input_file, "r") as ifile:
         reader = csv.reader(ifile)
+        uri_pattern = kwargs.get('uri_pattern')
+        provider_kwargs = {'uri_generator': UriPatternGenerator(uri_pattern)} if uri_pattern else {}
         return SimpleCsvProvider(
             {'id': input_name.upper()},
             reader,
+            **provider_kwargs
         )
 
 
-def file_to_json_provider(input_file):
+def file_to_json_provider(**kwargs):
     """
     Create Dictionary provider from the input file
     """
+    input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
     with open(input_file, 'r') as data_file:
         dictionary = json.load(data_file)
+    uri_pattern = kwargs.get('uri_pattern')
+    provider_kwargs = {'uri_generator': UriPatternGenerator(uri_pattern)} if uri_pattern else {}
     return DictionaryProvider(
         {'id': input_name.upper()},
         dictionary,
+        **provider_kwargs
     )
 
 
@@ -91,8 +101,8 @@ def parse_argv_for_import(argv):
     cmd = os.path.basename(argv[0])
     parser = argparse.ArgumentParser(
         description='Import file to a database',
-        usage='{0} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label] [--conceptscheme_uri cs_uri]\n '
-              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels --conceptscheme_uri urn:x-skosprovider:trees")'.format(
+        usage='{0} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label] [--conceptscheme_uri cs_uri] [--uri_pattern uri_pattern]\n '
+              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels --conceptscheme_uri urn:x-skosprovider:trees" --uri_pattern urn:x-skosprovider:trees:%s)'.format(
             cmd, cmd)
     )
     parser.add_argument('--from',
@@ -119,6 +129,13 @@ def parse_argv_for_import(argv):
                         dest='cs_uri',
                         type=str,
                         help='URI of the conceptscheme',
+                        required=False,
+                        default=None
+                        )
+    parser.add_argument('--uri_pattern',
+                        dest='uri_pattern',
+                        type=str,
+                        help='URI pattern input for the URIGenerator',
                         required=False,
                         default=None
                         )
@@ -192,7 +209,7 @@ def provider_to_db(provider, conceptscheme, session):
 def main(argv=sys.argv):
     """
     Documentation: import -h
-    Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <cs_label> --conceptscheme_uri <cs_uri>
+    Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <cs_label> --conceptscheme_uri <cs_uri> --uri_pattern <uri_pattern>
 
     example path_input_file:
      atramhasis/scripts/my_file
@@ -214,7 +231,7 @@ def main(argv=sys.argv):
     session = conn_str_to_session(args.to)
     file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
                                  if input_ext in supported_types[filetype]['extensions']][0]
-    provider = file_to_provider_function(args.input_file)
+    provider = file_to_provider_function(**vars(args))
     cs_label = args.cs_label if args.cs_label else input_name.capitalize()
     cs_uri = args.cs_uri if args.cs_uri else 'urn:x-skosprovider:{0}'.format(input_name)
     cs = create_conceptscheme(cs_label, cs_uri)

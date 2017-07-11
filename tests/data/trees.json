@@ -18,8 +18,8 @@
               "type": "definition"}],
   "related": [],
   "subordinate_arrays": [],
-  "type": "concept",
-  "uri": "http://id.trees.org/1"},
+  "type": "concept"
+},
  {"broader": [],
   "id": 2,
   "labels": [{"label": "The Chestnut",
@@ -43,8 +43,8 @@
               "type": "definition"}],
   "related": [],
   "subordinate_arrays": [],
-  "type": "concept",
-  "uri": "http://id.trees.org/2"},
+  "type": "concept"
+ },
  {"id": 3,
   "labels": [{"label": "Bomen per soort",
                "language": "nl",
@@ -56,5 +56,5 @@
   "members": [1, 2],
   "notes": [],
   "superordinates": [],
-  "type": "collection",
-  "uri": "http://id.trees.org/3"}]
+  "type": "collection"
+ }]
