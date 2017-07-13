@@ -9,9 +9,9 @@ from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
 from paste.deploy.loadwsgi import appconfig
 
+from atramhasis.cache import list_region
 from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, AuditManager
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
-from atramhasis.views import tree_cache_dictionary
 from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView, \
     labels_to_string, get_definition
 from fixtures.data import trees
@@ -545,33 +545,12 @@ class TestAdminView(unittest.TestCase):
         self.assertTrue('admin' in info)
 
     def test_invalidate_scheme_tree(self):
-        tree_cache_dictionary['foo |TREES nl'] = []
-        tree_cache_dictionary['foo |TREES fr'] = []
-        tree_cache_dictionary['bar |MATERIALS fr'] = []
-
         request = testing.DummyRequest()
         request.matchdict['scheme_id'] = 'TREES'
         request.skos_registry = self.regis
         atramhasisAdminview = AtramhasisAdminView(request)
-        response = atramhasisAdminview.invalidate_scheme_tree()
-
-        self.assertEqual(response.status_int, 200)
-        self.assertIn('bar |MATERIALS fr', tree_cache_dictionary.keys())
-        self.assertNotIn('foo |TREES nl', tree_cache_dictionary.keys())
-        self.assertNotIn('foo |TREES fr', tree_cache_dictionary.keys())
-
-    def test_invalidate_tree(self):
-        tree_cache_dictionary['foo |TREES nl'] = []
-        tree_cache_dictionary['foo |TREES fr'] = []
-        tree_cache_dictionary['bar |MATERIALS fr'] = []
-
-        request = testing.DummyRequest()
-        request.skos_registry = self.regis
-        atramhasisAdminview = AtramhasisAdminView(request)
-        response = atramhasisAdminview.invalidate_tree()
-
-        self.assertEqual(response.status_int, 200)
-        self.assertEqual(len(tree_cache_dictionary), 0)
+        info = atramhasisAdminview.invalidate_scheme_tree()
+        self.assertIsNotNone(info)
 
 
 class TestViewFunctions(unittest.TestCase):
@@ -592,20 +571,22 @@ class TestListViews(unittest.TestCase):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
         self.request.data_managers = list_db(self.request)
+        if not list_region.is_configured:
+            list_region.configure('dogpile.cache.memory')
 
     def tearDown(self):
         testing.tearDown()
 
     def test_get_list(self):
         request = self.request
-        atramhasisListView = AtramhasisListView(request)
-        labellist = atramhasisListView.get_list(LabelType)
+        atramhasis_list_view = AtramhasisListView(request)
+        labellist = atramhasis_list_view.get_list(LabelType)
         self.assertIsNotNone(labellist)
         self.assertIsNotNone(labellist[0])
 
     def test_labeltype_list_view(self):
         request = self.request
-        atramhasisListView = AtramhasisListView(request)
-        labellist = atramhasisListView.labeltype_list_view()
+        atramhasis_list_view = AtramhasisListView(request)
+        labellist = atramhasis_list_view.labeltype_list_view()
         self.assertIsNotNone(labellist)
-        self.assertEqual(labellist[0].get('key'), 'prefLabel')
+        self.assertIn({'key': 'prefLabel', 'label': u'prefLabel'}, labellist)

@@ -13626,7 +13626,7 @@ h4.relations-subtitle {
 
 /* line 117, ../scss/atramhasis/_atramhasis-custom.scss */
 .highlightError {
-  border: 1px solid red;
+  border: 1px solid red !important;
   margin-bottom: 5px;
 }
 

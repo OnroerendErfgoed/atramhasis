@@ -17,6 +17,7 @@ def includeme(config):
     config.include('pyramid_rewrite')
     config.include('atramhasis.routes')
     config.include('pyramid_skosprovider')
+    config.include('atramhasis.cache')
     config.scan('pyramid_skosprovider')
 
     config.scan()

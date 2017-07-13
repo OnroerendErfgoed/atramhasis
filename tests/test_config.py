@@ -1,4 +1,6 @@
 import os
+import random
+import shutil
 import unittest
 
 from pyramid.paster import get_appsettings
@@ -41,3 +43,11 @@ class TestConfig(unittest.TestCase):
     def test_config(self):
         app = main({}, **settings)
         self.assertIsNotNone(app)
+
+    def test_config_alt_dump_location(self):
+        random_dump_loc = 'dump{0}'.format(random.randint(0, 100))
+        settings['atramhasis.dump_location'] = os.path.join(here, random_dump_loc)
+        app = main({}, **settings)
+        self.assertIsNotNone(app)
+        if os.path.exists(random_dump_loc):
+            shutil.rmtree(random_dump_loc)
