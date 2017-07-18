@@ -104,12 +104,20 @@ define([
       if (concept.labels && concept.label.length > 0) {
         var pref = '';
         var alt = '';
+        var hidden = '';
+        var sort = '';
         array.forEach(concept.labels, lang.hitch(this, function(label) {
           if (label.type === 'prefLabel') {
             pref += label.label + ' (' + label.language + '), ';
           }
           if (label.type === 'altLabel') {
             alt += label.label + ' (' + label.language + '), ';
+          }
+          if (label.type === 'hiddenLabel') {
+            hidden += label.label + ' (' + label.language + '), ';
+          }
+          if (label.type === 'sortLabel') {
+            sort += label.label + ' (' + label.language + '), ';
           }
         }));
         if (alt.length > 2) {
@@ -118,8 +126,16 @@ define([
         if (pref.length > 2) {
           pref = pref.substring(0, pref.length - 2);
         }
+        if (hidden.length > 2) {
+          hidden = hidden.substring(0, hidden.length -2);
+        }
+        if (sort.length > 2) {
+          sort = sort.substring(0, sort.length -2);
+        }
         this.preferredLabelsNode.innerHTML = pref;
         this.alternateLabelsNode.innerHTML = alt;
+        this.hiddenLabelsNode.innerHTML = hidden;
+        this.sortLabelsNode.innerHTML = sort;
       }
 
       // NARROWER
