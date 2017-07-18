@@ -26,6 +26,8 @@
       <h4 class="subheader">{% trans %}altLabel{% endtrans %}:</h4>
     {% elif type == 'hiddenLabel' %}
       <h4 class="subheader">{% trans %}hiddenLabel{% endtrans %}:</h4>
+    {% elif type == 'sortLabel' %}
+      <h4 class="subheader">{% trans %}sortLabel{% endtrans %}:</h4>
     {% endif %}
     <ul class="concept">
       {%- for label in type_labels|sort(attribute='label') %}
@@ -97,6 +99,7 @@
   {%- set pref = [] %}
   {%- set alt = [] %}
   {%- set hidden = [] %}
+  {%- set sort = [] %}
   {%- for label in labels %}
     {%- if label.type == 'prefLabel' or label.labeltype_id == 'prefLabel' %}
       {% do pref.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>') %}
@@ -104,6 +107,8 @@
       {%- do alt.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>')  %}
     {%- elif label.type == 'hiddenLabel' or label.labeltype_id == 'hiddenLabel' %}
       {%- do hidden.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>')  %}
+    {%- elif label.type == 'sortLabel' or label.labeltype_id == 'sortLabel' %}
+      {%- do sort.append('<span><strong>' ~ label.label ~ '</strong> <em>(' ~ label.language ~ ')</em></span>')  %}
     {%- endif %}
   {%- endfor %}
   {%- if pref|length > 0 %}
@@ -122,6 +127,12 @@
     <dt>{% trans %}hiddenLabel{% endtrans %}</dt>
     <dd>
       {{ hidden | join(', ') | safe }}
+    </dd>
+  {%- endif %}
+  {%- if sort|length > 0 %}
+    <dt>{% trans %}sortLabel{% endtrans %}</dt>
+    <dd>
+      {{ sort | join(', ') | safe }}
     </dd>
   {%- endif %}
 {% endmacro %}

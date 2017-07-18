@@ -98,6 +98,9 @@ msgstr "alt labels"
 msgid "hiddenLabel"
 msgstr "verborgen labels"
 
+msgid "sortLabel"
+msgstr "sorteer labels"
+
 #: atramhasis/templates/search_form.jinja2:7
 msgid "search"
 msgstr "zoeken"

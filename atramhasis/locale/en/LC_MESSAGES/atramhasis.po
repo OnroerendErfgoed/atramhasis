@@ -52,6 +52,9 @@ msgstr "export"
 msgid "hiddenLabel"
 msgstr "hidden labels"
 
+msgid "sortLabel"
+msgstr "sort labels"
+
 msgid "issue_tracker"
 msgstr "Our issue tracker"
 
