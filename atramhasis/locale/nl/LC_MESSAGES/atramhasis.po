@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-02-23 21:37+0100\n"
-"PO-Revision-Date: 2016-09-27 14:52+0100\n"
+"PO-Revision-Date: 2017-06-28 15:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: nl <LL@li.org>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: atramhasis/templates/browse_schemes_sidebar.jinja2:7
 msgid "browse"
@@ -97,6 +97,9 @@ msgstr "alt labels"
 #: atramhasis/templates/macros.jinja2:26
 msgid "hiddenLabel"
 msgstr "verborgen labels"
+
+msgid "sortLabel"
+msgstr "sorteer labels"
 
 #: atramhasis/templates/search_form.jinja2:7
 msgid "search"
@@ -187,6 +190,9 @@ msgid "tree_help"
 msgstr ""
 "Linkerklik om de nodes uit te vouwen, rechterklik om naar het "
 "concept(schema) te gaan"
+
+msgid "select_scheme_error"
+msgstr "Gelieve een concept schema te selecteren"
 
 #~ msgid "type"
 #~ msgstr "type"

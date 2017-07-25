@@ -115,7 +115,7 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='0.5.2',
+      version='0.6.0',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -128,6 +128,7 @@ setup(name='atramhasis',
           "Programming Language :: Python :: 2.7",
           "Programming Language :: Python :: 3.4",
           "Programming Language :: Python :: 3.5"
+          "Programming Language :: Python :: 3.6"
       ],
       author='Flanders Heritage Agency',
       author_email='ict@onroerenderfgoed.be',
@@ -145,6 +146,8 @@ setup(name='atramhasis',
       [console_scripts]
       initialize_atramhasis_db = atramhasis.scripts.initializedb:main
       import_file = atramhasis.scripts.import_file:main
+      dump_rdf = atramhasis.scripts.dump_rdf:main
+      generate_ldf_config = atramhasis.scripts.generate_ldf_config:main
       [pyramid.scaffold]
         atramhasis_scaffold=atramhasis.scaffolds:AtramhasisTemplate
         atramhasis_demo=atramhasis.scaffolds:AtramhasisDemoTemplate

@@ -1,4 +1,8 @@
-from pyramid.response import Response
+# -*- coding: utf-8 -*-
+
+import os
+
+from pyramid.response import Response, FileResponse
 from pyramid.view import view_defaults, view_config
 from skosprovider_rdf import utils
 
@@ -8,6 +12,26 @@ from atramhasis.errors import (
     ConceptNotFoundException
 )
 from atramhasis.audit import audit
+
+from atramhasis.rdf import void_dumper
+
+@view_defaults()
+class AtramhasisVoid(object):
+
+    def __init__(self, request):
+        self.request = request
+        if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+            self.skos_registry = self.request.skos_registry
+        else:
+            raise SkosRegistryNotFoundException()   # pragma: no cover
+
+    @view_config(route_name='atramhasis.rdf_void_turtle_ext')
+    def rdf_void_turtle(self):
+        graph = void_dumper(self.request, self.skos_registry)
+        response = Response(content_type='text/turtle')
+        response.body = graph.serialize(format='turtle')
+        response.content_disposition = 'attachment; filename="void.ttl"'
+        return response
 
 
 @view_defaults()
@@ -32,22 +56,28 @@ class AtramhasisRDF(object):
     @view_config(route_name='atramhasis.rdf_full_export')
     @view_config(route_name='atramhasis.rdf_full_export_ext')
     def rdf_full_export(self):
-        graph = utils.rdf_dumper(self.provider)
-        response = Response(content_type='application/rdf+xml')
-        response.body = graph.serialize(format='xml')
-        response.content_disposition = 'attachment; filename="%s-full.rdf"' % (str(self.scheme_id),)
-        return response
+        dump_location = self.request.registry.settings['atramhasis.dump_location']
+        filename = os.path.join(dump_location, '%s-full.rdf' % self.scheme_id)
+        return FileResponse(
+            filename,
+            request=self.request,
+            content_type='application/rdf+xml',
+            cache_max_age=86400
+        )
 
     @audit
     @view_config(route_name='atramhasis.rdf_full_export_turtle')
     @view_config(route_name='atramhasis.rdf_full_export_turtle_x')
     @view_config(route_name='atramhasis.rdf_full_export_turtle_ext')
     def rdf_full_export_turtle(self):
-        graph = utils.rdf_dumper(self.provider)
-        response = Response(content_type='text/turtle')
-        response.body = graph.serialize(format='turtle')
-        response.content_disposition = 'attachment; filename="%s-full.ttl"' % (str(self.scheme_id),)
-        return response
+        dump_location = self.request.registry.settings['atramhasis.dump_location']
+        filename = os.path.join(dump_location, '%s-full.ttl' % self.scheme_id)
+        return FileResponse(
+            filename,
+            request=self.request,
+            content_type='text/turtle',
+            cache_max_age=86400
+        )
 
     @audit
     @view_config(route_name='atramhasis.rdf_conceptscheme_export')

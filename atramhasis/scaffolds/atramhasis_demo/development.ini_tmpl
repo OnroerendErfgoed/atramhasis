@@ -31,6 +31,16 @@ jinja2.i18n.domain = atramhasis
 # If unspecified, defaults to src.
 dojo.mode = dist
 
+# cache
+cache.tree.backend = dogpile.cache.memory
+cache.tree.arguments.cache_size = 5000
+cache.tree.expiration_time = 7000
+
+cache.list.backend = dogpile.cache.memory
+cache.list.arguments.cache_size = 5000
+cache.list.expiration_time = 7000
+
+
 persona.secret = sosecret
 persona.audiences = http://localhost:6543
 

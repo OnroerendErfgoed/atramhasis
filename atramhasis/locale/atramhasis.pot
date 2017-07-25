@@ -97,6 +97,9 @@ msgstr ""
 msgid "hiddenLabel"
 msgstr ""
 
+msgid "sortLabel"
+msgstr ""
+
 #: atramhasis/templates/search_form.jinja2:7
 msgid "search"
 msgstr ""

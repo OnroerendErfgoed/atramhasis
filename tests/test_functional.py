@@ -45,6 +45,11 @@ json_value = {
             "type": "prefLabel",
             "language": "en",
             "label": "The Larch"
+        },
+        {
+            "type": "sortLabel",
+            "language": "en",
+            "label": "a"
         }
     ],
     "notes": [],
@@ -148,6 +153,7 @@ class FunctionalTests(unittest.TestCase):
             local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
             local_session.add(LabelType('altLabel', 'An alternative label.'))
             local_session.add(LabelType('prefLabel', 'A preferred label.'))
+            local_session.add(LabelType('sortLabel', 'A sorting label.'))
 
             local_session.add(MatchType('broadMatch', ''))
             local_session.add(MatchType('closeMatch', ''))
@@ -251,6 +257,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['id'], 1)
         self.assertEqual(res.json['type'], 'concept')
+        self.assertIn('sortLabel', [label['type'] for label in res.json['labels']])
 
     def test_get_conceptscheme(self):
         res = self.testapp.get('/conceptschemes/TREES', headers=self._get_default_headers())
@@ -638,6 +645,12 @@ class CacheFunctionalTests(FunctionalTests):
 
 
 class RdfFunctionalTests(FunctionalTests):
+
+    def test_void(self):
+        rdf_response = self.testapp.get('/void.ttl')
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('text/turtle', rdf_response.content_type)
+
     def test_rdf_full_xml(self):
         rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c', headers={'Accept': 'application/rdf+xml'})
         self.assertEqual('200 OK', rdf_response.status)
@@ -710,7 +723,7 @@ class ListFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', labeltypeslist_res.status)
         self.assertEqual('application/json', labeltypeslist_res.content_type)
         self.assertIsNotNone(labeltypeslist_res.json)
-        self.assertEqual(3, len(labeltypeslist_res.json))
+        self.assertEqual(4, len(labeltypeslist_res.json))
 
     def test_notetypes_list(self):
         labeltypeslist_res = self.testapp.get('/notetypes')

@@ -160,7 +160,7 @@ define([
       this._narrowerStore = new TrackableMemory({ data: [] });
       this._narrowerGrid.set('collection', this._narrowerStore);
       this._relatedStore = new TrackableMemory({ data: [] });
-      this._relatedGrid.set('colleciton', this._relatedStore);
+      this._relatedGrid.set('collection', this._relatedStore);
       this._memberOfStore = new TrackableMemory({ data: [] });
       this._memberOfGrid.set('collection', this._memberOfStore);
       this._subordinateStore = new TrackableMemory({ data: [] });

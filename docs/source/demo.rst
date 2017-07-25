@@ -44,6 +44,8 @@ This creates a local demo package you can run with just a few more commands:
     $ initialize_atramhasis_db development.ini
     # compile translations
     $ python setup.py compile_catalog
+    # generate full RDF dumps (not necessary for basic functionality)
+    $ dump_rdf development.ini
     # start server
     $ pserve development.ini
 
@@ -60,6 +62,7 @@ security module by another one. This enables you to use the security mechanisms
 (eg. LDAP, Active Directory, a custom users database, ...) that your 
 organisation requires. Please consult the documentation on :ref:`security` 
 customisation for further information on this topic.
+
 
 Running a demo site on Heroku
 =============================
@@ -232,6 +235,7 @@ Run the commands to prepare your application
     $ alembic upgrade head
     $ initialize_atramhasis_db production.ini
     $ python setup.py compile_catalog
+    $ dump_rdf production.ini
 
 .. note::
 

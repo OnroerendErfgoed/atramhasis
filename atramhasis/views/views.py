@@ -11,7 +11,7 @@ from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteT
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.utils import update_last_visited_concepts
-from atramhasis.views import tree_region, invalidate_scheme_cache, invalidate_cache
+from atramhasis.cache import tree_region, invalidate_scheme_cache, invalidate_cache, list_region
 from atramhasis.audit import audit
 
 
@@ -151,7 +151,8 @@ class AtramhasisView(object):
                 return Response('Thing without type: ' + str(c_id), status_int=500)
             url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
             update_last_visited_concepts(self.request, {'label': c.label(self.request.locale_name).label, 'url': url})
-            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
+            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
+                    'conceptschemes': conceptschemes, 'provider': provider}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
@@ -327,7 +328,7 @@ class AtramhasisListView(object):
     def notetype_list_view(self):
         return self.get_list(NoteType)
 
-    @tree_region.cache_on_arguments()
+    @list_region.cache_on_arguments()
     def get_list(self, listtype):
         return [{"key": ltype.name, "label": self.localizer.translate(self._(ltype.name))}
                 for ltype in self.skos_manager.get_by_list_type(listtype)]

@@ -113,3 +113,16 @@ h4.relations-subtitle {
   font-size: 13px;
   margin-left: 5px;
 }
+
+.highlightError {
+  border: 1px solid red !important;
+  margin-bottom: 5px;
+}
+
+.highlightErrorText {
+  color: red;
+  font-size: 13px;
+  padding-left: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
+}

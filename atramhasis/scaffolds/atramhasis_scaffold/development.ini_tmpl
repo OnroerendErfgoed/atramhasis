@@ -23,6 +23,16 @@ sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 atramhasis.session_factory.secret = test123
 
+# cache
+cache.tree.backend = dogpile.cache.memory
+cache.tree.arguments.cache_size = 5000
+cache.tree.expiration_time = 7000
+
+cache.list.backend = dogpile.cache.memory
+cache.list.arguments.cache_size = 5000
+cache.list.expiration_time = 7000
+
+
 # Edit and uncomment to activate nl and fr language support or other languages
 # you have added yourself.
 # available_languages = en nl fr

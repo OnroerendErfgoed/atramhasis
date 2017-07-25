@@ -1,6 +1,6 @@
 {% extends 'layout.jinja2' %}
 
-{% block html_title %}Detail{% endblock %}
+{% block html_title %}{{ concept.label(request.locale_name).label|title }}{% endblock %}
 
 {% from "macros.jinja2" import
     render_relaties_lijst,

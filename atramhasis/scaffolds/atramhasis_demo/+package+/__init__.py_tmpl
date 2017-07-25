@@ -1,3 +1,5 @@
+import os
+
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.config import Configurator
 from pyramid.settings import aslist
@@ -18,6 +20,11 @@ def main(global_config, **settings):
 
     # update settings
     settings['layout.focus_conceptschemes'] = aslist(settings['layout.focus_conceptschemes'], flatten=False)
+
+    # set up dump location
+    dump_location = settings['atramhasis.dump_location']
+    if not os.path.exists(dump_location):
+        os.makedirs(dump_location)
 
     # Set up pyramid
     config = Configurator(settings=settings)

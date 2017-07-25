@@ -21,7 +21,8 @@ define([
     labelTypes: [
       {label: "Preferred", value: "prefLabel"},
       {label: "Alternative", value: "altLabel"},
-      {label: "Hidden", value: "hiddenLabel"}
+      {label: "Hidden", value: "hiddenLabel"},
+      {label: "Sort", value: "sortLabel"}
     ],
     noteTypes: [
       {label: "Definition", value: "definition"},
