@@ -1,4 +1,4 @@
-0.6.0 (??-??-2017)
+0.6.0 (??-08-2017)
 ------------------
 
 This release is a major release containing new features.
@@ -36,6 +36,8 @@ This release is a major release containing new features.
   Most of the functionality was already present in `skosprovider` 0.6.0, but it
   had not been properly included in Atramhasis.
   (#362)
+- Added 'und - undetermined' to the default language set to support json file 
+  imports. (#386)
 - Fixed a bug when editing concepts where data from previously opened concepts
   would bleed into the concept you were editing. (#367)
 - Update several dependencies to the latest versions. (#380, #381, #376)

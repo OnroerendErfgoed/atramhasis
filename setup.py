@@ -52,7 +52,7 @@ def copy_static_scaffold(output_dir):
 def dojo_build():
     print('-' * 50)
     print('==> check npm dependencies')
-    libs = str(subprocess.check_output(["npm", "list", "-g", "bower", "grunt-cli"]))
+    libs = str(subprocess.check_output(["sudo", "npm", "list", "-g", "bower", "grunt-cli"]))
     if 'bower' in libs:
         bower = True
         print('bower OK')
