@@ -41,6 +41,7 @@ This release is a major release containing new features.
 - Fixed a bug when editing concepts where data from previously opened concepts
   would bleed into the concept you were editing. (#367)
 - Update several dependencies to the latest versions. (#380, #381, #376)
+- Added 'und - undetermined' to the default language set to support json file imports (#386)
 
 0.5.2 (07-10-2016)
 ------------------
