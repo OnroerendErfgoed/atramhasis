@@ -1,4 +1,4 @@
-.. _glossary:
+
 
 Glossary
 ========
@@ -49,3 +49,10 @@ Glossary
    Jinja2
     `Jinja2 <http://jinja.pocoo.org>`__ is a python templating engine. It's
     used by Atramhasis for rendering :term:`HTML` templates.
+
+   HDT
+    `HDT <http://www.rdfhdt.org>`__ (Header, Dictionary, Triples) is a 
+    compact data structure and binary serialization format for RDF that keeps
+    big datasets compressed to save space while maintaining search and browse
+    operations without prior decompression. This makes it an ideal format for 
+    storing and sharing RDF datasets on the Web.

@@ -62,7 +62,7 @@ This server can use different backends. Out of the box, Atramhasis generates
 Turtle files that can be used by the LDF server. It's also possible to configre
 Atramhasis with a link to the rdf2hdt command (requires a separate
 installation). In this case, everytime the conceptschemes are dumped to RDF, the
-dump files are also written in HDT format.
+dump files are also written in :term:`HDT` format.
 
 General installation
 ====================
@@ -194,10 +194,10 @@ Running a Linked Data Fragments server
 
 If you want to add a `Linked Data Fragments <http://linkeddatafragments.org>`_
 server, Atramhasis makes it easy for you. First you need to decide if you want
-to run the server with :term:`hdt` files. If not, you can always use raw `Turtle`
-files, but be aware that the term:`hdt` files offer much better performance.
+to run the server with :term:`HDT` files. If not, you can always use raw `Turtle`
+files, but be aware that the :term:`HDT` files offer much better performance.
 
-If you want to use :term:`hdt` files, please install `hdt-cpp`. Be aware that
+If you want to use :term:`HDT` files, please install `hdt-cpp`. Be aware that
 you might have to download the source files and compile them yourself. Once
 you have done so, add the rdf2hdt command to your development.ini file.
 Supposing you installed it in :file:`/opt/hdt-cpp/hdt-lib/tools/rdf2hdt`:
