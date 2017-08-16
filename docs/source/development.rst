@@ -52,13 +52,14 @@ application.
   the vocabularies published by EH, RCAHMS and RCAHMW at 
   `heritagedata.org <http://heritagedata.org>`_.
 
-Atramhasis can easily be set up with a `Linked Data Fragments <http://linkeddatafragments.org>`_ 
+Atramhasis can easily be set up with a `Linked Data Fragments (LDF) <http://linkeddatafragments.org>`_ 
 server. This server allows posing simple `triple pattern` queries of your dataset. 
 Combined with a Linked Data Fragments client, similar functionalities to a 
-traditional `SPARQL` endpoint can be achieved. Atramhasis supports Linked Data
-Fragments (LDF) by generating a suitable config file for the Javascript server.
-LDF can use different backends. Out of the box, Atramhasis generates Turtle
-files that can be used by the LDF server. It's also possible to configre
+traditional `SPARQL` endpoint can be achieved. Atramhasis facilitates the setup
+of a Linked Data Fragments server by generating a suitable config file 
+for the `Javascript server <https://github.com/LinkedDataFragments/Server.js>`_.
+This server can use different backends. Out of the box, Atramhasis generates
+Turtle files that can be used by the LDF server. It's also possible to configre
 Atramhasis with a link to the rdf2hdt command (requires a separate
 installation). In this case, everytime the conceptschemes are dumped to RDF, the
 dump files are also written in HDT format.
