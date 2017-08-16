@@ -207,7 +207,7 @@ Supposing you installed it in :file:`/opt/hdt-cpp/hdt-lib/tools/rdf2hdt`:
     # Location of rdf2hdt executable
     atramhasis.rdf2hdt = /opt/hdt-cpp/hdt-lib/tools/rdf2hdt
 
-Now, whenever Atramhasis creates rdf dumps it will also create :term:`hdt`
+Now, whenever Atramhasis creates rdf dumps it will also create :term:`HDT`
 files. If you do not have :command:`rdf2hdt` installed, you will still have
 `Turtle` datadumps that can be used by the LDF-server.
 
