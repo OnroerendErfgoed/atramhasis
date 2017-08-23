@@ -1,4 +1,4 @@
-0.6.0 (??-08-2017)
+0.6.0 (23-08-2017)
 ------------------
 
 This release is a major release containing new features.
