@@ -8,6 +8,7 @@ Data Fragments server.
   now. (#390)
 - Make it possible to set the LDF server protocol when generating the config.
   (#391)
+- When generating an LDF server config, add a composite source as well. (#393)
 
 0.6.0 (23-08-2017)
 ------------------
