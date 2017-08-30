@@ -1,3 +1,12 @@
+0.6.1 (??-??-2017)
+------------------
+
+This release is a minor release, containing improvements regarding the Linked
+Data Fragments server.
+
+- Also add hidden datasets to the LDF server. Only external ones are not added
+  now. (#390)
+
 0.6.0 (23-08-2017)
 ------------------
 
