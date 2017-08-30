@@ -59,6 +59,11 @@ is set to the atramhasis.ldf.config_location from your ini file.'
         None
     )
 
+    ldf_protocol = env['registry'].settings.get(
+        'atramhasis.ldf.protocol',
+        None
+    )
+
     request = env['request']
 
     if hasattr(request, 'skos_registry') and request.skos_registry is not None:
@@ -84,6 +89,9 @@ is set to the atramhasis.ldf.config_location from your ini file.'
 
     if ldf_baseurl:
         ldfconfig['baseURL'] = ldf_baseurl
+
+    if ldf_protocol:
+        ldfconfig['protocol'] = ldf_protocol
 
     for p in skos_registry.get_providers():
         if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external']]):
