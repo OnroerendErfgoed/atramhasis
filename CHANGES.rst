@@ -6,6 +6,8 @@ Data Fragments server.
 
 - Also add hidden datasets to the LDF server. Only external ones are not added
   now. (#390)
+- Make it possible to set the LDF server protocol when generating the config.
+  (#391)
 
 0.6.0 (23-08-2017)
 ------------------
