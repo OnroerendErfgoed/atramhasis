@@ -5,15 +5,18 @@ Module containing utility functions dealing with RDF used by Atramhasis.
 .. versionadded:: 0.6.0
 """
 
+from pyramid.settings import asbool
+
 from rdflib import Graph
 from rdflib.namespace import RDF, VOID, DCTERMS, FOAF, SKOS
 from rdflib.namespace import Namespace
-from rdflib.term import URIRef, Literal
+from rdflib.term import URIRef, BNode, Literal
 
 from skosprovider_rdf.utils import _add_labels
 
 FORMATS = Namespace('http://www.w3.org/ns/formats/')
 SKOS_THES = Namespace('http://purl.org/iso25964/skos-thes#')
+HYDRA = Namespace('http://www.w3.org/ns/hydra/core#')
 
 
 def void_dumper(request, registry):
@@ -25,7 +28,7 @@ def void_dumper(request, registry):
     '''
     providers = [
         x for x in registry.get_providers()
-        if not any([not_shown in x.get_metadata()['subject'] for not_shown in ['external', 'hidden']])
+        if not any([not_shown in x.get_metadata()['subject'] for not_shown in ['external']])
     ]
     graph = Graph()
     graph.namespace_manager.bind("void", VOID)
@@ -33,6 +36,7 @@ def void_dumper(request, registry):
     graph.namespace_manager.bind("foaf", FOAF)
     graph.namespace_manager.bind("skos", SKOS)
     graph.namespace_manager.bind("skos-thes", SKOS_THES)
+    graph.namespace_manager.bind("hydra", HYDRA)
     duri = request.route_url('atramhasis.rdf_void_turtle_ext', _anchor='atramhasis')
     dataset = URIRef(duri)
     graph.add((dataset, RDF.type, VOID.Dataset))
@@ -40,6 +44,17 @@ def void_dumper(request, registry):
     graph.add((dataset, VOID.vocabulary, URIRef(DCTERMS)))
     graph.add((dataset, VOID.vocabulary, URIRef(SKOS)))
     graph.add((dataset, VOID.vocabulary, URIRef(SKOS_THES)))
+    ldf_enabled = asbool(request.registry.settings.get(
+        'atramhasis.ldf.enabled',
+        None
+    ))
+    ldf_baseurl = request.registry.settings.get(
+        'atramhasis.ldf.baseurl',
+        None
+    )
+    if ldf_enabled and ldf_baseurl:
+        ldfurl = ldf_baseurl + '/composite{?s,p,o}'
+        _add_ldf_server(graph, dataset, ldfurl, request)
     for p in providers:
         _add_provider(graph, p, dataset, request)
     return graph
@@ -75,6 +90,19 @@ def _add_provider(graph, provider, dataseturi, request):
         graph.add((pd, VOID.feature, f[1]))
         dump_url = request.route_url(f[2], scheme_id=pid)
         graph.add((pd, VOID.dataDump, URIRef(dump_url)))
+
+    ldf_enabled = asbool(request.registry.settings.get(
+        'atramhasis.ldf.enabled',
+        None
+    ))
+    ldf_baseurl = request.registry.settings.get(
+        'atramhasis.ldf.baseurl',
+        None
+    )
+    if ldf_enabled and ldf_baseurl:
+        pid = provider.get_vocabulary_id()
+        ldfurl = ldf_baseurl + '/' + pid + '{?s,p,o}'
+        _add_ldf_server(graph, pd, ldfurl, request)
     return graph
 
 
@@ -125,4 +153,29 @@ def _add_metadataset(graph, subject, metadataset):
             for ko in metadataset[k]:
                 o = objecttype(ko)
                 graph.add((subject, v['predicate'], o))
+    return graph
+
+
+def _add_ldf_server(graph, dataseturi, ldfurl, request):
+    '''
+    :param rdflib.graph.Graph graph: Graph that contains the Dataset.
+    :param rdflib.term.URIRef subject: Uri of the Dataset.
+    :param str ldfurl: Url pointing to the ldf server.
+    :rtype: :class:`rdflib.graph.Graph`
+    '''
+    ldf = BNode()
+    graph.add((dataseturi, HYDRA.search, ldf))
+    graph.add((ldf, HYDRA.template, Literal(ldfurl)))
+    s = BNode()
+    graph.add((s, HYDRA.variable, Literal('s')))
+    graph.add((s, HYDRA.property, RDF.subject))
+    graph.add((ldf, HYDRA.mapping, s))
+    p = BNode()
+    graph.add((p, HYDRA.variable, Literal('p')))
+    graph.add((p, HYDRA.property, RDF.predicate))
+    graph.add((ldf, HYDRA.mapping, p))
+    o = BNode()
+    graph.add((o, HYDRA.variable, Literal('o')))
+    graph.add((o, HYDRA.property, RDF.object))
+    graph.add((ldf, HYDRA.mapping, o))
     return graph

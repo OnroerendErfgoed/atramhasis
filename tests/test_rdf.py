@@ -58,6 +58,10 @@ class AddProviderTests(unittest.TestCase):
             'http://test.atramhasis.org/conceptschemes/TREES/c.rdf',
             'http://test.atramhasis.org/conceptschemes/TREES/c.ttl'
         ]
+        req.registry.settings = {
+            'atramhasis.ldf.enabled': True,
+            'atramhasis.ldf.baseurl': 'http://test.atramhasis.org/ldf'
+        }
         g = _add_provider(g, p, duri, req)
         sd = URIRef(sduri)
         self.assertIn((duri, RDF.type, VOID.Dataset), g)
