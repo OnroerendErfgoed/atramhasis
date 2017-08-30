@@ -86,7 +86,7 @@ is set to the atramhasis.ldf.config_location from your ini file.'
         ldfconfig['baseURL'] = ldf_baseurl
 
     for p in skos_registry.get_providers():
-        if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external', 'hidden']]):
+        if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external']]):
             continue;
         pid = p.get_metadata()['id']
         filename = os.path.join(dump_location, '%s-full' % pid)
