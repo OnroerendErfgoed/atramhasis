@@ -215,6 +215,53 @@ If you need more complicated URI's, you can easily write you own generator
 with a small piece of python code. You just need to follow the interface
 provided by :class:`skosprovider.uri.UriGenerator`.
 
+Hiding a vocabulary
+===================
+
+Atramhasis allows you to hide a vocabulary. This means the vocabulary is still
+there as far as services are concerned and you can still edit it. But it will
+not be visible in the public html user interface. You might want to use it for
+small and rather technical vocabularies you need but don't want to draw
+attention to. The only thing you need to do,
+is tagging this provider with a subject. By adding the `hidden`
+subject to the provider, we let Atramhasis know that this vocabulary should not 
+be present among your regular vocabularies.
+
+Suppose we wanted to hide our stuff:
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+
+    import logging
+    log = logging.getLogger(__name__)
+
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+    from skosprovider.uri import UriPatternGenerator
+
+
+    def includeme(config):
+        STUFF = SQLAlchemyProvider(
+            {
+                'id': 'STUFF',
+                'conceptscheme_id': 1,
+                'subject': ['hidden']
+            },
+            config.registry.dbmaker,
+            uri_generator=UriPatternGenerator(
+                'http://id.mydata.org/thesauri/stuff/%s'
+            )
+        )
+
+        skosregis = config.get_skos_registry()
+
+        skosregis.register_provider(STUFF)
+
+
+Now the STUFF thesaurus will not show up in the public web interface, but REST
+calls to this conceptscheme will function as normal and you will be able to
+maintain it from the admin interface.
+
 
 .. _i18n:
 
