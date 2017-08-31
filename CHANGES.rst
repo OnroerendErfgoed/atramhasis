@@ -8,9 +8,11 @@ Data Fragments server.
   now. (#390)
 - Make it possible to set the LDF server protocol when generating the config.
   (#391)
-- When generating an LDF server config, add a composite source as well. (#393)
-- When generating the dataset information, add hydra controls that link to 
-  the LDF server instance. (#392)
+- When generating an LDF server config, add a composite source containing all
+  conceptschemes as well. (#393)
+- When generating the Atramhasis dataset information, add hydra controls that 
+  link to the LDF server instance. This should make it easier to find the LDF
+  server. (#392)
 
 0.6.0 (23-08-2017)
 ------------------
