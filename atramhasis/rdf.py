@@ -23,7 +23,7 @@ def void_dumper(request, registry):
     '''
     Creates a void file with information about all void Datasets in this Atramhasis instance.
 
-    :param pyramid.request.Request request: 
+    :param pyramid.request.Request request:
     :param skosprovider.registry.Registry:
     '''
     providers = [
@@ -54,7 +54,7 @@ def void_dumper(request, registry):
     )
     if ldf_enabled and ldf_baseurl:
         ldfurl = ldf_baseurl + '/composite{?s,p,o}'
-        _add_ldf_server(graph, dataset, ldfurl, request)
+        _add_ldf_server(graph, dataset, ldfurl)
     for p in providers:
         _add_provider(graph, p, dataset, request)
     return graph
@@ -102,7 +102,7 @@ def _add_provider(graph, provider, dataseturi, request):
     if ldf_enabled and ldf_baseurl:
         pid = provider.get_vocabulary_id()
         ldfurl = ldf_baseurl + '/' + pid + '{?s,p,o}'
-        _add_ldf_server(graph, pd, ldfurl, request)
+        _add_ldf_server(graph, pd, ldfurl)
     return graph
 
 
@@ -156,7 +156,7 @@ def _add_metadataset(graph, subject, metadataset):
     return graph
 
 
-def _add_ldf_server(graph, dataseturi, ldfurl, request):
+def _add_ldf_server(graph, dataseturi, ldfurl):
     '''
     :param rdflib.graph.Graph graph: Graph that contains the Dataset.
     :param rdflib.term.URIRef subject: Uri of the Dataset.

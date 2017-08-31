@@ -11,7 +11,7 @@ from rdflib import Graph
 from rdflib.term import URIRef, Literal
 from rdflib.namespace import RDF, VOID, DCTERMS, XSD, FOAF
 
-from atramhasis.rdf import _add_metadataset, _add_provider
+from atramhasis.rdf import _add_metadataset, _add_provider, _add_ldf_server, HYDRA
 
 from datetime import date
 
@@ -72,6 +72,7 @@ class AddProviderTests(unittest.TestCase):
         self.assertIn((sd, FOAF.homepage, URIRef(homepage)), g)
         self.assertIn((sd, VOID.dataDump, URIRef(rdfdump)), g)
         self.assertIn((sd, VOID.dataDump, URIRef(ttldump)), g)
+        self.assertIn((sd, HYDRA.search, None), g)
 
 
 class MetadatasetTests(unittest.TestCase):
@@ -115,3 +116,22 @@ class MetadatasetTests(unittest.TestCase):
         self.assertIn((uri, DCTERMS.license, URIRef('https://id.erfgoed.net/vocab/licences#GODL')), g)
         self.assertIn((uri, DCTERMS.created, Literal(date(2016,9,14))), g)
 
+class LdfServerTests(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def _get_graph(self):
+        return Graph()
+
+    def test_add_ldf_server(self):
+        url = Literal('http://demo.atramhasis.org/ldf{?s,p,o}')
+        g = self._get_graph()
+        uri = URIRef('http://test.atramhasis.org/void.ttl#emptyset')
+        g.add((uri, RDF.type, VOID.Dataset))
+        g = _add_ldf_server(g, uri, url)
+        self.assertIn((uri, HYDRA.search, None), g)
+        self.assertIn((None, HYDRA.template, url), g)
+        self.assertIn((None, HYDRA.mapping, None), g)
