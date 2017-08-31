@@ -11,6 +11,8 @@ Data Fragments server.
 - When generating an LDF server config, add a composite source as well. (#393)
 - When generating the dataset information, add hydra controls that link to 
   the LDF server instance. (#392)
+- When an LDF server is present, add a link to the HTML document to this server.
+  (#394)
 
 0.6.0 (23-08-2017)
 ------------------
