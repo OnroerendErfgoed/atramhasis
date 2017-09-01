@@ -82,7 +82,7 @@ is set to the atramhasis.ldf.config_location from your ini file.'
             'xsd': 'http://www.w3.org/2001/XMLSchema#',
             'hydra': 'http://www.w3.org/ns/hydra/core#',
             'void': 'http://rdfs.org/ns/void#',
-            'skos': ' http://www.w3.org/2004/02/skos/core#',
+            'skos': 'http://www.w3.org/2004/02/skos/core#',
             'skos-thes': 'http://purl.org/iso25964/skos-thes#'
         }
     }

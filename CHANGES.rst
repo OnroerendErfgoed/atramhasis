@@ -3,6 +3,7 @@
 
 - When an LDF server is present, add a link to the HTML document to this server.
   (#394)
+- Wrong expansion of SKOS namespace in LDF server. (#401)
 
 0.6.1 (01-09-2017)
 ------------------
