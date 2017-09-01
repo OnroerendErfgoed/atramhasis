@@ -1,4 +1,4 @@
-0.6.1 (??-??-2017)
+0.6.1 (01-09-2017)
 ------------------
 
 This release is a minor release, containing improvements regarding the Linked
@@ -10,7 +10,7 @@ Data Fragments server.
   (#391)
 - When generating an LDF server config, add a composite source containing all
   conceptschemes as well. (#393)
-- When generating the Atramhasis dataset information, add hydra controls that 
+- When generating the Atramhasis dataset information, add hydra controls that
   link to the LDF server instance. This should make it easier to find the LDF
   server. (#392)
 
