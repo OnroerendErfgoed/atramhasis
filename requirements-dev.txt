@@ -11,7 +11,7 @@ skosprovider_oe==0.5.0
 pytest==3.2.2
 pytest-cov==2.5.1
 py==1.4.34
-coveralls==1.1
+coveralls==1.2.0
 webtest==2.0.23
 mock==2.0.0
 testfixtures==4.9.1
