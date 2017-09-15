@@ -48,4 +48,4 @@ bleach==2.0.0
 
 # requests
 requests==2.18.4
-cachecontrol==0.11.6
+cachecontrol==0.12.3
