@@ -19,7 +19,7 @@ testfixtures==5.2.0
 # Documentation
 Sphinx==1.6.3
 sphinxcontrib-httpdomain==1.5.0
-pygments==2.1.1
+pygments==2.2.0
 
 # waitress
 waitress==0.9.0
