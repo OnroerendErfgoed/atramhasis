@@ -41,7 +41,7 @@ dogpile.cache==0.6.4
 
 # other
 six==1.10.0
-python-dateutil==2.5.3
+python-dateutil==2.6.1
 rdflib==4.2.2
 html5lib==0.9999999
 bleach==1.4.3
