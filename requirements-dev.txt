@@ -2,7 +2,7 @@
 --requirement requirements.txt
 
 # pyramid
-pyramid-debugtoolbar==2.5
+pyramid-debugtoolbar==4.3
 
 # skosprovider_oe (for generating fixtures)
 skosprovider_oe==0.4.2
