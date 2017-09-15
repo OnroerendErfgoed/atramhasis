@@ -13,7 +13,7 @@ skosprovider_rdf==0.6.0
 # -e git+https://github.com/OnroerendErfgoed/skosprovider_rdf.git#egg=skosprovider_rdf
 skosprovider_getty==0.4.2
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_getty.git#egg=skosprovider_getty
-skosprovider_heritagedata==0.3.0
+skosprovider_heritagedata==0.3.1
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata.git#egg=skosprovider_heritagedata
 
 #language-tags
