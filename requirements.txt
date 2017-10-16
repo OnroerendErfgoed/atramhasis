@@ -31,7 +31,7 @@ pyramid-jinja2==2.7
 Babel==2.5.1
 
 # alembic
-alembic==0.9.5
+alembic==0.9.6
 
 # colander
 colander==1.4.0
@@ -40,11 +40,11 @@ colander==1.4.0
 dogpile.cache==0.6.4
 
 # other
-six==1.10.0
+six==1.11.0
 python-dateutil==2.6.1
 rdflib==4.2.2
 html5lib==0.999999999
-bleach==2.0.0
+bleach==2.1.1
 
 # requests
 requests==2.18.4
