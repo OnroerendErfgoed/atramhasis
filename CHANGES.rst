@@ -1,4 +1,4 @@
-0.6.2 (??-09-2017)
+0.6.2 (11-10-2017)
 ------------------
 
 - When an LDF server is present, add a link to the HTML document to this server.
