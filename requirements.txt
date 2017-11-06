@@ -20,7 +20,7 @@ skosprovider_heritagedata==0.3.1
 language-tags==0.4.3
 
 # sqlalchemy
-sqlalchemy==1.1.14
+sqlalchemy==1.1.15
 zope.sqlalchemy==0.7.7
 transaction==2.1.2
 psycopg2==2.7.3.2
@@ -44,7 +44,7 @@ six==1.11.0
 python-dateutil==2.6.1
 rdflib==4.2.2
 html5lib==0.999999999
-bleach==2.0.0
+bleach==2.1.1
 
 # requests
 requests==2.18.4
