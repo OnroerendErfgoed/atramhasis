@@ -29,7 +29,18 @@ class Label(colander.MappingSchema):
 
 
 def html_preparer(value):
-    return bleach.clean(value, tags=['strong', 'em', 'a'], strip=True)
+    '''
+    Prepare the value by stripping all html except certain tags.
+
+    :param value: The value to be cleaned. 
+    :rtype: str
+    '''
+    try:
+        return bleach.clean(value, tags=['strong', 'em', 'a'], strip=True)
+    except TypeError as e:
+        # Trying to clean a non-string
+        # Ignore for now so it can be caught later on
+        return value
 
 
 class Note(colander.MappingSchema):
