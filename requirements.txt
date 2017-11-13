@@ -44,7 +44,7 @@ six==1.11.0
 python-dateutil==2.6.1
 rdflib==4.2.2
 html5lib==0.999999999
-bleach==2.0.0
+bleach==2.1.1
 
 # requests
 requests==2.18.4
