@@ -26,7 +26,7 @@ transaction==2.1.2
 psycopg2==2.7.3.2
 
 # jinja2
-jinja2==2.9.6
+jinja2==2.10
 pyramid-jinja2==2.7
 Babel==2.5.1
 
