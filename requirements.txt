@@ -20,13 +20,13 @@ skosprovider_heritagedata==0.3.1
 language-tags==0.4.3
 
 # sqlalchemy
-sqlalchemy==1.1.14
+sqlalchemy==1.1.15
 zope.sqlalchemy==0.7.7
 transaction==2.1.2
 psycopg2==2.7.3.2
 
 # jinja2
-jinja2==2.9.6
+jinja2==2.10
 pyramid-jinja2==2.7
 Babel==2.5.1
 
