@@ -1,3 +1,12 @@
+0.6.3 (29-11-2017)
+------------------
+
+- This version updates a lot of the requirements to their latest versions. This
+  might be an issued if you've written lots of code against older pyramid
+  versions. (#418, #413, #412, #411, #410, #408, #407, #404, #403)
+- Remove authentication from the demo version since Persona does not work
+  anymore. (#361)
+
 0.6.2 (11-10-2017)
 ------------------
 

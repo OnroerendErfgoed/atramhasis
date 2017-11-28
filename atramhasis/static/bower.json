@@ -1,6 +1,6 @@
 {
   "name": "atramhasis",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "private": "true",
   "dependencies": {
     "foundation": "~5.5.0",
