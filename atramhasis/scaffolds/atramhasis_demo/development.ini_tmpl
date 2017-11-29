@@ -41,9 +41,6 @@ cache.list.arguments.cache_size = 5000
 cache.list.expiration_time = 7000
 
 
-persona.secret = sosecret
-persona.audiences = http://localhost:6543
-
 # By default, the toolbar only appears for clients from IP addresses
 # '127.0.0.1' and '::1'.
 # debugtoolbar.hosts = 127.0.0.1 ::1
