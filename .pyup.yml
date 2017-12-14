@@ -2,3 +2,10 @@
 # see https://pyup.io/docs/configuration/ for all available options
 
 schedule: every week
+
+# Focus on production requirements, not development
+requirements:
+    - requirements.txt:
+        update: all
+    - requirements-dev.txt:
+        update: insecure
