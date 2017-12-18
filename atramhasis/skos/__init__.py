@@ -81,7 +81,6 @@ def includeme(config):   # pragma: no cover
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ]
-
             }
         },
         config.registry.dbmaker,
