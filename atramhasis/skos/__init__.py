@@ -40,7 +40,7 @@ def includeme(config):   # pragma: no cover
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
-                    'https://id.erfgoed.net/vocab/licences#GODL'
+                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ]
             }
 
@@ -60,7 +60,7 @@ def includeme(config):   # pragma: no cover
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
-                    'https://id.erfgoed.net/vocab/licences#GODL'
+                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ]
             }
         },
@@ -79,7 +79,7 @@ def includeme(config):   # pragma: no cover
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
-                    'https://id.erfgoed.net/vocab/licences#GODL'
+                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ]
 
             }
@@ -99,7 +99,7 @@ def includeme(config):   # pragma: no cover
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
-                    'https://id.erfgoed.net/vocab/licences#GODL'
+                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ]
             }
         },
@@ -118,7 +118,7 @@ def includeme(config):   # pragma: no cover
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
-                    'https://id.erfgoed.net/vocab/licences#GODL'
+                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ]
             }
         },
@@ -137,7 +137,7 @@ def includeme(config):   # pragma: no cover
                 'language': ['nl-BE', 'la'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
-                    'https://id.erfgoed.net/vocab/licences#GODL'
+                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ]
             }
         },
