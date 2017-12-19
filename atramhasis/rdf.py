@@ -156,8 +156,10 @@ def _add_provider(graph, provider, dataseturi, cataloguri, request):
 
         dist = URIRef(dump_url)
         graph.add((dist, RDF.type, DCAT.Distribution))
+        graph.add((dist, DCAT.accessURL, URIRef(cs_url)))
         graph.add((dist, DCAT.downloadURL, URIRef(dump_url)))
         graph.add((dist, DCAT.mediaType, Literal(f[3])))
+        graph.add((pd, DCAT.distribution, dist))
 
     ldf_enabled = asbool(request.registry.settings.get(
         'atramhasis.ldf.enabled',
