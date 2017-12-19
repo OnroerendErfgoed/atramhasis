@@ -16,7 +16,6 @@ def includeme(config):
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')
 
-    config.add_route('atramhasis.rdf_void_turtle_ext', pattern='/void.ttl', accept='text/turtle')
     config.add_route('atramhasis.rdf_full_export_ext', pattern='/conceptschemes/{scheme_id}/c.rdf')
     config.add_route('atramhasis.rdf_full_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c.ttl')
     config.add_route('atramhasis.rdf_conceptscheme_export_ext', pattern='/conceptschemes/{scheme_id}.rdf')
@@ -59,6 +58,13 @@ def includeme(config):
     config.add_route('admin', '/admin')
     config.add_route('scheme_tree_invalidate', pattern='/admin/tree/invalidate/{scheme_id}', accept='application/json')
     config.add_route('tree_invalidate', pattern='/admin/tree/invalidate', accept='application/json')
+
+    config.add_route('atramhasis.rdf_void_turtle_ext', pattern='/void.ttl', accept='text/turtle')
+    config.add_route('atramhasis.rdf_dcat_turtle_ext', pattern='/dcat.ttl', accept='text/turtle')
+    config.add_route('atramhasis.rdf_dcat_ext', pattern='/dcat.rdf', accept='text/turtle')
+    config.add_route('atramhasis.rdf_dcat_turtle', pattern='/dcat', accept='text/turtle')
+    config.add_route('atramhasis.rdf_dcat_turtle_x', pattern='/dcat', accept='application/x-turtle')
+    config.add_route('atramhasis.rdf_dcat', pattern='/dcat', accept='application/rdf+xml')
 
     config.add_route('atramhasis.rdf_full_export_turtle', pattern='/conceptschemes/{scheme_id}/c', accept='text/turtle')
     config.add_route('atramhasis.rdf_full_export_turtle_x', pattern='/conceptschemes/{scheme_id}/c',

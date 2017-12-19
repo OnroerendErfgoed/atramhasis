@@ -27,6 +27,9 @@ class AddProviderTests(unittest.TestCase):
     def _get_duri(self):
         return URIRef('http://test.atramhasis.org/void.ttl#bigdataset')
 
+    def _get_curi(self):
+        return URIRef('http://test.atramhasis.org/dcat')
+
     def _get_graph(self, duri):
         g = Graph()
         g.add((duri, RDF.type, VOID.Dataset))
@@ -44,6 +47,7 @@ class AddProviderTests(unittest.TestCase):
 
     def testEmptyProvider(self):
         duri = self._get_duri()
+        curi = self._get_curi()
         g = self._get_graph(duri)
         sduri = 'http://test.atramhasis.org/void.ttl#smalldataset'
         p = self._get_provider({'uri': sduri})
@@ -62,7 +66,7 @@ class AddProviderTests(unittest.TestCase):
             'atramhasis.ldf.enabled': True,
             'atramhasis.ldf.baseurl': 'http://test.atramhasis.org/ldf'
         }
-        g = _add_provider(g, p, duri, req)
+        g = _add_provider(g, p, duri, curi, req)
         sd = URIRef(sduri)
         self.assertIn((duri, RDF.type, VOID.Dataset), g)
         self.assertIn((sd, RDF.type, VOID.Dataset), g)

@@ -13,10 +13,10 @@ from atramhasis.errors import (
 )
 from atramhasis.audit import audit
 
-from atramhasis.rdf import void_dumper
+from atramhasis.rdf import void_dumper, dcat_dumper
 
 @view_defaults()
-class AtramhasisVoid(object):
+class AtramhasisMetadata(object):
 
     def __init__(self, request):
         self.request = request
@@ -31,6 +31,25 @@ class AtramhasisVoid(object):
         response = Response(content_type='text/turtle')
         response.body = graph.serialize(format='turtle')
         response.content_disposition = 'attachment; filename="void.ttl"'
+        return response
+
+    @view_config(route_name='atramhasis.rdf_dcat_turtle_ext')
+    @view_config(route_name='atramhasis.rdf_dcat_turtle')
+    @view_config(route_name='atramhasis.rdf_dcat_turtle_x')
+    def rdf_dcat_turtle(self):
+        graph = dcat_dumper(self.request, self.skos_registry)
+        response = Response(content_type='text/turtle')
+        response.body = graph.serialize(format='turtle')
+        response.content_disposition = 'attachment; filename="dcat.ttl"'
+        return response
+
+    @view_config(route_name='atramhasis.rdf_dcat_ext')
+    @view_config(route_name='atramhasis.rdf_dcat')
+    def rdf_dcat(self):
+        graph = dcat_dumper(self.request, self.skos_registry)
+        response = Response(content_type='application/xml+rdf')
+        response.body = graph.serialize(format='xml')
+        response.content_disposition = 'attachment; filename="dcat.rdf"'
         return response
 
 
