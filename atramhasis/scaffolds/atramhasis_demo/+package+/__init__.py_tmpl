@@ -7,7 +7,6 @@ from pyramid.settings import aslist
 from sqlalchemy import engine_from_config
 
 from atramhasis.data.models import Base
-from .security import groupfinder, Root
 
 
 def main(global_config, **settings):
@@ -38,13 +37,6 @@ def main(global_config, **settings):
     config.include('atramhasis')
     # Set up atramhasis db
     config.include('atramhasis:data.db')
-
-    # Set up security
-    config.include('pyramid_persona')
-    config.scan('pyramid_persona')
-    config.set_root_factory(Root)
-    secret = config.get_settings().get('persona.secret', None)
-    config.set_authentication_policy(AuthTktAuthenticationPolicy(secret, callback=groupfinder, hashalg='sha512'))
 
     #Add skos support
     config.include('{{package}}.skos')
