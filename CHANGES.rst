@@ -1,4 +1,4 @@
-0.6.3 (22-12-2017)
+0.6.3 (21-12-2017)
 ------------------
 
 - This version updates a lot of the requirements to their latest versions. This
