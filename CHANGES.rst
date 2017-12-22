@@ -1,3 +1,10 @@
+0.6.4 (22-12-2017)
+------------------
+
+0.6.3 was a brown bag release. Sorry!
+
+This version is exactly the same as 0.6.3, but properly packaged.
+
 0.6.3 (21-12-2017)
 ------------------
 
