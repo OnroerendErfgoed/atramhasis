@@ -47,9 +47,21 @@ jinja2.i18n.domain = atramhasis
 # '127.0.0.1' and '::1'.
 # debugtoolbar.hosts = 127.0.0.1 ::1
 
-###
-# wsgi server configuration
-###
+# Filesystem location to dump exports
+atramhasis.dump_location = %(here)s/datadumps
+
+# Assume an LDF server is present?
+# atramhasis.ldf.enabled = True
+
+# Location of the config file for the LDF server
+# atramhasis.ldf.config_location = %(here)s
+
+# External url of the LDF server
+# atramhasis.ldf.baseurl = http://demo.atramhasis.org/ldf
+
+# Protocol the LDF server is operating under.
+# See the LDF docs for more info
+# atramhasis.ldf.protocol = http
 
 # Edit this to be a list of ids of conceptschemes. Concepts from these schemes
 # will be presented on the homepage
@@ -58,6 +70,10 @@ layout.focus_conceptschemes =
   MORE_STUFF
   EVEN_MORE_STUFF
   THINGS
+
+###
+# wsgi server configuration
+###
 
 [server:main]
 use = egg:waitress#main

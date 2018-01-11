@@ -12,6 +12,8 @@ import requests
 from cachecontrol import CacheControl
 from cachecontrol.heuristics import ExpiresAfter
 
+from datetime import date
+
 log = logging.getLogger(__name__)
 
 
