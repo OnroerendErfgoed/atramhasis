@@ -23,12 +23,12 @@
 
 <http://localhost:6543/dcat#composite> a void:Dataset,
         dcat:Dataset ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
+    hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
+                    hydra:variable "p" ],
+                [ hydra:property rdf:object ;
                     hydra:variable "o" ],
                 [ hydra:property rdf:subject ;
-                    hydra:variable "s" ],
-                [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ] ;
+                    hydra:variable "s" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/composite{?s,p,o}" ] .
 
 <http://localhost:6543/void.ttl#atramhasis> void:subset <http://localhost:6543/void.ttl#GEOGRAPHY>,
@@ -43,6 +43,8 @@
 <http://localhost:6543/void.ttl#GEOGRAPHY> a void:Dataset,
         dcat:Dataset ;
     dcterms:identifier "GEOGRAPHY" ;
+    dcterms:title "Geography"@en,
+        "Geografie"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf>,
         <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
     void:feature <http://www.w3.org/ns/formats/RDF_XML>,
@@ -56,18 +58,20 @@
     dcat:distribution <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf>,
         <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
+    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
+                    hydra:variable "o" ],
+                [ hydra:property rdf:predicate ;
                     hydra:variable "p" ],
                 [ hydra:property rdf:subject ;
-                    hydra:variable "s" ],
-                [ hydra:property rdf:object ;
-                    hydra:variable "o" ] ;
+                    hydra:variable "s" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/GEOGRAPHY{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/GEOGRAPHY> .
 
 <http://localhost:6543/void.ttl#TREES> a void:Dataset,
         dcat:Dataset ;
     dcterms:identifier "TREES" ;
+    dcterms:title "Different types of trees"@en,
+        "Verschillende soorten bomen"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/TREES/c.rdf>,
         <http://localhost:6543/conceptschemes/TREES/c.ttl> ;
     void:feature <http://www.w3.org/ns/formats/RDF_XML>,
@@ -76,6 +80,7 @@
     void:vocabulary dcterms:,
         skos-thes:,
         skos: ;
+    skos:definition "A thesaurus of different types of trees as seen on TV."@en ;
     skos:prefLabel "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
     dcat:distribution <http://localhost:6543/conceptschemes/TREES/c.rdf>,
@@ -83,10 +88,10 @@
     dcat:landingPage <http://localhost:6543/conceptschemes/TREES> ;
     hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
                     hydra:variable "p" ],
-                [ hydra:property rdf:object ;
-                    hydra:variable "o" ],
                 [ hydra:property rdf:subject ;
-                    hydra:variable "s" ] ;
+                    hydra:variable "s" ],
+                [ hydra:property rdf:object ;
+                    hydra:variable "o" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/TREES{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/TREES> .
 
@@ -98,6 +103,8 @@
     dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
         <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Periods"@en,
+        "Dateringen"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/PERIOD/c.rdf>,
         <http://localhost:6543/conceptschemes/PERIOD/c.ttl> ;
     void:feature <http://www.w3.org/ns/formats/RDF_XML>,
@@ -128,6 +135,8 @@
     dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
         <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Heritage types"@en,
+        "Erfgoedtypes"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/HERITAGETYPE/c.rdf>,
         <http://localhost:6543/conceptschemes/HERITAGETYPE/c.ttl> ;
     void:feature <http://www.w3.org/ns/formats/RDF_XML>,
@@ -136,17 +145,18 @@
     void:vocabulary dcterms:,
         skos-thes:,
         skos: ;
+    skos:definition "A functional typology of heritage."@en ;
     skos:prefLabel "Heritage types"@en,
         "Erfgoedtypes"@nl ;
     dcat:distribution <http://localhost:6543/conceptschemes/HERITAGETYPE/c.rdf>,
         <http://localhost:6543/conceptschemes/HERITAGETYPE/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/HERITAGETYPE> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:subject ;
-                    hydra:variable "s" ],
-                [ hydra:property rdf:object ;
+    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
                     hydra:variable "o" ],
                 [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ] ;
+                    hydra:variable "p" ],
+                [ hydra:property rdf:subject ;
+                    hydra:variable "s" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/HERITAGETYPE{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/HERITAGETYPE> .
 
@@ -158,6 +168,8 @@
     dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
         <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Event types"@en,
+        "Gebeurtenistypes"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/EVENTTYPE/c.rdf>,
         <http://localhost:6543/conceptschemes/EVENTTYPE/c.ttl> ;
     void:feature <http://www.w3.org/ns/formats/RDF_XML>,
@@ -173,10 +185,10 @@
     dcat:landingPage <http://localhost:6543/conceptschemes/EVENTTYPE> ;
     hydra:search [ hydra:mapping [ hydra:property rdf:object ;
                     hydra:variable "o" ],
-                [ hydra:property rdf:subject ;
-                    hydra:variable "s" ],
                 [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ] ;
+                    hydra:variable "p" ],
+                [ hydra:property rdf:subject ;
+                    hydra:variable "s" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/EVENTTYPE{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/EVENTTYPE> .
 
@@ -188,6 +200,8 @@
     dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
         <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Materials"@en,
+        "Materialen"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/MATERIALS/c.rdf>,
         <http://localhost:6543/conceptschemes/MATERIALS/c.ttl> ;
     void:feature <http://www.w3.org/ns/formats/RDF_XML>,
@@ -201,12 +215,12 @@
     dcat:distribution <http://localhost:6543/conceptschemes/MATERIALS/c.rdf>,
         <http://localhost:6543/conceptschemes/MATERIALS/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/MATERIALS> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
-                    hydra:variable "o" ],
+    hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
+                    hydra:variable "p" ],
                 [ hydra:property rdf:subject ;
                     hydra:variable "s" ],
-                [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ] ;
+                [ hydra:property rdf:object ;
+                    hydra:variable "o" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/MATERIALS{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/MATERIALS> .
 
@@ -219,6 +233,8 @@
     dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
         <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Species"@en,
+        "Soorten"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/SPECIES/c.rdf>,
         <http://localhost:6543/conceptschemes/SPECIES/c.ttl> ;
     void:feature <http://www.w3.org/ns/formats/RDF_XML>,
@@ -232,12 +248,12 @@
     dcat:distribution <http://localhost:6543/conceptschemes/SPECIES/c.rdf>,
         <http://localhost:6543/conceptschemes/SPECIES/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/SPECIES> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:subject ;
+    hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
+                    hydra:variable "p" ],
+                [ hydra:property rdf:subject ;
                     hydra:variable "s" ],
                 [ hydra:property rdf:object ;
-                    hydra:variable "o" ],
-                [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ] ;
+                    hydra:variable "o" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/SPECIES{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/SPECIES> .
 
@@ -249,6 +265,8 @@
     dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
         <https://creativecommons.org/licenses/by/4.0/> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Styles and Cultures"@en,
+        "Stijlen en Culturen"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/STYLES/c.rdf>,
         <http://localhost:6543/conceptschemes/STYLES/c.ttl> ;
     void:feature <http://www.w3.org/ns/formats/RDF_XML>,
@@ -262,12 +280,12 @@
     dcat:distribution <http://localhost:6543/conceptschemes/STYLES/c.rdf>,
         <http://localhost:6543/conceptschemes/STYLES/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/STYLES> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
-                    hydra:variable "o" ],
-                [ hydra:property rdf:subject ;
+    hydra:search [ hydra:mapping [ hydra:property rdf:subject ;
                     hydra:variable "s" ],
                 [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ] ;
+                    hydra:variable "p" ],
+                [ hydra:property rdf:object ;
+                    hydra:variable "o" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/STYLES{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/STYLES> .
 

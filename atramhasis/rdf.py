@@ -12,7 +12,7 @@ from rdflib.namespace import RDF, VOID, DCTERMS, FOAF, SKOS
 from rdflib.namespace import Namespace
 from rdflib.term import URIRef, BNode, Literal
 
-from skosprovider_rdf.utils import _add_labels
+from skosprovider_rdf.utils import extract_language, _add_lang_to_html
 
 FORMATS = Namespace('http://www.w3.org/ns/formats/')
 SKOS_THES = Namespace('http://purl.org/iso25964/skos-thes#')
@@ -143,7 +143,8 @@ def _add_provider(graph, provider, dataseturi, cataloguri, request):
     graph.add((pd, VOID.vocabulary, URIRef(DCTERMS)))
     graph.add((pd, VOID.vocabulary, URIRef(SKOS)))
     graph.add((pd, VOID.vocabulary, URIRef(SKOS_THES)))
-    _add_labels(graph, provider.concept_scheme, pd)
+    _add_dataset_labels(graph, provider.concept_scheme, pd)
+    _add_dataset_description(graph, provider.concept_scheme, pd)
     _add_metadataset(graph, pd, metadataset)
     fmap = [
         ('rdf', FORMATS.RDF_XML, 'atramhasis.rdf_full_export_ext', 'application/rdf+xml'),
@@ -249,3 +250,24 @@ def _add_ldf_server(graph, dataseturi, ldfurl):
     graph.add((o, HYDRA.property, RDF.object))
     graph.add((ldf, HYDRA.mapping, o))
     return graph
+
+def _add_dataset_labels(graph, c, subject):
+    for l in c.labels:
+        predicate = URIRef(SKOS + l.type)
+        lang = extract_language(l.language)
+        graph.add((subject, predicate, Literal(l.label, lang=lang)))
+        if (l.type == 'prefLabel'):
+            predicate = URIRef(DCTERMS.title)
+            graph.add((subject, predicate, Literal(l.label, lang=lang)))
+
+def _add_dataset_description(graph, c, subject):
+    for n in c.notes:
+        if (n.type <> 'definition' and 'n.type' <> 'scopeNote'):
+            continue
+        predicate = URIRef(SKOS + n.type)
+        lang = extract_language(n.language)
+        if n.markup is None:
+            graph.add((subject, predicate, Literal(n.note, lang=lang)))
+        else:
+            html = _add_lang_to_html(n.note, lang)
+            graph.add((subject, predicate, Literal(html, datatype=RDF.HTML)))
