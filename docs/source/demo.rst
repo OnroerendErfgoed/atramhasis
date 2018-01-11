@@ -73,7 +73,7 @@ After installing Docker for your operating system, you
 can simply pull the image and run a container. Once you've
 executed the following commands, you should be able to 
 visit the demo application in your browser on 
-`<http://localhost:6543`_. A LDF-server is also included
+`<http://localhost:6543>`_. A LDF-server is also included
 in the demo, which is accessible on `<http://localhost:3000>`_.
 
 .. code::
@@ -95,7 +95,7 @@ image, will be discarded when you stop the Docker container. If you want
 to test the application over a longer period of time, this is probably not
 what you're looking for. If you need persistence, but still want to use
 Docker, you can customise the 
-`Dockerfile <https://github.com/OnroerendErfgoed/atramhasis-demo-docker/`_
+`Dockerfile <https://github.com/OnroerendErfgoed/atramhasis-demo-docker/>`_
 to suit your needs.
 
 Running a demo site on Heroku
