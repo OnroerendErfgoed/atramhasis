@@ -62,6 +62,41 @@ own security module. This enables you to use the security mechanisms
 organisation requires. Please consult the documentation on :ref:`security`
 customisation for further information on this topic.
 
+Running a demo site with Docker
+===============================
+
+There is a `Docker image <https://hub.docker.com/r/atramhasis/demo/>`_ 
+available that allows you to quickly get a demo instance up and running. 
+The Docker image contains the demo application and the LDF server. 
+
+After installing Docker for your operating system, you 
+can simply pull the image and run a container. Once you've
+executed the following commands, you should be able to 
+visit the demo application in your browser on 
+`<http://localhost:6543`_. A LDF-server is also included
+in the demo, which is accessible on `<http://localhost:3000>`_.
+
+.. code::
+
+   $ sudo docker pull atramhasis/demo
+   $ sudo docker run -p 6543:6543 -p 3000:3000 atramhasis/demo
+
+Alternatively, you can run a specific version of Atramhasis 
+(starting from atramhasis 0.6.4):
+
+.. code::
+
+   $ sudo docker pull atramhasis/demo:0.6.4
+   $ sudo docker run -p 6543:6543 -p 3000:3000 atramhasis/demo:0.6.4
+
+While this is a fast and easy way to get a first impression of 
+Atramhasis, please be aware  that any edits you make when running the 
+image, will be discarded when you stop the Docker container. If you want 
+to test the application over a longer period of time, this is probably not
+what you're looking for. If you need persistence, but still want to use
+Docker, you can customise the 
+`Dockerfile <https://github.com/OnroerendErfgoed/atramhasis-demo-docker/`_
+to suit your needs.
 
 Running a demo site on Heroku
 =============================
