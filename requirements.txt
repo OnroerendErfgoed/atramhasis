@@ -17,21 +17,21 @@ skosprovider_heritagedata==0.3.1
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata.git#egg=skosprovider_heritagedata
 
 #language-tags
-language-tags==0.4.3
+language-tags==0.4.4
 
 # sqlalchemy
-sqlalchemy==1.2.0
-zope.sqlalchemy==0.7.7
+sqlalchemy==1.2.2
+zope.sqlalchemy==1.0
 transaction==2.1.2
 psycopg2==2.7.3.2
 
 # jinja2
 jinja2==2.10
 pyramid-jinja2==2.7
-Babel==2.5.1
+Babel==2.5.3
 
 # alembic
-alembic==0.9.6
+alembic==0.9.7
 
 # colander
 colander==1.4.0
@@ -48,4 +48,4 @@ bleach==2.1.2
 
 # requests
 requests==2.18.4
-cachecontrol==0.12.3
+cachecontrol==0.12.4
