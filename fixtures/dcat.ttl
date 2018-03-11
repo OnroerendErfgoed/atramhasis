@@ -11,18 +11,17 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://localhost:6543/dcat> a dcat:Catalog ;
-    dcat:dataset <http://localhost:6543/void.ttl#GEOGRAPHY>,
-        <http://localhost:6543/void.ttl#TREES>,
+    dcat:dataset <http://id.trees.org>,
         <https://id.erfgoed.net/datasets/thesauri/dateringen>,
         <https://id.erfgoed.net/datasets/thesauri/erfgoedtypes>,
         <https://id.erfgoed.net/datasets/thesauri/gebeurtenistypes>,
         <https://id.erfgoed.net/datasets/thesauri/materialen>,
         <https://id.erfgoed.net/datasets/thesauri/soorten>,
-        <https://id.erfgoed.net/datasets/thesauri/stijlen_en_culturen> ;
+        <https://id.erfgoed.net/datasets/thesauri/stijlen_en_culturen>,
+        <urn:x-skosprovider:geography> ;
     foaf:homepage <http://localhost:6543/> .
 
-<http://localhost:6543/dcat#composite> a void:Dataset,
-        dcat:Dataset ;
+<http://localhost:6543/dcat#composite> a void:Dataset ;
     hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
                     hydra:variable "p" ],
                 [ hydra:property rdf:object ;
@@ -31,45 +30,20 @@
                     hydra:variable "s" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/composite{?s,p,o}" ] .
 
-<http://localhost:6543/void.ttl#atramhasis> void:subset <http://localhost:6543/void.ttl#GEOGRAPHY>,
-        <http://localhost:6543/void.ttl#TREES>,
+<http://localhost:6543/void.ttl#atramhasis> void:subset <http://id.trees.org>,
         <https://id.erfgoed.net/datasets/thesauri/dateringen>,
         <https://id.erfgoed.net/datasets/thesauri/erfgoedtypes>,
         <https://id.erfgoed.net/datasets/thesauri/gebeurtenistypes>,
         <https://id.erfgoed.net/datasets/thesauri/materialen>,
         <https://id.erfgoed.net/datasets/thesauri/soorten>,
-        <https://id.erfgoed.net/datasets/thesauri/stijlen_en_culturen> .
+        <https://id.erfgoed.net/datasets/thesauri/stijlen_en_culturen>,
+        <urn:x-skosprovider:geography> .
 
-<http://localhost:6543/void.ttl#GEOGRAPHY> a void:Dataset,
+<http://id.trees.org> a void:Dataset,
         dcat:Dataset ;
-    dcterms:identifier "GEOGRAPHY" ;
-    dcterms:title "Geography"@en,
-        "Geografie"@nl ;
-    void:dataDump <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf>,
-        <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
-    void:feature <http://www.w3.org/ns/formats/RDF_XML>,
-        <http://www.w3.org/ns/formats/Turtle> ;
-    void:rootResource <urn:x-skosprovider:geo> ;
-    void:vocabulary dcterms:,
-        skos-thes:,
-        skos: ;
-    skos:prefLabel "Geography"@en,
-        "Geografie"@nl ;
-    dcat:distribution <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf>,
-        <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
-    dcat:landingPage <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
-                    hydra:variable "o" ],
-                [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ],
-                [ hydra:property rdf:subject ;
-                    hydra:variable "s" ] ;
-            hydra:template "http://demo.atramhasis.org/ldf/GEOGRAPHY{?s,p,o}" ] ;
-    foaf:homepage <http://localhost:6543/conceptschemes/GEOGRAPHY> .
-
-<http://localhost:6543/void.ttl#TREES> a void:Dataset,
-        dcat:Dataset ;
+    dcterms:description "A thesaurus of different types of trees as seen on TV."@en ;
     dcterms:identifier "TREES" ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
     dcterms:title "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
     void:dataDump <http://localhost:6543/conceptschemes/TREES/c.rdf>,
@@ -83,15 +57,16 @@
     skos:definition "A thesaurus of different types of trees as seen on TV."@en ;
     skos:prefLabel "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
     dcat:distribution <http://localhost:6543/conceptschemes/TREES/c.rdf>,
         <http://localhost:6543/conceptschemes/TREES/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/TREES> ;
     hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
                     hydra:variable "p" ],
-                [ hydra:property rdf:subject ;
-                    hydra:variable "s" ],
                 [ hydra:property rdf:object ;
-                    hydra:variable "o" ] ;
+                    hydra:variable "o" ],
+                [ hydra:property rdf:subject ;
+                    hydra:variable "s" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/TREES{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/TREES> .
 
@@ -115,21 +90,23 @@
         skos: ;
     skos:prefLabel "Periods"@en,
         "Dateringen"@nl ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:distribution <http://localhost:6543/conceptschemes/PERIOD/c.rdf>,
         <http://localhost:6543/conceptschemes/PERIOD/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/PERIOD> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
-                    hydra:variable "o" ],
+    hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
+                    hydra:variable "p" ],
                 [ hydra:property rdf:subject ;
                     hydra:variable "s" ],
-                [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ] ;
+                [ hydra:property rdf:object ;
+                    hydra:variable "o" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/PERIOD{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/PERIOD> .
 
 <https://id.erfgoed.net/datasets/thesauri/erfgoedtypes> a void:Dataset,
         dcat:Dataset ;
     dcterms:created "2008-02-14"^^xsd:date ;
+    dcterms:description "A functional typology of heritage."@en ;
     dcterms:identifier "HERITAGETYPE" ;
     dcterms:language "nl-BE" ;
     dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
@@ -148,15 +125,16 @@
     skos:definition "A functional typology of heritage."@en ;
     skos:prefLabel "Heritage types"@en,
         "Erfgoedtypes"@nl ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:distribution <http://localhost:6543/conceptschemes/HERITAGETYPE/c.rdf>,
         <http://localhost:6543/conceptschemes/HERITAGETYPE/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/HERITAGETYPE> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
+    hydra:search [ hydra:mapping [ hydra:property rdf:subject ;
+                    hydra:variable "s" ],
+                [ hydra:property rdf:object ;
                     hydra:variable "o" ],
                 [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ],
-                [ hydra:property rdf:subject ;
-                    hydra:variable "s" ] ;
+                    hydra:variable "p" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/HERITAGETYPE{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/HERITAGETYPE> .
 
@@ -180,15 +158,16 @@
         skos: ;
     skos:prefLabel "Event types"@en,
         "Gebeurtenistypes"@nl ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:distribution <http://localhost:6543/conceptschemes/EVENTTYPE/c.rdf>,
         <http://localhost:6543/conceptschemes/EVENTTYPE/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/EVENTTYPE> ;
-    hydra:search [ hydra:mapping [ hydra:property rdf:object ;
+    hydra:search [ hydra:mapping [ hydra:property rdf:subject ;
+                    hydra:variable "s" ],
+                [ hydra:property rdf:object ;
                     hydra:variable "o" ],
                 [ hydra:property rdf:predicate ;
-                    hydra:variable "p" ],
-                [ hydra:property rdf:subject ;
-                    hydra:variable "s" ] ;
+                    hydra:variable "p" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/EVENTTYPE{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/EVENTTYPE> .
 
@@ -212,15 +191,16 @@
         skos: ;
     skos:prefLabel "Materials"@en,
         "Materialen"@nl ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:distribution <http://localhost:6543/conceptschemes/MATERIALS/c.rdf>,
         <http://localhost:6543/conceptschemes/MATERIALS/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/MATERIALS> ;
     hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
                     hydra:variable "p" ],
-                [ hydra:property rdf:subject ;
-                    hydra:variable "s" ],
                 [ hydra:property rdf:object ;
-                    hydra:variable "o" ] ;
+                    hydra:variable "o" ],
+                [ hydra:property rdf:subject ;
+                    hydra:variable "s" ] ;
             hydra:template "http://demo.atramhasis.org/ldf/MATERIALS{?s,p,o}" ] ;
     foaf:homepage <http://localhost:6543/conceptschemes/MATERIALS> .
 
@@ -245,6 +225,7 @@
         skos: ;
     skos:prefLabel "Species"@en,
         "Soorten"@nl ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:distribution <http://localhost:6543/conceptschemes/SPECIES/c.rdf>,
         <http://localhost:6543/conceptschemes/SPECIES/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/SPECIES> ;
@@ -277,95 +258,279 @@
         skos: ;
     skos:prefLabel "Styles and Cultures"@en,
         "Stijlen en Culturen"@nl ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:distribution <http://localhost:6543/conceptschemes/STYLES/c.rdf>,
         <http://localhost:6543/conceptschemes/STYLES/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/STYLES> ;
+    hydra:search [ hydra:mapping [ hydra:property rdf:predicate ;
+                    hydra:variable "p" ],
+                [ hydra:property rdf:subject ;
+                    hydra:variable "s" ],
+                [ hydra:property rdf:object ;
+                    hydra:variable "o" ] ;
+            hydra:template "http://demo.atramhasis.org/ldf/STYLES{?s,p,o}" ] ;
+    foaf:homepage <http://localhost:6543/conceptschemes/STYLES> .
+
+<urn:x-skosprovider:geography> a void:Dataset,
+        dcat:Dataset ;
+    dcterms:identifier "GEOGRAPHY" ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
+    dcterms:title "Geography"@en,
+        "Geografie"@nl ;
+    void:dataDump <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf>,
+        <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
+    void:feature <http://www.w3.org/ns/formats/RDF_XML>,
+        <http://www.w3.org/ns/formats/Turtle> ;
+    void:rootResource <urn:x-skosprovider:geo> ;
+    void:vocabulary dcterms:,
+        skos-thes:,
+        skos: ;
+    skos:prefLabel "Geography"@en,
+        "Geografie"@nl ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
+    dcat:distribution <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf>,
+        <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
+    dcat:landingPage <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
     hydra:search [ hydra:mapping [ hydra:property rdf:subject ;
                     hydra:variable "s" ],
                 [ hydra:property rdf:predicate ;
                     hydra:variable "p" ],
                 [ hydra:property rdf:object ;
                     hydra:variable "o" ] ;
-            hydra:template "http://demo.atramhasis.org/ldf/STYLES{?s,p,o}" ] ;
-    foaf:homepage <http://localhost:6543/conceptschemes/STYLES> .
+            hydra:template "http://demo.atramhasis.org/ldf/GEOGRAPHY{?s,p,o}" ] ;
+    foaf:homepage <http://localhost:6543/conceptschemes/GEOGRAPHY> .
 
 <http://localhost:6543/conceptschemes/EVENTTYPE/c.rdf> a dcat:Distribution ;
+    dcterms:created "2010-08-13"^^xsd:date ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Event types"@en,
+        "Gebeurtenistypes"@nl ;
+    skos:prefLabel "Event types"@en,
+        "Gebeurtenistypes"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/EVENTTYPE> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/EVENTTYPE/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/EVENTTYPE/c.ttl> a dcat:Distribution ;
+    dcterms:created "2010-08-13"^^xsd:date ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Event types"@en,
+        "Gebeurtenistypes"@nl ;
+    skos:prefLabel "Event types"@en,
+        "Gebeurtenistypes"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/EVENTTYPE> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/EVENTTYPE/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
 <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf> a dcat:Distribution ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
+    dcterms:title "Geography"@en,
+        "Geografie"@nl ;
+    skos:prefLabel "Geography"@en,
+        "Geografie"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> a dcat:Distribution ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
+    dcterms:title "Geography"@en,
+        "Geografie"@nl ;
+    skos:prefLabel "Geography"@en,
+        "Geografie"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
 <http://localhost:6543/conceptschemes/HERITAGETYPE/c.rdf> a dcat:Distribution ;
+    dcterms:created "2008-02-14"^^xsd:date ;
+    dcterms:description "A functional typology of heritage."@en ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Heritage types"@en,
+        "Erfgoedtypes"@nl ;
+    skos:definition "A functional typology of heritage."@en ;
+    skos:prefLabel "Heritage types"@en,
+        "Erfgoedtypes"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/HERITAGETYPE> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/HERITAGETYPE/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/HERITAGETYPE/c.ttl> a dcat:Distribution ;
+    dcterms:created "2008-02-14"^^xsd:date ;
+    dcterms:description "A functional typology of heritage."@en ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Heritage types"@en,
+        "Erfgoedtypes"@nl ;
+    skos:definition "A functional typology of heritage."@en ;
+    skos:prefLabel "Heritage types"@en,
+        "Erfgoedtypes"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/HERITAGETYPE> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/HERITAGETYPE/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
 <http://localhost:6543/conceptschemes/MATERIALS/c.rdf> a dcat:Distribution ;
+    dcterms:created "2011-03-16"^^xsd:date ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Materials"@en,
+        "Materialen"@nl ;
+    skos:prefLabel "Materials"@en,
+        "Materialen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/MATERIALS> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/MATERIALS/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/MATERIALS/c.ttl> a dcat:Distribution ;
+    dcterms:created "2011-03-16"^^xsd:date ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Materials"@en,
+        "Materialen"@nl ;
+    skos:prefLabel "Materials"@en,
+        "Materialen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/MATERIALS> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/MATERIALS/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
 <http://localhost:6543/conceptschemes/PERIOD/c.rdf> a dcat:Distribution ;
+    dcterms:created "2008-02-14"^^xsd:date ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Periods"@en,
+        "Dateringen"@nl ;
+    skos:prefLabel "Periods"@en,
+        "Dateringen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/PERIOD> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/PERIOD/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/PERIOD/c.ttl> a dcat:Distribution ;
+    dcterms:created "2008-02-14"^^xsd:date ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Periods"@en,
+        "Dateringen"@nl ;
+    skos:prefLabel "Periods"@en,
+        "Dateringen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/PERIOD> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/PERIOD/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
 <http://localhost:6543/conceptschemes/SPECIES/c.rdf> a dcat:Distribution ;
+    dcterms:created "2011-05-23"^^xsd:date ;
+    dcterms:language "la",
+        "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Species"@en,
+        "Soorten"@nl ;
+    skos:prefLabel "Species"@en,
+        "Soorten"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/SPECIES> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/SPECIES/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/SPECIES/c.ttl> a dcat:Distribution ;
+    dcterms:created "2011-05-23"^^xsd:date ;
+    dcterms:language "la",
+        "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Species"@en,
+        "Soorten"@nl ;
+    skos:prefLabel "Species"@en,
+        "Soorten"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/SPECIES> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/SPECIES/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
 <http://localhost:6543/conceptschemes/STYLES/c.rdf> a dcat:Distribution ;
+    dcterms:created "2008-02-14"^^xsd:date ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Styles and Cultures"@en,
+        "Stijlen en Culturen"@nl ;
+    skos:prefLabel "Styles and Cultures"@en,
+        "Stijlen en Culturen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/STYLES> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/STYLES/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/STYLES/c.ttl> a dcat:Distribution ;
+    dcterms:created "2008-02-14"^^xsd:date ;
+    dcterms:language "nl-BE" ;
+    dcterms:license <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0>,
+        <https://creativecommons.org/licenses/by/4.0/> ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/501> ;
+    dcterms:title "Styles and Cultures"@en,
+        "Stijlen en Culturen"@nl ;
+    skos:prefLabel "Styles and Cultures"@en,
+        "Stijlen en Culturen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/STYLES> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/STYLES/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
 <http://localhost:6543/conceptschemes/TREES/c.rdf> a dcat:Distribution ;
+    dcterms:description "A thesaurus of different types of trees as seen on TV."@en ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
+    dcterms:title "Different types of trees"@en,
+        "Verschillende soorten bomen"@nl ;
+    skos:definition "A thesaurus of different types of trees as seen on TV."@en ;
+    skos:prefLabel "Different types of trees"@en,
+        "Verschillende soorten bomen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/TREES> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/TREES/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/TREES/c.ttl> a dcat:Distribution ;
+    dcterms:description "A thesaurus of different types of trees as seen on TV."@en ;
+    dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
+    dcterms:title "Different types of trees"@en,
+        "Verschillende soorten bomen"@nl ;
+    skos:definition "A thesaurus of different types of trees as seen on TV."@en ;
+    skos:prefLabel "Different types of trees"@en,
+        "Verschillende soorten bomen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/TREES> ;
+    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/TREES/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
