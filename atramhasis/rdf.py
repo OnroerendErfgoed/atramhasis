@@ -90,11 +90,16 @@ def dcat_dumper(request, registry):
     voiddataset = URIRef(
         request.route_url('atramhasis.rdf_void_turtle_ext', _anchor='atramhasis')
     )
-    dcatcatalog = URIRef(
+    catalogmetadataset = registry.get_metadata().get('catalog', {})
+    cataloguri = catalogmetadataset.get(
+        'uri',
         request.route_url('atramhasis.rdf_dcat')
     )
+    dcatcatalog = URIRef(cataloguri)
     graph.add((dcatcatalog, RDF.type, DCAT.Catalog))
     graph.add((dcatcatalog, FOAF.homepage, URIRef(request.route_url('home'))))
+
+    _add_metadata(graph, dcatcatalog, catalogmetadataset)
     ldf_enabled = asbool(request.registry.settings.get(
         'atramhasis.ldf.enabled',
         None
@@ -108,7 +113,6 @@ def dcat_dumper(request, registry):
             request.route_url('atramhasis.rdf_dcat', _anchor='composite')
         )
         graph.add((compositedataset, RDF.type, VOID.Dataset))
-        graph.add((compositedataset, RDF.type, DCAT.Dataset))
         ldfurl = ldf_baseurl + '/composite{?s,p,o}'
         _add_ldf_server(graph, compositedataset, ldfurl)
     for p in providers:
@@ -118,6 +122,8 @@ def dcat_dumper(request, registry):
 
 def _add_provider(graph, provider, dataseturi, cataloguri, request):
     '''
+    Add a VOID or DCAT dataset to the Graph.
+
     :param rdflib.graph.Graph graph: Graph that will contain the Dataset.
     :param skosprovider.providers.VocabularyProvider provider: Provider to turn into a Dataset.
     :param rdflib.term.URIRef URIRef: URI of the main dataset this provider will be attached to.
@@ -143,9 +149,9 @@ def _add_provider(graph, provider, dataseturi, cataloguri, request):
     graph.add((pd, VOID.vocabulary, URIRef(DCTERMS)))
     graph.add((pd, VOID.vocabulary, URIRef(SKOS)))
     graph.add((pd, VOID.vocabulary, URIRef(SKOS_THES)))
-    _add_dataset_labels(graph, provider.concept_scheme, pd)
-    _add_dataset_description(graph, provider.concept_scheme, pd)
-    _add_metadataset(graph, pd, metadataset)
+    _add_dataset_labels(graph, pd, provider.concept_scheme)
+    _add_dataset_description(graph, pd, provider.concept_scheme)
+    _add_metadata(graph, pd, metadataset)
     fmap = [
         ('rdf', FORMATS.RDF_XML, 'atramhasis.rdf_full_export_ext', 'application/rdf+xml'),
         ('ttl', FORMATS.Turtle, 'atramhasis.rdf_full_export_turtle_ext', 'text/turtle')
@@ -160,6 +166,9 @@ def _add_provider(graph, provider, dataseturi, cataloguri, request):
         graph.add((dist, DCAT.accessURL, URIRef(cs_url)))
         graph.add((dist, DCAT.downloadURL, URIRef(dump_url)))
         graph.add((dist, DCAT.mediaType, Literal(f[3])))
+        _add_dataset_labels(graph, dist, provider.concept_scheme)
+        _add_dataset_description(graph, dist, provider.concept_scheme)
+        _add_metadata(graph, dist, metadataset)
         graph.add((pd, DCAT.distribution, dist))
 
     ldf_enabled = asbool(request.registry.settings.get(
@@ -176,12 +185,11 @@ def _add_provider(graph, provider, dataseturi, cataloguri, request):
         _add_ldf_server(graph, pd, ldfurl)
     return graph
 
-
-def _add_metadataset(graph, subject, metadataset):
+def _add_metadata(graph, subject, metadata):
     '''
-    :param rdflib.graph.Graph graph: Graph that contains the Dataset.
-    :param rdflib.term.URIRef subject: Uri of the Dataset.
-    :param dict metadataset: Dictionary with metadata to add to the Dataset.
+    :param rdflib.graph.Graph graph: Graph that contains the subject.
+    :param rdflib.term.URIRef subject: Uri of the Resource that will be metadated.
+    :param dict metadata: Dictionary with metadata to add to the Resource.
     :rtype: :class:`rdflib.graph.Graph`
     '''
     mapping = {
@@ -212,16 +220,20 @@ def _add_metadataset(graph, subject, metadataset):
         'license': {
             'predicate': DCTERMS.license,
             'objecttype': URIRef
+        },
+        'contactPoint': {
+            'predicate': DCAT.contactPoint,
+            'objecttype': URIRef
         }
     }
 
     for k, v in mapping.items():
-        if k in metadataset:
+        if k in metadata:
             if 'objecttype' in v:
                 objecttype = v['objecttype']
             else:
                 objecttype = Literal
-            for ko in metadataset[k]:
+            for ko in metadata[k]:
                 o = objecttype(ko)
                 graph.add((subject, v['predicate'], o))
     return graph
@@ -251,7 +263,15 @@ def _add_ldf_server(graph, dataseturi, ldfurl):
     graph.add((ldf, HYDRA.mapping, o))
     return graph
 
-def _add_dataset_labels(graph, c, subject):
+def _add_dataset_labels(graph, subject, c):
+    '''
+    Add SKOS labels and a DCTERMS title to a Dataset or a Distribution of it.
+
+    :param rdflib.graph.Graph graph: Graph that contains the Dataset.
+    :param rdflib.term.URIRef subject: Uri of the Dataset or a Distribution of it.
+    :param skosprovider.skos.ConceptScheme c: SKOS ConceptScheme with labels.
+    :rtype: :class:`rdflib.graph.Graph`
+    '''
     for l in c.labels:
         predicate = URIRef(SKOS + l.type)
         lang = extract_language(l.language)
@@ -259,15 +279,31 @@ def _add_dataset_labels(graph, c, subject):
         if (l.type == 'prefLabel'):
             predicate = URIRef(DCTERMS.title)
             graph.add((subject, predicate, Literal(l.label, lang=lang)))
+    return graph
 
-def _add_dataset_description(graph, c, subject):
+def _add_dataset_description(graph, subject, c):
+    '''
+    Add SKOS notes and a DCTERMS description to a Dataset or a Distribution of it.
+
+    :param rdflib.graph.Graph graph: Graph that contains the Dataset.
+    :param rdflib.term.URIRef subject: Uri of the Dataset or a Distribution of it.
+    :param skosprovider.skos.ConceptScheme c: SKOS ConceptScheme with notes.
+    :rtype: :class:`rdflib.graph.Graph`
+    '''
+    description = None;
     for n in c.notes:
-        if (n.type <> 'definition' and 'n.type' <> 'scopeNote'):
+        if (n.type not in ['definition', 'scopeNote']):
             continue
         predicate = URIRef(SKOS + n.type)
         lang = extract_language(n.language)
-        if n.markup is None:
-            graph.add((subject, predicate, Literal(n.note, lang=lang)))
-        else:
+        if n.markup == 'HTML':
             html = _add_lang_to_html(n.note, lang)
-            graph.add((subject, predicate, Literal(html, datatype=RDF.HTML)))
+            obj = Literal(html, datatype=RDF.HTML)
+        else:
+            obj = Literal(n.note, lang=lang)
+        graph.add((subject, predicate, obj))
+        if (n.type == 'definition' or description is None):
+            description = obj
+    if (description is not None):
+        graph.add((subject, URIRef(DCTERMS.description), obj))
+    return graph

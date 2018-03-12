@@ -20,12 +20,28 @@ def includeme(config):   # pragma: no cover
     dataseturigenerator = UriPatternGenerator('https://id.erfgoed.net/datasets/thesauri/%s')
 
     TREES = SQLAlchemyProvider(
-        {'id': 'TREES', 'conceptscheme_id': 1},
+        {
+            'id': 'TREES',
+            'conceptscheme_id': 1,
+            'dataset': {
+                'uri': 'http://id.trees.org',
+                'publisher': ['https://id.erfgoed.net/actoren/1'],
+                'contactPoint': ['https://id.erfgoed.net/actoren/1'],
+            }
+        },
         config.registry.dbmaker
     )
 
     GEO = SQLAlchemyProvider(
-        {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
+        {
+            'id': 'GEOGRAPHY',
+            'conceptscheme_id': 2,
+            'dataset': {
+                'uri': 'urn:x-skosprovider:geography',
+                'publisher': ['https://id.erfgoed.net/actoren/1'],
+                'contactPoint': ['https://id.erfgoed.net/actoren/1'],
+            }
+        },
         config.registry.dbmaker
     )
 
@@ -41,7 +57,8 @@ def includeme(config):   # pragma: no cover
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ]
+                ],
+                'contactPoint': ['https://id.erfgoed.net/actoren/501']
             }
 
         },
@@ -61,7 +78,8 @@ def includeme(config):   # pragma: no cover
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ]
+                ],
+                'contactPoint': ['https://id.erfgoed.net/actoren/501']
             }
         },
         config.registry.dbmaker,
@@ -80,7 +98,8 @@ def includeme(config):   # pragma: no cover
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ]
+                ],
+                'contactPoint': ['https://id.erfgoed.net/actoren/501']
             }
         },
         config.registry.dbmaker,
@@ -99,7 +118,8 @@ def includeme(config):   # pragma: no cover
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ]
+                ],
+                'contactPoint': ['https://id.erfgoed.net/actoren/501']
             }
         },
         config.registry.dbmaker,
@@ -118,7 +138,8 @@ def includeme(config):   # pragma: no cover
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ]
+                ],
+                'contactPoint': ['https://id.erfgoed.net/actoren/501']
             }
         },
         config.registry.dbmaker,
@@ -137,7 +158,8 @@ def includeme(config):   # pragma: no cover
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ]
+                ],
+                'contactPoint': ['https://id.erfgoed.net/actoren/501']
             }
         },
         config.registry.dbmaker,
