@@ -20,7 +20,7 @@ skosprovider_heritagedata==0.3.1
 language-tags==0.4.4
 
 # sqlalchemy
-sqlalchemy==1.2.4
+sqlalchemy==1.2.7
 zope.sqlalchemy==1.0
 transaction==2.2.0
 psycopg2==2.7.4
