@@ -40,9 +40,24 @@ cache.list.backend = dogpile.cache.memory
 cache.list.arguments.cache_size = 5000
 cache.list.expiration_time = 7000
 
+# Filesystem location to dump exports
+atramhasis.dump_location = %(here)s/datadumps
 
-persona.secret = sosecret
-persona.audiences = http://localhost:6543
+# Location of rdf2hdt executable
+# atramhasis.rdf2hdt = /link/to/rdf2hdt
+
+# Assume an LDF server is present?
+# atramhasis.ldf.enabled = True
+
+# Location of the config file for the LDF server
+# atramhasis.ldf.config_location = %(here)s
+
+# External url of the LDF server
+# atramhasis.ldf.baseurl = http://demo.atramhasis.org/ldf
+
+# Protocol the LDF server is operating under.
+# See the LDF docs for more info
+# atramhasis.ldf.protocol = http
 
 # Filesystem location to dump exports
 atramhasis.dump_location = %(here)s/datadumps

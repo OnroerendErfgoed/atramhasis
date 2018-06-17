@@ -1,5 +1,5 @@
 # pyramid
-pyramid==1.9.1
+pyramid==1.9.2
 pyramid-tm==2.2
 pyramid_rewrite==0.2
 
@@ -17,35 +17,35 @@ skosprovider_heritagedata==0.3.1
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata.git#egg=skosprovider_heritagedata
 
 #language-tags
-language-tags==0.4.3
+language-tags==0.4.4
 
 # sqlalchemy
-sqlalchemy==1.1.15
-zope.sqlalchemy==0.7.7
-transaction==2.1.2
-psycopg2==2.7.3.2
+sqlalchemy==1.2.8
+zope.sqlalchemy==1.0
+transaction==2.2.1
+psycopg2==2.7.4
 
 # jinja2
 jinja2==2.10
 pyramid-jinja2==2.7
-Babel==2.5.1
+Babel==2.6.0
 
 # alembic
-alembic==0.9.6
+alembic==0.9.9
 
 # colander
 colander==1.4.0
 
 # caching
-dogpile.cache==0.6.4
+dogpile.cache==0.6.5
 
 # other
 six==1.11.0
-python-dateutil==2.6.1
+python-dateutil==2.7.3
 rdflib==4.2.2
-html5lib==0.999999999
-bleach==2.1.1
+html5lib==1.0.1
+bleach==2.1.3
 
 # requests
 requests==2.18.4
-cachecontrol==0.12.3
+cachecontrol==0.12.4

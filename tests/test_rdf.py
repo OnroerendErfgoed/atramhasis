@@ -100,7 +100,7 @@ class MetadatasetTests(unittest.TestCase):
             'language': ['nl', 'en', 'fr'],
             'license': [
                 'https://creativecommons.org/licenses/by/4.0/',
-                'https://id.erfgoed.net/vocab/licences#GODL'
+                'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
             ]
         }
         g = self._get_graph()
@@ -113,7 +113,7 @@ class MetadatasetTests(unittest.TestCase):
         self.assertIn((uri, DCTERMS.language, Literal('en')), g)
         self.assertIn((uri, DCTERMS.publisher, URIRef('https://id.erfgoed.net/actoren/501')), g)
         self.assertIn((uri, DCTERMS.license, URIRef('https://creativecommons.org/licenses/by/4.0/')), g)
-        self.assertIn((uri, DCTERMS.license, URIRef('https://id.erfgoed.net/vocab/licences#GODL')), g)
+        self.assertIn((uri, DCTERMS.license, URIRef('http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0')), g)
         self.assertIn((uri, DCTERMS.created, Literal(date(2016,9,14))), g)
 
 class LdfServerTests(unittest.TestCase):

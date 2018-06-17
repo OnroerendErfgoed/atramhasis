@@ -14,7 +14,7 @@
           <li><a href="{{ request.path }}.csv?{{ request.query_string }}">CSV</a></li>
         </ul>
       </div>
-      {%- for c in concepts|sort(attribute='label') %}
+      {%- for c in concepts %}
         <div class="large-3 large-3-pad columns result-grid"><a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}"><h5>{{ c.label }}</h5> <span> [ ID : {{ c.id }} ]</span><br><small>{{ c.type }}</small></a></div>
       {%- endfor %}
     </div>

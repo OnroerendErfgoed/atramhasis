@@ -11,8 +11,8 @@ Atramhasis comes with a demo site include. This allows you to quickly evaluate
 and inspect the software. To get started, just download Atramhasis from pypi and
 install it. We recommend doing this in a virtualenvironment.
 
-.. code-block:: bash    
-    
+.. code-block:: bash
+
     $ mkvirtualenv atramhasis_demo
     $ pip install -U atramhasis
 
@@ -20,14 +20,14 @@ install it. We recommend doing this in a virtualenvironment.
 Once Atramhasis is installed, you can call upon a pyramid scaffold to generate
 the demo site.
 
-.. code-block:: bash    
-    
+.. code-block:: bash
+
     $ pcreate -s atramhasis_demo atramhasis_demo
     $ cd atramhasis_demo
 
 This creates a local demo package you can run with just a few more commands:
 
-.. code-block:: bash    
+.. code-block:: bash
 
     # setup
     $ pip install -r requirements-dev.txt
@@ -54,15 +54,49 @@ reach it, open your browser and surf to the address `<http://localhost:6543>`_.
 
 You will be greeted by the Atramhasis front page. From this page you can start
 searching and browsing the thesauri. You can also start editing the thesauri
-by surfing to `<http://localhost:6543/admin>`_. The demo instance requires that
-you login to access the admin module. We've provided a login mechanism using
-`Mozilla Persona <http://www.mozilla.org/en-US/persona/>`_ for the demo. If you 
-want to run Atramhasis in a production environment, you can easily replace the 
-security module by another one. This enables you to use the security mechanisms 
-(eg. LDAP, Active Directory, a custom users database, ...) that your 
-organisation requires. Please consult the documentation on :ref:`security` 
+by surfing to `<http://localhost:6543/admin>`_. The demo instance does not
+requires you to login to access the admin module. If you
+want to run Atramhasis in a production environment, you can easily write your
+own security module. This enables you to use the security mechanisms
+(eg. LDAP, Active Directory, a custom users database, ...) that your
+organisation requires. Please consult the documentation on :ref:`security`
 customisation for further information on this topic.
 
+Running a demo site with Docker
+===============================
+
+There is a `Docker image <https://hub.docker.com/r/atramhasis/demo/>`_ 
+available that allows you to quickly get a demo instance up and running. 
+The Docker image contains the demo application and the LDF server. 
+
+After installing Docker for your operating system, you 
+can simply pull the image and run a container. Once you've
+executed the following commands, you should be able to 
+visit the demo application in your browser on 
+`<http://localhost:6543>`_. A LDF-server is also included
+in the demo, which is accessible on `<http://localhost:3000>`_.
+
+.. code::
+
+   $ sudo docker pull atramhasis/demo
+   $ sudo docker run -p 6543:6543 -p 3000:3000 atramhasis/demo
+
+Alternatively, you can run a specific version of Atramhasis 
+(starting from atramhasis 0.6.4):
+
+.. code::
+
+   $ sudo docker pull atramhasis/demo:0.6.4
+   $ sudo docker run -p 6543:6543 -p 3000:3000 atramhasis/demo:0.6.4
+
+While this is a fast and easy way to get a first impression of 
+Atramhasis, please be aware  that any edits you make when running the 
+image, will be discarded when you stop the Docker container. If you want 
+to test the application over a longer period of time, this is probably not
+what you're looking for. If you need persistence, but still want to use
+Docker, you can customise the 
+`Dockerfile <https://github.com/OnroerendErfgoed/atramhasis-demo-docker/>`_
+to suit your needs.
 
 Running a demo site on Heroku
 =============================

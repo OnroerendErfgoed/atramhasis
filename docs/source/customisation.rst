@@ -402,25 +402,16 @@ evaluation purposes, others might need a simple standalone database of users
 and certain deployments might need to integrate with enterprise authentication
 systems like LDAP, Active Directory, Single Sign On, ...
 
-Atramhasis provides authorisation hooks for security. To edit, add or delete a concept or collection,
-a user is required to have the 'editor' pemission. Unless no authorisation policy has been configured.
+Atramhasis provides authorisation hooks for security. To edit, add or delete a 
+concept or collection, a user is required to have the 'editor' pemission. Unless 
+no authorisation policy has been configured.
 
+To get started, consult the sections of the Pyramid documentation on security.
 
-Sample configuration
---------------------
-
-The atramhasis_demo scaffold contains a sample security configuration, using Mozilla Persona:
-http://www.mozilla.org/en-US/persona/. Persona security is implemented with pyramid_persona:
-https://pypi.python.org/pypi/pyramid_persona
-
-You can configure persona.secret and persona.audience in development.ini:
-
-.. code-block:: python
-
-    persona.secret = sosecret
-    persona.audiences = http://localhost:6543
-
-The login and logout views, the groupfinder and rootfactory are implemented in the security.py file.
+Prior to version 0.6.3, Atramhasis contained a demo scaffold that had a custom
+security implementation using Mozilla Persona. Since this service has been
+discontinued, the security configuration was removed as well. But you can still
+check out the old code in our Github repository to see how it works.
 
 
 Foreign Keys
