@@ -31,7 +31,7 @@ pyramid-jinja2==2.7
 Babel==2.6.0
 
 # alembic
-alembic==0.9.9
+alembic==0.9.10
 
 # colander
 colander==1.4.0
