@@ -5,7 +5,13 @@ Module containing utility functions dealing with RDF used by Atramhasis.
 .. versionadded:: 0.6.0
 """
 
+import logging
+
+log = logging.getLogger(__name__)
+
 from pyramid.settings import asbool
+
+import requests
 
 from rdflib import Graph
 from rdflib.namespace import RDF, VOID, DCTERMS, FOAF, SKOS
@@ -14,10 +20,12 @@ from rdflib.term import URIRef, BNode, Literal
 
 from skosprovider_rdf.utils import extract_language, _add_lang_to_html
 
+
 FORMATS = Namespace('http://www.w3.org/ns/formats/')
 SKOS_THES = Namespace('http://purl.org/iso25964/skos-thes#')
 HYDRA = Namespace('http://www.w3.org/ns/hydra/core#')
 DCAT = Namespace('http://www.w3.org/ns/dcat#')
+CC = Namespace('https://creativecommons.org/ns#')
 
 def _init_metadata_graph():
     '''
@@ -33,6 +41,7 @@ def _init_metadata_graph():
     graph.namespace_manager.bind("skos", SKOS)
     graph.namespace_manager.bind("skos-thes", SKOS_THES)
     graph.namespace_manager.bind("hydra", HYDRA)
+    graph.namespace_manager.bind("cc", CC)
     return graph
 
 
@@ -195,15 +204,15 @@ def _add_metadata(graph, subject, metadata):
     mapping = {
         'creator': {
             'predicate': DCTERMS.creator,
-            'objecttype': URIRef
+            'objecttype': 'agent'
         },
         'publisher': {
             'predicate': DCTERMS.publisher,
-            'objecttype': URIRef
+            'objecttype': 'agent'
         },
         'contributor': {
             'predicate': DCTERMS.contributor,
-            'objecttype': URIRef
+            'objecttype': 'agent'
         },
         'language': {
             'predicate': DCTERMS.language
@@ -223,7 +232,7 @@ def _add_metadata(graph, subject, metadata):
         },
         'contactPoint': {
             'predicate': DCAT.contactPoint,
-            'objecttype': URIRef
+            'objecttype': 'agent'
         }
     }
 
@@ -234,9 +243,58 @@ def _add_metadata(graph, subject, metadata):
             else:
                 objecttype = Literal
             for ko in metadata[k]:
+                if objecttype == 'agent':
+                    if 'uri' in ko:
+                        agentsubject = URIRef(ko.get('uri'))
+                    else:
+                        agentsubject = BNode()
+                    graph.add((subject, v['predicate'], agentsubject))
+                    _add_agent(graph, agentsubject, ko)
+                else:
+                    o = objecttype(ko)
+                    graph.add((subject, v['predicate'], o))
+    return graph
+
+
+def _add_agent(graph, subject, agent):
+    graph.add((subject, RDF.type, FOAF.Agent))
+    mapping = {
+        'name': {
+            'predicate': FOAF.name
+        },
+        'type': {
+            'predicate': RDF.type,
+            'objecttype': URIRef
+        }
+    }
+    for k, v in mapping.items():
+        if k in agent:
+            if 'objecttype' in v:
+                objecttype = v['objecttype']
+            else:
+                objecttype = Literal
+            for ko in agent[k]:
                 o = objecttype(ko)
                 graph.add((subject, v['predicate'], o))
     return graph
+
+
+
+def _add_external_uri(graph, uri):
+    res = requests.get(uri, headers={'Accept': 'application/rdf+xml,text/turtle;q=0.9,text/n3;q=0.75,*/*;q=0.1'})
+    try:
+        res.raise_for_status()
+    except:
+        #URI could not be fetched, abort
+        return
+    log.debug(res.headers.get('content-type'))
+    if 'text/html' not in res.headers.get('content-type'):
+        log.debug(res.text)
+        format = res.headers.get('content-type').split(';', 1)[0]
+        graph.parse(data=res.text, format=format)
+        log.debug('Finished parsing')
+    else:
+        log.debug('No parsing possible.')
 
 
 def _add_ldf_server(graph, dataseturi, ldfurl):

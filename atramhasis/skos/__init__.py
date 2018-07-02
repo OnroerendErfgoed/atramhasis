@@ -25,8 +25,14 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 1,
             'dataset': {
                 'uri': 'http://id.trees.org',
-                'publisher': ['https://id.erfgoed.net/actoren/1'],
-                'contactPoint': ['https://id.erfgoed.net/actoren/1'],
+                'publisher': [{
+                    'uri': 'https://id.erfgoed.net/actoren/1',
+                    'name': ['Van Daele, Koen'],
+                    'type': ['http://xmlns.com/foaf/0.1/Person']
+                }],
+                'contactPoint': [{
+                    'uri': 'https://id.erfgoed.net/actoren/1'
+                }],
             }
         },
         config.registry.dbmaker
@@ -38,8 +44,12 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 2,
             'dataset': {
                 'uri': 'urn:x-skosprovider:geography',
-                'publisher': ['https://id.erfgoed.net/actoren/1'],
-                'contactPoint': ['https://id.erfgoed.net/actoren/1'],
+                'publisher': [{
+                    'uri': 'https://id.erfgoed.net/actoren/1'
+                }],
+                'contactPoint': [{
+                    'uri': 'https://id.erfgoed.net/actoren/1'
+                }],
             }
         },
         config.registry.dbmaker
@@ -51,14 +61,20 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 3,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='stijlen_en_culturen'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
+                'publisher': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501',
+                    'name': ['Agentschap Onroerend erfgoed'],
+                    'type': ['http://xmlns.com/foaf/0.1/Organization']
+                }],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ],
-                'contactPoint': ['https://id.erfgoed.net/actoren/501']
+                'contactPoint': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }]
             }
 
         },
@@ -72,14 +88,18 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 4,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='materialen'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
+                'publisher': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }],
                 'created': [date(2011,3,16)],
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ],
-                'contactPoint': ['https://id.erfgoed.net/actoren/501']
+                'contactPoint': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }]
             }
         },
         config.registry.dbmaker,
@@ -92,14 +112,18 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 5,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='gebeurtenistypes'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
+                'publisher': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }],
                 'created': [date(2010,8,13)],
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ],
-                'contactPoint': ['https://id.erfgoed.net/actoren/501']
+                'contactPoint': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }]
             }
         },
         config.registry.dbmaker,
@@ -112,14 +136,18 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 6,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='erfgoedtypes'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
+                'publisher': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ],
-                'contactPoint': ['https://id.erfgoed.net/actoren/501']
+                'contactPoint': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }]
             }
         },
         config.registry.dbmaker,
@@ -132,14 +160,18 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 7,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='dateringen'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
+                'publisher': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ],
-                'contactPoint': ['https://id.erfgoed.net/actoren/501']
+                'contactPoint': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }]
             }
         },
         config.registry.dbmaker,
@@ -152,14 +184,18 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 8,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='soorten'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
+                'publisher': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }],
                 'created': [date(2011,5,23)],
                 'language': ['nl-BE', 'la'],
                 'license': [
                     'https://creativecommons.org/licenses/by/4.0/',
                     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
                 ],
-                'contactPoint': ['https://id.erfgoed.net/actoren/501']
+                'contactPoint': [{
+                    'uri': 'https://id.erfgoed.net/actoren/501'
+                }]
             }
         },
         config.registry.dbmaker,
