@@ -68,10 +68,16 @@ def includeme(config):   # pragma: no cover
                 }],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
-                'license': [
-                    'https://creativecommons.org/licenses/by/4.0/',
-                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ],
+                'license': [{
+                    'uri': 'https://creativecommons.org/licenses/by/4.0/',
+                    'title': ['Attribution 4.0 International'],
+                    'identifier': ['(CC BY 4.0)'],
+                    'type': ['https://creativecommons.org/ns#License']
+                }, {
+                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0',
+                    'title': ['Modellicentie voor gratis hergebruik'],
+                    'type': ['https://creativecommons.org/ns#License']
+                }],
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/501'
                 }]
@@ -93,10 +99,11 @@ def includeme(config):   # pragma: no cover
                 }],
                 'created': [date(2011,3,16)],
                 'language': ['nl-BE'],
-                'license': [
-                    'https://creativecommons.org/licenses/by/4.0/',
-                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ],
+                'license': [{
+                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
+                }, {
+                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+                }],
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/501'
                 }]
@@ -117,10 +124,11 @@ def includeme(config):   # pragma: no cover
                 }],
                 'created': [date(2010,8,13)],
                 'language': ['nl-BE'],
-                'license': [
-                    'https://creativecommons.org/licenses/by/4.0/',
-                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ],
+                'license': [{
+                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
+                }, {
+                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+                }],
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/501'
                 }]
@@ -141,10 +149,11 @@ def includeme(config):   # pragma: no cover
                 }],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
-                'license': [
-                    'https://creativecommons.org/licenses/by/4.0/',
-                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ],
+                'license': [{
+                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
+                }, {
+                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+                }],
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/501'
                 }]
@@ -165,10 +174,11 @@ def includeme(config):   # pragma: no cover
                 }],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
-                'license': [
-                    'https://creativecommons.org/licenses/by/4.0/',
-                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ],
+                'license': [{
+                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
+                }, {
+                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+                }],
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/501'
                 }]
@@ -189,10 +199,11 @@ def includeme(config):   # pragma: no cover
                 }],
                 'created': [date(2011,5,23)],
                 'language': ['nl-BE', 'la'],
-                'license': [
-                    'https://creativecommons.org/licenses/by/4.0/',
-                    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                ],
+                'license': [{
+                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
+                }, {
+                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+                }],
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/501'
                 }]

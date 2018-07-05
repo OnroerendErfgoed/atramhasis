@@ -228,7 +228,7 @@ def _add_metadata(graph, subject, metadata):
         },
         'license': {
             'predicate': DCTERMS.license,
-            'objecttype': URIRef
+            'objecttype': 'license'
         },
         'contactPoint': {
             'predicate': DCAT.contactPoint,
@@ -244,20 +244,22 @@ def _add_metadata(graph, subject, metadata):
                 objecttype = Literal
             for ko in metadata[k]:
                 if objecttype == 'agent':
-                    if 'uri' in ko:
-                        agentsubject = URIRef(ko.get('uri'))
-                    else:
-                        agentsubject = BNode()
-                    graph.add((subject, v['predicate'], agentsubject))
-                    _add_agent(graph, agentsubject, ko)
+                    _add_agent(graph, subject, v['predicate'], ko)
+                elif objecttype == 'license':
+                    _add_license(graph, subject, v['predicate'], ko)
                 else:
                     o = objecttype(ko)
                     graph.add((subject, v['predicate'], o))
     return graph
 
 
-def _add_agent(graph, subject, agent):
-    graph.add((subject, RDF.type, FOAF.Agent))
+def _add_agent(graph, subject, predicate, agent):
+    if 'uri' in agent:
+        agentsubject = URIRef(agent.get('uri'))
+    else:
+        agentsubject = BNode()
+    graph.add((subject, predicate, agentsubject))
+    graph.add((agentsubject, RDF.type, FOAF.Agent))
     mapping = {
         'name': {
             'predicate': FOAF.name
@@ -275,26 +277,42 @@ def _add_agent(graph, subject, agent):
                 objecttype = Literal
             for ko in agent[k]:
                 o = objecttype(ko)
-                graph.add((subject, v['predicate'], o))
+                graph.add((agentsubject, v['predicate'], o))
     return graph
 
 
-
-def _add_external_uri(graph, uri):
-    res = requests.get(uri, headers={'Accept': 'application/rdf+xml,text/turtle;q=0.9,text/n3;q=0.75,*/*;q=0.1'})
-    try:
-        res.raise_for_status()
-    except:
-        #URI could not be fetched, abort
-        return
-    log.debug(res.headers.get('content-type'))
-    if 'text/html' not in res.headers.get('content-type'):
-        log.debug(res.text)
-        format = res.headers.get('content-type').split(';', 1)[0]
-        graph.parse(data=res.text, format=format)
-        log.debug('Finished parsing')
+def _add_license(graph, subject, predicate, license):
+    if 'uri' in license:
+        licsubject = URIRef(license.get('uri'))
     else:
-        log.debug('No parsing possible.')
+        licsubject = BNode()
+    graph.add((subject, predicate, licsubject))
+    graph.add((licsubject, RDF.type, DCTERMS.LicenseDocument))
+    mapping = {
+        'title': {
+            'predicate': DCTERMS.title
+        },
+        'description': {
+            'predicate': DCTERMS.description
+        },
+        'type': {
+            'predicate': RDF.type,
+            'objecttype': URIRef
+        },
+        'identifier': {
+            'predicate': DCTERMS.identifier,
+        }
+    }
+    for k, v in mapping.items():
+        if k in license:
+            if 'objecttype' in v:
+                objecttype = v['objecttype']
+            else:
+                objecttype = Literal
+            for ko in license[k]:
+                o = objecttype(ko)
+                graph.add((licsubject, v['predicate'], o))
+    return graph
 
 
 def _add_ldf_server(graph, dataseturi, ldfurl):
