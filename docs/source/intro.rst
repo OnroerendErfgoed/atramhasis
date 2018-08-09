@@ -31,7 +31,7 @@ If you have questions about the project, want to help out, want to report a
 bug or just want to have a conversation with us, please get in touch. For 
 general conversations, you can use our 
 `Google Group <https://groups.google.com/d/forum/atramhasis>`_. If you have 
-encoutered a bug in Atramhasis or it's documenation, or if you want to ask
+encountered a bug in Atramhasis or it's documentation, or if you want to ask
 us to consider implementing a feature, feel free to use our 
 `issue tracker <http://github.com/OnroerendErfgoed/Atramhasis/issues>`_.
 
