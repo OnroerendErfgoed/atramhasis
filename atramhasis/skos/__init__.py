@@ -72,11 +72,13 @@ def includeme(config):   # pragma: no cover
                     'uri': 'https://creativecommons.org/licenses/by/4.0/',
                     'title': ['Attribution 4.0 International'],
                     'identifier': ['(CC BY 4.0)'],
-                    'type': ['https://creativecommons.org/ns#License']
+                    'type': ['https://creativecommons.org/ns#License'],
+                    'dctype': ['http://purl.org/adms/licencetype/Attribution']
                 }, {
                     'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0',
                     'title': ['Modellicentie voor gratis hergebruik'],
-                    'type': ['https://creativecommons.org/ns#License']
+                    'type': ['https://creativecommons.org/ns#License'],
+                    'dctype': ['http://purl.org/adms/licencetype/Attribution']
                 }],
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/501'

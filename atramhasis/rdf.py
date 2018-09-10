@@ -267,7 +267,11 @@ def _add_agent(graph, subject, predicate, agent):
         'type': {
             'predicate': RDF.type,
             'objecttype': URIRef
-        }
+        },
+        'dctype': {
+            'predicate': DCTERMS.type,
+            'objecttype': URIRef
+        },
     }
     for k, v in mapping.items():
         if k in agent:
@@ -297,6 +301,10 @@ def _add_license(graph, subject, predicate, license):
         },
         'type': {
             'predicate': RDF.type,
+            'objecttype': URIRef
+        },
+        'dctype': {
+            'predicate': DCTERMS.type,
             'objecttype': URIRef
         },
         'identifier': {
