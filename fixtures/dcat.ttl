@@ -472,18 +472,22 @@
 
 <https://id.erfgoed.net/actoren/1> a foaf:Agent,
         foaf:Person ;
+    dcterms:type <http://purl.org/adms/publishertype/PrivateIndividual(s)> ;
     foaf:name "Van Daele, Koen" .
 
 <http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0> a dcterms:LicenseDocument,
         cc:License ;
-    dcterms:title "Modellicentie voor gratis hergebruik" .
+    dcterms:title "Modellicentie voor gratis hergebruik" ;
+    dcterms:type <http://purl.org/adms/licencetype/Attribution> .
 
 <https://creativecommons.org/licenses/by/4.0/> a dcterms:LicenseDocument,
         cc:License ;
     dcterms:identifier "(CC BY 4.0)" ;
-    dcterms:title "Attribution 4.0 International" .
+    dcterms:title "Attribution 4.0 International" ;
+    dcterms:type <http://purl.org/adms/licencetype/Attribution> .
 
 <https://id.erfgoed.net/actoren/501> a foaf:Agent,
         foaf:Organization ;
+    dcterms:type <http://purl.org/adms/publishertype/RegionalAuthority> ;
     foaf:name "Agentschap Onroerend erfgoed" .
 

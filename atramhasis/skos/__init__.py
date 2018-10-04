@@ -28,7 +28,8 @@ def includeme(config):   # pragma: no cover
                 'publisher': [{
                     'uri': 'https://id.erfgoed.net/actoren/1',
                     'name': ['Van Daele, Koen'],
-                    'type': ['http://xmlns.com/foaf/0.1/Person']
+                    'type': ['http://xmlns.com/foaf/0.1/Person'],
+                    'dctype': ['http://purl.org/adms/publishertype/PrivateIndividual(s)']
                 }],
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/1'
@@ -64,7 +65,8 @@ def includeme(config):   # pragma: no cover
                 'publisher': [{
                     'uri': 'https://id.erfgoed.net/actoren/501',
                     'name': ['Agentschap Onroerend erfgoed'],
-                    'type': ['http://xmlns.com/foaf/0.1/Organization']
+                    'type': ['http://xmlns.com/foaf/0.1/Organization'],
+                    'dctype': ['http://purl.org/adms/publishertype/RegionalAuthority']
                 }],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
