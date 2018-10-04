@@ -34,6 +34,13 @@ def includeme(config):   # pragma: no cover
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/1'
                 }],
+                'license': [{
+                    'uri': 'https://creativecommons.org/publicdomain/zero/1.0',
+                    'title': ['CC0 1.0 Universal Public Domain Dedication'],
+                    'identifier': ['(CC0 1.0)'],
+                    'type': ['https://creativecommons.org/ns#License'],
+                    'dctype': ['http://purl.org/adms/licencetype/PublicDomain']
+                }]
             }
         },
         config.registry.dbmaker
@@ -51,6 +58,9 @@ def includeme(config):   # pragma: no cover
                 'contactPoint': [{
                     'uri': 'https://id.erfgoed.net/actoren/1'
                 }],
+                'license': [{
+                    'uri': 'https://creativecommons.org/publicdomain/zero/1.0'
+                }]
             }
         },
         config.registry.dbmaker

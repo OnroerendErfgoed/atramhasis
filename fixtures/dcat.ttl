@@ -35,6 +35,7 @@
         dcat:Dataset ;
     dcterms:description "A thesaurus of different types of trees as seen on TV."@en ;
     dcterms:identifier "TREES" ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
     dcterms:title "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
@@ -217,6 +218,7 @@
 <urn:x-skosprovider:geography> a void:Dataset,
         dcat:Dataset ;
     dcterms:identifier "GEOGRAPHY" ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
     dcterms:title "Geography"@en,
         "Geografie"@nl ;
@@ -267,6 +269,7 @@
     dcat:mediaType "text/turtle" .
 
 <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf> a dcat:Distribution ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
     dcterms:title "Geography"@en,
         "Geografie"@nl ;
@@ -278,6 +281,7 @@
     dcat:mediaType "application/rdf+xml" .
 
 <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> a dcat:Distribution ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
     dcterms:title "Geography"@en,
         "Geografie"@nl ;
@@ -446,6 +450,7 @@
 
 <http://localhost:6543/conceptschemes/TREES/c.rdf> a dcat:Distribution ;
     dcterms:description "A thesaurus of different types of trees as seen on TV."@en ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
     dcterms:title "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
@@ -459,6 +464,7 @@
 
 <http://localhost:6543/conceptschemes/TREES/c.ttl> a dcat:Distribution ;
     dcterms:description "A thesaurus of different types of trees as seen on TV."@en ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0> ;
     dcterms:publisher <https://id.erfgoed.net/actoren/1> ;
     dcterms:title "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
@@ -469,6 +475,12 @@
     dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/TREES/c.ttl> ;
     dcat:mediaType "text/turtle" .
+
+<https://creativecommons.org/publicdomain/zero/1.0> a dcterms:LicenseDocument,
+        cc:License ;
+    dcterms:identifier "(CC0 1.0)" ;
+    dcterms:title "CC0 1.0 Universal Public Domain Dedication" ;
+    dcterms:type <http://purl.org/adms/licencetype/PublicDomain> .
 
 <https://id.erfgoed.net/actoren/1> a foaf:Agent,
         foaf:Person ;
