@@ -22,7 +22,7 @@ language-tags==0.4.5
 # sqlalchemy
 sqlalchemy==1.2.13
 zope.sqlalchemy==1.0
-transaction==2.2.1
+transaction==2.4.0
 psycopg2==2.7.5
 
 # jinja2
