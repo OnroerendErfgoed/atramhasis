@@ -17,7 +17,7 @@ skosprovider_heritagedata==0.3.1
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata.git#egg=skosprovider_heritagedata
 
 #language-tags
-language-tags==0.4.4
+language-tags==0.4.5
 
 # sqlalchemy
 sqlalchemy==1.2.8
