@@ -34,7 +34,7 @@ Babel==2.6.0
 alembic==1.0.5
 
 # colander
-colander==1.4.0
+colander==1.5.1
 
 # caching
 dogpile.cache==0.6.5
