@@ -1,7 +1,9 @@
-0.7.0 (??-??-2018)
+0.6.5 (19-12-2018)
 ------------------
 
 - Generate a default dump location in development.ini files. (#416)
+- Update skosprovider_sqlalchemy to solve a problem with the tree cache. (#455)
+- Update a lot of dependencies.
 
 0.6.4 (22-12-2017)
 ------------------
