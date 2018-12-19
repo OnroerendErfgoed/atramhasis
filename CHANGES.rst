@@ -1,4 +1,4 @@
-0.7.0 (??-??-2018)
+0.6.5 (19-12-2018)
 ------------------
 
 - Generate a default dump location in development.ini files. (#416)
