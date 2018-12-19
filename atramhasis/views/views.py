@@ -248,16 +248,17 @@ class AtramhasisView(object):
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
         locale = self.request.locale_name
-        skostree = self.get_scheme(scheme_id, locale)
-        dicts = []
-        for thing in skostree:
-            dicts.append(self.parse_thing(thing, None))
+        dicts = self.get_results_tree(scheme_id, locale)
         if dicts:
             return dicts
         else:
             return Response(status_int=404)
 
     @tree_region.cache_on_arguments()
+    def get_results_tree(self, scheme_id, locale):
+        skostree = self.get_scheme(scheme_id, locale)
+        return [self.parse_thing(thing, None) for thing in skostree]
+
     def get_scheme(self, scheme, locale):
         scheme_tree = []
         provider = self.skos_registry.get_provider(scheme)
@@ -272,7 +273,6 @@ class AtramhasisView(object):
 
         return scheme_tree
 
-    @tree_region.cache_on_arguments()
     def parse_thing(self, thing, parent_tree_id):
         tree_id = self.create_treeid(parent_tree_id, thing.concept_id)
         locale = self.request.locale_name
