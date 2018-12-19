@@ -1,6 +1,6 @@
 # pyramid
-pyramid==1.9.2 # 1.10.1
-pyramid-tm==2.2 # 2.2.1
+pyramid==1.10.1
+pyramid-tm==2.2.1
 pyramid_rewrite==0.2
 
 skosprovider==0.6.1
@@ -17,7 +17,7 @@ skosprovider_heritagedata==0.3.1
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata.git#egg=skosprovider_heritagedata
 
 #language-tags
-language-tags==0.4.4 # 0.4.6
+language-tags==0.4.6
 
 # sqlalchemy
 sqlalchemy==1.2.8 # 1.2.14
