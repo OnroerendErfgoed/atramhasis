@@ -47,5 +47,5 @@ html5lib==1.0.1
 bleach==3.0.2
 
 # requests
-requests==2.20.1
+requests==2.21.0
 cachecontrol==0.12.5
