@@ -229,7 +229,7 @@ class TestConceptSchemeView(unittest.TestCase):
         self.regis = Registry()
         self.regis.register_provider(trees)
         self.request = testing.DummyRequest()
-        self.request.accept = ['text/html']
+        self.request.accept = 'text/html'
         self.request.data_managers = data_managers(self.request)
         self.request.skos_registry = self.regis
 
@@ -265,7 +265,7 @@ class TestConceptView(unittest.TestCase):
         self.config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
                               request_method="GET")
         self.request = testing.DummyRequest()
-        self.request.accept = ['text/html']
+        self.request.accept = 'text/html'
         self.regis = Registry()
         self.regis.register_provider(provider(1))
         self.request.data_managers = data_managers(self.request)
