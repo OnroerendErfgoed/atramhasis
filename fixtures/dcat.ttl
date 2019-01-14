@@ -7,6 +7,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix skos-thes: <http://purl.org/iso25964/skos-thes#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
@@ -50,7 +51,9 @@
     skos:definition "A thesaurus of different types of trees as seen on TV."@en ;
     skos:prefLabel "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
+    dcat:contactPoint [ a vcard:Individual,
+                vcard:Kind ;
+            vcard:fn "Van Daele, Koen" ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/TREES/c.rdf>,
         <http://localhost:6543/conceptschemes/TREES/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/TREES> ;
@@ -76,7 +79,7 @@
         skos: ;
     skos:prefLabel "Periods"@en,
         "Dateringen"@nl ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/PERIOD/c.rdf>,
         <http://localhost:6543/conceptschemes/PERIOD/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/PERIOD> ;
@@ -104,7 +107,7 @@
     skos:definition "A functional typology of heritage."@en ;
     skos:prefLabel "Heritage types"@en,
         "Erfgoedtypes"@nl ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/HERITAGETYPE/c.rdf>,
         <http://localhost:6543/conceptschemes/HERITAGETYPE/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/HERITAGETYPE> ;
@@ -130,7 +133,7 @@
         skos: ;
     skos:prefLabel "Event types"@en,
         "Gebeurtenistypes"@nl ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/EVENTTYPE/c.rdf>,
         <http://localhost:6543/conceptschemes/EVENTTYPE/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/EVENTTYPE> ;
@@ -156,7 +159,7 @@
         skos: ;
     skos:prefLabel "Materials"@en,
         "Materialen"@nl ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/MATERIALS/c.rdf>,
         <http://localhost:6543/conceptschemes/MATERIALS/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/MATERIALS> ;
@@ -183,7 +186,7 @@
         skos: ;
     skos:prefLabel "Species"@en,
         "Soorten"@nl ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/SPECIES/c.rdf>,
         <http://localhost:6543/conceptschemes/SPECIES/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/SPECIES> ;
@@ -209,7 +212,7 @@
         skos: ;
     skos:prefLabel "Styles and Cultures"@en,
         "Stijlen en Culturen"@nl ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/STYLES/c.rdf>,
         <http://localhost:6543/conceptschemes/STYLES/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/STYLES> ;
@@ -232,7 +235,7 @@
         skos: ;
     skos:prefLabel "Geography"@en,
         "Geografie"@nl ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf>,
         <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
@@ -249,7 +252,7 @@
     skos:prefLabel "Event types"@en,
         "Gebeurtenistypes"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/EVENTTYPE> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/EVENTTYPE/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -264,7 +267,7 @@
     skos:prefLabel "Event types"@en,
         "Gebeurtenistypes"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/EVENTTYPE> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/EVENTTYPE/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
@@ -276,7 +279,7 @@
     skos:prefLabel "Geography"@en,
         "Geografie"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -288,7 +291,7 @@
     skos:prefLabel "Geography"@en,
         "Geografie"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
@@ -305,7 +308,7 @@
     skos:prefLabel "Heritage types"@en,
         "Erfgoedtypes"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/HERITAGETYPE> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/HERITAGETYPE/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -322,7 +325,7 @@
     skos:prefLabel "Heritage types"@en,
         "Erfgoedtypes"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/HERITAGETYPE> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/HERITAGETYPE/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
@@ -337,7 +340,7 @@
     skos:prefLabel "Materials"@en,
         "Materialen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/MATERIALS> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/MATERIALS/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -352,7 +355,7 @@
     skos:prefLabel "Materials"@en,
         "Materialen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/MATERIALS> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/MATERIALS/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
@@ -367,7 +370,7 @@
     skos:prefLabel "Periods"@en,
         "Dateringen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/PERIOD> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/PERIOD/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -382,7 +385,7 @@
     skos:prefLabel "Periods"@en,
         "Dateringen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/PERIOD> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/PERIOD/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
@@ -398,7 +401,7 @@
     skos:prefLabel "Species"@en,
         "Soorten"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/SPECIES> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/SPECIES/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -414,7 +417,7 @@
     skos:prefLabel "Species"@en,
         "Soorten"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/SPECIES> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/SPECIES/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
@@ -429,7 +432,7 @@
     skos:prefLabel "Styles and Cultures"@en,
         "Stijlen en Culturen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/STYLES> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/STYLES/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -444,7 +447,7 @@
     skos:prefLabel "Styles and Cultures"@en,
         "Stijlen en Culturen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/STYLES> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/501> ;
+    dcat:contactPoint [ a vcard:Kind ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/STYLES/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
@@ -458,7 +461,9 @@
     skos:prefLabel "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/TREES> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
+    dcat:contactPoint [ a vcard:Individual,
+                vcard:Kind ;
+            vcard:fn "Van Daele, Koen" ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/TREES/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -472,7 +477,9 @@
     skos:prefLabel "Different types of trees"@en,
         "Verschillende soorten bomen"@nl ;
     dcat:accessURL <http://localhost:6543/conceptschemes/TREES> ;
-    dcat:contactPoint <https://id.erfgoed.net/actoren/1> ;
+    dcat:contactPoint [ a vcard:Individual,
+                vcard:Kind ;
+            vcard:fn "Van Daele, Koen" ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/TREES/c.ttl> ;
     dcat:mediaType "text/turtle" .
 
