@@ -47,7 +47,7 @@ class AtramhasisMetadata(object):
     @view_config(route_name='atramhasis.rdf_dcat')
     def rdf_dcat(self):
         graph = dcat_dumper(self.request, self.skos_registry)
-        response = Response(content_type='application/xml+rdf')
+        response = Response(content_type='application/rdf+xml')
         response.body = graph.serialize(format='xml')
         response.content_disposition = 'attachment; filename="dcat.rdf"'
         return response

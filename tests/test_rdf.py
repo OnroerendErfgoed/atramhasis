@@ -110,7 +110,20 @@ class MetadataTests(unittest.TestCase):
             'publisher': [{
                 'uri': 'https://id.erfgoed.net/actoren/501',
                 'name': ['Onroerend Erfgoed'],
-                'type': ['http://xmlns.com/foaf/0.1/Organization']
+                'type': ['http://xmlns.com/foaf/0.1/Organization'],
+                'dctype': ['http://purl.org/adms/publishertype/RegionalAuthority']
+            }],
+            'contactPoint': [{
+                'type': ['http://www.w3.org/2006/vcard/ns#Organization'],
+                'fn': ['Onroerend Erfgoed'],
+                'hasEmail': [{
+                    'type': ['http://www.w3.org/2006/vcard/ns#Work'],
+                    'hasValue': ['mailto:info@onroerenderfgoed.be']
+                }],
+                'hasTelephone': [{
+                    'type': ['http://www.w3.org/2006/vcard/ns#Work','http://www.w3.org/2006/vcard/ns#Voice'],
+                    'hasValue': ['tel:+3225531650']
+                }],
             }],
             'created': [date(2016,9,14)],
             'language': ['nl', 'en', 'fr'],
@@ -129,6 +142,7 @@ class MetadataTests(unittest.TestCase):
         self.assertIn((uri, DCTERMS.language, Literal('fr')), g)
         self.assertIn((uri, DCTERMS.language, Literal('en')), g)
         self.assertIn((uri, DCTERMS.publisher, URIRef('https://id.erfgoed.net/actoren/501')), g)
+        self.assertIn((URIRef('https://id.erfgoed.net/actoren/501'), DCTERMS.type, URIRef('http://purl.org/adms/publishertype/RegionalAuthority')), g)
         self.assertIn((uri, DCTERMS.license, URIRef('https://creativecommons.org/licenses/by/4.0/')), g)
         self.assertIn((uri, DCTERMS.license, URIRef('http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0')), g)
         self.assertIn((uri, DCTERMS.created, Literal(date(2016,9,14))), g)

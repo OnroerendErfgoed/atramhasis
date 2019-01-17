@@ -651,6 +651,26 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', rdf_response.status)
         self.assertEqual('text/turtle', rdf_response.content_type)
 
+    def test_dcat_turtle(self):
+        rdf_response = self.testapp.get('/dcat', headers={'Accept': 'text/turtle'})
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('text/turtle', rdf_response.content_type)
+
+    def test_dcat_turtle_ext(self):
+        rdf_response = self.testapp.get('/dcat.ttl')
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('text/turtle', rdf_response.content_type)
+
+    def test_dcat_rdf(self):
+        rdf_response = self.testapp.get('/dcat', headers={'Accept': 'application/rdf+xml'})
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('application/rdf+xml', rdf_response.content_type)
+
+    def test_dcat_rdf_ext(self):
+        rdf_response = self.testapp.get('/dcat.rdf')
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('application/rdf+xml', rdf_response.content_type)
+
     def test_rdf_full_xml(self):
         rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c', headers={'Accept': 'application/rdf+xml'})
         self.assertEqual('200 OK', rdf_response.status)
