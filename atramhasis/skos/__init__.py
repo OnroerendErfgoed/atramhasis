@@ -19,28 +19,80 @@ log = logging.getLogger(__name__)
 def includeme(config):   # pragma: no cover
     dataseturigenerator = UriPatternGenerator('https://id.erfgoed.net/datasets/thesauri/%s')
 
+    KVD = {
+        'uri': 'https://id.erfgoed.net/actoren/1',
+        'name': ['Van Daele, Koen'],
+        'type': ['http://xmlns.com/foaf/0.1/Person'],
+        'dctype': ['http://purl.org/adms/publishertype/PrivateIndividual(s)']
+    }
+
+    KVD_VCARD = {
+        'type': ['http://www.w3.org/2006/vcard/ns#Individual'],
+        'fn': ['Van Daele, Koen'],
+        'hasEmail': [{
+            'type': ['http://www.w3.org/2006/vcard/ns#Work'],
+            'hasValue': ['mailto:koen.vandaele@vlaanderen.be']
+        }],
+        'hasTelephone': [{
+            'type': ['http://www.w3.org/2006/vcard/ns#Work','http://www.w3.org/2006/vcard/ns#Voice'],
+            'hasValue': ['tel:+3225531682']
+        }, {
+            'type': ['http://www.w3.org/2006/vcard/ns#Work','http://www.w3.org/2006/vcard/ns#Cell'],
+            'hasValue': ['tel:+32499949368']
+        }],
+    }
+
+    FHA = {
+        'uri': 'https://id.erfgoed.net/actoren/501',
+        'name': ['Agentschap Onroerend erfgoed'],
+        'type': ['http://xmlns.com/foaf/0.1/Organization'],
+        'dctype': ['http://purl.org/adms/publishertype/RegionalAuthority']
+    }
+
+    FHA_VCARD = {
+        'type': ['http://www.w3.org/2006/vcard/ns#Organization'],
+        'fn': ['Onroerend Erfgoed'],
+        'hasEmail': [{
+            'type': ['http://www.w3.org/2006/vcard/ns#Work'],
+            'hasValue': ['mailto:info@onroerenderfgoed.be']
+        }],
+        'hasTelephone': [{
+            'type': ['http://www.w3.org/2006/vcard/ns#Work','http://www.w3.org/2006/vcard/ns#Voice'],
+            'hasValue': ['tel:+3225531650']
+        }],
+    }
+
+    CC0 = {
+        'uri': 'https://creativecommons.org/publicdomain/zero/1.0',
+        'title': ['CC0 1.0 Universal Public Domain Dedication'],
+        'identifier': ['(CC0 1.0)'],
+        'type': ['https://creativecommons.org/ns#License'],
+        'dctype': ['http://purl.org/adms/licencetype/PublicDomain']
+    }
+
+    CCBY = {
+        'uri': 'https://creativecommons.org/licenses/by/4.0/',
+        'title': ['Attribution 4.0 International'],
+        'identifier': ['(CC BY 4.0)'],
+        'type': ['https://creativecommons.org/ns#License'],
+        'dctype': ['http://purl.org/adms/licencetype/Attribution']
+    }
+    MGH = {
+        'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0',
+        'title': ['Modellicentie voor gratis hergebruik'],
+        'type': ['https://creativecommons.org/ns#License'],
+        'dctype': ['http://purl.org/adms/licencetype/Attribution']
+    }
+
     TREES = SQLAlchemyProvider(
         {
             'id': 'TREES',
             'conceptscheme_id': 1,
             'dataset': {
                 'uri': 'http://id.trees.org',
-                'publisher': [{
-                    'uri': 'https://id.erfgoed.net/actoren/1',
-                    'name': ['Van Daele, Koen'],
-                    'type': ['http://xmlns.com/foaf/0.1/Person'],
-                    'dctype': ['http://purl.org/adms/publishertype/PrivateIndividual(s)']
-                }],
-                'contactPoint': [{
-                    'uri': 'https://id.erfgoed.net/actoren/1'
-                }],
-                'license': [{
-                    'uri': 'https://creativecommons.org/publicdomain/zero/1.0',
-                    'title': ['CC0 1.0 Universal Public Domain Dedication'],
-                    'identifier': ['(CC0 1.0)'],
-                    'type': ['https://creativecommons.org/ns#License'],
-                    'dctype': ['http://purl.org/adms/licencetype/PublicDomain']
-                }]
+                'publisher': [KVD],
+                'contactPoint': [KVD_VCARD],
+                'license': [CC0]
             }
         },
         config.registry.dbmaker
@@ -52,15 +104,9 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 2,
             'dataset': {
                 'uri': 'urn:x-skosprovider:geography',
-                'publisher': [{
-                    'uri': 'https://id.erfgoed.net/actoren/1'
-                }],
-                'contactPoint': [{
-                    'uri': 'https://id.erfgoed.net/actoren/1'
-                }],
-                'license': [{
-                    'uri': 'https://creativecommons.org/publicdomain/zero/1.0'
-                }]
+                'publisher': [KVD],
+                'contactPoint': [KVD_VCARD],
+                'license': [CC0]
             }
         },
         config.registry.dbmaker
@@ -72,29 +118,11 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 3,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='stijlen_en_culturen'),
-                'publisher': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501',
-                    'name': ['Agentschap Onroerend erfgoed'],
-                    'type': ['http://xmlns.com/foaf/0.1/Organization'],
-                    'dctype': ['http://purl.org/adms/publishertype/RegionalAuthority']
-                }],
+                'publisher': [FHA],
+                'contactPoint': [FHA_VCARD],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
-                'license': [{
-                    'uri': 'https://creativecommons.org/licenses/by/4.0/',
-                    'title': ['Attribution 4.0 International'],
-                    'identifier': ['(CC BY 4.0)'],
-                    'type': ['https://creativecommons.org/ns#License'],
-                    'dctype': ['http://purl.org/adms/licencetype/Attribution']
-                }, {
-                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0',
-                    'title': ['Modellicentie voor gratis hergebruik'],
-                    'type': ['https://creativecommons.org/ns#License'],
-                    'dctype': ['http://purl.org/adms/licencetype/Attribution']
-                }],
-                'contactPoint': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }]
+                'license': [CCBY, MGH]
             }
 
         },
@@ -108,19 +136,11 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 4,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='materialen'),
-                'publisher': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }],
+                'publisher': [FHA],
+                'contactPoint': [FHA_VCARD],
                 'created': [date(2011,3,16)],
                 'language': ['nl-BE'],
-                'license': [{
-                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
-                }, {
-                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                }],
-                'contactPoint': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }]
+                'license': [CCBY, MGH]
             }
         },
         config.registry.dbmaker,
@@ -133,19 +153,11 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 5,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='gebeurtenistypes'),
-                'publisher': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }],
+                'publisher': [FHA],
+                'contactPoint': [FHA_VCARD],
                 'created': [date(2010,8,13)],
                 'language': ['nl-BE'],
-                'license': [{
-                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
-                }, {
-                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                }],
-                'contactPoint': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }]
+                'license': [CCBY, MGH]
             }
         },
         config.registry.dbmaker,
@@ -158,19 +170,11 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 6,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='erfgoedtypes'),
-                'publisher': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }],
+                'publisher': [FHA],
+                'contactPoint': [FHA_VCARD],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
-                'license': [{
-                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
-                }, {
-                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                }],
-                'contactPoint': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }]
+                'license': [CCBY, MGH]
             }
         },
         config.registry.dbmaker,
@@ -183,19 +187,11 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 7,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='dateringen'),
-                'publisher': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }],
+                'publisher': [FHA],
+                'contactPoint': [FHA_VCARD],
                 'created': [date(2008,2,14)],
                 'language': ['nl-BE'],
-                'license': [{
-                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
-                }, {
-                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                }],
-                'contactPoint': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }]
+                'license': [CCBY, MGH]
             }
         },
         config.registry.dbmaker,
@@ -208,19 +204,11 @@ def includeme(config):   # pragma: no cover
             'conceptscheme_id': 8,
             'dataset': {
                 'uri': dataseturigenerator.generate(id='soorten'),
-                'publisher': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }],
+                'publisher': [FHA],
+                'contactPoint': [FHA_VCARD],
                 'created': [date(2011,5,23)],
                 'language': ['nl-BE', 'la'],
-                'license': [{
-                    'uri': 'https://creativecommons.org/licenses/by/4.0/'
-                }, {
-                    'uri': 'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
-                }],
-                'contactPoint': [{
-                    'uri': 'https://id.erfgoed.net/actoren/501'
-                }]
+                'license': [CCBY, MGH]
             }
         },
         config.registry.dbmaker,

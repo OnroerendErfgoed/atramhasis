@@ -11,8 +11,6 @@ log = logging.getLogger(__name__)
 
 from pyramid.settings import asbool
 
-import requests
-
 from rdflib import Graph
 from rdflib.namespace import RDF, VOID, DCTERMS, FOAF, SKOS
 from rdflib.namespace import Namespace
@@ -26,6 +24,8 @@ SKOS_THES = Namespace('http://purl.org/iso25964/skos-thes#')
 HYDRA = Namespace('http://www.w3.org/ns/hydra/core#')
 DCAT = Namespace('http://www.w3.org/ns/dcat#')
 CC = Namespace('https://creativecommons.org/ns#')
+VCARD = Namespace('http://www.w3.org/2006/vcard/ns#')
+
 
 def _init_metadata_graph():
     '''
@@ -42,6 +42,7 @@ def _init_metadata_graph():
     graph.namespace_manager.bind("skos-thes", SKOS_THES)
     graph.namespace_manager.bind("hydra", HYDRA)
     graph.namespace_manager.bind("cc", CC)
+    graph.namespace_manager.bind("vcard", VCARD)
     return graph
 
 
@@ -232,7 +233,7 @@ def _add_metadata(graph, subject, metadata):
         },
         'contactPoint': {
             'predicate': DCAT.contactPoint,
-            'objecttype': 'agent'
+            'objecttype': 'vcard'
         }
     }
 
@@ -247,19 +248,74 @@ def _add_metadata(graph, subject, metadata):
                     _add_agent(graph, subject, v['predicate'], ko)
                 elif objecttype == 'license':
                     _add_license(graph, subject, v['predicate'], ko)
+                elif objecttype == 'vcard':
+                    _add_vcard(graph, subject, v['predicate'], ko)
                 else:
                     o = objecttype(ko)
                     graph.add((subject, v['predicate'], o))
     return graph
 
 
+def _add_vcard(graph, subject, predicate, vcard):
+    vcard['type'] = vcard.get('type', [])
+    vcard['type'].append(VCARD.Kind)
+    mapping = {
+        'fn': {
+            'predicate': VCARD.fn
+        },
+        'type': {
+            'predicate': RDF.type,
+            'objecttype': URIRef
+        },
+        'hasEmail': {
+            'predicate': VCARD.hasEmail,
+            'objecttype': 'mapping',
+            'mapper': _add_email
+        },
+        'hasTelephone': {
+            'predicate': VCARD.hasTelephone,
+            'objecttype': 'mapping',
+            'mapper': _add_tel
+        },
+    }
+    return _gen_mapping(graph, subject, predicate, vcard, mapping)
+
+
+def _add_email(graph, subject, predicate, email):
+    email['type'] = email.get('type', [])
+    email['type'].append(VCARD.Email)
+    mapping = {
+        'hasValue': {
+            'predicate': VCARD.hasValue,
+            'objecttype': URIRef
+        },
+        'type': {
+            'predicate': RDF.type,
+            'objecttype': URIRef
+        },
+    }
+    return _gen_mapping(graph, subject, predicate, email, mapping)
+
+
+def _add_tel(graph, subject, predicate, tel):
+    tel['type'] = tel.get('type', [])
+    tel['type'].append(VCARD.Telephone)
+    mapping = {
+        'hasValue': {
+            'predicate': VCARD.hasValue,
+            'objecttype': URIRef
+        },
+        'type': {
+            'predicate': RDF.type,
+            'objecttype': URIRef
+        },
+    }
+    return _gen_mapping(graph, subject, predicate, tel, mapping)
+
+
 def _add_agent(graph, subject, predicate, agent):
-    if 'uri' in agent:
-        agentsubject = URIRef(agent.get('uri'))
-    else:
-        agentsubject = BNode()
-    graph.add((subject, predicate, agentsubject))
-    graph.add((agentsubject, RDF.type, FOAF.Agent))
+    agent['type'] = agent.get('type', [])
+    agent['type'].append(FOAF.Agent)
     mapping = {
         'name': {
             'predicate': FOAF.name
@@ -273,25 +329,12 @@ def _add_agent(graph, subject, predicate, agent):
             'objecttype': URIRef
         },
     }
-    for k, v in mapping.items():
-        if k in agent:
-            if 'objecttype' in v:
-                objecttype = v['objecttype']
-            else:
-                objecttype = Literal
-            for ko in agent[k]:
-                o = objecttype(ko)
-                graph.add((agentsubject, v['predicate'], o))
-    return graph
+    return _gen_mapping(graph, subject, predicate, agent, mapping)
 
 
 def _add_license(graph, subject, predicate, license):
-    if 'uri' in license:
-        licsubject = URIRef(license.get('uri'))
-    else:
-        licsubject = BNode()
-    graph.add((subject, predicate, licsubject))
-    graph.add((licsubject, RDF.type, DCTERMS.LicenseDocument))
+    license['type'] = license.get('type', [])
+    license['type'].append(DCTERMS.LicenseDocument)
     mapping = {
         'title': {
             'predicate': DCTERMS.title
@@ -311,15 +354,29 @@ def _add_license(graph, subject, predicate, license):
             'predicate': DCTERMS.identifier,
         }
     }
+    return _gen_mapping(graph, subject, predicate, license, mapping)
+
+
+def _gen_mapping(graph, s, p, o, mapping):
+    if 'uri' in o:
+        ores = URIRef(o.get('uri'))
+    else:
+        ores = BNode()
+    graph.add((s, p, ores))
     for k, v in mapping.items():
-        if k in license:
+        if k in o:
             if 'objecttype' in v:
                 objecttype = v['objecttype']
+                if objecttype == 'mapping':
+                    mapper = v['mapper']
             else:
                 objecttype = Literal
-            for ko in license[k]:
-                o = objecttype(ko)
-                graph.add((licsubject, v['predicate'], o))
+            for ko in o[k]:
+                if objecttype == 'mapping':
+                    mapper(graph, ores, v['predicate'], ko)
+                else:
+                    oval = objecttype(ko)
+                    graph.add((ores, v['predicate'], oval))
     return graph
 
 
@@ -374,7 +431,7 @@ def _add_dataset_description(graph, subject, c):
     :param skosprovider.skos.ConceptScheme c: SKOS ConceptScheme with notes.
     :rtype: :class:`rdflib.graph.Graph`
     '''
-    description = None;
+    description = None
     for n in c.notes:
         if (n.type not in ['definition', 'scopeNote']):
             continue
