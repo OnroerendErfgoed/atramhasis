@@ -54,6 +54,12 @@
     dcat:contactPoint [ a vcard:Individual,
                 vcard:Kind ;
             vcard:fn "Van Daele, Koen" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:koen.vandaele@vlaanderen.be> ] ;
@@ -93,6 +99,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -130,6 +142,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -165,6 +183,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -200,6 +224,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -236,6 +266,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -271,6 +307,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -303,17 +345,23 @@
     dcat:contactPoint [ a vcard:Individual,
                 vcard:Kind ;
             vcard:fn "Van Daele, Koen" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:koen.vandaele@vlaanderen.be> ] ;
-            vcard:hasTelephone [ a vcard:Cell,
-                        vcard:Telephone,
-                        vcard:Work ;
-                    vcard:hasValue <tel:+32499949368> ],
-                [ a vcard:Telephone,
+            vcard:hasTelephone [ a vcard:Telephone,
                         vcard:Voice,
                         vcard:Work ;
-                    vcard:hasValue <tel:+3225531682> ] ] ;
+                    vcard:hasValue <tel:+3225531682> ],
+                [ a vcard:Cell,
+                        vcard:Telephone,
+                        vcard:Work ;
+                    vcard:hasValue <tel:+32499949368> ] ] ;
     dcat:distribution <http://localhost:6543/conceptschemes/GEOGRAPHY/c.rdf>,
         <http://localhost:6543/conceptschemes/GEOGRAPHY/c.ttl> ;
     dcat:landingPage <http://localhost:6543/conceptschemes/GEOGRAPHY> ;
@@ -333,6 +381,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -357,6 +411,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -378,6 +438,12 @@
     dcat:contactPoint [ a vcard:Individual,
                 vcard:Kind ;
             vcard:fn "Van Daele, Koen" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:koen.vandaele@vlaanderen.be> ] ;
@@ -403,6 +469,12 @@
     dcat:contactPoint [ a vcard:Individual,
                 vcard:Kind ;
             vcard:fn "Van Daele, Koen" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:koen.vandaele@vlaanderen.be> ] ;
@@ -433,6 +505,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -459,6 +537,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -483,6 +567,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -507,6 +597,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -531,6 +627,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -555,6 +657,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -580,6 +688,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -605,6 +719,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -629,6 +749,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -653,6 +779,12 @@
     dcat:contactPoint [ a vcard:Kind,
                 vcard:Organization ;
             vcard:fn "Onroerend Erfgoed" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:info@onroerenderfgoed.be> ] ;
@@ -676,17 +808,23 @@
     dcat:contactPoint [ a vcard:Individual,
                 vcard:Kind ;
             vcard:fn "Van Daele, Koen" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:koen.vandaele@vlaanderen.be> ] ;
-            vcard:hasTelephone [ a vcard:Cell,
-                        vcard:Telephone,
-                        vcard:Work ;
-                    vcard:hasValue <tel:+32499949368> ],
-                [ a vcard:Telephone,
+            vcard:hasTelephone [ a vcard:Telephone,
                         vcard:Voice,
                         vcard:Work ;
-                    vcard:hasValue <tel:+3225531682> ] ] ;
+                    vcard:hasValue <tel:+3225531682> ],
+                [ a vcard:Cell,
+                        vcard:Telephone,
+                        vcard:Work ;
+                    vcard:hasValue <tel:+32499949368> ] ] ;
     dcat:downloadURL <http://localhost:6543/conceptschemes/TREES/c.rdf> ;
     dcat:mediaType "application/rdf+xml" .
 
@@ -703,6 +841,12 @@
     dcat:contactPoint [ a vcard:Individual,
                 vcard:Kind ;
             vcard:fn "Van Daele, Koen" ;
+            vcard:hasAddress [ a vcard:Address,
+                        vcard:Work ;
+                    vcard:country-name "Belgium" ;
+                    vcard:locality "Brussels" ;
+                    vcard:postal-code 1000 ;
+                    vcard:street-address "Herman Teirlinckgebouw, Havenlaan 88 bus 5" ] ;
             vcard:hasEmail [ a vcard:Email,
                         vcard:Work ;
                     vcard:hasValue <mailto:koen.vandaele@vlaanderen.be> ] ;

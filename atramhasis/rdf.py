@@ -277,6 +277,11 @@ def _add_vcard(graph, subject, predicate, vcard):
             'objecttype': 'mapping',
             'mapper': _add_tel
         },
+        'hasAddress': {
+            'predicate': VCARD.hasAddress,
+            'objecttype': 'mapping',
+            'mapper': _add_address
+        }
     }
     return _gen_mapping(graph, subject, predicate, vcard, mapping)
 
@@ -309,6 +314,33 @@ def _add_tel(graph, subject, predicate, tel):
             'predicate': RDF.type,
             'objecttype': URIRef
         },
+    }
+    return _gen_mapping(graph, subject, predicate, tel, mapping)
+
+
+def _add_address(graph, subject, predicate, tel):
+    tel['type'] = tel.get('type', [])
+    tel['type'].append(VCARD.Address)
+    mapping = {
+        'type': {
+            'predicate': RDF.type,
+            'objecttype': URIRef
+        },
+        'country-name': {
+            'predicate': VCARD['country-name'],
+        },
+        'locality': {
+            'predicate': VCARD.locality,
+        },
+        'postal-code': {
+            'predicate': VCARD['postal-code'],
+        },
+        'region': {
+            'predicate': VCARD.region,
+        },
+        'street-address': {
+            'predicate': VCARD['street-address'],
+        }
     }
     return _gen_mapping(graph, subject, predicate, tel, mapping)
 
