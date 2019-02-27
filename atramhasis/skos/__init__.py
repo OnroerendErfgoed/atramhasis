@@ -40,6 +40,13 @@ def includeme(config):   # pragma: no cover
             'type': ['http://www.w3.org/2006/vcard/ns#Work','http://www.w3.org/2006/vcard/ns#Cell'],
             'hasValue': ['tel:+32499949368']
         }],
+        'hasAddress': [{
+            'type': ['http://www.w3.org/2006/vcard/ns#Work'],
+            'country-name': ['Belgium'],
+            'postal-code': [1000],
+            'locality': ['Brussels'],
+            'street-address': ['Herman Teirlinckgebouw, Havenlaan 88 bus 5']
+        }]
     }
 
     FHA = {
@@ -60,6 +67,13 @@ def includeme(config):   # pragma: no cover
             'type': ['http://www.w3.org/2006/vcard/ns#Work','http://www.w3.org/2006/vcard/ns#Voice'],
             'hasValue': ['tel:+3225531650']
         }],
+        'hasAddress': [{
+            'type': ['http://www.w3.org/2006/vcard/ns#Work'],
+            'country-name': ['Belgium'],
+            'postal-code': [1000],
+            'locality': ['Brussels'],
+            'street-address': ['Herman Teirlinckgebouw, Havenlaan 88 bus 5']
+        }]
     }
 
     CC0 = {
