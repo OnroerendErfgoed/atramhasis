@@ -4,6 +4,7 @@
 - Update Colander and other dependencies. (#464)
 - Remove old convert_oe script because it depends on an obsolete webservice. (#466)
 - Fix an issue with circular dependencies in requirements files. (#463)
+- Change the default GA macro to anonymizeIp and be more GDPR compliant. (#450)
 
 0.6.5 (19-12-2018)
 ------------------
