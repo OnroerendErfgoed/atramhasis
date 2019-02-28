@@ -83,9 +83,9 @@ class PrepareScaffold(Command):
     def run(self):
         dojo_build()
         copy_files_scaffolds("requirements.txt", "atramhasis-requirements.txt", "atramhasis_demo")
-        copy_files_scaffolds("requirements-dev.txt", "atramhasis-requirements-dev.txt", "atramhasis_demo")
+        copy_files_scaffolds("requirements-dev-base.txt", "atramhasis-requirements-dev.txt", "atramhasis_demo")
         copy_files_scaffolds("requirements.txt", "atramhasis-requirements.txt", "atramhasis_scaffold")
-        copy_files_scaffolds("requirements-dev.txt", "atramhasis-requirements-dev.txt", "atramhasis_scaffold")
+        copy_files_scaffolds("requirements-dev-base.txt", "atramhasis-requirements-dev.txt", "atramhasis_scaffold")
         copy_static_scaffold("atramhasis_scaffold")
         copy_static_scaffold("atramhasis_demo")
 
