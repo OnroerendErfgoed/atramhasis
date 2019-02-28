@@ -1,4 +1,4 @@
-0.6.6 (??-02-2019)
+0.6.6 (01-03-2019)
 ------------------
 
 - Update Colander and other dependencies. (#464)
