@@ -3,6 +3,7 @@
 
 - Update Colander and other dependencies. (#464)
 - Remove old convert_oe script because it depends on an obsolete webservice. (#466)
+- Fix an issue with circular dependencies in requirements files. (#463)
 
 0.6.5 (19-12-2018)
 ------------------
