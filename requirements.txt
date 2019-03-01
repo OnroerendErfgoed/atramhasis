@@ -1,5 +1,5 @@
 # pyramid
-pyramid==1.10.1
+pyramid==1.10.2
 pyramid-tm==2.2.1
 pyramid_rewrite==0.2
 
