@@ -27,7 +27,7 @@ psycopg2==2.7.7
 
 # jinja2
 jinja2==2.10
-pyramid-jinja2==2.7
+pyramid-jinja2==2.8
 Babel==2.6.0
 
 # alembic
