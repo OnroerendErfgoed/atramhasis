@@ -1,5 +1,5 @@
 # pyramid
-pyramid==1.10.2
+pyramid==1.10.4
 pyramid-tm==2.2.1
 pyramid_rewrite==0.2
 
@@ -20,13 +20,13 @@ skosprovider_heritagedata==0.3.1
 language-tags==0.4.6
 
 # sqlalchemy
-sqlalchemy==1.2.18
+sqlalchemy==1.3.5
 zope.sqlalchemy==1.1
 transaction==2.4.0
 psycopg2==2.7.7
 
 # jinja2
-jinja2==2.10
+jinja2==2.10.1
 pyramid-jinja2==2.8
 Babel==2.6.0
 
