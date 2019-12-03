@@ -657,7 +657,7 @@ Call it with the `help` argument to see the possible arguments.
 .. code-block:: bash
 
     $ workon my_thesarus
-    $ import_files --help
+    $ import_file --help
 
     usage: import_file [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label]
      (example: "import_file --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels")

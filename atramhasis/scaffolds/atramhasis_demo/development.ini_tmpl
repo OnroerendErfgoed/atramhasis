@@ -59,9 +59,6 @@ atramhasis.dump_location = %(here)s/datadumps
 # See the LDF docs for more info
 # atramhasis.ldf.protocol = http
 
-# Filesystem location to dump exports
-atramhasis.dump_location = %(here)s/datadumps
-
 # By default, the toolbar only appears for clients from IP addresses
 # '127.0.0.1' and '::1'.
 # debugtoolbar.hosts = 127.0.0.1 ::1
