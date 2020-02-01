@@ -1,7 +1,7 @@
 # Basic Atramhasis dev requirements
 
 # pyramid
-pyramid-debugtoolbar==4.5
+pyramid-debugtoolbar==4.6
 
 # Testing
 pytest==4.3.0
