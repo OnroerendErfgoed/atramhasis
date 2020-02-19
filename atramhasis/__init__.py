@@ -44,9 +44,4 @@ def main(global_config, **settings):
 
     config.include('atramhasis.data:db')
 
-    # if standalone include skos sample data
-    test_mode = settings.get('atramhasis.test_mode')
-    if not test_mode == 'true':  # pragma: no cover
-        config.include('.skos')
-
     return config.make_wsgi_app()

@@ -1,34 +1,37 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import os
 import sys
-import unittest
-
-import logging
 
 import six
-from pyramid.config import Configurator
 import skosprovider
+from pyramid.paster import get_appsettings
 from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.providers import DictionaryProvider
-from skosprovider.uri import UriPatternGenerator
-from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType
-from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy.orm import sessionmaker
-import transaction
 from webtest import TestApp
-from pyramid import testing
 from zope.sqlalchemy import ZopeTransactionExtension
-from pyramid.paster import get_appsettings
-from sqlalchemy import engine_from_config
 
-from atramhasis import includeme
-from atramhasis.data.db import data_managers
-from atramhasis.data.models import Base as VisitLogBase
-from atramhasis.protected_resources import ProtectedResourceException, ProtectedResourceEvent
-from fixtures.data import trees, geo, larch, chestnut, species
-from fixtures.materials import materials
+from atramhasis import main
+from atramhasis.protected_resources import ProtectedResourceEvent
+from atramhasis.protected_resources import ProtectedResourceException
+from fixtures.data import chestnut
+from fixtures.data import larch
+from fixtures.data import species
+from tests import DbTest
+from tests import SETTINGS
+from tests import setup_db
+
+try:
+    from unittest.mock import Mock, patch
+except ImportError:
+    from mock import Mock, patch
+
+
+def setUpModule():
+    setup_db()
+
 
 logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 
@@ -117,88 +120,27 @@ TEST = DictionaryProvider(
 )
 
 
-class FunctionalTests(unittest.TestCase):
+class FunctionalTests(DbTest):
+
     @classmethod
     def setUpClass(cls):
-        cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
-        cls.session_maker = sessionmaker(
-            bind=cls.engine,
+        super(FunctionalTests, cls).setUpClass()
+        cls.init_app()
+
+    @classmethod
+    def init_app(cls):
+        cls.app = main({}, **SETTINGS)
+        cls.testapp = TestApp(cls.app)
+        # change db maker to make sessions bound to the test transaction
+        registry = cls.testapp.app.registry
+        registry.dbmaker = sessionmaker(
+            bind=cls.connection,
             extension=ZopeTransactionExtension()
         )
 
     def setUp(self):
-        self.config = Configurator(settings=settings, package='tests')
-        self.config.add_route('login', '/auth/login')
-        self.config.add_route('logout', '/auth/logout')
-        includeme(self.config)
-        self.config.add_static_view('atramhasis/static', 'atramhasis:static')
-
-        Base.metadata.drop_all(self.engine)
-        Base.metadata.create_all(self.engine)
-        VisitLogBase.metadata.drop_all(self.engine)
-        VisitLogBase.metadata.create_all(self.engine)
-
-        Base.metadata.bind = self.engine
-
-        self.config.registry.dbmaker = self.session_maker
-        self.config.add_request_method(data_managers, reify=True)
-
-        with transaction.manager:
-            local_session = self.session_maker()
-
-            import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
-            import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
-            import_provider(geo, ConceptScheme(id=2, uri='urn:x-vioe:geography'), local_session)
-            local_session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
-            local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
-            local_session.add(LabelType('altLabel', 'An alternative label.'))
-            local_session.add(LabelType('prefLabel', 'A preferred label.'))
-            local_session.add(LabelType('sortLabel', 'A sorting label.'))
-
-            local_session.add(MatchType('broadMatch', ''))
-            local_session.add(MatchType('closeMatch', ''))
-            local_session.add(MatchType('exactMatch', ''))
-            local_session.add(MatchType('narrowMatch', ''))
-            local_session.add(MatchType('relatedMatch', ''))
-            local_session.add(Language(id='de', name='test'))
-
-        TREES = SQLAlchemyProvider(
-            {'id': 'TREES', 'conceptscheme_id': 1},
-            self.config.registry.dbmaker
-        )
-
-        GEO = SQLAlchemyProvider(
-            {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
-            self.config.registry.dbmaker,
-            uri_generator=UriPatternGenerator('urn:x-vioe:geography:%s')
-        )
-
-        STYLES = SQLAlchemyProvider(
-            {'id': 'STYLES', 'conceptscheme_id': 3},
-            self.config.registry.dbmaker
-        )
-
-        MATERIALS = SQLAlchemyProvider(
-            {'id': 'MATERIALS', 'conceptscheme_id': 4},
-            self.config.registry.dbmaker,
-            uri_generator=UriPatternGenerator('urn:x-vioe:materials:%s')
-        )
-
-        self.config.add_subscriber(self.mock_event_handler, ProtectedResourceEvent)
-        self.config.add_subscriber(self.mock_event_handler_provider_unavailable, ProtectedResourceEvent)
-
-        skosregis = self.config.get_skos_registry()
-        skosregis.register_provider(TREES)
-        skosregis.register_provider(GEO)
-        skosregis.register_provider(STYLES)
-        skosregis.register_provider(MATERIALS)
-        skosregis.register_provider(TEST)
-
-        self.app = self.config.make_wsgi_app()
-        self.testapp = TestApp(self.app)
-
-    def tearDown(self):
-        testing.tearDown()
+        super(FunctionalTests, self).setUp()
+        self.testapp.reset()
 
     @staticmethod
     def mock_event_handler(event):
@@ -397,17 +339,22 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('urn:x-vioe:materials:51', res.json['uri'])
 
     def test_provider_unavailable_view(self):
-        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/55', headers=self._get_default_headers()
-                                  , expect_errors=True)
-        self.assertEqual('503 Service Unavailable', res.status)
-        self.assertIn("test msg", res)
+        def raise_provider_unavailable_exception():
+            raise ProviderUnavailableException('test msg')
+        with patch('atramhasis.views.crud.AtramhasisCrud.delete_concept',
+                   Mock(side_effect=raise_provider_unavailable_exception)):
+            res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/55',
+                                      headers=self._get_default_headers(),
+                                      expect_errors=True)
+            self.assertEqual('503 Service Unavailable', res.status)
+            self.assertIn("test msg", res)
 
     def test_get_languages(self):
         res = self.testapp.get('/languages', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 5)
+        self.assertEqual(len(res.json), 8)
 
     def test_get_languages_sort(self):
         res = self.testapp.get('/languages', headers=self._get_default_headers(),
@@ -415,7 +362,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 5)
+        self.assertEqual(len(res.json), 8)
 
     def test_get_languages_sort_desc(self):
         res = self.testapp.get('/languages', headers=self._get_default_headers(),
@@ -423,14 +370,14 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res)
-        self.assertEqual(len(res.json), 5)
+        self.assertEqual(len(res.json), 8)
 
     def test_get_language(self):
         res = self.testapp.get('/languages/de', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
-        self.assertEqual(res.json['name'], 'test')
+        self.assertEqual('German', res.json['name'])
 
     def test_get_language_not_found(self):
         res = self.testapp.get('/languages/jos', headers=self._get_default_headers(), expect_errors=True)
@@ -504,8 +451,21 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json, {"message": "The resource could not be found."})
 
     def test_delete_protected_resource(self):
-        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/9', headers=self._get_default_headers(),
-                                  expect_errors=True)
+        def mock_event_handler(event):
+            if isinstance(event,  ProtectedResourceEvent):
+                referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
+                raise ProtectedResourceException(
+                    'resource {0} is still in use, preventing operation'
+                    .format(event.uri),
+                    referenced_in
+                )
+
+        registry = self.testapp.app.registry
+        with patch.object(registry, 'notify',
+                          new=Mock(side_effect=mock_event_handler)):
+            res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/9',
+                                      headers=self._get_default_headers(),
+                                      expect_errors=True)
         self.assertEqual('409 Conflict', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
@@ -556,32 +516,7 @@ class JsonTreeFunctionalTests(FunctionalTests):
         self.assertEqual('404 Not Found', response.status)
 
 
-class SkosFunctionalTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
-        cls.session_maker = sessionmaker(
-            bind=cls.engine,
-            extension=ZopeTransactionExtension()
-        )
-
-    def setUp(self):
-        self.config = Configurator(settings=settings)
-        includeme(self.config)
-
-        Base.metadata.drop_all(self.engine)
-        Base.metadata.create_all(self.engine)
-
-        Base.metadata.bind = self.engine
-
-        self.config.registry.dbmaker = self.session_maker
-        self.config.add_request_method(data_managers, reify=True)
-
-        self.app = self.config.make_wsgi_app()
-        self.testapp = TestApp(self.app)
-
-    def tearDown(self):
-        testing.tearDown()
+class SkosFunctionalTests(FunctionalTests):
 
     def _get_default_headers(self):
         return {'Accept': 'text/html'}
@@ -590,16 +525,18 @@ class SkosFunctionalTests(unittest.TestCase):
         return {'Accept': 'application/json'}
 
     def test_admin_no_skos_provider(self):
-        del self.app.request_extensions.descriptors['skos_registry']
-        res = self.testapp.get('/admin', headers=self._get_default_headers(), expect_errors=True)
+        with patch.dict(self.app.request_extensions.descriptors):
+            del self.app.request_extensions.descriptors['skos_registry']
+            res = self.testapp.get('/admin', headers=self._get_default_headers(), expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)
 
     def test_crud_no_skos_provider(self):
-        del self.app.request_extensions.descriptors['skos_registry']
-        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_json_headers(),
-                                     params=json_collection_value, expect_errors=True)
+        with patch.dict(self.app.request_extensions.descriptors):
+            del self.app.request_extensions.descriptors['skos_registry']
+            res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_json_headers(),
+                                         params=json_collection_value, expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)
