@@ -1,90 +1,37 @@
 # -*- coding: utf-8 -*-
-import os
-import unittest
-from pyramid.paster import get_appsettings
-from skosprovider_sqlalchemy.utils import import_provider
-from sqlalchemy import engine_from_config
-from sqlalchemy.orm import sessionmaker
+from datetime import date
+from datetime import datetime
+
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import LabelType
+from skosprovider_sqlalchemy.models import Language
 from sqlalchemy.orm.exc import NoResultFound
-import transaction
-from zope.sqlalchemy import ZopeTransactionExtension
-from skosprovider_sqlalchemy.models import Base, ConceptScheme, LabelType, Language, MatchType, Concept, NoteType, Match
-from atramhasis.data.models import Base as VisitLogBase, ConceptschemeCounts
-from atramhasis.data.datamanagers import ConceptSchemeManager, SkosManager, LanguagesManager, AuditManager, \
-    CountsManager
-from fixtures.materials import materials
-from fixtures.data import trees, geo
+
+from atramhasis.data.datamanagers import AuditManager
+from atramhasis.data.datamanagers import ConceptSchemeManager
+from atramhasis.data.datamanagers import CountsManager
+from atramhasis.data.datamanagers import LanguagesManager
+from atramhasis.data.datamanagers import SkosManager
+from atramhasis.data.models import ConceptVisitLog
+from atramhasis.data.models import ConceptschemeCounts
+from tests import DbTest
+from tests import setup_db
 
 try:
     from unittest.mock import Mock, patch
-except:
+except ImportError:
     from mock import Mock, patch
-from datetime import date, datetime
-from atramhasis.data.models import ConceptVisitLog
-
-here = os.path.dirname(__file__)
-settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
 
 
-class DatamangersTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
-        cls.session_maker = sessionmaker(
-            bind=cls.engine,
-            extension=ZopeTransactionExtension()
-        )
-
-    def setUp(self):
-        Base.metadata.drop_all(self.engine)
-        Base.metadata.create_all(self.engine)
-        Base.metadata.bind = self.engine
-        VisitLogBase.metadata.drop_all(self.engine)
-        VisitLogBase.metadata.create_all(self.engine)
-        VisitLogBase.metadata.bind = self.engine
-
-        with transaction.manager:
-            local_session = self.session_maker()
-            local_session.add(Language('nl', 'Dutch'))
-            local_session.add(Language('nl-BE', 'Dutch'))
-            local_session.add(Language('en', 'English'))
-
-            import_provider(trees, ConceptScheme(id=1, uri='urn:x-skosprovider:trees'), local_session)
-            import_provider(materials, ConceptScheme(id=4, uri='urn:x-vioe:materials'), local_session)
-            import_provider(geo, ConceptScheme(id=2, uri='urn:x-vioe:geo'), local_session)
-            local_session.add(ConceptScheme(id=3, uri='urn:x-vioe:test'))
-            local_session.add(LabelType('hiddenLabel', 'A hidden label.'))
-            local_session.add(LabelType('altLabel', 'An alternative label.'))
-            local_session.add(LabelType('prefLabel', 'A preferred label.'))
-
-            local_session.add(MatchType('broadMatch', ''))
-            local_session.add(MatchType('closeMatch', ''))
-            local_session.add(MatchType('exactMatch', ''))
-            local_session.add(MatchType('narrowMatch', ''))
-            local_session.add(MatchType('relatedMatch', ''))
-
-            local_session.flush()
-
-            match = Match()
-            match.matchtype_id = 'narrowMatch'
-            match.uri = 'urn:test'
-            match.concept_id = 1
-            local_session.add(match)
-
-            local_session.add(ConceptVisitLog(concept_id=1, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
-            local_session.add(ConceptVisitLog(concept_id=1, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 11, 58, 3)))
-            local_session.add(ConceptVisitLog(concept_id=2, conceptscheme_id=1, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
-            local_session.add(ConceptVisitLog(concept_id=2, conceptscheme_id=2, origin='REST',
-                                              visited_at=datetime(2015, 8, 27, 10, 58, 3)))
+def setUpModule():
+    setup_db()
 
 
-class ConceptSchemeManagerTest(DatamangersTests):
+class ConceptSchemeManagerTest(DbTest):
     def setUp(self):
         super(ConceptSchemeManagerTest, self).setUp()
-        self.conceptscheme_manager = ConceptSchemeManager(self.session_maker())
+        self.conceptscheme_manager = ConceptSchemeManager(self.session)
 
     def test_get(self):
         res = self.conceptscheme_manager.get(1)
@@ -108,17 +55,15 @@ class ConceptSchemeManagerTest(DatamangersTests):
         self.assertEqual(10, len(res))
 
     def test_save(self):
-        local_session = self.session_maker()
-        conceptscheme = local_session.query(ConceptScheme).filter(Concept.id == 1).first()
+        conceptscheme = self.session.query(ConceptScheme).filter(Concept.id == 1).first()
         conceptscheme = self.conceptscheme_manager.save(conceptscheme)
         self.assertIsNotNone(conceptscheme.id)
-        local_session.close()
 
 
-class SkosManagerTest(DatamangersTests):
+class SkosManagerTest(DbTest):
     def setUp(self):
         super(SkosManagerTest, self).setUp()
-        self.skos_manager = SkosManager(self.session_maker())
+        self.skos_manager = SkosManager(self.session)
 
     def test_get_thing(self):
         res = self.skos_manager.get_thing(1, 1)
@@ -138,38 +83,44 @@ class SkosManagerTest(DatamangersTests):
 
     def test_get_by_list_type(self):
         res = self.skos_manager.get_by_list_type(LabelType)
-        self.assertEqual(3, len(res))
+        self.assertEqual(4, len(res))
 
     def test_get_match_type(self):
-        matchType = self.skos_manager.get_match_type('narrowMatch')
-        self.assertEqual('narrowMatch', matchType.name)
+        match_type = self.skos_manager.get_match_type('narrowMatch')
+        self.assertEqual('narrowMatch', match_type.name)
 
     def test_get_match(self):
+        from skosprovider_sqlalchemy.models import Match
+        match = Match()
+        match.matchtype_id = 'narrowMatch'
+        match.uri = 'urn:test'
+        match.concept_id = 1
+        self.session.add(match)
         match = self.skos_manager.get_match('urn:test', 'narrowMatch', 1)
         self.assertEqual('urn:test', match.uri)
 
     def test_get_all_label_types(self):
         res = self.skos_manager.get_all_label_types()
-        self.assertEqual(3, len(res))
+        self.assertEqual(4, len(res))
 
     def test_get_next_cid(self):
         res = self.skos_manager.get_next_cid(1)
         self.assertIsNotNone(res)
 
 
-class LanguagesManagerTest(DatamangersTests):
+class LanguagesManagerTest(DbTest):
     def setUp(self):
         super(LanguagesManagerTest, self).setUp()
-        self.language_manager = LanguagesManager(self.session_maker())
+        self.language_manager = LanguagesManager(self.session)
 
     def test_get(self):
         res = self.language_manager.get('nl')
         self.assertEqual('Dutch', res.name)
 
     def test_save(self):
-        language = Language('de', 'German')
+        language = Language('au', 'Austrian')
         language = self.language_manager.save(language)
-        self.assertEqual('German', language.name)
+        self.assertEqual('Austrian', language.name)
 
     def test_delete(self):
         language = self.language_manager.get('en')
@@ -181,22 +132,24 @@ class LanguagesManagerTest(DatamangersTests):
         self.assertGreaterEqual(len(res), 3)
 
     def test_get_all_sorted(self):
-        res = self.language_manager.get_all_sorted('id', False)
-        self.assertEqual('en', res[0].id)
+        result = self.language_manager.get_all_sorted('id', False)
+        result_ids = [lang.id for lang in result]
+        self.assertEqual(list(sorted(result_ids)), result_ids)
 
     def test_get_all_sorted_desc(self):
-        res = self.language_manager.get_all_sorted('id', True)
-        self.assertEqual('nl-BE', res[0].id)
+        result = self.language_manager.get_all_sorted('id', True)
+        result_ids = [lang.id for lang in result]
+        self.assertEqual(list(sorted(result_ids, reverse=True)), result_ids)
 
     def test_count_languages(self):
         res = self.language_manager.count_languages('nl')
         self.assertEqual(1, res)
 
 
-class AuditManagerTest(DatamangersTests):
+class AuditManagerTest(DbTest):
     def setUp(self):
         super(AuditManagerTest, self).setUp()
-        self.audit_manager = AuditManager(self.session_maker())
+        self.audit_manager = AuditManager(self.session)
 
     @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 8, 1))))
     def test_get_first_day(self):
@@ -207,8 +160,31 @@ class AuditManagerTest(DatamangersTests):
 
     @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 9, 15))))
     def test_get_most_popular_concepts_for_conceptscheme(self):
-        self.assertListEqual([{'concept_id': 1, 'scheme_id': 1}, {'concept_id': 2, 'scheme_id': 1}],
-                             self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_month'))
+        self.session.add(
+            ConceptVisitLog(concept_id=1, conceptscheme_id='1', origin='REST',
+                            visited_at=datetime(2015, 8, 27, 10, 58, 3))
+        )
+        self.session.add(
+            ConceptVisitLog(concept_id=1, conceptscheme_id='1', origin='REST',
+                            visited_at=datetime(2015, 8, 27, 11, 58, 3))
+        )
+        self.session.add(
+            ConceptVisitLog(concept_id=2, conceptscheme_id='1', origin='REST',
+                            visited_at=datetime(2015, 8, 27, 10, 58, 3))
+        )
+        self.session.add(
+            ConceptVisitLog(concept_id=2, conceptscheme_id='2', origin='REST',
+                            visited_at=datetime(2015, 8, 27, 10, 58, 3))
+        )
+        self.assertListEqual(
+            [
+                {'concept_id': 1, 'scheme_id': 1},
+                {'concept_id': 2, 'scheme_id': 1}
+            ],
+            self.audit_manager.get_most_popular_concepts_for_conceptscheme(
+                1, 5, 'last_month'
+            )
+        )
         self.assertListEqual([{'concept_id': 2, 'scheme_id': 2}],
                              self.audit_manager.get_most_popular_concepts_for_conceptscheme(2, 5, 'last_month'))
         self.assertListEqual([{'concept_id': 1, 'scheme_id': 1}],
@@ -217,10 +193,10 @@ class AuditManagerTest(DatamangersTests):
                              self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_day'))
 
 
-class CountsManagerTest(DatamangersTests):
+class CountsManagerTest(DbTest):
     def setUp(self):
         super(CountsManagerTest, self).setUp()
-        self.counts_manager = CountsManager(self.session_maker())
+        self.counts_manager = CountsManager(self.session)
 
     def test_count_for_scheme(self):
         counts = ConceptschemeCounts()

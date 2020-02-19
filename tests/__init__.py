@@ -17,12 +17,18 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.orm import sessionmaker
 
+from atramhasis.cache import list_region
+from atramhasis.cache import tree_region
 from fixtures import data
 from fixtures import materials as material_data
 
 TEST_DIR = os.path.dirname(__file__)
 SETTINGS = get_appsettings(os.path.join(TEST_DIR, '..', 'tests', 'conf_test.ini'))
 db_setup = False
+
+# No test should want caching
+tree_region.configure('dogpile.cache.null', replace_existing_backend=True)
+list_region.configure('dogpile.cache.null', replace_existing_backend=True)
 
 
 def get_alembic_config():
