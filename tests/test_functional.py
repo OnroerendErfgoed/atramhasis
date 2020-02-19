@@ -21,6 +21,7 @@ from fixtures.data import larch
 from fixtures.data import species
 from tests import DbTest
 from tests import SETTINGS
+from tests import fill_db
 from tests import setup_db
 
 try:
@@ -31,6 +32,7 @@ except ImportError:
 
 def setUpModule():
     setup_db()
+    fill_db()
 
 
 logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)

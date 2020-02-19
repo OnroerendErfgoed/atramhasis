@@ -16,6 +16,7 @@ from atramhasis.data.datamanagers import SkosManager
 from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
 from tests import DbTest
+from tests import fill_db
 from tests import setup_db
 
 try:
@@ -26,6 +27,7 @@ except ImportError:
 
 def setUpModule():
     setup_db()
+    fill_db()
 
 
 class ConceptSchemeManagerTest(DbTest):

@@ -25,6 +25,7 @@ from fixtures import materials as material_data
 TEST_DIR = os.path.dirname(__file__)
 SETTINGS = get_appsettings(os.path.join(TEST_DIR, '..', 'tests', 'conf_test.ini'))
 db_setup = False
+db_filled = False
 
 # No test should want caching
 tree_region.configure('dogpile.cache.null', replace_existing_backend=True)
@@ -47,9 +48,9 @@ def get_alembic_config():
 ALEMBIC_CONFIG = get_alembic_config()
 
 
-def setup_db():
-    global db_setup
-    if not db_setup:
+def setup_db(guarantee_empty=False):
+    global db_setup, db_filled
+    if not db_setup or (guarantee_empty and db_filled):
         engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
         if engine.name == 'sqlite':
             # Can't alembic downgrade sqlite because it can't do
@@ -68,7 +69,13 @@ def setup_db():
 
         engine.dispose()
         command.upgrade(ALEMBIC_CONFIG, 'head')
+        db_setup = True
+        db_filled = False
 
+
+def fill_db():
+    global db_filled
+    if not db_filled:
         from fixtures.data import trees
         from skosprovider_sqlalchemy.models import ConceptScheme
         with db_session() as session:
@@ -86,7 +93,7 @@ def setup_db():
                 session.add(
                     ConceptScheme(id=scheme_id, uri='urn:dummy-{}'.format(scheme_id))
                 )
-        db_setup = True
+        db_filled = True
 
 
 class DbTest(unittest.TestCase):

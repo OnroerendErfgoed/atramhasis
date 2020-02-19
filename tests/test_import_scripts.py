@@ -1,52 +1,49 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from pyramid.paster import get_appsettings
-import unittest
 
-from sqlalchemy import engine_from_config
-from sqlalchemy.orm import sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
-
-from skosprovider_sqlalchemy.models import Base
-from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+import tests
+from skosprovider.skos import Concept
+from skosprovider.skos import Note
 from skosprovider.utils import dict_dumper
-from skosprovider.skos import (
-    Concept,
-    Note
-)
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
 from atramhasis.scripts import import_file
+from tests import DbTest
+from tests import SETTINGS
+from tests import TEST_DIR
+from tests import setup_db
 
-here = os.path.dirname(__file__)
-settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
-test_data_rdf = os.path.join(here, '../', 'tests/data/trees.xml')
-test_data_json = os.path.join(here, '../', 'tests/data/trees.json')
-test_data_csv = os.path.join(here, '../', 'tests/data/menu.csv')
+try:
+    from unittest.mock import Mock, patch
+except ImportError:
+    from mock import Mock, patch
+
+test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.xml')
+test_data_json = os.path.join(TEST_DIR, 'data', 'trees.json')
+test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 
 
-class ImportTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        settings['sqlalchemy.url'] = 'sqlite:///%s/dbtest.sqlite' % here
-        cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
-        Base.metadata.drop_all(cls.engine)
-        Base.metadata.create_all(cls.engine)
+def setUpModule():
+    setup_db(guarantee_empty=True)
+
+
+class ImportTests(DbTest):
 
     def setUp(self):
-        Base.metadata.drop_all(self.engine)
-        Base.metadata.create_all(self.engine)
-        Base.metadata.bind = self.engine
-        self.session_maker = sessionmaker(
-            bind=self.engine,
-            extension=ZopeTransactionExtension()
-        )
+        super(ImportTests, self).setUp()
+        # Patch the session that scripts will use to the session of the tests.
+        # This makes everything rollback after every test.
+        self.patcher = patch.object(import_file, 'conn_str_to_session',
+                                    Mock(return_value=self.session))
+        self.patcher.start()
 
     def tearDown(self):
-        Base.metadata.drop_all(self.engine)
+        self.patcher.stop()
+        super(ImportTests, self).tearDown()
 
     def _check_trees(self, conceptscheme_label):
-        sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session_maker)
+        sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session)
         dump = dict_dumper(sql_prov)
 
         self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.labels[0].label)
@@ -67,7 +64,7 @@ class ImportTests(unittest.TestCase):
     def _check_menu(self, uri_pattern=None):
         if not uri_pattern:
             uri_pattern = 'urn:x-skosprovider:menu:%s'
-        sql_prov = SQLAlchemyProvider({'id': 'MENU', 'conceptscheme_id': 1}, self.session_maker)
+        sql_prov = SQLAlchemyProvider({'id': 'MENU', 'conceptscheme_id': 1}, self.session)
         self.assertEqual(11, len(sql_prov.get_all()))
         eb = sql_prov.get_by_id(1)
         self.assertIsInstance(eb, Concept)
@@ -91,30 +88,30 @@ class ImportTests(unittest.TestCase):
         self.assertEqual('note', eb.notes[0].type)
     
     def test_import_rdf(self):
-        sys.argv = ['import_file', '--from', test_data_rdf, '--to', settings['sqlalchemy.url']]
+        sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url']]
         import_file.main(sys.argv)
+        tests.db_filled = True
         self._check_trees('Trees')
 
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json,
-                    '--to', settings['sqlalchemy.url'],
+                    '--to', SETTINGS['sqlalchemy.url'],
                     '--conceptscheme_label', 'Trees Conceptscheme', '--conceptscheme_uri', 'http://id.trees.org',
                     '--uri_pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
+        tests.db_filled = True
         self._check_trees('Trees Conceptscheme')
 
     def test_import_csv(self):
-        sys.argv = ['import_file', '--from', test_data_csv, '--to', settings['sqlalchemy.url']]
+        sys.argv = ['import_file', '--from', test_data_csv, '--to', SETTINGS['sqlalchemy.url']]
         import_file.main(sys.argv)
+        tests.db_filled = True
         self._check_menu()
 
     def test_import_csv_uri_generator(self):
-        sys.argv = ['import_file', '--from', test_data_csv, '--to', settings['sqlalchemy.url'],
+        sys.argv = ['import_file', '--from', test_data_csv, '--to', SETTINGS['sqlalchemy.url'],
                     '--conceptscheme_label', 'Menu Conceptscheme', '--conceptscheme_uri', 'http://id.menu.org',
                     '--uri_pattern', 'http://id.menu.org/%s']
         import_file.main(sys.argv)
+        tests.db_filled = True
         self._check_menu('http://id.menu.org/%s')
-
-
-
-
