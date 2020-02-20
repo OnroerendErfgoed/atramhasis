@@ -63,7 +63,7 @@ def _reset_db():
         # Can't alembic downgrade sqlite because it can't do
         # ALTER TABLE X DROP COLUMN
         try:
-            os.remove(os.path.join(TEST_DIR, engine.url.database))
+            os.remove(engine.url.database)
         except OSError:
             pass
     elif engine.name == 'postgresql':
