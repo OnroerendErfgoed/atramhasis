@@ -101,4 +101,4 @@ atramhasis/scaffolds/atramhasis_scaffold/atramhasis-requirements-dev.txt_tmpl
 atramhasis/scaffolds/atramhasis_scaffold/atramhasis-requirements.txt_tmpl
 
 # sqlite database created for tests.
-tests/test.db
+test.db
