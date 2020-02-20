@@ -51,26 +51,32 @@ ALEMBIC_CONFIG = get_alembic_config()
 def setup_db(guarantee_empty=False):
     global db_setup, db_filled
     if not db_setup or (guarantee_empty and db_filled):
-        engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
-        if engine.name == 'sqlite':
-            # Can't alembic downgrade sqlite because it can't do
-            # ALTER TABLE X DROP COLUMN
-            os.remove(os.path.join(TEST_DIR, engine.url.database))
-        elif engine.name == 'postgresql':
-            try:
-                engine.execute("DELETE FROM concept_note")
-                engine.execute("DELETE FROM note")
-                engine.execute("DELETE FROM concept_label")
-                engine.execute("DELETE FROM label")
-                command.downgrade(ALEMBIC_CONFIG, 'base')
-            except ProgrammingError:
-                """The tables may not exist if it's first time."""
-            command.downgrade(ALEMBIC_CONFIG, 'base')
-
-        engine.dispose()
+        _reset_db()
         command.upgrade(ALEMBIC_CONFIG, 'head')
         db_setup = True
         db_filled = False
+
+
+def _reset_db():
+    engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
+    if engine.name == 'sqlite':
+        # Can't alembic downgrade sqlite because it can't do
+        # ALTER TABLE X DROP COLUMN
+        try:
+            os.remove(os.path.join(TEST_DIR, engine.url.database))
+        except OSError:
+            pass
+    elif engine.name == 'postgresql':
+        try:
+            engine.execute("DELETE FROM concept_note")
+            engine.execute("DELETE FROM note")
+            engine.execute("DELETE FROM concept_label")
+            engine.execute("DELETE FROM label")
+            command.downgrade(ALEMBIC_CONFIG, 'base')
+        except ProgrammingError:
+            """The tables may not exist if it's first time."""
+        command.downgrade(ALEMBIC_CONFIG, 'base')
+    engine.dispose()
 
 
 def fill_db():
