@@ -16,7 +16,7 @@ def upgrade():
     op.add_column(
         'concept',
         sa.Column('infer_concept_relations', sa.Boolean(), nullable=False,
-                  server_default=True)
+                  server_default='true')
     )
 
 
