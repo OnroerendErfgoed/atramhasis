@@ -23,170 +23,176 @@ LICENSES = [
 
 
 def create_registry(request):
-    registry = Registry(instance_scope='threaded_thread')
-    dataseturigenerator = UriPatternGenerator(
-        'https://id.erfgoed.net/datasets/thesauri/%s'
-    )
-
-    trees = SQLAlchemyProvider(
-        {'id': 'TREES', 'conceptscheme_id': 1},
-        request.db
-    )
-
-    geo = SQLAlchemyProvider(
-        {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
-        request.db
-    )
-
-    styles = SQLAlchemyProvider(
-        {
-            'id': 'STYLES',
-            'conceptscheme_id': 3,
-            'dataset': {
-                'uri': dataseturigenerator.generate(id='stijlen_en_culturen'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
-                'created': [date(2008, 2, 14)],
-                'language': ['nl-BE'],
-                'license': LICENSES
-            }
-
-        },
-        request.db,
-        uri_generator=UriPatternGenerator(
-            'https://id.erfgoed.net/thesauri/stijlen_en_culturen/%s'
+    try:
+        registry = Registry(instance_scope='threaded_thread')
+        dataseturigenerator = UriPatternGenerator(
+            'https://id.erfgoed.net/datasets/thesauri/%s'
         )
-    )
 
-    materials = SQLAlchemyProvider(
-        {
-            'id': 'MATERIALS',
-            'conceptscheme_id': 4,
-            'dataset': {
-                'uri': dataseturigenerator.generate(id='materialen'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
-                'created': [date(2011, 3, 16)],
-                'language': ['nl-BE'],
-                'license': LICENSES
-            }
-        },
-        request.db,
-        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/materialen/%s')
-    )
-
-    eventtypes = SQLAlchemyProvider(
-        {
-            'id': 'EVENTTYPE',
-            'conceptscheme_id': 5,
-            'dataset': {
-                'uri': dataseturigenerator.generate(id='gebeurtenistypes'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
-                'created': [date(2010, 8, 13)],
-                'language': ['nl-BE'],
-                'license': LICENSES
-            }
-        },
-        request.db,
-        uri_generator=UriPatternGenerator(
-            'https://id.erfgoed.net/thesauri/gebeurtenistypes/%s'
+        trees = SQLAlchemyProvider(
+            {'id': 'TREES', 'conceptscheme_id': 1},
+            request.db
         )
-    )
 
-    heritagetypes = SQLAlchemyProvider(
-        {
-            'id': 'HERITAGETYPE',
-            'conceptscheme_id': 6,
-            'dataset': {
-                'uri': dataseturigenerator.generate(id='erfgoedtypes'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
-                'created': [date(2008, 2, 14)],
-                'language': ['nl-BE'],
-                'license': LICENSES
-            }
-        },
-        request.db,
-        uri_generator=UriPatternGenerator(
-            'https://id.erfgoed.net/thesauri/erfgoedtypes/%s'
+        geo = SQLAlchemyProvider(
+            {'id': 'GEOGRAPHY', 'conceptscheme_id': 2},
+            request.db
         )
-    )
 
-    periods = SQLAlchemyProvider(
-        {
-            'id': 'PERIOD',
-            'conceptscheme_id': 7,
-            'dataset': {
-                'uri': dataseturigenerator.generate(id='dateringen'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
-                'created': [date(2008, 2, 14)],
-                'language': ['nl-BE'],
-                'license': LICENSES
-            }
-        },
-        request.db,
-        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/dateringen/%s')
-    )
+        styles = SQLAlchemyProvider(
+            {
+                'id': 'STYLES',
+                'conceptscheme_id': 3,
+                'dataset': {
+                    'uri': dataseturigenerator.generate(id='stijlen_en_culturen'),
+                    'publisher': ['https://id.erfgoed.net/actoren/501'],
+                    'created': [date(2008, 2, 14)],
+                    'language': ['nl-BE'],
+                    'license': LICENSES
+                }
 
-    species = SQLAlchemyProvider(
-        {
-            'id': 'SPECIES',
-            'conceptscheme_id': 8,
-            'dataset': {
-                'uri': dataseturigenerator.generate(id='soorten'),
-                'publisher': ['https://id.erfgoed.net/actoren/501'],
-                'created': [date(2011, 5, 23)],
-                'language': ['nl-BE', 'la'],
-                'license': LICENSES
-            }
-        },
-        request.db,
-        uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/soorten/%s')
-    )
+            },
+            request.db,
+            uri_generator=UriPatternGenerator(
+                'https://id.erfgoed.net/thesauri/stijlen_en_culturen/%s'
+            )
+        )
 
-    # use 'subject': ['external'] for read only external providers
-    # (only available in REST service)
+        materials = SQLAlchemyProvider(
+            {
+                'id': 'MATERIALS',
+                'conceptscheme_id': 4,
+                'dataset': {
+                    'uri': dataseturigenerator.generate(id='materialen'),
+                    'publisher': ['https://id.erfgoed.net/actoren/501'],
+                    'created': [date(2011, 3, 16)],
+                    'language': ['nl-BE'],
+                    'license': LICENSES
+                }
+            },
+            request.db,
+            uri_generator=UriPatternGenerator(
+                'https://id.erfgoed.net/thesauri/materialen/%s'
+            )
+        )
 
-    getty_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
+        eventtypes = SQLAlchemyProvider(
+            {
+                'id': 'EVENTTYPE',
+                'conceptscheme_id': 5,
+                'dataset': {
+                    'uri': dataseturigenerator.generate(id='gebeurtenistypes'),
+                    'publisher': ['https://id.erfgoed.net/actoren/501'],
+                    'created': [date(2010, 8, 13)],
+                    'language': ['nl-BE'],
+                    'license': LICENSES
+                }
+            },
+            request.db,
+            uri_generator=UriPatternGenerator(
+                'https://id.erfgoed.net/thesauri/gebeurtenistypes/%s'
+            )
+        )
 
-    aat = AATProvider(
-        {'id': 'AAT', 'subject': ['external']},
-        session=getty_session
-    )
+        heritagetypes = SQLAlchemyProvider(
+            {
+                'id': 'HERITAGETYPE',
+                'conceptscheme_id': 6,
+                'dataset': {
+                    'uri': dataseturigenerator.generate(id='erfgoedtypes'),
+                    'publisher': ['https://id.erfgoed.net/actoren/501'],
+                    'created': [date(2008, 2, 14)],
+                    'language': ['nl-BE'],
+                    'license': LICENSES
+                }
+            },
+            request.db,
+            uri_generator=UriPatternGenerator(
+                'https://id.erfgoed.net/thesauri/erfgoedtypes/%s'
+            )
+        )
 
-    tgn = TGNProvider(
-        {'id': 'TGN', 'subject': ['external']},
-        session=getty_session
-    )
+        periods = SQLAlchemyProvider(
+            {
+                'id': 'PERIOD',
+                'conceptscheme_id': 7,
+                'dataset': {
+                    'uri': dataseturigenerator.generate(id='dateringen'),
+                    'publisher': ['https://id.erfgoed.net/actoren/501'],
+                    'created': [date(2008, 2, 14)],
+                    'language': ['nl-BE'],
+                    'license': LICENSES
+                }
+            },
+            request.db,
+            uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/dateringen/%s')
+        )
 
-    eh_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
+        species = SQLAlchemyProvider(
+            {
+                'id': 'SPECIES',
+                'conceptscheme_id': 8,
+                'dataset': {
+                    'uri': dataseturigenerator.generate(id='soorten'),
+                    'publisher': ['https://id.erfgoed.net/actoren/501'],
+                    'created': [date(2011, 5, 23)],
+                    'language': ['nl-BE', 'la'],
+                    'license': LICENSES
+                }
+            },
+            request.db,
+            uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/soorten/%s')
+        )
 
-    eh_period = HeritagedataProvider(
-        {'id': 'EH_PERIOD', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_period',
-        session=eh_session
-    )
+        # use 'subject': ['external'] for read only external providers
+        # (only available in REST service)
 
-    eh_monument_type = HeritagedataProvider(
-        {'id': 'EH_MONUMENT_TYPE', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2',
-        session=eh_session
-    )
+        getty_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
 
-    eh_materials = HeritagedataProvider(
-        {'id': 'EH_MATERIALS', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_tbm',
-        session=eh_session
-    )
+        aat = AATProvider(
+            {'id': 'AAT', 'subject': ['external']},
+            session=getty_session
+        )
 
-    registry.register_provider(trees)
-    registry.register_provider(geo)
-    registry.register_provider(styles)
-    registry.register_provider(materials)
-    registry.register_provider(eventtypes)
-    registry.register_provider(heritagetypes)
-    registry.register_provider(periods)
-    registry.register_provider(species)
-    registry.register_provider(aat)
-    registry.register_provider(tgn)
-    registry.register_provider(eh_period)
-    registry.register_provider(eh_monument_type)
-    registry.register_provider(eh_materials)
-    return registry
+        tgn = TGNProvider(
+            {'id': 'TGN', 'subject': ['external']},
+            session=getty_session
+        )
+
+        eh_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
+
+        eh_period = HeritagedataProvider(
+            {'id': 'EH_PERIOD', 'subject': ['external']},
+            scheme_uri='http://purl.org/heritagedata/schemes/eh_period',
+            session=eh_session
+        )
+
+        eh_monument_type = HeritagedataProvider(
+            {'id': 'EH_MONUMENT_TYPE', 'subject': ['external']},
+            scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2',
+            session=eh_session
+        )
+
+        eh_materials = HeritagedataProvider(
+            {'id': 'EH_MATERIALS', 'subject': ['external']},
+            scheme_uri='http://purl.org/heritagedata/schemes/eh_tbm',
+            session=eh_session
+        )
+
+        registry.register_provider(trees)
+        registry.register_provider(geo)
+        registry.register_provider(styles)
+        registry.register_provider(materials)
+        registry.register_provider(eventtypes)
+        registry.register_provider(heritagetypes)
+        registry.register_provider(periods)
+        registry.register_provider(species)
+        registry.register_provider(aat)
+        registry.register_provider(tgn)
+        registry.register_provider(eh_period)
+        registry.register_provider(eh_monument_type)
+        registry.register_provider(eh_materials)
+        return registry
+    except AttributeError:
+        log.exception("Attribute error during creation of Registry.")
+        raise

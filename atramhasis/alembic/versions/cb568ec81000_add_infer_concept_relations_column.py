@@ -15,7 +15,8 @@ down_revision = '184f1bbcb916'
 def upgrade():
     op.add_column(
         'concept',
-        sa.Column('infer_concept_relations', sa.Boolean(), nullable=True)
+        sa.Column('infer_concept_relations', sa.Boolean(), nullable=False,
+                  server_default=True)
     )
 
 
