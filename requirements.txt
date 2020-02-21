@@ -4,13 +4,13 @@ pyramid-tm==2.2.1
 pyramid_rewrite==0.2
 
 #skosprovider==0.7.0
--e git+https://github.com/koenedaele/skosprovider.git@DEV_0.7.0#egg=skosprovider
+-e git+https://github.com/koenedaele/skosprovider.git@develop#egg=skosprovider
 #skosprovider_sqlalchemy==0.6.0
 -e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git@DEV_0.6.0#egg=skosprovider_sqlalchemy
 #pyramid_skosprovider==0.9.0
 -e git+https://github.com/koenedaele/pyramid_skosprovider.git@DEV_0.9#egg=pyramid_skosprovider
-#skosprovider_rdf==0.7.0
--e git+https://github.com/OnroerendErfgoed/skosprovider_rdf.git@DEV_0.7.0#egg=skosprovider_rdf
+skosprovider_rdf==0.7.0
+#-e git+https://github.com/OnroerendErfgoed/skosprovider_rdf.git@develop#egg=skosprovider_rdf
 #skosprovider_getty==0.5.2
 -e git+https://github.com/OnroerendErfgoed/skosprovider_getty.git@DEV_0.5.0#egg=skosprovider_getty
 skosprovider_heritagedata==0.3.1
