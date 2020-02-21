@@ -91,7 +91,7 @@ class MetadatasetTests(unittest.TestCase):
         uri = URIRef('http://test.atramhasis.org/void.ttl#emptyset')
         g.add((uri, RDF.type, VOID.Dataset))
         g = _add_metadataset(g, uri, metadataset)
-        self.assertEquals(1, len(g))
+        assert len(g) == 1
 
     def test_add_metadataset(self):
         metadataset = {
@@ -107,7 +107,7 @@ class MetadatasetTests(unittest.TestCase):
         uri = URIRef('http://id.python.org/datasets/different_types_of_trees')
         g.add((uri, RDF.type, VOID.Dataset))
         g = _add_metadataset(g, uri, metadataset)
-        self.assertEquals(8, len(g))
+        assert len(g) == 8
         self.assertIn((uri, DCTERMS.language, Literal('nl')), g)
         self.assertIn((uri, DCTERMS.language, Literal('fr')), g)
         self.assertIn((uri, DCTERMS.language, Literal('en')), g)

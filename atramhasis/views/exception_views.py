@@ -52,7 +52,7 @@ def protected(exc, request):
     """
     when a protected operation is called on a resource that is still referenced
     """
-    log.warn("'message': {0}, 'referenced_in': {1}".format(exc.value, exc.referenced_in))
+    log.warning("'message': {0}, 'referenced_in': {1}".format(exc.value, exc.referenced_in))
     request.response.status_int = 409
     return {'message': exc.value, 'referenced_in': exc.referenced_in}
 
@@ -72,7 +72,7 @@ def data_integrity(exc, request):
     """
     View invoked when IntegrityError was raised.
     """
-    log.warn(exc)
+    log.warning(exc)
     request.response.status_int = 409
     return {'message': 'this operation violates the data integrity and could not be executed '}
 
