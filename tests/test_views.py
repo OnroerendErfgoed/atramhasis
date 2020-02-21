@@ -572,11 +572,6 @@ class TestListViews(unittest.TestCase):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
         self.request.data_managers = list_db(self.request)
-        if not list_region.is_configured:
-            list_region.configure('dogpile.cache.memory')
-
-    def tearDown(self):
-        testing.tearDown()
 
     def test_get_list(self):
         request = self.request
@@ -590,4 +585,7 @@ class TestListViews(unittest.TestCase):
         atramhasis_list_view = AtramhasisListView(request)
         labellist = atramhasis_list_view.labeltype_list_view()
         self.assertIsNotNone(labellist)
-        self.assertIn({'key': 'prefLabel', 'label': u'prefLabel'}, labellist)
+        self.assertIn(
+            {'key': 'prefLabel', 'label': u'prefLabel'},
+            labellist
+        )
