@@ -126,9 +126,9 @@ setup(name='atramhasis',
           "Topic :: Internet :: WWW/HTTP",
           "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
           "Programming Language :: Python :: 2.7",
-          "Programming Language :: Python :: 3.4",
-          "Programming Language :: Python :: 3.5",
-          "Programming Language :: Python :: 3.6"
+          "Programming Language :: Python :: 3.6",
+          "Programming Language :: Python :: 3.7",
+          "Programming Language :: Python :: 3.8"
       ],
       author='Flanders Heritage Agency',
       author_email='ict@onroerenderfgoed.be',
