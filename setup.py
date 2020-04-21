@@ -118,6 +118,7 @@ setup(name='atramhasis',
       version='0.7.0',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
+      long_description_content_type='text/x-rst',
       classifiers=[
           "Development Status :: 4 - Beta",
           "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
