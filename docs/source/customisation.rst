@@ -67,6 +67,12 @@ but does not contain any ConceptSchemes. You will need to configure this by
 entering a database record for the ConceptScheme and writing a small piece
 of code.
 
+.. warning::
+
+    Instantiating providers has changed between version 0.6.x and 0.7.0. Make
+    sure to update your skos initialisation when updating. The old code is no
+    longer supported, although the changes you need to make are minor.
+
 To enter the database record, you need to enter a record in the table
 `conceptscheme`. In this table you need to register an id for the conceptscheme
 and a uri. The id is for internal database use and has no other meaning. The
@@ -81,25 +87,31 @@ database that was created:
 
     INSERT INTO conceptscheme VALUES (1, 'urn:x-my-thesaurus:stuff')
 
-This take care of the first step. Now you also need to tell Atramhasis where
+This takes care of the first step. Now you also need to tell Atramhasis where
 to find your conceptscheme and how to handle it. To do this, you need to edit
-the file called :file:`my_thesaurus/skos/__init__.py`. In this file you need
-to register :class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
-instances. First you need to tell python where to find such a provider by adding
-this code just below the logging configuration:
+the file called :file:`my_thesaurus/skos/__init__.py`. This is the default
+location for creating a registry factory. Be default, this function is called
+`create_registry`, but this can be changed in your development.ini file. The
+function itself needs to receive the current request as a parameter and return
+the instantiated :class:`skosprovider.registry.Registry`.
+
+In this funcion you will register 
+:class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
+instances to the SKOS registry. If not yet present, you need to tell Python where 
+to find such a provider by adding this code to the top of the file:
 
 .. code-block:: python
 
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
-Then you need to instantiate such a provider within the includeme function in
+Then you need to instantiate such a provider within the `create_registry` function in
 this file. This provider needs a few arguments: an id for the provider, an id
-for the conceptscheme it's working with and a function that knows how the
-provide a database session. The id for the provider is often a text string
-and will appear in certain url's and might popup in the user interface from
-time to time. The database sessionmaker can be found at
-`config.registry.dbmaker`. Finally, you need to register this provider with
-the :class:`skosprovider.registry.Registry`.
+for the conceptscheme it's working with and a connectionb to a database session.
+The id for the provider is often a text string and will appear in certain url's 
+and might popup in the user interface from time to time. The database session
+is added to the Pyramid request that is passed to function and can be reached
+as `request.db`. Finally, you need to register this provider with the 
+:class:`skosprovider.registry.Registry`.
 
 .. code-block:: python
 
@@ -108,10 +120,10 @@ the :class:`skosprovider.registry.Registry`.
             'id': 'STUFF',
             'conceptscheme_id': 1
         },
-        config.registry.dbmaker
+        request.db
     )
 
-    skosregis.register_provider(STUFF)
+    registry.register_provider(STUFF)
 
 After having registered your provider, the file should look more or less like
 this:
@@ -120,24 +132,30 @@ this:
 
     # -*- coding: utf-8 -*-
 
+    from skosprovider.registry import Registry
+    from skosprovider.uri import UriPatternGenerator
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
     import logging
     log = logging.getLogger(__name__)
 
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
 
-    def includeme(config):
+        # create your own providers
         STUFF = SQLAlchemyProvider(
-            {
-                'id': 'STUFF',
-                'conceptscheme_id': 1
-            },
-            config.registry.dbmaker
+            {'id': 'STUFF', 'conceptscheme_id': 1},
+            request.db
         )
+    
+        # Add your custom provider to the registry
+        registry.register_provider(STUFF)
 
-        skosregis = config.get_skos_registry()
+        # return the SKOS registry
+        return registry
 
-        skosregis.register_provider(STUFF)
 
 Now you can restart your server and then you front page will show you a new,
 but empty thesaurus. You can now start creating concepts and collections by
@@ -169,7 +187,7 @@ a :class:`~skosprovider.uri.UriPatternGenerator` with your provider:
             'id': 'STUFF',
             'conceptscheme_id': 1
         },
-        config.registry.dbmaker,
+        request.db,
         uri_generator=UriPatternGenerator(
             'http://id.mydata.org/thesauri/stuff/%s'
         )
@@ -188,28 +206,33 @@ Your final file should look similar to this:
 
     # -*- coding: utf-8 -*-
 
+    from skosprovider.registry import Registry
+    from skosprovider.uri import UriPatternGenerator
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
     import logging
     log = logging.getLogger(__name__)
 
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-    from skosprovider.uri import UriPatternGenerator
 
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
 
-    def includeme(config):
+        # create your own providers
         STUFF = SQLAlchemyProvider(
-            {
-                'id': 'STUFF',
-                'conceptscheme_id': 1
-            },
-            config.registry.dbmaker,
+            {'id': 'STUFF', 'conceptscheme_id': 1},
+            request.db,
             uri_generator=UriPatternGenerator(
                 'http://id.mydata.org/thesauri/stuff/%s'
             )
         )
+    
+        # Add your custom provider to the registry
+        registry.register_provider(STUFF)
 
-        skosregis = config.get_skos_registry()
+        # return the SKOS registry
+        return registry
 
-        skosregis.register_provider(STUFF)
 
 If you need more complicated URI's, you can easily write you own generator
 with a small piece of python code. You just need to follow the interface
@@ -236,26 +259,34 @@ Suppose we wanted to hide our stuff:
     import logging
     log = logging.getLogger(__name__)
 
+    from skosprovider.registry import Registry
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     from skosprovider.uri import UriPatternGenerator
 
 
-    def includeme(config):
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
+
+        # create your own providers
+        #
         STUFF = SQLAlchemyProvider(
             {
                 'id': 'STUFF',
                 'conceptscheme_id': 1,
                 'subject': ['hidden']
             },
-            config.registry.dbmaker,
+            request.db,
             uri_generator=UriPatternGenerator(
                 'http://id.mydata.org/thesauri/stuff/%s'
             )
         )
+    
+        # Add your custom provider to the registry
+        registry.register_provider(STUFF)
 
-        skosregis = config.get_skos_registry()
-
-        skosregis.register_provider(STUFF)
+        # return the SKOS registry
+        return registry
 
 
 Now the STUFF thesaurus will not show up in the public web interface, but REST
@@ -577,7 +608,7 @@ and visible to the public among your regular vocabularies.
     AAT = AATProvider(
         {'id': 'AAT', 'subject': ['external']},
     )
-    skosregis.register_provider(AAT)
+    registry.register_provider(AAT)
 
 That's all. You can do the same with the
 :class:`~skosprovider_getty.providers.TGNProvider` for the
@@ -595,18 +626,22 @@ this:
     import logging
     log = logging.getLogger(__name__)
 
+    from skosprovider.registry import Registry
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     from skosprovider_getty.providers import AATProvider
     from skosprovider.uri import UriPatternGenerator
 
 
-    def includeme(config):
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
+
         STUFF = SQLAlchemyProvider(
             {
                 'id': 'STUFF',
                 'conceptscheme_id': 1
             },
-            config.registry.dbmaker,
+            request.db,
             uri_generator=UriPatternGenerator(
                 'http://id.mydata.org/thesauri/stuff/%s'
             )
@@ -619,10 +654,11 @@ this:
             }
         )
 
-        skosregis = config.get_skos_registry()
+        registry.register_provider(STUFF)
+        registry.register_provider(AAT)
 
-        skosregis.register_provider(STUFF)
-        skosregis.register_provider(AAT)
+        return registry
+
 
 Now you'll be able to import from the AAT to your heart's delight. For an
 extended example that adds even more providers, you could have a look at the
@@ -763,7 +799,7 @@ We run the following command:
     $ workon my_thesarus
     $ import_file --from my_thesaurus/data/trees.json --to sqlite:///my_thesaurus.sqlite --conceptscheme_label Trees
 
-This will return the following output:
+This will return output similar to this:
 
 .. code-block:: bash
 
@@ -867,17 +903,23 @@ Just follow these instructions and edit your :file:`my_thesaurus/skos/__init__.p
     # -*- coding: utf-8 -*-
 
     import logging
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     log = logging.getLogger(__name__)
+    
+    from skosprovider.registry import Registry
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
 
-    def includeme(config):
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')a
+
         TREES = SQLAlchemyProvider(
                 {'id': 'TREES', 'conceptscheme_id': 11},
-                config.registry.dbmaker
+                request.db
         )
-        skosregis = config.get_skos_registry()
-        skosregis.register_provider(TREES)
+        registry.register_provider(TREES)
+
+        return registry
 
 Now your thesaurus has been successfully imported and is ready to be browsed,
 expanded and edited.
