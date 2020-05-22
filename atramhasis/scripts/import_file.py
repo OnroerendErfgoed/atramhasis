@@ -246,13 +246,16 @@ def main(argv=sys.argv):
         conceptscheme.id
     print("\n\n*** The import of the {0} file with conceptscheme label '{1}' to {2} was succesfull. ***\
           \n\nTo use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.\
-          \nAdd next lines: \
-          \n\ndef includeme(config):\
-                \n\t{3} = SQLAlchemyProvider(\
-                    \n\t\t{{'id': '{4}', 'conceptscheme_id': {5}}},\
-                    \n\t\tconfig.registry.dbmaker\
-                \n\t)\
-                \n\tskosregis = config.get_skos_registry()\
-                \n\tskosregis.register_provider({6})\n\n".
+          \nAdd a configuration similar to:\
+            \n\ndef create_registry(request):\
+            \n\t# create the SKOS registry\
+            \n\tregistry = Registry(instance_scope='threaded_thread')\
+            \n\t{3} = SQLAlchemyProvider(\
+            \n\t\t{{'id': '{4}', 'conceptscheme_id': {5}}},\
+            \n\t\trequest.db\
+            \n\t)\
+            \n\tregistry.register_provider({6})\
+            \n\treturn registry\
+            \n\n".
           format(args.input_file, cs_label, args.to,
                  prov_id.replace(' ', '_'), prov_id, scheme_id, prov_id.replace(' ', '_')))
