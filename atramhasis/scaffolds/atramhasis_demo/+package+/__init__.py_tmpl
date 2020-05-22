@@ -38,9 +38,6 @@ def main(global_config, **settings):
     # Set up atramhasis db
     config.include('atramhasis:data.db')
 
-    #Add skos support
-    config.include('{{package}}.skos')
-
     # Set up translations
     config.add_translation_dirs('{{package}}:locale/')
 

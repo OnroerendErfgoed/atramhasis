@@ -25,6 +25,9 @@ sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 atramhasis.session_factory.secret = test123
 
+skosprovider.skosregistry_location = request
+skosprovider.skosregistry_factory = {{package}}.skos.create_registry
+
 jinja2.i18n.domain = atramhasis
 
 # Run dojo from source (src) or distribution (dist)

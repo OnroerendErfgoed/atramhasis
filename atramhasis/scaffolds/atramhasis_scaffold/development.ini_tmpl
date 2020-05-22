@@ -23,6 +23,9 @@ sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 atramhasis.session_factory.secret = test123
 
+skosprovider.skosregistry_location = request
+skosprovider.skosregistry_factory = {{package}}.skos.create_registry
+
 # cache
 cache.tree.backend = dogpile.cache.memory
 cache.tree.arguments.cache_size = 5000
