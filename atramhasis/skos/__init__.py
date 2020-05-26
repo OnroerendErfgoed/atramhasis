@@ -6,7 +6,6 @@ from skosprovider.registry import Registry
 from skosprovider.uri import UriPatternGenerator
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
-from skosprovider_heritagedata.providers import HeritagedataProvider
 from skosprovider_getty.providers import AATProvider, TGNProvider
 
 import requests
