@@ -159,26 +159,6 @@ def create_registry(request):
             session=getty_session
         )
 
-        eh_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
-
-        eh_period = HeritagedataProvider(
-            {'id': 'EH_PERIOD', 'subject': ['external']},
-            scheme_uri='http://purl.org/heritagedata/schemes/eh_period',
-            session=eh_session
-        )
-
-        eh_monument_type = HeritagedataProvider(
-            {'id': 'EH_MONUMENT_TYPE', 'subject': ['external']},
-            scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2',
-            session=eh_session
-        )
-
-        eh_materials = HeritagedataProvider(
-            {'id': 'EH_MATERIALS', 'subject': ['external']},
-            scheme_uri='http://purl.org/heritagedata/schemes/eh_tbm',
-            session=eh_session
-        )
-
         registry.register_provider(trees)
         registry.register_provider(geo)
         registry.register_provider(styles)
@@ -189,9 +169,6 @@ def create_registry(request):
         registry.register_provider(species)
         registry.register_provider(aat)
         registry.register_provider(tgn)
-        registry.register_provider(eh_period)
-        registry.register_provider(eh_monument_type)
-        registry.register_provider(eh_materials)
         return registry
     except AttributeError:
         log.exception("Attribute error during creation of Registry.")

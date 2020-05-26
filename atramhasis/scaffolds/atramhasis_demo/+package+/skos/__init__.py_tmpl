@@ -147,20 +147,6 @@ def create_registry(request):
         session=getty_session
     )
 
-    eh_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
-
-    EH_PERIOD = HeritagedataProvider(
-        {'id': 'EH_PERIOD', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_period',
-        session=eh_session
-    )
-
-    EH_MONUMENT_TYPE = HeritagedataProvider(
-        {'id': 'EH_MONUMENT_TYPE', 'subject': ['external']},
-        scheme_uri='http://purl.org/heritagedata/schemes/eh_tmt2',
-        session=eh_session
-    )
-
     registry.register_provider(TREES)
     registry.register_provider(GEO)
     registry.register_provider(STYLES)
@@ -171,6 +157,4 @@ def create_registry(request):
     registry.register_provider(SPECIES)
     registry.register_provider(AAT)
     registry.register_provider(TGN)
-    registry.register_provider(EH_PERIOD)
-    registry.register_provider(EH_MONUMENT_TYPE)
     return registry
