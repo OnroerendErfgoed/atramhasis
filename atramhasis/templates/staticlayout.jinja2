@@ -6,6 +6,7 @@
 {% set app_name = app_name|default('Atramhasis') %}
 {% set copyright_year = copyright_year|default('2016-2017') %}
 
+{% block head %}
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,6 +37,7 @@
     {% endif %}
   {% endblock %}
 </head>
+{% endblock %}
 <body>
 {% block vl_header %}
 {% endblock %}
