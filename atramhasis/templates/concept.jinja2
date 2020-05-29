@@ -1,5 +1,13 @@
 {% extends 'layout.jinja2' %}
-
+{% block head %}
+  {{ super() }}
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="{{ request.registry.settings['twitter.site']}}" />
+  <meta name="twitter:title" content="{{ concept.label(request.locale_name).label|safe }}" />
+  {% if concept.notes|length > 0 %}
+    <meta name="twitter:description" content="{{ concept.notes[0]|safe }}" />
+  {% endif %}
+{% endblock %}
 {% block html_title %}{{ concept.label(request.locale_name).label|title }}{% endblock %}
 
 {% from "macros.jinja2" import
