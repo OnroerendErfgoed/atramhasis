@@ -109,7 +109,8 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
         conceptscheme = provider.concept_scheme
-        title = conceptscheme.label().label if (conceptscheme.label()) else scheme_id
+        title = conceptscheme.label(self.request.locale_name).label if (conceptscheme.label()) \
+            else scheme_id
 
         scheme = {
             'scheme_id': scheme_id,
