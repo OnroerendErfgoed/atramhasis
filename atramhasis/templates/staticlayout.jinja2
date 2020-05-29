@@ -9,6 +9,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="{{ request.registry.settings['twitter.site']}}" />
+  {% if concept is defined %}
+    <meta name="twitter:title" content="{{ concept.label(request.locale_name).label|safe }}" />
+  {% endif %}
+  {% if conceptscheme is defined and conceptscheme.notes|length > 0 %}
+    <meta name="twitter:description" content="{{ conceptscheme.notes[0]|safe }}" />
+  {% elif concept is defined and concept.notes|length > 0 %}
+    <meta name="twitter:description" content="{{ concept.notes[0]|safe }}" />
+  {% endif %}
   <title>{{ app_name }} - {% block html_title %}Base{% endblock %}</title>
 
   {% block css_files %}
