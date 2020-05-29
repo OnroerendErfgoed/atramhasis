@@ -5,7 +5,7 @@
       {%- for c in relaties|sort(attribute='id') %}
         {%- set counter = counter + 1 %}
         <div class="large-3 large-3-pad columns result-grid" {% if counter == relaties|length %}style="float: left;"{% endif %}>
-          <a href="{{ request.route_path('concept', scheme_id = scheme_id, c_id = c.concept_id) }}"><h5>{{ c.label(request.locale_name).label }}</h5> <span> [ ID : {{ c.id }} ]</span><br><small>{{ c.type }}</small></a>
+          <a href="{{ request.route_path('concept', scheme_id = scheme_id, c_id = c.concept_id) }}"><h5>{{ c.label(request.locale_name).label }}</h5> <span> [ ID : {{ c.concept_id }} ]</span><br><small>{{ c.type }}</small></a>
         </div>
       {%- endfor %}
     </div>
