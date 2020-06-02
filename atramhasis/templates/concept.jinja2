@@ -1,5 +1,8 @@
 {% extends 'layout.jinja2' %}
-
+{% block head %}
+    {{ super() }}
+    <link rel="canonical" href="{{ request.route_url('concept', scheme_id=scheme_id, c_id=concept.concept_id) }}" />
+{% endblock %}
 {% block html_title %}{{ concept.label(request.locale_name).label|title }}{% endblock %}
 
 {% from "macros.jinja2" import
