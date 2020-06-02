@@ -7,6 +7,7 @@
   {% if conceptscheme.notes|length > 0 %}
     <meta name="twitter:description" content="{{ conceptscheme.notes[0]|safe }}" />
   {% endif %}
+  <link rel="canonical" href="{{ request.route_url('conceptscheme', scheme_id=conceptscheme.scheme_id) }}" />
 {% endblock %}
 {% block html_title %}{{ conceptscheme.title }}{% endblock %}
 

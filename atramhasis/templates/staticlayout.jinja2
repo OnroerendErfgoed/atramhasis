@@ -8,6 +8,7 @@
 
 {% block head %}
 <head>
+{% block head %}
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ app_name }} - {% block html_title %}Base{% endblock %}</title>
@@ -36,6 +37,7 @@
       {{ ga_tracker(ga_key) }}
     {% endif %}
   {% endblock %}
+{% endblock %}
 </head>
 {% endblock %}
 <body>

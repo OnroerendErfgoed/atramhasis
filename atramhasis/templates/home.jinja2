@@ -1,5 +1,8 @@
 {% extends "layout.jinja2" %}
-
+{% block head %}
+    {{ super() }}
+    <link rel="canonical" href="{{ request.route_url('home') }}" />
+{% endblock %}
 {% set app_package = app_package|default('atramhasis', true) %}
 {% set copyright_year = copyright_year|default('2016-2017') %}
 
