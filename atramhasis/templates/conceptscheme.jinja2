@@ -7,6 +7,13 @@
   {% if conceptscheme.notes|length > 0 %}
     <meta name="og:description" content="{{ conceptscheme.notes[0]|safe }}" />
   {% endif %}
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="{{ request.registry.settings['twitter.site']}}" />
+  <meta name="twitter:title" content="{{ conceptscheme.title }}" />
+  {% if conceptscheme.notes|length > 0 %}
+    <meta name="twitter:description" content="{{ conceptscheme.notes[0]|safe }}" />
+  {% endif %}
+  <link rel="canonical" href="{{ request.route_url('conceptscheme', scheme_id=conceptscheme.scheme_id) }}" />
 {% endblock %}
 {% block html_title %}{{ conceptscheme.title }}{% endblock %}
 
