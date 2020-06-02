@@ -1,5 +1,13 @@
 {% extends 'layout.jinja2' %}
-
+{% block head %}
+  {{ super() }}
+  <meta name="og:type" content="website" />
+  <meta name="og:url" content="{{ request.route_url('conceptscheme', scheme_id=conceptscheme.scheme_id) }}" />
+  <meta name="og:title" content="{{ conceptscheme.title }}" />
+  {% if conceptscheme.notes|length > 0 %}
+    <meta name="og:description" content="{{ conceptscheme.notes[0]|safe }}" />
+  {% endif %}
+{% endblock %}
 {% block html_title %}{{ conceptscheme.title }}{% endblock %}
 
 {% from "macros.jinja2" import
