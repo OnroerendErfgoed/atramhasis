@@ -2,7 +2,7 @@
   {% if relaties|length > 0 %}
     {%- set counter = 0  %}
     <div class="large-12 columns">
-      {%- for c in relaties|sort(attribute='id') %}
+      {%- for c in relaties|label_sort(language=request.locale_name) %}
         {%- set counter = counter + 1 %}
         <div class="large-3 large-3-pad columns result-grid" {% if counter == relaties|length %}style="float: left;"{% endif %}>
           <a href="{{ request.route_path('concept', scheme_id = scheme_id, c_id = c.concept_id) }}"><h5>{{ c.label(request.locale_name).label }}</h5> <span> [ ID : {{ c.concept_id }} ]</span><br><small>{{ c.type }}</small></a>
@@ -140,7 +140,7 @@
 
 {% macro print_concepts(request, concepts, conceptscheme) %}
   {%- set counter = 0  %}
-  {%- for concept in concepts|sort(attribute='id') %}
+  {%- for concept in concepts|label_sort(language=request.locale_name) %}
     {%- set counter = counter + 1 %}
     <div class="large-3 large-3-pad columns result-grid" {% if counter == concepts|length %}style="float:left;"{% endif %}><a href="{{ request.route_path('concept', scheme_id= conceptscheme.scheme_id, c_id = concept.id) }}"><h5>{{ concept.label }}</h5> <span>[ id: {{ concept.id }} ]</span> <br><small>{{ concept.type }}</small></a></div>
   {%- endfor %}

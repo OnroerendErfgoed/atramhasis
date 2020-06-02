@@ -103,3 +103,12 @@ def update_last_visited_concepts(request, concept_data):
     # Add concept to the queue
     last_visited.append(concept_data)
 
+
+def label_sort(concepts, language='any'):
+    if not concepts:
+        return []
+    return sorted(
+        concepts, key=lambda concept: concept._sortkey(key='sortlabel',
+                                                       language=language)
+    )
+
