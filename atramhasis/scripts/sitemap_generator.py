@@ -5,7 +5,11 @@ import datetime
 import logging
 import os
 import xml.etree.cElementTree as ElementTree
-from builtins import input
+try:
+    from builtins import input
+except:
+    input = raw_input
+
 from os import listdir
 from os.path import isfile
 
