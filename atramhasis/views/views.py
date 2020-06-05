@@ -79,6 +79,13 @@ class AtramhasisView(object):
 
         return {'conceptschemes': conceptschemes}
 
+    @view_config(route_name='scheme_tree_html', renderer='scheme_tree.jinja2')
+    def scheme_tree_view(self):  # pragma: no cover
+        """
+        This view displays the print of a conceptscheme as a hierarchy
+        """
+        return {}
+
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
         """
