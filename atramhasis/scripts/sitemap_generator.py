@@ -61,7 +61,8 @@ def create_sitemaps(settings, limit_per_deel, directory, env):
     scheme_urls = list()
     concept_urls = list()
     for p in skos_registry.get_providers():
-        if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external']]):
+        if any([not_shown in p.get_metadata()['subject']
+                for not_shown in ['external', 'hidden']]):
             continue
         scheme_id = p.get_metadata()['id']
         scheme_urls.append(schemes_url.format(scheme_id))
