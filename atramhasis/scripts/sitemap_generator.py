@@ -5,11 +5,6 @@ import datetime
 import logging
 import os
 import xml.etree.cElementTree as ElementTree
-try:
-    from builtins import input
-except:
-    input = raw_input
-
 from os import listdir
 from os.path import isfile
 
@@ -20,6 +15,11 @@ from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 
 from atramhasis.errors import SkosRegistryNotFoundException
+
+try:
+    from builtins import input
+except ImportError:
+    input = raw_input
 
 timezone_brussels = timezone('Europe/Brussels')
 log = logging.getLogger(__name__)
@@ -48,8 +48,8 @@ def write_element_to_xml(filename, sitemap_dir, element):
 
 def create_sitemaps(settings, limit_per_deel, directory, env):
     base_url = settings.get("atramhasis.url")
-    schemes_url = "{}{}".format(base_url, '/conceptschemes/{}')
-    concepts_url = "{}{}".format(schemes_url, '/c/{}')
+    schemes_url = "{}/conceptschemes/{{}}".format(base_url)
+    concepts_url = "{}/c/{{}}".format(schemes_url)
 
     request = env['request']
 
@@ -107,9 +107,11 @@ def create_deel_sitemaps(objecturls, limit_per_deel, sitemap_dir, name):
 def create_index_sitemap(base_url, directory):
     """Loop over all the created sitemaps, and create an index file."""
     log.info("Beginning creation of the final sitemap index...")
-    list_sitemaps = [f for f in listdir(
-        directory) if isfile(os.path.join(directory, f))
-                     and "sitemap" in f and "sitemap_index.xml" not in f]
+    list_sitemaps = [
+        f for f in listdir(directory)
+        if isfile(os.path.join(directory, f))
+        and "sitemap" in f and "sitemap_index.xml" not in f
+    ]
     sitemapindex = ElementTree.Element(
         "sitemapindex", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     )
