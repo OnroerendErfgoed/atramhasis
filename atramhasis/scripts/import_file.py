@@ -189,12 +189,36 @@ def conn_str_to_session(conn_str):
 
 def create_conceptscheme(conceptscheme_label, conceptscheme_uri):
     """
-    configure output conceptscheme
+    Configure output conceptscheme based on arg values
     """
     cs = ConceptScheme(uri=conceptscheme_uri)
     l = Label(conceptscheme_label, 'prefLabel', 'und')
     cs.labels.append(l)
     return cs
+
+def create_conceptscheme_from_skos(conceptscheme):
+    """
+    Configure output conceptscheme based on a `skosprovider.skos.ConceptScheme`
+    """
+    return ConceptScheme(
+        uri=conceptscheme.uri,
+        labels = [
+            Label(l.label, l.type, l.language)
+            for l in conceptscheme.labels
+        ],
+        notes = [
+            Note(n.note, n.type, n.language, n.markup)
+            for n in conceptscheme.notes
+        ],
+        sources = [
+            Source(s.citation, s.markup)
+            for s in conceptscheme.sources
+        ],
+        languages = [
+            l for l in conceptscheme.languages
+        ]
+    )
+
 
 
 def provider_to_db(provider, conceptscheme, session):
@@ -222,7 +246,10 @@ def main(argv=sys.argv):
 
     example conceptscheme_label
      My Conceptscheme
-    default conceptscheme_label is the name of the file
+    default conceptscheme_label is the name of the file if a URI is specified.
+    If no URI is specified, a conceptscheme will be imported from the input
+    file. This only works for RDf files. For other file types (JSON and CSV)
+    conceptscheme_uri is mandatory and conceptscheme_label is recommended.
     """
 
     # Import the data
@@ -232,19 +259,19 @@ def main(argv=sys.argv):
     file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
                                  if input_ext in supported_types[filetype]['extensions']][0]
     provider = file_to_provider_function(**vars(args))
-    cs_label = args.cs_label if args.cs_label else input_name.capitalize()
-    cs_uri = args.cs_uri if args.cs_uri else 'urn:x-skosprovider:{0}'.format(input_name)
-    cs = create_conceptscheme(cs_label, cs_uri)
+    if args.cs_uri:
+        cs_uri = args.cs_uri
+        cs_label = args.cs_label if args.cs_label else input_name.capitalize()
+        cs = create_conceptscheme(cs_label, cs_uri)
+    else:
+        cs = create_conceptscheme_from_skos(provider.concept_scheme)
+        cs.label
     provider_to_db(provider, cs, session)
 
     # Get info to return to the user
-    prov_id = cs_label.upper()
-    scheme_id = session.query(Label). \
-        join(conceptscheme_label). \
-        filter(Label.label == cs_label). \
-        first(). \
-        conceptscheme.id
-    print("\n\n*** The import of the {0} file with conceptscheme label '{1}' to {2} was succesfull. ***\
+    prov_id = input_name.upper()
+    scheme_id = cs.id
+    print("\n\n*** The import of conceptscheme {0} from the {0} file to {2} was succesfull. ***\
           \n\nTo use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.\
           \nAdd a configuration similar to:\
             \n\ndef create_registry(request):\
@@ -257,5 +284,5 @@ def main(argv=sys.argv):
             \n\tregistry.register_provider({6})\
             \n\treturn registry\
             \n\n".
-          format(args.input_file, cs_label, args.to,
+          format(prov_id, args.input_file, args.to,
                  prov_id.replace(' ', '_'), prov_id, scheme_id, prov_id.replace(' ', '_')))

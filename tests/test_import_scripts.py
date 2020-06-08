@@ -86,12 +86,12 @@ class ImportTests(DbTest):
         self.assertIsInstance(eb.notes[0], Note)
         self.assertIn('Mornay', eb.notes[0].note)
         self.assertEqual('note', eb.notes[0].type)
-    
+
     def test_import_rdf(self):
         sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url']]
         import_file.main(sys.argv)
         tests.db_filled = True
-        self._check_trees('Trees')
+        self._check_trees('Verschillende soorten bomen')
 
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json,

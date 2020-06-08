@@ -5,7 +5,14 @@
    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
 >
   <rdf:Description rdf:about="http://id.trees.org/1">
-    <skos:inScheme rdf:resource="urn:x-skosprovider:tree"/>
+    <skos:inScheme>
+      <skos:ConceptScheme rdf:about="urn:x-skosprovider:trees">
+        <skos:hasTopConcept rdf:resource="http://id.trees.org/2"/>
+        <dcterms:identifier>TREES</dcterms:identifier>
+        <skos:prefLabel xml:lang="nl">Verschillende soorten bomen</skos:prefLabel>
+        <skos:hasTopConcept rdf:resource="http://id.trees.org/1"/>
+      </skos:ConceptScheme>
+    </skos:inScheme>
     <dcterms:identifier>1</dcterms:identifier>
     <skos:prefLabel xml:lang="en">The Larch</skos:prefLabel>
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
