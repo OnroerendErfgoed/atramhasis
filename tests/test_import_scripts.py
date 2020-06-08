@@ -92,7 +92,7 @@ class ImportTests(DbTest):
         sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url']]
         import_file.main(sys.argv)
         tests.db_filled = True
-        self._check_trees('Trees')
+        self._check_trees('Verschillende soorten bomen')
 
     def test_import_ttl(self):
         sys.argv = ['import_file', '--from', test_data_ttl, '--to', SETTINGS['sqlalchemy.url']]
