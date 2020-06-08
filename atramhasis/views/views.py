@@ -28,6 +28,13 @@ def get_definition(notes):
             return note.note
 
 
+def sort_by_labels(concepts, locale, reverse=False):
+    return sorted([x for x in concepts if x.label(locale)],
+                  reverse=reverse,
+                  key=lambda child: child.label(locale).label.lower()
+                  ) + [x for x in concepts if not x.label(locale)]
+
+
 @view_defaults(accept='text/html')
 class AtramhasisView(object):
     """
@@ -269,8 +276,7 @@ class AtramhasisView(object):
             tco = self.conceptscheme_manager.get_concepts_for_scheme_tree(conceptscheme_id)
             tcl = self.conceptscheme_manager.get_collections_for_scheme_tree(conceptscheme_id)
 
-            scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
-                          sorted(tcl, key=lambda child: child.label(locale).label.lower())
+            scheme_tree = sort_by_labels(tco, locale) + sort_by_labels(tcl, locale)
 
         return scheme_tree
 
@@ -284,13 +290,13 @@ class AtramhasisView(object):
             cs = [c for c in thing.narrower_concepts]
             cs = cs + [c for c in thing.narrower_collections]
 
-        sortedcs = sorted(cs, key=lambda child: child.label(locale).label.lower())
+        sortedcs = sort_by_labels(cs, locale)
         children = [self.parse_thing(c, tree_id) for index, c in enumerate(sortedcs, 1)]
         dict_thing = {
             'id': tree_id,
             'concept_id': thing.concept_id,
             'type': thing.type,
-            'label': thing.label(locale).label,
+            'label': thing.label(locale).label if thing.label(locale) else None,
             'children': children
         }
 
