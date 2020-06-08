@@ -20,6 +20,7 @@ except ImportError:
     from mock import Mock, patch
 
 test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.rdf')
+test_data_ttl = os.path.join(TEST_DIR, 'data', 'trees.ttl')
 test_data_json = os.path.join(TEST_DIR, 'data', 'trees.json')
 test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 
@@ -89,6 +90,12 @@ class ImportTests(DbTest):
 
     def test_import_rdf(self):
         sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url']]
+        import_file.main(sys.argv)
+        tests.db_filled = True
+        self._check_trees('Trees')
+
+    def test_import_ttl(self):
+        sys.argv = ['import_file', '--from', test_data_ttl, '--to', SETTINGS['sqlalchemy.url']]
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_trees('Trees')
