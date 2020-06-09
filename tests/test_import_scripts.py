@@ -100,6 +100,12 @@ class ImportTests(DbTest):
         tests.db_filled = True
         self._check_trees('Trees')
 
+    def test_import_ttl(self):
+        sys.argv = ['import_file', '--from', test_data_ttl, '--to', SETTINGS['sqlalchemy.url']]
+        import_file.main(sys.argv)
+        tests.db_filled = True
+        self._check_trees('Trees')
+
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json,
                     '--to', SETTINGS['sqlalchemy.url'],
