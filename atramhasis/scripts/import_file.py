@@ -264,13 +264,12 @@ def main(argv=sys.argv):
         cs = create_conceptscheme(cs_label, cs_uri)
     else:
         cs = create_conceptscheme_from_skos(provider.concept_scheme)
-        cs.label
     provider_to_db(provider, cs, session)
 
     # Get info to return to the user
     prov_id = input_name.upper()
     scheme_id = cs.id
-    print("\n\n*** The import of conceptscheme {0} from the {0} file to {2} was succesfull. ***\
+    print("\n\n*** The import of conceptscheme {0} from the {1} file to {2} was succesful. ***\
           \n\nTo use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.\
           \nAdd a configuration similar to:\
             \n\ndef create_registry(request):\
