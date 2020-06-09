@@ -5,7 +5,7 @@ import argparse
 
 from skosprovider_rdf.providers import RDFProvider
 from rdflib import Graph
-from rdflib.util import guess_format
+from rdflib.util import SUFFIX_FORMAT_MAP, guess_format
 
 from skosprovider.providers import SimpleCsvProvider
 from skosprovider.uri import UriPatternGenerator
@@ -76,8 +76,7 @@ def file_to_json_provider(**kwargs):
 
 supported_types = {
     'RDF': {
-        'extensions': ['.html', '.hturtle', '.mdata', '.microdata', '.n3', '.nquads', '.nt', '.rdfa', '.rdfa1.0',
-                       '.rdfa1.1', '.trix', '.turtle', '.xml'],
+        'extensions': ['.%s' % suffix for suffix in SUFFIX_FORMAT_MAP],
         'file_to_provider': file_to_rdf_provider
     },
     'CSV': {
