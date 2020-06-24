@@ -47,7 +47,7 @@ class ImportTests(DbTest):
         sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session)
         dump = dict_dumper(sql_prov)
 
-        self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.labels[0].label)
+        self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.label('en').label)
         obj_1 = [item for item in dump if item['uri'] == 'http://id.trees.org/2'][0]
         self.assertEqual(obj_1['broader'], [])
         self.assertEqual(obj_1['id'], 2)
