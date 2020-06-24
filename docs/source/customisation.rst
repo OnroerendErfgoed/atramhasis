@@ -677,15 +677,34 @@ datamodel.
 
 The supported file types:
 
-- RDF (.html, .hturtle, .mdata, .microdata, .n3, .nquads, .nt, .rdfa, .rdfa1.0, .rdfa1.1, .trix, .turtle, .xml)
-  using :class:`~skosprovider_rdf.providers.RDFProvider`. This provider supports
-  the full datamodel.
+- RDF using :class:`~skosprovider_rdf.providers.RDFProvider`. This provider supports
+  the full datamodel. Since the heavy lifting is done by `RDFlib`, most of the
+  dialects supported by `RDFlib` should work. The full list can be found in
+  `rdflib.util.SUFFIX_FORMAT_MAP`. Formats like `rdf/xml` and `turtle` should
+  work.
 - CSV (.csv) using :class:`~skosprovider.providers.SimpleCsvProvider`.
   The provider only supports importing and id, a prefLabel, a note and a source.
   It will work well when importing a simple flat list, but not for complex
   hierarchies.
 - JSON (.json) using :class:`~skosprovider.providers.DictionaryProvider`. This
   provider supports the full datamodel.
+
+Some things to take into account:
+
+- Atramhasis only supports concepts with a numeric id. This ensures they can be
+  auto-generated when adding new concepts or collections. These map to the
+  `concept_id` attribute in the database, which is unique per conceptscheme as
+  opposed to the `id` attribute that is unique for the entire database.
+- When importing from an RDF vocabulary, the id will be read from a `dc` or
+  `dcterms` `identifier` property if present. Please ensure this property 
+  contains a numeric id, not a string or a URI.
+- When importing from RDF, the import file could possibly contain more than one
+  conceptscheme. Please ensure only one conceptscheme is present or
+  no conceptschemes are presents and specify the URI and label on the command
+  line.
+- When importing from CSV or JSON, the data file only contains the concepts and
+  collections in the scheme, but not the conceptscheme itself. In this case,
+  please specify the URI and label of the conceptscheme on the command line.
 
 The script can be called through the commandline in the project virtual environment.
 Call it with the `help` argument to see the possible arguments.
@@ -717,9 +736,11 @@ PostGreSQL and SQLite are supported. The structure is either
 `postgresql://username:password@host:port/db_name` or
 either `sqlite:///path/db_name.sqlite`. The default value is `sqlite:///atramhasis.sqlite`.
 
-The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. The
-conceptscheme needs a label. The label can be added to the `conceptscheme_label`
-argument. The default label is the name of the file.
+The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. With a 
+:class:`~skosprovider_rdf.providers.RDFProvider` the conceptscheme can be present
+in the RDF file. The other providers can specify it on the command line
+through the `conceptscheme_label` argument. If no `conceptscheme_label` is present,
+the default label is the name of the file.
 
 Once the data is loaded in the database, the configuration of the added provider must be
 included in the :file:`my_thesaurus/skos/__init__.py`. A successfull run of the
