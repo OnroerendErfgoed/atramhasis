@@ -273,5 +273,5 @@ intersphinx_mapping = {
     'pyramid': ('https://docs.pylonsproject.org/projects/pyramid/en/latest', None),
     'colander': ('https://docs.pylonsproject.org/projects/colander/en/latest',
         None),
-    'rdflib': ('https://rdflib.readthedocs.io/en/latest/', None)
+    'rdflib': ('https://rdflib.readthedocs.io/en/latest', None)
 }
