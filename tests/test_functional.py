@@ -512,6 +512,14 @@ class JsonTreeFunctionalTests(FunctionalTests):
         self.assertEqual(2, len(response.json))
         self.assertEqual('World', response.json[0]['label'])
 
+    def test_missing_labels(self):
+        response = self.testapp.get('/conceptschemes/MISSING_LABEL/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        self.assertEqual('200 OK', response.status)
+        self.assertIsNotNone(response.json)
+        self.assertEqual(2, len(response.json))
+        self.assertEqual('label', response.json[0]['label'])
+        self.assertEqual(None, response.json[1]['label'])
+
     def test_no_tree(self):
         response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
                                     status=404, expect_errors=True)

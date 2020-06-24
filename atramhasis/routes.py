@@ -16,6 +16,10 @@ def includeme(config):
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')
 
+    config.add_static_view('sitemaps', 'static/_sitemaps/', cache_max_age=3600)
+    config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_route("sitemap", "/sitemap_index.xml")
+
     config.add_route('atramhasis.rdf_void_turtle_ext', pattern='/void.ttl', accept='text/turtle')
     config.add_route('atramhasis.rdf_full_export_ext', pattern='/conceptschemes/{scheme_id}/c.rdf')
     config.add_route('atramhasis.rdf_full_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c.ttl')

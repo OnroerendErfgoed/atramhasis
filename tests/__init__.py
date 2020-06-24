@@ -94,6 +94,20 @@ def fill_db():
             import_provider(data.geo,
                             ConceptScheme(id=2, uri='urn:x-vioe:geography'),
                             session)
+            import_provider(
+                DictionaryProvider(
+                    {'id': 'MISSING_LABEL', 'default_language': 'nl'},
+                    [{'id': '1', 'uri': 'urn:x-skosprovider:test/1'},
+                     {
+                         'id': '2',
+                         'uri': 'urn:x-skosprovider:test/2',
+                         'labels': [
+                             {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
+                         ],
+                     }]
+                ),
+                ConceptScheme(id=9, uri='urn:x-vioe:test'),
+                session)
             session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
             for scheme_id in (5, 6, 7, 8):
                 session.add(
@@ -182,10 +196,15 @@ def create_registry(request):
         [data.larch, data.chestnut, data.species],
         concept_scheme=ConceptScheme('http://id.trees.org')
     )
+    missing_label = SQLAlchemyProvider(
+        {'id': 'MISSING_LABEL', 'conceptscheme_id': 9},
+        request.db
+    )
 
     registry.register_provider(trees)
     registry.register_provider(geo)
     registry.register_provider(styles)
     registry.register_provider(materials)
     registry.register_provider(test)
+    registry.register_provider(missing_label)
     return registry
