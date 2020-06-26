@@ -267,9 +267,11 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('http://docs.python.org/', None),
-    'skosprovider': ('http://skosprovider.readthedocs.org/en/latest', None),
-    'pyramidskosprovider': ('http://pyramid-skosprovider.readthedocs.org/en/latest', None),
-    'skosprovidersqlalchemy': ('http://skosprovider-sqlalchemy.readthedocs.org/en/latest', None),
-    'pyramid': ('http://docs.pylonsproject.org/projects/pyramid/en/latest', None),
-    'colander': ('http://docs.pylonsproject.org/projects/colander/en/latest', None)
+    'skosprovider': ('https://skosprovider.readthedocs.io/en/latest', None),
+    'pyramidskosprovider': ('https://pyramid-skosprovider.readthedocs.io/en/latest', None),
+    'skosprovidersqlalchemy': ('https://skosprovider-sqlalchemy.readthedocs.io/en/latest', None),
+    'pyramid': ('https://docs.pylonsproject.org/projects/pyramid/en/latest', None),
+    'colander': ('https://docs.pylonsproject.org/projects/colander/en/latest',
+        None),
+    'rdflib': ('https://rdflib.readthedocs.io/en/latest', None)
 }
