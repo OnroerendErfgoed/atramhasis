@@ -294,6 +294,59 @@ calls to this conceptscheme will function as normal and you will be able to
 maintain it from the admin interface.
 
 
+.. _force_display_label_language:
+
+Force a display language for a vocabulary
+=========================================
+
+Under normal cicrumstances, Atramhasis tries to provide the most
+appropriate label for a certain concept or collection, based on some default
+configuration and the preferences of the end-user. Every provider can be marked
+as having a certain `default language` (English if not set), but Atramhasis
+also tries to read what the user wants. It does this through the user's
+browser's locale. This information can be read from the browser's HTTP headers
+or cookies. Generally, Atramhasis just knows in what language a user is
+browsing the site and tries to return labels appropriate for that language. So,
+the same thesaurus visited from the US will return English labels, while it
+will return Dutch when visited from Gent (Belgium).
+
+You might have a vocabulary with a strongly preferential relation to a certain
+language. We ran into this situation with a vocabulary of species: names for
+plants and trees commonly found in Flanders. Some of them have one or more
+local, Dutch, names. Most or all of them have an official name in Latin. The
+normal language handling mechanism created a weird situation. It led to a tree
+of names that was mostly in Latin, with the odd Dutch word thrown in for good
+measure. This was not as desired by our users. To that end, a special mechanism
+was created to force rendering labels of concepts and collections in a certain
+language, no matter what the end-user's browser is requesting.
+
+To set this, please edit the :file:`my_thesaurus/skos/__init__.py`. Look for the 
+thesaurus you want to override and add a setting `atramhasis.force_display_label_language`
+to the provider's metadata. Set it to a language supported by the provider
+(there's little sense to setting it to a language that isn't present in the
+vocabulary). Now Atramhasis will try serving concepts from this provider with
+this language. All labels will still be shown, but the page title or current
+label will be set to the selected language as much as possible. The normal
+language determination mechanisms will keep on working, so if the concept has
+no label in the requested language, Atramhasis will fall back on other labels
+present.
+
+Your provider should end up similar to this:
+
+.. code-block:: python
+
+    STUFF = SQLAlchemyProvider(
+        {
+            'id': 'STUFF',
+            'conceptscheme_id': 1,
+            'atramhasis.force_display_label_language': 'la'
+        },
+        request.db,
+        uri_generator=UriPatternGenerator(
+            'http://id.mydata.org/thesauri/stuff/%s'
+        )
+    )
+
 .. _i18n:
 
 Internationalisation
