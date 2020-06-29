@@ -347,6 +347,14 @@ Your provider should end up similar to this:
         )
     )
 
+Beware that this will only affect the Atramhasis UI, not the Atramhasis REST
+services. We looked into some solutions for our problem that would have also
+changed the underlying service, but decided against then because it would have
+prevented you from making your own choices when interacting with Atramhasis. If
+you want to render the tree of concepts using a preferred language different
+from what a browser would advocate for, you can pass the language parameter in
+a url, eg. `http://my.thesaurus.org/conceptschemes/STUFF/tree?language=la`.
+
 .. _i18n:
 
 Internationalisation
