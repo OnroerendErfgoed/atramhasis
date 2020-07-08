@@ -1,0 +1,16 @@
+{% extends 'layout.jinja2' %}
+
+{% block html_title %}Concept schemes{% endblock %}
+
+{% block content %}
+<div class="row">
+  {%- for item in tree recursive %}
+    {{ '-  ' * (loop.depth-1) }} {{ item.label }}<br>
+    {%- if item.children -%}
+        {{ loop(item.children) }}
+    {%- endif %}
+  {%- endfor %}
+</div>
+{% endblock %}
+
+{% block subfooter %}{% endblock %}

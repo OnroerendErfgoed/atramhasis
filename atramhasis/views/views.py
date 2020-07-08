@@ -84,7 +84,13 @@ class AtramhasisView(object):
         """
         This view displays the print of a conceptscheme as a hierarchy
         """
-        return {}
+        scheme_id = self.request.matchdict['scheme_id']
+        locale = self.request.locale_name
+        dicts = self.get_results_tree(scheme_id, locale)
+        if dicts:
+            return {'tree': dicts}
+        else:
+            return Response(status_int=404)
 
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
