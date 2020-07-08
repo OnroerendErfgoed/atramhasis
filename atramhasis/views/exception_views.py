@@ -64,7 +64,7 @@ def provider_unavailable(exc, request):
     """
     log.error(exc, exc_info=sys.exc_info())
     request.response.status_int = 503
-    return {'message': exc.message}
+    return {'message': exc}
 
 
 @view_config(context=IntegrityError, renderer='json')

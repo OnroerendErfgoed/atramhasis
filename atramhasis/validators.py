@@ -329,7 +329,7 @@ def label_lang_rule(errors, node, languages_manager, labels):
         if not tags.check(language_tag):
             errors.append(colander.Invalid(
                 node['labels'],
-                'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
+                'Invalid language tag: %s' % ", ".join([err for err in tags.tag(language_tag).errors])
             ))
         else:
             languages_present = languages_manager.count_languages(language_tag)
@@ -558,7 +558,7 @@ def languagetag_isvalid_rule(node, language_tag, errors):
     if not tags.check(language_tag):
         errors.append(colander.Invalid(
             node,
-            'Invalid language tag: %s' % ", ".join([err.message for err in tags.tag(language_tag).errors])
+            'Invalid language tag: %s' % ", ".join([err for err in tags.tag(language_tag).errors])
         ))
 
 
