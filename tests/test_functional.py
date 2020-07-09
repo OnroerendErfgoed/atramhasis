@@ -518,6 +518,20 @@ class JsonTreeFunctionalTests(FunctionalTests):
         self.assertEqual('404 Not Found', response.status)
 
 
+class HtmlTreeFunctionalTests(FunctionalTests):
+    def _get_default_headers(self):
+        return {'Accept': 'text/html'}
+
+    def test_tree(self):
+        response = self.testapp.get('/conceptschemes/GEOGRAPHY/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        self.assertEqual('200 OK', response.status)
+        self.assertIn('text/html', response.headers['Content-Type'])
+
+    def test_no_tree(self):
+        response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
+                                    status=404, expect_errors=True)
+        self.assertEqual('404 Not Found', response.status)
+
 class SkosFunctionalTests(FunctionalTests):
 
     def _get_default_headers(self):
