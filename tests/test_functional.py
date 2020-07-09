@@ -553,11 +553,13 @@ class CacheFunctionalTests(FunctionalTests):
         invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
         self.assertEqual('200 OK', invalidate_cache_response.status)
 
-        tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+                                         headers=self._get_default_headers())
         self.assertEqual('200 OK', tree_response.status)
         self.assertIsNotNone(tree_response.json)
 
-        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+                                                headers=self._get_default_headers())
         self.assertEqual('200 OK', cached_tree_response.status)
         self.assertIsNotNone(cached_tree_response.json)
 
