@@ -79,13 +79,6 @@ class AtramhasisView(object):
 
         return {'conceptschemes': conceptschemes}
 
-    @view_config(route_name='scheme_tree_html', renderer='scheme_tree.jinja2')
-    def scheme_tree_view(self):  # pragma: no cover
-        """
-        This view displays the print of a conceptscheme as a hierarchy
-        """
-        return {}
-
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
         """
@@ -252,13 +245,17 @@ class AtramhasisView(object):
             'filename': 'atramhasis_export'
         }
 
+    @view_config(route_name='scheme_tree_html', renderer='scheme_tree.jinja2')
     @view_config(route_name='scheme_tree', renderer='json', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
         locale = self.request.locale_name
         dicts = self.get_results_tree(scheme_id, locale)
         if dicts:
-            return dicts
+            if 'text/html' not in self.request.accept:
+                return dicts
+            else:
+                return {'tree': dicts}
         else:
             return Response(status_int=404)
 
