@@ -1,0 +1,8 @@
+/* line 1, ../scss/schemetree.scss */
+body {
+  font-family: "Flanders Art Sans Light", sans-serif;
+}
+
+@page {
+  margin: 25mm;
+}

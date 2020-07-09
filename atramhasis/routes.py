@@ -31,7 +31,7 @@ def includeme(config):
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
     config.add_route('scheme_root', pattern='/conceptschemes/{scheme_id}/c/', accept='text/html')
     config.add_route('scheme_tree', pattern='/conceptschemes/{scheme_id}/tree', accept='application/json')
-    config.add_route('scheme_tree_html', pattern='/conceptschemes/{scheme_id}/tree', accept='text/html')
+    config.add_route('scheme_tree_html', pattern='/conceptschemes/{scheme_id}/treeprint', accept='text/html')
 
     config.add_route('search_result_export', pattern='/conceptschemes/{scheme_id}/c.csv')
     config.add_route('atramhasis.edit_conceptscheme', pattern='/conceptschemes/{scheme_id}',

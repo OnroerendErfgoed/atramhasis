@@ -82,7 +82,7 @@ class AtramhasisView(object):
     @view_config(route_name='scheme_tree_html', renderer='scheme_tree.jinja2')
     def scheme_tree_view(self):  # pragma: no cover
         """
-        This view displays the print of a conceptscheme as a hierarchy
+        This view displays a tree of a conceptscheme as a printable hierarchy
         """
         scheme_id = self.request.matchdict['scheme_id']
         locale = self.request.locale_name
