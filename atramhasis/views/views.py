@@ -252,7 +252,7 @@ class AtramhasisView(object):
         locale = self.request.locale_name
         dicts = self.get_results_tree(scheme_id, locale)
         if dicts:
-            if 'application/json' in self.request.accept:
+            if 'text/html' not in self.request.accept:
                 return dicts
             else:
                 return {'tree': dicts}
