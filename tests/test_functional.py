@@ -520,6 +520,22 @@ class JsonTreeFunctionalTests(FunctionalTests):
         self.assertEqual('label', response.json[0]['label'])
         self.assertEqual(None, response.json[1]['label'])
 
+    def test_tree_language(self):
+        response = self.testapp.get('/conceptschemes/TREES/tree?language=nl',
+                                    headers=self._get_default_headers())
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            ['De Lariks', 'De Paardekastanje'],
+            [child['label'] for child in response.json[0]['children']]
+        )
+        response = self.testapp.get('/conceptschemes/TREES/tree?language=en',
+                                    headers=self._get_default_headers())
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            ['The Chestnut', 'The Larch'],
+            [child['label'] for child in response.json[0]['children']]
+        )
+
     def test_no_tree(self):
         response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
                                     status=404, expect_errors=True)

@@ -255,8 +255,8 @@ class AtramhasisView(object):
     @view_config(route_name='scheme_tree', renderer='json', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
-        locale = self.request.locale_name
-        dicts = self.get_results_tree(scheme_id, locale)
+        language = self.request.params.get('language', self.request.locale_name)
+        dicts = self.get_results_tree(scheme_id, language)
         if dicts:
             return dicts
         else:
@@ -282,7 +282,7 @@ class AtramhasisView(object):
 
     def parse_thing(self, thing, parent_tree_id):
         tree_id = self.create_treeid(parent_tree_id, thing.concept_id)
-        locale = self.request.locale_name
+        locale = self.request.params.get('language', self.request.locale_name)
 
         if thing.type and thing.type == 'collection':
             cs = [member for member in thing.members] if hasattr(thing, 'members') else []
