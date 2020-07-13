@@ -565,6 +565,32 @@ class SkosFunctionalTests(FunctionalTests):
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)
 
+    def test_match_filter(self):
+        response = self.testapp.get(
+            '/conceptschemes/TREES/c',
+            headers={'Accept': 'application/json'}
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(3, len(response.json))
+        response = self.testapp.get(
+            '/conceptschemes/TREES/c'
+            '?match=http://id.python.org/different/types/of/trees/nr/1/the/larch',
+            headers={'Accept': 'application/json'}
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            [
+                {
+                    'id': 1,
+                    'uri': 'urn:x-skosprovider:trees/1',
+                    'type': 'concept',
+                    'label': 'De Lariks',
+                    '@context': 'http://localhost/jsonld/context/skos'
+                }
+            ],
+            response.json
+        )
+
 
 class CacheFunctionalTests(FunctionalTests):
     def _get_default_headers(self):
