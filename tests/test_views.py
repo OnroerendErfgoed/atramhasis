@@ -32,6 +32,7 @@ def provider(some_id):
         provider_mock.get_metadata = Mock(return_value={'id': some_id, 'subject': []})
     provider_mock.allowed_instance_scopes = ['single', 'threaded_thread']
     provider_mock.conceptscheme_id = Mock(return_value=some_id)
+    provider_mock.metadata={}
     return provider_mock
 
 
@@ -284,6 +285,19 @@ class TestConceptView(unittest.TestCase):
         self.assertIsNotNone(info['concept'])
         self.assertEqual(info['conceptType'], 'Concept')
         self.assertEqual(info['scheme_id'], 'TREES')
+
+    def test_passing_view_with_languague(self):
+        request = self.request
+        request.matchdict['scheme_id'] = 'TREES'
+        request.matchdict['c_id'] = '1'
+        request.skos_registry = self.regis
+        request.skos_registry.providers['TREES'].metadata = {
+            'atramhasis.force_display_label_language': 'nl'
+        }
+        atramhasisview = AtramhasisView(request)
+        info = atramhasisview.concept_view()
+        self.assertIsNotNone(info['concept'])
+        self.assertEqual(info['locale'], 'nl')
 
     def test_passing_collection_view(self):
         request = self.request
