@@ -126,10 +126,10 @@ class AtramhasisView(object):
             'labels': conceptscheme.labels,
             'notes': conceptscheme.notes,
             'top_concepts': provider.get_top_concepts(),
-            'locale': self.request.locale_name
         }
 
-        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes}
+        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes,
+                'locale': self.request.locale_name}
 
     @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
