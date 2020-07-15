@@ -260,8 +260,7 @@ class AtramhasisView(object):
     @view_config(route_name='scheme_tree', renderer='json', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
-        language = (self.request.params.get('language', self.request.locale_name)
-                    or self.request.locale_name)
+        language = self.request.params.get('language') or self.request.locale_name
         dicts = self.get_results_tree(scheme_id, language)
         if dicts:
             return dicts
