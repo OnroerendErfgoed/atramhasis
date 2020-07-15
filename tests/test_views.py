@@ -32,6 +32,7 @@ def provider(some_id):
         provider_mock.get_metadata = Mock(return_value={'id': some_id, 'subject': []})
     provider_mock.allowed_instance_scopes = ['single', 'threaded_thread']
     provider_mock.conceptscheme_id = Mock(return_value=some_id)
+    provider_mock.metadata={}
     return provider_mock
 
 

@@ -37,7 +37,7 @@
       </div>
       {% if concept %}
         <div class="large-12 columns panel">
-          <h1 class="panel-header left word-wrap-element">{{ concept.label(request.locale_name).label|title }}</h1>
+          <h1 class="panel-header left word-wrap-element">{{ concept.label(locale).label|title }}</h1>
           <h2 class="id-header right">[ ID : {{ concept.concept_id }} ]</h2>
           <hr>
           <dl class="infolist clearfix">
@@ -105,10 +105,10 @@
                     <div class="clearfix">
                       <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
                       {% if concept.broader_concepts|length > 0 %}
-                        {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+                        {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id, locale) }}
                       {% endif %}
                       {% if concept.member_of|length > 0 %}
-                        {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
+                        {{ render_relaties_lijst(request, concept.member_of, scheme_id, locale) }}
                       {% endif %}
                     </div>
                   {% endif %}
@@ -118,10 +118,10 @@
                     <div class="clearfix">
                       <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
                       {% if concept.narrower_concepts|length > 0 %}
-                        {{ render_relaties_lijst(request, concept.narrower_concepts, scheme_id) }}
+                        {{ render_relaties_lijst(request, concept.narrower_concepts, scheme_id, locale) }}
                       {% endif %}
                       {% if concept.narrower_collections|length > 0 %}
-                        {{ render_relaties_lijst(request, concept.narrower_collections, scheme_id) }}
+                        {{ render_relaties_lijst(request, concept.narrower_collections, scheme_id, locale) }}
                       {% endif %}
                     </div>
                   {% endif %}
@@ -130,7 +130,7 @@
                   {% if concept.related_concepts|length > 0 %}
                     <div class="clearfix">
                       <h4 class="relations-subtitle">{% trans %}related{% endtrans %}</h4>
-                      {{ render_relaties_lijst(request, concept.related_concepts, scheme_id) }}
+                      {{ render_relaties_lijst(request, concept.related_concepts, scheme_id, locale) }}
                     </div>
                   {% endif %}
                 {% endif %}
@@ -141,10 +141,10 @@
                     <div class="clearfix">
                       <h4 class="relations-subtitle">{% trans %}broader{% endtrans %}</h4>
                       {% if concept.broader_concepts|length > 0 %}
-                        {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id) }}
+                        {{ render_relaties_lijst(request, concept.broader_concepts, scheme_id, locale) }}
                       {% endif %}
                       {% if concept.member_of|length > 0 %}
-                        {{ render_relaties_lijst(request, concept.member_of, scheme_id) }}
+                        {{ render_relaties_lijst(request, concept.member_of, scheme_id, locale) }}
                       {% endif %}
                     </div>
                   {% endif %}
@@ -152,7 +152,7 @@
                   {% if concept.members|length > 0 %}
                     <div class="clearfix">
                       <h4 class="relations-subtitle">{% trans %}narrower{% endtrans %}</h4>
-                      {{ render_relaties_lijst(request, concept.members, scheme_id) }}
+                      {{ render_relaties_lijst(request, concept.members, scheme_id, locale) }}
                     </div>
                   {% endif %}
                 {% endif %}
