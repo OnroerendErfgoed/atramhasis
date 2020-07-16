@@ -2,18 +2,30 @@
 import os
 import unittest
 
-from skosprovider.registry import Registry
+from paste.deploy.loadwsgi import appconfig
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note, LabelType, ConceptScheme
+from skosprovider.registry import Registry
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import LabelType
+from skosprovider_sqlalchemy.models import Note
+from skosprovider_sqlalchemy.models import Thing
 from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
-from paste.deploy.loadwsgi import appconfig
 
-from atramhasis.cache import list_region
-from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, AuditManager
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
-from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView, \
-    labels_to_string, get_definition
+from atramhasis.data.datamanagers import AuditManager
+from atramhasis.data.datamanagers import ConceptSchemeManager
+from atramhasis.data.datamanagers import SkosManager
+from atramhasis.errors import ConceptNotFoundException
+from atramhasis.errors import ConceptSchemeNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.views.views import AtramhasisAdminView
+from atramhasis.views.views import AtramhasisListView
+from atramhasis.views.views import AtramhasisView
+from atramhasis.views.views import get_definition
+from atramhasis.views.views import labels_to_string
 from fixtures.data import trees
 
 try:
@@ -259,6 +271,16 @@ class TestConceptSchemeView(unittest.TestCase):
         self.assertIsNotNone(res['conceptscheme']['labels'])
         self.assertIsNotNone(res['conceptscheme']['notes'])
         self.assertIsNotNone(res['conceptscheme']['top_concepts'])
+
+    def test_conceptscheme_view_language(self):
+        self.request.matchdict['scheme_id'] = 'TREES'
+        self.request.skos_registry.providers['TREES'].metadata[
+            'atramhasis.force_display_label_language'] = 'nl'
+
+        atramhasisview = AtramhasisView(self.request)
+        res = atramhasisview.conceptscheme_view()
+        self.assertIsNotNone(res)
+        self.assertEqual(res['locale'], 'nl')
 
 
 class TestConceptView(unittest.TestCase):
