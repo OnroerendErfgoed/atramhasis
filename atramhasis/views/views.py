@@ -129,7 +129,7 @@ class AtramhasisView(object):
             'uri': conceptscheme.uri,
             'labels': conceptscheme.labels,
             'notes': conceptscheme.notes,
-            'top_concepts': provider.get_top_concepts()
+            'top_concepts': provider.get_top_concepts(),
         }
 
         return {'conceptscheme': scheme, 'conceptschemes': conceptschemes,
