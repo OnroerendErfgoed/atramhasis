@@ -60,7 +60,7 @@
     var current = '{{ conceptscheme.scheme_id }}';
   {% endif %}
   d3.json('{{ request.route_path("scheme_tree", scheme_id = scheme_id, _query={'language':locale}) }}',
-      function (error, tree) {
+      function(error, tree) {
     if (error) throw error;
 
     var treeData = { 'label': scheme_label, 'scheme_id': scheme_id, children: tree }
