@@ -51,7 +51,7 @@
   {% endif %}
 
   {% if concept %}
-    var scheme_label = '{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name)|trim }}';
+    var scheme_label = '{{ get_conceptscheme_label(concept.conceptscheme, locale)|trim }}';
     var scheme_id = '{{ scheme_id }}';
     var current = '{{ concept.concept_id }}';
   {% else %}
@@ -59,8 +59,8 @@
     var scheme_id = '{{ conceptscheme.scheme_id }}';
     var current = '{{ conceptscheme.scheme_id }}';
   {% endif %}
-
-  d3.json('{{ request.route_path("scheme_tree", scheme_id = scheme_id ) }}', function(error, tree) {
+  d3.json('{{ request.route_path("scheme_tree", scheme_id = scheme_id, _query={'language':locale}) }}',
+      function(error, tree) {
     if (error) throw error;
 
     var treeData = { 'label': scheme_label, 'scheme_id': scheme_id, children: tree }
