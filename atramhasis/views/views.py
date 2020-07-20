@@ -261,13 +261,17 @@ class AtramhasisView(object):
             'filename': 'atramhasis_export'
         }
 
+    @view_config(route_name='scheme_tree_html', renderer='scheme_tree.jinja2')
     @view_config(route_name='scheme_tree', renderer='json', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
         language = self.request.params.get('language') or self.request.locale_name
         dicts = self.get_results_tree(scheme_id, language)
         if dicts:
-            return dicts
+            if 'text/html' not in self.request.accept:
+                return dicts
+            else:
+                return {'tree': dicts}
         else:
             return Response(status_int=404)
 
