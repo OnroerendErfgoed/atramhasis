@@ -299,7 +299,7 @@ maintain it from the admin interface.
 Force a display language for a vocabulary
 =========================================
 
-Under normal cicrumstances, Atramhasis tries to provide the most
+Under normal circumstances, Atramhasis tries to provide the most
 appropriate label for a certain concept or collection, based on some default
 configuration and the preferences of the end-user. Every provider can be marked
 as having a certain `default language` (English if not set), but Atramhasis
