@@ -34,7 +34,8 @@ def from_thing(thing):
             ],
             members=[member.concept_id for member in thing.members] if hasattr(thing, 'members') else [],
             member_of=[c.concept_id for c in thing.member_of],
-            superordinates=[broader_concept.concept_id for broader_concept in thing.broader_concepts]
+            superordinates=[broader_concept.concept_id for broader_concept in thing.broader_concepts],
+            infer_concept_relations=thing.infer_concept_relations
         )
     else:
         matches = {}

@@ -206,9 +206,10 @@ class AtramhasisCrud(object):
             concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
+        result = from_thing(concept)
         self.skos_manager.delete_thing(concept)
 
         invalidate_scheme_cache(self.scheme_id)
 
         self.request.response.status = '200'
-        return from_thing(concept)
+        return result

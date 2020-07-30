@@ -173,6 +173,8 @@ def map_concept(concept, concept_json, skos_manager):
                 except NoResultFound:
                     broader_concept = Concept(concept_id=broader['id'], conceptscheme_id=concept.conceptscheme_id)
                 concept.broader_concepts.add(broader_concept)
+            if 'infer_concept_relations' in concept_json:
+                concept.infer_concept_relations = concept_json['infer_concept_relations']
     return concept
 
 

@@ -108,7 +108,8 @@ json_collection_value = {
         "note": "een notitie",
         "type": "note",
         "language": "nl"
-    }]
+    }],
+    'infer_concept_relations': True
 }
 
 TEST = DictionaryProvider(
@@ -320,6 +321,7 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_edit_collection(self):
         json_collection_value['members'] = [{"id": 7}, {"id": 8}]
+        json_collection_value['infer_concept_relations'] = False
         res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers(),
                                     params=json_collection_value)
         self.assertEqual('200 OK', res.status)
@@ -327,6 +329,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['type'], 'collection')
         self.assertEqual(2, len(res.json['members']))
+        self.assertFalse(res.json['infer_concept_relations'])
 
     def test_delete_collection(self):
         res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers())
