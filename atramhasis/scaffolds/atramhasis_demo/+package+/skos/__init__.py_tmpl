@@ -126,7 +126,8 @@ def create_registry(request):
                 'created': [date(2011,5,23)],
                 'language': ['nl-BE', 'la'],
                 'license': LICENSES
-            }
+            },
+            'atramhasis.force_display_label_language': 'la'
         },
         request.db,
         uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/soorten/%s')

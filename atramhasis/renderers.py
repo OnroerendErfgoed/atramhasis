@@ -136,7 +136,8 @@ def collection_adapter(obj, request):
         'sources': obj.sources,
         'members': [map_relation(c, language) for c in obj.members],
         'member_of': [map_relation(c, language) for c in obj.member_of],
-        'superordinates': [map_relation(c, language) for c in obj.broader_concepts]
+        'superordinates': [map_relation(c, language) for c in obj.broader_concepts],
+        'infer_concept_relations': obj.infer_concept_relations
     }
 
 

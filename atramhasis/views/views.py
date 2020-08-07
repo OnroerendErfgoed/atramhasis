@@ -116,8 +116,12 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
         conceptscheme = provider.concept_scheme
-        title = conceptscheme.label(self.request.locale_name).label if (conceptscheme.label()) \
-            else scheme_id
+        if 'atramhasis.force_display_label_language' in provider.metadata:
+            locale = provider.metadata['atramhasis.force_display_label_language']
+        else:
+            locale = self.request.locale_name
+        title = (conceptscheme.label(locale).label if (conceptscheme.label())
+                 else scheme_id)
 
         scheme = {
             'scheme_id': scheme_id,
@@ -125,10 +129,11 @@ class AtramhasisView(object):
             'uri': conceptscheme.uri,
             'labels': conceptscheme.labels,
             'notes': conceptscheme.notes,
-            'top_concepts': provider.get_top_concepts()
+            'top_concepts': provider.get_top_concepts(),
         }
 
-        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes}
+        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes,
+                'locale': locale}
 
     @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
@@ -146,9 +151,12 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
-
         if not provider:
             raise ConceptSchemeNotFoundException(scheme_id)
+        if 'atramhasis.force_display_label_language' in provider.metadata:
+            locale = provider.metadata['atramhasis.force_display_label_language']
+        else:
+            locale = self.request.locale_name
         try:
             c = self.skos_manager.get_thing(c_id, provider.conceptscheme_id)
             if isinstance(c, Concept):
@@ -160,7 +168,8 @@ class AtramhasisView(object):
             url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
             update_last_visited_concepts(self.request, {'label': c.label(self.request.locale_name).label, 'url': url})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
-                    'conceptschemes': conceptschemes, 'provider': provider}
+                    'conceptschemes': conceptschemes, 'provider': provider,
+                    'locale': locale}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
@@ -256,8 +265,8 @@ class AtramhasisView(object):
     @view_config(route_name='scheme_tree', renderer='json', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
-        locale = self.request.locale_name
-        dicts = self.get_results_tree(scheme_id, locale)
+        language = self.request.params.get('language') or self.request.locale_name
+        dicts = self.get_results_tree(scheme_id, language)
         if dicts:
             if 'text/html' not in self.request.accept:
                 return dicts
@@ -286,7 +295,7 @@ class AtramhasisView(object):
 
     def parse_thing(self, thing, parent_tree_id):
         tree_id = self.create_treeid(parent_tree_id, thing.concept_id)
-        locale = self.request.locale_name
+        locale = self.request.params.get('language', self.request.locale_name)
 
         if thing.type and thing.type == 'collection':
             cs = [member for member in thing.members] if hasattr(thing, 'members') else []
