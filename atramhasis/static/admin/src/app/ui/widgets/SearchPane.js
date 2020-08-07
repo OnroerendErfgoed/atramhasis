@@ -262,6 +262,9 @@ define([
         label: this.labelInput.value,
         sort: '+label'
       };
+      if (this.matchInput.value.trim() !== '') {
+        filter.match= this.matchInput.value;
+      }
       var store = this.appUi.conceptController.getConceptStore(schemeId).filter(filter);
       this.init(schemeId, store);
       this.appUi._slideMenu._slideOpen();
