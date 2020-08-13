@@ -49,7 +49,7 @@ define([
 
     postCreate: function () {
       this.inherited(arguments);
-      console.debug('ConceptDetail::postCreate');
+      console.debug('ConceptDetail::postCreate', this.concept);
       domAttr.set(this.mergeButton, 'disabled', true);
     },
 
@@ -91,7 +91,6 @@ define([
     },
 
     _setData: function(concept) {
-      console.log(concept);
       // set view data
       this.conceptTitleViewNode.innerHTML = '<strong>' + this.scheme + ' : ' + concept.label + '</strong>';
       this.idViewNode.innerHTML = 'ID: ' + concept.id;
@@ -232,6 +231,19 @@ define([
         if (superString.length > 2) {
           superString = superString.substring(0, superString.length - 2);
         }
+        domConstruct.create('dd', {innerHTML: superString}, dt);
+      }
+
+      // infer_concept_relations
+      if (concept.type === 'collection') {
+        var dt = domConstruct.create('dt', {
+          innerHTML: 'Inheritance <i class="fa fa-info-circle">',
+          title: 'Should member concepts of this collection be seen as narrower concept of a superordinate ' +
+            'of the collection'
+        }, this.relationsListNode, 'last');
+        var cssClass = concept.infer_concept_relations === true ? 'fa-check' : 'fa-times';
+        var htmlTitle = concept.infer_concept_relations === true ? 'yes' : 'no';
+        var superString = '<i class="fa ' + cssClass + '" title="' + htmlTitle + '">';
         domConstruct.create('dd', {innerHTML: superString}, dt);
       }
 
