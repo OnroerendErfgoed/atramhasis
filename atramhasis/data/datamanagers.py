@@ -272,7 +272,7 @@ class AuditManager(DataManager):
             ConceptVisitLog.concept_id,
             func.count(ConceptVisitLog.concept_id).label('count')
         ).filter(
-            and_(ConceptVisitLog.conceptscheme_id == conceptscheme_id,
+            and_(ConceptVisitLog.conceptscheme_id == str(conceptscheme_id),
                  ConceptVisitLog.visited_at >= start_date)
         ).group_by(
             ConceptVisitLog.concept_id

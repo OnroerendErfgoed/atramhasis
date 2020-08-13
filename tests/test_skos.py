@@ -14,7 +14,7 @@ from fixtures.data import geo
 from fixtures.materials import materials
 from fixtures.styles_and_cultures import styles_and_cultures
 from fixtures.data import trees
-
+from tests import setup_db
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
@@ -28,8 +28,7 @@ class TestSkos(unittest.TestCase):
         session_maker = sessionmaker(
             bind=self.engine,
         )
-        SkosBase.metadata.drop_all(self.engine)
-        SkosBase.metadata.create_all(self.engine)
+        setup_db(True)
         self.config = testing.setUp()
         self.config.registry.dbmaker = session_maker
 

@@ -45,8 +45,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['language_id'], ['language.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('op.f("ix_label_labeltype_id")', 'label', ['labeltype_id'], unique=False)
-    op.create_index('op.f("ix_label_language_id")', 'label', ['language_id'], unique=False)
+    op.create_index('ix_label_labeltype_id', 'label', ['labeltype_id'], unique=False)
+    op.create_index('ix_label_language_id', 'label', ['language_id'], unique=False)
     op.create_table('note',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('note', sa.Text(), nullable=False),
@@ -56,8 +56,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['notetype_id'], ['notetype.name'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('op.f("ix_note_language_id")', 'note', ['language_id'], unique=False)
-    op.create_index('op.f("ix_note_notetype_id")', 'note', ['notetype_id'], unique=False)
+    op.create_index('ix_note_language_id', 'note', ['language_id'], unique=False)
+    op.create_index('ix_note_notetype_id', 'note', ['notetype_id'], unique=False)
     op.create_table('concept',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('type', sa.String(length=30), nullable=True),
@@ -67,8 +67,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['conceptscheme_id'], ['conceptscheme.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('op.f("ix_concept_concept_id")', 'concept', ['concept_id'], unique=False)
-    op.create_index('op.f("ix_concept_conceptscheme_id")', 'concept', ['conceptscheme_id'], unique=False)
+    op.create_index('ix_concept_concept_id', 'concept', ['concept_id'], unique=False)
+    op.create_index('ix_concept_conceptscheme_id', 'concept', ['conceptscheme_id'], unique=False)
     op.create_table('collection_concept',
     sa.Column('collection_id', sa.Integer(), nullable=False),
     sa.Column('concept_id', sa.Integer(), nullable=False),
@@ -101,11 +101,11 @@ def upgrade():
     sa.ForeignKeyConstraint(['conceptscheme_id'], ['conceptscheme.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index('op.f("ix_visitation_concept_id")', 'visitation', ['concept_id'], unique=False)
-    op.create_index('op.f("ix_visitation_conceptscheme_id")', 'visitation', ['conceptscheme_id'], unique=False)
-    op.create_index('op.f("ix_visitation_depth")', 'visitation', ['depth'], unique=False)
-    op.create_index('op.f("ix_visitation_lft")', 'visitation', ['lft'], unique=False)
-    op.create_index('op.f("ix_visitation_rght")', 'visitation', ['rght'], unique=False)
+    op.create_index('ix_visitation_concept_id', 'visitation', ['concept_id'], unique=False)
+    op.create_index('ix_visitation_conceptscheme_id', 'visitation', ['conceptscheme_id'], unique=False)
+    op.create_index('ix_visitation_depth', 'visitation', ['depth'], unique=False)
+    op.create_index('ix_visitation_lft', 'visitation', ['lft'], unique=False)
+    op.create_index('ix_visitation_rght', 'visitation', ['rght'], unique=False)
     op.create_table('concept_note',
     sa.Column('concept_id', sa.Integer(), nullable=False),
     sa.Column('note_id', sa.Integer(), nullable=False),
@@ -151,23 +151,23 @@ def downgrade():
     op.drop_table('concept_hierarchy_concept')
     op.drop_table('concept_related_concept')
     op.drop_table('concept_note')
-    op.drop_index('op.f("ix_visitation_rght")', table_name='visitation')
-    op.drop_index('op.f("ix_visitation_lft")', table_name='visitation')
-    op.drop_index('op.f("ix_visitation_depth")', table_name='visitation')
-    op.drop_index('op.f("ix_visitation_conceptscheme_id")', table_name='visitation')
-    op.drop_index('op.f("ix_visitation_concept_id")', table_name='visitation')
+    op.drop_index('ix_visitation_rght', table_name='visitation')
+    op.drop_index('ix_visitation_lft', table_name='visitation')
+    op.drop_index('ix_visitation_depth', table_name='visitation')
+    op.drop_index('ix_visitation_conceptscheme_id', table_name='visitation')
+    op.drop_index('ix_visitation_concept_id', table_name='visitation')
     op.drop_table('visitation')
     op.drop_table('conceptscheme_label')
     op.drop_table('conceptscheme_note')
     op.drop_table('collection_concept')
-    op.drop_index('op.f("ix_concept_conceptscheme_id")', table_name='concept')
-    op.drop_index('op.f("ix_concept_concept_id")', table_name='concept')
+    op.drop_index('ix_concept_conceptscheme_id', table_name='concept')
+    op.drop_index('ix_concept_concept_id', table_name='concept')
     op.drop_table('concept')
-    op.drop_index('op.f("ix_note_notetype_id")', table_name='note')
-    op.drop_index('op.f("ix_note_language_id")', table_name='note')
+    op.drop_index('ix_note_notetype_id', table_name='note')
+    op.drop_index('ix_note_language_id', table_name='note')
     op.drop_table('note')
-    op.drop_index('op.f("ix_label_language_id")', table_name='label')
-    op.drop_index('op.f("ix_label_labeltype_id")', table_name='label')
+    op.drop_index('ix_label_language_id', table_name='label')
+    op.drop_index('ix_label_labeltype_id', table_name='label')
     op.drop_table('label')
     op.drop_table('notetype')
     op.drop_table('conceptscheme')

@@ -21,4 +21,5 @@ def upgrade():
 
 
 def downgrade():
-    op.drop_column('concept', 'infer_concept_relations')
+    with op.batch_alter_table("concept") as batch_op:
+        batch_op.drop_column('infer_concept_relations')
