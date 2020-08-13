@@ -212,7 +212,7 @@
         d3.event.preventDefault();
         if (d.concept_id) {
           var basepath = '{{ request.route_path('concept', scheme_id= scheme_id, c_id = '') }}';
-          window.location.href = basepath + d.concept_id +'?&view_tree';
+          window.location.href = basepath + d.concept_id +'?view_tree';
         }
         else {
           if (d.scheme_id) {
