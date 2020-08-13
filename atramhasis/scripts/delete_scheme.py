@@ -76,7 +76,7 @@ def main():
                         help="the conceptscheme id")
     parser.add_argument("--no-input", action='store_true',
                         help="Don't stop script for user input")
-    args, _ = parser.parse_known_args()
+    args = parser.parse_args()
 
     config_uri = args.settings_file
     setup_logging(config_uri)

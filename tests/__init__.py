@@ -64,7 +64,6 @@ def _reset_db():
         engine.execute("DELETE FROM note")
         engine.execute("DELETE FROM concept_label")
         engine.execute("DELETE FROM label")
-        command.downgrade(ALEMBIC_CONFIG, 'base')
     except (ProgrammingError, OperationalError):
         """The tables may not exist if it's first time."""
     command.downgrade(ALEMBIC_CONFIG, 'base')
