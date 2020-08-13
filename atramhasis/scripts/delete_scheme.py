@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import argparse
-import contextlib
 import logging
 
 from pyramid.paster import get_appsettings
 from pyramid.paster import setup_logging
 from pytz import timezone
 from sqlalchemy import engine_from_config
-from sqlalchemy.orm import sessionmaker
 
 try:
     from builtins import input
@@ -18,26 +16,11 @@ timezone_brussels = timezone('Europe/Brussels')
 log = logging.getLogger(__name__)
 
 
-@contextlib.contextmanager
-def db_session(settings):
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    session_maker = sessionmaker(bind=engine)
-    session = session_maker()
-    try:
-        yield session
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
-
-
 def delete_scheme(settings, scheme_id):
     engine = engine_from_config(settings, 'sqlalchemy.')
     with engine.connect() as con:
         concept_ids = con.execute(
-            'select id from concept where conceptscheme_id={};'.format(scheme_id)
+            'select id from concept where conceptscheme_id={}'.format(scheme_id)
         )
         for row in concept_ids:
             concept_id = row[0]
