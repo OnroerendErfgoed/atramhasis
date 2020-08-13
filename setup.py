@@ -149,6 +149,7 @@ setup(name='atramhasis',
       dump_rdf = atramhasis.scripts.dump_rdf:main
       generate_ldf_config = atramhasis.scripts.generate_ldf_config:main
       sitemap_generator = atramhasis.scripts.sitemap_generator:main
+      delete_scheme = atramhasis.scripts.delete_scheme:main
       [pyramid.scaffold]
         atramhasis_scaffold=atramhasis.scaffolds:AtramhasisTemplate
         atramhasis_demo=atramhasis.scaffolds:AtramhasisDemoTemplate
