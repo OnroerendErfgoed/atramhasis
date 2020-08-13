@@ -1,12 +1,12 @@
-$(document).ready(function() {
-    var searchUrl = window.location.search.substr(1);
-    const params = searchUrl.split();
+$(document).ready(function () {
+  var searchUrl = window.location.search.substr(1);
+  var params = searchUrl.split();
 
-    if (params.findIndex(element => element === 'view_tree') > -1) {
-      openTreeTab();
-    }
-  });
-  
-  function openTreeTab() {
-    document.getElementById('tree-link').click();
+  if (params.indexOf('view_tree') > -1) {
+    openTreeTab();
   }
+});
+
+function openTreeTab() {
+  document.getElementById('tree-link').click();
+}
