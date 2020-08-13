@@ -15099,3 +15099,10 @@ a.admin-button:hover {
 .confirm-dialog .dijitDialogPaneActionBar *:focus {
   outline: none !important;
 }
+
+/* line 653, ../scss/atramhasis/_atramhasis-admin.scss */
+.radio-container > input[type="radio"] {
+  display: inline-block;
+  margin: 0.5rem 1rem 0 0.5rem;
+  vertical-align: baseline;
+}

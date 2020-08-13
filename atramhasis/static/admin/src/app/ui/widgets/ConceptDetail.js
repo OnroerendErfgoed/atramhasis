@@ -242,7 +242,8 @@ define([
             'of the collection'
         }, this.relationsListNode, 'last');
         var cssClass = concept.infer_concept_relations === true ? 'fa-check' : 'fa-times';
-        var superString = '<i class="fa ' + cssClass + '">';
+        var htmlTitle = concept.infer_concept_relations === true ? 'yes' : 'no';
+        var superString = '<i class="fa ' + cssClass + '" title="' + htmlTitle + '">';
         domConstruct.create('dd', {innerHTML: superString}, dt);
       }
 
