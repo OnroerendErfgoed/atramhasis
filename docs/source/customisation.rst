@@ -31,8 +31,6 @@ virtual environment.
     $ cd my_thesaurus
     # Install dependencies
     $ pip install -r requirements-dev.txt
-    # compile the Message Catalog Files
-    $ python setup.py compile_catalog
     # Download and install client side libraries
     $ cd my_thesaurus/static
     $ bower install
