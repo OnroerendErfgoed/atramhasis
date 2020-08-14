@@ -110,6 +110,7 @@ def main():
         graph.serialize(destination=filename_ttl, format='turtle')
         print('Dumping %s to RDFxml: %s' % (pid, filename_rdf))
         graph.serialize(destination=filename_rdf, format='pretty-xml')
+        del graph
         print("--- %s seconds ---" % (time.time() - start_time))
 
     print('All files dumped to %s' % dump_location)
