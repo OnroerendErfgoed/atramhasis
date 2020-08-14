@@ -8,7 +8,7 @@ skosprovider==0.7.1
 #skosprovider_sqlalchemy==0.6.0
 -e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git@0.6.0#egg=skosprovider_sqlalchemy
 #pyramid_skosprovider==0.9.0
--e git+https://github.com/koenedaele/pyramid_skosprovider.git@0.9#egg=pyramid_skosprovider
+-e git+https://github.com/koenedaele/pyramid_skosprovider.git@0.9.0#egg=pyramid_skosprovider
 skosprovider_rdf==0.7.0
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_rdf.git@develop#egg=skosprovider_rdf
 #skosprovider_getty==0.5.2
