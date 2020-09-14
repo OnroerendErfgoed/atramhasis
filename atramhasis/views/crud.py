@@ -5,6 +5,7 @@ Module containing views related to the REST service.
 import time
 
 import colander
+import transaction
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 from pyramid.view import view_config
 from pyramid.view import view_defaults
@@ -175,7 +176,7 @@ class AtramhasisCrud(object):
             except IntegrityError as exc:
                 # There is a small chance that another concept gets added at the same
                 # time. There is nothing wrong with the request, so we try again.
-                self.request.db.rollback()
+                transaction.abort()
                 time.sleep(0.05)
         else:
             raise Exception(
