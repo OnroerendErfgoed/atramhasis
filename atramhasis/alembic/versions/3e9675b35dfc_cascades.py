@@ -5,16 +5,17 @@ Revises: cb568ec81000
 Create Date: 2020-08-12 14:48:35.592316
 
 """
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '3e9675b35dfc'
 down_revision = 'cb568ec81000'
 
-from alembic import op
 
-is_sqlite = op.get_bind().dialect.name == 'sqlite'
-convention = ({"fk": "FK_%(table_name)s_%(referred_table_name)s"} if is_sqlite else
-              {"fk": "%(table_name)s_%(column_0_name)s_fkey"})
+def _get_convention():
+    is_sqlite = op.get_bind().dialect.name == 'sqlite'
+    return ({"fk": "FK_%(table_name)s_%(referred_table_name)s"} if is_sqlite else
+            {"fk": "%(table_name)s_%(column_0_name)s_fkey"})
 
 
 def upgrade():
@@ -45,6 +46,7 @@ def upgrade():
         ('concept_label', 'concept', 'concept_id', 'id'),
         ('concept_label', 'label', 'label_id', 'id'),
     ]
+    convention = _get_convention()
 
     for source_table, referent_table, local_col, remote_col in args:
         with op.batch_alter_table(source_table, naming_convention=convention) as batch_op:
