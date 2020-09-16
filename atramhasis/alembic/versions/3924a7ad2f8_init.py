@@ -5,13 +5,14 @@ Revises: None
 Create Date: 2014-04-10 15:37:26.804103
 
 """
+import sqlalchemy as sa
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '3924a7ad2f8'
 down_revision = None
+branch_labels = ('atramhasis',)
 
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():
