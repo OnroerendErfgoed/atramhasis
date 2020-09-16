@@ -24,14 +24,45 @@ var profile = {
   // build profile.
   packages: [
     // Using a string as a package is shorthand for `{ name: 'app', location: 'app' }`
-		'dojo',
-		'dijit',
-		'dojox',
-		'put-selector',
-		'xstyle',
-		'dgrid',
-		'app',
-    'dGrowl'
+  {
+       name: 'dijit',
+       location: '../node_modules/dijit',
+       trees: [
+           // don"t bother with .hidden, tests, min, src, and templates
+          [".", ".", /(\/\.)|(~$)|(test|node_modules)/]
+       ]
+     },
+     {
+       name: 'dojo',
+       location: '../node_modules/dojo',
+       trees: [
+           // don"t bother with .hidden, tests, min, src, and templates
+          [".", ".", /(\/\.)|(~$)|(test|node_modules)/]
+       ]
+     },
+    {
+       name: 'dgrid',
+       location: '../node_modules/dgrid',
+       trees: [
+           // don"t bother with .hidden, tests, min, src, and templates
+          [".", ".", /(\/\.)|(~$)|(test|node_modules)/]
+       ]
+     },         {
+       name: 'dstore',
+       location: '../node_modules/dstore',
+       trees: [
+           // don"t bother with .hidden, tests, min, src, and templates
+          [".", ".", /(\/\.)|(~$)|(test|node_modules)/]
+       ]
+     },         {
+       name: 'dGrowl',
+       location: '../node_modules/dGrowl',
+       trees: [
+           // don"t bother with .hidden, tests, min, src, and templates
+          [".", ".", /(\/\.)|(~$)|(test|node_modules)/]
+       ]
+     },
+		'app'
   ],
 
   // Strips all calls to console functions within the code. You can also set this to "warn" to strip everything

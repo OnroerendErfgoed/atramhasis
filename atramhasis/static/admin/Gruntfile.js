@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     dojo: {
       dist: {
         options: {
-          dojo: path.join('src', 'dojo', 'dojo.js'),
+          dojo: path.join('node_modules', 'dojo', 'dojo.js'),
           dojoConfig: path.join('src', 'dojoConfig.js'),
           profile: path.join('profiles', 'atramhasis.profile.js'),
           releaseDir: path.join('..', 'dist'),
