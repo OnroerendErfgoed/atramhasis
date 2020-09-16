@@ -1,6 +1,5 @@
 /*jshint node:true*/
 module.exports = function (grunt) {
-  require('load-grunt-tasks')(grunt, [ 'grunt-*' ]);
   var path = require('path');
 
   grunt.initConfig({
@@ -39,6 +38,10 @@ module.exports = function (grunt) {
       }
     }
   });
+
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-dojo');
 
   grunt.config('copy.fa', {
     files: [
