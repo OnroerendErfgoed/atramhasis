@@ -1,8 +1,10 @@
 {% set app_package = app_package|default('atramhasis', true) -%}
 {% if request.registry.settings['dojo.mode'] == 'dist' %}
-	{% set release_dir = app_package + ':static/admin/dist' %}
+  {% set release_dir = app_package + ':static/admin/dist' %}
+  {% set modules_dir = app_package + ':static/admin/dist' %}
 {% else %}
-	{% set release_dir = app_package + ':static/admin/src' %}
+  {% set release_dir = app_package + ':static/admin/src' %}
+  {% set modules_dir = app_package + ':static/admin/node_modules' %}
 {% endif %}
 
 <!DOCTYPE html>
@@ -40,7 +42,7 @@
 		dojoConfig.baseUrl = '{{ request.static_path(release_dir) }}';
     var staticAppPath = "{{ request.static_path(app_package + ':static/') }}"
 	</script>
-  <script src="{{ request.static_path(release_dir + '/dojo/dojo.js') }}"></script>
+  <script src="{{ request.static_path(modules_dir + '/dojo/dojo.js') }}"></script>
 	<script type="text/javascript">
 		require(dojoConfig, ['app']);
 	</script>
