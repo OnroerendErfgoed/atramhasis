@@ -1,6 +1,6 @@
 /*jshint unused:false */
 var profile = {
-  basePath: '../src/',
+
 
   // Builds a new release.
   action: 'release',

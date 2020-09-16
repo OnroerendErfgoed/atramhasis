@@ -10,7 +10,7 @@ module.exports = function (grunt) {
           dojoConfig: path.join('src', 'dojoConfig.js'),
           profile: path.join('profiles', 'atramhasis.profile.js'),
           releaseDir: path.join('..', 'dist'),
-          basePath: path.join(__dirname, 'src')
+          basePath: path.join(__dirname, 'node_modules')
         }
       }
     },

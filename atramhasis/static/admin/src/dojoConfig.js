@@ -5,11 +5,11 @@ var dojoConfig = {
 	tlmSiblingOfDojo: false,
 	isDebug: true,
 	packages: [
-		{ name: 'dojo', location: '../node_modules/dojo' },
-		{ name: 'dijit', location: '../node_modules/dijit' },
-		{ name: 'dgrid', location: '../node_modules/dgrid' },
-		{ name: 'dstore', location: '../node_modules/dstore' },
-		{ name: 'dGrowl', location: '../node_modules/dGrowl' },
-		'app'
+		{ name: 'dojo', location: 'dojo' },
+		{ name: 'dijit', location: 'dijit' },
+		{ name: 'dgrid', location: 'dgrid' },
+		{ name: 'dstore', location: 'dstore' },
+		{ name: 'dGrowl', location: 'dGrowl' },
+		{ name: 'app', location: '../src/app' } /*build setup - must remain last in row*/
 	]
 };
