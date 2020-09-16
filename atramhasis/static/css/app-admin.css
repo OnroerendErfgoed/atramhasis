@@ -1,7 +1,7 @@
 @charset "UTF-8";
-@import url(../admin/src/dojo/resources/dojo.css);
-@import url(../admin/src/dgrid/css/dgrid.css);
-@import url(../admin/src/dGrowl/dGrowl.css);
+@import url(../admin/node_modules/dojo/resources/dojo.css);
+@import url(../admin/node_modules/dgrid/css/dgrid.css);
+@import url(../admin/node_modules/dGrowl/dGrowl.css);
 /* line 431, ../bower_components/foundation/scss/foundation/components/_global.scss */
 meta.foundation-version {
   font-family: "/5.5.3/";

@@ -1,9 +1,9 @@
 @charset "UTF-8";
 // DOJO imports
-@import '../admin/src/dojo/resources/dojo.css';
-@import '../admin/src/dgrid/css/dgrid.css';
-//@import '../admin/src/dijit/themes/claro/claro.css'; // messes with dialogs :/
-@import '../admin/src/dGrowl/dGrowl.css';
+@import '../admin/node_modules/dojo/resources/dojo.css';
+@import '../admin/node_modules/dgrid/css/dgrid.css';
+//@import '../admin/node_modules/dijit/themes/claro/claro.css'; // messes with dialogs :/
+@import '../admin/node_modules/dGrowl/dGrowl.css';
 
 $animationSpeed: 0.8s;
 $menu-width: 50px;
