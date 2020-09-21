@@ -80,7 +80,7 @@ Second, initialise alembic in your project:
 
 .. code-block:: bash
 
-    # alembic init alembic
+    $ alembic init alembic
 
 This will create an alembic folder for your own revisions.
 
