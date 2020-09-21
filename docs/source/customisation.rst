@@ -123,11 +123,8 @@ Adding additional revisions will look like:
 
     Not using a seperate branch will add revisions to the atramhasis alembic
     branch. While this may work initially, this may create split branches
-    and multiple heads when upgrading atramhasis in the future.
-
-All generated revisions will `depends_on` the latest atramhasis revision at the
-time of creating the scaffold to ensure atramhasis will run before your own
-alembic. This is configured in the :file:`alembic/script.py.mako` file.
+    and multiple heads when upgrading atramhasis in the future and this is
+    ill-advised
 
 Whenever you would use `alembic upgrade head` to upgrade your database, you now
 have to use **heads** plural instead.
