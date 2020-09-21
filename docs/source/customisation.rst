@@ -48,33 +48,12 @@ if your needs are modest. You can always instruct Atramhasis to use
 some other database engine, as long as SQLAlchemy supports it. Configure the
 `sqlalchemy.url` configuration option in :file:`development.ini` to change
 the database. See the documentation of SQLAlchemy for more information about
-this connection url. If you don't intend to have any custom database tables or
-adjustments you can simply run :command:`alembic` to initialise and migrate the
-database to the latest version. Otherwise, skip to the :ref:`custom-alembic`
-section.
-
-Optional cleanup
-^^^^^^^^^^^^^^^^
-
-If you do not intend to do any custom database changes you could clean up
-some unnecessary files in the project.
-
-You can safely delete the whole **alembic** folder and edit `alembic.ini` as
-followed:
-
-.. code-block:: ini
-
-    [alembic]
-    # path to migration scripts
-    script_location = atramhasis:alembic
-
-    # comment or delete the below line
-    # version_locations = %(here)s/alembic/versions atramhasis:alembic/versions
+this connection url.
 
 Database initialisation
 .......................
 
-And finally initialise the database
+To initialise the database, simply run the following.
 
 .. code-block:: bash
 
@@ -87,17 +66,46 @@ And finally initialise the database
 Custom alembic revisions
 ........................
 
-If you do have a need to create your own tables, or do custom database changes
-we suggest you do so in another branch next to the atramhasis branch.
+If you have a need to create your own tables, or do custom database changes
+we suggest you do so in another alembic branch next to the atramhasis branch.
 
-To start your own branch the revision command is a little longer:
+First edit the :file:`alembic.ini` file so it contains the following:
+
+.. code-block:: ini
+
+    script_location = alembic
+    version_locations = %(here)s/alembic/versions atramhasis:alembic/versions
+
+Second, initialise alembic in your project:
+
+.. code-block:: bash
+
+    # alembic init alembic
+
+This will create an alembic folder for your own revisions.
+
+To create your first revision, the command is a little longer:
 
 .. code-block:: bash
 
     $ alembic revision -m "first revision" --head=base --branch-label=myproject \
     --version-path=alembic/versions
 
-This will create a second alembic branch. Your alembic should have 2 heads now:
+.. note::
+
+    if you need your alembic revisions to run after the atramhasis - for example
+    if you want to create foreign keys to atramhasis tables - you can use
+    :code:`--depends-on <hash>` where the hash is the latest revision hash from
+    atramhasis. This hash can be found by using :code:`alembic heads`. In this
+    example it is 184f1bbcb916
+
+    .. code-block:: bash
+
+        $ alembic heads
+        184f1bbcb916 (atramhasis) (head)
+
+Having created a revision like above will have created a second alembic branch.
+Your alembic should have 2 heads now:
 
 .. code-block:: bash
 
