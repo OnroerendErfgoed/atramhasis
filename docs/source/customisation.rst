@@ -1112,9 +1112,3 @@ You can change the default session factory in the __init__.py file.
     from pyramid.session import SignedCookieSessionFactory
     atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
     config.set_session_factory(atramhasis_session_factory)
-
-
-Database enhancements
-=====================
-If your project needs its own database tables with or without references to the
-atramhasis table your scaffold project comes with its own alembic branch.
