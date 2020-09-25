@@ -79,7 +79,7 @@ requirements for Atramhasis and development of the software (Sphinx, py.test,
 tox) will be installed.
 
 The following step will help you get the python development environment up and
-running. If also need to work on the javascript admin backend, please refer
+running. If you also need to work on the javascript admin backend, please refer
 to the admin module documentation.
 
 .. code-block:: bash
@@ -108,25 +108,26 @@ production environment.
 Admin development
 =================
 
-To work on the admin part, you'll need `npm`_ and `bower`_ installed. Consult
+To work on the admin part, you'll need `npm`_ installed. Consult
 your operating system documentation on how to install these. The following
 instructions will assume you're running a recent Debian based Linux distribution.
 
 .. code-block:: bash
 
-    # install npm, bower and grunt-cli
-    $ sudo apt-get install nodejs
-    $ sudo apt-get install npm
-    $ sudo npm install -g bower grunt-cli
-    # install js dependencies using bower
+    # install npm and grunt-cli
+    $ sudo apt install nodejs
+    $ sudo apt install npm
+    $ sudo npm install -g grunt-cli
+    # install js dependencies for public site using npm
+    $ cd atramhasis/static
+    $ npm install
+    # install js dependencies for admin using npm
     $ cd atramhasis/static/admin
-    $ bower install
-    # install dojo build tools
     $ npm install
 
 These commands will install a couple of js libraries that Atramhasis uses in
-:file:`/atramhasis/static/admin/src` and a set of tools to be able to generate
-js builds. Builds are carried out through a simple `grunt`_ file:
+:file:`/atramhasis/static/node_modules` and :file:`/atramhasis/static/admin/node_modules` and a set of tools to be able
+to generate js builds. Builds are carried out through a simple `grunt`_ file:
 
 .. code-block:: bash
 
@@ -303,7 +304,6 @@ This will update the requirement files in the scaffolds.
 .. _pytest: http://pytest.org
 .. _tox: http://tox.readthedocs.org
 .. _npm: https://www.npmjs.org/
-.. _bower: http://bower.io/
 .. _grunt: http://gruntjs.com
 .. _waitress: http://waitress.readthedocs.org
 .. _python: https://wwww.python.org

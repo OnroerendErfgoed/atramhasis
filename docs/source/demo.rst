@@ -34,9 +34,9 @@ This creates a local demo package you can run with just a few more commands:
     $ python setup.py develop
     # download and install client side libraries
     $ cd atramhasis_demo/static
-    $ bower install
+    $ npm install
     $ cd admin
-    $ bower install
+    $ npm install
     $ cd ../../..
     # create or upgrade database
     $ alembic upgrade head

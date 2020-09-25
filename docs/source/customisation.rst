@@ -33,9 +33,9 @@ virtual environment.
     $ pip install -r requirements-dev.txt
     # Download and install client side libraries
     $ cd my_thesaurus/static
-    $ bower install
+    $ npm install
     $ cd admin
-    $ bower install
+    $ npm install
 
 This gives you a clean slate to start your customisations on.
 
