@@ -55,7 +55,7 @@
 
 // Allows the use of rem-calc() or lower-bound() in your settings
 @import "foundation/functions";
-$fa-font-path: "../bower_components/font-awesome/fonts";
+$fa-font-path: "../node_modules/font-awesome/fonts";
 
 $primary-color: #944EA1 !default;
 $secondary-color: #e7e7e7 !default;

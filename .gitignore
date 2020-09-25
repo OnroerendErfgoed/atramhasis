@@ -73,7 +73,7 @@ vagrant_provision/
 .sass-cache
 
 # dojo/js stuff
-atramhasis/static/bower_components
+atramhasis/static/node_modules
 atramhasis/static/admin/src/*
 !atramhasis/static/admin/src/dojoConfig.js
 !atramhasis/static/admin/src/app
