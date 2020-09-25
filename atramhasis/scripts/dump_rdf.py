@@ -1,28 +1,20 @@
 # -*- coding: utf-8 -*-
 import optparse
-import sys
 import os
-import time
+import sys
 import textwrap
-from datetime import datetime
-
-from pyramid.paster import bootstrap, setup_logging
-
-from atramhasis.errors import (
-    SkosRegistryNotFoundException
-)
-
-from skosprovider_rdf import utils
-
-from datetime import datetime
-
-from rdflib.term import URIRef
-from rdflib.namespace import RDF, SKOS
-
-from atramhasis.data.models import ConceptschemeCounts
-from atramhasis.data.datamanagers import CountsManager
+import time
 
 import transaction
+from pyramid.paster import bootstrap, setup_logging
+from rdflib.namespace import RDF, SKOS
+from rdflib.term import URIRef
+from skosprovider_rdf import utils
+
+from atramhasis.data.datamanagers import CountsManager
+from atramhasis.data.models import ConceptschemeCounts
+from atramhasis.errors import SkosRegistryNotFoundException
+
 
 def main():
     description = """\
@@ -74,7 +66,7 @@ def main():
     if hasattr(request, 'skos_registry') and request.skos_registry is not None:
         skos_registry = request.skos_registry
     else:
-        raise SkosRegistryNotFoundException()   # pragma: no cover
+        raise SkosRegistryNotFoundException()  # pragma: no cover
 
     counts = []
 
@@ -98,7 +90,11 @@ def main():
         print('Number of triples in Conceptscheme: %d' % cs_triples)
         count_concepts = len(list(graph.subjects(RDF.type, SKOS.Concept)))
         count_collections = len(list(graph.subjects(RDF.type, SKOS.Collection)))
-        avg_concept_triples = (triples - cs_triples) / (count_concepts + count_collections)
+        try:
+            avg_concept_triples = ((triples - cs_triples) /
+                                   (count_concepts + count_collections))
+        except ZeroDivisionError:
+            avg_concept_triples = 0
         print('Average number of triples per concept: %d' % avg_concept_triples)
         counts.append({
             'conceptscheme_id': pid,

@@ -42,8 +42,6 @@ This creates a local demo package you can run with just a few more commands:
     $ alembic upgrade head
     # intialize sample data
     $ initialize_atramhasis_db development.ini
-    # compile translations
-    $ python setup.py compile_catalog
     # generate full RDF dumps (not necessary for basic functionality)
     $ dump_rdf development.ini
     # start server
@@ -268,7 +266,6 @@ Run the commands to prepare your application
     $ python setup.py develop
     $ alembic upgrade head
     $ initialize_atramhasis_db production.ini
-    $ python setup.py compile_catalog
     $ dump_rdf production.ini
 
 .. note::

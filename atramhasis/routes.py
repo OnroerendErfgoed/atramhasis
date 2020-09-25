@@ -16,6 +16,10 @@ def includeme(config):
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')
 
+    config.add_static_view('sitemaps', 'static/_sitemaps/', cache_max_age=3600)
+    config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_route("sitemap", "/sitemap_index.xml")
+
     config.add_route('atramhasis.rdf_void_turtle_ext', pattern='/void.ttl', accept='text/turtle')
     config.add_route('atramhasis.rdf_full_export_ext', pattern='/conceptschemes/{scheme_id}/c.rdf')
     config.add_route('atramhasis.rdf_full_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c.ttl')
@@ -30,7 +34,9 @@ def includeme(config):
                      request_method="GET")
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
     config.add_route('scheme_root', pattern='/conceptschemes/{scheme_id}/c/', accept='text/html')
+    config.add_route('scheme_tree_html', pattern='/conceptschemes/{scheme_id}/tree', accept='text/html')
     config.add_route('scheme_tree', pattern='/conceptschemes/{scheme_id}/tree', accept='application/json')
+
     config.add_route('search_result_export', pattern='/conceptschemes/{scheme_id}/c.csv')
     config.add_route('atramhasis.edit_conceptscheme', pattern='/conceptschemes/{scheme_id}',
                      accept='application/json', request_method='PUT')

@@ -31,29 +31,113 @@ virtual environment.
     $ cd my_thesaurus
     # Install dependencies
     $ pip install -r requirements-dev.txt
-    # compile the Message Catalog Files
-    $ python setup.py compile_catalog
     # Download and install client side libraries
     $ cd my_thesaurus/static
     $ bower install
     $ cd admin
     $ bower install
 
-This gives you a clean slate to start your customisations on. By default the
-scaffold comes with a simple SQLite database. This is more than enough for
-your first experiments and can even be used in production environment if your
-needs are modest. You can always instruct Atramhasis to use
+This gives you a clean slate to start your customisations on.
+
+Database
+--------
+
+By default the scaffold comes with a simple SQLite database. This is more than
+enough for your first experiments and can even be used in production environment
+if your needs are modest. You can always instruct Atramhasis to use
 some other database engine, as long as SQLAlchemy supports it. Configure the
 `sqlalchemy.url` configuration option in :file:`development.ini` to change
 the database. See the documentation of SQLAlchemy for more information about
-this connection url. After settings this url, run :command:`alembic` to
-initialise and migrate the database to the latest version.
+this connection url.
+
+Database initialisation
+.......................
+
+To initialise the database, simply run the following.
 
 .. code-block:: bash
 
     # Create or update database based on
     # the configuration in development.ini
     $ alembic upgrade head
+
+.. _custom-alembic:
+
+Custom alembic revisions
+........................
+
+If you have a need to create your own tables, or do custom database changes
+we suggest you do so in another alembic branch next to the atramhasis branch.
+
+First edit the :file:`alembic.ini` file so it contains the following:
+
+.. code-block:: ini
+
+    script_location = alembic
+    version_locations = %(here)s/alembic/versions atramhasis:alembic/versions
+
+Second, initialise alembic in your project:
+
+.. code-block:: bash
+
+    $ alembic init alembic
+
+This will create an alembic folder for your own revisions.
+
+To create your first revision, the command is a little longer:
+
+.. code-block:: bash
+
+    $ alembic revision -m "first revision" --head=base --branch-label=myproject \
+    --version-path=alembic/versions
+
+.. note::
+
+    if you need your alembic revisions to run after the atramhasis - for example
+    if you want to create foreign keys to atramhasis tables - you can use
+    :code:`--depends-on <hash>` where the hash is the latest revision hash from
+    atramhasis. This hash can be found by using :code:`alembic heads`. In this
+    example it is 184f1bbcb916
+
+    .. code-block:: bash
+
+        $ alembic heads
+        184f1bbcb916 (atramhasis) (head)
+
+Having created a revision like above will have created a second alembic branch.
+Your alembic should have 2 heads now:
+
+.. code-block:: bash
+
+    $ alembic heads
+    184f1bbcb916 (atramhasis) (effective head)
+    975228f4f18c (myproject) (head)
+
+Adding additional revisions will look like:
+
+.. code-block:: bash
+
+    alembic revision -m "second revision" --head=myproject@head
+
+.. warning::
+
+    Not using a seperate branch will add revisions to the atramhasis alembic
+    branch. While this may work initially, this may create split branches
+    and multiple heads when upgrading atramhasis in the future and this is
+    ill-advised
+
+Whenever you would use `alembic upgrade head` to upgrade your database, you now
+have to use **heads** plural instead.
+
+.. code-block:: bash
+
+    # Create or update database based on
+    # the configuration in development.ini
+    $ alembic upgrade heads
+
+
+Running a local server
+----------------------
 
 Your custom version of Atramhasis can now be run. Run the following command
 and point your browser to `http://localhost:6543` to see the result.
@@ -62,10 +146,13 @@ and point your browser to `http://localhost:6543` to see the result.
 
     $ pserve development.ini
 
-Of course, this does not do very much since your Atramhasis is now running,
-but does not contain any ConceptSchemes. You will need to configure this by
-entering a database record for the ConceptScheme and writing a small piece
-of code.
+
+Creating conceptschemes
+-----------------------
+
+Atramhasis is now running but does not contain any ConceptSchemes. You will
+need to configure this by entering a database record for the ConceptScheme and
+writing a small piece of code.
 
 .. warning::
 
@@ -158,7 +245,12 @@ this:
 
 
 Now you can restart your server and then you front page will show you a new,
-but empty thesaurus. You can now start creating concepts and collections by
+but empty thesaurus.
+
+Creating concepts and collections
+---------------------------------
+
+You can now start creating concepts and collections by
 going to the admin interface at `http://localhost:6543/admin`.
 
 You will notice that any concepts or collections you create wil get a
@@ -293,6 +385,67 @@ Now the STUFF thesaurus will not show up in the public web interface, but REST
 calls to this conceptscheme will function as normal and you will be able to
 maintain it from the admin interface.
 
+
+.. _force_display_label_language:
+
+Force a display language for a vocabulary
+=========================================
+
+Under normal circumstances, Atramhasis tries to provide the most
+appropriate label for a certain concept or collection, based on some default
+configuration and the preferences of the end-user. Every provider can be marked
+as having a certain `default language` (English if not set), but Atramhasis
+also tries to read what the user wants. It does this through the user's
+browser's locale. This information can be read from the browser's HTTP headers
+or cookies. Generally, Atramhasis just knows in what language a user is
+browsing the site and tries to return labels appropriate for that language. So,
+the same thesaurus visited from the US will return English labels, while it
+will return Dutch when visited from Gent (Belgium).
+
+You might have a vocabulary with a strongly preferential relation to a certain
+language. We ran into this situation with a vocabulary of species: names for
+plants and trees commonly found in Flanders. Some of them have one or more
+local, Dutch, names. Most or all of them have an official name in Latin. The
+normal language handling mechanism created a weird situation. It led to a tree
+of names that was mostly in Latin, with the odd Dutch word thrown in for good
+measure. This was not as desired by our users. To that end, a special mechanism
+was created to force rendering labels of concepts and collections in a certain
+language, no matter what the end-user's browser is requesting.
+
+To set this, please edit the :file:`my_thesaurus/skos/__init__.py`. Look for the 
+thesaurus you want to override and add a setting `atramhasis.force_display_label_language`
+to the provider's metadata. Set it to a language supported by the provider
+(there's little sense to setting it to a language that isn't present in the
+vocabulary). Now Atramhasis will try serving concepts from this provider with
+this language. All labels will still be shown, but the page title or current
+label will be set to the selected language as much as possible. The normal
+language determination mechanisms will keep on working, so if the concept has
+no label in the requested language, Atramhasis will fall back on other labels
+present.
+
+Your provider should end up similar to this:
+
+.. code-block:: python
+
+    STUFF = SQLAlchemyProvider(
+        {
+            'id': 'STUFF',
+            'conceptscheme_id': 1,
+            'atramhasis.force_display_label_language': 'la'
+        },
+        request.db,
+        uri_generator=UriPatternGenerator(
+            'http://id.mydata.org/thesauri/stuff/%s'
+        )
+    )
+
+Beware that this will only affect the Atramhasis UI, not the Atramhasis REST
+services. We looked into some solutions for our problem that would have also
+changed the underlying service, but decided against that because it would have
+prevented you from making your own choices when interacting with Atramhasis. If
+you want to render the tree of concepts using a preferred language different
+from what a browser would advocate for, you can pass the language parameter in
+a url, eg. `http://my.thesaurus.org/conceptschemes/STUFF/tree?language=la`.
 
 .. _i18n:
 
@@ -677,15 +830,34 @@ datamodel.
 
 The supported file types:
 
-- RDF (.html, .hturtle, .mdata, .microdata, .n3, .nquads, .nt, .rdfa, .rdfa1.0, .rdfa1.1, .trix, .turtle, .xml)
-  using :class:`~skosprovider_rdf.providers.RDFProvider`. This provider supports
-  the full datamodel.
+- RDF using :class:`~skosprovider_rdf.providers.RDFProvider`. This provider supports
+  the full datamodel. Since the heavy lifting is done by `RDFlib`, most of the
+  dialects supported by `RDFlib` should work. The full list can be found in
+  `rdflib.util.SUFFIX_FORMAT_MAP`. Formats like `rdf/xml` and `turtle` should
+  work.
 - CSV (.csv) using :class:`~skosprovider.providers.SimpleCsvProvider`.
   The provider only supports importing and id, a prefLabel, a note and a source.
   It will work well when importing a simple flat list, but not for complex
   hierarchies.
 - JSON (.json) using :class:`~skosprovider.providers.DictionaryProvider`. This
   provider supports the full datamodel.
+
+Some things to take into account:
+
+- Atramhasis only supports concepts with a numeric id. This ensures they can be
+  auto-generated when adding new concepts or collections. These map to the
+  `concept_id` attribute in the database, which is unique per conceptscheme as
+  opposed to the `id` attribute that is unique for the entire database.
+- When importing from an RDF vocabulary, the id will be read from a `dc` or
+  `dcterms` `identifier` property if present. Please ensure this property 
+  contains a numeric id, not a string or a URI.
+- When importing from RDF, the import file could possibly contain more than one
+  conceptscheme. Please ensure only one conceptscheme is present or
+  no conceptschemes are presents and specify the URI and label on the command
+  line.
+- When importing from CSV or JSON, the data file only contains the concepts and
+  collections in the scheme, but not the conceptscheme itself. In this case,
+  please specify the URI and label of the conceptscheme on the command line.
 
 The script can be called through the commandline in the project virtual environment.
 Call it with the `help` argument to see the possible arguments.
@@ -717,9 +889,11 @@ PostGreSQL and SQLite are supported. The structure is either
 `postgresql://username:password@host:port/db_name` or
 either `sqlite:///path/db_name.sqlite`. The default value is `sqlite:///atramhasis.sqlite`.
 
-The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. The
-conceptscheme needs a label. The label can be added to the `conceptscheme_label`
-argument. The default label is the name of the file.
+The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. With a 
+:class:`~skosprovider_rdf.providers.RDFProvider` the conceptscheme can be present
+in the RDF file. The other providers can specify it on the command line
+through the `conceptscheme_label` argument. If no `conceptscheme_label` is present,
+the default label is the name of the file.
 
 Once the data is loaded in the database, the configuration of the added provider must be
 included in the :file:`my_thesaurus/skos/__init__.py`. A successfull run of the
@@ -935,4 +1109,3 @@ You can change the default session factory in the __init__.py file.
     from pyramid.session import SignedCookieSessionFactory
     atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
     config.set_session_factory(atramhasis_session_factory)
-

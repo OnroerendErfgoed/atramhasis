@@ -1,3 +1,4 @@
+@charset "UTF-8";
 // DOJO imports
 @import '../admin/src/dojo/resources/dojo.css';
 @import '../admin/src/dgrid/css/dgrid.css';
@@ -645,5 +646,13 @@ a.admin-button:hover {
 
   *:focus {
     outline: none !important;
+  }
+}
+
+.radio-container {
+  > input[type="radio"] {
+    display: inline-block;
+    margin: 0.5rem 1rem 0 0.5rem;
+    vertical-align: baseline;
   }
 }

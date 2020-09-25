@@ -120,6 +120,10 @@ class Concept(colander.MappingSchema):
     subordinate_arrays = Concepts(missing=[])
     superordinates = Concepts(missing=[])
     matches = Matches(missing={})
+    infer_concept_relations = colander.SchemaNode(
+        colander.Boolean(),
+        missing=colander.drop
+    )
 
 
 class ConceptScheme(colander.MappingSchema):
@@ -231,6 +235,10 @@ def concept_schema_validator(node, cstruct):
         superordinates_only_in_concept_rule(errors, node['superordinates'], concept_type, superordinates)
         superordinates_type_rule(errors, node['superordinates'], skos_manager, conceptscheme_id, superordinates)
         superordinates_hierarchy_rule(errors, node['superordinates'], skos_manager, conceptscheme_id, cstruct)
+
+    if cstruct['type'] == 'concept' and 'infer_concept_relations' in cstruct:
+        msg = "'infer_concept_relations' can only be set for collections."
+        errors.append(colander.Invalid(node['infer_concept_relations'], msg=msg))
 
     if len(errors) > 0:
         raise ValidationError(
