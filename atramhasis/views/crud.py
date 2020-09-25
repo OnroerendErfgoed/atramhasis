@@ -2,22 +2,31 @@
 """
 Module containing views related to the REST service.
 """
+import time
 
 import colander
-from pyramid.view import view_defaults, view_config
+import transaction
 from pyramid.httpexceptions import HTTPMethodNotAllowed
-from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-from sqlalchemy.orm.exc import NoResultFound
-from skosprovider_sqlalchemy.models import Concept, Collection
-
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
-    ValidationError, ConceptNotFoundException
-from atramhasis.mappers import map_concept, map_conceptscheme
-from atramhasis.protected_resources import protected_operation
-from atramhasis.utils import from_thing, internal_providers_only
-from atramhasis.cache import invalidate_scheme_cache
-from atramhasis.audit import audit
+from pyramid.view import view_config
+from pyramid.view import view_defaults
 from pyramid_skosprovider.views import ProviderView
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import NoResultFound
+
+from atramhasis.audit import audit
+from atramhasis.cache import invalidate_scheme_cache
+from atramhasis.errors import ConceptNotFoundException
+from atramhasis.errors import ConceptSchemeNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.errors import ValidationError
+from atramhasis.mappers import map_concept
+from atramhasis.mappers import map_conceptscheme
+from atramhasis.protected_resources import protected_operation
+from atramhasis.utils import from_thing
+from atramhasis.utils import internal_providers_only
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
@@ -149,19 +158,30 @@ class AtramhasisCrud(object):
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         """
         validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
-        cid = self.skos_manager.get_next_cid(self.provider.conceptscheme_id)
-        if not cid:
-            cid = 0
-        cid += 1
-        if validated_json_concept['type'] == 'concept':
-            concept = Concept()
+        exc = None
+        for _ in range(5):
+            try:
+                if validated_json_concept['type'] == 'concept':
+                    concept = Concept()
+                else:
+                    concept = Collection()
+                concept.concept_id = self.skos_manager.get_next_cid(
+                    self.provider.conceptscheme_id
+                )
+                concept.conceptscheme_id = self.provider.conceptscheme_id
+                concept.uri = self.provider.uri_generator.generate(id=concept.concept_id)
+                map_concept(concept, validated_json_concept, self.skos_manager)
+                concept = self.skos_manager.save(concept)
+                break
+            except IntegrityError as exc:
+                # There is a small chance that another concept gets added at the same
+                # time. There is nothing wrong with the request, so we try again.
+                transaction.abort()
+                time.sleep(0.05)
         else:
-            concept = Collection()
-        concept.concept_id = cid
-        concept.conceptscheme_id = self.provider.conceptscheme_id
-        concept.uri = self.provider.uri_generator.generate(id=concept.concept_id)
-        map_concept(concept, validated_json_concept, self.skos_manager)
-        concept = self.skos_manager.save(concept)
+            raise Exception(
+                "Could not save new concept due to IntegrityErrors. {}".format(exc)
+            )
 
         invalidate_scheme_cache(self.scheme_id)
 
@@ -206,9 +226,10 @@ class AtramhasisCrud(object):
             concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
+        result = from_thing(concept)
         self.skos_manager.delete_thing(concept)
 
         invalidate_scheme_cache(self.scheme_id)
 
         self.request.response.status = '200'
-        return from_thing(concept)
+        return result

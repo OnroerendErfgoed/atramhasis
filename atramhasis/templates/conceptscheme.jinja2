@@ -33,6 +33,7 @@
           <li><a title="Download the scheme and it's top concepts in N3/Turle format." href="{{request.route_path('atramhasis.rdf_conceptscheme_export_turtle_ext', scheme_id=conceptscheme.scheme_id)}}">N3/Turtle</a></li>
           <li><a title="Download the scheme and all it's concepts and collections in RDF/XML format." href="{{request.route_path('atramhasis.rdf_full_export_ext', scheme_id=conceptscheme.scheme_id)}}">Full RDF/XML</a></li>
           <li><a title="Download the scheme and all it's concepts and collections in N3/Turtle format." href="{{request.route_path('atramhasis.rdf_full_export_turtle_ext', scheme_id=conceptscheme.scheme_id)}}">Full N3/Turtle</a></li>
+          <li><a title="Open a printable scheme tree and all it's concepts." href="{{request.route_path('scheme_tree_html', scheme_id=conceptscheme.scheme_id)}}">Printable Tree</a></li>
         </ul>
       </div>
 
