@@ -11,7 +11,6 @@ from pyramid.paster import (
     setup_logging,
 )
 from pyramid.scripts.common import parse_vars
-from zope.sqlalchemy import ZopeTransactionExtension
 
 
 def usage(argv):
@@ -36,10 +35,7 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
     engine = engine_from_config(settings, 'sqlalchemy.')
-    session_maker = sessionmaker(
-        bind=engine,
-        extension=ZopeTransactionExtension()
-    )
+    session_maker = sessionmaker(bind=engine)
     db_session = session_maker()
     with transaction.manager:
         import_provider(

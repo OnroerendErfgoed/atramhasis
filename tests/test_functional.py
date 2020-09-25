@@ -11,7 +11,6 @@ from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.providers import DictionaryProvider
 from sqlalchemy.orm import sessionmaker
 from webtest import TestApp
-from zope.sqlalchemy import ZopeTransactionExtension
 
 from atramhasis import main
 from atramhasis.protected_resources import ProtectedResourceEvent
@@ -136,10 +135,7 @@ class FunctionalTests(DbTest):
         cls.testapp = TestApp(cls.app)
         # change db maker to make sessions bound to the test transaction
         registry = cls.testapp.app.registry
-        registry.dbmaker = sessionmaker(
-            bind=cls.connection,
-            extension=ZopeTransactionExtension()
-        )
+        registry.dbmaker = sessionmaker(bind=cls.connection)
 
     def setUp(self):
         super(FunctionalTests, self).setUp()
