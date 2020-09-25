@@ -37,21 +37,107 @@ virtual environment.
     $ cd admin
     $ bower install
 
-This gives you a clean slate to start your customisations on. By default the
-scaffold comes with a simple SQLite database. This is more than enough for
-your first experiments and can even be used in production environment if your
-needs are modest. You can always instruct Atramhasis to use
+This gives you a clean slate to start your customisations on.
+
+Database
+--------
+
+By default the scaffold comes with a simple SQLite database. This is more than
+enough for your first experiments and can even be used in production environment
+if your needs are modest. You can always instruct Atramhasis to use
 some other database engine, as long as SQLAlchemy supports it. Configure the
 `sqlalchemy.url` configuration option in :file:`development.ini` to change
 the database. See the documentation of SQLAlchemy for more information about
-this connection url. After settings this url, run :command:`alembic` to
-initialise and migrate the database to the latest version.
+this connection url.
+
+Database initialisation
+.......................
+
+To initialise the database, simply run the following.
 
 .. code-block:: bash
 
     # Create or update database based on
     # the configuration in development.ini
     $ alembic upgrade head
+
+.. _custom-alembic:
+
+Custom alembic revisions
+........................
+
+If you have a need to create your own tables, or do custom database changes
+we suggest you do so in another alembic branch next to the atramhasis branch.
+
+First edit the :file:`alembic.ini` file so it contains the following:
+
+.. code-block:: ini
+
+    script_location = alembic
+    version_locations = %(here)s/alembic/versions atramhasis:alembic/versions
+
+Second, initialise alembic in your project:
+
+.. code-block:: bash
+
+    $ alembic init alembic
+
+This will create an alembic folder for your own revisions.
+
+To create your first revision, the command is a little longer:
+
+.. code-block:: bash
+
+    $ alembic revision -m "first revision" --head=base --branch-label=myproject \
+    --version-path=alembic/versions
+
+.. note::
+
+    if you need your alembic revisions to run after the atramhasis - for example
+    if you want to create foreign keys to atramhasis tables - you can use
+    :code:`--depends-on <hash>` where the hash is the latest revision hash from
+    atramhasis. This hash can be found by using :code:`alembic heads`. In this
+    example it is 184f1bbcb916
+
+    .. code-block:: bash
+
+        $ alembic heads
+        184f1bbcb916 (atramhasis) (head)
+
+Having created a revision like above will have created a second alembic branch.
+Your alembic should have 2 heads now:
+
+.. code-block:: bash
+
+    $ alembic heads
+    184f1bbcb916 (atramhasis) (effective head)
+    975228f4f18c (myproject) (head)
+
+Adding additional revisions will look like:
+
+.. code-block:: bash
+
+    alembic revision -m "second revision" --head=myproject@head
+
+.. warning::
+
+    Not using a seperate branch will add revisions to the atramhasis alembic
+    branch. While this may work initially, this may create split branches
+    and multiple heads when upgrading atramhasis in the future and this is
+    ill-advised
+
+Whenever you would use `alembic upgrade head` to upgrade your database, you now
+have to use **heads** plural instead.
+
+.. code-block:: bash
+
+    # Create or update database based on
+    # the configuration in development.ini
+    $ alembic upgrade heads
+
+
+Running a local server
+----------------------
 
 Your custom version of Atramhasis can now be run. Run the following command
 and point your browser to `http://localhost:6543` to see the result.
@@ -60,10 +146,13 @@ and point your browser to `http://localhost:6543` to see the result.
 
     $ pserve development.ini
 
-Of course, this does not do very much since your Atramhasis is now running,
-but does not contain any ConceptSchemes. You will need to configure this by
-entering a database record for the ConceptScheme and writing a small piece
-of code.
+
+Creating conceptschemes
+-----------------------
+
+Atramhasis is now running but does not contain any ConceptSchemes. You will
+need to configure this by entering a database record for the ConceptScheme and
+writing a small piece of code.
 
 .. warning::
 
@@ -156,7 +245,12 @@ this:
 
 
 Now you can restart your server and then you front page will show you a new,
-but empty thesaurus. You can now start creating concepts and collections by
+but empty thesaurus.
+
+Creating concepts and collections
+---------------------------------
+
+You can now start creating concepts and collections by
 going to the admin interface at `http://localhost:6543/admin`.
 
 You will notice that any concepts or collections you create wil get a
@@ -1015,4 +1109,3 @@ You can change the default session factory in the __init__.py file.
     from pyramid.session import SignedCookieSessionFactory
     atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
     config.set_session_factory(atramhasis_session_factory)
-

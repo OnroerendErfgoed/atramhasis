@@ -5,16 +5,27 @@ that abstract all interactions with the database away from the views.
 
 :versionadded: 0.4.1
 """
-from datetime import datetime, date
+from datetime import date
+from datetime import datetime
 
 import dateutil.relativedelta
-from skosprovider_sqlalchemy.models import ConceptScheme, Thing, Label, Concept, Collection, Language, MatchType, Match, \
-    LabelType
-from sqlalchemy import desc, func, and_
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import LabelType
+from skosprovider_sqlalchemy.models import Language
+from skosprovider_sqlalchemy.models import Match
+from skosprovider_sqlalchemy.models import MatchType
+from skosprovider_sqlalchemy.models import Thing
+from sqlalchemy import and_
+from sqlalchemy import desc
+from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 
 from atramhasis.data import popular_concepts
-from atramhasis.data.models import ConceptVisitLog, ConceptschemeCounts
+from atramhasis.data.models import ConceptVisitLog
+from atramhasis.data.models import ConceptschemeCounts
 
 
 class DataManager(object):
@@ -184,9 +195,10 @@ class SkosManager(DataManager):
         return self.session.query(LabelType).all()
 
     def get_next_cid(self, conceptscheme_id):
-        return self.session.query(
+        max_id = self.session.query(
             func.max(Thing.concept_id)
         ).filter_by(conceptscheme_id=conceptscheme_id).first()[0]
+        return max_id + 1 if max_id else 1
 
 
 class LanguagesManager(DataManager):
