@@ -19,6 +19,8 @@ jinja2.directories =
 jinja2.extensions =
     jinja2.ext.do
     jinja2.ext.with_
+jinja2.filters =
+    label_sort = atramhasis.utils.label_sort
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 atramhasis.session_factory.secret = test123
