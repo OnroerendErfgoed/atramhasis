@@ -35,9 +35,7 @@ This creates a local demo package you can run with just a few more commands:
     # download and install client side libraries
     $ cd atramhasis_demo/static
     $ npm install
-    $ cd admin
-    $ npm install
-    $ cd ../../..
+    $ cd ../..
     # create or upgrade database
     $ alembic upgrade head
     # intialize sample data
