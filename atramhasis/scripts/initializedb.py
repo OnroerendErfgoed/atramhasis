@@ -138,4 +138,6 @@ def main(argv=sys.argv):
             ),
             db_session
         )
+    db_session.commit()
+    db_session.close()
     print('--atramhasis-db-initialized--')
