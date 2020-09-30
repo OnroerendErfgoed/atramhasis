@@ -34,8 +34,6 @@ virtual environment.
     # Download and install client side libraries
     $ cd my_thesaurus/static
     $ npm install
-    $ cd admin
-    $ npm install
 
 This gives you a clean slate to start your customisations on.
 
