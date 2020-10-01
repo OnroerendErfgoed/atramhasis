@@ -26,17 +26,17 @@ def copy_static_scaffold(output_dir):
     dir_util.copy_tree(os.path.join(source_dir, 'js'), os.path.join(dest_dir, 'js'), update=True)
     dir_util.copy_tree(os.path.join(source_dir, 'scss', 'atramhasis'), os.path.join(dest_dir, 'scss', 'atramhasis'),
                        update=True)
+    file_util.copy_file(
+        os.path.join(source_dir, 'package.json'),
+        os.path.join(dest_dir,  'package.json'),
+        update=True
+    )
+    file_util.copy_file(
+        os.path.join(source_dir, 'package-lock.json'),
+        os.path.join(dest_dir, 'package-lock.json'),
+        update=True
+    )
     dir_util.mkpath(os.path.join(dest_dir, 'admin'))
-    file_util.copy_file(
-        os.path.join(source_dir, 'admin', '.bowerrc'),
-        os.path.join(dest_dir, 'admin', '.bowerrc'),
-        update=True
-    )
-    file_util.copy_file(
-        os.path.join(source_dir, 'admin', 'bower.json'),
-        os.path.join(dest_dir, 'admin', 'bower.json'),
-        update=True
-    )
     file_util.copy_file(
         os.path.join(source_dir, 'admin', 'Gruntfile.js'),
         os.path.join(dest_dir, 'admin', 'Gruntfile.js'),
@@ -47,25 +47,24 @@ def copy_static_scaffold(output_dir):
         os.path.join(dest_dir, 'admin', 'package.json'),
         update=True
     )
+    file_util.copy_file(
+        os.path.join(source_dir, 'admin', 'package-lock.json'),
+        os.path.join(dest_dir, 'admin', 'package-lock.json'),
+        update=True
+    )
 
 
 def dojo_build():
     print('-' * 50)
     print('==> check npm dependencies')
-    libs = str(subprocess.check_output(["npm", "list", "-g", "bower", "grunt-cli"]))
-    if 'bower' in libs:
-        bower = True
-        print('bower OK')
-    else:
-        bower = False
-        print('bower KO, use \'npm install -g bower\' to install')
+    libs = str(subprocess.check_output(["npm", "list", "-g", "grunt-cli"]))
     if 'grunt-cli' in libs:
         gruntcli = True
         print('grunt-cli OK')
     else:
         gruntcli = False
         print('grunt-cli KO, use \'npm install -g grunt-cli\' to install')
-    if bower and gruntcli:
+    if gruntcli:
         print('==> running grunt build')
         subprocess.call(["grunt", "-v", "build"], cwd="atramhasis/static/admin")
     print('-' * 50)
