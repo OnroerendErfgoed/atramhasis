@@ -7,13 +7,15 @@ import sys
 import six
 import skosprovider
 from pyramid.paster import get_appsettings
+from pyramid.request import Request
 from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.providers import DictionaryProvider
 from sqlalchemy.orm import sessionmaker
 from webtest import TestApp
-from zope.sqlalchemy import ZopeTransactionExtension
 
 from atramhasis import main
+from atramhasis.cache import list_region
+from atramhasis.cache import tree_region
 from atramhasis.protected_resources import ProtectedResourceEvent
 from atramhasis.protected_resources import ProtectedResourceException
 from fixtures.data import chestnut
@@ -134,12 +136,18 @@ class FunctionalTests(DbTest):
     def init_app(cls):
         cls.app = main({}, **SETTINGS)
         cls.testapp = TestApp(cls.app)
+
+        # Commit at end of every request. This will trigger listeners.
+        class CommittingRequest(Request):
+
+            def __init__(self, *args, **kwargs):
+                super(CommittingRequest, self).__init__(*args, **kwargs)
+                self.add_finished_callback(lambda req: req.db.commit())
+
+        cls.testapp.app.request_factory = CommittingRequest
         # change db maker to make sessions bound to the test transaction
         registry = cls.testapp.app.registry
-        registry.dbmaker = sessionmaker(
-            bind=cls.connection,
-            extension=ZopeTransactionExtension()
-        )
+        registry.dbmaker = sessionmaker(bind=cls.connection)
 
     def setUp(self):
         super(FunctionalTests, self).setUp()
@@ -633,6 +641,14 @@ class CacheFunctionalTests(FunctionalTests):
         self.assertEqual(tree_response.json, cached_tree_response.json)
 
     def test_auto_invalidate_cache(self):
+        tree_region.configure('dogpile.cache.memory',
+                              expiration_time=7000,
+                              arguments={'cache_size': 5000},
+                              replace_existing_backend=True)
+        list_region.configure('dogpile.cache.memory',
+                              expiration_time=7000,
+                              arguments={'cache_size': 5000},
+                              replace_existing_backend=True)
         # clear entire cache before start
         invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
         self.assertEqual('200 OK', invalidate_cache_response.status)
@@ -655,6 +671,9 @@ class CacheFunctionalTests(FunctionalTests):
         cached_tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
                                                  headers=self._get_default_headers())
         self.assertEqual(tree_response2.json, cached_tree_response2.json)
+
+        tree_region.configure('dogpile.cache.null', replace_existing_backend=True)
+        list_region.configure('dogpile.cache.null', replace_existing_backend=True)
 
 
 class RdfFunctionalTests(FunctionalTests):

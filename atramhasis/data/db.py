@@ -8,7 +8,7 @@ from skosprovider_sqlalchemy.models import Base as SkosBase
 
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
+from zope.sqlalchemy import register
 
 
 def data_managers(request):
@@ -50,10 +50,7 @@ def includeme(config):
     engine = engine_from_config(config.get_settings(), 'sqlalchemy.')
     Base.metadata.bind = engine
     SkosBase.metadata.bind = engine
-    session_maker = sessionmaker(
-        bind=engine,
-        extension=ZopeTransactionExtension()
-    )
-    config.registry.dbmaker = session_maker
+    config.registry.dbmaker = sessionmaker(bind=engine)
+    register(config.registry.dbmaker)
     config.add_request_method(data_managers, reify=True)
     config.add_request_method(db, reify=True)
