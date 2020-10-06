@@ -1,3 +1,48 @@
+0.7.0 (??-10-2020)
+------------------
+
+This releases is a new major release with some new features and some backwards
+incompatible changes that require a careful upgrade and some manual
+intervention. The 0.7.x releases will also be that last to support Python 2. If
+you haven't upgraded to Python 3 yet, we advise you to do now.
+
+**BC break** The major change in this version is no longer initiating the
+`skosprovider.registry.Registry` on starting the application, but when a
+request is created. The previous way of working created problems with
+SQLAlchemy providers in a webserver using mutiple threads. Please review the
+docs at
+https://atramhasis.readthedocs.io/en/latest/customisation.html#creating-conceptschemes
+to see how it works now. For more background, have a look at the
+pyramid_skosprovider_ docs at https://pyramid-skosprovider.readthedocs.io/en/0.9.0/install.html
+
+- All requirements were updated to their latest versions. Python versions were
+  fixed to 2.7, 3.6, 3.7 and 3.8. If you made custom changes, you might have to
+  edit them. (#508, #519, #513, #566)
+- Instantiation of the SKOS registry was changed to work on a per request
+  basis. (#346, #490, #535)
+- Fixed a major issue with generating the expanded version of a concept. By
+  default the assumption was that concepts in a collection were also narrower
+  concepts of the collection's superordinate concept, but the implementation
+  for this was incomplete and contained buggy. This has been changed to an
+  boolean attribute `infer_concept_relations`. When set to true, concepts in a
+  collection are considerd to be narrower concepts of that collections's
+  superordinate concept. This is especially important for a provider's
+  `expand` function and affects what is considered a narrower concept of a
+  concept that uses `thesaurus arrays` or `node labels`.
+- The docs were updated and now contain a part detailing what Atramhasis does
+  with some screenshots. (#495, #583, #440)
+- Default inclusion of skosprovider_heritagedata was removed because the
+  service is too unstable too often. (#537)
+- Improve some SEO by adding canonicul URL's, open graph info, Twitter cards
+  and the ability to generate a sitemap through a script. (#530, #531, #496,
+  #497)
+- Clean up importing and exporting of conceptschemes to make it easier. (#452,
+  #475, #476, #495)
+- Provide a simple, printable version of a thesaurus tree. (#533, 532)
+- Add a script to make removing a conceptscheme easier. Be careful as this will
+  drop all concepts, collections and the conceptscheme itself. (#579)
+- Lots of minor improvements and bug fixes.
+
 0.6.7 (21-06-2019)
 ------------------
 
