@@ -1,16 +1,25 @@
 {
-	"name": "Atramhasis-build",
-	"version": "0.4.4",
+	"name": "atramhasis",
+	"version": "0.7.0",
 	"description": "Node packages for building Atramhasis.",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/OnroerendErfgoed/atramhasis.git"
 	},
+	"dependencies": {
+		"dGrowl": "https://github.com/stratease/dGrowl#0.1.2",
+		"dgrid": "https://github.com/SitePen/dgrid#v1.1.0",
+		"dijit": "~1.12.1",
+		"dojo": "~1.12.1",
+		"dstore": "https://github.com/SitePen/dstore#v1.1.2",
+		"font-awesome": "~4.6.3",
+		"foundation-sites": "~5.5.0"
+	},
 	"devDependencies": {
-		"grunt": "~0.4.5",
-		"grunt-contrib-clean": "~1.0.0",
-		"grunt-contrib-copy": "~0.8.2",
-		"grunt-dojo": "~1.1.1",
-		"load-grunt-tasks": "~0.1.0"
+		"grunt": "^1.0.1",
+		"grunt-contrib-clean": "^1.1.0",
+		"grunt-contrib-copy": "^0.8.2",
+		"grunt-dojo": "^1.1.2",
+		"util": "https://github.com/dojo/util#1.12.1"
 	}
 }
