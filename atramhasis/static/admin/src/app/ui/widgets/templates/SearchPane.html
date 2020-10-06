@@ -27,6 +27,12 @@
           </select>
         </div>
       </div>
+      <div class="large-12 columns">
+        <div class="placeholder-container">
+          <label for="matchfilter-${id}">Filter by match</label>
+          <input id="matchfilter-${id}" data-dojo-attach-point="matchInput" type="text" placeholder="e.g. http://vocab.getty.edu/aat/300005241"/>
+        </div>
+      </div>
       <div class="text-center large-12 columns">
         <button href="#/search" class="button tiny search-button" data-dojo-attach-event="onClick: _search"><span class="ico ico-mglass"></span></button>
       </div>

@@ -59,23 +59,14 @@ def setup_db(guarantee_empty=False):
 
 def _reset_db():
     engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
-    if engine.name == 'sqlite':
-        # Can't alembic downgrade sqlite because it can't do
-        # ALTER TABLE X DROP COLUMN
-        try:
-            os.remove(engine.url.database)
-        except OSError:
-            pass
-    elif engine.name == 'postgresql':
-        try:
-            engine.execute("DELETE FROM concept_note")
-            engine.execute("DELETE FROM note")
-            engine.execute("DELETE FROM concept_label")
-            engine.execute("DELETE FROM label")
-            command.downgrade(ALEMBIC_CONFIG, 'base')
-        except ProgrammingError:
-            """The tables may not exist if it's first time."""
-        command.downgrade(ALEMBIC_CONFIG, 'base')
+    try:
+        engine.execute("DELETE FROM concept_note")
+        engine.execute("DELETE FROM note")
+        engine.execute("DELETE FROM concept_label")
+        engine.execute("DELETE FROM label")
+    except (ProgrammingError, OperationalError):
+        """The tables may not exist if it's first time."""
+    command.downgrade(ALEMBIC_CONFIG, 'base')
     engine.dispose()
 
 
@@ -94,6 +85,20 @@ def fill_db():
             import_provider(data.geo,
                             ConceptScheme(id=2, uri='urn:x-vioe:geography'),
                             session)
+            import_provider(
+                DictionaryProvider(
+                    {'id': 'MISSING_LABEL', 'default_language': 'nl'},
+                    [{'id': '1', 'uri': 'urn:x-skosprovider:test/1'},
+                     {
+                         'id': '2',
+                         'uri': 'urn:x-skosprovider:test/2',
+                         'labels': [
+                             {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
+                         ],
+                     }]
+                ),
+                ConceptScheme(id=9, uri='urn:x-vioe:test'),
+                session)
             session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
             for scheme_id in (5, 6, 7, 8):
                 session.add(
@@ -182,10 +187,15 @@ def create_registry(request):
         [data.larch, data.chestnut, data.species],
         concept_scheme=ConceptScheme('http://id.trees.org')
     )
+    missing_label = SQLAlchemyProvider(
+        {'id': 'MISSING_LABEL', 'conceptscheme_id': 9},
+        request.db
+    )
 
     registry.register_provider(trees)
     registry.register_provider(geo)
     registry.register_provider(styles)
     registry.register_provider(materials)
     registry.register_provider(test)
+    registry.register_provider(missing_label)
     return registry

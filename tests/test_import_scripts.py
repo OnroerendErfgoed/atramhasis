@@ -19,7 +19,8 @@ try:
 except ImportError:
     from mock import Mock, patch
 
-test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.xml')
+test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.rdf')
+test_data_ttl = os.path.join(TEST_DIR, 'data', 'trees.ttl')
 test_data_json = os.path.join(TEST_DIR, 'data', 'trees.json')
 test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 
@@ -46,7 +47,7 @@ class ImportTests(DbTest):
         sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session)
         dump = dict_dumper(sql_prov)
 
-        self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.labels[0].label)
+        self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.label('en').label)
         obj_1 = [item for item in dump if item['uri'] == 'http://id.trees.org/2'][0]
         self.assertEqual(obj_1['broader'], [])
         self.assertEqual(obj_1['id'], 2)
@@ -86,12 +87,18 @@ class ImportTests(DbTest):
         self.assertIsInstance(eb.notes[0], Note)
         self.assertIn('Mornay', eb.notes[0].note)
         self.assertEqual('note', eb.notes[0].type)
-    
+
     def test_import_rdf(self):
         sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url']]
         import_file.main(sys.argv)
         tests.db_filled = True
-        self._check_trees('Trees')
+        self._check_trees('Verschillende soorten bomen')
+
+    def test_import_ttl(self):
+        sys.argv = ['import_file', '--from', test_data_ttl, '--to', SETTINGS['sqlalchemy.url']]
+        import_file.main(sys.argv)
+        tests.db_filled = True
+        self._check_trees('Different types of trees')
 
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json,

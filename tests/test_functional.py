@@ -107,7 +107,8 @@ json_collection_value = {
         "note": "een notitie",
         "type": "note",
         "language": "nl"
-    }]
+    }],
+    'infer_concept_relations': True
 }
 
 TEST = DictionaryProvider(
@@ -316,6 +317,7 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_edit_collection(self):
         json_collection_value['members'] = [{"id": 7}, {"id": 8}]
+        json_collection_value['infer_concept_relations'] = False
         res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers(),
                                     params=json_collection_value)
         self.assertEqual('200 OK', res.status)
@@ -323,6 +325,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['type'], 'collection')
         self.assertEqual(2, len(res.json['members']))
+        self.assertFalse(res.json['infer_concept_relations'])
 
     def test_delete_collection(self):
         res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers())
@@ -508,11 +511,49 @@ class JsonTreeFunctionalTests(FunctionalTests):
         self.assertEqual(2, len(response.json))
         self.assertEqual('World', response.json[0]['label'])
 
+    def test_missing_labels(self):
+        response = self.testapp.get('/conceptschemes/MISSING_LABEL/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        self.assertEqual('200 OK', response.status)
+        self.assertIsNotNone(response.json)
+        self.assertEqual(2, len(response.json))
+        self.assertEqual('label', response.json[0]['label'])
+        self.assertEqual(None, response.json[1]['label'])
+
+    def test_tree_language(self):
+        response = self.testapp.get('/conceptschemes/TREES/tree?language=nl',
+                                    headers=self._get_default_headers())
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            ['De Lariks', 'De Paardekastanje'],
+            [child['label'] for child in response.json[0]['children']]
+        )
+        response = self.testapp.get('/conceptschemes/TREES/tree?language=en',
+                                    headers=self._get_default_headers())
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            ['The Chestnut', 'The Larch'],
+            [child['label'] for child in response.json[0]['children']]
+        )
+
     def test_no_tree(self):
         response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
                                     status=404, expect_errors=True)
         self.assertEqual('404 Not Found', response.status)
 
+
+class HtmlTreeFunctionalTests(FunctionalTests):
+    def _get_default_headers(self):
+        return {'Accept': 'text/html'}
+
+    def test_tree(self):
+        response = self.testapp.get('/conceptschemes/GEOGRAPHY/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        self.assertEqual('200 OK', response.status)
+        self.assertIn('text/html', response.headers['Content-Type'])
+
+    def test_no_tree(self):
+        response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
+                                    status=404, expect_errors=True)
+        self.assertEqual('404 Not Found', response.status)
 
 class SkosFunctionalTests(FunctionalTests):
 
@@ -539,6 +580,32 @@ class SkosFunctionalTests(FunctionalTests):
         self.assertTrue('message' in res)
         self.assertTrue('No SKOS registry found, please check your application setup' in res)
 
+    def test_match_filter(self):
+        response = self.testapp.get(
+            '/conceptschemes/TREES/c',
+            headers={'Accept': 'application/json'}
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(3, len(response.json))
+        response = self.testapp.get(
+            '/conceptschemes/TREES/c'
+            '?match=http://id.python.org/different/types/of/trees/nr/1/the/larch',
+            headers={'Accept': 'application/json'}
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(
+            [
+                {
+                    'id': 1,
+                    'uri': 'urn:x-skosprovider:trees/1',
+                    'type': 'concept',
+                    'label': 'De Lariks',
+                    '@context': 'http://localhost/jsonld/context/skos'
+                }
+            ],
+            response.json
+        )
+
 
 class CacheFunctionalTests(FunctionalTests):
     def _get_default_headers(self):
@@ -549,11 +616,13 @@ class CacheFunctionalTests(FunctionalTests):
         invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
         self.assertEqual('200 OK', invalidate_cache_response.status)
 
-        tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+                                         headers=self._get_default_headers())
         self.assertEqual('200 OK', tree_response.status)
         self.assertIsNotNone(tree_response.json)
 
-        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+                                                headers=self._get_default_headers())
         self.assertEqual('200 OK', cached_tree_response.status)
         self.assertIsNotNone(cached_tree_response.json)
 
@@ -564,18 +633,23 @@ class CacheFunctionalTests(FunctionalTests):
         invalidate_cache_response = self.testapp.get('/admin/tree/invalidate')
         self.assertEqual('200 OK', invalidate_cache_response.status)
 
-        tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
-        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+                                         headers=self._get_default_headers())
+        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+                                                headers=self._get_default_headers())
         self.assertEqual(tree_response.json, cached_tree_response.json)
 
-        delete_response = self.testapp.delete('/conceptschemes/MATERIALS/c/31', headers=self._get_default_headers())
+        delete_response = self.testapp.delete('/conceptschemes/MATERIALS/c/31',
+                                              headers=self._get_default_headers())
         self.assertEqual('200 OK', delete_response.status)
         self.assertIsNotNone(delete_response.json['id'])
 
-        tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+                                          headers=self._get_default_headers())
         self.assertNotEqual(tree_response.json, tree_response2.json)
 
-        cached_tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl')
+        cached_tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+                                                 headers=self._get_default_headers())
         self.assertEqual(tree_response2.json, cached_tree_response2.json)
 
 

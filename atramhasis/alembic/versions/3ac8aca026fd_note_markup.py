@@ -19,4 +19,5 @@ def upgrade():
 
 
 def downgrade():
-    op.drop_column('note', 'markup')
+    with op.batch_alter_table("note") as batch_op:
+        batch_op.drop_column('markup')
