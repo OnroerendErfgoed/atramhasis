@@ -74,6 +74,8 @@ When recreating the sitemap it is best practice to remove
 existing files from the static/_sitemap directory.
 If the directory is not empty the script will overwrite existing sitemaps,
 but unused sitemaps will be retained.
+Unless the --no-input flag is used,
+the script wil ask the user to press [enter] before overwriting existing files.
 The sitemap index will always contain links to all the files (used and unused).
 
 Running a demo site with Docker
