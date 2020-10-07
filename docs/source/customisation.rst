@@ -595,6 +595,37 @@ security implementation using Mozilla Persona. Since this service has been
 discontinued, the security configuration was removed as well. But you can still
 check out the old code in our Github repository to see how it works.
 
+.. _sitemap:
+
+Sitemap
+=======
+
+Since Atramhasis 0.7.0 it's possible to generate a sitemap. It consists of a
+set of files (one per conceptscheme and an index file) you can submit to a
+search engine. It will help it index your thesaurus as efficiently as possible. 
+
+You can generate the sitemap using the following commands:
+
+.. code-block:: bash
+
+    # remove any existing sitemaps
+    $ rm my_thesaurus/static/_sitemaps/*
+    $ sitemap_generator development.ini
+
+The sitemap index xml will be visible at the root of your webserver, eg. 
+`<http://localhost:6543/sitemap_index.xml>`_. Depending on how often you edit
+conceptschemes, concepts or collections it's a good idea to make this into a
+cron job. When recreating the sitemap it is best practice to remove
+existing files from the static/_sitemap directory. If the directory is not empty 
+the script will overwrite existing sitemaps, but unused sitemaps will be retained. 
+Unless the  --no-input flag is used, the script wil ask the user to press [enter] before 
+overwriting existing files. The sitemap index will always contain links to all 
+the files (used and unused).
+
+Since a sitemap needs to contain abolute URL's, the script needs to know where
+the application is being hosted. This can be controlled with a setting
+`atramhasis.url` in the application's ini file. Set this to the root of your
+webapplication, eg. `http://my.thesaurus.org` (no trailing slash needed).
 
 Foreign Keys
 ============
@@ -1108,23 +1139,3 @@ You can change the default session factory in the __init__.py file.
     atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
     config.set_session_factory(atramhasis_session_factory)
 
-Sitemap
-============
-
-You can generate a clean sitemap using the following commands:
-
-.. code-block:: bash
-
-    # remove any existing sitemaps
-    $ rm my_thesaurus/static/_sitemaps/*
-    $ sitemap_generator development.ini
-
-The sitemap index xml will be visible at
-`<http://localhost:6543/sitemap_index.xml>`_.
-When recreating the sitemap it is best practice to remove
-existing files from the static/_sitemap directory.
-If the directory is not empty the script will overwrite existing sitemaps,
-but unused sitemaps will be retained.
-Unless the --no-input flag is used,
-the script wil ask the user to press [enter] before overwriting existing files.
-The sitemap index will always contain links to all the files (used and unused).
