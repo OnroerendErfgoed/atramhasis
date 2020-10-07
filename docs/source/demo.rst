@@ -60,6 +60,22 @@ own security module. This enables you to use the security mechanisms
 organisation requires. Please consult the documentation on :ref:`security`
 customisation for further information on this topic.
 
+You can generate a clean sitemap using the following commands:
+
+.. code-block:: bash
+
+    # remove any existing sitemaps
+    $ rm atramhasis_demo/static/_sitemaps/*
+    $ sitemap_generator development.ini
+
+The sitemap index xml will be visible at
+`<http://localhost:6543/sitemap_index.xml>`_.
+When recreating the sitemap it is best practice to remove
+existing files from the static/_sitemap directory.
+If the directory is not empty the script will overwrite existing sitemaps,
+but unused sitemaps will be retained.
+The sitemap index will always contain links to all the files (used and unused).
+
 Running a demo site with Docker
 ===============================
 
