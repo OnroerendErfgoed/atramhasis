@@ -1,17 +1,16 @@
 /*jshint node:true*/
 module.exports = function (grunt) {
-  require('load-grunt-tasks')(grunt, [ 'grunt-*' ]);
   var path = require('path');
 
   grunt.initConfig({
     dojo: {
       dist: {
         options: {
-          dojo: path.join('src', 'dojo', 'dojo.js'),
+          dojo: path.join('node_modules', 'dojo', 'dojo.js'),
           dojoConfig: path.join('src', 'dojoConfig.js'),
           profile: path.join('profiles', 'atramhasis.profile.js'),
           releaseDir: path.join('..', 'dist'),
-          basePath: path.join(__dirname, 'src')
+          basePath: path.join(__dirname, 'node_modules')
         }
       }
     },
@@ -39,6 +38,10 @@ module.exports = function (grunt) {
       }
     }
   });
+
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-dojo');
 
   grunt.config('copy.fa', {
     files: [
