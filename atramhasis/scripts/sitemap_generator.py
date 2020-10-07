@@ -133,7 +133,7 @@ def main():
         usage="sitemap_generator development.ini#atramhasis "
               "--limit=1000")
     parser.add_argument('settings_file',
-                        help="<The location of the settings file>#<app-name>")
+                        help="<The location of the settings file>")
     parser.add_argument("--limit", type=int,
                         help="range of objects in sitemap", default=50000)
     parser.add_argument("--no-input", action='store_true',
