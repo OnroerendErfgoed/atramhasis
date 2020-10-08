@@ -1,27 +1,30 @@
 # Basic Atramhasis dev requirements
 
 # pyramid
-pyramid-debugtoolbar==4.5
+pyramid-debugtoolbar==4.6.1
 
 # Testing
-pytest==4.3.0
-pytest-cov==2.6.1
-py==1.8.0
-coveralls==1.6.0
-webtest==2.0.33
-mock==2.0.0
-testfixtures==6.6.0
+pytest==4.6.11 ; python_version < '3.0'
+pytest==6.0.1 ; python_version >= '3.0'
+pytest-cov==2.10.0
+coveralls==1.11.1
+webtest==2.0.35
+mock==3.0.5 ; python_version < '3.6'
+mock==4.0.2 ; python_version >= '3.6'
+testfixtures==6.14.1
 
 # Documentation
-Sphinx==1.8.4
+Sphinx==1.8.5 ; python_version < '3.5'
+Sphinx==3.2.0 ; python_version >= '3.5'
 sphinxcontrib-httpdomain==1.7.0
-pygments==2.3.1
+pygments==2.5.2 ; python_version < '3.5'
+pygments==2.6.1 ; python_version >= '3.5'
 
 # waitress
-waitress==1.2.0
+waitress==1.4.4
 
 # Linting
-flake8==3.7.7
+flake8==3.8.3
 mccabe==0.6.1
 pep8==1.7.1
-pyflakes==2.1.0
+pyflakes==2.2.0

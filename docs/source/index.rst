@@ -10,6 +10,7 @@ Atramhasis
    :maxdepth: 2
 
    intro
+   features
    demo
    development
    services

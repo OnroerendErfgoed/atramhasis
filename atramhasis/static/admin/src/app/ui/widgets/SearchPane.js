@@ -130,7 +130,7 @@ define([
       var footerheight = 30;
       var headerheight = 60;
       var menuheight = win.h - footerheight - headerheight;
-      var form = 270;
+      var form = 326;
       var buttons = 80;
       domStyle.set(this.searchResultsNode, 'height', menuheight - form - buttons + 'px');
     },
@@ -253,6 +253,10 @@ define([
     _search: function (evt) {
       evt ? evt.preventDefault() : null;
       var schemeId = domUtils.getSelectedOption(this.conceptSchemeSelect);
+
+      this.matchInput.value = this.matchInput.value.trim();
+      this.labelInput.value = this.labelInput.value.trim();
+
       if (schemeId == -1) {
         topic.publish('dGrowl', "You have to select a scheme.", {'title': "", 'sticky': false, 'channel':'warn'});
         return;
@@ -262,6 +266,9 @@ define([
         label: this.labelInput.value,
         sort: '+label'
       };
+      if (this.matchInput.value !== '') {
+        filter.match= this.matchInput.value;
+      }
       var store = this.appUi.conceptController.getConceptStore(schemeId).filter(filter);
       this.init(schemeId, store);
       this.appUi._slideMenu._slideOpen();

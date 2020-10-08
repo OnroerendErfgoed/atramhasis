@@ -20,10 +20,15 @@ jinja2.directories =
 jinja2.extensions =
     jinja2.ext.do
     jinja2.ext.with_
+jinja2.filters =
+    label_sort = atramhasis.utils.label_sort
 available_languages = en nl fr
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 atramhasis.session_factory.secret = test123
+
+skosprovider.skosregistry_location = request
+skosprovider.skosregistry_factory = {{package}}.skos.create_registry
 
 jinja2.i18n.domain = atramhasis
 

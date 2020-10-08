@@ -8,7 +8,7 @@ from skosprovider_sqlalchemy.models import Base as SkosBase
 
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
+from zope.sqlalchemy import register
 
 
 def data_managers(request):
@@ -20,18 +20,23 @@ def data_managers(request):
     :returns: A dictionary containing different
         :class:`datamanagers <atramhasis.data.datamanagers.DataManager>`.
     """
-    session = request.registry.dbmaker()
+    session = request.db
     skos_manager = SkosManager(session)
     conceptscheme_manager = ConceptSchemeManager(session)
     languages_manager = LanguagesManager(session)
     audit_manager = AuditManager(session)
 
-    def cleanup(request):
-        session.close()
-    request.add_finished_callback(cleanup)
-
     return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager,
             'languages_manager': languages_manager, 'audit_manager': audit_manager}
+
+
+def db(request):
+    session = request.registry.dbmaker()
+
+    def cleanup(_):
+        session.close()
+    request.add_finished_callback(cleanup)
+    return session
 
 
 def includeme(config):
@@ -45,9 +50,7 @@ def includeme(config):
     engine = engine_from_config(config.get_settings(), 'sqlalchemy.')
     Base.metadata.bind = engine
     SkosBase.metadata.bind = engine
-    session_maker = sessionmaker(
-        bind=engine,
-        extension=ZopeTransactionExtension()
-    )
-    config.registry.dbmaker = session_maker
+    config.registry.dbmaker = sessionmaker(bind=engine)
+    register(config.registry.dbmaker)
     config.add_request_method(data_managers, reify=True)
+    config.add_request_method(db, reify=True)

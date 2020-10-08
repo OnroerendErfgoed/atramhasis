@@ -167,6 +167,8 @@ define([
       this._subordinateGrid.set('collection', this._subordinateStore);
       this._superordinatesCollStore = new TrackableMemory({ data: [] });
       this._superordinatesCollGrid.set('collection', this._superordinatesCollStore);
+      this.inferConceptRelationsYesNode.checked = false;
+      this.inferConceptRelationsNoNode.checked = false;
     },
 
     setCollectionTypes: function() {
@@ -184,6 +186,7 @@ define([
       this.superordinatesCollGridNode.style.display = 'block';
       this.membersContainerNode.style.display = 'block';
       this.membersGridNode.style.display = 'block';
+      this.inferConceptRelationsContainerNode.style.display = 'block';
     },
 
     setConceptTypes: function() {
@@ -201,6 +204,7 @@ define([
       this.membersGridNode.style.display = 'none';
       this.superordinatesCollContainerNode.style.display = 'none';
       this.superordinatesCollGridNode.style.display = 'none';
+      this.inferConceptRelationsContainerNode.style.display = 'none';
     },
 
     _createGrid: function(options, node) {
@@ -282,6 +286,10 @@ define([
           con.id = item.id;
           return con;
         }, this);
+        /* jshint -W106 */
+        relations.infer_concept_relations = this.inferConceptRelationsYesNode.checked ?
+          true : (this.inferConceptRelationsNoNode.checked ? false : undefined);
+        /* jshint +W106 */
       }
 
       /* jshint -W106 */
@@ -325,7 +333,14 @@ define([
         this._subordinateGrid.set('collection', this._subordinateStore);
         this._superordinatesCollStore = new this.trackableMemory({data: this.concept ? this.concept.superordinates : []});
         this._superordinatesCollGrid.set('collection', this._superordinatesCollStore);
-
+        /* jshint -W106 */
+        if (concept.infer_concept_relations === true) {
+          this.inferConceptRelationsYesNode.checked = true;
+        }
+        else if (concept.infer_concept_relations === false) {
+          this.inferConceptRelationsNoNode.checked = true;
+        }
+        /* jshint +W106 */
         if (this.concept.type === 'collection') {
           this.setCollectionTypes();
         } else {

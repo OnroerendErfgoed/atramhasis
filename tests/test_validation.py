@@ -311,6 +311,20 @@ class TestValidation(unittest.TestCase):
         self.assertTrue(isinstance(error, ValidationError))
         self.assertIn({'narrower': 'A narrower, broader or related concept'
                                    ' should always be a concept, not a collection'}, error.errors)
+    
+    def test_infer_concept_relations(self):
+        self.json_concept['infer_concept_relations'] = True
+        with self.assertRaises(ValidationError) as e:
+            self.concept_schema.deserialize(self.json_concept)
+        self.assertIn(
+            {
+                'infer_concept_relations': "'infer_concept_relations' can only "
+                                           "be set for collections."
+            },
+            e.exception.errors
+        )
+        self.json_collection['infer_concept_relations'] = True
+        self.concept_schema.deserialize(self.json_collection)
 
     def test_collection_with_narrower(self):
         # Collections can not have narrower relations

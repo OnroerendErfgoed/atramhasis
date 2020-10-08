@@ -2,18 +2,30 @@
 import os
 import unittest
 
-from skosprovider.registry import Registry
+from paste.deploy.loadwsgi import appconfig
 from pyramid import testing
-from skosprovider_sqlalchemy.models import Concept, Collection, Thing, Label, Note, LabelType, ConceptScheme
+from skosprovider.registry import Registry
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import LabelType
+from skosprovider_sqlalchemy.models import Note
+from skosprovider_sqlalchemy.models import Thing
 from sqlalchemy.orm.exc import NoResultFound
 from webob.multidict import MultiDict
-from paste.deploy.loadwsgi import appconfig
 
-from atramhasis.cache import list_region
-from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, AuditManager
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
-from atramhasis.views.views import AtramhasisView, AtramhasisAdminView, AtramhasisListView, \
-    labels_to_string, get_definition
+from atramhasis.data.datamanagers import AuditManager
+from atramhasis.data.datamanagers import ConceptSchemeManager
+from atramhasis.data.datamanagers import SkosManager
+from atramhasis.errors import ConceptNotFoundException
+from atramhasis.errors import ConceptSchemeNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.views.views import AtramhasisAdminView
+from atramhasis.views.views import AtramhasisListView
+from atramhasis.views.views import AtramhasisView
+from atramhasis.views.views import get_definition
+from atramhasis.views.views import labels_to_string
 from fixtures.data import trees
 
 try:
@@ -30,7 +42,9 @@ def provider(some_id):
     if some_id == 1:
         provider_mock.get_vocabulary_id = Mock(return_value='TREES')
         provider_mock.get_metadata = Mock(return_value={'id': some_id, 'subject': []})
+    provider_mock.allowed_instance_scopes = ['single', 'threaded_thread']
     provider_mock.conceptscheme_id = Mock(return_value=some_id)
+    provider_mock.metadata={}
     return provider_mock
 
 
@@ -258,6 +272,16 @@ class TestConceptSchemeView(unittest.TestCase):
         self.assertIsNotNone(res['conceptscheme']['notes'])
         self.assertIsNotNone(res['conceptscheme']['top_concepts'])
 
+    def test_conceptscheme_view_language(self):
+        self.request.matchdict['scheme_id'] = 'TREES'
+        self.request.skos_registry.providers['TREES'].metadata[
+            'atramhasis.force_display_label_language'] = 'nl'
+
+        atramhasisview = AtramhasisView(self.request)
+        res = atramhasisview.conceptscheme_view()
+        self.assertIsNotNone(res)
+        self.assertEqual(res['locale'], 'nl')
+
 
 class TestConceptView(unittest.TestCase):
     def setUp(self):
@@ -283,6 +307,19 @@ class TestConceptView(unittest.TestCase):
         self.assertIsNotNone(info['concept'])
         self.assertEqual(info['conceptType'], 'Concept')
         self.assertEqual(info['scheme_id'], 'TREES')
+
+    def test_passing_view_with_languague(self):
+        request = self.request
+        request.matchdict['scheme_id'] = 'TREES'
+        request.matchdict['c_id'] = '1'
+        request.skos_registry = self.regis
+        request.skos_registry.providers['TREES'].metadata = {
+            'atramhasis.force_display_label_language': 'nl'
+        }
+        atramhasisview = AtramhasisView(request)
+        info = atramhasisview.concept_view()
+        self.assertIsNotNone(info['concept'])
+        self.assertEqual(info['locale'], 'nl')
 
     def test_passing_collection_view(self):
         request = self.request
@@ -571,11 +608,6 @@ class TestListViews(unittest.TestCase):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
         self.request.data_managers = list_db(self.request)
-        if not list_region.is_configured:
-            list_region.configure('dogpile.cache.memory')
-
-    def tearDown(self):
-        testing.tearDown()
 
     def test_get_list(self):
         request = self.request
@@ -589,4 +621,7 @@ class TestListViews(unittest.TestCase):
         atramhasis_list_view = AtramhasisListView(request)
         labellist = atramhasis_list_view.labeltype_list_view()
         self.assertIsNotNone(labellist)
-        self.assertIn({'key': 'prefLabel', 'label': u'prefLabel'}, labellist)
+        self.assertIn(
+            {'key': 'prefLabel', 'label': u'prefLabel'},
+            labellist
+        )

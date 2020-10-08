@@ -26,17 +26,17 @@ def copy_static_scaffold(output_dir):
     dir_util.copy_tree(os.path.join(source_dir, 'js'), os.path.join(dest_dir, 'js'), update=True)
     dir_util.copy_tree(os.path.join(source_dir, 'scss', 'atramhasis'), os.path.join(dest_dir, 'scss', 'atramhasis'),
                        update=True)
+    file_util.copy_file(
+        os.path.join(source_dir, 'package.json'),
+        os.path.join(dest_dir,  'package.json'),
+        update=True
+    )
+    file_util.copy_file(
+        os.path.join(source_dir, 'package-lock.json'),
+        os.path.join(dest_dir, 'package-lock.json'),
+        update=True
+    )
     dir_util.mkpath(os.path.join(dest_dir, 'admin'))
-    file_util.copy_file(
-        os.path.join(source_dir, 'admin', '.bowerrc'),
-        os.path.join(dest_dir, 'admin', '.bowerrc'),
-        update=True
-    )
-    file_util.copy_file(
-        os.path.join(source_dir, 'admin', 'bower.json'),
-        os.path.join(dest_dir, 'admin', 'bower.json'),
-        update=True
-    )
     file_util.copy_file(
         os.path.join(source_dir, 'admin', 'Gruntfile.js'),
         os.path.join(dest_dir, 'admin', 'Gruntfile.js'),
@@ -47,25 +47,24 @@ def copy_static_scaffold(output_dir):
         os.path.join(dest_dir, 'admin', 'package.json'),
         update=True
     )
+    file_util.copy_file(
+        os.path.join(source_dir, 'admin', 'package-lock.json'),
+        os.path.join(dest_dir, 'admin', 'package-lock.json'),
+        update=True
+    )
 
 
 def dojo_build():
     print('-' * 50)
     print('==> check npm dependencies')
-    libs = str(subprocess.check_output(["npm", "list", "-g", "bower", "grunt-cli"]))
-    if 'bower' in libs:
-        bower = True
-        print('bower OK')
-    else:
-        bower = False
-        print('bower KO, use \'npm install -g bower\' to install')
+    libs = str(subprocess.check_output(["npm", "list", "-g", "grunt-cli"]))
     if 'grunt-cli' in libs:
         gruntcli = True
         print('grunt-cli OK')
     else:
         gruntcli = False
         print('grunt-cli KO, use \'npm install -g grunt-cli\' to install')
-    if bower and gruntcli:
+    if gruntcli:
         print('==> running grunt build')
         subprocess.call(["grunt", "-v", "build"], cwd="atramhasis/static/admin")
     print('-' * 50)
@@ -101,7 +100,6 @@ requires = [
     'skosprovider_sqlalchemy',
     'skosprovider_rdf',
     'skosprovider_getty',
-    'skosprovider_heritagedata',
     'pyramid_skosprovider',
     'language_tags',
     'pyramid_jinja2',
@@ -115,9 +113,10 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='0.6.7',
+      version='0.7.0b1',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
+      long_description_content_type='text/x-rst',
       classifiers=[
           "Development Status :: 4 - Beta",
           "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
@@ -126,9 +125,9 @@ setup(name='atramhasis',
           "Topic :: Internet :: WWW/HTTP",
           "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
           "Programming Language :: Python :: 2.7",
-          "Programming Language :: Python :: 3.4",
-          "Programming Language :: Python :: 3.5",
-          "Programming Language :: Python :: 3.6"
+          "Programming Language :: Python :: 3.6",
+          "Programming Language :: Python :: 3.7",
+          "Programming Language :: Python :: 3.8"
       ],
       author='Flanders Heritage Agency',
       author_email='ict@onroerenderfgoed.be',
@@ -148,6 +147,8 @@ setup(name='atramhasis',
       import_file = atramhasis.scripts.import_file:main
       dump_rdf = atramhasis.scripts.dump_rdf:main
       generate_ldf_config = atramhasis.scripts.generate_ldf_config:main
+      sitemap_generator = atramhasis.scripts.sitemap_generator:main
+      delete_scheme = atramhasis.scripts.delete_scheme:main
       [pyramid.scaffold]
         atramhasis_scaffold=atramhasis.scaffolds:AtramhasisTemplate
         atramhasis_demo=atramhasis.scaffolds:AtramhasisDemoTemplate

@@ -34,7 +34,8 @@ def from_thing(thing):
             ],
             members=[member.concept_id for member in thing.members] if hasattr(thing, 'members') else [],
             member_of=[c.concept_id for c in thing.member_of],
-            superordinates=[broader_concept.concept_id for broader_concept in thing.broader_concepts]
+            superordinates=[broader_concept.concept_id for broader_concept in thing.broader_concepts],
+            infer_concept_relations=thing.infer_concept_relations
         )
     else:
         matches = {}
@@ -102,4 +103,13 @@ def update_last_visited_concepts(request, concept_data):
 
     # Add concept to the queue
     last_visited.append(concept_data)
+
+
+def label_sort(concepts, language='any'):
+    if not concepts:
+        return []
+    return sorted(
+        concepts, key=lambda concept: concept._sortkey(key='sortlabel',
+                                                       language=language)
+    )
 

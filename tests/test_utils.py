@@ -132,14 +132,14 @@ class TestInternalProviderOnly(unittest.TestCase):
 
     def test_internal_providers(self):
         self.dummy.provider = SQLAlchemyProvider(metadata={'id': 'Test', 'conceptscheme_id': 1},
-                                                 session_maker=None)
+                                                 session=None)
         self.dummy.internal_providers('ok')
         self.assertEqual(self.dummy.dummy, 'ok')
 
     def test_external_providers(self):
         self.dummy.provider = SQLAlchemyProvider(metadata={'id': 'Test', 'conceptscheme_id': 1,
                                                            'subject': ['external']},
-                                                 session_maker=None)
+                                                 session=None)
         self.assertRaises(HTTPMethodNotAllowed, self.dummy.internal_providers, 'ok')
         self.assertIsNone(self.dummy.dummy)
 

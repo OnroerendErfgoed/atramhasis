@@ -28,6 +28,13 @@ def get_definition(notes):
             return note.note
 
 
+def sort_by_labels(concepts, locale, reverse=False):
+    return sorted([x for x in concepts if x.label(locale)],
+                  reverse=reverse,
+                  key=lambda child: child.label(locale).label.lower()
+                  ) + [x for x in concepts if not x.label(locale)]
+
+
 @view_defaults(accept='text/html')
 class AtramhasisView(object):
     """
@@ -109,7 +116,12 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
         conceptscheme = provider.concept_scheme
-        title = conceptscheme.label().label if (conceptscheme.label()) else scheme_id
+        if 'atramhasis.force_display_label_language' in provider.metadata:
+            locale = provider.metadata['atramhasis.force_display_label_language']
+        else:
+            locale = self.request.locale_name
+        title = (conceptscheme.label(locale).label if (conceptscheme.label())
+                 else scheme_id)
 
         scheme = {
             'scheme_id': scheme_id,
@@ -117,10 +129,11 @@ class AtramhasisView(object):
             'uri': conceptscheme.uri,
             'labels': conceptscheme.labels,
             'notes': conceptscheme.notes,
-            'top_concepts': provider.get_top_concepts()
+            'top_concepts': provider.get_top_concepts(),
         }
 
-        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes}
+        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes,
+                'locale': locale}
 
     @audit
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
@@ -138,9 +151,12 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
-
         if not provider:
             raise ConceptSchemeNotFoundException(scheme_id)
+        if 'atramhasis.force_display_label_language' in provider.metadata:
+            locale = provider.metadata['atramhasis.force_display_label_language']
+        else:
+            locale = self.request.locale_name
         try:
             c = self.skos_manager.get_thing(c_id, provider.conceptscheme_id)
             if isinstance(c, Concept):
@@ -152,7 +168,8 @@ class AtramhasisView(object):
             url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
             update_last_visited_concepts(self.request, {'label': c.label(self.request.locale_name).label, 'url': url})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
-                    'conceptschemes': conceptschemes, 'provider': provider}
+                    'conceptschemes': conceptschemes, 'provider': provider,
+                    'locale': locale}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
@@ -244,13 +261,17 @@ class AtramhasisView(object):
             'filename': 'atramhasis_export'
         }
 
+    @view_config(route_name='scheme_tree_html', renderer='scheme_tree.jinja2')
     @view_config(route_name='scheme_tree', renderer='json', accept='application/json')
     def results_tree_json(self):
         scheme_id = self.request.matchdict['scheme_id']
-        locale = self.request.locale_name
-        dicts = self.get_results_tree(scheme_id, locale)
+        language = self.request.params.get('language') or self.request.locale_name
+        dicts = self.get_results_tree(scheme_id, language)
         if dicts:
-            return dicts
+            if 'text/html' not in self.request.accept:
+                return dicts
+            else:
+                return {'tree': dicts}
         else:
             return Response(status_int=404)
 
@@ -268,14 +289,13 @@ class AtramhasisView(object):
             tco = self.conceptscheme_manager.get_concepts_for_scheme_tree(conceptscheme_id)
             tcl = self.conceptscheme_manager.get_collections_for_scheme_tree(conceptscheme_id)
 
-            scheme_tree = sorted(tco, key=lambda child: child.label(locale).label.lower()) + \
-                          sorted(tcl, key=lambda child: child.label(locale).label.lower())
+            scheme_tree = sort_by_labels(tco, locale) + sort_by_labels(tcl, locale)
 
         return scheme_tree
 
     def parse_thing(self, thing, parent_tree_id):
         tree_id = self.create_treeid(parent_tree_id, thing.concept_id)
-        locale = self.request.locale_name
+        locale = self.request.params.get('language', self.request.locale_name)
 
         if thing.type and thing.type == 'collection':
             cs = [member for member in thing.members] if hasattr(thing, 'members') else []
@@ -283,13 +303,13 @@ class AtramhasisView(object):
             cs = [c for c in thing.narrower_concepts]
             cs = cs + [c for c in thing.narrower_collections]
 
-        sortedcs = sorted(cs, key=lambda child: child.label(locale).label.lower())
+        sortedcs = sort_by_labels(cs, locale)
         children = [self.parse_thing(c, tree_id) for index, c in enumerate(sortedcs, 1)]
         dict_thing = {
             'id': tree_id,
             'concept_id': thing.concept_id,
             'type': thing.type,
-            'label': thing.label(locale).label,
+            'label': thing.label(locale).label if thing.label(locale) else None,
             'children': children
         }
 

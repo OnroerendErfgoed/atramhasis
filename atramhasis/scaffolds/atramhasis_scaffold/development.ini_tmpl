@@ -19,9 +19,14 @@ jinja2.directories =
 jinja2.extensions =
     jinja2.ext.do
     jinja2.ext.with_
+jinja2.filters =
+    label_sort = atramhasis.utils.label_sort
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
 atramhasis.session_factory.secret = test123
+
+skosprovider.skosregistry_location = request
+skosprovider.skosregistry_factory = {{package}}.skos.create_registry
 
 # cache
 cache.tree.backend = dogpile.cache.memory

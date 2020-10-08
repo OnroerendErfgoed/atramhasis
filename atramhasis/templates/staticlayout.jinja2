@@ -4,9 +4,10 @@
 
 {% set app_package = app_package|default('atramhasis', true) -%}
 {% set app_name = app_name|default('Atramhasis') %}
-{% set copyright_year = copyright_year|default('2016-2017') %}
+{% set copyright_year = copyright_year|default('2014-2020') %}
 
 <head>
+{% block head %}
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ app_name }} - {% block html_title %}Base{% endblock %}</title>
@@ -21,11 +22,11 @@
   {% endif %}
 
   <link rel="icon" type="image/x-icon" href="{{request.static_path(app_package + ':static/img/favicon.ico')}}" />
-  <script src="{{request.static_path(app_package + ':static/bower_components/modernizr/modernizr.js')}}"></script>
+  <script src="{{request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/modernizr.js')}}"></script>
 
   {% block js_files_head %}
-    <script src="{{ request.static_path(app_package + ':static/bower_components/jquery/dist/jquery.js') }}"></script>
-    <script src="{{ request.static_path(app_package + ':static/bower_components/jquery.cookie/jquery.cookie.js') }}"></script>
+    <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.js') }}"></script>
+    <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.cookie.js') }}"></script>
   {% endblock %}
 
   {% block ga %}
@@ -35,6 +36,7 @@
       {{ ga_tracker(ga_key) }}
     {% endif %}
   {% endblock %}
+{% endblock %}
 </head>
 <body>
 {% block vl_header %}
@@ -53,7 +55,8 @@
 {% endblock %}
 
 {% block js_files %}
-  <script src="{{ request.static_path(app_package + ':static/bower_components/foundation/js/foundation.min.js') }}"></script>
+  <script src="{{request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/fastclick.js')}}"></script>
+  <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/foundation.min.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/js/app.js') }}"></script>
 {% endblock %}
 

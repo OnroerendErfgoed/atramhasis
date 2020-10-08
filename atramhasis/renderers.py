@@ -4,11 +4,11 @@ import codecs
 from six import StringIO, text_type, PY2
 from pyramid.renderers import JSON
 from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note, Source, Language, ConceptScheme
-from pyramid_skosprovider.utils import concept_adapter as skos_concept_adapter
-from pyramid_skosprovider.utils import collection_adapter as skos_collection_adapter
-from pyramid_skosprovider.utils import label_adapter as skos_label_adapter
-from pyramid_skosprovider.utils import note_adapter as skos_note_adapter
-from pyramid_skosprovider.utils import source_adapter as skos_source_adapter
+from pyramid_skosprovider.renderers import concept_adapter as skos_concept_adapter
+from pyramid_skosprovider.renderers import collection_adapter as skos_collection_adapter
+from pyramid_skosprovider.renderers import label_adapter as skos_label_adapter
+from pyramid_skosprovider.renderers import note_adapter as skos_note_adapter
+from pyramid_skosprovider.renderers import source_adapter as skos_source_adapter
 from skosprovider.skos import Concept as SkosConcept
 from skosprovider.skos import Collection as SkosCollection
 from skosprovider.skos import Label as SkosLabel
@@ -136,7 +136,8 @@ def collection_adapter(obj, request):
         'sources': obj.sources,
         'members': [map_relation(c, language) for c in obj.members],
         'member_of': [map_relation(c, language) for c in obj.member_of],
-        'superordinates': [map_relation(c, language) for c in obj.broader_concepts]
+        'superordinates': [map_relation(c, language) for c in obj.broader_concepts],
+        'infer_concept_relations': obj.infer_concept_relations
     }
 
 

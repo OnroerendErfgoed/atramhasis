@@ -1,0 +1,8 @@
+/* line 1, ../scss/schemetree.scss */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@page {
+  margin: 25mm;
+}

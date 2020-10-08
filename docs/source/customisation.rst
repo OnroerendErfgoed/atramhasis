@@ -31,29 +31,111 @@ virtual environment.
     $ cd my_thesaurus
     # Install dependencies
     $ pip install -r requirements-dev.txt
-    # compile the Message Catalog Files
-    $ python setup.py compile_catalog
     # Download and install client side libraries
     $ cd my_thesaurus/static
-    $ bower install
-    $ cd admin
-    $ bower install
+    $ npm install
 
-This gives you a clean slate to start your customisations on. By default the
-scaffold comes with a simple SQLite database. This is more than enough for
-your first experiments and can even be used in production environment if your
-needs are modest. You can always instruct Atramhasis to use
+This gives you a clean slate to start your customisations on.
+
+Database
+--------
+
+By default the scaffold comes with a simple SQLite database. This is more than
+enough for your first experiments and can even be used in production environment
+if your needs are modest. You can always instruct Atramhasis to use
 some other database engine, as long as SQLAlchemy supports it. Configure the
 `sqlalchemy.url` configuration option in :file:`development.ini` to change
 the database. See the documentation of SQLAlchemy for more information about
-this connection url. After settings this url, run :command:`alembic` to
-initialise and migrate the database to the latest version.
+this connection url.
+
+Database initialisation
+.......................
+
+To initialise the database, simply run the following.
 
 .. code-block:: bash
 
     # Create or update database based on
     # the configuration in development.ini
     $ alembic upgrade head
+
+.. _custom-alembic:
+
+Custom alembic revisions
+........................
+
+If you have a need to create your own tables, or do custom database changes
+we suggest you do so in another alembic branch next to the atramhasis branch.
+
+First edit the :file:`alembic.ini` file so it contains the following:
+
+.. code-block:: ini
+
+    script_location = alembic
+    version_locations = %(here)s/alembic/versions atramhasis:alembic/versions
+
+Second, initialise alembic in your project:
+
+.. code-block:: bash
+
+    $ alembic init alembic
+
+This will create an alembic folder for your own revisions.
+
+To create your first revision, the command is a little longer:
+
+.. code-block:: bash
+
+    $ alembic revision -m "first revision" --head=base --branch-label=myproject \
+    --version-path=alembic/versions
+
+.. note::
+
+    if you need your alembic revisions to run after the atramhasis - for example
+    if you want to create foreign keys to atramhasis tables - you can use
+    :code:`--depends-on <hash>` where the hash is the latest revision hash from
+    atramhasis. This hash can be found by using :code:`alembic heads`. In this
+    example it is 184f1bbcb916
+
+    .. code-block:: bash
+
+        $ alembic heads
+        184f1bbcb916 (atramhasis) (head)
+
+Having created a revision like above will have created a second alembic branch.
+Your alembic should have 2 heads now:
+
+.. code-block:: bash
+
+    $ alembic heads
+    184f1bbcb916 (atramhasis) (effective head)
+    975228f4f18c (myproject) (head)
+
+Adding additional revisions will look like:
+
+.. code-block:: bash
+
+    alembic revision -m "second revision" --head=myproject@head
+
+.. warning::
+
+    Not using a seperate branch will add revisions to the atramhasis alembic
+    branch. While this may work initially, this may create split branches
+    and multiple heads when upgrading atramhasis in the future and this is
+    ill-advised
+
+Whenever you would use `alembic upgrade head` to upgrade your database, you now
+have to use **heads** plural instead.
+
+.. code-block:: bash
+
+    # Create or update database based on
+    # the configuration in development.ini
+    $ alembic upgrade heads
+
+
+Running a local server
+----------------------
 
 Your custom version of Atramhasis can now be run. Run the following command
 and point your browser to `http://localhost:6543` to see the result.
@@ -62,10 +144,19 @@ and point your browser to `http://localhost:6543` to see the result.
 
     $ pserve development.ini
 
-Of course, this does not do very much since your Atramhasis is now running,
-but does not contain any ConceptSchemes. You will need to configure this by
-entering a database record for the ConceptScheme and writing a small piece
-of code.
+
+Creating conceptschemes
+-----------------------
+
+Atramhasis is now running but does not contain any ConceptSchemes. You will
+need to configure this by entering a database record for the ConceptScheme and
+writing a small piece of code.
+
+.. warning::
+
+    Instantiating providers has changed between version 0.6.x and 0.7.0. Make
+    sure to update your skos initialisation when updating. The old code is no
+    longer supported, although the changes you need to make are minor.
 
 To enter the database record, you need to enter a record in the table
 `conceptscheme`. In this table you need to register an id for the conceptscheme
@@ -81,25 +172,31 @@ database that was created:
 
     INSERT INTO conceptscheme VALUES (1, 'urn:x-my-thesaurus:stuff')
 
-This take care of the first step. Now you also need to tell Atramhasis where
+This takes care of the first step. Now you also need to tell Atramhasis where
 to find your conceptscheme and how to handle it. To do this, you need to edit
-the file called :file:`my_thesaurus/skos/__init__.py`. In this file you need
-to register :class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
-instances. First you need to tell python where to find such a provider by adding
-this code just below the logging configuration:
+the file called :file:`my_thesaurus/skos/__init__.py`. This is the default
+location for creating a registry factory. Be default, this function is called
+`create_registry`, but this can be changed in your development.ini file. The
+function itself needs to receive the current request as a parameter and return
+the instantiated :class:`skosprovider.registry.Registry`.
+
+In this funcion you will register 
+:class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
+instances to the SKOS registry. If not yet present, you need to tell Python where 
+to find such a provider by adding this code to the top of the file:
 
 .. code-block:: python
 
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
-Then you need to instantiate such a provider within the includeme function in
+Then you need to instantiate such a provider within the `create_registry` function in
 this file. This provider needs a few arguments: an id for the provider, an id
-for the conceptscheme it's working with and a function that knows how the
-provide a database session. The id for the provider is often a text string
-and will appear in certain url's and might popup in the user interface from
-time to time. The database sessionmaker can be found at
-`config.registry.dbmaker`. Finally, you need to register this provider with
-the :class:`skosprovider.registry.Registry`.
+for the conceptscheme it's working with and a connectionb to a database session.
+The id for the provider is often a text string and will appear in certain url's 
+and might popup in the user interface from time to time. The database session
+is added to the Pyramid request that is passed to function and can be reached
+as `request.db`. Finally, you need to register this provider with the 
+:class:`skosprovider.registry.Registry`.
 
 .. code-block:: python
 
@@ -108,10 +205,10 @@ the :class:`skosprovider.registry.Registry`.
             'id': 'STUFF',
             'conceptscheme_id': 1
         },
-        config.registry.dbmaker
+        request.db
     )
 
-    skosregis.register_provider(STUFF)
+    registry.register_provider(STUFF)
 
 After having registered your provider, the file should look more or less like
 this:
@@ -120,27 +217,38 @@ this:
 
     # -*- coding: utf-8 -*-
 
+    from skosprovider.registry import Registry
+    from skosprovider.uri import UriPatternGenerator
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
     import logging
     log = logging.getLogger(__name__)
 
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
 
-    def includeme(config):
+        # create your own providers
         STUFF = SQLAlchemyProvider(
-            {
-                'id': 'STUFF',
-                'conceptscheme_id': 1
-            },
-            config.registry.dbmaker
+            {'id': 'STUFF', 'conceptscheme_id': 1},
+            request.db
         )
+    
+        # Add your custom provider to the registry
+        registry.register_provider(STUFF)
 
-        skosregis = config.get_skos_registry()
+        # return the SKOS registry
+        return registry
 
-        skosregis.register_provider(STUFF)
 
 Now you can restart your server and then you front page will show you a new,
-but empty thesaurus. You can now start creating concepts and collections by
+but empty thesaurus.
+
+Creating concepts and collections
+---------------------------------
+
+You can now start creating concepts and collections by
 going to the admin interface at `http://localhost:6543/admin`.
 
 You will notice that any concepts or collections you create wil get a
@@ -169,7 +277,7 @@ a :class:`~skosprovider.uri.UriPatternGenerator` with your provider:
             'id': 'STUFF',
             'conceptscheme_id': 1
         },
-        config.registry.dbmaker,
+        request.db,
         uri_generator=UriPatternGenerator(
             'http://id.mydata.org/thesauri/stuff/%s'
         )
@@ -188,28 +296,33 @@ Your final file should look similar to this:
 
     # -*- coding: utf-8 -*-
 
+    from skosprovider.registry import Registry
+    from skosprovider.uri import UriPatternGenerator
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
     import logging
     log = logging.getLogger(__name__)
 
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-    from skosprovider.uri import UriPatternGenerator
 
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
 
-    def includeme(config):
+        # create your own providers
         STUFF = SQLAlchemyProvider(
-            {
-                'id': 'STUFF',
-                'conceptscheme_id': 1
-            },
-            config.registry.dbmaker,
+            {'id': 'STUFF', 'conceptscheme_id': 1},
+            request.db,
             uri_generator=UriPatternGenerator(
                 'http://id.mydata.org/thesauri/stuff/%s'
             )
         )
+    
+        # Add your custom provider to the registry
+        registry.register_provider(STUFF)
 
-        skosregis = config.get_skos_registry()
+        # return the SKOS registry
+        return registry
 
-        skosregis.register_provider(STUFF)
 
 If you need more complicated URI's, you can easily write you own generator
 with a small piece of python code. You just need to follow the interface
@@ -236,32 +349,101 @@ Suppose we wanted to hide our stuff:
     import logging
     log = logging.getLogger(__name__)
 
+    from skosprovider.registry import Registry
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     from skosprovider.uri import UriPatternGenerator
 
 
-    def includeme(config):
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
+
+        # create your own providers
+        #
         STUFF = SQLAlchemyProvider(
             {
                 'id': 'STUFF',
                 'conceptscheme_id': 1,
                 'subject': ['hidden']
             },
-            config.registry.dbmaker,
+            request.db,
             uri_generator=UriPatternGenerator(
                 'http://id.mydata.org/thesauri/stuff/%s'
             )
         )
+    
+        # Add your custom provider to the registry
+        registry.register_provider(STUFF)
 
-        skosregis = config.get_skos_registry()
-
-        skosregis.register_provider(STUFF)
+        # return the SKOS registry
+        return registry
 
 
 Now the STUFF thesaurus will not show up in the public web interface, but REST
 calls to this conceptscheme will function as normal and you will be able to
 maintain it from the admin interface.
 
+
+.. _force_display_label_language:
+
+Force a display language for a vocabulary
+=========================================
+
+Under normal circumstances, Atramhasis tries to provide the most
+appropriate label for a certain concept or collection, based on some default
+configuration and the preferences of the end-user. Every provider can be marked
+as having a certain `default language` (English if not set), but Atramhasis
+also tries to read what the user wants. It does this through the user's
+browser's locale. This information can be read from the browser's HTTP headers
+or cookies. Generally, Atramhasis just knows in what language a user is
+browsing the site and tries to return labels appropriate for that language. So,
+the same thesaurus visited from the US will return English labels, while it
+will return Dutch when visited from Gent (Belgium).
+
+You might have a vocabulary with a strongly preferential relation to a certain
+language. We ran into this situation with a vocabulary of species: names for
+plants and trees commonly found in Flanders. Some of them have one or more
+local, Dutch, names. Most or all of them have an official name in Latin. The
+normal language handling mechanism created a weird situation. It led to a tree
+of names that was mostly in Latin, with the odd Dutch word thrown in for good
+measure. This was not as desired by our users. To that end, a special mechanism
+was created to force rendering labels of concepts and collections in a certain
+language, no matter what the end-user's browser is requesting.
+
+To set this, please edit the :file:`my_thesaurus/skos/__init__.py`. Look for the 
+thesaurus you want to override and add a setting `atramhasis.force_display_label_language`
+to the provider's metadata. Set it to a language supported by the provider
+(there's little sense to setting it to a language that isn't present in the
+vocabulary). Now Atramhasis will try serving concepts from this provider with
+this language. All labels will still be shown, but the page title or current
+label will be set to the selected language as much as possible. The normal
+language determination mechanisms will keep on working, so if the concept has
+no label in the requested language, Atramhasis will fall back on other labels
+present.
+
+Your provider should end up similar to this:
+
+.. code-block:: python
+
+    STUFF = SQLAlchemyProvider(
+        {
+            'id': 'STUFF',
+            'conceptscheme_id': 1,
+            'atramhasis.force_display_label_language': 'la'
+        },
+        request.db,
+        uri_generator=UriPatternGenerator(
+            'http://id.mydata.org/thesauri/stuff/%s'
+        )
+    )
+
+Beware that this will only affect the Atramhasis UI, not the Atramhasis REST
+services. We looked into some solutions for our problem that would have also
+changed the underlying service, but decided against that because it would have
+prevented you from making your own choices when interacting with Atramhasis. If
+you want to render the tree of concepts using a preferred language different
+from what a browser would advocate for, you can pass the language parameter in
+a url, eg. `http://my.thesaurus.org/conceptschemes/STUFF/tree?language=la`.
 
 .. _i18n:
 
@@ -413,6 +595,37 @@ security implementation using Mozilla Persona. Since this service has been
 discontinued, the security configuration was removed as well. But you can still
 check out the old code in our Github repository to see how it works.
 
+.. _sitemap:
+
+Sitemap
+=======
+
+Since Atramhasis 0.7.0 it's possible to generate a sitemap. It consists of a
+set of files (one per conceptscheme and an index file) you can submit to a
+search engine. It will help it index your thesaurus as efficiently as possible. 
+
+You can generate the sitemap using the following commands:
+
+.. code-block:: bash
+
+    # remove any existing sitemaps
+    $ rm my_thesaurus/static/_sitemaps/*
+    $ sitemap_generator development.ini
+
+The sitemap index xml will be visible at the root of your webserver, eg. 
+`<http://localhost:6543/sitemap_index.xml>`_. Depending on how often you edit
+conceptschemes, concepts or collections it's a good idea to make this into a
+cron job. When recreating the sitemap it is best practice to remove
+existing files from the static/_sitemap directory. If the directory is not empty 
+the script will overwrite existing sitemaps, but unused sitemaps will be retained. 
+Unless the  --no-input flag is used, the script wil ask the user to press [enter] before 
+overwriting existing files. The sitemap index will always contain links to all 
+the files (used and unused).
+
+Since a sitemap needs to contain abolute URL's, the script needs to know where
+the application is being hosted. This can be controlled with a setting
+`atramhasis.url` in the application's ini file. Set this to the root of your
+webapplication, eg. `http://my.thesaurus.org` (no trailing slash needed).
 
 Foreign Keys
 ============
@@ -577,7 +790,7 @@ and visible to the public among your regular vocabularies.
     AAT = AATProvider(
         {'id': 'AAT', 'subject': ['external']},
     )
-    skosregis.register_provider(AAT)
+    registry.register_provider(AAT)
 
 That's all. You can do the same with the
 :class:`~skosprovider_getty.providers.TGNProvider` for the
@@ -595,18 +808,22 @@ this:
     import logging
     log = logging.getLogger(__name__)
 
+    from skosprovider.registry import Registry
     from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     from skosprovider_getty.providers import AATProvider
     from skosprovider.uri import UriPatternGenerator
 
 
-    def includeme(config):
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
+
         STUFF = SQLAlchemyProvider(
             {
                 'id': 'STUFF',
                 'conceptscheme_id': 1
             },
-            config.registry.dbmaker,
+            request.db,
             uri_generator=UriPatternGenerator(
                 'http://id.mydata.org/thesauri/stuff/%s'
             )
@@ -619,10 +836,11 @@ this:
             }
         )
 
-        skosregis = config.get_skos_registry()
+        registry.register_provider(STUFF)
+        registry.register_provider(AAT)
 
-        skosregis.register_provider(STUFF)
-        skosregis.register_provider(AAT)
+        return registry
+
 
 Now you'll be able to import from the AAT to your heart's delight. For an
 extended example that adds even more providers, you could have a look at the
@@ -641,15 +859,34 @@ datamodel.
 
 The supported file types:
 
-- RDF (.html, .hturtle, .mdata, .microdata, .n3, .nquads, .nt, .rdfa, .rdfa1.0, .rdfa1.1, .trix, .turtle, .xml)
-  using :class:`~skosprovider_rdf.providers.RDFProvider`. This provider supports
-  the full datamodel.
+- RDF using :class:`~skosprovider_rdf.providers.RDFProvider`. This provider supports
+  the full datamodel. Since the heavy lifting is done by `RDFlib`, most of the
+  dialects supported by `RDFlib` should work. The full list can be found in
+  `rdflib.util.SUFFIX_FORMAT_MAP`. Formats like `rdf/xml` and `turtle` should
+  work.
 - CSV (.csv) using :class:`~skosprovider.providers.SimpleCsvProvider`.
   The provider only supports importing and id, a prefLabel, a note and a source.
   It will work well when importing a simple flat list, but not for complex
   hierarchies.
 - JSON (.json) using :class:`~skosprovider.providers.DictionaryProvider`. This
   provider supports the full datamodel.
+
+Some things to take into account:
+
+- Atramhasis only supports concepts with a numeric id. This ensures they can be
+  auto-generated when adding new concepts or collections. These map to the
+  `concept_id` attribute in the database, which is unique per conceptscheme as
+  opposed to the `id` attribute that is unique for the entire database.
+- When importing from an RDF vocabulary, the id will be read from a `dc` or
+  `dcterms` `identifier` property if present. Please ensure this property 
+  contains a numeric id, not a string or a URI.
+- When importing from RDF, the import file could possibly contain more than one
+  conceptscheme. Please ensure only one conceptscheme is present or
+  no conceptschemes are presents and specify the URI and label on the command
+  line.
+- When importing from CSV or JSON, the data file only contains the concepts and
+  collections in the scheme, but not the conceptscheme itself. In this case,
+  please specify the URI and label of the conceptscheme on the command line.
 
 The script can be called through the commandline in the project virtual environment.
 Call it with the `help` argument to see the possible arguments.
@@ -681,9 +918,11 @@ PostGreSQL and SQLite are supported. The structure is either
 `postgresql://username:password@host:port/db_name` or
 either `sqlite:///path/db_name.sqlite`. The default value is `sqlite:///atramhasis.sqlite`.
 
-The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. The
-conceptscheme needs a label. The label can be added to the `conceptscheme_label`
-argument. The default label is the name of the file.
+The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. With a 
+:class:`~skosprovider_rdf.providers.RDFProvider` the conceptscheme can be present
+in the RDF file. The other providers can specify it on the command line
+through the `conceptscheme_label` argument. If no `conceptscheme_label` is present,
+the default label is the name of the file.
 
 Once the data is loaded in the database, the configuration of the added provider must be
 included in the :file:`my_thesaurus/skos/__init__.py`. A successfull run of the
@@ -763,7 +1002,7 @@ We run the following command:
     $ workon my_thesarus
     $ import_file --from my_thesaurus/data/trees.json --to sqlite:///my_thesaurus.sqlite --conceptscheme_label Trees
 
-This will return the following output:
+This will return output similar to this:
 
 .. code-block:: bash
 
@@ -867,17 +1106,23 @@ Just follow these instructions and edit your :file:`my_thesaurus/skos/__init__.p
     # -*- coding: utf-8 -*-
 
     import logging
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     log = logging.getLogger(__name__)
+    
+    from skosprovider.registry import Registry
+    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
 
-    def includeme(config):
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')a
+
         TREES = SQLAlchemyProvider(
                 {'id': 'TREES', 'conceptscheme_id': 11},
-                config.registry.dbmaker
+                request.db
         )
-        skosregis = config.get_skos_registry()
-        skosregis.register_provider(TREES)
+        registry.register_provider(TREES)
+
+        return registry
 
 Now your thesaurus has been successfully imported and is ready to be browsed,
 expanded and edited.

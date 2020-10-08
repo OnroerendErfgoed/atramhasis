@@ -1,51 +1,50 @@
 # pyramid
 pyramid==1.10.4
-pyramid-tm==2.2.1
+pyramid-tm==2.4
 pyramid_rewrite==0.2
 
-skosprovider==0.6.1
-#-e git+https://github.com/koenedaele/skosprovider.git#egg=skosprovider
-skosprovider_sqlalchemy==0.5.2
-#-e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git#egg=skosprovider_sqlalchemy
-pyramid_skosprovider==0.8.0
-#-e git+https://github.com/koenedaele/pyramid_skosprovider.git#egg=pyramid_skosprovider
-skosprovider_rdf==0.6.0
-# -e git+https://github.com/OnroerendErfgoed/skosprovider_rdf.git#egg=skosprovider_rdf
-skosprovider_getty==0.4.2
-#-e git+https://github.com/OnroerendErfgoed/skosprovider_getty.git#egg=skosprovider_getty
-skosprovider_heritagedata==0.3.1
-#-e git+https://github.com/OnroerendErfgoed/skosprovider_heritagedata.git#egg=skosprovider_heritagedata
+skosprovider==0.7.1
+#-e git+https://github.com/koenedaele/skosprovider.git@develop#egg=skosprovider
+skosprovider_sqlalchemy==0.6.0
+#-e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git@0.6.0#egg=skosprovider_sqlalchemy
+pyramid_skosprovider==0.9.0
+#-e git+https://github.com/koenedaele/pyramid_skosprovider.git@0.9.0#egg=pyramid_skosprovider
+skosprovider_rdf==0.8.1
+#-e git+https://github.com/OnroerendErfgoed/skosprovider_rdf.git@develop#egg=skosprovider_rdf
+skosprovider_getty==0.5.1
+#-e git+https://github.com/OnroerendErfgoed/skosprovider_getty.git@0.5.0#egg=skosprovider_getty
 
 #language-tags
-language-tags==0.4.6
+language-tags==0.5.0 ; python_version < '3.6'
+language-tags==1.0.0 ; python_version >= '3.6'
 
 # sqlalchemy
-sqlalchemy==1.3.5
-zope.sqlalchemy==1.1
-transaction==2.4.0
-psycopg2==2.7.7
+sqlalchemy==1.3.18
+zope.sqlalchemy==1.3
+transaction==3.0.0
+psycopg2==2.8.4
 
 # jinja2
-jinja2==2.10.1
+jinja2==2.11.1
 pyramid-jinja2==2.8
-Babel==2.6.0
+Babel==2.8.0
 
 # alembic
-alembic==1.0.7
+alembic==1.4.2
 
 # colander
 colander==1.7.0
 
 # caching
-dogpile.cache==0.7.1
+dogpile.cache==0.9.0
 
 # other
-six==1.12.0
-python-dateutil==2.8.0
-rdflib==4.2.2
+six==1.14.0
+python-dateutil==2.8.1
+rdflib==5.0.0
 html5lib==1.0.1
-bleach==3.1.0
+bleach==3.1.4
 
 # requests
-requests==2.21.0
-cachecontrol==0.12.5
+requests==2.23.0
+cachecontrol==0.12.6
