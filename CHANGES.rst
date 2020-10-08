@@ -18,12 +18,15 @@ pyramid_skosprovider_ docs at https://pyramid-skosprovider.readthedocs.io/en/0.9
 - All requirements were updated to their latest versions. Python versions were
   fixed to 2.7, 3.6, 3.7 and 3.8. If you made custom changes, you might have to
   edit them. (#508, #519, #513, #566)
+- Npm has replaced bower as the package manager for frontend packages and the
+  build process was revised. If you   made custom frontend changes, please 
+  check them thoroughly.(#511)
 - Instantiation of the SKOS registry was changed to work on a per request
   basis. (#346, #490, #535)
 - Fixed a major issue with generating the expanded version of a concept. By
   default the assumption was that concepts in a collection were also narrower
   concepts of the collection's superordinate concept, but the implementation
-  for this was incomplete and contained buggy. This has been changed to an
+  for this was incomplete and contained bugs. This has been changed to an
   boolean attribute `infer_concept_relations`. When set to true, concepts in a
   collection are considerd to be narrower concepts of that collections's
   superordinate concept. This is especially important for a provider's
@@ -32,13 +35,13 @@ pyramid_skosprovider_ docs at https://pyramid-skosprovider.readthedocs.io/en/0.9
 - The docs were updated and now contain a part detailing what Atramhasis does
   with some screenshots. (#495, #583, #440)
 - Default inclusion of skosprovider_heritagedata was removed because the
-  service is too unstable too often. (#537)
+  service is unstable too often. (#537)
 - Improve some SEO by adding canonicul URL's, open graph info, Twitter cards
   and the ability to generate a sitemap through a script. (#530, #531, #496,
   #497)
 - Clean up importing and exporting of conceptschemes to make it easier. (#452,
   #475, #476, #495)
-- Provide a simple, printable version of a thesaurus tree. (#533, 532)
+- Provide a simple, printable version of a thesaurus tree. (#533, #532)
 - Add a script to make removing a conceptscheme easier. Be careful as this will
   drop all concepts, collections and the conceptscheme itself. (#579)
 - Lots of minor improvements and bug fixes.
