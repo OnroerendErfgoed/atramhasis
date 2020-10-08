@@ -19,7 +19,7 @@ pyramid_skosprovider_ docs at https://pyramid-skosprovider.readthedocs.io/en/0.9
   fixed to 2.7, 3.6, 3.7 and 3.8. If you made custom changes, you might have to
   edit them. (#508, #519, #513, #566)
 - Npm has replaced bower as the package manager for frontend packages and the
-  build process was revised. If you   made custom frontend changes, please 
+  build process was revised. If you made custom frontend changes, please
   check them thoroughly.(#511)
 - Instantiation of the SKOS registry was changed to work on a per request
   basis. (#346, #490, #535)
