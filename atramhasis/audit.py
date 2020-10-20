@@ -16,6 +16,8 @@ def _origin_from_request(request):
         return 'HTML'
     elif 'application/json' in request.accept:
         return 'REST'
+    elif 'application/ld+json' in request.accept:
+        return 'RDF'
     else:
         return None
 
