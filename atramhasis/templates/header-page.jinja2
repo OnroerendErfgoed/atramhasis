@@ -14,7 +14,7 @@
       <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
       <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
     </ul>
-    <form id="search-form" method="get" action="#" name="searchForm" class="top-bar-section">
+    <form onsubmit="return validateForm()" id="search-form" method="get" action="#" name="searchForm" class="top-bar-section">
       <!-- Right Nav Section -->
       <ul class="right">
         <li class="divider"></li>
@@ -41,23 +41,23 @@
         <li class="has-form">
           <div class="row collapse">
             <div class="left"><input name="label" id="label" type="text" class="search-input-top" placeholder="{% trans %}search_for{% endtrans %} {% trans %}labels{% endtrans %}"/></div>
-            <div class="left"><a onclick="submitForm();"><span class="ico ico-mglass"></span></a></div>
+            <div class="left"><button type="submit"><span class="ico ico-mglass"></span></button></div>
           </div>
         </li>
       </ul>
     </form>
     <script>
-      function submitForm() {
+      function validateForm() {
         var scheme = $('#scheme');
         var schemeVal = scheme.val();
         if (schemeVal && schemeVal !== '') {
-          document.searchForm.submit();
-        } else {
-          scheme.addClass('highlightError');
-          scheme.one('change', function() {
-            scheme.removeClass('highlightError');
-          });
+          return true;
         }
+        scheme.addClass('highlightError');
+        scheme.one('change', function () {
+          scheme.removeClass('highlightError');
+        });
+        return false;
       }
     </script>
   </nav>
