@@ -16,12 +16,15 @@ def _origin_from_request(request):
         return 'HTML'
     elif 'application/json' in request.accept:
         return 'REST'
+    elif 'application/ld+json' in request.accept:
+        return 'RDF'
     else:
         return None
 
 
 def _origin_from_response(response):
     if response.content_type == 'application/rdf+xml' \
+            or response.content_type == 'application/ld+json' \
             or response.content_type == 'text/turtle' \
             or response.content_type == 'application/x-turtle':
         return 'RDF'
