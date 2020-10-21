@@ -5,7 +5,7 @@
 
 <div class="large-6 columns home-search-placer">
   <div class="home-img_position">
-    <form id="search-form" action="#" method="get" name="searchForm">
+    <form onsubmit="return validateForm()" id="search-form" action="#" method="get" name="searchForm">
 
       <select id="scheme">
         <option value="" selected>{% trans %}select_scheme{% endtrans %}</option>
@@ -26,25 +26,25 @@
       <input type="text" name="label" id="label" placeholder="{% trans %}search_for{% endtrans %} {% trans %}labels{% endtrans %}">
 
       <div class="text-center">
-        <a onclick="submitForm()"><span class="ico ico-mglass-large"></span></a>
+        <button type="submit"><span class="ico ico-mglass-large"></span></button>
       </div>
-    <script>
-      function submitForm() {
-        var scheme = $('#scheme');
-        var schemeVal = scheme.val();
-        if (schemeVal && schemeVal !== '') {
-          document.searchForm.submit();
-        } else {
+      <script>
+        function validateForm() {
+          var scheme = $('#scheme');
+          var schemeVal = scheme.val();
+          if (schemeVal && schemeVal !== '') {
+            return true;
+          }
           scheme.addClass('highlightError');
           $('.highlightErrorText').remove();
           var msg = $('<small class="highlightErrorText">{% trans %}select_scheme_error{% endtrans %}</small>').insertAfter(scheme);
-          scheme.one('change', function() {
+          scheme.one('change', function () {
             scheme.removeClass('highlightError');
             msg.remove();
           });
+          return false;
         }
-      }
-    </script>
+      </script>
     </form>
     <div class="text-center">
       <img src="{{ request.static_path(app_package + ':static/img/headimg.png') }}" width="230">
