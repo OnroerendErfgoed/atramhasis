@@ -4,6 +4,7 @@ import os
 
 from pyramid.response import Response, FileResponse
 from pyramid.view import view_defaults, view_config
+from pyramid_skosprovider.views import ProviderView
 from skosprovider_rdf import utils
 
 from atramhasis.errors import (
@@ -119,3 +120,15 @@ class AtramhasisRDF(object):
         response.body = graph.serialize(format='turtle')
         response.content_disposition = 'attachment; filename="%s.ttl"' % (str(self.c_id),)
         return response
+
+    @audit
+    @view_config(route_name='atramhasis.rdf_conceptscheme_jsonld', permission='view', renderer='skosjsonld')
+    @view_config(route_name='atramhasis.rdf_conceptscheme_jsonld_ext', permission='view', renderer='skosjsonld')
+    def get_conceptscheme_jsonld(self):
+        return ProviderView(self.request).get_conceptscheme_jsonld()
+
+    @audit
+    @view_config(route_name='atramhasis.rdf_individual_jsonld', permission='view', renderer='skosjsonld')
+    @view_config(route_name='atramhasis.rdf_individual_jsonld_ext', permission='view', renderer='skosjsonld')
+    def get_concept(self):
+        return ProviderView(self.request).get_concept()
