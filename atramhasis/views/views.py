@@ -196,7 +196,7 @@ class AtramhasisView(object):
                 concepts = provider.find({'type': ctype}, language=self.request.locale_name, sort='label')
             else:
                 concepts = provider.get_all(language=self.request.locale_name, sort='label')
-            return {'concepts': concepts, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
+            return {'concepts': concepts, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes, 'ctype': ctype, 'label': label}
         return Response(content_type='text/plain', status_int=404)
 
     @view_config(route_name='locale')
