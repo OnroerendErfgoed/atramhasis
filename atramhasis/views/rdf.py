@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-
 import os
 
+from pyramid import compat
+from pyramid.renderers import render
 from pyramid.response import Response, FileResponse
 from pyramid.view import view_defaults, view_config
 from pyramid_skosprovider.views import ProviderView
@@ -122,13 +123,21 @@ class AtramhasisRDF(object):
         return response
 
     @audit
-    @view_config(route_name='atramhasis.rdf_conceptscheme_jsonld', permission='view', renderer='skosjsonld')
-    @view_config(route_name='atramhasis.rdf_conceptscheme_jsonld_ext', permission='view', renderer='skosjsonld')
+    @view_config(route_name='atramhasis.rdf_conceptscheme_jsonld', permission='view')
+    @view_config(route_name='atramhasis.rdf_conceptscheme_jsonld_ext', permission='view')
     def get_conceptscheme_jsonld(self):
-        return ProviderView(self.request).get_conceptscheme_jsonld()
+        conceptscheme = ProviderView(self.request).get_conceptscheme_jsonld()
+        response = Response(content_type='application/ld+json')
+        response.text = compat.text_(render('skosjsonld', conceptscheme, self.request))
+        response.content_disposition = 'attachment; filename="%s.jsonld"' % (str(self.scheme_id),)
+        return response
 
     @audit
-    @view_config(route_name='atramhasis.rdf_individual_jsonld', permission='view', renderer='skosjsonld')
-    @view_config(route_name='atramhasis.rdf_individual_jsonld_ext', permission='view', renderer='skosjsonld')
+    @view_config(route_name='atramhasis.rdf_individual_jsonld', permission='view')
+    @view_config(route_name='atramhasis.rdf_individual_jsonld_ext', permission='view')
     def get_concept(self):
-        return ProviderView(self.request).get_concept()
+        concept = ProviderView(self.request).get_concept()
+        response = Response(content_type='application/ld+json')
+        response.text = compat.text_(render('skosjsonld', concept, self.request))
+        response.content_disposition = 'attachment; filename="%s.jsonld"' % (str(self.c_id),)
+        return response

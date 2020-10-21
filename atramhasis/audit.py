@@ -24,6 +24,7 @@ def _origin_from_request(request):
 
 def _origin_from_response(response):
     if response.content_type == 'application/rdf+xml' \
+            or response.content_type == 'application/ld+json' \
             or response.content_type == 'text/turtle' \
             or response.content_type == 'application/x-turtle':
         return 'RDF'

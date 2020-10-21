@@ -32,6 +32,7 @@
         <ul class="downloadtop right">
           <li>DOWNLOAD</li>
           <li><a href="{{ request.route_path('atramhasis.rdf_individual_export_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">RDF/XML</a></li>
+          <li><a href="{{ request.route_path('atramhasis.rdf_individual_jsonld_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">JSON/LD</a></li>
           <li><a href="{{ request.route_path('atramhasis.rdf_individual_export_turtle_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">N3/Turtle</a></li>
         </ul>
       </div>
