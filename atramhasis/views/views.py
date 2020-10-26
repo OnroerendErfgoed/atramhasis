@@ -151,6 +151,9 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
+        label = self._read_request_param('label')
+        ctype = self._read_request_param('ctype')
+        
         if not provider:
             raise ConceptSchemeNotFoundException(scheme_id)
         if 'atramhasis.force_display_label_language' in provider.metadata:
@@ -169,7 +172,7 @@ class AtramhasisView(object):
             update_last_visited_concepts(self.request, {'label': c.label(self.request.locale_name).label, 'url': url})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
                     'conceptschemes': conceptschemes, 'provider': provider,
-                    'locale': locale}
+                    'locale': locale, 'ctype': ctype, 'label': label}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
