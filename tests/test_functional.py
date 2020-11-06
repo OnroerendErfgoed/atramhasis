@@ -723,6 +723,26 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 
+    def test_rdf_conceptscheme_jsonld(self):
+        res = self.testapp.get('/conceptschemes/MATERIALS', headers={'Accept': 'application/ld+json'})
+        self.assertEqual('200 OK', res.status)
+        self.assertEqual('application/ld+json', res.content_type)
+
+    def test_rdf_conceptscheme_jsonld_ext(self):
+        res = self.testapp.get('/conceptschemes/MATERIALS.jsonld')
+        self.assertEqual('200 OK', res.status)
+        self.assertEqual('application/ld+json', res.content_type)
+
+    def test_rdf_individual_jsonld(self):
+        res = self.testapp.get('/conceptschemes/MATERIALS/c/1', headers={'Accept': 'application/ld+json'})
+        self.assertEqual('200 OK', res.status)
+        self.assertEqual('application/ld+json', res.content_type)
+
+    def test_rdf_individual_jsonld_ext(self):
+        res = self.testapp.get('/conceptschemes/MATERIALS/c/1.jsonld')
+        self.assertEqual('200 OK', res.status)
+        self.assertEqual('application/ld+json', res.content_type)
+
     def test_rdf_individual_xml(self):
         rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c/1', headers={'Accept': 'application/rdf+xml'})
         self.assertEqual('200 OK', rdf_response.status)

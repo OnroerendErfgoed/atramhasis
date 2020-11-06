@@ -27,6 +27,8 @@ def includeme(config):
     config.add_route('atramhasis.rdf_conceptscheme_export_turtle_ext', pattern='/conceptschemes/{scheme_id}.ttl')
     config.add_route('atramhasis.rdf_individual_export_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.rdf')
     config.add_route('atramhasis.rdf_individual_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.ttl')
+    config.add_route('atramhasis.rdf_conceptscheme_jsonld_ext', pattern='/conceptschemes/{scheme_id}.jsonld')
+    config.add_route('atramhasis.rdf_individual_jsonld_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.jsonld')
 
     config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html', request_method="GET")
     config.add_route('conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='text/html', request_method="GET")
@@ -83,3 +85,7 @@ def includeme(config):
                      accept='text/turtle')
     config.add_route('atramhasis.rdf_individual_export_turtle_x', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='application/x-turtle')
+    config.add_route('atramhasis.rdf_conceptscheme_jsonld', pattern='/conceptschemes/{scheme_id}',
+                     accept='application/ld+json')
+    config.add_route('atramhasis.rdf_individual_jsonld', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
+                     accept='application/ld+json')

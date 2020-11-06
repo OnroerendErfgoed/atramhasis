@@ -151,6 +151,9 @@ class AtramhasisView(object):
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
+        label = self._read_request_param('label')
+        ctype = self._read_request_param('ctype')
+        
         if not provider:
             raise ConceptSchemeNotFoundException(scheme_id)
         if 'atramhasis.force_display_label_language' in provider.metadata:
@@ -166,10 +169,10 @@ class AtramhasisView(object):
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
             url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
-            update_last_visited_concepts(self.request, {'label': c.label(self.request.locale_name).label, 'url': url})
+            update_last_visited_concepts(self.request, {'label': c.label(locale).label, 'url': url})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
                     'conceptschemes': conceptschemes, 'provider': provider,
-                    'locale': locale}
+                    'locale': locale, 'ctype': ctype, 'label': label}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
@@ -190,13 +193,17 @@ class AtramhasisView(object):
         ctype = self._read_request_param('ctype')
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
-            if label is not None:
-                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name, sort='label')
-            elif (label is None) and (ctype is not None):
-                concepts = provider.find({'type': ctype}, language=self.request.locale_name, sort='label')
+            if 'atramhasis.force_display_label_language' in provider.metadata:
+                locale = provider.metadata['atramhasis.force_display_label_language']
             else:
-                concepts = provider.get_all(language=self.request.locale_name, sort='label')
-            return {'concepts': concepts, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes}
+                locale = self.request.locale_name
+            if label is not None:
+                concepts = provider.find({'label': label, 'type': ctype}, language=locale, sort='label')
+            elif (label is None) and (ctype is not None):
+                concepts = provider.find({'type': ctype}, language=locale, sort='label')
+            else:
+                concepts = provider.get_all(language=locale, sort='label')
+            return {'concepts': concepts, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes, 'ctype': ctype, 'label': label}
         return Response(content_type='text/plain', status_int=404)
 
     @view_config(route_name='locale')

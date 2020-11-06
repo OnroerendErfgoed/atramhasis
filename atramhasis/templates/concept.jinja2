@@ -3,19 +3,19 @@
   {{ super() }}
   <meta name="og:type" content="website" />
   <meta name="og:url" content="{{ request.route_url('concept', scheme_id=scheme_id, c_id=concept.concept_id) }}" />
-  <meta name="og:title" content="{{ concept.label(request.locale_name).label|safe }}" />
+  <meta name="og:title" content="{{ concept.label(locale).label|safe }}" />
   {% if concept.notes|length > 0 %}
     <meta name="og:description" content="{{ concept.notes[0]|safe }}" />
   {% endif %}
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="{{ request.registry.settings['twitter.site']}}" />
-  <meta name="twitter:title" content="{{ concept.label(request.locale_name).label|safe }}" />
+  <meta name="twitter:title" content="{{ concept.label(locale).label|safe }}" />
   {% if concept.notes|length > 0 %}
     <meta name="twitter:description" content="{{ concept.notes[0]|safe }}" />
   {% endif %}
   <link rel="canonical" href="{{ request.route_url('concept', scheme_id=scheme_id, c_id=concept.concept_id) }}" />
 {% endblock %}
-{% block html_title %}{{ concept.label(request.locale_name).label|title }}{% endblock %}
+{% block html_title %}{{ concept.label(locale).label|title }}{% endblock %}
 
 {% from "macros.jinja2" import
     render_relaties_lijst,
@@ -32,6 +32,7 @@
         <ul class="downloadtop right">
           <li>DOWNLOAD</li>
           <li><a href="{{ request.route_path('atramhasis.rdf_individual_export_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">RDF/XML</a></li>
+          <li><a href="{{ request.route_path('atramhasis.rdf_individual_jsonld_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">JSON/LD</a></li>
           <li><a href="{{ request.route_path('atramhasis.rdf_individual_export_turtle_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">N3/Turtle</a></li>
         </ul>
       </div>
