@@ -1,4 +1,4 @@
-0.7.0 (??-10-2020)
+0.7.0 (06-11-2020)
 ------------------
 
 This releases is a new major release with some new features and some backwards
