@@ -178,7 +178,7 @@ class HtmlFunctionalTests(FunctionalTests):
 
 class CsvFunctionalTests(FunctionalTests):
     def test_get_csv(self):
-        response = self.testapp.get('/conceptschemes/TREES/c.csv?ctype=collection&label=')
+        response = self.testapp.get('/conceptschemes/TREES/c.csv?type=collection&label=')
         self.assertEqual('200 OK', response.status)
         self.assertIn('text/csv', response.headers['Content-Type'])
         self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
