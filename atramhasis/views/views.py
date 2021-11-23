@@ -152,7 +152,7 @@ class AtramhasisView(object):
         c_id = self.request.matchdict['c_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
         label = self._read_request_param('label')
-        ctype = self._read_request_param('ctype')
+        requested_type = self._read_request_param('type')
         
         if not provider:
             raise ConceptSchemeNotFoundException(scheme_id)
@@ -172,7 +172,7 @@ class AtramhasisView(object):
             update_last_visited_concepts(self.request, {'label': c.label(locale).label, 'url': url})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
                     'conceptschemes': conceptschemes, 'provider': provider,
-                    'locale': locale, 'ctype': ctype, 'label': label}
+                    'locale': locale, 'type': requested_type, 'label': label}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
@@ -190,7 +190,7 @@ class AtramhasisView(object):
 
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
-        ctype = self._read_request_param('ctype')
+        requested_type = self._read_request_param('type')
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if 'atramhasis.force_display_label_language' in provider.metadata:
@@ -198,12 +198,24 @@ class AtramhasisView(object):
             else:
                 locale = self.request.locale_name
             if label is not None:
-                concepts = provider.find({'label': label, 'type': ctype}, language=locale, sort='label')
-            elif (label is None) and (ctype is not None):
-                concepts = provider.find({'type': ctype}, language=locale, sort='label')
+                concepts = provider.find(
+                    {'label': label, 'type': requested_type},
+                    language=locale,
+                    sort='label'
+                )
+            elif (label is None) and (requested_type is not None):
+                concepts = provider.find(
+                    {'type': requested_type}, language=locale, sort='label'
+                )
             else:
                 concepts = provider.get_all(language=locale, sort='label')
-            return {'concepts': concepts, 'scheme_id': scheme_id, 'conceptschemes': conceptschemes, 'ctype': ctype, 'label': label}
+            return {
+                'concepts': concepts,
+                'scheme_id': scheme_id,
+                'conceptschemes': conceptschemes,
+                'type': requested_type,
+                'label': label
+            }
         return Response(content_type='text/plain', status_int=404)
 
     @view_config(route_name='locale')
@@ -238,13 +250,17 @@ class AtramhasisView(object):
         rows = []
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
-        ctype = self._read_request_param('ctype')
+        requested_type = self._read_request_param('type')
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
-                concepts = self.conceptscheme_manager.find(provider.conceptscheme_id, {'label': label, 'type': ctype})
-            elif (label is None) and (ctype is not None):
-                concepts = self.conceptscheme_manager.find(provider.conceptscheme_id, {'type': ctype})
+                concepts = self.conceptscheme_manager.find(
+                    provider.conceptscheme_id, {'label': label, 'type': requested_type}
+                )
+            elif (label is None) and (requested_type is not None):
+                concepts = self.conceptscheme_manager.find(
+                    provider.conceptscheme_id, {'type': requested_type}
+                )
             else:
                 concepts = self.conceptscheme_manager.get_all(provider.conceptscheme_id)
             for concept in concepts:

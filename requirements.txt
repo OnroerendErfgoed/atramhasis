@@ -15,7 +15,7 @@ skosprovider_getty==0.5.1
 #-e git+https://github.com/OnroerendErfgoed/skosprovider_getty.git@0.5.0#egg=skosprovider_getty
 
 #language-tags
-language-tags==0.5.0 ; python_version < '3.6'
+#language-tags==0.5.0 ; python_version < '3.6'
 language-tags==1.0.0 ; python_version >= '3.6'
 
 # sqlalchemy

@@ -15,7 +15,7 @@
         </ul>
       </div>
       {%- for c in concepts %}
-        <div class="large-3 large-3-pad columns result-grid"><a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}?ctype={{ctype}}&label={% if label is not none %}{{label}}{% endif %}"><h5>{{ c.label }}</h5> <span> [ ID : {{ c.id }} ]</span><br><small>{{ c.type }}</small></a></div>
+        <div class="large-3 large-3-pad columns result-grid"><a href="{{ request.route_path('concept', scheme_id= scheme_id, c_id = c.id) }}?type={{type}}&label={% if label is not none %}{{label}}{% endif %}"><h5>{{ c.label }}</h5> <span> [ ID : {{ c.id }} ]</span><br><small>{{ c.type }}</small></a></div>
       {%- endfor %}
     </div>
   </div>
