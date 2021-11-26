@@ -4,8 +4,9 @@
 
 {% set app_package = app_package|default('atramhasis', true) -%}
 {% set app_name = app_name|default('Atramhasis') %}
-{% set copyright_year = copyright_year|default('2014-2020') %}
-
+{% set copyright_year = copyright_year|default('2014-2021') %}
+{% set plausible_data_domain = request.registry.settings["plausible.data_domain"] %}
+{% set plausible_omgeving = request.registry.settings["plausible.omgeving"] %}
 <head>
 {% block head %}
   <meta charset="utf-8" />
@@ -29,11 +30,17 @@
     <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.cookie.js') }}"></script>
   {% endblock %}
 
-  {% block ga %}
-    {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
-    {% from 'macros.jinja2' import ga_tracker %}
-    {% if ga_key %}
-      {{ ga_tracker(ga_key) }}
+  {% block plausible %}
+    {% set plausible_data_domain = plausible_data_domain|default(request.registry.settings["plausible.data_domain"]) %}
+    {% set plausible_omgeving = plausible_omgeving|default('dev') %}
+    {% if plausible_omgeving in ('dev', 'test') %}
+      {% set omgeving = plausible_omgeving + '-' %}
+    {% else %}
+      {% set omgeving = '' %}
+    {% endif %}
+    {% if plausible_data_domain %}
+    	{% from 'macros.jinja2' import plausible_tracker %}
+      {{ plausible_tracker(plausible_data_domain, omgeving) }}
     {% endif %}
   {% endblock %}
 {% endblock %}
@@ -63,6 +70,17 @@
 {% block vl_footer %}
 {% endblock %}
 
+{% block cookiebanner %}
+  {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
+  {% set show_cookie_banner = show_cookie_banner|default(request.registry.settings["cookie_banner"]) %}
+  {% if show_cookie_banner == 'True' %}
+    {% from 'macros.jinja2' import cookie_banner %}
+    {{ cookie_banner(request, app_package, ga_key) }}
+  {% else %}
+    {% from 'macros.jinja2' import ga_tracker %}
+    {{ ga_tracker(ga_key) }}
+  {% endif %}
+{% endblock %}
 {% block custom_js %}{% endblock %}
 </body>
 </html>

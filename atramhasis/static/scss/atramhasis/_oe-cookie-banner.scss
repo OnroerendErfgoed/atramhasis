@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+@media only screen and (max-device-width: 640px) {
+
+    /* Styles */
+    .cc-window.cc-banner.cc-type-opt-out.cc-theme-classic.cc-bottom.cc-color-override-1025685691 {
+        padding-left: 1.8em !important;
+        padding-right: 1.8em !important
+    }
+}
+
+.cc-window.cc-banner.cc-type-opt-out.cc-theme-classic.cc-bottom.cc-color-override-1025685691 {
+    flex-wrap: wrap;
+    padding-right: 20%;
+    padding-left: 20%;
+    justify-content: center;
+    border-top: solid 2px #914f9a;
+    box-shadow: 0 -2px 2px 0px rgba(2, 23, 16, 0.1);
+    font-size: 15px;
+}
+
+.cc-window.cc-banner.cc-type-opt-out.cc-theme-classic.cc-bottom.cc-color-override-1025685691 a {
+    text-decoration: underline;
+    color: #0075DB;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.cc-window.cc-banner.cc-type-opt-out.cc-theme-classic.cc-bottom.cc-color-override-1025685691 a:hover {
+    text-decoration: none;
+}
+
+.cc-window.cc-banner.cc-type-opt-out.cc-theme-classic.cc-bottom.cc-color-override-1025685691 a.cc-btn.cc-allow {
+    text-decoration: none !important;
+    color: #fff !important;
+    margin-left: 1rem;
+}
+
+span#cookieconsent:desc {
+    margin-bottom: 0.5rem;
+}
