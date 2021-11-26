@@ -4,6 +4,7 @@ Routes for the Atramhasis views.
 
 .. versionadded:: 0.4.4
 """
+import os
 
 
 def includeme(config):
@@ -15,6 +16,13 @@ def includeme(config):
 
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.add_route('home', '/')
+
+    # Configure pyramid_openapi3 integration
+    config.pyramid_openapi3_spec(
+        os.path.join(os.path.dirname(__file__), "openapi.yaml"),
+        route="/api_doc/openapi.yaml",
+    )
+    config.pyramid_openapi3_add_explorer(route="/api_doc")
 
     config.add_static_view('sitemaps', 'static/_sitemaps/', cache_max_age=3600)
     config.add_static_view('static', 'static', cache_max_age=3600)

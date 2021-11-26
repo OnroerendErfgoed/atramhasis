@@ -2,6 +2,8 @@
 pyramid==1.10.4
 pyramid-tm==2.4
 pyramid_rewrite==0.2
+openapi-core==0.13.8
+pyramid_openapi3==0.11
 
 skosprovider==0.7.1
 #-e git+https://github.com/koenedaele/skosprovider.git@develop#egg=skosprovider
