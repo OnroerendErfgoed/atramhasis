@@ -159,11 +159,11 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro plausible_tracker(plausible_data_domain, omgeving) %}
+{# {% macro plausible_tracker(plausible_data_domain, omgeving) %}
     <!-- Plausible Analytics -->
     <script async defer data-domain="{{ plausible_data_domain }}" src="https://{{ omgeving }}webstats.onroerenderfgoed.be/js/plausible.js"></script>
     <!-- End Plausible Analytics -->
-{% endmacro %}
+{% endmacro %} #}
 
 {% macro cookie_banner(request, app_package, ga_key) %} 
   <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/bower_components/cookieconsent/build/cookieconsent.min.css') }}" />

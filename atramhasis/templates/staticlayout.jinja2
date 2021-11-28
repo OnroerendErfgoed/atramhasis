@@ -30,7 +30,7 @@
     <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.cookie.js') }}"></script>
   {% endblock %}
 
-  {% block plausible %}
+  {# {% block plausible %}
     {% set plausible_data_domain = plausible_data_domain|default(request.registry.settings["plausible.data_domain"]) %}
     {% set plausible_omgeving = plausible_omgeving|default('dev') %}
     {% if plausible_omgeving in ('dev', 'test') %}
@@ -42,7 +42,7 @@
     	{% from 'macros.jinja2' import plausible_tracker %}
       {{ plausible_tracker(plausible_data_domain, omgeving) }}
     {% endif %}
-  {% endblock %}
+  {% endblock %} #}
 {% endblock %}
 </head>
 <body>
@@ -71,7 +71,8 @@
 {% endblock %}
 
 {% block cookiebanner %}
-  {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
+  <h1>Dit is een test!</h1>
+  {# {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
   {% set show_cookie_banner = show_cookie_banner|default(request.registry.settings["cookie_banner"]) %}
   {% if show_cookie_banner == 'True' %}
     {% from 'macros.jinja2' import cookie_banner %}
@@ -79,7 +80,7 @@
   {% else %}
     {% from 'macros.jinja2' import ga_tracker %}
     {{ ga_tracker(ga_key) }}
-  {% endif %}
+  {% endif %} #}
 {% endblock %}
 {% block custom_js %}{% endblock %}
 </body>
