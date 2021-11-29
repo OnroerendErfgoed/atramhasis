@@ -31,7 +31,6 @@
   {% endblock %}
 
   {% block plausible %}
-    <h1>Dit is een test</h1>
     {% set plausible_data_domain = plausible_data_domain|default(request.registry.settings["plausible.data_domain"]) %}
     {% set plausible_omgeving = plausible_omgeving|default('dev') %}
     {% if plausible_omgeving in ('dev', 'test') %}

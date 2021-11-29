@@ -3,6 +3,20 @@
 {% set app_name = app_name|default('Atramhasis') %}
 {% set copyright_year = copyright_year|default('2014-2020') %}
 
+{% block plausible %}
+  {% set plausible_data_domain = plausible_data_domain|default(request.registry.settings["plausible.data_domain"]) %}
+  {% set plausible_omgeving = plausible_omgeving|default('dev') %}
+  {% if plausible_omgeving in ('dev', 'test') %}
+    {% set omgeving = plausible_omgeving + '-' %}
+  {% else %}
+    {% set omgeving = '' %}
+  {% endif %}
+  {% if plausible_data_domain %}
+  	{% from 'macros.jinja2' import plausible_tracker %}
+    {{ plausible_tracker(plausible_data_domain, omgeving) }}
+  {% endif %}
+{% endblock %}
+
 {% block js_files_head %}
   <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.cookie.js') }}"></script>
