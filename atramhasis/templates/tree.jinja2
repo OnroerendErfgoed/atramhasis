@@ -68,7 +68,8 @@
 
      // Calculate total nodes, max label length
       var totalNodes = 0;
-      var maxLabelLength = 0;
+      var nodeLengthsByDepth = [];
+
       // panning variables
       var panSpeed = 200;
       var panBoundary = 20; // Within 20px from edges will pan when dragging.
@@ -99,31 +100,32 @@
 
       // A recursive helper function for performing some setup by walking through all nodes
 
-      function visit(parent, visitFn, childrenFn) {
+      function visit(parent, visitFn, childrenFn, depth) {
         if (!parent) return;
 
-        visitFn(parent);
+        visitFn(parent, depth);
 
         var children = childrenFn(parent);
         if (children) {
           var count = children.length;
           for (var i = 0; i < count; i++) {
-            visit(children[i], visitFn, childrenFn);
+            visit(children[i], visitFn, childrenFn, depth + 1);
           }
         }
       }
 
       // Call visit function to establish maxLabelLength
-      visit(treeData, function(d) {
-        totalNodes++;
-        if (d.label) {
-          maxLabelLength = Math.max(d.label.length, maxLabelLength);
+      visit(treeData, function(d, depth) {
+        var labelLength = d.label ? d.label.length : '{{ scheme_id }}'.length;
+        if (nodeLengthsByDepth.length === depth){
+          nodeLengthsByDepth.push(labelLength);
         } else {
-          maxLabelLength = Math.max('{{ scheme_id }}'.length, maxLabelLength);
+          nodeLengthsByDepth[depth] = Math.max(labelLength, nodeLengthsByDepth[depth]);
         }
+        totalNodes++;
       }, function(d) {
         return d.children && d.children.length > 0 ? d.children : null;
-      });
+      }, 0);
 
       function pan(domNode, direction) {
         var speed = panSpeed;
@@ -287,7 +289,10 @@
 
         // Set widths between levels based on maxLabelLength.
         nodes.forEach(function(d) {
-          d.y = (d.depth * (maxLabelLength * 5)); //maxLabelLength * 6px
+          var lengths = nodeLengthsByDepth.slice(0, d.depth + 1);
+          d.y =  lengths.reduce(function (sum, length) {
+            return sum + (length * 7); // length * 7px
+          });
           // alternatively to keep a fixed scale one can set a fixed depth per level
           // Normalize for fixed-depth by commenting out below line
           // d.y = (d.depth * 500); //500px per level.
