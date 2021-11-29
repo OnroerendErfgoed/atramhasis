@@ -31,17 +31,7 @@
   {% endblock %}
 
   {% block plausible %}
-    {% set plausible_data_domain = plausible_data_domain|default(request.registry.settings["plausible.data_domain"]) %}
-    {% set plausible_omgeving = plausible_omgeving|default('dev') %}
-    {% if plausible_omgeving in ('dev', 'test') %}
-      {% set omgeving = plausible_omgeving + '-' %}
-    {% else %}
-      {% set omgeving = '' %}
-    {% endif %}
-    {% if plausible_data_domain %}
-    	{% from 'macros.jinja2' import plausible_tracker %}
-      {{ plausible_tracker(plausible_data_domain, omgeving) }}
-    {% endif %}
+    {{super()}}
   {% endblock %}
 {% endblock %}
 </head>
@@ -70,7 +60,9 @@
 {% block vl_footer %}
 {% endblock %}
 
-{% block cookiebanner %}{% endblock %}
+{% block cookiebanner %}
+  {{ super() }}
+{% endblock %}
 
 {% block custom_js %}{% endblock %}
 </body>
