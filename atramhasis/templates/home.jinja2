@@ -35,7 +35,7 @@
 
 {% block cookiebanner %}
   <h1>Dit is een test!</h1>
-  {# {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
+  {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
   {% set show_cookie_banner = show_cookie_banner|default(request.registry.settings["cookie_banner"]) %}
   {% if show_cookie_banner == 'True' %}
     {% from 'macros.jinja2' import cookie_banner %}
@@ -43,7 +43,7 @@
   {% else %}
     {% from 'macros.jinja2' import ga_tracker %}
     {{ ga_tracker(ga_key) }}
-  {% endif %} #}
+  {% endif %}
 {% endblock %}
 
 {% block custom_js %}{% endblock %}
