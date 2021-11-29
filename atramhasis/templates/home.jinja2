@@ -34,7 +34,6 @@
 {% endblock %}
 
 {% block cookiebanner %}
-  <h1>Dit is een test!</h1>
   {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
   {% set show_cookie_banner = show_cookie_banner|default(request.registry.settings["cookie_banner"]) %}
   {% if show_cookie_banner == 'True' %}

@@ -166,9 +166,9 @@
 {% endmacro %} #}
 
 {% macro cookie_banner(request, app_package, ga_key) %} 
-  <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/bower_components/cookieconsent/build/cookieconsent.min.css') }}" />
+  <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/node_modules/cookieconsent/build/cookieconsent.min.css') }}" />
   <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/css/app.css') }}" />
-  <script type="text/javascript" src="{{ request.static_path(app_package + ':static/bower_components/cookieconsent/build/cookieconsent.min.js') }}"></script>
+  <script type="text/javascript" src="{{ request.static_path(app_package + ':static/node_modules/cookieconsent/build/cookieconsent.min.js') }}"></script>
 
   <script type="text/javascript">
     var ga_key = "{{ga_key}}";
