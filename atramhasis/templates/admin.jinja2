@@ -1,4 +1,6 @@
 {% set app_package = app_package|default('atramhasis', true) -%}
+{% set plausible_data_domain = request.registry.settings["plausible.data_domain"] %}
+{% set plausible_omgeving = request.registry.settings["plausible.omgeving"] %}
 {% if request.registry.settings['dojo.mode'] == 'dist' %}
   {% set release_dir = app_package + ':static/admin/dist' %}
   {% set modules_dir = app_package + ':static/admin/dist' %}
