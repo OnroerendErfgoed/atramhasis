@@ -172,7 +172,6 @@
     {% set omgeving = '' %}
   {% endif %}
   {% if plausible_data_domain %}
-   {% from 'pyoes/macros.jinja2' import plausible_tracker %}
     {{ plausible_tracker(plausible_data_domain, omgeving) }}
   {% endif %}
 {% endmacro %}
