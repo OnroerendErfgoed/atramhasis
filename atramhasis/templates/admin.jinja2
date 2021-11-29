@@ -1,6 +1,4 @@
 {% set app_package = app_package|default('atramhasis', true) -%}
-{% set plausible_data_domain = request.registry.settings["plausible.data_domain"] %}
-{% set plausible_omgeving = request.registry.settings["plausible.omgeving"] %}
 {% if request.registry.settings['dojo.mode'] == 'dist' %}
   {% set release_dir = app_package + ':static/admin/dist' %}
   {% set modules_dir = app_package + ':static/admin/dist' %}
@@ -22,8 +20,6 @@
           {{ ga_tracker(ga_key) }}
       {% endif %}
   {% endblock %}
-  {% from 'macros.jinja2' import add_plausible_code %}
-  {{add_plausible_code(plausible_data_domain, plausible_omgeving)}}
 </head>
 
 <body class="claro">
