@@ -165,6 +165,18 @@
     <!-- End Plausible Analytics -->
 {% endmacro %}
 
+{% macro add_plausible_code(plausible_data_domain, plausible_omgeving) %}
+  {% if plausible_omgeving in ('dev', 'test') %}
+    {% set omgeving = plausible_omgeving + '-' %}
+  {% else %}
+    {% set omgeving = '' %}
+  {% endif %}
+  {% if plausible_data_domain %}
+   {% from 'pyoes/macros.jinja2' import plausible_tracker %}
+    {{ plausible_tracker(plausible_data_domain, omgeving) }}
+  {% endif %}
+{% endmacro %}
+
 {% macro cookie_banner(request, app_package, ga_key) %} 
   <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/node_modules/cookieconsent/build/cookieconsent.min.css') }}" />
   <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/css/app.css') }}" />
