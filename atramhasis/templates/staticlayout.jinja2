@@ -30,7 +30,8 @@
     <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.cookie.js') }}"></script>
   {% endblock %}
 
-  {# {% block plausible %}
+  {% block plausible %}
+    <h1>Dit is een test</h1>
     {% set plausible_data_domain = plausible_data_domain|default(request.registry.settings["plausible.data_domain"]) %}
     {% set plausible_omgeving = plausible_omgeving|default('dev') %}
     {% if plausible_omgeving in ('dev', 'test') %}
@@ -42,7 +43,7 @@
     	{% from 'macros.jinja2' import plausible_tracker %}
       {{ plausible_tracker(plausible_data_domain, omgeving) }}
     {% endif %}
-  {% endblock %} #}
+  {% endblock %}
 {% endblock %}
 </head>
 <body>
