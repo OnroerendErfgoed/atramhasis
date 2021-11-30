@@ -1,43 +1,24 @@
 import csv
-import codecs
+from io import StringIO
 
-from six import StringIO, text_type, PY2
 from pyramid.renderers import JSON
-from skosprovider_sqlalchemy.models import Collection, Concept, Label, Note, Source, Language, ConceptScheme
-from pyramid_skosprovider.renderers import concept_adapter as skos_concept_adapter
 from pyramid_skosprovider.renderers import collection_adapter as skos_collection_adapter
+from pyramid_skosprovider.renderers import concept_adapter as skos_concept_adapter
 from pyramid_skosprovider.renderers import label_adapter as skos_label_adapter
 from pyramid_skosprovider.renderers import note_adapter as skos_note_adapter
 from pyramid_skosprovider.renderers import source_adapter as skos_source_adapter
-from skosprovider.skos import Concept as SkosConcept
 from skosprovider.skos import Collection as SkosCollection
+from skosprovider.skos import Concept as SkosConcept
 from skosprovider.skos import Label as SkosLabel
 from skosprovider.skos import Note as SkosNote
 from skosprovider.skos import Source as SkosSource
-
-
-class UnicodeWriter:
-    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
-        self.stream = f
-        self.writer = csv.writer(self.stream, dialect=dialect, **kwds)
-        self.encoder = codecs.getincrementalencoder(encoding)()
-
-    def writerow(self, row):  # pragma: no cover
-        # some ugly code to support python2
-        if PY2:
-            encoded_row = []
-            for s in row:
-                if isinstance(s, text_type):
-                    encoded_row.append(self.encoder.encode(s))
-                else:
-                    encoded_row.append(s)
-            self.writer.writerow(encoded_row)
-        else:
-            self.writer.writerow(row)
-
-    def writerows(self, rows):
-        for row in rows:
-            self.writerow(row)
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import Language
+from skosprovider_sqlalchemy.models import Note
+from skosprovider_sqlalchemy.models import Source
 
 
 class CSVRenderer(object):
@@ -46,7 +27,7 @@ class CSVRenderer(object):
 
     def __call__(self, value, system):
         f_out = StringIO()
-        writer = UnicodeWriter(f_out, delimiter=',', quoting=csv.QUOTE_ALL)
+        writer = csv.writer(f_out, delimiter=',', quoting=csv.QUOTE_ALL)
 
         writer.writerow(value['header'])
         writer.writerows(value['rows'])

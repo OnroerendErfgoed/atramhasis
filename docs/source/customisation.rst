@@ -16,24 +16,7 @@ instance with only these default settings.
 Creating your own project
 =========================
 
-Whenever you want to run an instance of Atramhasis, you start by creating your
-own project. This is the place where you will maintain and develop your own
-custom templates, static assets such as stylesheets, your security implementation
-and other general configuration. To make it easier on you to get started, we
-provide a scaffold just for this. As always, we advise working in a
-virtual environment.
-
-.. code-block:: bash
-
-    $ mkvirtualenv my_thesaurus
-    $ pip install atramhasis
-    $ pcreate -s atramhasis_scaffold my_thesaurus
-    $ cd my_thesaurus
-    # Install dependencies
-    $ pip install -r requirements-dev.txt
-    # Download and install client side libraries
-    $ cd my_thesaurus/static
-    $ npm install
+Follow the README at `atramhasis_scaffold_cookiecutter <https://github.com/OnroerendErfgoed/atramhasis_scaffold_cookiecutter>`_
 
 This gives you a clean slate to start your customisations on.
 
