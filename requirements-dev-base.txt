@@ -18,7 +18,7 @@ Sphinx==1.8.5 ; python_version < '3.5'
 Sphinx==3.2.0 ; python_version >= '3.5'
 sphinxcontrib-httpdomain==1.7.0
 pygments==2.5.2 ; python_version < '3.5'
-pygments==2.6.1 ; python_version >= '3.5'
+pygments==2.7.4 ; python_version >= '3.5'
 
 # waitress
 waitress==1.4.4
