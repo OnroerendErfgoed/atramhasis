@@ -205,7 +205,7 @@ class AtramhasisCrud(object):
             concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
-        map_concept(concept, validated_json_concept, self.skos_manager)
+        concept = map_concept(concept, validated_json_concept, self.skos_manager)
 
         invalidate_scheme_cache(self.scheme_id)
 
