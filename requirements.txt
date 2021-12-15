@@ -1,28 +1,21 @@
 # pyramid
-pyramid==1.10.4
+pyramid==2.0
 pyramid-tm==2.4
 pyramid_rewrite==0.2
 
-skosprovider==0.7.1
-#-e git+https://github.com/koenedaele/skosprovider.git@develop#egg=skosprovider
+# skosprovider
+skosprovider==1.0.0
 skosprovider_sqlalchemy==0.6.0
-#-e git+https://github.com/koenedaele/skosprovider_sqlalchemy.git@0.6.0#egg=skosprovider_sqlalchemy
-pyramid_skosprovider==0.9.1
-#-e git+https://github.com/koenedaele/pyramid_skosprovider.git@0.9.1#egg=pyramid_skosprovider
+pyramid_skosprovider==1.0.0
 skosprovider_rdf==0.8.1
-#-e git+https://github.com/OnroerendErfgoed/skosprovider_rdf.git@develop#egg=skosprovider_rdf
 skosprovider_getty==0.5.1
-#-e git+https://github.com/OnroerendErfgoed/skosprovider_getty.git@0.5.0#egg=skosprovider_getty
 
-#language-tags
-#language-tags==0.5.0 ; python_version < '3.6'
-language-tags==1.0.0 ; python_version >= '3.6'
+language-tags==1.0.0
 
-# sqlalchemy
+# database
 sqlalchemy==1.3.18
 zope.sqlalchemy==1.3
 transaction==3.0.0
-psycopg2==2.8.4
 
 # jinja2
 jinja2==2.11.3
@@ -32,17 +25,15 @@ Babel==2.9.1
 # alembic
 alembic==1.4.2
 
-# colander
+# validation
 colander==1.7.0
 
 # caching
 dogpile.cache==0.9.0
 
 # other
-six==1.14.0
 python-dateutil==2.8.1
 rdflib==5.0.0
-html5lib==1.0.1
 bleach==3.3.0
 
 # requests
