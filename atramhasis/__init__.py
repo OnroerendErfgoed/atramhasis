@@ -15,6 +15,7 @@ def includeme(config):
     config.add_renderer('skosrenderer_verbose', json_renderer_verbose)
     # Rewrite urls with trailing slash
     config.include('pyramid_rewrite')
+    config.include("pyramid_openapi3")
     config.include('atramhasis.routes')
     config.include('pyramid_skosprovider')
     config.include('atramhasis.cache')
