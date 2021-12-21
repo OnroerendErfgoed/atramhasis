@@ -9,13 +9,84 @@ servers:
 
 paths:
   /conceptschemes/{scheme_id}/c:
+    get:
+      summary: Search for concepts or collections in a scheme.
+      description: Search for concepts or collections in a scheme.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain concept scheme.
+          required: true
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Define if you want to show concepts or collections. Leave
+            blank to show both.
+          required: false
+          schema:
+            type: string
+        - name: mode
+          in: query
+          description: Allows for special processing mode for dijitFilteringSelect.
+            Makes it possible to use wildcards in the label parameter.
+          required: false
+          schema:
+            type: string
+        - name: label
+          in: query
+          description: Shows all concepts and collections that have this search
+            string in one of their labels.
+          required: false
+          schema:
+            type: string
+        - name: collection
+          in: query
+          description: Get information about the content of a collection.
+            Expects to be passed an id of a collection in this scheme. Will restrict
+            the search to concepts or collections that are a member of this collection
+            or a narrower concept of a member.
+          required: false
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Define if you want to sort the results by a given field. Otherwise items are returned
+            in an indeterminate order. Prefix with '+' to sort ascending, '-' to sort descending.
+            eg. ``?sort=-label`` to sort all results descending by label.
+          required: false
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: Returns the label with the corresponding language-tag if present.
+            If the language is not present for this concept/collection, it falls back to
+            1) the default language of the provider. 2) 'en' 3) any label.
+            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: The concepts in this conceptscheme were found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConceptListItem'
+        404:
+          description: The conceptscheme was not found.
+
     post:
       summary: Add a concept or collection to a conceptscheme.
       description: Add a concept or collection to a conceptscheme. The response body will
         contain a representation of the concept or collection after is has
         been added to the conceptscheme.
       tags:
-        - Concepts and collections
+        - Conceptschemes
       parameters:
         - name: scheme_id
           in: path
@@ -54,13 +125,41 @@ paths:
           $ref: "#/components/responses/Error"
 
   /conceptschemes/{scheme_id}/c/{c_id}:
+    get:
+      summary: Get information about a concept or collection.
+      description: Get information about a concept or collection.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain concept scheme.
+          required: true
+          schema:
+            type: string
+        - name: c_id
+          in: path
+          description: The identifier for a certain concept or collection.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: The concept was found in the conceptscheme.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConceptResponse"
+        404:
+          description: The concept was not found in the conceptscheme or the
+            conceptscheme was not found.
     put:
       summary: Edit the concept or collection with id `c_id`.
       description: Edit the concept or collection with id `c_id`. The response body will
         contain a representation of the concept or collection after the
         modifications.
       tags:
-        - Concepts and collections
+        - Conceptschemes
       parameters:
         - name: scheme_id
           in: path
@@ -110,7 +209,7 @@ paths:
       description: Remove the concept with id `c_id`.
         The response body will contain the last representation known by the service.
       tags:
-        - Concepts and collections
+        - Conceptschemes
       parameters:
         - name: scheme_id
           in: path
@@ -153,6 +252,103 @@ paths:
         500:
           $ref: "#/components/responses/Error"
 
+  /conceptschemes/{scheme_id}/tree:
+    get:
+      summary: Display a tree of a conceptscheme and its children
+      description: List all languages known to this Atramhasis instance.
+      tags:
+        - Conceptschemes
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain concept scheme.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: A tree view of the conceptscheme was returned.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConceptTree"
+
+  /conceptschemes/{scheme_id}:
+    get:
+      summary: Get information about a concept scheme.
+      description: Get information about a concept scheme.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain concept scheme.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: The conceptscheme was not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseConceptScheme"
+    put:
+      summary: Edit the conceptschemes
+      description: Edit the conceptschemes with scheme_id. The response body will
+        contain a representation of the conceptscheme.
+      tags:
+        - Conceptschemes
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain conceptscheme.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Data to alter the conceptscheme
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestConceptScheme"
+      responses:
+        200:
+          description: The concept or collection was edited succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseConceptScheme"
+        400:
+          description: The conceptscheme could not be edited because
+            the submitted json was invalid due to eg. validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+        404:
+          description: The conceptscheme with `scheme_id` does not exist.
+        500:
+          $ref: "#/components/responses/Error"
+
+  /conceptschemes:
+    get:
+      summary: Get all registered conceptschemes.
+      description: Get all registered conceptschemes.
+      tags:
+        - Skosprovider
+      responses:
+        200:
+          description: The list of conceptschemes was found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConceptSchemeListItem"
   /languages:
     get:
       summary: List all languages known to this Atramhasis instance.
@@ -259,7 +455,312 @@ paths:
         404:
           description: The language was not found in this instance.
 
+  /labeltypes:
+    get:
+      summary: Get labeltypes.
+      description: Get labeltypes.
+      tags:
+        - Lists
+      responses:
+        200:
+          description: The labeltypes were found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Type"
 
+  /notetypes:
+    get:
+      summary: Get notetypes.
+      description: Get notetypes.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: l_id
+          in: path
+          description: The identifier for a certain language.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: The notetypes were found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Type"
+
+  /uris:
+    get:
+      summary: Look up where a certain URI can be found.
+      description: Find more information on a certain :term:`URI`. This can map to eiter
+        a concept, collection or conceptscheme that is known by the current SKOS
+        registry.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: uri
+          in: query
+          description: The URI to search for.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: The URI maps to something known by pyramid_skosprovider,
+            either a conceptscheme, a concept or collection.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  context:
+                    $ref: '#/components/schemas/Context'
+                  type:
+                    type: string
+                  uri:
+                    type: string
+                  id:
+                    type: integer
+                  concept_scheme:
+                    $ref: '#/components/schemas/ConceptSchemeLimited'
+        404:
+          description: The URI can't be found by pyramid_skosprovider.
+  /c:
+    get:
+      summary: Search concepts or collections.
+      description: Search for concepts or collections, no matter what scheme they're a part of.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: type
+          in: query
+          description: Define if you want to show concepts or collections. Leave
+            blank to show both.
+          required: false
+          schema:
+            type: string
+        - name: mode
+          in: query
+          description: Allows for special processing mode for dijitFilteringSelect.
+            Makes it possible to use wildcards in the label parameter.
+          required: false
+          schema:
+            type: string
+        - name: label
+          in: query
+          description: Shows all concepts and collections that have this search
+            string in one of their labels.
+          required: false
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: Returns the label with the corresponding language-tag if present.
+            If the language is not present for this concept/collection, it falls back to
+            1) the default language of the provider. 2) 'en' 3) any label.
+            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
+          required: false
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Define if you want to sort the results by a given field. Otherwise items are returned
+            in an indeterminate order. Prefix with '+' to sort ascending, '-' to sort descending.
+            eg. ``?sort=-label`` to sort all results descending by label.
+          required: false
+          schema:
+            type: string
+        - name: providers.ids
+          in: query
+          description: A comma separated list of concept scheme id's. The query
+            will only be passed to the providers with these id's. eg.
+            ``?providers.ids=TREES, PARROTS`` will only list concepts from these two providers.
+          required: false
+          schema:
+            type: string
+        - name: providers.subject
+          in: query
+          description: A subject can be registered with a skosprovider in
+            the registry. Adding this search parameter means that the query will only
+            be passed on to providers that have been tagged with this subject. Eg.
+            ``?providers.subject=external`` to only query the providers that have been marked
+            with the subject `external`.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: The concepts in this conceptscheme were found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConceptListItem'
+
+  /conceptschemes/{scheme_id}/topconcepts:
+    get:
+      summary: Get the top concepts in a scheme.
+      description: Get all top concepts in a certain conceptscheme. These are all the concepts
+        in the conceptscheme that have no broader concept.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain conceptscheme.
+          required: true
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: Returns the label with the corresponding language-tag if present.
+            If the language is not present for this concept/collection, it falls back to
+            1) the default language of the provider. 2) 'en' 3) any label.
+            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: The topconcepts in this conceptscheme were found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConceptListItem"
+        404:
+          description: The conceptscheme was not found.
+
+  /conceptschemes/{scheme_id}/displaytop:
+    get:
+      summary: Get the top of a display hierarchy.
+      description: Get the top of a display hierarchy. Depending on the underlying provider
+        this will be a list of Concepts and Collections.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain conceptscheme.
+          required: true
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: Returns the label with the corresponding language-tag if present.
+            If the language is not present for this concept/collection, it falls back to
+            1) the default language of the provider. 2) 'en' 3) any label.
+            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: The concepts and collections were found.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConceptListItem"
+        404:
+          description: The conceptscheme was not found.
+
+  /conceptschemes/{scheme_id}/c/{c_id}/displaychildren:
+    get:
+      summary: Get the children for display purposes.
+      description: Get a list of Collections and Concepts that should be displayed as
+        children of this Concept or Collection.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain conceptscheme.
+          required: true
+          schema:
+            type: string
+        - name: c_id
+          in: path
+          description: The identifier for a certain concept or collection.
+          required: true
+          schema:
+            type: integer
+        - name: language
+          in: query
+          description: Returns the label with the corresponding language-tag if present.
+            If the language is not present for this concept/collection, it falls back to
+            1) the default language of the provider. 2) 'en' 3) any label.
+            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: The concept was found in the conceptscheme.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ConceptListItem"
+        404:
+          description: The concept was not found in the conceptscheme or the
+            conceptscheme was not found.
+
+  /conceptschemes/{scheme_id}/c/{c_id}/expand:
+    get:
+      summary: Expand a concept or collection to all it's narrower concepts.
+      description: Expand a concept or collection to all it's narrower
+        concepts.
+
+        This method should recurse and also return narrower concepts
+        of narrower concepts.
+
+        If the id passed belongs to a :class:`skosprovider.skos.Concept`,
+        the id of the concept itself should be include in the return value.
+
+        If the id passed belongs to a :class:`skosprovider.skos.Collection`,
+        the id of the collection itself must not be present in the return value
+        In this case the return value includes all the member concepts and
+        their narrower concepts.
+
+        Returns A list of id's or :class:`HTTPNotFound` if the concept or collection doesn't
+        exist.
+      tags:
+        - Skosprovider
+      parameters:
+        - name: scheme_id
+          in: path
+          description: The identifier for a certain conceptscheme.
+          required: true
+          schema:
+            type: string
+        - name: c_id
+          in: path
+          description: The identifier for a certain concept or collection.
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: The concept/collection was found in the conceptscheme.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+        404:
+          description: The concept/collection was not found in the conceptscheme or the
+            conceptscheme was not found.
 components:
   schemas:
     Language:
@@ -269,6 +770,13 @@ components:
           type: integer
         name:
           type: integer
+    Type:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          type: string
     Relatedconcept:
       type: object
       properties:
@@ -366,8 +874,138 @@ components:
               type: integer
             uri:
               type: string
-
-
+    ConceptTree:
+      type: object
+      properties:
+        id:
+          type: string
+        concept_id:
+          type: integer
+        label:
+          type: string
+        children:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              concept_id:
+                type: integer
+              label:
+                type: string
+              children:
+                type: array
+    RequestConceptScheme:
+      type: object
+      properties:
+        labels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+        notes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Note"
+        sources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Source"
+    ResponseConceptScheme:
+      allOf:
+        - $ref: "#/components/schemas/RequestConceptScheme"
+        - type: object
+          properties:
+            id:
+              type: integer
+            uri:
+              type: string
+            label:
+              type: string
+            languages:
+              type: array
+              items:
+                $ref: "#/components/schemas/Language"
+    Context:
+      type: object
+      properties:
+        version:
+          type: string
+        dct:
+          type: string
+        skos:
+          type: string
+        iso-thes:
+          type: string
+        rdf:
+          type: string
+        rdfs:
+          type: string
+        void:
+          type: string
+        uri:
+          type: string
+        type:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
+        concept:
+          type: string
+        collection:
+          type: string
+        subject:
+          type: object
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+        concept_scheme:
+          type: object
+          properties:
+            id:
+              type: string
+            type:
+              type: string
+    ConceptSchemeListItem:
+      type: object
+      properties:
+        context:
+          $ref: "#/components/schemas/Context"
+        type:
+          type: string
+        id:
+          type: string
+        uri:
+          type: string
+        label:
+          type: string
+        subject:
+          type: array
+          items:
+            type: string
+    ConceptSchemeLimited:
+      type: object
+      properties:
+        type:
+          type: string
+        uri:
+          type: string
+        id:
+          type: string
+    ConceptListItem:
+      type: object
+      properties:
+        type:
+          type: string
+        uri:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
     ValidationError:
       type: object
       required:
