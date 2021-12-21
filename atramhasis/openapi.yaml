@@ -13,7 +13,7 @@ paths:
       summary: Search for concepts or collections in a scheme.
       description: Search for concepts or collections in a scheme.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
@@ -86,7 +86,7 @@ paths:
         contain a representation of the concept or collection after is has
         been added to the conceptscheme.
       tags:
-        - Conceptschemes
+        - Atramhasis
       parameters:
         - name: scheme_id
           in: path
@@ -129,7 +129,7 @@ paths:
       summary: Get information about a concept or collection.
       description: Get information about a concept or collection.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
@@ -159,7 +159,7 @@ paths:
         contain a representation of the concept or collection after the
         modifications.
       tags:
-        - Conceptschemes
+        - Atramhasis
       parameters:
         - name: scheme_id
           in: path
@@ -209,7 +209,7 @@ paths:
       description: Remove the concept with id `c_id`.
         The response body will contain the last representation known by the service.
       tags:
-        - Conceptschemes
+        - Atramhasis
       parameters:
         - name: scheme_id
           in: path
@@ -257,7 +257,7 @@ paths:
       summary: Display a tree of a conceptscheme and its children
       description: List all languages known to this Atramhasis instance.
       tags:
-        - Conceptschemes
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
@@ -280,7 +280,7 @@ paths:
       summary: Get information about a concept scheme.
       description: Get information about a concept scheme.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
@@ -300,7 +300,7 @@ paths:
       description: Edit the conceptschemes with scheme_id. The response body will
         contain a representation of the conceptscheme.
       tags:
-        - Conceptschemes
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
@@ -339,7 +339,7 @@ paths:
       summary: Get all registered conceptschemes.
       description: Get all registered conceptschemes.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       responses:
         200:
           description: The list of conceptschemes was found.
@@ -354,7 +354,7 @@ paths:
       summary: List all languages known to this Atramhasis instance.
       description: List all languages known to this Atramhasis instance.
       tags:
-        - Languages
+        - Atramhasis
       parameters:
         - name: sort
           in: query
@@ -379,7 +379,7 @@ paths:
       summary: Get information on a certain language.
       description: Get information on a certain language.
       tags:
-        - Languages
+        - Atramhasis
       parameters:
         - name: l_id
           in: path
@@ -402,7 +402,7 @@ paths:
       description: Update the information on a certain language or create an entry for a new
         one.
       tags:
-        - Languages
+        - Atramhasis
       parameters:
         - name: l_id
           in: path
@@ -437,7 +437,7 @@ paths:
       summary: Delete language
       description: Delete a language from this Atramhasis instance.
       tags:
-        - Languages
+        - Atramhasis
       parameters:
         - name: l_id
           in: path
@@ -476,7 +476,7 @@ paths:
       summary: Get notetypes.
       description: Get notetypes.
       tags:
-        - Skosprovider
+        - Lists
       parameters:
         - name: l_id
           in: path
@@ -501,7 +501,7 @@ paths:
         a concept, collection or conceptscheme that is known by the current SKOS
         registry.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: uri
           in: query
@@ -535,7 +535,7 @@ paths:
       summary: Search concepts or collections.
       description: Search for concepts or collections, no matter what scheme they're a part of.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: type
           in: query
@@ -609,7 +609,7 @@ paths:
       description: Get all top concepts in a certain conceptscheme. These are all the concepts
         in the conceptscheme that have no broader concept.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
@@ -644,7 +644,7 @@ paths:
       description: Get the top of a display hierarchy. Depending on the underlying provider
         this will be a list of Concepts and Collections.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
@@ -679,7 +679,7 @@ paths:
       description: Get a list of Collections and Concepts that should be displayed as
         children of this Concept or Collection.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
@@ -735,7 +735,7 @@ paths:
         Returns A list of id's or :class:`HTTPNotFound` if the concept or collection doesn't
         exist.
       tags:
-        - Skosprovider
+        - Pyramid_skosprovider
       parameters:
         - name: scheme_id
           in: path
