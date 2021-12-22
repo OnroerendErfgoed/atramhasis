@@ -37,6 +37,8 @@ dogpile.cache==1.1.4
 python-dateutil==2.8.2
 rdflib==5.0.0
 bleach==4.1.0
+importlib-metadata==4.10.0 ; python_version >= '3.7'
+importlib-metadata==4.8.3 ; python_version < '3.7'
 
 # requests
 requests==2.26.0
