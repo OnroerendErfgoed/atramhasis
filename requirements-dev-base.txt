@@ -1,26 +1,26 @@
 # Basic Atramhasis dev requirements
 
 # pyramid
-pyramid-debugtoolbar==4.6.1
+pyramid-debugtoolbar==4.9
 
 # Testing
-pytest==6.0.1
-pytest-cov==2.10.0
-coveralls==1.11.1
-webtest==2.0.35
-mock==4.0.2
-testfixtures==6.14.1
+pytest==6.2.5
+pytest-cov==3.0.0
+coveralls==3.3.1
+webtest==3.0.0
+mock==4.0.3
+testfixtures==6.18.3
 
 # Documentation
-Sphinx==3.2.0
-sphinxcontrib-httpdomain==1.7.0
-pygments==2.7.4
+Sphinx==4.3.2
+sphinxcontrib-httpdomain==1.8.0
+pygments==2.10.0
 
 # waitress
-waitress==1.4.4
+waitress==2.0.0
 
 # Linting
-flake8==3.8.3
+flake8==4.0.1
 mccabe==0.6.1
 pep8==1.7.1
-pyflakes==2.2.0
+pyflakes==2.4.0

@@ -4,10 +4,12 @@ python:
  - "3.6"
  - "3.7"
  - "3.8"
-install:
+before_install:
+ - pip install --upgrade pip
  - pip install -U setuptools
- - pip install -r requirements-dev.txt
- - python setup.py develop
+install:
+  - pip install -r requirements-dev.txt
+  - python setup.py develop
 script:
  - py.test --cov atramhasis --cov-report term-missing tests
 after_success:

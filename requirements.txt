@@ -2,42 +2,42 @@
 pyramid==2.0
 pyramid-tm==2.4
 pyramid_rewrite==0.2
-openapi-core==0.13.8
-pyramid_openapi3==0.11
+openapi-core==0.13.8 # newer version incompatible with pyramid_openapi3==0.13
+pyramid_openapi3==0.13
 
 # skosprovider
-skosprovider==1.0.0
-skosprovider_sqlalchemy==0.6.0
-pyramid_skosprovider==1.0.0
-skosprovider_rdf==0.8.1
-skosprovider_getty==0.5.1
+skosprovider==1.1.0
+skosprovider_sqlalchemy==1.0.0
+pyramid_skosprovider==1.1.0
+skosprovider_rdf==1.0.0
+skosprovider_getty==1.0.0
 
-language-tags==1.0.0
+language-tags==1.1.0
 
 # database
-sqlalchemy==1.3.18
-zope.sqlalchemy==1.3
-transaction==3.0.0
+sqlalchemy==1.4.28
+zope.sqlalchemy==1.6
+transaction==3.0.1
 
 # jinja2
-jinja2==2.11.3
+jinja2==3.0.3
 pyramid-jinja2==2.8
 Babel==2.9.1
 
 # alembic
-alembic==1.4.2
+alembic==1.7.5
 
 # validation
-colander==1.7.0
+colander==1.8.3
 
 # caching
-dogpile.cache==0.9.0
+dogpile.cache==1.1.4
 
 # other
-python-dateutil==2.8.1
+python-dateutil==2.8.2
 rdflib==5.0.0
-bleach==3.3.0
+bleach==4.1.0
 
 # requests
-requests==2.23.0
-cachecontrol==0.12.6
+requests==2.26.0
+cachecontrol==0.12.10
