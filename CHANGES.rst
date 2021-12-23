@@ -1,5 +1,5 @@
-1.0.0a3 (22-12-2021)
-------------------
+1.0.0-a4 (22-12-2021)
+---------------------
 Python 2 support was dropped in this release
 
 - Upgrade requirements (#653, #648, #654)
