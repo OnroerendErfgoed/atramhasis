@@ -1,4 +1,4 @@
-1.0.0 (22-12-2021)
+1.0.0a2 (22-12-2021)
 ------------------
 Python 2 support was dropped in this release
 
