@@ -1,3 +1,15 @@
+1.0.0 (24-12-2021)
+---------------------
+Python 2 support was dropped in this release
+
+- Upgrade requirements (#653, #648, #654)
+- API docs were added and are available via the endpoint /api_docs. They include all atramhasis API services,as well as the API endpoins included from https://github.com/OnroerendErfgoed/pyramid_skosprovider/ (#670)
+- The presentation of labels in the Tree view are optimized (#658)
+- Fix bug to convert collection to concept (#668)
+- Fix bug: Sources not shown on conceptscheme page (#652)
+- As a user I want a unified searchparam to search for concepts or collections by type, searchparam type will be used in favor of ctype no matter what output format we are requesting (#651)
+
+
 0.7.0 (06-11-2020)
 ------------------
 

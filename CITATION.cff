@@ -1,0 +1,55 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Atramhasis
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Koen
+    family-names: Van Daele
+    email: koen.vandaele@vlaanderen.be
+    affiliation: Agentschap Onroerend Erfgoed
+    orcid: 'https://orcid.org/0000-0002-8153-2978'
+  - given-names: Bart
+    family-names: Saelen
+    affiliation: Geo Solutions
+  - given-names: Maarten
+    family-names: Taeymans
+    affiliation: Geo Solutions
+  - given-names: Jonathan
+    family-names: Piraux
+  - given-names: Tinne
+    family-names: Cahy
+  - given-names: Cedrik
+    family-names: Vanderhaegen
+  - given-names: Jonas
+    family-names: Geuens
+    affiliation: Agentschap Onroerend Erfgoed
+    orcid: 'https://orcid.org/0000-0001-8197-5034'
+  - given-names: Wim
+    family-names: De Clercq
+  - given-names: Bram
+    family-names: Goessens
+repository-code: 'https://github.com/OnroerendErfgoed/atramhasis'
+abstract: >-
+  Atramhasis is an online SKOS editor. This
+  webapplication enables users to create SKOS
+  vocabularies consisting of Concepts and
+  Collections. It tries to stay close to the SKOS
+  specification. This makes it suited for different
+  types of vocabularies such as simple pick lists,
+  authority files, flat lists and basic to relatively
+  complex thesauri. Atramhasis is not suited for
+  managing very large or complex thesauri such as the
+  Getty Art and Architecture Thesaurus.
+keywords:
+  - SKOS
+  - thesaurus
+  - vocabulary
+  - python
+license: GPL-3.0
+version: 1.0.0
+date-released: '2021-12-22'

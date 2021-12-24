@@ -398,7 +398,7 @@ class TestSearchResultView(unittest.TestCase):
     def test_find_by_concept(self):
         self.request.matchdict['scheme_id'] = 'TREES'
         self.request.params = MultiDict()
-        self.request.params.add('ctype', 'concept')
+        self.request.params.add('type', 'concept')
         self.request.params.add('_LOCALE_', 'nl')
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
@@ -460,10 +460,10 @@ class TestCsvView(unittest.TestCase):
         self.assertIsInstance(res['rows'], list)
         self.assertEqual(2, len(res['rows']))
 
-    def test_csv_ctype(self):
+    def test_csv_type(self):
         self.request.matchdict['scheme_id'] = 'TREES'
         self.request.params = MultiDict()
-        self.request.params.add('ctype', 'concept')
+        self.request.params.add('type', 'concept')
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.results_csv()
         self.assertEqual(res['filename'], 'atramhasis_export')

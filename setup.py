@@ -1,57 +1,15 @@
 import os
-import distutils.file_util as file_util
-import distutils.dir_util as dir_util
 import subprocess
 
-from setuptools import setup, find_packages, Command
+from setuptools import Command
+from setuptools import find_packages
+from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst')) as f:
     README = f.read()
 with open(os.path.join(here, 'CHANGES.rst')) as f:
     CHANGES = f.read()
-
-
-def copy_files_scaffolds(filename, new_filename, output_dir):
-    source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
-    dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, new_filename + '_tmpl')
-    file_util.copy_file(source_dir, dest_dir, update=True)
-
-
-def copy_static_scaffold(output_dir):
-    source_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'atramhasis', 'static'))
-    dest_dir = os.path.join(os.path.dirname(__file__), 'atramhasis', 'scaffolds', output_dir, '+package+', 'static')
-    dir_util.copy_tree(os.path.join(source_dir, 'css'), os.path.join(dest_dir, 'css'), update=True)
-    dir_util.copy_tree(os.path.join(source_dir, 'img'), os.path.join(dest_dir, 'img'), update=True)
-    dir_util.copy_tree(os.path.join(source_dir, 'js'), os.path.join(dest_dir, 'js'), update=True)
-    dir_util.copy_tree(os.path.join(source_dir, 'scss', 'atramhasis'), os.path.join(dest_dir, 'scss', 'atramhasis'),
-                       update=True)
-    file_util.copy_file(
-        os.path.join(source_dir, 'package.json'),
-        os.path.join(dest_dir,  'package.json'),
-        update=True
-    )
-    file_util.copy_file(
-        os.path.join(source_dir, 'package-lock.json'),
-        os.path.join(dest_dir, 'package-lock.json'),
-        update=True
-    )
-    dir_util.mkpath(os.path.join(dest_dir, 'admin'))
-    file_util.copy_file(
-        os.path.join(source_dir, 'admin', 'Gruntfile.js'),
-        os.path.join(dest_dir, 'admin', 'Gruntfile.js'),
-        update=True
-    )
-    file_util.copy_file(
-        os.path.join(source_dir, 'admin', 'package.json'),
-        os.path.join(dest_dir, 'admin', 'package.json'),
-        update=True
-    )
-    file_util.copy_file(
-        os.path.join(source_dir, 'admin', 'package-lock.json'),
-        os.path.join(dest_dir, 'admin', 'package-lock.json'),
-        update=True
-    )
 
 
 def dojo_build():
@@ -70,7 +28,7 @@ def dojo_build():
     print('-' * 50)
 
 
-class PrepareScaffold(Command):
+class Prepare(Command):
     user_options = []
 
     def initialize_options(self):
@@ -81,12 +39,6 @@ class PrepareScaffold(Command):
 
     def run(self):
         dojo_build()
-        copy_files_scaffolds("requirements.txt", "atramhasis-requirements.txt", "atramhasis_demo")
-        copy_files_scaffolds("requirements-dev-base.txt", "atramhasis-requirements-dev.txt", "atramhasis_demo")
-        copy_files_scaffolds("requirements.txt", "atramhasis-requirements.txt", "atramhasis_scaffold")
-        copy_files_scaffolds("requirements-dev-base.txt", "atramhasis-requirements-dev.txt", "atramhasis_scaffold")
-        copy_static_scaffold("atramhasis_scaffold")
-        copy_static_scaffold("atramhasis_demo")
 
 
 requires = [
@@ -102,18 +54,22 @@ requires = [
     'skosprovider_getty',
     'pyramid_skosprovider',
     'language_tags',
+    'jinja2',
     'pyramid_jinja2',
     'alembic',
     'babel',
     'colander',
     'requests',
+    'cachecontrol',
     'dogpile.cache',
-    'six',
-    'pyramid_rewrite'
+    'pyramid_rewrite',
+    'python-dateutil',
+    'rdflib',
+    'bleach',
 ]
 
 setup(name='atramhasis',
-      version='0.7.0',
+      version='1.0.0',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       long_description_content_type='text/x-rst',
@@ -124,7 +80,6 @@ setup(name='atramhasis',
           "Framework :: Pyramid",
           "Topic :: Internet :: WWW/HTTP",
           "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-          "Programming Language :: Python :: 2.7",
           "Programming Language :: Python :: 3.6",
           "Programming Language :: Python :: 3.7",
           "Programming Language :: Python :: 3.8"
@@ -149,11 +104,8 @@ setup(name='atramhasis',
       generate_ldf_config = atramhasis.scripts.generate_ldf_config:main
       sitemap_generator = atramhasis.scripts.sitemap_generator:main
       delete_scheme = atramhasis.scripts.delete_scheme:main
-      [pyramid.scaffold]
-        atramhasis_scaffold=atramhasis.scaffolds:AtramhasisTemplate
-        atramhasis_demo=atramhasis.scaffolds:AtramhasisDemoTemplate
       """,
       cmdclass={
-          'prepare': PrepareScaffold
+          'prepare': Prepare
       }
       )

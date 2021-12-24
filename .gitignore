@@ -77,25 +77,5 @@ atramhasis/static/node_modules
 atramhasis/static/admin/dist
 atramhasis/static/admin/node_modules
 
-atramhasis/scaffolds/atramhasis_demo/+package+/static/css
-atramhasis/scaffolds/atramhasis_demo/+package+/static/img
-atramhasis/scaffolds/atramhasis_demo/+package+/static/js
-atramhasis/scaffolds/atramhasis_demo/+package+/static/package.json
-atramhasis/scaffolds/atramhasis_demo/+package+/static/package-lock.json
-atramhasis/scaffolds/atramhasis_demo/+package+/static/scss/atramhasis
-atramhasis/scaffolds/atramhasis_demo/+package+/static/admin
-atramhasis/scaffolds/atramhasis_demo/atramhasis-requirements-dev.txt_tmpl
-atramhasis/scaffolds/atramhasis_demo/atramhasis-requirements.txt_tmpl
-
-atramhasis/scaffolds/atramhasis_scaffold/+package+/static/css
-atramhasis/scaffolds/atramhasis_scaffold/+package+/static/img
-atramhasis/scaffolds/atramhasis_scaffold/+package+/static/js
-atramhasis/scaffolds/atramhasis_scaffold/+package+/static/package.json
-atramhasis/scaffolds/atramhasis_scaffold/+package+/static/package-lock.json
-atramhasis/scaffolds/atramhasis_scaffold/+package+/static/scss/atramhasis
-atramhasis/scaffolds/atramhasis_scaffold/+package+/static/admin
-atramhasis/scaffolds/atramhasis_scaffold/atramhasis-requirements-dev.txt_tmpl
-atramhasis/scaffolds/atramhasis_scaffold/atramhasis-requirements.txt_tmpl
-
 # sqlite database created for tests.
 test.db
