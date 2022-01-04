@@ -69,7 +69,7 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='1.0.0',
+      version='1.0.1',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       long_description_content_type='text/x-rst',
