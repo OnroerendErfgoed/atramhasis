@@ -294,7 +294,7 @@ This will update the requirement files in the scaffolds.
 
 .. code-block:: bash
 
-    $ python setup.py prepare sdist
+    $ python setup.py prepare sdist bdist_wheel
 
 
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
