@@ -1,3 +1,11 @@
+1.0.1 (04-01-2022)
+------------------
+
+1.0.0 was a brown bag release. Sorry!
+
+This version is exactly the same as 1.0.0, but properly packaged.
+
+
 1.0.0 (24-12-2021)
 ------------------
 Python 2 support was dropped in this release
