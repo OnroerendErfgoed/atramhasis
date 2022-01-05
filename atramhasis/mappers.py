@@ -1,9 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Module containing mapping functions used by Atramhasis.
 """
 
-from skosprovider_sqlalchemy.models import Label, Note, Source, Concept, Collection, Match
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import Match
+from skosprovider_sqlalchemy.models import Note
+from skosprovider_sqlalchemy.models import Source
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -35,10 +39,13 @@ def map_concept(concept, concept_json, skos_manager):
 
         if concept_json_type == 'concept':
             members = concept.members
-            concept = skos_manager.change_type(concept,
-                                               concept.concept_id,
-                                               concept.conceptscheme_id,
-                                               concept_json_type)
+            concept = skos_manager.change_type(
+                concept,
+                concept.concept_id,
+                concept.conceptscheme_id,
+                concept_json_type,
+                concept.uri
+            )
             for member in members:
                 if member.type == 'concept':
                     concept.narrower_concepts.add(member)
@@ -47,10 +54,13 @@ def map_concept(concept, concept_json, skos_manager):
         elif concept_json_type == 'collection':
             narrower_concepts = concept.narrower_concepts
             narrower_collections = concept.narrower_collections
-            concept = skos_manager.change_type(concept,
-                                               concept.concept_id,
-                                               concept.conceptscheme_id,
-                                               concept_json_type)
+            concept = skos_manager.change_type(
+                concept,
+                concept.concept_id,
+                concept.conceptscheme_id,
+                concept_json_type,
+                concept.uri
+            )
             for narrower_concept in narrower_concepts:
                 concept.members.add(narrower_concept)
             for narrower_collection in narrower_collections:
