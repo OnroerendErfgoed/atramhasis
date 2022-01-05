@@ -28,6 +28,10 @@ def from_thing(thing):
                 Label(l.label, l.labeltype_id, l.language_id)
                 for l in thing.labels
             ],
+            notes=[
+                Note(n.note, n.notetype_id, n.language_id)
+                for n in thing.notes
+            ],
             sources=[
                 Source(s.citation)
                 for s in thing.sources
