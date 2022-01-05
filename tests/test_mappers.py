@@ -176,6 +176,7 @@ class TestMappers(unittest.TestCase):
         self.collection = Collection()
         self.collection.concept_id = 0
         self.collection.conceptscheme_id = 1
+        self.collection.uri = "urn:x-skosprovider:trees/3"
         self.conceptscheme = ConceptScheme()
         self.conceptscheme.id = 1
         member_concept_1 = Concept()
@@ -302,6 +303,7 @@ class TestMappers(unittest.TestCase):
         self.assertTrue(hasattr(result_concept, 'related_concepts'))
         self.assertTrue(hasattr(result_concept, 'narrower_concepts'))
         self.assertTrue(hasattr(result_concept, 'narrower_collections'))
+        self.assertEqual(result_concept.uri, 'urn:x-skosprovider:trees/3')
 
     def test_mapping_conceptscheme(self):
         result_conceptscheme = map_conceptscheme(self.conceptscheme, test_json_conceptscheme)
