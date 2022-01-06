@@ -45,6 +45,36 @@ abstract: >-
   complex thesauri. Atramhasis is not suited for
   managing very large or complex thesauri such as the
   Getty Art and Architecture Thesaurus.
+references:
+  - doi: 10.5194/isprs-annals-IV-2-W2-151-2017
+    type: article
+    year: 2017
+    title: 'Calling it what it is. Thesauri in the Flanders Heritage Agency: History, Importance, Use and Technological Advances'
+    authors:
+      - given-names: Sophie
+        family-names: Mortier
+      - given-names: Koen
+        family-names: Van Daele
+        email: koen.vandaele@vlaanderen.be
+        affiliation: Agentschap Onroerend Erfgoed
+        orcid: 'https://orcid.org/0000-0002-8153-2978'
+      - given-names: Leen
+        family-names: Meganck
+        email: leen.meganck@vlaanderen.be
+        affiliation: Agentschap Onroerend Erfgoed
+    journal: ISPRS Annals of Photogrammetry, Remote Sensing and Spatial Information Sciences
+    volume: 4W2
+    pages: 151-156
+    notes: Publication documenting how Atramhasis is used by Flanders Heritage Agency
+  - doi: 10.5281/zenodo.5767151
+    type: software
+    title: Skosprovider
+    authors:
+      - given-names: Koen
+        family-names: Van Daele
+        email: koen.vandaele@vlaanderen.be
+        affiliation: Flanders Heritage Agency
+        orcid: 'https://orcid.org/0000-0002-8153-2978'
 keywords:
   - SKOS
   - thesaurus
