@@ -113,6 +113,7 @@ def collection_adapter(obj, request):
         'type': obj.type,
         'uri': obj.uri,
         'label': label.label if label else None,
+        'notes': obj.notes,
         'labels': obj.labels,
         'sources': obj.sources,
         'members': [map_relation(c, language) for c in obj.members],
