@@ -159,13 +159,14 @@ class SkosManager(DataManager):
         self.session.flush()
         return thing
 
-    def change_type(self, thing, concept_id, conceptscheme_id, new_type):
+    def change_type(self, thing, concept_id, conceptscheme_id, new_type, uri):
         self.delete_thing(thing)
         self.session.flush()
         thing = Concept() if new_type == 'concept' else Collection()
         thing.type = new_type
         thing.concept_id = concept_id
         thing.conceptscheme_id = conceptscheme_id
+        thing.uri = uri
         self.save(thing)
         return thing
 

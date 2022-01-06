@@ -1,3 +1,11 @@
+1.0.2 (06-01-2022)
+------------------
+
+- Keep uri field when change concept type: uri field is set to null in database when we change the type of a concept #680
+- Not possible to save notes within a collection via the UI #682
+- Add 2 references (article and software) to CITATION.cff file.
+
+
 1.0.1 (04-01-2022)
 ------------------
 
