@@ -1,3 +1,9 @@
+1.0.3 (14-01-2022)
+------------------
+
+- Update skosprovider to fix language queryparameter: https://github.com/OnroerendErfgoed/skosprovider/releases/tag/1.1.1
+
+
 1.0.2 (06-01-2022)
 ------------------
 
