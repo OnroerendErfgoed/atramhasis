@@ -2,7 +2,7 @@ openapi: 3.0.3
 
 info:
   title: Atramhasis API
-  version: 1.0.2
+  version: 1.0.3
 
 servers:
   - url: '/'
