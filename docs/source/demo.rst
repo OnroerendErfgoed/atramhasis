@@ -7,41 +7,63 @@ Demo
 Running a demo site
 ===================
 
-Atramhasis comes with a demo site include. This allows you to quickly evaluate
-and inspect the software. To get started, just download Atramhasis from pypi and
-install it. We recommend doing this in a virtualenvironment.
+Checking a working instance of the Atramhasis can be done at `the Flanders
+Heritage Thesaurus <https://thesaurus.onroerenderfgoed.be>`_ or by running a
+demo yourself. This allows you to quickly evaluate and inspect the software. 
+This can be done through the `cookiecutter` package. 
 
 .. code-block:: bash
 
     $ mkvirtualenv atramhasis_demo
-    $ pip install -U atramhasis
+    $ pip install -U cookiecutter
 
-
-Once Atramhasis is installed, you can call upon a pyramid scaffold to generate
-the demo site.
+Once cookiecutter is installed, you use it to generate the demo site.
 
 .. code-block:: bash
 
-    $ pcreate -s atramhasis_demo atramhasis_demo
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis_scaffold_cookiecutter
+
+Running this command will ask a few questions. Just accept the default answers,
+unless you want to give your project a different name. After the
+cookiecutter command, there should be a directory with the name of your
+project (default: atramhasis_demo). Enter this directory and install
+requirements:
+
+.. code-block:: bash
+
     $ cd atramhasis_demo
+    $ pip install -r requirements-dev.txt
+    $ pip install -e .
 
-This creates a local demo package you can run with just a few more commands:
+Now it's time to setup our database (a simple SQLite database) and add some 
+testdata:
 
 .. code-block:: bash
 
-    # setup
-    $ pip install -r requirements-dev.txt
-    $ python setup.py develop
-    # download and install client side libraries
+    $ alembic upgrade head
+    # fill the database with data
+    $ initialize_atramhasis_db development.ini
+
+Optionally, we can create RDF dumps, but this is not necessary for basic
+functionality:
+
+.. code-block:: bash
+
+    $ dump_rdf development.ini
+
+Almost done! All we need now are some frontend dependencies:
+
+.. code-block:: bash
+
     $ cd atramhasis_demo/static
     $ npm install
+
+Finally, we can start our server. Return to the root of your project repo and
+run pserve:
+
+.. code-block:: bash
+
     $ cd ../..
-    # create or upgrade database
-    $ alembic upgrade head
-    # intialize sample data
-    $ initialize_atramhasis_db development.ini
-    # generate full RDF dumps (not necessary for basic functionality)
-    $ dump_rdf development.ini
     # start server
     $ pserve development.ini
 
@@ -60,6 +82,11 @@ customisation for further information on this topic.
 
 Running a demo site with Docker
 ===============================
+
+.. warning::
+
+    This older documentation, written for a previous version, and probably
+    doesn't work anymore.
 
 There is a `Docker image <https://hub.docker.com/r/atramhasis/demo/>`_ 
 available that allows you to quickly get a demo instance up and running. 
@@ -96,6 +123,11 @@ to suit your needs.
 
 Running a demo site on Heroku
 =============================
+
+.. warning::
+
+    This older documentation, written for a previous version, and probably
+    doesn't work anymore.
 
 This section will tell you how to deploy an Atramhasis demo (or your own implementation) in the cloud.
 We'll use `Heroku <https://www.heroku.com/>`_, since this provider allows for a free Python instance
