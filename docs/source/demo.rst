@@ -21,7 +21,7 @@ Once cookiecutter is installed, you use it to generate the demo site.
 
 .. code-block:: bash
 
-    $ cookiecutter gh:OnroerendErfgoed/atramhasis_scaffold_cookiecutter
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis_demo_cookiecutter
 
 Running this command will ask a few questions. Just accept the default answers,
 unless you want to give your project a different name. After the
