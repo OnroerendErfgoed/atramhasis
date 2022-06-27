@@ -236,7 +236,7 @@ refer to the LDF server documentation for troubleshooting.
 .. code-block:: bash
 
     # Install ldf-server
-    $ [sudo] npm install -g ldf-server
+    $ [sudo] npm install -g @ldf/server
     # Run ldf-server
     $ ldf-server ldf_server_config.json
 

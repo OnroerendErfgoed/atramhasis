@@ -10,10 +10,7 @@ from pyramid.paster import bootstrap, setup_logging
 
 import json
 
-from atramhasis.errors import (
-    SkosRegistryNotFoundException
-)
-
+from atramhasis.errors import SkosRegistryNotFoundException
 
 
 def main():
@@ -21,20 +18,22 @@ def main():
     Generate a config file for a LDF server.
     """
     usage = "usage: %prog config_uri"
-    parser = optparse.OptionParser(
-        usage=usage,
-        description=textwrap.dedent(description)
-    )
+    parser = optparse.OptionParser(usage=usage, description=textwrap.dedent(description))
     parser.add_option(
-        '-l', '--location', dest='config_location', type='string',
-        help='Specify where to put the config file. If not specified, this \
-is set to the atramhasis.ldf.config_location from your ini file.'
+        "-l",
+        "--location",
+        dest="config_location",
+        type="string",
+        help=(
+            "Specify where to put the config file. If not specified, this is set to the"
+            " atramhasis.ldf.config_location from your ini file."
+        ),
     )
 
     options, args = parser.parse_args(sys.argv[1:])
 
     if not len(args) >= 1:
-        print('You must provide at least one argument.')
+        print("You must provide at least one argument.")
         return 2
 
     config_uri = args[0]
@@ -44,102 +43,104 @@ is set to the atramhasis.ldf.config_location from your ini file.'
 
     config_location = options.config_location
     if config_location is None:
-        config_location = env['registry'].settings.get(
-            'atramhasis.ldf.config_location',
-            os.path.abspath(os.path.dirname(config_uri))
+        config_location = env["registry"].settings.get(
+            "atramhasis.ldf.config_location", os.path.abspath(os.path.dirname(config_uri))
         )
 
-    dump_location = env['registry'].settings.get(
-        'atramhasis.dump_location',
-        os.path.abspath(os.path.dirname(config_uri))
+    dump_location = env["registry"].settings.get(
+        "atramhasis.dump_location", os.path.abspath(os.path.dirname(config_uri))
     )
 
-    ldf_baseurl = env['registry'].settings.get(
-        'atramhasis.ldf.baseurl',
-        None
-    )
+    ldf_baseurl = env["registry"].settings.get("atramhasis.ldf.baseurl", None)
 
-    ldf_protocol = env['registry'].settings.get(
-        'atramhasis.ldf.protocol',
-        None
-    )
+    ldf_protocol = env["registry"].settings.get("atramhasis.ldf.protocol", None)
 
-    request = env['request']
+    request = env["request"]
 
-    if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+    if hasattr(request, "skos_registry") and request.skos_registry is not None:
         skos_registry = request.skos_registry
     else:
-        raise SkosRegistryNotFoundException()   # pragma: no cover
+        raise SkosRegistryNotFoundException()  # pragma: no cover
 
     start_time = time.time()
     ldfconfig = {
-        'title': 'Atramhasis LDF server',
-        'datasources': {},
-        'prefixes': {
-            'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-            'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
-            'owl': 'http://www.w3.org/2002/07/owl#',
-            'xsd': 'http://www.w3.org/2001/XMLSchema#',
-            'hydra': 'http://www.w3.org/ns/hydra/core#',
-            'void': 'http://rdfs.org/ns/void#',
-            'skos': 'http://www.w3.org/2004/02/skos/core#',
-            'skos-thes': 'http://purl.org/iso25964/skos-thes#'
-        }
+        "@context": "https://linkedsoftwaredependencies.org/bundles/npm/@ldf/server/^3.0.0/components/context.jsonld",
+        "@id": "urn:ldf-server:my",
+        "import": "preset-qpf:config-defaults.json",
+        "title": "Atramhasis LDF server",
+        "datasources": [],
+        "prefixes": [
+            {"prefix": "rdf", "uri": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"},
+            {"prefix": "rdfs", "uri": "http://www.w3.org/2000/01/rdf-schema#"},
+            {"prefix": "owl", "uri": "http://www.w3.org/2002/07/owl#"},
+            {"prefix": "xsd", "uri": "http://www.w3.org/2001/XMLSchema#"},
+            {"prefix": "hydra", "uri": "http://www.w3.org/ns/hydra/core#"},
+            {"prefix": "void", "uri": "http://rdfs.org/ns/void#"},
+            {"prefix": "skos", "uri": "http://www.w3.org/2004/02/skos/core#"},
+            {"prefix": "skos-thes", "uri": "http://purl.org/iso25964/skos-thes#"},
+        ],
     }
 
     if ldf_baseurl:
-        ldfconfig['baseURL'] = ldf_baseurl
+        ldfconfig["baseURL"] = ldf_baseurl
 
     if ldf_protocol:
-        ldfconfig['protocol'] = ldf_protocol
+        ldfconfig["protocol"] = ldf_protocol
 
     pids = []
     for p in skos_registry.get_providers():
         if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external']]):
-            continue;
-        pid = p.get_metadata()['id']
+            continue
+        pid = p.get_metadata()["id"]
+        title = p.concept_scheme.label().label if p.concept_scheme.label() else pid
         pids.append(pid)
-        filename = os.path.join(dump_location, '%s-full' % pid)
-        filename_ttl = filename + '.ttl'
-        filename_hdt = filename + '.hdt'
-        if os.path.isfile(filename_hdt):
-            dumptype = 'HdtDatasource'
-            dumpfile = filename_hdt
-        else:
-            dumptype = 'TurtleDatasource'
-            dumpfile = filename_ttl
+        filename = os.path.join(dump_location, "%s-full" % pid)
+        dumptype = "HdtDatasource"
+        filetype = "hdtFile"
+        dumpfile = filename + ".hdt"
+
+        if not os.path.isfile(dumpfile):
+            dumptype = "TurtleDatasource"
+            filetype = "file"
+            dumpfile = filename + ".ttl"
+
         sourceconfig = {
-            'title': p.concept_scheme.label().label if p.concept_scheme.label() else pid,
-            'type': dumptype,
-            'settings': {
-                'file': dumpfile
-            }
+            "@id": f"urn:ldf-server:myDatasource{pid}",
+            "@type": dumptype,
+            "quads": False,  # TODO
+            "datasourcePath": pid,
+            "datasourceTitle": title,
+            filetype: dumpfile,
         }
+
         for n in p.concept_scheme.notes:
-            if n.type in ['definition', 'scopeNote']:
-                sourceconfig['description'] = n.note
+            if n.type in ["definition", "scopeNote"]:
+                sourceconfig["description"] = n.note
                 break
-        ldfconfig['datasources'][pid] = sourceconfig
+
+        ldfconfig["datasources"].append(sourceconfig)
 
     if len(pids):
-        sourceconfig = {
-            'title': 'All conceptschemes',
-            'type': 'CompositeDatasource',
-            'description': 'All conceptschemes contained in this Atramhasis instance together.',
-            'settings': {
-                'references': pids
-            }
+        composite_sourceconfig = {
+            "@id": "urn:ldf-server:myDatasourcecomposite",
+            "@type": "CompositeDatasource",
+            "quads": False,  # TODO
+            "datasourcePath": "composite",
+            "datasourceTitle": "All conceptschemes",
+            "description": (
+                "All conceptschemes contained in this Atramhasis instance together."
+            ),
+            "compose": [f"urn:ldf-server:myDatasource{pid}" for pid in pids],
         }
-        ldfconfig['datasources']['composite'] = sourceconfig
+        ldfconfig["datasources"].append(composite_sourceconfig)
 
+    config_filename = os.path.join(config_location, "ldf_server_config.json")
 
-    config_filename = os.path.join(config_location, 'ldf_server_config.json')
-
-    with open(config_filename, 'w') as fp:
+    with open(config_filename, "w") as fp:
         json.dump(ldfconfig, fp, indent=4)
 
-    print('Config written to %s.' % config_filename)
+    print("Config written to %s." % config_filename)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
-    env['closer']()
+    env["closer"]()
