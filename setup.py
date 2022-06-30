@@ -53,6 +53,7 @@ requires = [
     'skosprovider_rdf',
     'skosprovider_getty',
     'pyramid_skosprovider',
+    'pyramid_openapi3',
     'language_tags',
     'jinja2',
     'pyramid_jinja2',
