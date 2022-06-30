@@ -4,8 +4,8 @@
 Demo
 ====
 
-Running a demo site
-===================
+Running a demo site with Cookiecutter
+=====================================
 
 Checking a working instance of the Atramhasis can be done at `the Flanders
 Heritage Thesaurus <https://thesaurus.onroerenderfgoed.be>`_ or by running a
