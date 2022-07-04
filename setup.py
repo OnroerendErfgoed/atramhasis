@@ -53,6 +53,7 @@ requires = [
     'skosprovider_rdf',
     'skosprovider_getty',
     'pyramid_skosprovider',
+    'pyramid_openapi3',
     'language_tags',
     'jinja2',
     'pyramid_jinja2',
@@ -69,7 +70,7 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='1.0.3',
+      version='1.1.0',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       long_description_content_type='text/x-rst',

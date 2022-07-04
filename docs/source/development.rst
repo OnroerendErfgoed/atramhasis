@@ -236,7 +236,7 @@ refer to the LDF server documentation for troubleshooting.
 .. code-block:: bash
 
     # Install ldf-server
-    $ [sudo] npm install -g ldf-server
+    $ [sudo] npm install -g @ldf/server
     # Run ldf-server
     $ ldf-server ldf_server_config.json
 
@@ -290,7 +290,7 @@ Distribution
 ============
 
 For building a distribution use the prepare command before the distribution command.
-This will update the requirement files in the scaffolds.
+This will build the dojo code in the static folder.
 
 .. code-block:: bash
 
