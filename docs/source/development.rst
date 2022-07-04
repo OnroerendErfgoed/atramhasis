@@ -290,7 +290,7 @@ Distribution
 ============
 
 For building a distribution use the prepare command before the distribution command.
-This will update the requirement files in the scaffolds.
+This will build the dojo code in the static folder.
 
 .. code-block:: bash
 
