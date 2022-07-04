@@ -1,3 +1,12 @@
+1.1.0 (04-07-2022)
+------------------
+
+- Integration with LDF is out of date (#687)
+- Missing dependency pyramid_openapi3 (#697)
+- Docs should be updated for creating a demo site (#699)
+- Demo site crashes on a concept detail (#700)
+
+
 1.0.3 (14-01-2022)
 ------------------
 
