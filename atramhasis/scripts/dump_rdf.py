@@ -108,12 +108,12 @@ def main():
             'conceptscheme_triples': cs_triples,
             'avg_concept_triples': avg_concept_triples
         })
-        log.info('Dumping %s to Turtle: %s' % (pid, filename_ttl))
+        log.info(f'Dumping {pid} to Turtle: {filename_ttl}')
         graph.serialize(destination=filename_ttl, format='turtle')
-        log.info('Dumping %s to RDFxml: %s' % (pid, filename_rdf))
+        log.info(f'Dumping {pid} to RDFxml: {filename_rdf}')
         graph.serialize(destination=filename_rdf, format='pretty-xml')
         del graph
-        log.info("--- %s seconds ---" % (time.time() - start_time))
+        log.info(f'--- {(time.time() - start_time)} seconds ---')
 
     log.info('All files dumped to %s' % dump_location)
 
@@ -128,17 +128,17 @@ def main():
             except (FileNotFoundError, CalledProcessError) as e:
                 # Turtle failed, let's try rdfxml
                 parsing_error = True
-                log.warning('rdf2hdt failed with error %s. Trying rdfxml...' % e)
+                log.warning(f'rdf2hdt for file {f} failed with error {e}. Trying rdfxml...')
                 rdff = f.replace('.ttl', '.rdf')
                 try:
                     check_call([rdf2hdt, '-f', 'rdfxml', rdff, hdtf])
                 except (FileNotFoundError, CalledProcessError) as e:
                     # rdfxml failed
-                    log.error('rdfxml failed with error %s' % e)
+                    log.error(f'rdfxml for file {f} failed with error {e}')
         if parsing_error:
             log.error('Error during rdf2hdt conversion. Check logs for more information.')
         else:
-            log.info('All hdt files dumped to %s' % dump_location)
+            log.info(f'All hdt files dumped to {dump_location}')
 
     with transaction.manager:
         dbsession = request.registry.dbmaker()
