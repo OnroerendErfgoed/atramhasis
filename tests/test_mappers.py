@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import unittest
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -8,7 +7,7 @@ from atramhasis.data.datamanagers import SkosManager
 try:
     from unittest.mock import Mock
 except ImportError:
-    from mock import Mock  # pragma: no cover
+    from unittest.mock import Mock  # pragma: no cover
 from pyramid import testing
 from skosprovider_sqlalchemy.models import (
     Thing,

@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
 import unittest
 
 try:
     from unittest.mock import Mock
 except ImportError:
-    from mock import Mock  # pragma: no cover
+    from unittest.mock import Mock  # pragma: no cover
 
 from rdflib import Graph
 from rdflib.term import URIRef, Literal

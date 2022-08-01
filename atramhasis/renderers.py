@@ -21,7 +21,7 @@ from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Source
 
 
-class CSVRenderer(object):
+class CSVRenderer:
     def __init__(self, info):
         pass
 

@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 '''
 Testdata cotaining heritage types
 
 .. versionadded:: 0.4.4
 '''
 
-from __future__ import unicode_literals
 
 from skosprovider.providers import DictionaryProvider
 from skosprovider.uri import UriPatternGenerator

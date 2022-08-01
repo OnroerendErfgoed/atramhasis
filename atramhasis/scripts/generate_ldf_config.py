@@ -1,16 +1,17 @@
-# -*- coding: utf-8 -*-
+import logging
 import optparse
 import sys
 import os
 import time
 import textwrap
-from datetime import datetime
 
 from pyramid.paster import bootstrap, setup_logging
 
 import json
 
 from atramhasis.errors import SkosRegistryNotFoundException
+
+log = logging.getLogger(__name__)
 
 
 def main():
@@ -33,7 +34,7 @@ def main():
     options, args = parser.parse_args(sys.argv[1:])
 
     if not len(args) >= 1:
-        print("You must provide at least one argument.")
+        log.error("You must provide at least one argument.")
         return 2
 
     config_uri = args[0]
@@ -139,8 +140,8 @@ def main():
     with open(config_filename, "w") as fp:
         json.dump(ldfconfig, fp, indent=4)
 
-    print("Config written to %s." % config_filename)
+    log.info(f'Config written to {config_filename}.')
 
-    print("--- %s seconds ---" % (time.time() - start_time))
+    log.info(f'--- {(time.time() - start_time)} seconds ---;')
 
     env["closer"]()

@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError
 try:
     from unittest.mock import Mock, MagicMock
 except ImportError:
-    from mock import Mock, MagicMock  # pragma: no cover
+    from unittest.mock import Mock, MagicMock  # pragma: no cover
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ConceptNotFoundException, DbNotFoundException, ValidationError, LanguageNotFoundException
 from atramhasis.views.exception_views import data_integrity

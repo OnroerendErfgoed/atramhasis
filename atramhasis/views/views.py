@@ -29,14 +29,14 @@ def get_definition(notes):
 
 
 def sort_by_labels(concepts, locale, reverse=False):
-    return sorted([x for x in concepts if x.label(locale)],
+    return sorted((x for x in concepts if x.label(locale)),
                   reverse=reverse,
                   key=lambda child: child.label(locale).label.lower()
                   ) + [x for x in concepts if not x.label(locale)]
 
 
 @view_defaults(accept='text/html')
-class AtramhasisView(object):
+class AtramhasisView:
     """
     This object groups HTML views part of the public user interface.
     """
@@ -353,7 +353,7 @@ class AtramhasisView(object):
 
 
 @view_defaults(accept='application/json', renderer='json')
-class AtramhasisListView(object):
+class AtramhasisListView:
     """
     This object groups list views part for the user interface.
     """
@@ -379,7 +379,7 @@ class AtramhasisListView(object):
 
 
 @view_defaults(accept='text/html')
-class AtramhasisAdminView(object):
+class AtramhasisAdminView:
     """
     This object groups HTML views part of the admin user interface.
     """

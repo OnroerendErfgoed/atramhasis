@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import date
 from datetime import datetime
 
@@ -22,7 +21,7 @@ from tests import setup_db
 try:
     from unittest.mock import Mock, patch
 except ImportError:
-    from mock import Mock, patch
+    from unittest.mock import Mock, patch
 
 
 def setUpModule():
@@ -32,7 +31,7 @@ def setUpModule():
 
 class ConceptSchemeManagerTest(DbTest):
     def setUp(self):
-        super(ConceptSchemeManagerTest, self).setUp()
+        super().setUp()
         self.conceptscheme_manager = ConceptSchemeManager(self.session)
 
     def test_get(self):
@@ -64,7 +63,7 @@ class ConceptSchemeManagerTest(DbTest):
 
 class SkosManagerTest(DbTest):
     def setUp(self):
-        super(SkosManagerTest, self).setUp()
+        super().setUp()
         self.skos_manager = SkosManager(self.session)
 
     def test_get_thing(self):
@@ -112,7 +111,7 @@ class SkosManagerTest(DbTest):
 
 class LanguagesManagerTest(DbTest):
     def setUp(self):
-        super(LanguagesManagerTest, self).setUp()
+        super().setUp()
         self.language_manager = LanguagesManager(self.session)
 
     def test_get(self):
@@ -150,7 +149,7 @@ class LanguagesManagerTest(DbTest):
 
 class AuditManagerTest(DbTest):
     def setUp(self):
-        super(AuditManagerTest, self).setUp()
+        super().setUp()
         self.audit_manager = AuditManager(self.session)
 
     @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 8, 1))))
@@ -197,7 +196,7 @@ class AuditManagerTest(DbTest):
 
 class CountsManagerTest(DbTest):
     def setUp(self):
-        super(CountsManagerTest, self).setUp()
+        super().setUp()
         self.counts_manager = CountsManager(self.session)
 
     def test_count_for_scheme(self):

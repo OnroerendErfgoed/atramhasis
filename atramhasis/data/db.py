@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Module that sets up the datamanagers and the database connections.
 """

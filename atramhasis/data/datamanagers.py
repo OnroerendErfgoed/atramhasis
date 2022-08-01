@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 This module adds DataManagers for Atramhasis. These are service layer objects
 that abstract all interactions with the database away from the views.
@@ -28,7 +27,7 @@ from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
 
 
-class DataManager(object):
+class DataManager:
     """
     A DataManager abstracts all interactions with the database for a certain model.
     """
@@ -44,7 +43,7 @@ class ConceptSchemeManager(DataManager):
     """
 
     def __init__(self, session):
-        super(ConceptSchemeManager, self).__init__(session)
+        super().__init__(session)
 
     def get(self, conceptscheme_id):
         """
@@ -136,7 +135,7 @@ class SkosManager(DataManager):
     """
 
     def __init__(self, session):
-        super(SkosManager, self).__init__(session)
+        super().__init__(session)
 
     def get_thing(self, concept_id, conceptscheme_id):
         """
@@ -209,7 +208,7 @@ class LanguagesManager(DataManager):
     """
 
     def __init__(self, session):
-        super(LanguagesManager, self).__init__(session)
+        super().__init__(session)
 
     def get(self, language_id):
         return self.session.query(Language).filter_by(id=language_id).one()
