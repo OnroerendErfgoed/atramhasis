@@ -65,7 +65,7 @@ requires = [
     'dogpile.cache',
     'pyramid_rewrite',
     'python-dateutil',
-    'rdflib',
+    'rdflib == 5.0.0',
     'bleach',
 ]
 
