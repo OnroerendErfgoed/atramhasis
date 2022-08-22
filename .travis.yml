@@ -1,9 +1,11 @@
 sudo: false
 language: python
+os: linux
+dist: focal
 python:
- - "3.6"
- - "3.7"
- - "3.8"
+ - 3.8
+ - 3.9
+ - 3.10
 before_install:
  - pip install --upgrade pip
  - pip install setuptools==59.6.0 #https://github.com/pypa/setuptools/issues/3293
