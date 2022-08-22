@@ -40,9 +40,9 @@ def void_dumper(request, registry):
     dataset = URIRef(duri)
     graph.add((dataset, RDF.type, VOID.Dataset))
     graph.add((dataset, FOAF.homepage, URIRef(request.route_url('home'))))
-    graph.add((dataset, VOID.vocabulary, DCTERMS['']))
-    graph.add((dataset, VOID.vocabulary, SKOS.uri))
-    graph.add((dataset, VOID.vocabulary, SKOS_THES['']))
+    graph.add((dataset, VOID.vocabulary, URIRef(DCTERMS)))
+    graph.add((dataset, VOID.vocabulary, URIRef(SKOS)))
+    graph.add((dataset, VOID.vocabulary, URIRef(SKOS_THES)))
     ldf_enabled = asbool(request.registry.settings.get(
         'atramhasis.ldf.enabled',
         None

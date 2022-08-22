@@ -29,7 +29,7 @@ class AtramhasisVoid:
     def rdf_void_turtle(self):
         graph = void_dumper(self.request, self.skos_registry)
         response = Response(content_type='text/turtle')
-        response.body = graph.serialize(format='turtle')
+        response.text = graph.serialize(format='turtle')
         response.content_disposition = 'attachment; filename="void.ttl"'
         return response
 
@@ -85,7 +85,7 @@ class AtramhasisRDF:
     def rdf_conceptscheme_export(self):
         graph = utils.rdf_conceptscheme_dumper(self.provider)
         response = Response(content_type='application/rdf+xml')
-        response.body = graph.serialize(format='xml')
+        response.text = graph.serialize(format='xml')
         response.content_disposition = 'attachment; filename="{}.rdf"'.format(str(self.scheme_id))
         return response
 
@@ -95,7 +95,7 @@ class AtramhasisRDF:
     def rdf_conceptscheme_export_turtle(self):
         graph = utils.rdf_conceptscheme_dumper(self.provider)
         response = Response(content_type='text/turtle')
-        response.body = graph.serialize(format='turtle')
+        response.text = graph.serialize(format='turtle')
         response.content_disposition = 'attachment; filename="{}.ttl"'.format(str(self.scheme_id))
         return response
 
@@ -105,7 +105,7 @@ class AtramhasisRDF:
     def rdf_individual_export(self):
         graph = utils.rdf_c_dumper(self.provider, self.c_id)
         response = Response(content_type='application/rdf+xml')
-        response.body = graph.serialize(format='xml')
+        response.text = graph.serialize(format='xml')
         response.content_disposition = 'attachment; filename="{}.rdf"'.format(str(self.c_id))
         return response
 
@@ -116,7 +116,7 @@ class AtramhasisRDF:
     def rdf_individual_export_turtle(self):
         graph = utils.rdf_c_dumper(self.provider, self.c_id)
         response = Response(content_type='text/turtle')
-        response.body = graph.serialize(format='turtle')
+        response.text = graph.serialize(format='turtle')
         response.content_disposition = 'attachment; filename="{}.ttl"'.format(str(self.c_id))
         return response
 

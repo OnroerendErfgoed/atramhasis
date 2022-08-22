@@ -6,11 +6,11 @@ openapi-core==0.13.8 # newer version incompatible with pyramid_openapi3==0.13
 pyramid_openapi3==0.13
 
 # skosprovider
-skosprovider==1.1.1
+skosprovider==1.1.0
 skosprovider_sqlalchemy==1.0.0
 pyramid_skosprovider==1.1.0
-skosprovider_rdf==1.0.0
-skosprovider_getty==1.0.0
+skosprovider_rdf==1.1.0
+skosprovider_getty==1.1.0
 
 language-tags==1.1.0
 
