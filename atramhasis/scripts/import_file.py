@@ -74,6 +74,10 @@ def file_to_json_provider(**kwargs):
 
 
 supported_types = {
+    'JSON': {
+        'extensions': ['.json'],
+        'file_to_provider': file_to_json_provider
+    },
     'RDF': {
         'extensions': ['.%s' % suffix for suffix in SUFFIX_FORMAT_MAP],
         'file_to_provider': file_to_rdf_provider
@@ -81,10 +85,6 @@ supported_types = {
     'CSV': {
         'extensions': ['.csv'],
         'file_to_provider': file_to_csv_provider
-    },
-    'JSON': {
-        'extensions': ['.json'],
-        'file_to_provider': file_to_json_provider
     }
 }
 
