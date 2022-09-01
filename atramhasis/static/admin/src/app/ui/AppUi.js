@@ -29,6 +29,7 @@ define([
   './dialogs/ImportConceptDialog',
   './dialogs/MergeConceptDialog',
   './dialogs/ManageSchemeDialog',
+  './dialogs/CreateSchemeDialog',
   '../utils/ErrorUtils',
   'dojo/NodeList-manipulate'
 ], function (
@@ -59,6 +60,7 @@ define([
   ImportConceptDialog,
   MergeConceptDialog,
   ManageSchemeDialog,
+  CreateSchemeDialog,
   errorUtils
 ) {
   return declare([_WidgetBase, _TemplatedMixin], {
@@ -136,6 +138,17 @@ define([
       this._manageSchemeDialog.startup();
       on(this._manageSchemeDialog, 'scheme.save', lang.hitch(this, function(evt) {
         this._saveConceptScheme(this._manageSchemeDialog, evt.scheme);
+      }));
+
+      this._createSchemeDialog = new CreateSchemeDialog({
+        parent: this,
+        languageController: this.languageController,
+        listController: this.listController,
+        conceptSchemeController: this.conceptSchemeController
+      });
+      this._createSchemeDialog.startup();
+      on(this._createSchemeDialog, 'scheme.create', lang.hitch(this, function(evt) {
+        this._createConceptScheme(this._createSchemeDialog, evt.scheme);
       }));
 
       on(window, 'resize', lang.hitch(this, function() { this._calculateHeight() }));
@@ -348,6 +361,12 @@ define([
       }).always(lang.hitch(this, function() {
         this._hideLoading();
       }));
+    },
+
+    _openCreateConceptScheme: function (evt) {
+      evt.preventDefault();
+      // open dialog
+      this._createSchemeDialog.show();
     },
 
     _openEditConceptScheme: function(schemeId) {
@@ -646,6 +665,27 @@ define([
         view._close();
         topic.publish('dGrowl', 'The concept scheme was successfully saved.', {
           'title': 'Save successful',
+          'sticky': false,
+          'channel': 'info'
+        });
+      }), function(err) {
+        var parsedError = errorUtils.parseError(err);
+        topic.publish('dGrowl', parsedError.message, {
+          'title': parsedError.title,
+          'sticky': true,
+          'channel': 'error'
+        });
+      }).always(lang.hitch(this, function() {
+        this._hideLoading();
+      }));
+    },
+
+    _createConceptScheme: function(view, scheme) {
+      this._showLoading('Creating concept scheme..');
+      this.conceptSchemeController.createConceptScheme(scheme).then(lang.hitch(this, function(res) {
+        view._close();
+        topic.publish('dGrowl', 'The concept scheme was successfully created.', {
+          'title': 'Create successful',
           'sticky': false,
           'channel': 'info'
         });

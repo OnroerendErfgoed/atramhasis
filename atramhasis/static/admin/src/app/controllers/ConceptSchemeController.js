@@ -66,6 +66,28 @@ define([
         });
     },
 
+    deleteConceptScheme: function(concept){
+      console.debug('ConceptSchemeController::deleteConceptScheme', concept);
+      return xhr(this._target + '/' + concept.id,
+        {
+          handleAs: "json",
+          method: "DELETE",
+          headers:{'Content-Type': 'application/json', 'Accept': "application/json"}
+        });
+    },
+
+    createConceptScheme: function(concept){
+      console.debug('ConceptSchemeController::createConceptScheme', concept);
+      var jData = json.stringify(concept);
+      return xhr(this._target,
+        {
+          handleAs: "json",
+          method: "POST",
+          data: jData,
+          headers:{'Content-Type': 'application/json', 'Accept': "application/json"}
+        });
+    },
+
     loadConceptSchemeStores: function() {
       console.debug('ConceptSchemeController::loadConceptSchemeStores');
       return this.getConceptSchemes().then(lang.hitch(this, function (schemes) {
