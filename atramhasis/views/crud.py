@@ -10,7 +10,7 @@ from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid_skosprovider.views import ProviderView
 from skosprovider_sqlalchemy.models import Collection
-from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import Concept, ConceptScheme
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
@@ -103,6 +103,17 @@ class AtramhasisCrud:
             raise HTTPMethodNotAllowed
         # is the same as the pyramid_skosprovider get_conceptscheme function, but wrapped with the audit function
         return ProviderView(self.request).get_conceptscheme()
+
+    @view_config(route_name='atramhasis.create_conceptscheme', permission='edit')
+    def create_conceptscheme(self):
+        """
+        Create an empty conceptscheme
+
+        """
+        validated_json_conceptscheme = self._validate_conceptscheme(self._get_json_body())
+        conceptscheme = map_conceptscheme(ConceptScheme(), validated_json_conceptscheme)
+        conceptscheme = self.conceptscheme_manager.save(conceptscheme)
+        self.request.response.status = '200'
 
     @view_config(route_name='atramhasis.edit_conceptscheme', permission='edit')
     def edit_conceptscheme(self):
