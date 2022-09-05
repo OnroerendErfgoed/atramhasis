@@ -139,7 +139,6 @@ class ConceptSchemeManager(DataManager):
         self.session.flush()
         return conceptscheme
 
-
 class SkosManager(DataManager):
     """
     A :class:`DataManager` for
@@ -167,7 +166,7 @@ class SkosManager(DataManager):
         :return: saved thing
         """
         self.session.add(thing)
-        self.session.commit()
+        self.session.flush()
         return thing
 
     def change_type(self, thing, concept_id, conceptscheme_id, new_type, uri):
