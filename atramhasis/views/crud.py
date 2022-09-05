@@ -117,6 +117,16 @@ class AtramhasisCrud:
         self.request.response.status = '200'
         return conceptscheme
 
+    @view_config(route_name='atramhasis.delete_conceptscheme', permission='edit')
+    def delete_conceptscheme(self):
+        """
+        Delete a conceptscheme
+
+        """
+        conceptscheme = self.conceptscheme_manager.get(self.provider.conceptscheme_id)
+        self.conceptscheme_manager.delete_thing(conceptscheme)
+
+
     @view_config(route_name='atramhasis.edit_conceptscheme', permission='edit')
     def edit_conceptscheme(self):
         """

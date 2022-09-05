@@ -139,6 +139,13 @@ class ConceptSchemeManager(DataManager):
         self.session.flush()
         return conceptscheme
 
+    def delete(self, conceptscheme):
+        """
+
+        :param conceptscheme: conceptscheme to delete
+        """ 
+        self.session.delete(conceptscheme)
+
 class SkosManager(DataManager):
     """
     A :class:`DataManager` for

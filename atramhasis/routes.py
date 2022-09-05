@@ -39,6 +39,7 @@ def includeme(config):
 
     config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html', request_method="GET")
     config.add_route('atramhasis.create_conceptscheme', pattern='/conceptschemes', accept='application/json', request_method="POST")
+    config.add_route('atramhasis.delete_conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='application/json', request_method="DELETE")
     config.add_route('conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='text/html', request_method="GET")
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}', accept='text/html',
                      request_method="GET")
