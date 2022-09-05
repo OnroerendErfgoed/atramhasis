@@ -17,6 +17,7 @@ from skosprovider_sqlalchemy.models import Language
 from skosprovider_sqlalchemy.models import Match
 from skosprovider_sqlalchemy.models import MatchType
 from skosprovider_sqlalchemy.models import Thing
+from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy import and_
 from sqlalchemy import desc
 from sqlalchemy import func
@@ -128,6 +129,17 @@ class ConceptSchemeManager(DataManager):
         return conceptscheme
 
 
+    def create(self, conceptscheme):
+        """
+
+        :param conceptscheme: conceptscheme to create
+        :return: create conceptscheme
+        """ 
+        self.session.add(conceptscheme)
+        self.session.flush()
+        return conceptscheme
+
+
 class SkosManager(DataManager):
     """
     A :class:`DataManager` for
@@ -155,7 +167,7 @@ class SkosManager(DataManager):
         :return: saved thing
         """
         self.session.add(thing)
-        self.session.flush()
+        self.session.commit()
         return thing
 
     def change_type(self, thing, concept_id, conceptscheme_id, new_type, uri):

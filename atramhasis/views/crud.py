@@ -110,10 +110,12 @@ class AtramhasisCrud:
         Create an empty conceptscheme
 
         """
-        validated_json_conceptscheme = self._validate_conceptscheme(self._get_json_body())
-        conceptscheme = map_conceptscheme(ConceptScheme(), validated_json_conceptscheme)
-        conceptscheme = self.conceptscheme_manager.save(conceptscheme)
+        #validated_json_conceptscheme = self._validate_conceptscheme(self._get_json_body())
+        conceptscheme = ConceptScheme()
+        conceptscheme = map_conceptscheme(conceptscheme, self._get_json_body())
+        conceptscheme = self.conceptscheme_manager.create(conceptscheme)
         self.request.response.status = '200'
+        return conceptscheme
 
     @view_config(route_name='atramhasis.edit_conceptscheme', permission='edit')
     def edit_conceptscheme(self):

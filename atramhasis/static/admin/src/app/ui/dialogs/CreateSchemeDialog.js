@@ -53,7 +53,11 @@ define([
       evt.preventDefault();
       if (this._validate()) {
         this.emit('scheme.create', { scheme: {
-          label: this.labelInputNode.value.trim(),
+          labels: [{
+            // TODO: replace with proper label dialog
+            type: "prefLabel", language: "en",
+            label: this.labelInputNode.value.trim()
+          }],
           uri: this.uriInputNode.value.trim(),
         }
         });
