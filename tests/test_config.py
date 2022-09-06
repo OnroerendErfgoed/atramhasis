@@ -23,7 +23,7 @@ class TestConfig(DbTest):
         self.assertIsNotNone(app)
 
     def test_config_alt_dump_location(self):
-        random_dump_loc = 'dump{0}'.format(random.randint(0, 100))
+        random_dump_loc = f'dump{random.randint(0, 100)}'
         settings['atramhasis.dump_location'] = os.path.join(here, random_dump_loc)
         app = main({}, **settings)
         self.assertIsNotNone(app)

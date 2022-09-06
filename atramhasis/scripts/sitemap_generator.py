@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 import argparse
 import contextlib
 import datetime
 import logging
 import os
-import xml.etree.cElementTree as ElementTree
+import xml.etree.ElementTree as ElementTree
 from os import listdir
 from os.path import isfile
 
+from builtins import input
 from pyramid.paster import get_appsettings, bootstrap
 from pyramid.paster import setup_logging
 from pytz import timezone
@@ -15,11 +15,6 @@ from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 
 from atramhasis.errors import SkosRegistryNotFoundException
-
-try:
-    from builtins import input
-except ImportError:
-    input = raw_input
 
 timezone_brussels = timezone('Europe/Brussels')
 log = logging.getLogger(__name__)
@@ -48,8 +43,8 @@ def write_element_to_xml(filename, sitemap_dir, element):
 
 def create_sitemaps(settings, limit_per_deel, directory, env):
     base_url = settings.get("atramhasis.url")
-    schemes_url = "{}/conceptschemes/{{}}".format(base_url)
-    concepts_url = "{}/c/{{}}".format(schemes_url)
+    schemes_url = f"{base_url}/conceptschemes/{{}}"
+    concepts_url = f"{schemes_url}/c/{{}}"
 
     request = env['request']
 
@@ -91,7 +86,7 @@ def create_deel_sitemaps(objecturls, limit_per_deel, sitemap_dir, name):
         ElementTree.SubElement(url, "loc").text = objecturl
 
         if counter % limit_per_deel == 0:
-            filename = '{}_sitemap_deel_{}.xml'.format(name, sitemap_counter)
+            filename = f'{name}_sitemap_deel_{sitemap_counter}.xml'
             log.info("Processed %s conceptschemes, writing %s", counter, filename)
             write_element_to_xml(filename, sitemap_dir, urlset)
             sitemap_counter += 1
@@ -99,9 +94,9 @@ def create_deel_sitemaps(objecturls, limit_per_deel, sitemap_dir, name):
                 "urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
             )
     if len(urlset):
-        filename = '{}_sitemap_deel_{}.xml'.format(name, sitemap_counter)
+        filename = f'{name}_sitemap_deel_{sitemap_counter}.xml'
         write_element_to_xml(filename, sitemap_dir, urlset)
-    log.info("All {} sitemaps created.".format(name))
+    log.info(f"All {name} sitemaps created.")
 
 
 def create_index_sitemap(base_url, directory):
@@ -117,7 +112,7 @@ def create_index_sitemap(base_url, directory):
     )
 
     for file_name in list_sitemaps:
-        sitemap_static_url = "{}/sitemaps/{}".format(base_url, file_name)
+        sitemap_static_url = f"{base_url}/sitemaps/{file_name}"
         sitemap_area = ElementTree.SubElement(sitemapindex, "sitemap")
         ElementTree.SubElement(sitemap_area, "loc").text = sitemap_static_url
         today = datetime.datetime.now(timezone_brussels).strftime("%Y-%m-%d")

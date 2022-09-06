@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import sys
 
@@ -17,7 +16,7 @@ from tests import setup_db
 try:
     from unittest.mock import Mock, patch
 except ImportError:
-    from mock import Mock, patch
+    from unittest.mock import Mock, patch
 
 test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.rdf')
 test_data_ttl = os.path.join(TEST_DIR, 'data', 'trees.ttl')
@@ -32,7 +31,7 @@ def setUpModule():
 class ImportTests(DbTest):
 
     def setUp(self):
-        super(ImportTests, self).setUp()
+        super().setUp()
         # Patch the session that scripts will use to the session of the tests.
         # This makes everything rollback after every test.
         self.patcher = patch.object(import_file, 'conn_str_to_session',
@@ -41,7 +40,7 @@ class ImportTests(DbTest):
 
     def tearDown(self):
         self.patcher.stop()
-        super(ImportTests, self).tearDown()
+        super().tearDown()
 
     def _check_trees(self, conceptscheme_label):
         sql_prov = SQLAlchemyProvider({'id': 'TREES', 'conceptscheme_id': 1}, self.session)
@@ -58,7 +57,7 @@ class ImportTests(DbTest):
         label_nl = [label for label in obj_1['labels'] if label['language'] == 'nl'][0]
         self.assertDictEqual(label_nl, {'label': 'De Paardekastanje', 'language': 'nl', 'type': 'altLabel'})
         label_fr = [label for label in obj_1['labels'] if label['language'] == 'fr'][0]
-        self.assertDictEqual(label_fr, {'label': u'la châtaigne', 'language': 'fr', 'type': 'altLabel'})
+        self.assertDictEqual(label_fr, {'label': 'la châtaigne', 'language': 'fr', 'type': 'altLabel'})
         self.assertDictEqual(obj_1['notes'][0],
                              {'language': 'en', 'note': 'A different type of tree.', 'type': 'definition', 'markup': None})
 

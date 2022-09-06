@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Module containing error views.
 """
@@ -42,7 +41,7 @@ def failed_validation(exc, request):
     """
     View invoked when bad data was submitted to Atramhasis.
     """
-    log.debug("'message': {0}, 'errors': {1}".format(exc.value, exc.errors))
+    log.debug(f"'message': {exc.value}, 'errors': {exc.errors}")
     request.response.status_int = 400
     return {'message': exc.value, 'errors': exc.errors}
 
@@ -52,7 +51,7 @@ def protected(exc, request):
     """
     when a protected operation is called on a resource that is still referenced
     """
-    log.warning("'message': {0}, 'referenced_in': {1}".format(exc.value, exc.referenced_in))
+    log.warning(f"'message': {exc.value}, 'referenced_in': {exc.referenced_in}")
     request.response.status_int = 409
     return {'message': exc.value, 'referenced_in': exc.referenced_in}
 

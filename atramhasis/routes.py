@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Routes for the Atramhasis views.
 

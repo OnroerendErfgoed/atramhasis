@@ -40,8 +40,8 @@ def main(argv=sys.argv):
             id=1,
             uri='urn:x-skosprovider:trees',
             labels=[
-                Label('Verschillende soorten bomen', u'prefLabel', u'nl'),
-                Label('Different types of trees', u'prefLabel', u'en')
+                Label('Verschillende soorten bomen', 'prefLabel', 'nl'),
+                Label('Different types of trees', 'prefLabel', 'en')
             ]
         ),
         db_session
@@ -52,8 +52,8 @@ def main(argv=sys.argv):
             id=2,
             uri='urn:x-skosprovider:geo',
             labels=[
-                Label('Geografie', u'prefLabel', u'nl'),
-                Label('Geography', u'prefLabel', u'en')
+                Label('Geografie', 'prefLabel', 'nl'),
+                Label('Geography', 'prefLabel', 'en')
             ]
         ),
         db_session
@@ -64,8 +64,8 @@ def main(argv=sys.argv):
             id=3,
             uri='https://id.erfgoed.net/thesauri/stijlen_en_culturen',
             labels=[
-                Label('Stijlen en Culturen', u'prefLabel', u'nl'),
-                Label('Styles and Cultures', u'prefLabel', u'en')
+                Label('Stijlen en Culturen', 'prefLabel', 'nl'),
+                Label('Styles and Cultures', 'prefLabel', 'en')
             ]
         ),
         db_session
@@ -76,8 +76,8 @@ def main(argv=sys.argv):
             id=4,
             uri='https://id.erfgoed.net/thesauri/materialen',
             labels=[
-                Label('Materialen', u'prefLabel', u'nl'),
-                Label('Materials', u'prefLabel', u'en')
+                Label('Materialen', 'prefLabel', 'nl'),
+                Label('Materials', 'prefLabel', 'en')
             ]
         ),
         db_session
@@ -88,8 +88,8 @@ def main(argv=sys.argv):
             id=5,
             uri='https://id.erfgoed.net/thesauri/gebeurtenistypes',
             labels=[
-                Label('Gebeurtenistypes', u'prefLabel', u'nl'),
-                Label('Event types', u'prefLabel', u'en')
+                Label('Gebeurtenistypes', 'prefLabel', 'nl'),
+                Label('Event types', 'prefLabel', 'en')
             ]
         ),
         db_session
@@ -100,8 +100,8 @@ def main(argv=sys.argv):
             id=6,
             uri='https://id.erfgoed.net/thesauri/erfgoedtypes',
             labels=[
-                Label('Erfgoedtypes', u'prefLabel', u'nl'),
-                Label('Heritage types', u'prefLabel', u'en')
+                Label('Erfgoedtypes', 'prefLabel', 'nl'),
+                Label('Heritage types', 'prefLabel', 'en')
             ]
         ),
         db_session
@@ -112,8 +112,8 @@ def main(argv=sys.argv):
             id=7,
             uri='https://id.erfgoed.net/thesauri/dateringen',
             labels=[
-                Label('Dateringen', u'prefLabel', u'nl'),
-                Label('Periods', u'prefLabel', u'en')
+                Label('Dateringen', 'prefLabel', 'nl'),
+                Label('Periods', 'prefLabel', 'en')
             ]
         ),
         db_session
@@ -124,8 +124,8 @@ def main(argv=sys.argv):
             id=8,
             uri='https://id.erfgoed.net/thesauri/soorten',
             labels=[
-                Label('Soorten', u'prefLabel', u'nl'),
-                Label('Species', u'prefLabel', u'en')
+                Label('Soorten', 'prefLabel', 'nl'),
+                Label('Species', 'prefLabel', 'en')
             ]
         ),
         db_session

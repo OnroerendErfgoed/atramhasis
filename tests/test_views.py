@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import unittest
 
@@ -31,7 +30,7 @@ from fixtures.data import trees
 try:
     from unittest.mock import Mock
 except ImportError:
-    from mock import Mock  # pragma: no cover
+    from unittest.mock import Mock  # pragma: no cover
 
 TEST_DIR = os.path.dirname(__file__)
 settings = appconfig('config:' + os.path.join(TEST_DIR, 'conf_test.ini'))
@@ -622,6 +621,6 @@ class TestListViews(unittest.TestCase):
         labellist = atramhasis_list_view.labeltype_list_view()
         self.assertIsNotNone(labellist)
         self.assertIn(
-            {'key': 'prefLabel', 'label': u'prefLabel'},
+            {'key': 'prefLabel', 'label': 'prefLabel'},
             labellist
         )

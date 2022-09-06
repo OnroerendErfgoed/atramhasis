@@ -106,7 +106,7 @@ class TestFromThing(unittest.TestCase):
         self.assertEqual(skoscollection.uri, 'urn:x-atramhasis-demo:TREES:102')
 
 
-class DummyViewClassForTest(object):
+class DummyViewClassForTest:
 
     def __init__(self):
         self.provider = None
@@ -163,11 +163,11 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
         c = Concept()
         c.id= 2
         c.labels = [Label('test', language_id='en-us')]
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{55}'})
         c = Concept()
         c.id= 33
         c.labels = [Label('test', language_id='nl-be')]
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(2)})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{2}'})
         self.assertEqual(2, len(self.request.session['last_visited']))
 
     def test_update_last_visited_concepts_max(self):
@@ -175,7 +175,7 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
             c = Concept()
             c.id = id
             c.labels = [Label('test', language_id='en-us')]
-            update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(id)})
+            update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{id}'})
         self.assertEqual(4, len(self.request.session['last_visited']))
         last = self.request.session['last_visited'].pop()
         self.assertEqual('http://test.test/49', last['url'])
@@ -184,10 +184,10 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
         c = Concept()
         c.id = 2
         c.labels = [Label('test', language_id='en-us')]
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(55)})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{55}'})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{55}'})
         c = Concept()
         c.id = 33
         c.labels = [Label('test', language_id='nl-be')]
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': 'http://test.test/{0}'.format(2)})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{2}'})
         self.assertEqual(2, len(self.request.session['last_visited']))

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 from atramhasis.errors import ConceptSchemeNotFoundException
 
@@ -10,7 +9,7 @@ that might be used in external applications.
 """
 
 
-class ProtectedResourceEvent(object):
+class ProtectedResourceEvent:
     """
     Event triggered when calling a protected operation on a resource
     """
@@ -29,7 +28,7 @@ def protected_operation(fn):
     def advice(parent_object, *args, **kw):
         request = parent_object.request
         url = request.path
-        match = re.compile('/conceptschemes/(\w+)/c/(\w+)').match(url)
+        match = re.compile(r'/conceptschemes/(\w+)/c/(\w+)').match(url)
         scheme_id = match.group(1)
         c_id = match.group(2)
         provider = request.skos_registry.get_provider(scheme_id)

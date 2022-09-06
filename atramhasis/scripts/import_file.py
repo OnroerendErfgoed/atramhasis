@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import sys
 import os
 import argparse
@@ -46,7 +45,7 @@ def file_to_csv_provider(**kwargs):
     """
     input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
-    with open(input_file, "r") as ifile:
+    with open(input_file) as ifile:
         reader = csv.reader(ifile)
         uri_pattern = kwargs.get('uri_pattern')
         provider_kwargs = {'uri_generator': UriPatternGenerator(uri_pattern)} if uri_pattern else {}
@@ -63,7 +62,7 @@ def file_to_json_provider(**kwargs):
     """
     input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
-    with open(input_file, 'r') as data_file:
+    with open(input_file) as data_file:
         dictionary = json.load(data_file)
     uri_pattern = kwargs.get('uri_pattern')
     provider_kwargs = {'uri_generator': UriPatternGenerator(uri_pattern)} if uri_pattern else {}
@@ -75,6 +74,10 @@ def file_to_json_provider(**kwargs):
 
 
 supported_types = {
+    'JSON': {
+        'extensions': ['.json'],
+        'file_to_provider': file_to_json_provider
+    },
     'RDF': {
         'extensions': ['.%s' % suffix for suffix in SUFFIX_FORMAT_MAP],
         'file_to_provider': file_to_rdf_provider
@@ -82,10 +85,6 @@ supported_types = {
     'CSV': {
         'extensions': ['.csv'],
         'file_to_provider': file_to_csv_provider
-    },
-    'JSON': {
-        'extensions': ['.json'],
-        'file_to_provider': file_to_json_provider
     }
 }
 
@@ -100,8 +99,8 @@ def parse_argv_for_import(argv):
     cmd = os.path.basename(argv[0])
     parser = argparse.ArgumentParser(
         description='Import file to a database',
-        usage='{0} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label] [--conceptscheme_uri cs_uri] [--uri_pattern uri_pattern]\n '
-              '(example: "{1} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels --conceptscheme_uri urn:x-skosprovider:trees" --uri_pattern urn:x-skosprovider:trees:%s)'.format(
+        usage='{} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label] [--conceptscheme_uri cs_uri] [--uri_pattern uri_pattern]\n '
+              '(example: "{} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels --conceptscheme_uri urn:x-skosprovider:trees" --uri_pattern urn:x-skosprovider:trees:%s)'.format(
             cmd, cmd)
     )
     parser.add_argument('--from',
@@ -146,10 +145,10 @@ def parse_argv_for_import(argv):
 
 def validate_file(input_file):
     if not os.path.exists(input_file):
-        print('The input file {0} does not exists'.format(input_file))
+        print(f'The input file {input_file} does not exists')
         return False
     elif os.path.splitext(input_file)[1] not in supported_ext:
-        print ('the input file {0} is not supported. Allowed extensions are: {1}'.format(input_file, supported_ext))
+        print (f'the input file {input_file} is not supported. Allowed extensions are: {supported_ext}')
         return False
     else:
         return True
