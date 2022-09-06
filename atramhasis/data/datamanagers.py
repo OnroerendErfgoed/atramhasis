@@ -139,7 +139,7 @@ class ConceptSchemeManager(DataManager):
         self.session.flush()
         return conceptscheme
 
-    def delete(self, conceptscheme):
+    def delete_thing(self, conceptscheme):
         """
 
         :param conceptscheme: conceptscheme to delete

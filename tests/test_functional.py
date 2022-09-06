@@ -95,6 +95,17 @@ json_value_invalid = """{
     "notes": []}
 }"""
 
+json_scheme_value = {
+    "uri": "urn:test:test",
+    "labels": [
+        {
+            "type": "prefLabel",
+            "language": "en",
+            "label": "TestScheme"
+        }
+    ],
+}
+
 json_collection_value = {
     "labels": [{
         "language": "nl",
@@ -215,6 +226,11 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
+
+    def test_create_conceptscheme(self):
+        res = self.testapp.post_json('/conceptschemes', headers=self._get_default_headers(), params=json_scheme_value)
+        self.assertEqual('201 Created', res.status)
+        self.assertIn('http://localhost/conceptschemes/10', res.headers['Location'])
 
     def test_get_concept_dictprovider(self):
         res = self.testapp.get('/conceptschemes/TEST/c/1', headers=self._get_default_headers())
@@ -485,13 +501,15 @@ class RestFunctionalTests(FunctionalTests):
             "referenced_in": ["urn:someobject", "http://test.test.org/object/2"]
         })
 
-    def test_method_not_allowed(self):
-        self.testapp.delete('/conceptschemes/TREES', headers=self._get_default_headers(), status=405)
-        self.testapp.post('/conceptschemes', headers=self._get_default_headers(), status=405)
+    # def test_method_not_allowed(self):
+    #     self.testapp.delete('/conceptschemes/TREES', headers=self._get_default_headers(), status=405)
+    #     self.testapp.post('/conceptschemes', headers=self._get_default_headers(), status=405)
 
     def test_get_conceptschemes(self):
         self.testapp.get('/conceptschemes', headers=self._get_default_headers(), status=200)
-
+    
+    def test_delete_conceptscheme(self):
+        self.testapp.delete('/conceptschemes/TEST', headers=self._get_default_headers(), status=200)
 
 class TestCookieView(FunctionalTests):
     def _get_default_headers(self):

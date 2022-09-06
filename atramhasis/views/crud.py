@@ -114,8 +114,9 @@ class AtramhasisCrud:
         conceptscheme = ConceptScheme()
         conceptscheme = map_conceptscheme(conceptscheme, self._get_json_body())
         conceptscheme = self.conceptscheme_manager.create(conceptscheme)
-        self.request.response.status = '200'
-        return conceptscheme
+        self.request.response.status = '201'
+        self.request.response.location = self.request.route_path(
+            'atramhasis.get_conceptscheme', scheme_id=conceptscheme.id)
 
     @view_config(route_name='atramhasis.delete_conceptscheme', permission='edit')
     def delete_conceptscheme(self):
@@ -124,7 +125,9 @@ class AtramhasisCrud:
 
         """
         conceptscheme = self.conceptscheme_manager.get(self.provider.conceptscheme_id)
-        self.conceptscheme_manager.delete_thing(conceptscheme)
+        result = self.conceptscheme_manager.delete_thing(conceptscheme)
+        self.request.response.status = '200'
+        return result
 
 
     @view_config(route_name='atramhasis.edit_conceptscheme', permission='edit')
