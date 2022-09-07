@@ -17,7 +17,9 @@ from skosprovider_sqlalchemy.utils import import_provider
 from skosprovider_sqlalchemy.models import (
     ConceptScheme,
     Label,
-    conceptscheme_label
+    conceptscheme_label,
+    Note,
+    Source
 )
 
 from sqlalchemy import create_engine
