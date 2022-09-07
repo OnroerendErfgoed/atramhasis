@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
 import unittest
 from atramhasis.protected_resources import ProtectedResourceEvent, ProtectedResourceException, protected_operation
 try:
     from unittest.mock import Mock, MagicMock
 except ImportError:
-    from mock import Mock, MagicMock, call  # pragma: no cover
+    from unittest.mock import Mock, MagicMock, call  # pragma: no cover
 from atramhasis.errors import ConceptSchemeNotFoundException
 
 
-class DummyParent(object):
+class DummyParent:
 
     def __init__(self):
         self.request = MagicMock()

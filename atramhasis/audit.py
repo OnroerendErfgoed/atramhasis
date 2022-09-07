@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from atramhasis.data.models import (
     ConceptschemeVisitLog,
     ConceptVisitLog

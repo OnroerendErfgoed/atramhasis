@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import colander
 from pyramid.view import view_defaults, view_config
 from skosprovider_sqlalchemy.models import Language
@@ -9,7 +8,7 @@ from atramhasis.validators import LanguageTag, languagetag_validator
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
-class LanguagesCrud(object):
+class LanguagesCrud:
     """
     This object groups CRUD REST views for languages.
     """

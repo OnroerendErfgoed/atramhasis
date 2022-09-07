@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 
 from pyramid.renderers import render
@@ -17,7 +16,7 @@ from atramhasis.audit import audit
 from atramhasis.rdf import void_dumper
 
 @view_defaults()
-class AtramhasisVoid(object):
+class AtramhasisVoid:
 
     def __init__(self, request):
         self.request = request
@@ -30,13 +29,13 @@ class AtramhasisVoid(object):
     def rdf_void_turtle(self):
         graph = void_dumper(self.request, self.skos_registry)
         response = Response(content_type='text/turtle')
-        response.body = graph.serialize(format='turtle')
+        response.text = graph.serialize(format='turtle')
         response.content_disposition = 'attachment; filename="void.ttl"'
         return response
 
 
 @view_defaults()
-class AtramhasisRDF(object):
+class AtramhasisRDF:
 
     def __init__(self, request):
         self.request = request
@@ -86,8 +85,8 @@ class AtramhasisRDF(object):
     def rdf_conceptscheme_export(self):
         graph = utils.rdf_conceptscheme_dumper(self.provider)
         response = Response(content_type='application/rdf+xml')
-        response.body = graph.serialize(format='xml')
-        response.content_disposition = 'attachment; filename="%s.rdf"' % (str(self.scheme_id),)
+        response.text = graph.serialize(format='xml')
+        response.content_disposition = 'attachment; filename="{}.rdf"'.format(str(self.scheme_id))
         return response
 
     @view_config(route_name='atramhasis.rdf_conceptscheme_export_turtle')
@@ -96,8 +95,8 @@ class AtramhasisRDF(object):
     def rdf_conceptscheme_export_turtle(self):
         graph = utils.rdf_conceptscheme_dumper(self.provider)
         response = Response(content_type='text/turtle')
-        response.body = graph.serialize(format='turtle')
-        response.content_disposition = 'attachment; filename="%s.ttl"' % (str(self.scheme_id),)
+        response.text = graph.serialize(format='turtle')
+        response.content_disposition = 'attachment; filename="{}.ttl"'.format(str(self.scheme_id))
         return response
 
     @audit
@@ -106,8 +105,8 @@ class AtramhasisRDF(object):
     def rdf_individual_export(self):
         graph = utils.rdf_c_dumper(self.provider, self.c_id)
         response = Response(content_type='application/rdf+xml')
-        response.body = graph.serialize(format='xml')
-        response.content_disposition = 'attachment; filename="%s.rdf"' % (str(self.c_id),)
+        response.text = graph.serialize(format='xml')
+        response.content_disposition = 'attachment; filename="{}.rdf"'.format(str(self.c_id))
         return response
 
     @audit
@@ -117,8 +116,8 @@ class AtramhasisRDF(object):
     def rdf_individual_export_turtle(self):
         graph = utils.rdf_c_dumper(self.provider, self.c_id)
         response = Response(content_type='text/turtle')
-        response.body = graph.serialize(format='turtle')
-        response.content_disposition = 'attachment; filename="%s.ttl"' % (str(self.c_id),)
+        response.text = graph.serialize(format='turtle')
+        response.content_disposition = 'attachment; filename="{}.ttl"'.format(str(self.c_id))
         return response
 
     @audit
@@ -128,7 +127,7 @@ class AtramhasisRDF(object):
         conceptscheme = ProviderView(self.request).get_conceptscheme_jsonld()
         response = Response(content_type='application/ld+json')
         response.text = render('skosjsonld', conceptscheme, self.request)
-        response.content_disposition = 'attachment; filename="%s.jsonld"' % (str(self.scheme_id),)
+        response.content_disposition = 'attachment; filename="{}.jsonld"'.format(str(self.scheme_id))
         return response
 
     @audit
@@ -138,5 +137,5 @@ class AtramhasisRDF(object):
         concept = ProviderView(self.request).get_concept()
         response = Response(content_type='application/ld+json')
         response.text = render('skosjsonld', concept, self.request)
-        response.content_disposition = 'attachment; filename="%s.jsonld"' % (str(self.c_id),)
+        response.content_disposition = 'attachment; filename="{}.jsonld"'.format(str(self.c_id))
         return response

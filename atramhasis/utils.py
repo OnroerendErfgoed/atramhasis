@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Module containing utility functions used by Atramhasis.
 """

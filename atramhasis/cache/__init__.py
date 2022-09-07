@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from dogpile.cache import make_region
 
 tree_region = make_region()

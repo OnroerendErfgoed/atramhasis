@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 import optparse
 import os
@@ -121,7 +120,7 @@ def main():
         from subprocess import check_call, CalledProcessError
         parsing_error = False
         for f in files:
-            log.info('Converting %s to hdt' % f)
+            log.info(f'Converting {f} to hdt')
             hdtf = f.replace('.ttl', '.hdt')
             try:
                 check_call([rdf2hdt, '-f', 'turtle', f, hdtf])
