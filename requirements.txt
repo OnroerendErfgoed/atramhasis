@@ -4,6 +4,7 @@ pyramid-tm==2.4
 pyramid_rewrite==0.2
 openapi-core==0.13.8 # newer version incompatible with pyramid_openapi3==0.13
 pyramid_openapi3==0.13
+openapi-spec-validator==0.4.0
 
 # skosprovider
 skosprovider==1.1.0
