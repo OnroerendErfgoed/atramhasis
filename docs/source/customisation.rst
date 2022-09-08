@@ -479,13 +479,13 @@ the :term:`Jinja2` documentation if you need help with this.
 Once you've created your template file, you just need to tell your project to
 override the default :file:`welcome.jinja2` with your version. To do this you
 need to configure the :term:`Pyramid` config object found in
-:file:`my_thesaurus.__init__.py`.
+:file:`my_thesaurus/__init__.py`.
 
 .. code-block:: python
 
     config.override_asset(
         to_override='atramhasis:templates/welcome.jinja2',
-        override_with='templates/my_welcome.jinja2'
+        override_with='my_thesaurus:templates/my_welcome.jinja2'
     )
 
 .. note::
