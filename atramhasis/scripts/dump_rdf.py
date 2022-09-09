@@ -55,6 +55,9 @@ def main():
             'atramhasis.dump_location',
             os.path.abspath(os.path.dirname(config_uri))
         )
+    if not os.access(dump_location, os.W_OK | os.X_OK):
+        log.error('Dump location "' + dump_location + '" is not writable.')
+        return 2
 
     rdf2hdt = options.rdf2hdt
     if not rdf2hdt:
@@ -111,16 +114,17 @@ def main():
         del graph
         log.info(f'--- {(time.time() - start_time)} seconds ---')
 
-    print('All files dumped to %s' % dump_location)
+    log.info('All files dumped to %s' % dump_location)
 
     if rdf2hdt:
         from subprocess import check_call, CalledProcessError
+        parsing_error = False
         for f in files:
             log.info(f'Converting {f} to hdt')
             hdtf = f.replace('.ttl', '.hdt')
             try:
                 check_call([rdf2hdt, '-f', 'turtle', f, hdtf])
-            except CalledProcessError:
+            except (FileNotFoundError, CalledProcessError) as e:
                 # Turtle failed, let's try rdfxml
                 parsing_error = True
                 log.warning(f'rdf2hdt for file {f} failed with error {e}. Trying rdfxml...')
