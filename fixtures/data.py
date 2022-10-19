@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 '''
 Testdata cotaining two very simple conceptschemes: trees and a few geographic concepts.
 
 .. versionadded:: 0.1.0
 '''
 
-from __future__ import unicode_literals
 
 from skosprovider.providers import DictionaryProvider
 

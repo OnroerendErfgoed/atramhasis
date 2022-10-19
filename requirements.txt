@@ -4,13 +4,14 @@ pyramid-tm==2.4
 pyramid_rewrite==0.2
 openapi-core==0.13.8 # newer version incompatible with pyramid_openapi3==0.13
 pyramid_openapi3==0.13
+openapi-spec-validator==0.4.0
 
 # skosprovider
-skosprovider==1.1.1
+skosprovider==1.1.0
 skosprovider_sqlalchemy==1.0.0
 pyramid_skosprovider==1.1.0
-skosprovider_rdf==1.0.0
-skosprovider_getty==1.0.0
+skosprovider_rdf==1.1.0
+skosprovider_getty==1.1.0
 
 language-tags==1.1.0
 
@@ -35,7 +36,7 @@ dogpile.cache==1.1.4
 
 # other
 python-dateutil==2.8.2
-rdflib==5.0.0
+rdflib==6.2.0
 bleach==4.1.0
 
 # requests

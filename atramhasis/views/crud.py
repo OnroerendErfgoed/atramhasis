@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Module containing views related to the REST service.
 """
@@ -30,7 +29,7 @@ from atramhasis.utils import internal_providers_only
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
-class AtramhasisCrud(object):
+class AtramhasisCrud:
     """
     This object groups CRUD REST views part of the private user interface.
     """
@@ -180,7 +179,7 @@ class AtramhasisCrud(object):
                 time.sleep(0.05)
         else:
             raise Exception(
-                "Could not save new concept due to IntegrityErrors. {}".format(exc)
+                f"Could not save new concept due to IntegrityErrors. {exc}"
             )
 
         invalidate_scheme_cache(self.scheme_id)

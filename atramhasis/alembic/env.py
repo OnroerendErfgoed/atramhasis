@@ -1,4 +1,3 @@
-from __future__ import with_statement
 try:
     import configparser
 except ImportError:

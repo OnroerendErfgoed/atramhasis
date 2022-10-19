@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+import logging
 import optparse
 import os
 import sys
@@ -14,6 +14,8 @@ from skosprovider_rdf import utils
 from atramhasis.data.datamanagers import CountsManager
 from atramhasis.data.models import ConceptschemeCounts
 from atramhasis.errors import SkosRegistryNotFoundException
+
+log = logging.getLogger(__name__)
 
 
 def main():
@@ -39,7 +41,7 @@ def main():
     options, args = parser.parse_args(sys.argv[1:])
 
     if not len(args) >= 1:
-        print('You must provide at least one argument.')
+        log.error('You must provide at least one argument.')
         return 2
 
     config_uri = args[0]
@@ -53,6 +55,9 @@ def main():
             'atramhasis.dump_location',
             os.path.abspath(os.path.dirname(config_uri))
         )
+    if not os.access(dump_location, os.W_OK | os.X_OK):
+        log.error('Dump location "' + dump_location + '" is not writable.')
+        return 2
 
     rdf2hdt = options.rdf2hdt
     if not rdf2hdt:
@@ -81,13 +86,13 @@ def main():
         filename_ttl = '%s.ttl' % filename
         filename_rdf = '%s.rdf' % filename
         files.append(filename_ttl)
-        print('Generating dump for %s' % pid)
+        log.info('Generating dump for %s' % pid)
         graph = utils.rdf_dumper(p)
         triples = len(graph)
-        print('Number of triples in Graph: %d' % triples)
+        log.info('Number of triples in Graph: %d' % triples)
         csuri = URIRef(p.concept_scheme.uri)
         cs_triples = len(list(graph.predicate_objects(csuri)))
-        print('Number of triples in Conceptscheme: %d' % cs_triples)
+        log.info('Number of triples in Conceptscheme: %d' % cs_triples)
         count_concepts = len(list(graph.subjects(RDF.type, SKOS.Concept)))
         count_collections = len(list(graph.subjects(RDF.type, SKOS.Collection)))
         try:
@@ -95,34 +100,44 @@ def main():
                                    (count_concepts + count_collections))
         except ZeroDivisionError:
             avg_concept_triples = 0
-        print('Average number of triples per concept: %d' % avg_concept_triples)
+        log.info('Average number of triples per concept: %d' % avg_concept_triples)
         counts.append({
             'conceptscheme_id': pid,
             'triples': triples,
             'conceptscheme_triples': cs_triples,
             'avg_concept_triples': avg_concept_triples
         })
-        print('Dumping %s to Turtle: %s' % (pid, filename_ttl))
+        log.info(f'Dumping {pid} to Turtle: {filename_ttl}')
         graph.serialize(destination=filename_ttl, format='turtle')
-        print('Dumping %s to RDFxml: %s' % (pid, filename_rdf))
+        log.info(f'Dumping {pid} to RDFxml: {filename_rdf}')
         graph.serialize(destination=filename_rdf, format='pretty-xml')
         del graph
-        print("--- %s seconds ---" % (time.time() - start_time))
+        log.info(f'--- {(time.time() - start_time)} seconds ---')
 
-    print('All files dumped to %s' % dump_location)
+    log.info('All files dumped to %s' % dump_location)
 
     if rdf2hdt:
         from subprocess import check_call, CalledProcessError
+        parsing_error = False
         for f in files:
-            print('Converting %s to hdt' % f)
+            log.info(f'Converting {f} to hdt')
             hdtf = f.replace('.ttl', '.hdt')
             try:
                 check_call([rdf2hdt, '-f', 'turtle', f, hdtf])
-            except CalledProcessError:
+            except (FileNotFoundError, CalledProcessError) as e:
                 # Turtle failed, let's try rdfxml
+                parsing_error = True
+                log.warning(f'rdf2hdt for file {f} failed with error {e}. Trying rdfxml...')
                 rdff = f.replace('.ttl', '.rdf')
-                check_call([rdf2hdt, '-f', 'rdfxml', rdff, hdtf])
-        print('All hdt files dumped to %s' % dump_location)
+                try:
+                    check_call([rdf2hdt, '-f', 'rdfxml', rdff, hdtf])
+                except (FileNotFoundError, CalledProcessError) as e:
+                    # rdfxml failed
+                    log.error(f'rdfxml for file {f} failed with error {e}')
+        if parsing_error:
+            log.error('Error during rdf2hdt conversion. Check logs for more information.')
+        else:
+            log.info(f'All hdt files dumped to {dump_location}')
 
     with transaction.manager:
         dbsession = request.registry.dbmaker()

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import logging
 import os
 import sys
@@ -29,7 +27,7 @@ from tests import setup_db
 try:
     from unittest.mock import Mock, patch
 except ImportError:
-    from mock import Mock, patch
+    from unittest.mock import Mock, patch
 
 
 def setUpModule():
@@ -129,7 +127,7 @@ class FunctionalTests(DbTest):
 
     @classmethod
     def setUpClass(cls):
-        super(FunctionalTests, cls).setUpClass()
+        super().setUpClass()
         cls.init_app()
 
     @classmethod
@@ -141,7 +139,7 @@ class FunctionalTests(DbTest):
         class CommittingRequest(Request):
 
             def __init__(self, *args, **kwargs):
-                super(CommittingRequest, self).__init__(*args, **kwargs)
+                super().__init__(*args, **kwargs)
                 self.add_finished_callback(lambda req: req.db.commit())
 
         cls.testapp.app.request_factory = CommittingRequest
@@ -150,14 +148,14 @@ class FunctionalTests(DbTest):
         registry.dbmaker = sessionmaker(bind=cls.connection)
 
     def setUp(self):
-        super(FunctionalTests, self).setUp()
+        super().setUp()
         self.testapp.reset()
 
     @staticmethod
     def mock_event_handler(event):
         if event.uri == 'urn:x-vioe:geography:9':
             referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
-            raise ProtectedResourceException('resource {0} is still in use, preventing operation'.format(event.uri),
+            raise ProtectedResourceException(f'resource {event.uri} is still in use, preventing operation',
                                              referenced_in)
 
     @staticmethod
@@ -186,11 +184,11 @@ class CsvFunctionalTests(FunctionalTests):
     def test_unicode_csv(self):
         response = self.testapp.get('/conceptschemes/TREES/c.csv?label=Chestnut&_LOCALE_=fr')
         data = response.body.decode('utf-8')
-        self.assertIsInstance(data, six.text_type)
+        self.assertIsInstance(data, str)
         self.assertEqual('200 OK', response.status)
         self.assertIn('text/csv', response.headers['Content-Type'])
         self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
-        self.assertIn(u'la châtaigne', data)
+        self.assertIn('la châtaigne', data)
 
     def test_get_csv_all(self):
         response = self.testapp.get('/conceptschemes/TREES/c.csv')
@@ -468,7 +466,7 @@ class RestFunctionalTests(FunctionalTests):
             if isinstance(event,  ProtectedResourceEvent):
                 referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
                 raise ProtectedResourceException(
-                    'resource {0} is still in use, preventing operation'
+                    'resource {} is still in use, preventing operation'
                     .format(event.uri),
                     referenced_in
                 )

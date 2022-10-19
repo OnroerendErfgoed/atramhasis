@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import unittest
 from atramhasis.audit import audit, _origin_from_response
 from pyramid.response import Response
@@ -8,7 +7,7 @@ from testfixtures import LogCapture
 try:
     from unittest.mock import Mock, MagicMock
 except ImportError:
-    from mock import Mock, MagicMock, call  # pragma: no cover
+    from unittest.mock import Mock, MagicMock, call  # pragma: no cover
 
 log = logging.getLogger('')
 
@@ -17,7 +16,7 @@ cs_mock = MagicMock()
 cs_mock.get_metadata = Mock(return_value={'subject': ['external']})
 
 
-class RecordingManager(object):
+class RecordingManager:
     def __init__(self):
         self.saved_objects = []
 
@@ -25,7 +24,7 @@ class RecordingManager(object):
         self.saved_objects.append(object)
 
 
-class DummyParent(object):
+class DummyParent:
     def __init__(self):
         self.request = MagicMock()
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import contextlib
 import os
 import unittest
@@ -102,7 +101,7 @@ def fill_db():
             session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
             for scheme_id in (5, 6, 7, 8):
                 session.add(
-                    ConceptScheme(id=scheme_id, uri='urn:dummy-{}'.format(scheme_id))
+                    ConceptScheme(id=scheme_id, uri=f'urn:dummy-{scheme_id}')
                 )
         db_filled = True
 
@@ -110,7 +109,7 @@ def fill_db():
 class DbTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        super(DbTest, cls).setUpClass()
+        super().setUpClass()
         cls.engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
         cls.connection = cls.engine.connect()
 
@@ -118,10 +117,10 @@ class DbTest(unittest.TestCase):
     def tearDownClass(cls):
         cls.connection.close()
         cls.engine.dispose()
-        super(DbTest, cls).tearDownClass()
+        super().tearDownClass()
 
     def setUp(self):
-        super(DbTest, self).setUp()
+        super().setUp()
         self.transaction = self.connection.begin()
         self.session = sessionmaker(bind=self.connection)()
 
