@@ -26,6 +26,16 @@ python.
     $ py.test atramhasis/tests/test_views.py
 ```
 
+We follow gitflow guidelines for branch naming and merging. Please name your 
+branches according to these guidelines:
+```
+bugfix/<ticketnumber>_description_of_fix
+feature/<ticketnumber>_description_of_feature
+````
+
+Branches should be branched from develop and merged back into develop once approved 
+through a pull request.
+
 Every pull request will be run through [Travis-ci]. When providing a pull 
 request, please run the unit tests first and make sure they all pass. Please 
 provide new unit tests to maintain 100% coverage. If you send us a pull request

@@ -1,3 +1,12 @@
+1.2.0 (19-10-2022)
+------------------
+
+- Concept detail RDF is missing link with collection (#707)
+- import_data.py: NameError: name 'Note' is not defined (#721)
+- Better error logging for dump_rdf script (#712)
+- Upgrade to rdflib 6 (#714)
+- 500 Exception when using unexpected values for endpoint /conceptschemes/[schemeid]/c/[concept_id] (#708)
+
 1.1.0 (04-07-2022)
 ------------------
 
