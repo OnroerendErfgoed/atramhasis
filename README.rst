@@ -11,8 +11,8 @@ Atramhasis
         :target: https://app.travis-ci.com/OnroerendErfgoed/atramhasis 
 .. image:: https://coveralls.io/repos/github/OnroerendErfgoed/atramhasis/badge.svg?branch=master
         :target: https://coveralls.io/github/OnroerendErfgoed/atramhasis?branch=master
-.. image:: https://scrutinizer-ci.com/g/onroerenderfgoed/atramhasis/badges/quality-score.png?b=master
-        :target: https://scrutinizer-ci.com/g/onroerenderfgoed/atramhasis/?branch=master
+.. image:: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/badges/quality-score.png?b=develop
+        :target: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/?branch=develop
 
 Atramhasis is an online SKOS editor. This webapplication enables
 users to create SKOS vocabularies consisting of Concepts and Collections. It 
