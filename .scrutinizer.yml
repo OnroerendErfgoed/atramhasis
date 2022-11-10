@@ -1,3 +1,11 @@
+build:
+    nodes:
+        analysis:
+            project_setup:
+                override: true
+            tests:
+                override: [py-scrutinizer-run]
+
 checks:
     python:
         code_rating: true
