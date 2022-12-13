@@ -58,7 +58,7 @@ knowledge of SKOS or RDF. For a typical user, it had to feel like they were cons
 a normal website, as opposed to a RDF vocabulary since the latter can feel rather daunting 
 to non-technical users. This not only applies to users consulting the thesauri, but also 
 to those editing them. The editors do not write RDF statements, but edit data in a normal 
-web admin interface \autoref{editingairfields}. All mapping to RDF and SKOS is done behind
+web admin interface \autoref{fig:editingairfields}. All mapping to RDF and SKOS is done behind
 the scene, invisible to the editors.
 
 ![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
@@ -70,7 +70,7 @@ online in a user-friendly way. Search results can be downloaded as CSV for furth
 Internal and external systems use the webservices provided by Atramhasis 
 to consult or download vocabularies. Concept uris are used in indexing data 
 in systems such as the [Inventory of Immovable Cultural Heritage](https://inventaris.onroerenderfgoed.be).
-This allows users to search those external systems using the provided thesauri \autoref{searchingairfields}.
+This allows users to search those external systems using the provided thesauri \autoref{fig:searchingairfields}.
 For a typical end-user the thesauri are presented as dropdown lists or specialised 
 widgets that allow navigating the thesaurus from the top concepts along branches to 
 the leafs. For most internal operations with the thesaurus, JSON REST services are used because 
