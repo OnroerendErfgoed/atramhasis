@@ -61,7 +61,7 @@ to those editing them. The editors do not write RDF statements, but edit data in
 web admin interface \autoref{editingairfields}. All mapping to RDF and SKOS is done behind
 the scene, invisible to the editors.
 
-![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_editing_airfields.png)
+![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
 
 The system was conceived as Flanders Heritage's [central platform](https://thesaurus.onroerenderfgoed.be) 
 for publication of internal and regional vocabularies dealing with cultural heritage [@mortier:2017]. 
