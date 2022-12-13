@@ -46,7 +46,7 @@ and collections can be labelled with preferred labels and alternative labels,
 more elaborately described with definitions and notes, and provided with references 
 to source material. The concepts can be related, in general or in a hierarchical way 
 (broader/narrower), to other concepts and collections in the same vocabulary or 
-to concepts in other vocabularies such as the AAT [@aat].
+to concepts in other vocabularies such as the Art and Architecture Thesaurus (AAT) [@aat].
 
 ![Airfields described as a SKOS concept.\label{fig:airfields}](atramhasis_screen_airfields.png)
 
@@ -64,7 +64,7 @@ the scene, invisible to the editors.
 ![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
 
 The system was conceived as Flanders Heritage's [central platform](https://thesaurus.onroerenderfgoed.be) 
-for publication of internal and regional vocabularies dealing with cultural heritage [@mortier:2017]. 
+for publication of internal and regional vocabularies dealing with cultural heritage [@Mortier:2017]. 
 The publication website allows humans to browse, search and consult the vocabularies 
 online in a user-friendly way. Search results can be downloaded as CSV for further processing.
 Internal and external systems use the webservices provided by Atramhasis 
@@ -75,11 +75,11 @@ For a typical end-user the thesauri are presented as dropdown lists or specialis
 widgets that allow navigating the thesaurus from the top concepts along branches to 
 the leafs. For most internal operations with the thesaurus, JSON REST services are used because 
 they are convenient for webdevelopers used to designing and developing enterprise IT-systems.
-For external uses, publishing of Linked Data is supported. Individual concepts and
+For external uses, publishing of linked data is supported. Individual concepts and
 collections can be downloaded as RDF data in Turtle, RDF/XML and JSON/LD format. Entire
 conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an integration with an
-LDF server is available that allows quering the server with SPARQL queries through 
-the LDF protocol.
+Linked Data Fragments server is available that allows quering the server with SPARQL queries
+through the Triple Pattern Fragments protocol [@Verborgh:2016].
 
 ![Searching for airfields in the Inventory of Immovable Cultural Heritage\label{fig:searchingairfields}](inventaris_screen_search_airfields.png)
 
