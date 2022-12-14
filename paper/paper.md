@@ -31,7 +31,7 @@ Atramhasis is an online SKOS [@skos:2008] editor that allows users
 to create, maintain and consult controlled vocabularies and thesauri according 
 to the SKOS standard. These SKOS vocabularies consist of concepts, collections
 and their relations. A concept being something a researcher wants to describe and define.
-Flanders Heritage is active in the domain of cultural heritage and ,
+Flanders Heritage is active in the domain of cultural heritage and 
 describes concepts such as [Roman period](https://id.erfgoed.net/thesauri/dateringen/1223),
 [oppida](https://id.erfgoed.net/thesauri/erfgoedtypes/1052) or 
 [archaeological excavations](https://id.erfgoed.net/thesauri/gebeurtenistypes/38).
@@ -54,7 +54,7 @@ to concepts in other vocabularies such as the Art and Architecture Thesaurus (AA
 
 Atramhasis was written to be a lightweight open source SKOS editor. First and foremost,
 we wanted a system that adheres to the SKOS standard, yet is useable for users without
-knowledge of SKOS or RDF. For a typical user, it had to feel like they were consulting 
+knowledge of SKOS or RDF. For a typical user, it had to feel as if they were consulting 
 a normal website, as opposed to a RDF vocabulary since the latter can feel rather daunting 
 to non-technical users. This not only applies to users consulting the thesauri, but also 
 to those editing them. The editors do not write RDF statements, but edit data in a normal 
@@ -77,7 +77,7 @@ the leafs. For most internal operations with the thesaurus, JSON REST services a
 they are convenient for webdevelopers used to designing and developing enterprise IT-systems.
 For external uses, publishing of linked data is supported. Individual concepts and
 collections can be downloaded as RDF data in Turtle, RDF/XML and JSON/LD format. Entire
-conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an integration with an
+conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an integration with a
 Linked Data Fragments server is available that allows quering the server with SPARQL queries
 through the Triple Pattern Fragments protocol [@Verborgh:2016].
 
@@ -87,7 +87,7 @@ An Atramhasis instance can also be connected to external vocabularies and thesau
 an interface called a Skosprovider. Any thesaurus providing one can be used for linking external 
 concepts. Out of the box skosproviders are available for Getty vocabularies such as the
 AAT [@aat] or other Atramhasis instances, but any thesaurus adhering to the SKOS standard 
-can be added with a little development work. Connecting an external thesaurus open up the possiblity 
+can be added with a little development work. Connecting an external thesaurus opens up the possiblity 
 of interlinking internal and external thesauri, importing concepts from such a thesaurus 
 and turning your vocabularies into true linked data. 
 
