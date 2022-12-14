@@ -66,7 +66,7 @@ the scene, invisible to the editors.
 The system was conceived as Flanders Heritage's [central platform](https://thesaurus.onroerenderfgoed.be) 
 for publication of internal and regional vocabularies dealing with cultural heritage [@Mortier:2017]. 
 The publication website allows humans to browse, search and consult the vocabularies 
-online in a user-friendly way. Search results can be downloaded as CSV for further processing.
+online in a user-friendly way. Search results can be downloaded in CSV format for further processing.
 Internal and external systems use the webservices provided by Atramhasis 
 to consult or download vocabularies. Concept uris are used in indexing data 
 in systems such as the [Inventory of Immovable Cultural Heritage](https://inventaris.onroerenderfgoed.be).
@@ -74,7 +74,7 @@ This allows users to search those external systems using the provided thesauri \
 For a typical end-user the thesauri are presented as dropdown lists or specialised 
 widgets that allow navigating the thesaurus from the top concepts along branches to 
 the leafs. For most internal operations with the thesaurus, JSON REST services are used because 
-they are convenient for webdevelopers used to designing and developing enterprise IT-systems.
+they are convenient for web developers to design and develop enterprise IT-systems.
 For external uses, publishing of linked data is supported. Individual concepts and
 collections can be downloaded as RDF data in Turtle, RDF/XML and JSON/LD format. Entire
 conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an integration with an
@@ -87,7 +87,7 @@ An Atramhasis instance can also be connected to external vocabularies and thesau
 an interface called a Skosprovider. Any thesaurus providing one can be used for linking external 
 concepts. Out of the box skosproviders are available for Getty vocabularies such as the
 AAT [@aat] or other Atramhasis instances, but any thesaurus adhering to the SKOS standard 
-can be added with a little development work. Connecting an external thesaurus open up the possiblity 
+can be added with a little development work. Connecting an external thesaurus opens up the possiblity 
 of interlinking internal and external thesauri, importing concepts from such a thesaurus 
 and turning your vocabularies into true linked data. 
 
