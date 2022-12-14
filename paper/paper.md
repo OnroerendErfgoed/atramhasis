@@ -84,12 +84,12 @@ through the Triple Pattern Fragments protocol [@Verborgh:2016].
 ![Searching for airfields in the Inventory of Immovable Cultural Heritage\label{fig:searchingairfields}](inventaris_screen_search_airfields.png)
 
 An Atramhasis instance can also be connected to external vocabularies and thesauri through 
-an interface called a Skosprovider. Any thesaurus providing one can be used for linking external 
-concepts. Out of the box skosproviders are available for Getty vocabularies such as the
-AAT [@aat] or other Atramhasis instances, but any thesaurus adhering to the SKOS standard 
-can be added with a little development work. Connecting an external thesaurus opens up the possiblity 
-of interlinking internal and external thesauri, importing concepts from such a thesaurus 
-and turning your vocabularies into true linked data. 
+an interface called a Skosprovider [@skosprovider:2022]. Any thesaurus providing one can 
+be used for linking external concepts. Out of the box skosproviders are available for Getty 
+vocabularies such as the AAT [@aat] or other Atramhasis instances, but any thesaurus adhering 
+to the SKOS standard can be added with a little development work. Connecting an external 
+thesaurus opens up the possiblity of interlinking internal and external thesauri, importing 
+concepts from such a thesaurus and turning your vocabularies into true linked data. 
 
 # Acknowledgements
 
