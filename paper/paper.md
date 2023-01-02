@@ -27,9 +27,9 @@ bibliography: paper.bib
 
 # Summary
 
-Atramhasis is an online vocabulary editor that allows users 
-to create, maintain and consult controlled vocabularies and thesauri according 
-to the SKOS specification [@skos:2008]. SKOS (Simple Knowledge Organisation System) is a 
+Atramhasis is an online vocabulary editor that allows users to create, maintain 
+and consult controlled vocabularies and thesauri [@Harpring:2010] according to 
+the SKOS specification [@skos:2008]. SKOS (Simple Knowledge Organisation System) is a 
 W3C Recommendation that supports controlled vocabularies within the framework of the 
 Semantic Web. SKOS provides a standard way to represent these vocabularies using RDF 
 (Resource Description Framework) [@rdf:2014], another W3C Recommendation that allows
