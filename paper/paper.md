@@ -1,5 +1,5 @@
 ---
-title: 'Atramhasis: A webbased SKOS editor'
+title: 'Atramhasis: An online SKOS vocabulary editor'
 tags:
   - Python
   - SKOS
@@ -93,6 +93,6 @@ concepts from such a thesaurus and turning your vocabularies into true linked da
 
 # Acknowledgements
 
-As with any long lived project, Atramhasis has benefitted from the input of several colleagues and software developers over the years. While it's impossible to thank them, we do want to thank Bart Saelen, Tinne Cahy and Cedrik Vanderhaegen for much of the original development. A full list of people who contributed over the years can be found on Github. Leen Meganck and Sophie Mortier were responsible for building most of the vocabularies that led to creating the software. Their needs and requirements drove the features of Atramhasis.
+As with any long lived project, Atramhasis has benefitted from the input of several colleagues and software developers over the years. While it's impossible to thank them, we do want to thank Bart Saelen, Tinne Cahy and Cedrik Vanderhaegen for much of the original development. A full list of people who contributed over the years can be found on GitHub. Leen Meganck and Sophie Mortier were responsible for building most of the vocabularies that led to creating the software. Their needs and requirements drove the features of Atramhasis.
 
 # References
