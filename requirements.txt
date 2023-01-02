@@ -10,7 +10,7 @@ openapi-spec-validator==0.4.0
 skosprovider==1.2.0
 skosprovider_sqlalchemy==1.0.0
 pyramid_skosprovider==1.1.0
-skosprovider_rdf==1.2.0
+skosprovider_rdf==1.3.0
 skosprovider_getty==1.1.0
 
 language-tags==1.1.0
