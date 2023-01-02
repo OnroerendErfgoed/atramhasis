@@ -27,17 +27,26 @@ bibliography: paper.bib
 
 # Summary
 
-Atramhasis is an online SKOS [@skos:2008] editor that allows users 
+Atramhasis is an online vocabulary editor that allows users 
 to create, maintain and consult controlled vocabularies and thesauri according 
-to the SKOS standard. These SKOS vocabularies consist of concepts, collections
-and their relations. A concept being something a researcher wants to describe and define.
+to the SKOS specification [@skos:2008]. SKOS (Simple Knowledge Organisation System) is a 
+W3C Recommendation that supports controlled vocabularies within the framework of the 
+Semantic Web. SKOS provides a standard way to represent these vocabularies using RDF 
+(Resource Description Framework) [@rdf:2014], another W3C Recommendation that allows
+passing data between computer applications in an interoperable way.  
+
+SKOS vocabularies record controlled vocabularies as a set of concepts, collections
+and their relations. A concept being something a researcher wants to describe and define,
+a collection being a grouping of a number of concepts.
 Flanders Heritage is active in the domain of cultural heritage and 
 describes concepts such as [Roman period](https://id.erfgoed.net/thesauri/dateringen/1223),
 [oppida](https://id.erfgoed.net/thesauri/erfgoedtypes/1052) or 
-[archaeological excavations](https://id.erfgoed.net/thesauri/gebeurtenistypes/38).
+[archaeological excavations](https://id.erfgoed.net/thesauri/gebeurtenistypes/38). A 
+typical collection would be [settlements by function](https://id.erfgoed.net/thesauri/erfgoedtypes/1034), 
+a grouping of settlement types according to their function, as opposed to by size or form. 
 Similar concepts and collections are grouped in a conceptscheme, eg. the 
 conceptscheme of [heritage types](https://id.erfgoed.net/thesauri/erfgoedtypes)
-consists of concepts that describes types of heritage, ranging from 
+consists of concepts and collections that describes types of heritage, ranging from 
 [solitary trees](https://id.erfgoed.net/thesauri/erfgoedtypes/1654) 
 over [burial mounds](https://id.erfgoed.net/thesauri/erfgoedtypes/170)
  to [airfields](https://id.erfgoed.net/thesauri/erfgoedtypes/476) 
