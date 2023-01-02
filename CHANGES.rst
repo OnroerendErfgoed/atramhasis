@@ -1,3 +1,9 @@
+2.0.0. (??-??-2023)
+-------------------
+
+- Update skosprovider_rdf to version 1.3.0 to avoid accidentally 
+  exposing URI's as dcterms:identifier. (#741)
+
 1.2.0 (19-10-2022)
 ------------------
 

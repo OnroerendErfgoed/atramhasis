@@ -70,12 +70,12 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='1.2.0',
+      version='2.0.0a1',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       long_description_content_type='text/x-rst',
       classifiers=[
-          "Development Status :: 4 - Beta",
+          "Development Status :: 5 - Production/Stable",
           "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
           "Programming Language :: Python",
           "Framework :: Pyramid",
