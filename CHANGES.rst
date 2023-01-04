@@ -1,4 +1,4 @@
-2.0.0. (??-??-2023)
+1.3.0 (??-01-2023)
 -------------------
 
 - Update skosprovider_rdf to version 1.3.0 to avoid accidentally 
