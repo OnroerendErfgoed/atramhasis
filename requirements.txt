@@ -2,9 +2,8 @@
 pyramid==2.0
 pyramid-tm==2.4
 pyramid_rewrite==0.2
-openapi-core==0.13.8 # newer version incompatible with pyramid_openapi3==0.13
-pyramid_openapi3==0.13
-openapi-spec-validator==0.4.0
+pyramid_openapi3==0.14.3
+openapi-spec-validator==0.4.0  # https://github.com/p1c2u/openapi-core/issues/442
 
 # skosprovider
 skosprovider==1.2.0
@@ -21,7 +20,8 @@ zope.sqlalchemy==1.6
 transaction==3.0.1
 
 # jinja2
-jinja2==3.0.3
+jinja2==2.11.3
+markupsafe==2.0.1  # necessary for <3 jinja2 versions
 pyramid-jinja2==2.8
 Babel==2.9.1
 
