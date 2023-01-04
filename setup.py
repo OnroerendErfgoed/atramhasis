@@ -44,18 +44,19 @@ class Prepare(Command):
 requires = [
     'pyramid',
     'pyramid_tm',
-    'SQLAlchemy',
+    'SQLAlchemy<2.0.0',
     'transaction',
     'zope.sqlalchemy',
-    'waitress',
     'skosprovider',
-    'skosprovider_sqlalchemy',
+    'skosprovider_sqlalchemy<2.0.0',
     'skosprovider_rdf',
     'skosprovider_getty',
     'pyramid_skosprovider',
     'pyramid_openapi3',
+    'openapi-spec-validator==0.4.0',  # https://github.com/p1c2u/openapi-core/issues/442
     'language_tags',
-    'jinja2',
+    'jinja2 < 3.0.0',
+    'markupsafe==2.0.1',  # necessary for <3 jinja2 versions
     'pyramid_jinja2',
     'alembic',
     'babel',
