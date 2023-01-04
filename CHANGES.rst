@@ -1,6 +1,8 @@
-1.3.0 (??-01-2023)
+1.3.0 (04-01-2023)
 -------------------
 
+- Fix some dependencies to avoid broken dependencies (#749)
+- Remove Waitress from setup.py since this it's not necessary to run in production with Waitress (#749)
 - Update skosprovider_rdf to version 1.3.0 to avoid accidentally 
   exposing URI's as dcterms:identifier. (#741)
 
