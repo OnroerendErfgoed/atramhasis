@@ -1,3 +1,8 @@
+in progress
+-----------
+
+- Stop building universal wheels (#752)
+
 1.3.0 (04-01-2023)
 -------------------
 
