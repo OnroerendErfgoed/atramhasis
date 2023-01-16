@@ -1,23 +1,32 @@
 import os
 
-from pyramid.response import Response
-from pyramid.response import FileResponse
-from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPFound
-from pyramid.threadlocal import get_current_registry
 from pyramid.i18n import TranslationStringFactory
-from sqlalchemy.orm.exc import NoResultFound
-from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteType
+from pyramid.response import FileResponse
+from pyramid.response import Response
+from pyramid.threadlocal import get_current_registry
+from pyramid.view import view_config
+from pyramid.view import view_defaults
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import LabelType
+from skosprovider_sqlalchemy.models import NoteType
+from sqlalchemy.exc import NoResultFound
 
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
-from atramhasis.utils import update_last_visited_concepts
-from atramhasis.cache import tree_region, invalidate_scheme_cache, invalidate_cache, list_region
 from atramhasis.audit import audit
+from atramhasis.cache import invalidate_cache
+from atramhasis.cache import invalidate_scheme_cache
+from atramhasis.cache import list_region
+from atramhasis.cache import tree_region
+from atramhasis.errors import ConceptNotFoundException
+from atramhasis.errors import ConceptSchemeNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.utils import update_last_visited_concepts
 
 
 def labels_to_string(labels, ltype):
     labelstring = ''
-    for label in (l for l in labels if l.labeltype_id == ltype):
+    for label in (label for label in labels if label.labeltype_id == ltype):
         labelstring += label.label + ' (' + label.language_id + '), '
     return labelstring[:-2]
 
@@ -154,7 +163,7 @@ class AtramhasisView:
         provider = self.request.skos_registry.get_provider(scheme_id)
         label = self._read_request_param('label')
         requested_type = self._read_request_param('type')
-        
+
         if not provider:
             raise ConceptSchemeNotFoundException(scheme_id)
         if 'atramhasis.force_display_label_language' in provider.metadata:

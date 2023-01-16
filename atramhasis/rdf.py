@@ -5,12 +5,16 @@ Module containing utility functions dealing with RDF used by Atramhasis.
 """
 
 from pyramid.settings import asbool
-
 from rdflib import Graph
-from rdflib.namespace import RDF, VOID, DCTERMS, FOAF, SKOS
-from rdflib.namespace import Namespace
-from rdflib.term import URIRef, BNode, Literal
-
+from rdflib import DCTERMS
+from rdflib import FOAF
+from rdflib import Namespace
+from rdflib import RDF
+from rdflib import SKOS
+from rdflib import VOID
+from rdflib.term import BNode
+from rdflib.term import Literal
+from rdflib.term import URIRef
 from skosprovider_rdf.utils import _add_labels
 
 FORMATS = Namespace('http://www.w3.org/ns/formats/')
@@ -19,12 +23,12 @@ HYDRA = Namespace('http://www.w3.org/ns/hydra/core#')
 
 
 def void_dumper(request, registry):
-    '''
+    """
     Creates a void file with information about all void Datasets in this Atramhasis instance.
 
-    :param pyramid.request.Request request:
-    :param skosprovider.registry.Registry:
-    '''
+    :param request: pyramid.request.Request request
+    :param registry: skosprovider.registry.Registry
+    """
     providers = [
         x for x in registry.get_providers()
         if not any([not_shown in x.get_metadata()['subject'] for not_shown in ['external']])
@@ -43,14 +47,8 @@ def void_dumper(request, registry):
     graph.add((dataset, VOID.vocabulary, URIRef(DCTERMS)))
     graph.add((dataset, VOID.vocabulary, URIRef(SKOS)))
     graph.add((dataset, VOID.vocabulary, URIRef(SKOS_THES)))
-    ldf_enabled = asbool(request.registry.settings.get(
-        'atramhasis.ldf.enabled',
-        None
-    ))
-    ldf_baseurl = request.registry.settings.get(
-        'atramhasis.ldf.baseurl',
-        None
-    )
+    ldf_enabled = asbool(request.registry.settings.get('atramhasis.ldf.enabled'))
+    ldf_baseurl = request.registry.settings.get('atramhasis.ldf.baseurl')
     if ldf_enabled and ldf_baseurl:
         ldfurl = ldf_baseurl + '/composite{?s,p,o}'
         _add_ldf_server(graph, dataset, ldfurl)
@@ -60,13 +58,13 @@ def void_dumper(request, registry):
 
 
 def _add_provider(graph, provider, dataseturi, request):
-    '''
+    """
     :param rdflib.graph.Graph graph: Graph that will contain the Dataset.
     :param skosprovider.providers.VocabularyProvider provider: Provider to turn into a Dataset.
-    :param rdflib.term.URIRef URIRef: URI of the main dataset this provider will be attached to.
+    :param rdflib.term.URIRef dataseturi: URI of the main dataset this provider will be attached to.
     :param pyramid.request.Request request:
     :rtype: :class:`rdflib.graph.Graph`
-    '''
+    """
     pid = provider.get_vocabulary_id()
     metadataset = provider.get_metadata().get('dataset', {})
     duri = metadataset.get(
@@ -90,14 +88,8 @@ def _add_provider(graph, provider, dataseturi, request):
         dump_url = request.route_url(f[2], scheme_id=pid)
         graph.add((pd, VOID.dataDump, URIRef(dump_url)))
 
-    ldf_enabled = asbool(request.registry.settings.get(
-        'atramhasis.ldf.enabled',
-        None
-    ))
-    ldf_baseurl = request.registry.settings.get(
-        'atramhasis.ldf.baseurl',
-        None
-    )
+    ldf_enabled = asbool(request.registry.settings.get('atramhasis.ldf.enabled'))
+    ldf_baseurl = request.registry.settings.get('atramhasis.ldf.baseurl')
     if ldf_enabled and ldf_baseurl:
         pid = provider.get_vocabulary_id()
         ldfurl = ldf_baseurl + '/' + pid + '{?s,p,o}'
@@ -106,12 +98,12 @@ def _add_provider(graph, provider, dataseturi, request):
 
 
 def _add_metadataset(graph, subject, metadataset):
-    '''
+    """
     :param rdflib.graph.Graph graph: Graph that contains the Dataset.
     :param rdflib.term.URIRef subject: Uri of the Dataset.
     :param dict metadataset: Dictionary with metadata to add to the Dataset.
     :rtype: :class:`rdflib.graph.Graph`
-    '''
+    """
     mapping = {
         'creator': {
             'predicate': DCTERMS.creator,
@@ -156,12 +148,12 @@ def _add_metadataset(graph, subject, metadataset):
 
 
 def _add_ldf_server(graph, dataseturi, ldfurl):
-    '''
+    """
     :param rdflib.graph.Graph graph: Graph that contains the Dataset.
-    :param rdflib.term.URIRef subject: Uri of the Dataset.
+    :param rdflib.term.URIRef dataseturi: Uri of the Dataset.
     :param str ldfurl: Url pointing to the ldf server.
     :rtype: :class:`rdflib.graph.Graph`
-    '''
+    """
     ldf = BNode()
     graph.add((dataseturi, HYDRA.search, ldf))
     graph.add((ldf, HYDRA.template, Literal(ldfurl)))

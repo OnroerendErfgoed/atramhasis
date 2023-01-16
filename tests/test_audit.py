@@ -1,13 +1,13 @@
-import unittest
-from atramhasis.audit import audit, _origin_from_response
-from pyramid.response import Response
 import logging
+import unittest
+from unittest.mock import MagicMock
+from unittest.mock import Mock
+
+from pyramid.response import Response
 from testfixtures import LogCapture
 
-try:
-    from unittest.mock import Mock, MagicMock
-except ImportError:
-    from unittest.mock import Mock, MagicMock, call  # pragma: no cover
+from atramhasis.audit import _origin_from_response
+from atramhasis.audit import audit
 
 log = logging.getLogger('')
 
@@ -20,8 +20,8 @@ class RecordingManager:
     def __init__(self):
         self.saved_objects = []
 
-    def save(self, object):
-        self.saved_objects.append(object)
+    def save(self, db_object):
+        self.saved_objects.append(db_object)
 
 
 class DummyParent:

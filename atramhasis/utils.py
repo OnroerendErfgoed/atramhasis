@@ -2,9 +2,14 @@
 Module containing utility functions used by Atramhasis.
 """
 from collections import deque
-from pyramid.httpexceptions import HTTPMethodNotAllowed
 
-from skosprovider.skos import Concept, Collection, Label, Note, Source, ConceptScheme
+from pyramid.httpexceptions import HTTPMethodNotAllowed
+from skosprovider.skos import Collection
+from skosprovider.skos import Concept
+from skosprovider.skos import ConceptScheme
+from skosprovider.skos import Label
+from skosprovider.skos import Note
+from skosprovider.skos import Source
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
 
@@ -24,8 +29,8 @@ def from_thing(thing):
             uri=thing.uri,
             concept_scheme=ConceptScheme(thing.conceptscheme.uri),
             labels=[
-                Label(l.label, l.labeltype_id, l.language_id)
-                for l in thing.labels
+                Label(label.label, label.labeltype_id, label.language_id)
+                for label in thing.labels
             ],
             notes=[
                 Note(n.note, n.notetype_id, n.language_id)
@@ -52,8 +57,8 @@ def from_thing(thing):
             uri=thing.uri,
             concept_scheme=ConceptScheme(thing.conceptscheme.uri),
             labels=[
-                Label(l.label, l.labeltype_id, l.language_id)
-                for l in thing.labels
+                Label(label.label, label.labeltype_id, label.language_id)
+                for label in thing.labels
             ],
             notes=[
                 Note(n.note, n.notetype_id, n.language_id)

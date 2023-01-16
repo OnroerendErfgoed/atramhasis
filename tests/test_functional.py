@@ -1,9 +1,10 @@
 import logging
 import os
 import sys
+from unittest.mock import Mock
+from unittest.mock import patch
 
-import six
-import skosprovider
+import skosprovider.skos
 from pyramid.paster import get_appsettings
 from pyramid.request import Request
 from skosprovider.exceptions import ProviderUnavailableException
@@ -23,11 +24,6 @@ from tests import DbTest
 from tests import SETTINGS
 from tests import fill_db
 from tests import setup_db
-
-try:
-    from unittest.mock import Mock, patch
-except ImportError:
-    from unittest.mock import Mock, patch
 
 
 def setUpModule():
@@ -124,6 +120,8 @@ TEST = DictionaryProvider(
 
 
 class FunctionalTests(DbTest):
+    app = None
+    testapp = None
 
     @classmethod
     def setUpClass(cls):

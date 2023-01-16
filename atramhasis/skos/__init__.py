@@ -1,22 +1,27 @@
+import enum
 import logging
-
-from skosprovider.registry import Registry
-from skosprovider.uri import UriPatternGenerator
-from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-from skosprovider_getty.providers import AATProvider, TGNProvider
+from datetime import date
 
 import requests
 from cachecontrol import CacheControl
 from cachecontrol.heuristics import ExpiresAfter
-
-from datetime import date
+from skosprovider.registry import Registry
+from skosprovider.uri import UriPatternGenerator
+from skosprovider_getty.providers import AATProvider
+from skosprovider_getty.providers import TGNProvider
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
 log = logging.getLogger(__name__)
 LICENSES = [
     'https://creativecommons.org/licenses/by/4.0/',
     'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
 ]
+
+
+class IDGenerationStrategy(enum.Enum):
+    NUMERIC = enum.auto()
+    GUID = enum.auto()
+    MANUAL = enum.auto()
 
 
 def create_registry(request):
