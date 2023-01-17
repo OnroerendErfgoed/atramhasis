@@ -67,7 +67,7 @@ knowledge of SKOS or RDF. For a typical user, it had to feel as if they were con
 a normal website, as opposed to a RDF vocabulary since the latter can feel rather daunting 
 to non-technical users. This not only applies to users consulting the thesauri, but also 
 to those editing them. The editors do not write RDF statements, but edit data in a normal 
-web admin interface \autoref{fig:editingairfields}. All mapping to RDF and SKOS is done behind
+web admin interface, as seen in \autoref{fig:editingairfields}. All mapping to RDF and SKOS is done behind
 the scene, invisible to the editors.
 
 ![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
