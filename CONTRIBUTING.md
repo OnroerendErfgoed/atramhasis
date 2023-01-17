@@ -1,11 +1,21 @@
 Contributing
 ============
 
-Atramhasis is being developed as open source software by the 
+Atramhasis is an open source SKOS editor developed by
 [Flanders Heritage Agency]. All development is done on the agency's 
-[Github page for Atramhasis].
+[Github page for Atramhasis]. If you run into bugs or would like to request
+a new feature, please open a [Github issue]. Please provide some context to 
+your question such as the python and Atramhasis versions you are running. 
+If you have specific questions about the software or the datasets hosted at 
+[Flanders Heritage Thesaurus] you would rather not address in a public forum, 
+please mail <ict@onroerenderfgoed.be>.
 
-Since we place a lot of importance of code quality, we expect to have a good 
+If you have some
+exerience with Python, Javascript, RDF or SKOS, feel free to contribute
+where you can. If you are unsure if a particular change would be welcome, 
+create an issue first. When doing so, we recommend you follow these guidelines.
+
+We place a lot of importance on code quality, expect to have a good 
 amount of code coverage present and run frequent unit tests. All commits and
 pull requests will be tested with [Travis-ci]. Code coverage is being 
 monitored with [Coveralls].
@@ -39,11 +49,13 @@ through a pull request.
 Every pull request will be run through [Travis-ci]. When providing a pull 
 request, please run the unit tests first and make sure they all pass. Please 
 provide new unit tests to maintain 100% coverage. If you send us a pull request
-and this build doesn't function, please correct the issue at hand or let us 
+that doesn't pass all tests, please correct the issue at hand or let us 
 know why it's not working.
 
 [Flanders Heritage Agency]: https://www.onroerenderfgoed.be
+[Flanders Heritage Thesaurus]: https://thesaurus.onroerenderfgoed.be
 [Github page for Atramhasis]: https://github.com/OnroerendErfgoed/atramhasis
+[Github issue]: https://github.com/OnroerendErfgoed/atramhasis/issues
 [Travis-ci]: https://travis-ci.org/OnroerendErfgoed/atramhasis
 [Coveralls]: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 [pytest]: http://pytest.org
