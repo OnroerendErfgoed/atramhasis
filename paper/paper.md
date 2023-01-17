@@ -85,9 +85,9 @@ widgets that allow navigating the thesaurus from the top concepts along branches
 the leafs. For most internal operations with the thesaurus, JSON REST services are used because 
 they are convenient for web developers to design and develop enterprise IT-systems.
 For external uses, publishing of linked data is supported. Individual concepts and
-collections can be downloaded as RDF data in Turtle, RDF/XML and JSON/LD format. Entire
-conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an integration with a
-Linked Data Fragments server is available that allows quering the server with SPARQL queries
+collections can be downloaded as RDF data in Turtle, RDF/XML and JSON-LD format [@jsonld:2020].
+Entire conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an integration with 
+a Linked Data Fragments server is available that allows quering the server with SPARQL queries
 through the Triple Pattern Fragments protocol [@Verborgh:2016].
 
 ![Searching for airfields in the Inventory of Immovable Cultural Heritage\label{fig:searchingairfields}](inventaris_screen_search_airfields.png)
