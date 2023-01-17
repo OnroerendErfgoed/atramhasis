@@ -11,13 +11,18 @@ authors:
     orcid: 0000-0002-8153-2978
     corresponding: True
     affiliation: 1
+  - name: Cahy, Tinne
+  - name: De Clercq, Wim
   - name: Geuens, Jonas
     orcid: 0000-0001-8197-5034
     affiliation: 1
-  - name: Vanderhaegen, Cedrik
-    affiliation: 1
   - name: Goessens, Bram
     affiliation: 1
+  - name: Piraux, Jonathan
+  - name: Vanderhaegen, Cedrik
+    affiliation: 1
+  - name: Saelen, Bart
+  - name: Taeymans, Maarten
 affiliations:
  - name: Flanders Heritage Agency, Belgium
    index: 1
