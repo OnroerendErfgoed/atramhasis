@@ -12,6 +12,7 @@ authors:
     corresponding: True
     affiliation: 1
   - name: Cahy, Tinne
+    affiliation:
   - name: De Clercq, Wim
   - name: Geuens, Jonas
     orcid: 0000-0001-8197-5034
