@@ -19,10 +19,10 @@ authors:
   - name: Goessens, Bram
     affiliation: 1
   - name: Piraux, Jonathan
-  - name: Vanderhaegen, Cedrik
-    affiliation: 1
   - name: Saelen, Bart
   - name: Taeymans, Maarten
+  - name: Vanderhaegen, Cedrik
+    affiliation: 1
 affiliations:
  - name: Flanders Heritage Agency, Belgium
    index: 1
