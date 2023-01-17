@@ -77,7 +77,7 @@ for publication of internal and regional vocabularies dealing with cultural heri
 The publication website allows humans to browse, search and consult the vocabularies 
 online in a user-friendly way. Search results can be downloaded in CSV format for further processing.
 Internal and external systems use the webservices provided by Atramhasis 
-to consult or download vocabularies. Concept uris are used in indexing data 
+to consult or download vocabularies. Concept URIs are used in indexing data 
 in systems such as the [Inventory of Immovable Cultural Heritage](https://inventaris.onroerenderfgoed.be).
 This allows users to search those external systems using the provided thesauri \autoref{fig:searchingairfields}.
 For a typical end-user the thesauri are presented as dropdown lists or specialised 
