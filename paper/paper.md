@@ -85,18 +85,28 @@ online in a user-friendly way. Search results can be downloaded in CSV format fo
 Internal and external systems use the webservices provided by Atramhasis 
 to consult or download vocabularies. Concept URIs are used in indexing data 
 in systems such as the [Inventory of Immovable Cultural Heritage](https://inventaris.onroerenderfgoed.be).
-This allows users to search those external systems using the provided thesauri \autoref{fig:searchingairfields}.
+This allows users to search those external systems using the provided thesauri (\autoref{fig:searchingairfields}).
 For a typical end-user the thesauri are presented as dropdown lists or specialised 
 widgets that allow navigating the thesaurus from the top concepts along branches to 
 the leafs. For most internal operations with the thesaurus, JSON REST services are used because 
 they are convenient for web developers to design and develop enterprise IT-systems.
-For external uses, publishing of linked data is supported. Individual concepts and
-collections can be downloaded as RDF data in Turtle, RDF/XML and JSON-LD format [@jsonld:2020].
-Entire conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an integration with 
-a Linked Data Fragments server is available that allows quering the server with SPARQL queries
-through the Triple Pattern Fragments protocol [@Verborgh:2016].
 
 ![Searching for airfields in the Inventory of Immovable Cultural Heritage\label{fig:searchingairfields}](inventaris_screen_search_airfields.png)
+
+For external uses, publishing of linked data is supported. Individual concepts and
+collections can be downloaded as RDF data in Turtle, RDF/XML and JSON-LD format [@jsonld:2020].
+Entire conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an [integration with 
+a Linked Data Fragments (LDF) server](https://atramhasis.readthedocs.io/en/latest/development.html#running-a-linked-data-fragments-server) 
+can be set up. An LDF server such as the 
+[Flanders Heritage Thesaurus LDF server](https://thesaurus.onroerenderfgoed.be/ldf/)
+can be browsed online for basic usage, but really shines in combination with an 
+LDF client (\autoref{fig:comunica}) such as [Comunica](https://comunica.dev/) 
+[@Taelman:2018]. Such a client provides a full SPARQL interface to the thesauri 
+in Atramhasis through the [Triple Pattern Fragments](https://linkeddatafragments.org/in-depth/#tpf)
+protocol [@Verborgh:2016].
+
+![Querying the Flanders Heritage thesaurus of styles and cultures with a SPARQL query from a comunica client\label{fig:comunica}](comunica_query.png)
+
 
 An Atramhasis instance can also be connected to external vocabularies and thesauri through 
 an interface called a Skosprovider [@skosprovider:2022]. Any thesaurus providing one can 
