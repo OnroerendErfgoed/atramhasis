@@ -2,6 +2,7 @@ in progress
 -----------
 
 - Stop building universal wheels (#752)
+- Update CONTRIBUTING.md file (#756)
 
 1.3.0 (04-01-2023)
 -------------------
