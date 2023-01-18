@@ -17,6 +17,7 @@ authors:
     orcid: 0000-0001-8197-5034
     affiliation: 1
   - name: Goessens, Bram
+    orcid: 0000-0001-6693-0866
     affiliation: 1
   - name: Piraux, Jonathan
   - name: Saelen, Bart
