@@ -7,6 +7,10 @@
   <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.cookie.js') }}"></script>
   <script src="{{ request.static_path(app_package + ':static/node_modules/d3/d3.min.js') }}"></script>
+  {% if request.registry.settings["tracking_snippet"] %}
+    {% set tracking_snippet = tracking_snippet|default(request.registry.settings["tracking_snippet"]) %}
+    {{ tracking_snippet|safe }}
+  {% endif %}
 {% endblock %}
 
 {% block header %}
