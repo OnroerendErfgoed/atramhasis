@@ -1,10 +1,13 @@
 import colander
-from pyramid.view import view_defaults, view_config
+from pyramid.view import view_config
+from pyramid.view import view_defaults
 from skosprovider_sqlalchemy.models import Language
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 
-from atramhasis.errors import LanguageNotFoundException, ValidationError
-from atramhasis.validators import LanguageTag, languagetag_validator
+from atramhasis.errors import LanguageNotFoundException
+from atramhasis.errors import ValidationError
+from atramhasis.validators import LanguageTag
+from atramhasis.validators import languagetag_validator
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')

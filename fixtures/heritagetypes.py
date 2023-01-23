@@ -1,8 +1,8 @@
-'''
+"""
 Testdata cotaining heritage types
 
 .. versionadded:: 0.4.4
-'''
+"""
 
 
 from skosprovider.providers import DictionaryProvider

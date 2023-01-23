@@ -44,11 +44,11 @@ class Prepare(Command):
 requires = [
     'pyramid',
     'pyramid_tm',
-    'SQLAlchemy<2.0.0',
+    'SQLAlchemy<2.0.0,>=1.4.0',
     'transaction',
     'zope.sqlalchemy',
     'skosprovider',
-    'skosprovider_sqlalchemy<2.0.0',
+    'skosprovider_sqlalchemy==2.0.0',
     'skosprovider_rdf',
     'skosprovider_getty',
     'pyramid_skosprovider',

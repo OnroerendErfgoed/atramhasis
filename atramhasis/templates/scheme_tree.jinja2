@@ -18,7 +18,7 @@
   <section class="page">
     <article>
       {%- for item in tree recursive %}
-        <span>{{ '-  ' * (loop.depth-1) }} {{ item.label }}</span><br>
+        <span>{{ '-  ' * (loop.depth - 1) }} {{ item.label }}</span><br>
         {%- if item.children -%}
             {{ loop(item.children) }}
         {%- endif %}

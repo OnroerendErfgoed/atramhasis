@@ -1,15 +1,24 @@
 import unittest
-from skosprovider_sqlalchemy.models import Concept, Collection, Note, Label, Source, Match, MatchType, Language, ConceptScheme
+
 from pyramid import testing
-from fixtures.data import trees
 from skosprovider.registry import Registry
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import Language
+from skosprovider_sqlalchemy.models import Match
+from skosprovider_sqlalchemy.models import MatchType
+from skosprovider_sqlalchemy.models import Note
+from skosprovider_sqlalchemy.models import Source
+
+from fixtures.data import trees
 
 
 class TestJsonRenderer(unittest.TestCase):
 
     def setUp(self):
         self.concept = Concept()
-        self.concept.type = 'concept'
         self.concept.id = 11
         self.concept.concept_id = 101
         self.concept.uri = 'urn:x-atramhasis-demo:TREES:101'
@@ -52,7 +61,6 @@ class TestJsonRenderer(unittest.TestCase):
         self.concept.matches = matches
 
         self.collection = Collection()
-        self.collection.type = 'collection'
         self.collection.id = 12
         self.collection.concept_id = 102
         self.collection.uri = 'urn:x-atramhasis-demo:TREES:102'
@@ -77,8 +85,8 @@ class TestJsonRenderer(unittest.TestCase):
 
     def test_label_adapter(self):
         from atramhasis.renderers import label_adapter
-        l = self.concept.labels[2]
-        label = label_adapter(l, {})
+        label = self.concept.labels[2]
+        label = label_adapter(label, {})
         self.assertIsInstance(label, dict)
         self.assertEqual(label['label'], 'and some other label')
         self.assertEqual(label['type'], 'altLabel')
@@ -172,8 +180,8 @@ class TestJsonRenderer(unittest.TestCase):
 
     def test_language_adaptor(self):
         from atramhasis.renderers import language_adaptor
-        l = Language(id='af', name='Afrikaans')
-        res = language_adaptor(l, None)
+        language = Language(id='af', name='Afrikaans')
+        res = language_adaptor(language, None)
         self.assertIsNotNone(res)
         self.assertIsInstance(res, dict)
         self.assertEqual(res['id'], 'af')

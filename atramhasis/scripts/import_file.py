@@ -1,30 +1,24 @@
-import sys
-import os
 import argparse
+import csv
+import json
+import os
+import sys
 
-from skosprovider_rdf.providers import RDFProvider
 from rdflib import Graph
-from rdflib.util import SUFFIX_FORMAT_MAP, guess_format
-
+from rdflib.util import SUFFIX_FORMAT_MAP
+from rdflib.util import guess_format
+from skosprovider.providers import DictionaryProvider
 from skosprovider.providers import SimpleCsvProvider
 from skosprovider.uri import UriPatternGenerator
-import csv
-
-from skosprovider.providers import DictionaryProvider
-import json
-
+from skosprovider_rdf.providers import RDFProvider
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import Note
+from skosprovider_sqlalchemy.models import Source
 from skosprovider_sqlalchemy.utils import import_provider
-from skosprovider_sqlalchemy.models import (
-    ConceptScheme,
-    Label,
-    conceptscheme_label,
-    Note,
-    Source
-)
-
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import url
+from sqlalchemy.orm import sessionmaker
 
 
 def file_to_rdf_provider(**kwargs):
@@ -101,9 +95,14 @@ def parse_argv_for_import(argv):
     cmd = os.path.basename(argv[0])
     parser = argparse.ArgumentParser(
         description='Import file to a database',
-        usage='{} [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label] [--conceptscheme_uri cs_uri] [--uri_pattern uri_pattern]\n '
-              '(example: "{} --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels --conceptscheme_uri urn:x-skosprovider:trees" --uri_pattern urn:x-skosprovider:trees:%s)'.format(
-            cmd, cmd)
+        epilog=(
+            f'example: {cmd} '
+            '--from atramhasis/scripts/my_file '
+            '--to sqlite:///atramhasis.sqlite '
+            '--conceptscheme_label Labels '
+            '--conceptscheme_uri urn:x-skosprovider:trees '
+            '--uri_pattern urn:x-skosprovider:trees:%s'
+        )
     )
     parser.add_argument('--from',
                         dest='input_file',
@@ -113,6 +112,7 @@ def parse_argv_for_import(argv):
                         )
     parser.add_argument('--to',
                         dest='to',
+                        metavar='conn_string',
                         type=str,
                         help='Connection string of the output database',
                         required=False,
@@ -150,7 +150,7 @@ def validate_file(input_file):
         print(f'The input file {input_file} does not exists')
         return False
     elif os.path.splitext(input_file)[1] not in supported_ext:
-        print (f'the input file {input_file} is not supported. Allowed extensions are: {supported_ext}')
+        print(f'the input file {input_file} is not supported. Allowed extensions are: {supported_ext}')
         return False
     else:
         return True
@@ -192,9 +192,10 @@ def create_conceptscheme(conceptscheme_label, conceptscheme_uri):
     Configure output conceptscheme based on arg values
     """
     cs = ConceptScheme(uri=conceptscheme_uri)
-    l = Label(conceptscheme_label, 'prefLabel', 'und')
-    cs.labels.append(l)
+    label = Label(conceptscheme_label, 'prefLabel', 'und')
+    cs.labels.append(label)
     return cs
+
 
 def create_conceptscheme_from_skos(conceptscheme):
     """
@@ -202,23 +203,22 @@ def create_conceptscheme_from_skos(conceptscheme):
     """
     return ConceptScheme(
         uri=conceptscheme.uri,
-        labels = [
-            Label(l.label, l.type, l.language)
-            for l in conceptscheme.labels
+        labels=[
+            Label(label.label, label.type, label.language)
+            for label in conceptscheme.labels
         ],
-        notes = [
+        notes=[
             Note(n.note, n.type, n.language, n.markup)
             for n in conceptscheme.notes
         ],
-        sources = [
+        sources=[
             Source(s.citation, s.markup)
             for s in conceptscheme.sources
         ],
-        languages = [
-            l for l in conceptscheme.languages
+        languages=[
+            language for language in conceptscheme.languages
         ]
     )
-
 
 
 def provider_to_db(provider, conceptscheme, session):
@@ -285,3 +285,7 @@ def main(argv=sys.argv):
             \n\n".
           format(prov_id, args.input_file, args.to,
                  prov_id.replace(' ', '_'), prov_id, scheme_id, prov_id.replace(' ', '_')))
+
+
+if __name__ == '__main__':
+    main()

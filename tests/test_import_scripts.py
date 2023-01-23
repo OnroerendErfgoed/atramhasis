@@ -1,22 +1,19 @@
 import os
 import sys
+from unittest.mock import Mock
+from unittest.mock import patch
 
-import tests
 from skosprovider.skos import Concept
 from skosprovider.skos import Note
 from skosprovider.utils import dict_dumper
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
+import tests
 from atramhasis.scripts import import_file
 from tests import DbTest
 from tests import SETTINGS
 from tests import TEST_DIR
 from tests import setup_db
-
-try:
-    from unittest.mock import Mock, patch
-except ImportError:
-    from unittest.mock import Mock, patch
 
 test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.rdf')
 test_data_ttl = os.path.join(TEST_DIR, 'data', 'trees.ttl')

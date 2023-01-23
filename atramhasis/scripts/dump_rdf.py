@@ -6,8 +6,10 @@ import textwrap
 import time
 
 import transaction
-from pyramid.paster import bootstrap, setup_logging
-from rdflib.namespace import RDF, SKOS
+from pyramid.paster import bootstrap
+from pyramid.paster import setup_logging
+from rdflib import RDF
+from rdflib import SKOS
 from rdflib.term import URIRef
 from skosprovider_rdf import utils
 

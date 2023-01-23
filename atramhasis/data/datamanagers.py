@@ -4,6 +4,8 @@ that abstract all interactions with the database away from the views.
 
 :versionadded: 0.4.1
 """
+import uuid
+
 from datetime import date
 from datetime import datetime
 
@@ -17,14 +19,15 @@ from skosprovider_sqlalchemy.models import Language
 from skosprovider_sqlalchemy.models import Match
 from skosprovider_sqlalchemy.models import MatchType
 from skosprovider_sqlalchemy.models import Thing
-from sqlalchemy import and_
 from sqlalchemy import desc
 from sqlalchemy import func
+from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
 from atramhasis.data import popular_concepts
 from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
+from atramhasis.skos import IDGenerationStrategy
 
 
 class DataManager:
@@ -51,7 +54,10 @@ class ConceptSchemeManager(DataManager):
         :param conceptscheme_id: a concepscheme id
         :return: the concepscheme for the given id
         """
-        return self.session.query(ConceptScheme).filter_by(id=conceptscheme_id).one()
+        return self.session.execute(
+            select(ConceptScheme)
+            .filter(ConceptScheme.id == conceptscheme_id)
+        ).scalar_one()
 
     def find(self, conceptscheme_id, query):
         """
@@ -62,19 +68,20 @@ class ConceptSchemeManager(DataManager):
         :returns: A :class:`list` of
             :class:`skosprovider_sqlalchemy.models.Thing` instances.
         """
-        q = self.session \
-            .query(Thing) \
-            .options(joinedload('labels')) \
+        db_query = (
+            select(Thing)
+            .options(joinedload('labels'))
             .filter(Thing.conceptscheme_id == conceptscheme_id)
+        )
         if 'type' in query and query['type'] in ['concept', 'collection']:
-            q = q.filter(Thing.type == query['type'])
+            db_query = db_query.filter(Thing.type == query['type'])
         if 'label' in query:
-            q = q.filter(
+            db_query = db_query.filter(
                 Thing.labels.any(
                     Label.label.ilike('%' + query['label'].lower() + '%')
                 )
             )
-        return q.all()
+        return self.session.execute(db_query).unique().scalars().all()
 
     def get_concepts_for_scheme_tree(self, conceptscheme_id):
         """
@@ -82,12 +89,14 @@ class ConceptSchemeManager(DataManager):
         :param conceptscheme_id:  a concepscheme id
         :return: all concepts for the scheme_tree
         """
-        return self.session \
-            .query(Concept) \
-            .filter(Concept.conceptscheme_id == conceptscheme_id,
-                    ~Concept.broader_concepts.any(),
-                    ~Collection.member_of.any()
-                    ).all()
+        return self.session.execute(
+            select(Concept)
+            .filter(
+                Concept.conceptscheme_id == conceptscheme_id,
+                ~Concept.broader_concepts.any(),
+                ~Collection.member_of.any()
+            )
+        ).scalars().all()
 
     def get_collections_for_scheme_tree(self, conceptscheme_id):
         """
@@ -95,12 +104,14 @@ class ConceptSchemeManager(DataManager):
         :param conceptscheme_id: a concepscheme id
         :return: all collections for the scheme_tree
         """
-        return self.session \
-            .query(Collection) \
-            .filter(Collection.conceptscheme_id == conceptscheme_id,
-                    ~Collection.broader_concepts.any(),
-                    ~Collection.member_of.any()
-                    ).all()
+        return self.session.execute(
+            select(Collection)
+            .filter(
+                Collection.conceptscheme_id == conceptscheme_id,
+                ~Collection.broader_concepts.any(),
+                ~Collection.member_of.any(),
+            )
+        ).scalars().all()
 
     def get_all(self, conceptscheme_id):
         """
@@ -110,11 +121,11 @@ class ConceptSchemeManager(DataManager):
         :returns: A :class:`list` of
             :class:`skosprovider_sqlalchemy.models.Thing` instances.
         """
-        all_results = self.session \
-            .query(Thing) \
-            .options(joinedload('labels')) \
-            .filter(Thing.conceptscheme_id == conceptscheme_id) \
-            .all()
+        all_results = self.session.execute(
+            select(Thing)
+            .options(joinedload('labels'))
+            .filter(Thing.conceptscheme_id == conceptscheme_id)
+        ).unique().scalars().all()
         return all_results
 
     def save(self, conceptscheme):
@@ -144,9 +155,13 @@ class SkosManager(DataManager):
         :param conceptscheme_id: a conceptscheme id
         :return: the selected thing (Concept or Collection)
         """
-        return self.session.query(Thing) \
-            .filter_by(concept_id=concept_id, conceptscheme_id=conceptscheme_id) \
-            .one()
+        return self.session.execute(
+            select(Thing)
+            .filter(
+                Thing.concept_id == concept_id,
+                Thing.conceptscheme_id == conceptscheme_id
+            )
+        ).scalar_one()
 
     def save(self, thing):
         """
@@ -182,23 +197,38 @@ class SkosManager(DataManager):
         :param list_type: a specific list type
         :return: all results for the specific list type
         """
-        return self.session.query(list_type).all()
+        return self.session.execute(select(list_type)).scalars().all()
 
     def get_match_type(self, match_type):
-        return self.session.query(MatchType).filter_by(name=match_type).one()
+        return self.session.execute(
+            select(MatchType)
+            .filter(MatchType.name == match_type)
+        ).scalar_one()
 
     def get_match(self, uri, matchtype_id, concept_id):
-        return self.session.query(Match).filter_by(uri=uri, matchtype_id=matchtype_id,
-                                                   concept_id=concept_id).one()
+        return self.session.execute(
+            select(Match)
+            .filter(
+                Match.uri == uri,
+                Match.matchtype_id == matchtype_id,
+                Match.concept_id == concept_id
+            )
+        ).scalar_one()
 
     def get_all_label_types(self):
-        return self.session.query(LabelType).all()
+        return self.session.execute(select(LabelType)).scalars().all()
 
-    def get_next_cid(self, conceptscheme_id):
-        max_id = self.session.query(
-            func.max(Thing.concept_id)
-        ).filter_by(conceptscheme_id=conceptscheme_id).first()[0]
-        return max_id + 1 if max_id else 1
+    def get_next_cid(self, conceptscheme_id, id_generation_strategy):
+        if id_generation_strategy == IDGenerationStrategy.NUMERIC:
+            max_id = self.session.execute(
+               select(func.max(Thing.concept_id))
+               .filter_by(conceptscheme_id=conceptscheme_id)
+            ).scalar_one()
+            return max_id + 1 if max_id else 1
+        elif id_generation_strategy == IDGenerationStrategy.GUID:
+            return str(uuid.uuid4())
+        else:
+            raise ValueError("unsupported id_generation_strategy")
 
 
 class LanguagesManager(DataManager):
@@ -211,7 +241,10 @@ class LanguagesManager(DataManager):
         super().__init__(session)
 
     def get(self, language_id):
-        return self.session.query(Language).filter_by(id=language_id).one()
+        return self.session.execute(
+            select(Language)
+            .filter(Language.id == language_id)
+        ).scalar_one()
 
     def save(self, language):
         """
@@ -235,7 +268,7 @@ class LanguagesManager(DataManager):
 
         :return: list of all languages
         """
-        return self.session.query(Language).all()
+        return self.session.execute(select(Language)).scalars().all()
 
     def get_all_sorted(self, sort_coll, sort_desc):
         """
@@ -245,13 +278,21 @@ class LanguagesManager(DataManager):
         :return: sorted list of languages
         """
         if sort_desc:
-            languages = self.session.query(Language).order_by(desc(sort_coll)).all()
+            return self.session.execute(
+                select(Language)
+                .order_by(desc(sort_coll))
+            ).scalars().all()
         else:
-            languages = self.session.query(Language).order_by(sort_coll).all()
-        return languages
+            return self.session.execute(
+                select(Language)
+                .order_by(sort_coll)
+            ).scalars().all()
 
     def count_languages(self, language_tag):
-        return self.session.query(Language).filter_by(id=language_tag).count()
+        return self.session.execute(
+            select(func.count(Language.id))
+            .filter(Language.id == language_tag)
+        ).scalar_one()
 
 
 class AuditManager(DataManager):
@@ -270,32 +311,34 @@ class AuditManager(DataManager):
         return visit_log
 
     @popular_concepts.cache_on_arguments(expiration_time=86400)
-    def get_most_popular_concepts_for_conceptscheme(self, conceptscheme_id, max=5, period='last_month'):
+    def get_most_popular_concepts_for_conceptscheme(
+        self, conceptscheme_id, max_results=5, period='last_month'
+    ):
         """
         get the most popular concepts for a conceptscheme
         :param conceptscheme_id: id of the conceptscheme
-        :param max: maximum number of results, default 5
-        :param period: 'last_day' or 'last_week' or 'last_month' or 'last_year', default 'last_month'
+        :param max_results: maximum number of results, default 5
+        :param period: 'last_day' or 'last_week' or 'last_month' or 'last_year', default 'last_mont h'
         :return: List of the most popular concepts of a conceptscheme over a certain period
         """
 
         start_date = self._get_first_day(period)
-        popular_concepts = self.session.query(
-            ConceptVisitLog.concept_id,
-            func.count(ConceptVisitLog.concept_id).label('count')
-        ).filter(
-            and_(ConceptVisitLog.conceptscheme_id == str(conceptscheme_id),
-                 ConceptVisitLog.visited_at >= start_date)
-        ).group_by(
-            ConceptVisitLog.concept_id
-        ).order_by(
-            desc('count')
-        ).limit(
-            max
+        rows = self.session.execute(
+            select(
+                ConceptVisitLog.concept_id,
+                func.count(ConceptVisitLog.concept_id).label('count')
+            )
+            .filter(
+                ConceptVisitLog.conceptscheme_id == str(conceptscheme_id),
+                ConceptVisitLog.visited_at >= start_date
+            )
+            .group_by(ConceptVisitLog.concept_id)
+            .order_by(desc('count'))
+            .limit(max_results)
         ).all()
         results = []
-        for concept in popular_concepts:
-            results.append({'concept_id': concept.concept_id, 'scheme_id': conceptscheme_id})
+        for row in rows:
+            results.append({'concept_id': row.concept_id, 'scheme_id': conceptscheme_id})
         return results
 
     @staticmethod
@@ -334,11 +377,9 @@ class CountsManager(DataManager):
         return counts
 
     def get_most_recent_count_for_scheme(self, conceptscheme_id):
-        recent = self.session.query(
-            ConceptschemeCounts
-        ).filter_by(
-            conceptscheme_id=conceptscheme_id
-        ).order_by(
-            desc('counted_at')
-        ).one()
+        recent = self.session.execute(
+            select(ConceptschemeCounts)
+            .filter(ConceptschemeCounts.conceptscheme_id == conceptscheme_id)
+            .order_by(desc('counted_at'))
+        ).scalar_one()
         return recent

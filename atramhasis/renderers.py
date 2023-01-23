@@ -127,6 +127,7 @@ def map_relation(thing, language='any'):
     """
     Map thing in a relation, leaving out the relations (to avoid circular dependencies)
     :param thing: the thing to map
+    :param language: language to use for the label
     :rtype: :class:`dict`
     """
     label = thing.label(language)
@@ -193,6 +194,7 @@ def language_adaptor(obj, request):
         'id': obj.id,
         'name': obj.name
     }
+
 
 json_renderer_verbose.add_adapter(ConceptScheme, conceptscheme_adapter)
 json_renderer_verbose.add_adapter(Concept, concept_adapter)

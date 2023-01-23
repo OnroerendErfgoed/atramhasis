@@ -1,6 +1,7 @@
 """
 Module containing views related to the REST service.
 """
+import logging
 import time
 
 import colander
@@ -13,7 +14,7 @@ from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 
 from atramhasis.audit import audit
 from atramhasis.cache import invalidate_scheme_cache
@@ -24,8 +25,11 @@ from atramhasis.errors import ValidationError
 from atramhasis.mappers import map_concept
 from atramhasis.mappers import map_conceptscheme
 from atramhasis.protected_resources import protected_operation
+from atramhasis.skos import IDGenerationStrategy
 from atramhasis.utils import from_thing
 from atramhasis.utils import internal_providers_only
+
+LOG = logging.getLogger(__name__)
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
@@ -56,7 +60,7 @@ class AtramhasisCrud:
             json_body['id'] = self.request.matchdict['c_id']
         return json_body
 
-    def _validate_concept(self, json_concept, conceptscheme_id):
+    def _validate_concept(self, json_concept, provider):
         from atramhasis.validators import (
             Concept as ConceptSchema,
             concept_schema_validator
@@ -66,7 +70,7 @@ class AtramhasisCrud:
             validator=concept_schema_validator
         ).bind(
             request=self.request,
-            conceptscheme_id=conceptscheme_id
+            provider=provider
         )
         try:
             return concept_schema.deserialize(json_concept)
@@ -156,23 +160,41 @@ class AtramhasisCrud:
 
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         """
-        validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
+        validated_json_concept = self._validate_concept(self._get_json_body(), self.provider)
         exc = None
+        id_generation_strategy = IDGenerationStrategy.NUMERIC
         for _ in range(5):
             try:
                 if validated_json_concept['type'] == 'concept':
                     concept = Concept()
                 else:
                     concept = Collection()
-                concept.concept_id = self.skos_manager.get_next_cid(
-                    self.provider.conceptscheme_id
+
+                id_generation_strategy = self.provider.metadata.get(
+                    "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
                 )
+                if id_generation_strategy == IDGenerationStrategy.MANUAL:
+                    concept.concept_id = validated_json_concept["concept_id"]
+                else:
+                    concept.concept_id = self.skos_manager.get_next_cid(
+                        self.provider.conceptscheme_id, id_generation_strategy
+                    )
+
                 concept.conceptscheme_id = self.provider.conceptscheme_id
                 concept.uri = self.provider.uri_generator.generate(id=concept.concept_id)
                 map_concept(concept, validated_json_concept, self.skos_manager)
                 concept = self.skos_manager.save(concept)
                 break
             except IntegrityError as exc:
+                if id_generation_strategy == IDGenerationStrategy.MANUAL:
+                    # Technically the concept_id is not 100% guaranteed to be the cause
+                    # of an IntegrityError, so log trace just in case.
+                    LOG.exception("Integrity error")
+
+                    concept_id = validated_json_concept["concept_id"]
+                    raise ValidationError(
+                        "Integrity error", [{"concept_id": f"{concept_id} already exists."}]
+                    )
                 # There is a small chance that another concept gets added at the same
                 # time. There is nothing wrong with the request, so we try again.
                 transaction.abort()
@@ -199,7 +221,7 @@ class AtramhasisCrud:
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         """
         c_id = self.request.matchdict['c_id']
-        validated_json_concept = self._validate_concept(self._get_json_body(), self.provider.conceptscheme_id)
+        validated_json_concept = self._validate_concept(self._get_json_body(), self.provider)
         try:
             concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:

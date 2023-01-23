@@ -1,10 +1,11 @@
 import unittest
-from atramhasis.protected_resources import ProtectedResourceEvent, ProtectedResourceException, protected_operation
-try:
-    from unittest.mock import Mock, MagicMock
-except ImportError:
-    from unittest.mock import Mock, MagicMock, call  # pragma: no cover
+from unittest.mock import MagicMock
+from unittest.mock import Mock
+
 from atramhasis.errors import ConceptSchemeNotFoundException
+from atramhasis.protected_resources import ProtectedResourceEvent
+from atramhasis.protected_resources import ProtectedResourceException
+from atramhasis.protected_resources import protected_operation
 
 
 class DummyParent:

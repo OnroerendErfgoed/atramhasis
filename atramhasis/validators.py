@@ -10,9 +10,27 @@ from language_tags import tags
 from skosprovider_sqlalchemy.models import (
     Language
 )
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 
 from atramhasis.errors import ValidationError
+from atramhasis.skos import IDGenerationStrategy
+
+
+class ForcedString(colander.String):
+    """
+    Acts just like colander.String but anything it gets will be turned into a string.
+
+    eg. Passing a number 1 will treat it as "1". null/None remains null/None
+    """
+
+    def deserialize(self, node, cstruct):
+        if (
+            not isinstance(cstruct, str)
+            and not isinstance(cstruct, bytes)
+            and cstruct is not colander.null
+        ):
+            cstruct = str(cstruct)
+        return super().deserialize(node, cstruct)
 
 
 class Label(colander.MappingSchema):
@@ -28,15 +46,15 @@ class Label(colander.MappingSchema):
 
 
 def html_preparer(value):
-    '''
+    """
     Prepare the value by stripping all html except certain tags.
 
     :param value: The value to be cleaned. 
     :rtype: str
-    '''
+    """
     try:
         return bleach.clean(value, tags=['strong', 'em', 'a'], strip=True)
-    except TypeError as e:
+    except TypeError:
         # Trying to clean a non-string
         # Ignore for now so it can be caught later on
         return value
@@ -76,7 +94,7 @@ class Sources(colander.SequenceSchema):
 
 class RelatedConcept(colander.MappingSchema):
     id = colander.SchemaNode(
-        colander.Int()
+        ForcedString()
     )
 
 
@@ -101,7 +119,7 @@ class Matches(colander.MappingSchema):
 
 class Concept(colander.MappingSchema):
     id = colander.SchemaNode(
-        colander.Int(),
+        ForcedString(),
         missing=None
     )
     type = colander.SchemaNode(
@@ -123,6 +141,9 @@ class Concept(colander.MappingSchema):
         colander.Boolean(),
         missing=colander.drop
     )
+
+    def preparer(self, concept):
+        return concept
 
 
 class ConceptScheme(colander.MappingSchema):
@@ -153,9 +174,10 @@ def concept_schema_validator(node, cstruct):
     request = node.bindings['request']
     skos_manager = request.data_managers['skos_manager']
     languages_manager = request.data_managers['languages_manager']
-    conceptscheme_id = node.bindings['conceptscheme_id']
+    provider = node.bindings['provider']
+    conceptscheme_id = provider.conceptscheme_id
     concept_type = cstruct['type']
-    id = cstruct['id']
+    collection_id = cstruct['id']
     narrower = None
     broader = None
     related = None
@@ -177,30 +199,30 @@ def concept_schema_validator(node, cstruct):
         related = copy.deepcopy(cstruct['related'])
         related = [m['id'] for m in related]
         r_validated = semantic_relations_rule(errors, node['related'], skos_manager,
-                                              conceptscheme_id, related, id)
+                                              conceptscheme_id, related, collection_id)
         concept_relations_rule(errors, node['related'], related, concept_type)
     if 'narrower' in cstruct:
         narrower = copy.deepcopy(cstruct['narrower'])
         narrower = [m['id'] for m in narrower]
         n_validated = semantic_relations_rule(errors, node['narrower'], skos_manager,
-                                              conceptscheme_id, narrower, id)
+                                              conceptscheme_id, narrower, collection_id)
         concept_relations_rule(errors, node['narrower'], narrower, concept_type)
     if 'broader' in cstruct:
         broader = copy.deepcopy(cstruct['broader'])
         broader = [m['id'] for m in broader]
         b_validated = semantic_relations_rule(errors, node['broader'], skos_manager,
-                                              conceptscheme_id, broader, id)
+                                              conceptscheme_id, broader, collection_id)
         concept_relations_rule(errors, node['broader'], broader, concept_type)
     if 'members' in cstruct:
         members = copy.deepcopy(cstruct['members'])
         members = [m['id'] for m in members]
         m_validated = semantic_relations_rule(errors, node['members'], skos_manager,
-                                              conceptscheme_id, members, id)
+                                              conceptscheme_id, members, collection_id)
     if 'member_of' in cstruct:
         member_of = copy.deepcopy(cstruct['member_of'])
         member_of = [m['id'] for m in member_of]
         o_validated = semantic_relations_rule(errors, node['member_of'], skos_manager,
-                                              conceptscheme_id, member_of, id)
+                                              conceptscheme_id, member_of, collection_id)
     if r_validated and n_validated and b_validated:
         concept_type_rule(errors, node['narrower'], skos_manager, conceptscheme_id, narrower)
         narrower_hierarchy_rule(errors, node['narrower'], skos_manager, conceptscheme_id, cstruct)
@@ -238,6 +260,23 @@ def concept_schema_validator(node, cstruct):
     if cstruct['type'] == 'concept' and 'infer_concept_relations' in cstruct:
         msg = "'infer_concept_relations' can only be set for collections."
         errors.append(colander.Invalid(node['infer_concept_relations'], msg=msg))
+
+    id_generation_strategy = provider.metadata.get(
+        "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
+    )
+    if id_generation_strategy == IDGenerationStrategy.MANUAL:
+        if not cstruct.get("id"):
+            msg = "Required for this provider."
+            errors.append(colander.Invalid(node["id"], msg=msg))
+        else:
+            try:
+                skos_manager.get_thing(cstruct["id"], conceptscheme_id)
+            except NoResultFound:
+                # this is desired
+                pass
+            else:
+                msg = f"{cstruct['id']} already exists."
+                errors.append(colander.Invalid(node["id"], msg=msg))
 
     if len(errors) > 0:
         raise ValidationError(
