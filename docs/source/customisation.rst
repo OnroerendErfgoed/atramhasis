@@ -663,66 +663,38 @@ concepts with a URI of less than 5 characters:
             )
 
 
-Adding Google Analytics
+Adding Analytics
 =======================
 
-Out of the box, it's very easy to add Google Analytics integration to Atramhasis.
-All you need to do is add you Web Property ID to :file:`development.ini`.
+Out of the box, it's very easy to add any analytics integration to Atramhasis.
+All you need to do is add your tracking snippet to :file:`development.ini`.
+
+Example code to add Google Analytics tracking:
 
 .. code-block:: ini
 
-    # Enter your Google Analytics Web Property ID
-    ga.tracker_key = UA-12345678-9
-
-This will add basic analytics to every page, using a Jinja2 macro. If you need
-more control over the code, you can override this macro in your own project.
-Suppose you always want to use SSL when sending data. First, you would create
-you own macro, eg. in :file:`my_macros.jinja2` in the templates directory
-of your :ref:`own project <own_project>`.
-
-.. code-block:: jinja
-
-    {% macro ga_tracker(ga_key) %}
-        <!-- Google Analytics -->
+    # Enter your tracking snippet
+    tracking_snippet = <!-- Google Analytics -->
         <script type="text/javascript">
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
 
-        ga('create', '{{ ga_key }}', 'auto');
-        ga('set', 'forceSSL', true);
-        ga('send', 'pageview');
+        ga("create", "some_key", "auto");
+        ga("set", "forceSSL", true);
+        ga("send", "pageview");
         </script>
         <!-- End Google Analytics -->
-    {% endmacro %}
 
-Once that's done, you need to override the the ``ga`` block in the base template. To
-do this, it's easiest to override Atramhasis' :file:`base.jinja2` in your own
-project. To do that, add the following to your project's main function:
+Another example to add Plausible Analytics:
 
-.. code-block:: python
+.. code-block:: ini
 
-    config.override_asset(
-        to_override='atramhasis:templates/base.jinja2',
-        override_with='templates/base.jinja2'
-    )
-
-In this file, you can now choose what should appear within the ga block defined
-in :file:`staticbase.jinja2`. Here we are just replacing one macro with another,
-but you are off course free to make further alterations.
-
-.. code-block:: jinja
-
-    {%- extends 'staticbase.jinja2' -%}
-
-    {% block ga %}
-        {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
-        {% from 'my_macros.jinja2' import ga_tracker %}
-        {% if ga_key %}
-            {{ ga_tracker(ga_key) }}
-        {% endif %}
-    {% endblock %}
+    # Enter your tracking snippet
+    tracking_snippet = <script defer data-domain="your.domain.com"
+        src="https://your.plausibleinstance.com/js/script.js">
+        </script>
 
 Adding external providers
 =========================
