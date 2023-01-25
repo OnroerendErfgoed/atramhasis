@@ -67,14 +67,16 @@ to concepts in other vocabularies such as the Art and Architecture Thesaurus (AA
 
 # Statement of need
 
-Atramhasis was written to be a lightweight open source SKOS editor. First and foremost,
+Atramhasis was written to be a user-friendly open source SKOS editor. First and foremost,
 we wanted a system that adheres to the SKOS standard, yet is useable for users without
 knowledge of SKOS or RDF. For a typical user, it had to feel as if they were consulting 
 a normal website, as opposed to a RDF vocabulary since the latter can feel rather daunting 
 to non-technical users. This not only applies to users consulting the thesauri, but also 
-to those editing them. The editors do not write RDF statements, but edit data in a normal 
-web admin interface, as seen in \autoref{fig:editingairfields}. All mapping to RDF and SKOS is done behind
-the scene, invisible to the editors.
+to those editing them. Our thesaurus editors are not IT-specialists, but researchers in the
+field of cultural heritage. While a general understanding of thesauri is within their grasp, 
+the technicalities of RDF are not. Thus, editors in Atramhasis do not write RDF statements,
+but edit data in a normal web admin interface, as seen in \autoref{fig:editingairfields}. 
+All mapping to RDF and SKOS is done behind the scene, invisible to the editors.
 
 ![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
 
@@ -107,7 +109,6 @@ protocol [@Verborgh:2016].
 
 ![Querying the Flanders Heritage thesaurus of styles and cultures with a SPARQL query from a comunica client\label{fig:comunica}](comunica_query.png)
 
-
 An Atramhasis instance can also be connected to external vocabularies and thesauri through 
 an interface called a Skosprovider [@skosprovider:2022]. Any thesaurus providing one can 
 be used for linking external concepts. Out of the box skosproviders are available for Getty 
@@ -116,8 +117,46 @@ to the SKOS standard can be added with a little development work. Connecting an 
 thesaurus opens up the possiblity of interlinking internal and external thesauri, importing 
 concepts from such a thesaurus and turning your vocabularies into true linked data. 
 
+# State of the field
+
+The first version of Atramhasis was released in 2014. Before we started work on 
+the software, we surveyed other vocabulary software. Apart from the goals we have 
+described we also had some secondary requirements. We needed software that was 
+easy to integrate with our regular authentication and authorisation mechanism, 
+a single sign-on environment used by most Flemish Government agencies. We also 
+needed the software to be easily adaptable to our corporate identity and branding.
+Finally, we preferred software written in the same or a similar language to our 
+regular technology stack (Python, Javascript, PostgreSQL) and we prefer working 
+with open source software.
+
+Software like [Protégé](https://protege.stanford.edu/) offers a lot of 
+functionality for building RDF vocabularies, but is not suited for editing by 
+non-technical users. Collaboration would have required all editors to be 
+proficient in version control systems such as [Git](https://git-scm.com). A similar
+limitation is shared with a project such as [SkoHub](https://skohub.io/). Others
+projects such as [Skosmos](https://skosmos.org/) provide for publication of 
+thesauri, but not editing. A true online editor such as
+[TemaTres](https://vocabularyserver.com/web/) had a more user-friendly interface,
+but was difficult to evaluate properly since most of the documenation and code 
+was in Spanish. It also diverged from our technology stack, although we did 
+have some older projects using similar technologies.  
+[OpenSkos](https://openskos.org) alos diverged from our technology stack, 
+was lacking in good documenation so it was unclear how easy it would be to
+adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) had 
+excatly the kind of end-user experience we were looking for. Unfortunately we 
+were not at all proficient in Ruby. iQvoc also runs on the idea that every 
+conceptscheme requires a new instance of the application, which would have 
+required a lot of work whenever a new scheme was needed. In the end, we decided 
+that writing a simple but extensible editor in Python was our best option.
+ 
 # Acknowledgements
 
-As with any long lived project, Atramhasis has benefitted from the input of several colleagues and software developers over the years. While it's impossible to thank them, we do want to thank Bart Saelen, Tinne Cahy and Cedrik Vanderhaegen for much of the original development. A full list of people who contributed over the years can be found on GitHub. Leen Meganck and Sophie Mortier were responsible for building most of the vocabularies that led to creating the software. Their needs and requirements drove the features of Atramhasis.
+As with any long lived project, Atramhasis has benefitted from the input of 
+several colleagues and software developers over the years. While it's impossible 
+to thank them all, we do want to thank Bart Saelen, Tinne Cahy and 
+Cedrik Vanderhaegen for much of the original development. A full list of people 
+who contributed over the years can be found on GitHub. Leen Meganck and 
+Sophie Mortier were responsible for building most of the vocabularies that led to 
+creating the software. Their needs and requirements drove the features of Atramhasis.
 
 # References
