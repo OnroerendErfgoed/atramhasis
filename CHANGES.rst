@@ -2,6 +2,7 @@ in progress
 -----------
 
 - Easier and more flexible configuration of analytics snippets, such as `Plausible Analytics <https://plausible.io>`_. (#738)
+- Update language-tags to latest version. (#754)
 - Stop building universal wheels (#752)
 - Update CONTRIBUTING.md file (#756)
 
