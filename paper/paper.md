@@ -153,11 +153,25 @@ or made it easy to build one. Adding our own corporate identity would have
 have been feasible in some ways, but often it would have to be done by forking
 the software as opposed to configuring it, complicating long term maintenance.
 
-In the end, we decided to write a simple but extensible editor in Python that
-adhered to our primary and secondary requirements. To this day Atramhasis is 
-easy to extend with custom authentication mechanisms or corporate identity, as
+# Implementation
+
+We decided to write a simple but extensible editor in Python that
+adhered to our primary and secondary requirements. Atramhasis comes with a 
+default style but is  easy to extend with a custom corporate identity, as
 can be seen by comparing the Flanders Heritage [thesaurus](https://thesaurus.onroerenderfgoed.be) 
-with the default Atramhasis setup. It continues to serve us well.
+with the default Atramhasis setup. It does not come with a default authentication 
+and a authorization layer, but the underlying Pyramid framework provides hooks
+and integration points facilitating this. There are default libraries for this 
+framework that can be configured according to a user's own corporate security 
+needs.
+
+Because the software use a database abstraction layer, it can be run with 
+different RDBMS backends. The code is tested on PostgreSQL, good for an 
+enterprise multi-user production environment and SQLite, good for a single-user 
+environment and rapid prototyping. Not configuring any authentication and using 
+a SQLite database allows one to setup a quick local installation that can be 
+used as a single user enviroment to generate a SKOS vocabulary that can be
+exported and reused for other purposes. 
  
 # Acknowledgements
 
