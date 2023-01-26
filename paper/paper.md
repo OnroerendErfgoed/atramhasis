@@ -121,7 +121,8 @@ concepts from such a thesaurus and turning your vocabularies into true linked da
 
 The first version of Atramhasis was released in 2014. Before we started work on 
 the software, we surveyed other vocabulary software. Apart from the goals we have 
-described we also had some secondary requirements. We needed software that was 
+described, to have user-friendly software that incorporated SKOS without being too 
+technical about it, we also had some secondary requirements. We needed software that was 
 easy to integrate with our regular authentication and authorisation mechanism, 
 a single sign-on environment used by most Flemish Government agencies. We also 
 needed the software to be easily adaptable to our corporate identity and branding.
@@ -146,8 +147,17 @@ adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) had
 excatly the kind of end-user experience we were looking for. Unfortunately we 
 were not at all proficient in Ruby. iQvoc also runs on the idea that every 
 conceptscheme requires a new instance of the application, which would have 
-required a lot of work whenever a new scheme was needed. In the end, we decided 
-that writing a simple but extensible editor in Python was our best option.
+required a lot of work whenever a new scheme was needed. None of the available
+solutions had a ready-made integration with our single sign-on environment
+or made it easy to build one. Adding our own corporate identity would have 
+have been feasible in some ways, but often it would have to be done by forking
+the software as opposed to configuring it, complicating long term maintenance.
+
+In the end, we decided to write a simple but extensible editor in Python that
+adhered to our primary and secondary requirements. To this day Atramhasis is 
+easy to extend with custom authentication mechanisms or corporate identity, as
+can be seen by comparing the Flanders Heritage [thesaurus](https://thesaurus.onroerenderfgoed.be) 
+with the default Atramhasis setup. It continues to serve us well.
  
 # Acknowledgements
 
