@@ -4,11 +4,12 @@ import datetime
 import logging
 import os
 import xml.etree.ElementTree as ElementTree
+from builtins import input
 from os import listdir
 from os.path import isfile
 
-from builtins import input
-from pyramid.paster import get_appsettings, bootstrap
+from pyramid.paster import bootstrap
+from pyramid.paster import get_appsettings
 from pyramid.paster import setup_logging
 from pytz import timezone
 from sqlalchemy import engine_from_config

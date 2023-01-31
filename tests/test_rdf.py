@@ -1,17 +1,19 @@
 import unittest
-
-try:
-    from unittest.mock import Mock
-except ImportError:
-    from unittest.mock import Mock  # pragma: no cover
-
-from rdflib import Graph
-from rdflib.term import URIRef, Literal
-from rdflib.namespace import RDF, VOID, DCTERMS, XSD, FOAF
-
-from atramhasis.rdf import _add_metadataset, _add_provider, _add_ldf_server, HYDRA
-
 from datetime import date
+from unittest.mock import Mock
+
+from rdflib import DCTERMS
+from rdflib import FOAF
+from rdflib import Graph
+from rdflib import RDF
+from rdflib import VOID
+from rdflib.term import Literal
+from rdflib.term import URIRef
+
+from atramhasis.rdf import HYDRA
+from atramhasis.rdf import _add_ldf_server
+from atramhasis.rdf import _add_metadataset
+from atramhasis.rdf import _add_provider
 
 
 class AddProviderTests(unittest.TestCase):
@@ -30,7 +32,7 @@ class AddProviderTests(unittest.TestCase):
         g.add((duri, RDF.type, VOID.Dataset))
         return g
 
-    def _get_provider(self, dataset = {}):
+    def _get_provider(self, dataset={}):
         provider_mock = Mock()
         provider_mock.get_vocabulary_id = Mock(return_value='TREES')
         provider_mock.get_metadata = Mock(return_value={'id': 'TREES', 'subject': [], 'dataset': dataset})
@@ -94,7 +96,7 @@ class MetadatasetTests(unittest.TestCase):
     def test_add_metadataset(self):
         metadataset = {
             'publisher': ['https://id.erfgoed.net/actoren/501'],
-            'created': [date(2016,9,14)],
+            'created': [date(year=2016, month=9, day=14)],
             'language': ['nl', 'en', 'fr'],
             'license': [
                 'https://creativecommons.org/licenses/by/4.0/',
@@ -112,7 +114,8 @@ class MetadatasetTests(unittest.TestCase):
         self.assertIn((uri, DCTERMS.publisher, URIRef('https://id.erfgoed.net/actoren/501')), g)
         self.assertIn((uri, DCTERMS.license, URIRef('https://creativecommons.org/licenses/by/4.0/')), g)
         self.assertIn((uri, DCTERMS.license, URIRef('http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0')), g)
-        self.assertIn((uri, DCTERMS.created, Literal(date(2016,9,14))), g)
+        self.assertIn((uri, DCTERMS.created, Literal(date(year=2016, month=9, day=14))), g)
+
 
 class LdfServerTests(unittest.TestCase):
     def setUp(self):

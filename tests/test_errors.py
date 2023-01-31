@@ -1,11 +1,14 @@
 import unittest
+from unittest.mock import MagicMock
+
 from sqlalchemy.exc import IntegrityError
-try:
-    from unittest.mock import Mock, MagicMock
-except ImportError:
-    from unittest.mock import Mock, MagicMock  # pragma: no cover
-from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
-    ConceptNotFoundException, DbNotFoundException, ValidationError, LanguageNotFoundException
+
+from atramhasis.errors import ConceptNotFoundException
+from atramhasis.errors import ConceptSchemeNotFoundException
+from atramhasis.errors import DbNotFoundException
+from atramhasis.errors import LanguageNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.errors import ValidationError
 from atramhasis.views.exception_views import data_integrity
 
 

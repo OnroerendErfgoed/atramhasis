@@ -1,11 +1,15 @@
+import re
 from datetime import date
 from datetime import datetime
+from unittest.mock import Mock
+from unittest.mock import patch
 
 from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.models import LabelType
 from skosprovider_sqlalchemy.models import Language
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import select
+from sqlalchemy.exc import NoResultFound
 
 from atramhasis.data.datamanagers import AuditManager
 from atramhasis.data.datamanagers import ConceptSchemeManager
@@ -14,14 +18,10 @@ from atramhasis.data.datamanagers import LanguagesManager
 from atramhasis.data.datamanagers import SkosManager
 from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
+from atramhasis.skos import IDGenerationStrategy
 from tests import DbTest
 from tests import fill_db
 from tests import setup_db
-
-try:
-    from unittest.mock import Mock, patch
-except ImportError:
-    from unittest.mock import Mock, patch
 
 
 def setUpModule():
@@ -56,7 +56,9 @@ class ConceptSchemeManagerTest(DbTest):
         self.assertEqual(10, len(res))
 
     def test_save(self):
-        conceptscheme = self.session.query(ConceptScheme).filter(Concept.id == 1).first()
+        conceptscheme = self.session.execute(
+            select(ConceptScheme).filter(Concept.id == 1)
+        ).scalars().first()
         conceptscheme = self.conceptscheme_manager.save(conceptscheme)
         self.assertIsNotNone(conceptscheme.id)
 
@@ -104,9 +106,22 @@ class SkosManagerTest(DbTest):
         res = self.skos_manager.get_all_label_types()
         self.assertEqual(4, len(res))
 
-    def test_get_next_cid(self):
-        res = self.skos_manager.get_next_cid(1)
-        self.assertIsNotNone(res)
+    def test_get_next_cid_numeric(self):
+        res = self.skos_manager.get_next_cid(1, IDGenerationStrategy.NUMERIC)
+        self.assertIsInstance(res, int)
+
+    def test_get_next_cid_guid(self):
+        res = self.skos_manager.get_next_cid(1, IDGenerationStrategy.GUID)
+        self.assertIsInstance(res, str)
+        char = "[0-9a-fA-F]"
+        self.assertRegex(
+            res,
+            fr"^{char}{{8}}\b-{char}{{4}}\b-{char}{{4}}\b-{char}{{4}}\b-{char}{{12}}$"
+        )
+
+    def test_get_next_cid_manual(self):
+        with self.assertRaises(ValueError):
+            self.skos_manager.get_next_cid(1, IDGenerationStrategy.MANUAL)
 
 
 class LanguagesManagerTest(DbTest):

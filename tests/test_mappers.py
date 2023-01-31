@@ -1,25 +1,17 @@
 import unittest
+from unittest.mock import Mock
 
-from sqlalchemy.orm.exc import NoResultFound
-from atramhasis.data.datamanagers import SkosManager
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import Match
+from skosprovider_sqlalchemy.models import MatchType
+from skosprovider_sqlalchemy.models import Source
+from sqlalchemy.exc import NoResultFound
 
-
-try:
-    from unittest.mock import Mock
-except ImportError:
-    from unittest.mock import Mock  # pragma: no cover
-from pyramid import testing
-from skosprovider_sqlalchemy.models import (
-    Thing,
-    ConceptScheme,
-    Concept,
-    Collection,
-    Label,
-    Source,
-    MatchType,
-    Match,
-)
-from atramhasis.mappers import map_concept, map_conceptscheme
+from atramhasis.mappers import map_concept
+from atramhasis.mappers import map_conceptscheme
 
 test_json = {
     "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
@@ -80,7 +72,7 @@ test_json_conceptscheme = {
         "citation": "Atlas."
     }]
 }
-test_json_html={
+test_json_html = {
     "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
     "label": "Belgium",
     "type": "concept",
@@ -108,67 +100,53 @@ test_json_html={
 }
 
 
-
-def filter_by_mock_concept(concept_id, conceptscheme_id):
-    if concept_id in (7, 11, 12):
-        raise NoResultFound()
-    filter_mock = Mock()
-    if concept_id in (999, 19):
-        thing = Collection(id=concept_id, concept_id=concept_id, conceptscheme_id=conceptscheme_id)
-        thing.type = 'collection'
-    else:
-        thing = Concept(id=concept_id, concept_id=concept_id, conceptscheme_id=conceptscheme_id)
-        thing.type = 'concept'
-    filter_mock.one = Mock(return_value=thing)
-    return filter_mock
-
-
-def filter_by_mock_matchtype(name):
-    filter_mock = Mock()
-    if name in ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch']:
-        matchtype = MatchType(name, 'test')
-    else:
-        raise NoResultFound()
-    filter_mock.one = Mock(return_value=matchtype)
-    return filter_mock
-
-
-def filter_by_mock_match(uri, matchtype_id, concept_id):
-    filter_mock = Mock()
-    if concept_id == -1:
-        raise NoResultFound()
-    else:
-        match = Match()
-        match.uri = uri
-        match.concept_id = concept_id
-        if matchtype_id in ['broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch']:
-            match.matchtype = MatchType(matchtype_id, 'test')
-        else:
+class DummySkosManager:
+    def get_thing(self, concept_id, conceptscheme_id):
+        if concept_id in (7, 11, 12):
             raise NoResultFound()
-    filter_mock.one = Mock(return_value=match)
-    return filter_mock
+        if concept_id in (999, 19):
+            return Collection(
+                id=concept_id,
+                concept_id=concept_id,
+                conceptscheme_id=conceptscheme_id
+            )
+        else:
+            return Concept(
+                id=concept_id,
+                concept_id=concept_id,
+                conceptscheme_id=conceptscheme_id
+            )
 
+    def change_type(self, _, concept_id, conceptscheme_id, new_type, uri):
+        thing = Concept() if new_type == 'concept' else Collection()
+        thing.type = new_type
+        thing.concept_id = concept_id
+        thing.conceptscheme_id = conceptscheme_id
+        thing.uri = uri
+        return thing
 
-def create_query_mock(some_class):
-    query_mock = Mock()
-    if some_class in [Thing, Concept, Collection]:
-        query_mock.filter_by = Mock(side_effect=filter_by_mock_concept)
-    elif some_class == MatchType:
-        query_mock.filter_by = Mock(side_effect=filter_by_mock_matchtype)
-    elif some_class == Match:
-        query_mock.filter_by = Mock(side_effect=filter_by_mock_match)
-    return query_mock
+    def get_match_type(self, *_, **__):
+        return Mock()
 
-
-def session_maker():
-    session_mock = Mock()
-    session_mock.query = Mock(side_effect=create_query_mock)
-    return session_mock
+    def get_match(self, uri, matchtype_id, concept_id):
+        if concept_id == -1:
+            raise NoResultFound()
+        else:
+            match = Match()
+            match.uri = uri
+            match.concept_id = concept_id
+            if matchtype_id in [
+                'broadMatch', 'closeMatch', 'exactMatch', 'narrowMatch', 'relatedMatch'
+            ]:
+                match.matchtype = MatchType(matchtype_id, 'test')
+                return match
+            else:
+                raise NoResultFound()
 
 
 class TestMappers(unittest.TestCase):
     def setUp(self):
-        self.skos_manager = SkosManager(session_maker())
+        self.skos_manager = DummySkosManager()
         self.concept = Concept()
         self.concept.concept_id = 1
         self.concept.conceptscheme_id = 1
