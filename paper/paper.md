@@ -81,12 +81,15 @@ All mapping to RDF and SKOS is done behind the scene, invisible to the editors.
 ![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
 
 The system was conceived as Flanders Heritage's [central platform](https://thesaurus.onroerenderfgoed.be) 
-for publication of internal and regional vocabularies dealing with cultural heritage [@Mortier:2017]. 
-The publication website allows humans to browse, search and consult the vocabularies 
-online in a user-friendly way. Search results can be downloaded in CSV format for further processing.
-Internal and external systems use the webservices provided by Atramhasis 
-to consult or download vocabularies. Concept URIs are used in indexing data 
-in systems such as the [Inventory of Immovable Cultural Heritage](https://inventaris.onroerenderfgoed.be).
+for publication of internal and regional vocabularies dealing with cultural heritage 
+[@Mortier:2017]. The publication website allows humans to browse, search and 
+consult the vocabularies online in a user-friendly way. Search results can be 
+downloaded in CSV format for further processing. Internal and external systems 
+use the webservices provided by Atramhasis to consult or download vocabularies. 
+Concept URIs are used in indexing data in systems such as the 
+[Inventory of Immovable Cultural Heritage](https://inventaris.onroerenderfgoed.be) 
+[@VanDaele:2015; @deHaan:2021; @Hooft:2021] or the 
+[Flanders Heritage Image Database](https://beeldbank.onroerenderfgoed.be).
 This allows users to search those external systems using the provided thesauri (\autoref{fig:searchingairfields}).
 For a typical end-user the thesauri are presented as dropdown lists or specialised 
 widgets that allow navigating the thesaurus from the top concepts along branches to 
@@ -157,21 +160,51 @@ the software as opposed to configuring it, complicating long term maintenance.
 
 We decided to write a simple but extensible editor in Python that
 adhered to our primary and secondary requirements. Atramhasis comes with a 
-default style but is  easy to extend with a custom corporate identity, as
-can be seen by comparing the Flanders Heritage [thesaurus](https://thesaurus.onroerenderfgoed.be) 
+default style but is easy to extend with a custom corporate identity, as
+can be seen by comparing the [Flanders Heritage thesaurus](https://thesaurus.onroerenderfgoed.be) 
 with the default Atramhasis setup. It does not come with a default authentication 
 and a authorization layer, but the underlying Pyramid framework provides hooks
 and integration points facilitating this. There are default libraries for this 
 framework that can be configured according to a user's own corporate security 
 needs.
 
-Because the software use a database abstraction layer, it can be run with 
-different RDBMS backends. The code is tested on PostgreSQL, good for an 
-enterprise multi-user production environment and SQLite, good for a single-user 
-environment and rapid prototyping. Not configuring any authentication and using 
-a SQLite database allows one to setup a quick local installation that can be 
-used as a single user enviroment to generate a SKOS vocabulary that can be
-exported and reused for other purposes. 
+Because the software uses [SQLAlchemy](https://sqlalchemy.org), a database 
+abstraction layer, it can be run with different RDBMS backends. While the list 
+of backends SQLAlchemy supports is long, for Atramhasis we run integration tests 
+on two different open source backends for every commit and pull-request. 
+The first, [PostgreSQL](https://postgresql.org) 
+is well suited for an enterprise multi-user production environment such as the 
+Flanders Heritage thesaurus. It has been running our production 
+environment for years, serving XXXXX visits per year. 
+The second, [SQLite](https://sqlite.org), is very well 
+suited for a single-user environment and rapid prototyping. By using this very 
+simple file-based RDBMS and not configuring any authentication you can use Atramhasis 
+as a local SKOS editor on any machine that has recent running Python evironment
+installed. People have used it in this way as a quick SKOS editor for those 
+who do not want to write SKOS files by hand.
+ 
+A single instance of Atramhasis can host mutiple thesauri or conceptschemes. 
+Creating a conceptscheme is more involved than creating a concept or collection. 
+Generally it is best left to system admins and IT-experts who can also setup 
+a URI generation scheme, decide on some special configuration settings and know
+how the conceptschem will be used in other applications. While this previously 
+needed to be done by writing a small piece of code, version 2.0.0 will provide 
+a web interface for this. We still advise to consult a systems architect when 
+creating new thesauri, especially if they are meant to be integrated in a wider 
+enterprise architecture. 
+
+A conceptscheme has no limit on the number of concepts or collections. The largest 
+Flandes Heritage conceptscheme holds some 1.485 concepts. While a 
+lot more concepts can be added, we find that generally the very large thesauri 
+such as the Art and Architecture Thesaurus or the AGROVOC thesaurus define 
+custom properties or have smaller subgroups to keep the thesarus navigeable. 
+Flanders Heritage has always shied away from creating heterogenous conceptschemes, 
+opting for conceptschemes with a tight focus.
+Eg. the Flanders Heritage thesaurus has different conceptschemes that each map
+to an AAT Facet (Styles and Periods, Activities, Materials, Objects). While 
+the end result is very similar, even on a semantic level, Atramhasis is currently 
+not equipped to support facets within a single conceptscheme.
+  
  
 # Acknowledgements
 
