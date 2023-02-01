@@ -193,17 +193,19 @@ a web interface for this. We still advise to consult a systems architect when
 creating new thesauri, especially if they are meant to be integrated in a wider 
 enterprise architecture. 
 
-A conceptscheme has no limit on the number of concepts or collections. The largest 
-Flandes Heritage conceptscheme holds some 1.485 concepts. While a 
-lot more concepts can be added, we find that generally the very large thesauri 
-such as the Art and Architecture Thesaurus or the AGROVOC thesaurus define 
-custom properties or have smaller subgroups to keep the thesarus navigeable. 
-Flanders Heritage has always shied away from creating heterogenous conceptschemes, 
-opting for conceptschemes with a tight focus.
-Eg. the Flanders Heritage thesaurus has different conceptschemes that each map
-to an AAT Facet (Styles and Periods, Activities, Materials, Objects). While 
-the end result is very similar, even on a semantic level, Atramhasis is currently 
-not equipped to support facets within a single conceptscheme.
+A conceptscheme has no hardcoded limit on the number of concepts or collections.
+The largest Flandes Heritage conceptscheme holds some 1.485 concepts. Bigger 
+conceptschemes are certainly possible, but no upper limit has been reached so far. 
+However, we do feel Atramhasis is not ideal for hosting very large thesauri 
+such as the AAT [@aat]. Often such a thesaurus defines custom properties or 
+has smaller subgroups to keep the thesarus navigeable. At Flanders Heritage 
+we have avoided creating heterogenous conceptschemes, opting for conceptschemes 
+with a tight focus. Eg. the Flanders Heritage thesaurus has different conceptschemes 
+that each map to an AAT subgroup called a Facet (Styles and Periods, Activities, 
+Materials, Objects). While the end result is very similar Atramhasis does not 
+currently support something like the facets the AAT employs to organise concepts 
+in different subgroups within a single conceptscheme. So far, this has not proved 
+to be an issue.
   
  
 # Acknowledgements
