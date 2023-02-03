@@ -65,54 +65,64 @@ to concepts in other vocabularies such as the Art and Architecture Thesaurus (AA
 
 ![Airfields described as a SKOS concept.\label{fig:airfields}](atramhasis_screen_airfields.png)
 
-# Statement of need
+# Functional requirements
 
-Atramhasis was written to be a user-friendly open source SKOS editor. First and foremost,
-we wanted a system that adheres to the SKOS standard, yet is useable for users without
-knowledge of SKOS or RDF. For a typical user, it had to feel as if they were consulting 
-a normal website, as opposed to a RDF vocabulary since the latter can feel rather daunting 
-to non-technical users. This not only applies to users consulting the thesauri, but also 
-to those editing them. Our thesaurus editors are not IT-specialists, but researchers in the
-field of cultural heritage. While a general understanding of thesauri is within their grasp, 
-the technicalities of RDF are not. Thus, editors in Atramhasis do not write RDF statements,
-but edit data in a normal web admin interface, as seen in \autoref{fig:editingairfields}. 
+Atramhasis was written to be a user-friendly open source SKOS editor. First and 
+foremost, we wanted a system that adheres to the SKOS standard, yet is useable 
+for users without knowledge of SKOS or RDF. For a typical user, it had to feel 
+as if they were consulting a normal website, as opposed to a RDF vocabulary 
+since the latter can feel rather daunting to non-technical users. This not only 
+applies to users consulting the thesauri, but also to those editing them. Our 
+thesaurus editors are not IT- or linked data specialists, but domain experts, 
+researchers and other specialists in the field of cultural heritage. While a 
+general understanding of thesauri is within their grasp, the technicalities of 
+RDF are not. Thus, editors in Atramhasis do not write RDF statements, but edit 
+data in a normal web admin interface, as seen in \autoref{fig:editingairfields}. 
 All mapping to RDF and SKOS is done behind the scene, invisible to the editors.
 
 ![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
 
-The system was conceived as Flanders Heritage's [central platform](https://thesaurus.onroerenderfgoed.be) 
-for publication of internal and regional vocabularies dealing with cultural heritage 
-[@Mortier:2017]. The publication website allows humans to browse, search and 
-consult the vocabularies online in a user-friendly way. Search results can be 
-downloaded in CSV format for further processing. Internal and external systems 
-use the webservices provided by Atramhasis to consult or download vocabularies. 
-Concept URIs are used in indexing data in systems such as the 
+The system was conceived as Flanders Heritage's 
+[central platform](https://thesaurus.onroerenderfgoed.be) for publication of µ
+internal and regional vocabularies dealing with cultural heritage [@Mortier:2017]. 
+The publication website allows humans to browse, search and consult the vocabularies 
+online in a user-friendly way. Search results can be downloaded in CSV format 
+for further processing. Internal and external systems use the webservices provided 
+by Atramhasis to consult or download vocabularies. Concept URIs are used in 
+indexing data in systems such as the 
 [Inventory of Immovable Cultural Heritage](https://inventaris.onroerenderfgoed.be) 
 [@VanDaele:2015; @deHaan:2021; @Hooft:2021] or the 
 [Flanders Heritage Image Database](https://beeldbank.onroerenderfgoed.be).
-This allows users to search those external systems using the provided thesauri (\autoref{fig:searchingairfields}).
-For a typical end-user the thesauri are presented as dropdown lists or specialised 
-widgets that allow navigating the thesaurus from the top concepts along branches to 
-the leafs. For most internal operations with the thesaurus, JSON REST services are used because 
-they are convenient for web developers to design and develop enterprise IT-systems.
+This allows users to search those systems using the provided thesauri (\autoref{fig:searchingairfields}).
+For a typical end-user the thesauri are presented as dropdown lists or 
+[specialised widgets](https://github.com/OnroerendErfgoed/thesaurus-widget) that 
+allow navigating the thesaurus from the top concepts along branches to the leafs. 
+For most transactions between internal Flanders Heritage systems and the
+the thesaurus system, simple JSON REST services are used. This was deliberately kept 
+close to the implementation standards used in other Flanders Heritage sytems to allow 
+developers used to working in an enterprise IT context to feel comfortable and 
+productive.
 
 ![Searching for airfields in the Inventory of Immovable Cultural Heritage\label{fig:searchingairfields}](inventaris_screen_search_airfields.png)
 
 For external uses, publishing of linked data is supported. Individual concepts and
 collections can be downloaded as RDF data in Turtle, RDF/XML and JSON-LD format [@jsonld:2020].
-Entire conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, an [integration with 
-a Linked Data Fragments (LDF) server](https://atramhasis.readthedocs.io/en/latest/development.html#running-a-linked-data-fragments-server) 
+Entire conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, 
+an [integration with a Linked Data Fragments (LDF) server](https://atramhasis.readthedocs.io/en/latest/development.html#running-a-linked-data-fragments-server) 
 can be set up. An LDF server such as the 
 [Flanders Heritage Thesaurus LDF server](https://thesaurus.onroerenderfgoed.be/ldf/)
 can be browsed online for basic usage, but really shines in combination with an 
 LDF client (\autoref{fig:comunica}) such as [Comunica](https://comunica.dev/) 
 [@Taelman:2018]. Such a client provides a full SPARQL interface to the thesauri 
 in Atramhasis through the [Triple Pattern Fragments](https://linkeddatafragments.org/in-depth/#tpf)
-protocol [@Verborgh:2016].
+protocol [@Verborgh:2016]. This combination provides the power of SPARQL queries
+without having to setup a triplestore, thus keeping the required technology stack 
+small. Implementors needing a full triplestore, could easily add one and use the 
+export capabilities provided by Atramahsis to populate the triplestore. 
 
 ![Querying the Flanders Heritage thesaurus of styles and cultures with a SPARQL query from a comunica client\label{fig:comunica}](comunica_query.png)
 
-An Atramhasis instance can also be connected to external vocabularies and thesauri through 
+An Atramhasis instance can be connected to external vocabularies and thesauri through 
 an interface called a Skosprovider [@skosprovider:2022]. Any thesaurus providing one can 
 be used for linking external concepts. Out of the box skosproviders are available for Getty 
 vocabularies such as the AAT [@aat] or other Atramhasis instances, but any thesaurus adhering 
@@ -120,43 +130,7 @@ to the SKOS standard can be added with a little development work. Connecting an 
 thesaurus opens up the possiblity of interlinking internal and external thesauri, importing 
 concepts from such a thesaurus and turning your vocabularies into true linked data. 
 
-# State of the field
-
-The first version of Atramhasis was released in 2014. Before we started work on 
-the software, we surveyed other vocabulary software. Apart from the goals we have 
-described, to have user-friendly software that incorporated SKOS without being too 
-technical about it, we also had some secondary requirements. We needed software that was 
-easy to integrate with our regular authentication and authorisation mechanism, 
-a single sign-on environment used by most Flemish Government agencies. We also 
-needed the software to be easily adaptable to our corporate identity and branding.
-Finally, we preferred software written in the same or a similar language to our 
-regular technology stack (Python, Javascript, PostgreSQL) and we prefer working 
-with open source software.
-
-Software like [Protégé](https://protege.stanford.edu/) offers a lot of 
-functionality for building RDF vocabularies, but is not suited for editing by 
-non-technical users. Collaboration would have required all editors to be 
-proficient in version control systems such as [Git](https://git-scm.com). A similar
-limitation is shared with a project such as [SkoHub](https://skohub.io/). Others
-projects such as [Skosmos](https://skosmos.org/) provide for publication of 
-thesauri, but not editing. A true online editor such as
-[TemaTres](https://vocabularyserver.com/web/) had a more user-friendly interface,
-but was difficult to evaluate properly since most of the documenation and code 
-was in Spanish. It also diverged from our technology stack, although we did 
-have some older projects using similar technologies.  
-[OpenSkos](https://openskos.org) alos diverged from our technology stack, 
-was lacking in good documenation so it was unclear how easy it would be to
-adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) had 
-excatly the kind of end-user experience we were looking for. Unfortunately we 
-were not at all proficient in Ruby. iQvoc also runs on the idea that every 
-conceptscheme requires a new instance of the application, which would have 
-required a lot of work whenever a new scheme was needed. None of the available
-solutions had a ready-made integration with our single sign-on environment
-or made it easy to build one. Adding our own corporate identity would have 
-have been feasible in some ways, but often it would have to be done by forking
-the software as opposed to configuring it, complicating long term maintenance.
-
-# Implementation
+# Technical requirements
 
 We decided to write a simple but extensible editor in Python that
 adhered to our primary and secondary requirements. Atramhasis comes with a 
@@ -206,7 +180,42 @@ Materials, Objects). While the end result is very similar Atramhasis does not
 currently support something like the facets the AAT employs to organise concepts 
 in different subgroups within a single conceptscheme. So far, this has not proved 
 to be an issue.
-  
+
+# State of the field
+
+The first version of Atramhasis was released in 2014. Before we started work on 
+the software, we surveyed other vocabulary software. Apart from the goals we have 
+described, to have user-friendly software that incorporated SKOS without being too 
+technical about it, we also had some secondary requirements. We needed software that was 
+easy to integrate with our regular authentication and authorisation mechanism, 
+a single sign-on environment used by most Flemish Government agencies. We also 
+needed the software to be easily adaptable to our corporate identity and branding.
+Finally, we preferred software written in the same or a similar language to our 
+regular technology stack (Python, Javascript, PostgreSQL) and we prefer working 
+with open source software.
+
+Software like [Protégé](https://protege.stanford.edu/) offers a lot of 
+functionality for building RDF vocabularies, but is not suited for editing by 
+non-technical users. Collaboration would have required all editors to be 
+proficient in version control systems such as [Git](https://git-scm.com). A similar
+limitation is shared with a project such as [SkoHub](https://skohub.io/). Others
+projects such as [Skosmos](https://skosmos.org/) provide for publication of 
+thesauri, but not editing. A true online editor such as
+[TemaTres](https://vocabularyserver.com/web/) had a more user-friendly interface,
+but was difficult to evaluate properly since most of the documenation and code 
+was in Spanish. It also diverged from our technology stack, although we did 
+have some older projects using similar technologies.  
+[OpenSkos](https://openskos.org) alos diverged from our technology stack, 
+was lacking in good documenation so it was unclear how easy it would be to
+adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) had 
+excatly the kind of end-user experience we were looking for. Unfortunately we 
+were not at all proficient in Ruby. iQvoc also runs on the idea that every 
+conceptscheme requires a new instance of the application, which would have 
+required a lot of work whenever a new scheme was needed. None of the available
+solutions had a ready-made integration with our single sign-on environment
+or made it easy to build one. Adding our own corporate identity would have 
+have been feasible in some ways, but often it would have to be done by forking
+the software as opposed to configuring it, complicating long term maintenance.
  
 # Acknowledgements
 
