@@ -38,8 +38,9 @@ define([
       DomUtils.addOptionsToSelect(this.langSelectNode, {
         data: this.langList,
         idProperty: 'id',
-        labelProperty: 'name'
-      }, true);
+        labelProperty: 'name',
+        showId: true
+      });
     },
 
     startup: function () {
