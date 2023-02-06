@@ -39,7 +39,7 @@ define([
         data: this.langList,
         idProperty: 'id',
         labelProperty: 'name'
-      });
+      }, true);
     },
 
     startup: function () {
