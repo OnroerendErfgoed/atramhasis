@@ -24,7 +24,7 @@ define([
      *     labelProperty: {string}
      *   }
      */
-    addOptionsToSelect: function (select, options, lang = false) {
+    addOptionsToSelect: function (select, options, showId = false) {
       options.data.forEach(item => {
         const itemProp = lang ? item[options.labelProperty] + ' (' + item[options.idProperty] + ')' : item[options.labelProperty];
         domConstruct.place(`<option value="${item[options.idProperty]}">${itemProp}</option>`, select);
