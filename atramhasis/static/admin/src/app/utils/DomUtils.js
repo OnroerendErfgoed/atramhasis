@@ -24,10 +24,10 @@ define([
      *     labelProperty: {string}
      *   }
      */
-    addOptionsToSelect: function (select, options){
-      array.forEach(options.data, function (item) {
-        domConstruct.place('<option value="' + item[options.idProperty] + '">' + item[options.labelProperty] + '</option>',
-          select);
+    addOptionsToSelect: function (select, options) {
+      options.data.forEach(item => {
+        const itemProp = options.showId ? item[options.labelProperty] + ' (' + item[options.idProperty] + ')' : item[options.labelProperty];
+        domConstruct.place(`<option value="${item[options.idProperty]}">${itemProp}</option>`, select);
       });
     },
 
