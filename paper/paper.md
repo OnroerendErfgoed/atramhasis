@@ -45,7 +45,7 @@ SKOS vocabularies record controlled vocabularies as a set of concepts, collectio
 and their relations. A concept being something a researcher wants to describe and define,
 a collection being a grouping of a number of concepts.
 Flanders Heritage is active in the domain of cultural heritage and 
-describes concepts such as [Roman period](https://id.erfgoed.net/thesauri/dateringen/1223),
+describes concepts such as [Roman period](https://id.erfgoed.net/thesauri/dateringen/1223) [@Slechten:2004],
 [oppida](https://id.erfgoed.net/thesauri/erfgoedtypes/1052) or 
 [archaeological excavations](https://id.erfgoed.net/thesauri/gebeurtenistypes/38). A 
 typical collection would be [settlements by function](https://id.erfgoed.net/thesauri/erfgoedtypes/1034), 
