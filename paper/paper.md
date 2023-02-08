@@ -83,7 +83,7 @@ All mapping to RDF and SKOS is done behind the scene, invisible to the editors.
 ![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
 
 The system was conceived as Flanders Heritage's 
-[central platform](https://thesaurus.onroerenderfgoed.be) for publication of µ
+[central platform](https://thesaurus.onroerenderfgoed.be) for publication of 
 internal and regional vocabularies dealing with cultural heritage [@Mortier:2017]. 
 The publication website allows humans to browse, search and consult the vocabularies 
 online in a user-friendly way. Search results can be downloaded in CSV format 
@@ -98,17 +98,19 @@ For a typical end-user the thesauri are presented as dropdown lists or
 [specialised widgets](https://github.com/OnroerendErfgoed/thesaurus-widget) that 
 allow navigating the thesaurus from the top concepts along branches to the leafs. 
 For most transactions between internal Flanders Heritage systems and the
-the thesaurus system, simple JSON REST services are used. This was deliberately kept 
-close to the implementation standards used in other Flanders Heritage sytems to allow 
-developers used to working in an enterprise IT context to feel comfortable and 
-productive.
+thesaurus system, simple JSON REST services are used. This was deliberately 
+modelled on the implementation standards used in other Flanders Heritage sytems.
+This allows developers used to working in an enterprise IT context to feel 
+comfortable and productive.
 
 ![Searching for airfields in the Inventory of Immovable Cultural Heritage\label{fig:searchingairfields}](inventaris_screen_search_airfields.png)
 
-For external uses, publishing of linked data is supported. Individual concepts and
-collections can be downloaded as RDF data in Turtle, RDF/XML and JSON-LD format [@jsonld:2020].
-Entire conceptschemes can be downloaded in Turtle or RDF/XML format. Finally, 
-an [integration with a Linked Data Fragments (LDF) server](https://atramhasis.readthedocs.io/en/latest/development.html#running-a-linked-data-fragments-server) 
+While interactions with internal system are done through plain JSON REST
+services, publishing of linked data for external consumption is also supported.
+Individual concepts and collections can be downloaded as RDF data in Turtle, 
+RDF/XML and JSON-LD format [@jsonld:2020]. Entire conceptschemes can be downloaded 
+in Turtle or RDF/XML format. Finally, an 
+[integration with a Linked Data Fragments (LDF) server](https://atramhasis.readthedocs.io/en/latest/development.html#running-a-linked-data-fragments-server) 
 can be set up. An LDF server such as the 
 [Flanders Heritage Thesaurus LDF server](https://thesaurus.onroerenderfgoed.be/ldf/)
 can be browsed online for basic usage, but really shines in combination with an 
@@ -132,67 +134,73 @@ concepts from such a thesaurus and turning your vocabularies into true linked da
 
 # Technical requirements
 
-We decided to write a simple but extensible editor in Python that
-adhered to our primary and secondary requirements. Atramhasis comes with a 
-default style but is easy to extend with a custom corporate identity, as
-can be seen by comparing the [Flanders Heritage thesaurus](https://thesaurus.onroerenderfgoed.be) 
-with the default Atramhasis setup. It does not come with a default authentication 
-and a authorization layer, but the underlying Pyramid framework provides hooks
-and integration points facilitating this. There are default libraries for this 
-framework that can be configured according to a user's own corporate security 
-needs.
+When considering an IT-project, we take into account both functional and 
+non-functional requirements. These are less about what the software does, 
+and more about how it does it.
 
-Because the software uses [SQLAlchemy](https://sqlalchemy.org), a database 
-abstraction layer, it can be run with different RDBMS backends. While the list 
+As a government agency, Flanders Heritage has it's own corporate identity, part
+of the wider branding of the Flemsish Government. Therefore, Atramhasis comes 
+with a default style but is easy to extend with a custom corporate identity. This
+can be seen by comparing the [Flanders Heritage thesaurus](https://thesaurus.onroerenderfgoed.be) 
+with the default Atramhasis setup.
+
+We needed software that was easy to integrate with our regular authentication 
+and authorisation mechanism, a single sign-on environment used by most Flemish 
+Government agencies. Therefore, Atramhasis does not come with a default 
+authentication and authorization layer, but the underlying 
+[Pyramid framework](https://trypyramid.com) provides hooks and integration points 
+facilitating this. There are default libraries for this framework that can be 
+configured according to a user's own corporate security needs.
+
+Our normal RDBMS of choice is [PostgreSQL](https://postgresql.org), but we 
+try not to become too dependent on one single piece of technology. We use
+[SQLAlchemy](https://sqlalchemy.org), a database abstraction layer, so
+Atramhasis can be run with different RDBMS backends. While the list 
 of backends SQLAlchemy supports is long, for Atramhasis we run integration tests 
-on two different open source backends for every commit and pull-request. 
-The first, [PostgreSQL](https://postgresql.org) 
+on two different open source backends. The first, [PostgreSQL](https://postgresql.org) 
 is well suited for an enterprise multi-user production environment such as the 
 Flanders Heritage thesaurus. It has been running our production 
-environment for years, serving XXXXX visits per year. 
+environment for years, serving 25.000 visitors annually. 
 The second, [SQLite](https://sqlite.org), is very well 
 suited for a single-user environment and rapid prototyping. By using this very 
 simple file-based RDBMS and not configuring any authentication you can use Atramhasis 
-as a local SKOS editor on any machine that has recent running Python evironment
-installed. People have used it in this way as a quick SKOS editor for those 
-who do not want to write SKOS files by hand.
+as a local SKOS editor on any machine that has a recent Python evironment
+installed. People who did not want to write SKOS files by hand have used it 
+in this way as a quick SKOS editor.
  
-A single instance of Atramhasis can host mutiple thesauri or conceptschemes. 
-Creating a conceptscheme is more involved than creating a concept or collection. 
-Generally it is best left to system admins and IT-experts who can also setup 
-a URI generation scheme, decide on some special configuration settings and know
-how the conceptschem will be used in other applications. While this previously 
-needed to be done by writing a small piece of code, version 2.0.0 will provide 
-a web interface for this. We still advise to consult a systems architect when 
-creating new thesauri, especially if they are meant to be integrated in a wider 
-enterprise architecture. 
+Since we already had mutiple thesauri, a single instance of Atramhasis can host
+multiple conceptschemes (\autoref{fig:conceptschemes}). Creating a conceptscheme is 
+somewhat more involved than creating a concept or collection. Generally it is 
+best left to system admins and IT-experts who can also setup a URI generation scheme 
+and [handler](https://https://github.com/OnroerendErfgoed/urihandler), decide on 
+some special configuration settings and know how the conceptscheme will be used in other 
+applications. While this previously needed to be done by writing a small piece 
+of code, version 2.0.0 will provide a web interface for this. We still recommend 
+consulting a systems architect when creating new thesauri, especially if they are 
+meant to be integrated in a wider enterprise architecture.
 
-A conceptscheme has no hardcoded limit on the number of concepts or collections.
-The largest Flandes Heritage conceptscheme holds some 1.485 concepts. Bigger 
-conceptschemes are certainly possible, but no upper limit has been reached so far. 
-However, we do feel Atramhasis is not ideal for hosting very large thesauri 
-such as the AAT [@aat]. Often such a thesaurus defines custom properties or 
-has smaller subgroups to keep the thesarus navigeable. At Flanders Heritage 
-we have avoided creating heterogenous conceptschemes, opting for conceptschemes 
-with a tight focus. Eg. the Flanders Heritage thesaurus has different conceptschemes 
-that each map to an AAT subgroup called a Facet (Styles and Periods, Activities, 
-Materials, Objects). While the end result is very similar Atramhasis does not 
-currently support something like the facets the AAT employs to organise concepts 
-in different subgroups within a single conceptscheme. So far, this has not proved 
-to be an issue.
+![All conceptschemes in a single Atramhasis instance\label{fig:conceptschemes}](atramhasis_conceptschems.png)
+
+Finally, we knew our thesauri were fairly small. The largest Flandes Heritage 
+conceptscheme holds some 1.485 concepts. Bigger 
+conceptschemes are certainly possible, but no upper limit has been reached so 
+far and the software itself has no hardcoded limit. However, we do feel Atramhasis 
+is not ideal for hosting very large thesauri such as the AAT [@aat]. Often such a 
+thesaurus defines custom properties or has smaller subgroups to keep the thesarus 
+navigeable. At Flanders Heritage we have avoided creating heterogenous conceptschemes, 
+opting for conceptschemes with a tight focus. Eg. the Flanders Heritage thesaurus 
+has different conceptschemes that each map to an AAT subgroup called a Facet 
+(Styles and Periods, Activities, Materials, Objects). While the end result is very 
+similar, Atramhasis does not currently support something like the facets the 
+AAT employs to organise concepts in different subgroups within a single 
+conceptscheme. So far, this has not proved to be an issue.
 
 # State of the field
 
-The first version of Atramhasis was released in 2014. Before we started work on 
-the software, we surveyed other vocabulary software. Apart from the goals we have 
-described, to have user-friendly software that incorporated SKOS without being too 
-technical about it, we also had some secondary requirements. We needed software that was 
-easy to integrate with our regular authentication and authorisation mechanism, 
-a single sign-on environment used by most Flemish Government agencies. We also 
-needed the software to be easily adaptable to our corporate identity and branding.
-Finally, we preferred software written in the same or a similar language to our 
-regular technology stack (Python, Javascript, PostgreSQL) and we prefer working 
-with open source software.
+Having decided on our functional and technical requirements, we surveyed vocabulary 
+software available at the time (2014). Knowing we need to integrate existing 
+software in our normal technical environment, requiring a great degree of flexibility 
+and customisation, we focussed our search on open source software.
 
 Software like [Protégé](https://protege.stanford.edu/) offers a lot of 
 functionality for building RDF vocabularies, but is not suited for editing by 
@@ -206,9 +214,9 @@ but was difficult to evaluate properly since most of the documenation and code
 was in Spanish. It also diverged from our technology stack, although we did 
 have some older projects using similar technologies.  
 [OpenSkos](https://openskos.org) alos diverged from our technology stack, 
-was lacking in good documenation so it was unclear how easy it would be to
-adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) had 
-excatly the kind of end-user experience we were looking for. Unfortunately we 
+and was lacking in good documenation so it was unclear how easy it would be
+customise and adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) 
+had excatly the kind of end-user experience we were looking for. Unfortunately we 
 were not at all proficient in Ruby. iQvoc also runs on the idea that every 
 conceptscheme requires a new instance of the application, which would have 
 required a lot of work whenever a new scheme was needed. None of the available
@@ -216,6 +224,13 @@ solutions had a ready-made integration with our single sign-on environment
 or made it easy to build one. Adding our own corporate identity would have 
 have been feasible in some ways, but often it would have to be done by forking
 the software as opposed to configuring it, complicating long term maintenance.
+
+# Conclusion
+
+After careful consideration of our functional and technical requirements and the
+available software we found, we decided to write a simple but extensible editor 
+in Python. We felt this was the best way to make sure we could support all our 
+use cases in a sustainable way. So far this has proven to be the right decision.
  
 # Acknowledgements
 
