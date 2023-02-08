@@ -179,7 +179,7 @@ of code, version 2.0.0 will provide a web interface for this. We still recommend
 consulting a systems architect when creating new thesauri, especially if they are 
 meant to be integrated in a wider enterprise architecture.
 
-![All conceptschemes in a single Atramhasis instance\label{fig:conceptschemes}](atramhasis_conceptschems.png)
+![All conceptschemes in a single Atramhasis instance\label{fig:conceptschemes}](atramhasis_conceptschemes.png)
 
 Finally, we knew our thesauri were fairly small. The largest Flandes Heritage 
 conceptscheme holds some 1.485 concepts. Bigger 
