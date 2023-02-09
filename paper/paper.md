@@ -65,7 +65,9 @@ to concepts in other vocabularies such as the Art and Architecture Thesaurus (AA
 
 ![Airfields described as a SKOS concept.\label{fig:airfields}](atramhasis_screen_airfields.png)
 
-# Functional requirements
+# Statement of need
+
+## Functional requirements
 
 Atramhasis was written to be a user-friendly open source SKOS editor. First and 
 foremost, we wanted a system that adheres to the SKOS standard, yet is useable 
@@ -98,7 +100,7 @@ For a typical end-user the thesauri are presented as dropdown lists or
 [specialised widgets](https://github.com/OnroerendErfgoed/thesaurus-widget) that 
 allow navigating the thesaurus from the top concepts along branches to the leafs. 
 For most transactions between internal Flanders Heritage systems and the
-thesaurus system, simple JSON REST services are used. This was deliberately 
+thesaurus system, simple JSON REST services are used. These are deliberately 
 modelled on the implementation standards used in other Flanders Heritage sytems.
 This allows developers used to working in an enterprise IT context to feel 
 comfortable and productive.
@@ -132,11 +134,7 @@ to the SKOS standard can be added with a little development work. Connecting an 
 thesaurus opens up the possiblity of interlinking internal and external thesauri, importing 
 concepts from such a thesaurus and turning your vocabularies into true linked data. 
 
-# Technical requirements
-
-When considering an IT-project, we take into account both functional and 
-non-functional requirements. These are less about what the software does, 
-and more about how it does it.
+## Technical requirements
 
 As a government agency, Flanders Heritage has it's own corporate identity, part
 of the wider branding of the Flemsish Government. Therefore, Atramhasis comes 
@@ -157,14 +155,14 @@ try not to become too dependent on one single piece of technology. We use
 [SQLAlchemy](https://sqlalchemy.org), a database abstraction layer, so
 Atramhasis can be run with different RDBMS backends. While the list 
 of backends SQLAlchemy supports is long, for Atramhasis we run integration tests 
-on two different open source backends. The first, [PostgreSQL](https://postgresql.org) 
+on two different open source backends. The first, [PostgreSQL](https://postgresql.org), 
 is well suited for an enterprise multi-user production environment such as the 
 Flanders Heritage thesaurus. It has been running our production 
 environment for years, serving 25.000 visitors annually. 
 The second, [SQLite](https://sqlite.org), is very well 
 suited for a single-user environment and rapid prototyping. By using this very 
 simple file-based RDBMS and not configuring any authentication you can use Atramhasis 
-as a local SKOS editor on any machine that has a recent Python evironment
+as a local SKOS editor on any machine that has a Python evironment
 installed. People who did not want to write SKOS files by hand have used it 
 in this way as a quick SKOS editor.
  
@@ -183,7 +181,7 @@ meant to be integrated in a wider enterprise architecture.
 
 Finally, we knew our thesauri were fairly small. The largest Flandes Heritage 
 conceptscheme holds some 1.485 concepts. Bigger 
-conceptschemes are certainly possible, but no upper limit has been reached so 
+conceptschemes are certainly possible. No upper limit has been reached so 
 far and the software itself has no hardcoded limit. However, we do feel Atramhasis 
 is not ideal for hosting very large thesauri such as the AAT [@aat]. Often such a 
 thesaurus defines custom properties or has smaller subgroups to keep the thesarus 
@@ -225,7 +223,7 @@ the software as opposed to configuring it, complicating long term maintenance.
 # Conclusion
 
 After careful consideration of our functional and technical requirements and the
-available software we found, we decided to write a simple but extensible editor 
+available open source software, we decided to write a simple but extensible editor 
 in Python. We felt this was the best way to make sure we could support all our 
 use cases in a sustainable way. So far this has proven to be the right decision.
  
