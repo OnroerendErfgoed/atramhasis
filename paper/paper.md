@@ -211,17 +211,14 @@ projects such as [Skosmos](https://skosmos.org/) provide for publication of
 thesauri, but not editing. A true online editor such as
 [TemaTres](https://vocabularyserver.com/web/) had a more user-friendly interface,
 but was difficult to evaluate properly since most of the documenation and code 
-was in Spanish. It also diverged from our technology stack, although we did 
-have some older projects using similar technologies.
-[OpenSkos](https://openskos.org) also diverged from our technology stack, 
-and was lacking good documentation so it was unclear how easy it would be
-to customise and adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) 
-had exactly the kind of end-user experience we were looking for. Unfortunately we 
-were not at all proficient in Ruby. iQvoc also runs on the idea that every 
-conceptscheme requires a new instance of the application, which would have 
-required a lot of work whenever a new scheme was needed. None of the available
-solutions had a ready-made integration with our single sign-on environment
-or made it easy to build one. Adding our own corporate identity would have 
+was in Spanish. Both TemaTres and [OpenSkos](https://openskos.org) are written
+in PHP. OpenSkos was also lacking good documentation so it was unclear how easy
+it would be to customise and adapt the software. [iQvoc](https://iqvoc.net) 
+had exactly the kind of end-user experience we were looking for. iQvoc runs on 
+the idea that every conceptscheme requires a new instance of the application, 
+which would have required a lot of work whenever a new scheme was needed. None 
+of the available solutions had a ready-made integration with a single sign-on 
+environment or made it easy to build one. Adding your own corporate identity would 
 have been feasible in some ways, but often it would have to be done by forking
 the software as opposed to configuring it, complicating long term maintenance.
 
