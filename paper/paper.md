@@ -169,8 +169,8 @@ installed. People who did not want to write SKOS files by hand have used it
 in this way as a quick SKOS editor.
  
 Since we already had mutiple thesauri, a single instance of Atramhasis can host
-multiple conceptschemes (\autoref{fig:conceptschemes}). Creating a conceptscheme is 
-somewhat more involved than creating a concept or collection. Generally it is 
+multiple conceptschemes (\autoref{fig:conceptschemes}). Creating a conceptscheme requires 
+somewhat more work than creating a concept or collection. Generally it is 
 best left to system admins and IT-experts who can also setup a URI generation scheme 
 and [handler](https://https://github.com/OnroerendErfgoed/urihandler), decide on 
 some special configuration settings and know how the conceptscheme will be used in other 
@@ -187,7 +187,7 @@ conceptschemes are certainly possible, but no upper limit has been reached so
 far and the software itself has no hardcoded limit. However, we do feel Atramhasis 
 is not ideal for hosting very large thesauri such as the AAT [@aat]. Often such a 
 thesaurus defines custom properties or has smaller subgroups to keep the thesarus 
-navigeable. At Flanders Heritage we have avoided creating heterogenous conceptschemes, 
+navigable. At Flanders Heritage we have avoided creating heterogenous conceptschemes, 
 opting for conceptschemes with a tight focus. Eg. the Flanders Heritage thesaurus 
 has different conceptschemes that each map to an AAT subgroup called a Facet 
 (Styles and Periods, Activities, Materials, Objects). While the end result is very 
@@ -212,11 +212,11 @@ thesauri, but not editing. A true online editor such as
 [TemaTres](https://vocabularyserver.com/web/) had a more user-friendly interface,
 but was difficult to evaluate properly since most of the documenation and code 
 was in Spanish. It also diverged from our technology stack, although we did 
-have some older projects using similar technologies.  
-[OpenSkos](https://openskos.org) alos diverged from our technology stack, 
-and was lacking in good documenation so it was unclear how easy it would be
-customise and adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) 
-had excatly the kind of end-user experience we were looking for. Unfortunately we 
+have some older projects using similar technologies.
+[OpenSkos](https://openskos.org) also diverged from our technology stack, 
+and was lacking good documentation so it was unclear how easy it would be
+to customise and adapt the software to our corporate identity. [iQvoc](https://iqvoc.net) 
+had exactly the kind of end-user experience we were looking for. Unfortunately we 
 were not at all proficient in Ruby. iQvoc also runs on the idea that every 
 conceptscheme requires a new instance of the application, which would have 
 required a lot of work whenever a new scheme was needed. None of the available
