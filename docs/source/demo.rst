@@ -12,10 +12,13 @@ Heritage Thesaurus <https://thesaurus.onroerenderfgoed.be>`_ or by running a
 demo yourself. This allows you to quickly evaluate and inspect the software. 
 This can be done through the `cookiecutter` package. 
 
-.. code-block:: bash
-
-    $ mkvirtualenv atramhasis_demo
-    $ pip install -U cookiecutter
+.. code-block:: bash    
+    
+   $ python -m venv atramhasis_demo
+   $ . atramhasis_demo/bin/activate
+   # Make sure pip and setuptools are up to date
+   $ pip install --upgrade pip setuptools
+   $ pip install -U cookiecutter
 
 Once cookiecutter is installed, you use it to generate the demo site.
 
@@ -145,12 +148,15 @@ Atramhasis scaffold
 
 Create an Atramhasis scaffold (if you want to deploy an existing scaffold, skip this step)
 
-.. code-block:: bash
-
-    $ mkvirtualenv atramhasis_heroku
-    $ pip install -U atramhasis
-    $ pcreate -s atramhasis_demo atramhasis_heroku
-    $ cd atramhasis_heroku
+.. code-block:: bash    
+    
+   $ python -m venv atramhasis_heroku
+   $ . atramhasis_heroku/bin/activate
+   # Make sure pip and setuptools are up to date
+   $ pip install --upgrade pip setuptools
+   $ pip install -U atramhasis
+   $ pcreate -s atramhasis_demo atramhasis_heroku
+   $ cd atramhasis_heroku
 
 Git repository
 --------------
