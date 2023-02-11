@@ -2,8 +2,11 @@ in progress
 -----------
 
 - Easier and more flexible configuration of analytics snippets, such as `Plausible Analytics <https://plausible.io>`_. (#738)
+- Show acutal language tags in admin interface drop downs, as opposed to just the labels to reduce confusion. (#766)
+- Update label of default language `vls` to `Vlaams` to be inline with the normal IANA label. (#767)
 - Update language-tags to latest version. (#754)
 - Stop building universal wheels (#752)
+- Update docs to no longer reference mkvirtualenv, use standard venv instead (#773)
 - Update CONTRIBUTING.md file (#756)
 
 1.3.0 (04-01-2023)
