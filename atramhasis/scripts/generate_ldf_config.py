@@ -1,13 +1,13 @@
+import json
 import logging
 import optparse
-import sys
 import os
-import time
+import sys
 import textwrap
+import time
 
-from pyramid.paster import bootstrap, setup_logging
-
-import json
+from pyramid.paster import bootstrap
+from pyramid.paster import setup_logging
 
 from atramhasis.errors import SkosRegistryNotFoundException
 

@@ -1,8 +1,15 @@
 checks:
-    python:
-        code_rating: true
-        duplicate_code: true
+  python:
+    code_rating: true
+    duplicate_code: true
+
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - py-scrutinizer-run
 
 filter:
-    excluded_paths:
-        - 'tests/*'
+  excluded_paths:
+    - 'tests/*'

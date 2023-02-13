@@ -11,6 +11,7 @@ from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import NoteType
 from skosprovider_sqlalchemy.models import Source
 from skosprovider_sqlalchemy.models import Visitation
+from sqlalchemy import select
 
 from atramhasis.scripts import delete_scheme
 from tests import DbTest
@@ -31,16 +32,15 @@ class DeleteSchemeTest(DbTest):
 
     def test_delete(self):
         with db_session() as session:
-            for id in range(1, 10):
-                delete_scheme.delete_scheme(settings, id)
-            assert len(session.query(ConceptScheme).all()) == 0
-            assert len(session.query(Concept).all()) == 0
-            assert len(session.query(Collection).all()) == 0
-            assert len(session.query(Note).all()) == 0
-            assert len(session.query(Source).all()) == 0
-            assert len(session.query(Visitation).all()) == 0
-            assert len(session.query(Label).all()) == 0
-            assert len(session.query(LabelType).all()) != 0
-            assert len(session.query(NoteType).all()) != 0
-            assert len(session.query(Language).all()) != 0
-
+            for scheme_id in range(1, 10):
+                delete_scheme.delete_scheme(settings, scheme_id)
+            assert len(session.execute(select(ConceptScheme)).all()) == 0
+            assert len(session.execute(select(Concept)).all()) == 0
+            assert len(session.execute(select(Collection)).all()) == 0
+            assert len(session.execute(select(Note)).all()) == 0
+            assert len(session.execute(select(Source)).all()) == 0
+            assert len(session.execute(select(Visitation)).all()) == 0
+            assert len(session.execute(select(Label)).all()) == 0
+            assert len(session.execute(select(LabelType)).all()) != 0
+            assert len(session.execute(select(NoteType)).all()) != 0
+            assert len(session.execute(select(Language)).all()) != 0

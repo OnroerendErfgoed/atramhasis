@@ -1,14 +1,14 @@
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-from alembic import context
-from sqlalchemy import engine_from_config, pool
+import configparser
 from logging.config import fileConfig
-from atramhasis.data.models import Base
-from skosprovider_sqlalchemy.models import Base as SkosBase
-from sqlalchemy.schema import MetaData
 from os import path
+
+from alembic import context
+from skosprovider_sqlalchemy.models import Base as SkosBase
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
+from sqlalchemy.schema import MetaData
+
+from atramhasis.data.models import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -29,18 +29,22 @@ target_metadata = [SkosBase.metadata, Base.metadata]
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+
 def load_app_ini(ini_file):
     """Load the settings for the application.ini file."""
     ini = configparser.ConfigParser()
-    ini.readfp(open(ini_file))
+    with open(ini_file) as f:
+        ini.read_file(f)
     here = path.abspath(path.dirname(ini_file))
-    ini.set('app:main', 'here', here)
+    ini.set("app:main", "here", here)
     return ini
 
-app_ini = config.get_main_option('ini_location')
+
+app_ini = config.get_main_option("ini_location")
 app_config = load_app_ini(app_ini)
-sa_url = app_config.get('app:main', 'sqlalchemy.url')
-config.set_main_option('sqlalchemy.url', sa_url)
+sa_url = app_config.get("app:main", "sqlalchemy.url")
+config.set_main_option("sqlalchemy.url", sa_url)
+
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -70,8 +74,9 @@ def run_migrations_online():
     """
     engine = engine_from_config(
         config.get_section(config.config_ini_section),
-        prefix='sqlalchemy.',
-        poolclass=pool.NullPool)
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
 
     metadata = MetaData()
     for md in target_metadata:
@@ -80,9 +85,7 @@ def run_migrations_online():
 
     connection = engine.connect()
     context.configure(
-        connection=connection,
-        target_metadata=metadata,
-        render_as_batch=True
+        connection=connection, target_metadata=metadata, render_as_batch=True
     )
 
     try:
@@ -96,4 +99,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-

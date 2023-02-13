@@ -107,6 +107,9 @@ def fill_db():
 
 
 class DbTest(unittest.TestCase):
+    engine = None
+    connection = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
