@@ -1,20 +1,23 @@
 import unittest
-from pyramid import testing
 
+from pyramid import testing
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider.providers import DictionaryProvider
-from skosprovider_sqlalchemy.models import (
-    Concept, Collection,
-    Note, Label, Source,
-    ConceptScheme,
-    Match, MatchType
-)
+from skosprovider.skos import Collection as SkosCollection
+from skosprovider.skos import Concept as SkosConcept
+from skosprovider_sqlalchemy.models import Collection
+from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
+from skosprovider_sqlalchemy.models import Label
+from skosprovider_sqlalchemy.models import Match
+from skosprovider_sqlalchemy.models import MatchType
+from skosprovider_sqlalchemy.models import Note
+from skosprovider_sqlalchemy.models import Source
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-from skosprovider.skos import(
-    Concept as SkosConcept,
-    Collection as SkosCollection
-)
-from atramhasis.utils import from_thing, internal_providers_only, update_last_visited_concepts
+
+from atramhasis.utils import from_thing
+from atramhasis.utils import internal_providers_only
+from atramhasis.utils import update_last_visited_concepts
 
 species = {
     'id': 3,
@@ -41,7 +44,6 @@ class TestFromThing(unittest.TestCase):
         conceptscheme.uri = 'urn:x-atramhasis-demo'
         conceptscheme.id = 1
         self.concept = Concept()
-        self.concept.type = 'concept'
         self.concept.id = 11
         self.concept.concept_id = 101
         self.concept.uri = 'urn:x-atramhasis-demo:TREES:101'
@@ -71,11 +73,11 @@ class TestFromThing(unittest.TestCase):
 
         matches = []
         match1 = Match()
-        match1.uri ='urn:test'
+        match1.uri = 'urn:test'
         match1.concept = self.concept
         match1.matchtype = MatchType(name='closeMatch', description='')
         match2 = Match()
-        match2.uri ='urn:test'
+        match2.uri = 'urn:test'
         match2.concept = self.concept
         match2.matchtype = MatchType(name='closeMatch', description='')
         matches.append(match1)
@@ -83,7 +85,6 @@ class TestFromThing(unittest.TestCase):
         self.matches = matches
 
         self.collection = Collection()
-        self.collection.type = 'collection'
         self.collection.id = 12
         self.collection.concept_id = 102
         self.collection.uri = 'urn:x-atramhasis-demo:TREES:102'
@@ -161,21 +162,23 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
 
     def test_update_last_visited_concepts(self):
         c = Concept()
-        c.id= 2
+        c.id = 2
         c.labels = [Label('test', language_id='en-us')]
         update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{55}'})
         c = Concept()
-        c.id= 33
+        c.id = 33
         c.labels = [Label('test', language_id='nl-be')]
         update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{2}'})
         self.assertEqual(2, len(self.request.session['last_visited']))
 
     def test_update_last_visited_concepts_max(self):
-        for id in range(50):
+        for concept_id in range(50):
             c = Concept()
-            c.id = id
+            c.id = concept_id
             c.labels = [Label('test', language_id='en-us')]
-            update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{id}'})
+            update_last_visited_concepts(
+                self.request, {'label': c.label(), 'url': f'http://test.test/{concept_id}'}
+            )
         self.assertEqual(4, len(self.request.session['last_visited']))
         last = self.request.session['last_visited'].pop()
         self.assertEqual('http://test.test/49', last['url'])

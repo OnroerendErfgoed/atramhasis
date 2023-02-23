@@ -1,9 +1,9 @@
-from atramhasis.data.models import (
-    ConceptschemeVisitLog,
-    ConceptVisitLog
-)
-from pyramid.response import Response
 import logging
+
+from pyramid.response import Response
+
+from atramhasis.data.models import ConceptVisitLog
+from atramhasis.data.models import ConceptschemeVisitLog
 
 log = logging.getLogger(__name__)
 

@@ -1,19 +1,19 @@
 import os
 
 from pyramid.renderers import render
-from pyramid.response import Response, FileResponse
-from pyramid.view import view_defaults, view_config
+from pyramid.response import FileResponse
+from pyramid.response import Response
+from pyramid.view import view_config
+from pyramid.view import view_defaults
 from pyramid_skosprovider.views import ProviderView
 from skosprovider_rdf import utils
 
-from atramhasis.errors import (
-    SkosRegistryNotFoundException,
-    ConceptSchemeNotFoundException,
-    ConceptNotFoundException
-)
 from atramhasis.audit import audit
-
+from atramhasis.errors import ConceptNotFoundException
+from atramhasis.errors import ConceptSchemeNotFoundException
+from atramhasis.errors import SkosRegistryNotFoundException
 from atramhasis.rdf import void_dumper
+
 
 @view_defaults()
 class AtramhasisVoid:

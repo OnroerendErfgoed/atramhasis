@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{request.static_path(app_package + ':static/css/print.css')}}" media="print" />
   {% endblock %}
 
-  {% if request.registry.settings['atramhasis.ldf.enabled']: %}
+  {% if request.registry.settings['atramhasis.ldf.enabled'] %}
     <link rel="dcat:distribution" href="{{request.registry.settings['atramhasis.ldf.baseurl']}}" />
   {% endif %}
 
@@ -27,14 +27,6 @@
   {% block js_files_head %}
     <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.js') }}"></script>
     <script src="{{ request.static_path(app_package + ':static/node_modules/foundation-sites/js/vendor/jquery.cookie.js') }}"></script>
-  {% endblock %}
-
-  {% block ga %}
-    {% set ga_key = ga_key|default(request.registry.settings["ga.tracker_key"]) %}
-    {% from 'macros.jinja2' import ga_tracker %}
-    {% if ga_key %}
-      {{ ga_tracker(ga_key) }}
-    {% endif %}
   {% endblock %}
 {% endblock %}
 </head>

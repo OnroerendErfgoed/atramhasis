@@ -8,7 +8,7 @@ from skosprovider_sqlalchemy.models import Label
 from skosprovider_sqlalchemy.models import Match
 from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Source
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 
 
 def is_html(value):
@@ -73,8 +73,12 @@ def map_concept(concept, concept_json, skos_manager):
     if concept.type in ('concept', 'collection'):
         concept.labels[:] = []
         labels = concept_json.get('labels', [])
-        for l in labels:
-            label = Label(label=l.get('label', ''), labeltype_id=l.get('type', ''), language_id=l.get('language', ''))
+        for label in labels:
+            label = Label(
+                label=label.get('label', ''),
+                labeltype_id=label.get('type', ''),
+                language_id=label.get('language', ''),
+            )
             concept.labels.append(label)
         concept.notes[:] = []
         notes = concept_json.get('notes', [])
@@ -136,17 +140,17 @@ def map_concept(concept, concept_json, skos_manager):
 
             matches = []
             matchdict = concept_json.get('matches', {})
-            for type in matchdict:
-                db_type = type + "Match"
-                matchtype = skos_manager.get_match_type(db_type)
-                for uri in matchdict[type]:
+            for match_type, uris in matchdict.items():
+                db_type = match_type + "Match"
+                match_type = skos_manager.get_match_type(db_type)
+                for uri in uris:
                     concept_id = concept_json.get('id', -1)
                     try:
-                        match = skos_manager.get_match(uri=uri, matchtype_id=matchtype.name,
+                        match = skos_manager.get_match(uri=uri, matchtype_id=match_type.name,
                                                        concept_id=concept_id)
                     except NoResultFound:
                         match = Match()
-                        match.matchtype = matchtype
+                        match.matchtype = match_type
                         match.uri = uri
                     matches.append(match)
             concept.matches = matches
@@ -200,8 +204,12 @@ def map_conceptscheme(conceptscheme, conceptscheme_json):
     """
     conceptscheme.labels[:] = []
     labels = conceptscheme_json.get('labels', [])
-    for l in labels:
-        label = Label(label=l.get('label', ''), labeltype_id=l.get('type', ''), language_id=l.get('language', ''))
+    for label in labels:
+        label = Label(
+            label=label.get('label', ''),
+            labeltype_id=label.get('type', ''),
+            language_id=label.get('language', ''),
+        )
         conceptscheme.labels.append(label)
     conceptscheme.notes[:] = []
     notes = conceptscheme_json.get('notes', [])
