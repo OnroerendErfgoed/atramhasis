@@ -12,7 +12,9 @@ authors:
     corresponding: True
     affiliation: 1
   - name: Cahy, Tinne
+    affiliation: 2
   - name: De Clercq, Wim
+    affiliation: 2
   - name: Geuens, Jonas
     orcid: 0000-0001-8197-5034
     affiliation: 1
@@ -20,13 +22,18 @@ authors:
     orcid: 0000-0001-6693-0866
     affiliation: 1
   - name: Piraux, Jonathan
+    affiliation: 2
   - name: Saelen, Bart
+    affiliation: 2
   - name: Taeymans, Maarten
+    affiliation: 2
   - name: Vanderhaegen, Cedrik
     affiliation: 1
 affiliations:
  - name: Flanders Heritage Agency, Belgium
    index: 1
+ - name: GEO Solutions, Belgium
+   index: 2
 date: 22 december 2022
 bibliography: paper.bib
 ---
