@@ -129,7 +129,7 @@ in Atramhasis through the [Triple Pattern Fragments](https://linkeddatafragments
 protocol [@Verborgh:2016]. This combination provides the power of SPARQL queries
 without having to setup a triplestore, thus keeping the required technology stack 
 small. Implementors needing a full triplestore, could easily add one and use the 
-export capabilities provided by Atramahsis to populate the triplestore. 
+export capabilities provided by Atramhasis to populate the triplestore. 
 
 ![Querying the Flanders Heritage thesaurus of styles and cultures with a SPARQL query from a comunica client\label{fig:comunica}](comunica_query.png)
 
@@ -138,12 +138,12 @@ an interface called a Skosprovider [@skosprovider:2022]. Any thesaurus providing
 be used for linking external concepts. Out of the box skosproviders are available for Getty 
 vocabularies such as the AAT [@aat] or other Atramhasis instances, but any thesaurus adhering 
 to the SKOS standard can be added with a little development work. Connecting an external 
-thesaurus opens up the possiblity of interlinking internal and external thesauri, importing 
+thesaurus opens up the possibility of interlinking internal and external thesauri, importing 
 concepts from such a thesaurus and turning your vocabularies into true linked data. 
 
 ## Technical requirements
 
-As a government agency, Flanders Heritage has it's own corporate identity, part
+As a government agency, Flanders Heritage has itss own corporate identity, part
 of the wider branding of the Flemsish Government. Therefore, Atramhasis comes 
 with a default style but is easy to extend with a custom corporate identity. This
 can be seen by comparing the [Flanders Heritage thesaurus](https://thesaurus.onroerenderfgoed.be) 
@@ -173,7 +173,7 @@ as a local SKOS editor on any machine that has a Python evironment
 installed. People who did not want to write SKOS files by hand have used it 
 in this way as a quick SKOS editor.
  
-Since we already had mutiple thesauri, a single instance of Atramhasis can host
+Since we already had multiple thesauri, a single instance of Atramhasis can host
 multiple conceptschemes (\autoref{fig:conceptschemes}). Creating a conceptscheme requires 
 somewhat more work than creating a concept or collection. Generally it is 
 best left to system admins and IT-experts who can also setup a URI generation scheme 
