@@ -18,3 +18,4 @@ build:
 filter:
   excluded_paths:
     - 'tests/*'
+    - 'atramhasis/scripts/*'
