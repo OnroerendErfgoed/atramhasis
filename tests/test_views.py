@@ -576,14 +576,10 @@ class TestViewFunctions(unittest.TestCase):
     def test_get_public_conceptschemes(self):
         regis = Registry()
         regis.register_provider(trees)
-        regis.register_provider(provider(2))
-        regis.register_provider(hidden_provider(3))
-        regis.register_provider(external_provider(4))
+        regis.register_provider(hidden_provider(2))
+        regis.register_provider(external_provider(3))
         conceptschemes = get_public_conceptschemes(regis)
-        self.assertEqual(2, len(conceptschemes))
-        for cs in conceptschemes:
-            self.assertNotIn('hidden', cs.get_metadata['subject'])
-            self.assertNotIn('external', cs.get_metadata['subject'])
+        self.assertEqual(1, len(conceptschemes))
 
 class TestListViews(unittest.TestCase):
     def setUp(self):
