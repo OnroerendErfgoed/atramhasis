@@ -2,9 +2,15 @@ checks:
   python:
     code_rating: true
     duplicate_code: true
+  javascript:
+    no_comma_dangle: true
+    code_rating: true
+    duplicate_code: true
+
 
 build:
   nodes:
+    tests: false
     analysis:
       tests:
         override:
