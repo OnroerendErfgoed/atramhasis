@@ -18,4 +18,5 @@ build:
 filter:
   excluded_paths:
     - 'tests/*'
+    - 'fixtures/*'
     - 'atramhasis/scripts/*'
