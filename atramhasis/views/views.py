@@ -81,10 +81,9 @@ class AtramhasisView:
         )
         return response
 
-    @view_config(route_name='home', renderer='atramhasis:templates/home.jinja2')
-    def home_view(self):
+    def _get_public_conceptschemes(self):
         """
-        Display the homepage.
+        Get all conceptschemes that are visible through the public UI.
         """
         conceptschemes = [
             {'id': x.get_metadata()['id'],
@@ -92,6 +91,15 @@ class AtramhasisView:
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
             ]
+
+        return conceptschemes
+
+    @view_config(route_name='home', renderer='atramhasis:templates/home.jinja2')
+    def home_view(self):
+        """
+        Display the homepage.
+        """
+        conceptschemes = self._get_public_conceptschemes()
 
         return {'conceptschemes': conceptschemes}
 
@@ -100,12 +108,7 @@ class AtramhasisView:
         """
         Display a list of available conceptschemes.
         """
-        conceptschemes = [
-            {'id': x.get_metadata()['id'],
-             'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
-                                                                    for not_shown in ['external', 'hidden']])
-            ]
+        conceptschemes = self._get_public_conceptschemes()
 
         return {'conceptschemes': conceptschemes}
 
@@ -115,12 +118,7 @@ class AtramhasisView:
         """
         Display a single conceptscheme.
         """
-        conceptschemes = [
-            {'id': x.get_metadata()['id'],
-             'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
-                                                                    for not_shown in ['external', 'hidden']])
-            ]
+        conceptschemes = self._get_public_conceptschemes()
 
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
