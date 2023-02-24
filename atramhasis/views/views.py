@@ -43,6 +43,18 @@ def sort_by_labels(concepts, locale, reverse=False):
                   key=lambda child: child.label(locale).label.lower()
                   ) + [x for x in concepts if not x.label(locale)]
 
+def get_public_conceptschemes(skos_registry):
+    """
+    Get all conceptschemes that are visible through the public UI.
+    """
+    conceptschemes = [
+        {'id': x.get_metadata()['id'],
+         'conceptscheme': x.concept_scheme}
+        for x in skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                           for not_shown in ['external', 'hidden']])
+        ]
+
+    return conceptschemes
 
 @view_defaults(accept='text/html')
 class AtramhasisView:
@@ -81,36 +93,20 @@ class AtramhasisView:
         )
         return response
 
-    def _get_public_conceptschemes(self):
-        """
-        Get all conceptschemes that are visible through the public UI.
-        """
-        conceptschemes = [
-            {'id': x.get_metadata()['id'],
-             'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
-                                                                    for not_shown in ['external', 'hidden']])
-            ]
-
-        return conceptschemes
 
     @view_config(route_name='home', renderer='atramhasis:templates/home.jinja2')
     def home_view(self):
         """
         Display the homepage.
         """
-        conceptschemes = self._get_public_conceptschemes()
-
-        return {'conceptschemes': conceptschemes}
+        return {'conceptschemes': get_public_conceptschemes(self.skos_registry)}
 
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
         """
         Display a list of available conceptschemes.
         """
-        conceptschemes = self._get_public_conceptschemes()
-
-        return {'conceptschemes': conceptschemes}
+        return {'conceptschemes': get_public_conceptschemes(self.skos_registry)}
 
     @audit
     @view_config(route_name='conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
@@ -118,7 +114,7 @@ class AtramhasisView:
         """
         Display a single conceptscheme.
         """
-        conceptschemes = self._get_public_conceptschemes()
+        conceptschemes = get_public_conceptschemes(self.skos_registry)
 
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
