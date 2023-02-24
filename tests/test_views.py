@@ -22,6 +22,7 @@ from atramhasis.views.views import AtramhasisListView
 from atramhasis.views.views import AtramhasisView
 from atramhasis.views.views import get_definition
 from atramhasis.views.views import labels_to_string
+from atramhasis.views.views import get_public_conceptschemes
 from fixtures.data import trees
 
 TEST_DIR = os.path.dirname(__file__)
@@ -46,6 +47,12 @@ def hidden_provider(some_id):
     )
     return provider_mock
 
+def external_provider(some_id):
+    provider_mock = provider(some_id)
+    provider_mock.get_metadata = Mock(
+        return_value={"id": some_id, "subject": ["external"]}
+    )
+    return provider_mock
 
 class DummySKOSManager:
     def get_thing(self, concept_id, conceptscheme_id):
@@ -566,6 +573,17 @@ class TestViewFunctions(unittest.TestCase):
         s = get_definition(notes)
         self.assertEqual("test2", s)
 
+    def test_get_public_conceptschemes(self):
+        regis = Registry()
+        regis.register_provider(trees)
+        regis.register_provider(provider(2))
+        regis.register_provider(hidden_provider(3))
+        regis.register_provider(external_provider(4))
+        conceptschemes = get_public_conceptschemes(regis)
+        self.assertEqual(2, len(conceptschemes))
+        for cs in conceptschemes:
+            self.assertNotIn('hidden', cs.get_metadata['subject'])
+            self.assertNotIn('external', cs.get_metadata['subject'])
 
 class TestListViews(unittest.TestCase):
     def setUp(self):
