@@ -32,3 +32,7 @@ about the software or the datasets hosted at
 `Flanders Heritage Thesaurus <https://thesaurus.onroerenderfgoed.be>`_
 you would rather not address in a public forum, please mail us at
 ict@onroerenderfgoed.be.
+
+Contributions are welcome, both in code and documentation. Please see our 
+`contribution guidelines <https://github.com/OnroerendErfgoed/atramhasis/blob/develop/CONTRIBUTING.md>`_ 
+to find out how we can collaborate.
