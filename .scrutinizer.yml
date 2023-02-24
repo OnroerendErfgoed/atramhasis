@@ -10,7 +10,6 @@ checks:
 
 build:
   nodes:
-    tests: false
     analysis:
       tests:
         override:
