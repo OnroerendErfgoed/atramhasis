@@ -157,21 +157,14 @@ authentication and authorization layer, but the underlying
 facilitating this. There are default libraries for this framework that can be 
 configured according to a user's own corporate security needs.
 
-Our normal RDBMS of choice is [PostgreSQL](https://postgresql.org), but we 
-try not to become too dependent on one single piece of technology. We use
-[SQLAlchemy](https://sqlalchemy.org), a database abstraction layer, so
-Atramhasis can be run with different RDBMS backends. While the list 
-of backends SQLAlchemy supports is long, for Atramhasis we run integration tests 
-on two different open source backends. The first, [PostgreSQL](https://postgresql.org), 
-is well suited for an enterprise multi-user production environment such as the 
-Flanders Heritage thesaurus. It has been running our production 
-environment for years, serving 25.000 visitors annually. 
-The second, [SQLite](https://sqlite.org), is very well 
-suited for a single-user environment and rapid prototyping. By using this very 
-simple file-based RDBMS and not configuring any authentication you can use Atramhasis 
-as a local SKOS editor on any machine that has a Python evironment
-installed. People who did not want to write SKOS files by hand have used it 
-in this way as a quick SKOS editor.
+Atramhasis uses [SQLAlchemy](https://sqlalchemy.org), a database abstraction 
+layer, so it can be run with different relational databases. We recommend 
+[PostgreSQL](https://postgresql.org) for an enterprise multi-user production 
+environment such as the Flanders Heritage thesaurus. It has been serving 
+25.000 visitors annually. [SQLite](https://sqlite.org) is very well suited 
+for a single-user environment and rapid prototyping. By using this very 
+simple file-based backend and not configuring any authentication Atramhasis 
+has been used a quick SKOS editor by people not wanting to write SKOS by hand.
  
 Since we already had multiple thesauri, a single instance of Atramhasis can host
 multiple conceptschemes (\autoref{fig:conceptschemes}). Creating a conceptscheme requires 
