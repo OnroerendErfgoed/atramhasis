@@ -4,11 +4,9 @@ from builtins import input
 
 from pyramid.paster import get_appsettings
 from pyramid.paster import setup_logging
-from pytz import timezone
 from sqlalchemy import engine_from_config
 from sqlalchemy.sql.expression import text
 
-timezone_brussels = timezone('Europe/Brussels')
 log = logging.getLogger(__name__)
 
 

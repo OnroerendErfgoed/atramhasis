@@ -8,6 +8,8 @@ in progress
 - Stop building universal wheels (#752)
 - Update docs to no longer reference mkvirtualenv, use standard venv instead (#773)
 - Update CONTRIBUTING.md file (#756)
+- Remove unneeded reference to pytz (#780)
+- Minor refactoring of view method to get publically available conceptschemes (#777)
 
 1.3.0 (04-01-2023)
 -------------------

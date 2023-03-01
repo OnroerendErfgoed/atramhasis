@@ -2,6 +2,11 @@ checks:
   python:
     code_rating: true
     duplicate_code: true
+  javascript:
+    no_comma_dangle: true
+    code_rating: true
+    duplicate_code: true
+
 
 build:
   nodes:
@@ -13,3 +18,5 @@ build:
 filter:
   excluded_paths:
     - 'tests/*'
+    - 'fixtures/*'
+    - 'atramhasis/scripts/*'

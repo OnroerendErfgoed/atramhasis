@@ -43,6 +43,18 @@ def sort_by_labels(concepts, locale, reverse=False):
                   key=lambda child: child.label(locale).label.lower()
                   ) + [x for x in concepts if not x.label(locale)]
 
+def get_public_conceptschemes(skos_registry):
+    """
+    Get all conceptschemes that are visible through the public UI.
+    """
+    conceptschemes = [
+        {'id': x.get_metadata()['id'],
+         'conceptscheme': x.concept_scheme}
+        for x in skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
+                                                           for not_shown in ['external', 'hidden']])
+        ]
+
+    return conceptschemes
 
 @view_defaults(accept='text/html')
 class AtramhasisView:
@@ -70,7 +82,7 @@ class AtramhasisView:
     @view_config(name='favicon.ico')
     def favicon_view(self):
         """
-        This view returns the favicon when requested from the web root.
+        Return the favicon when requested from the web root.
         """
         here = os.path.dirname(__file__)
         icon = os.path.join(os.path.dirname(here), 'static', 'img', 'favicon.ico')
@@ -81,46 +93,28 @@ class AtramhasisView:
         )
         return response
 
+
     @view_config(route_name='home', renderer='atramhasis:templates/home.jinja2')
     def home_view(self):
         """
-        This view displays the homepage.
+        Display the homepage.
         """
-        conceptschemes = [
-            {'id': x.get_metadata()['id'],
-             'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
-                                                                    for not_shown in ['external', 'hidden']])
-            ]
-
-        return {'conceptschemes': conceptschemes}
+        return {'conceptschemes': get_public_conceptschemes(self.skos_registry)}
 
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
         """
-        This view displays a list of available conceptschemes.
+        Display a list of available conceptschemes.
         """
-        conceptschemes = [
-            {'id': x.get_metadata()['id'],
-             'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
-                                                                    for not_shown in ['external', 'hidden']])
-            ]
-
-        return {'conceptschemes': conceptschemes}
+        return {'conceptschemes': get_public_conceptschemes(self.skos_registry)}
 
     @audit
     @view_config(route_name='conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
     def conceptscheme_view(self):
         """
-        This view displays conceptscheme details.
+        Display a single conceptscheme.
         """
-        conceptschemes = [
-            {'id': x.get_metadata()['id'],
-             'conceptscheme': x.concept_scheme}
-            for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
-                                                                    for not_shown in ['external', 'hidden']])
-            ]
+        conceptschemes = get_public_conceptschemes(self.skos_registry)
 
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
@@ -149,7 +143,7 @@ class AtramhasisView:
     @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
         """
-        This view displays the concept details
+        Display all about a single concept or collection.
         """
         conceptschemes = [
             {'id': x.get_metadata()['id'],
@@ -189,7 +183,7 @@ class AtramhasisView:
     @view_config(route_name='search_result', renderer='atramhasis:templates/search_result.jinja2')
     def search_result(self):
         """
-        This view displays the search results
+        Display search results
         """
         conceptschemes = [
             {'id': x.get_metadata()['id'],
@@ -231,7 +225,7 @@ class AtramhasisView:
     @view_config(route_name='locale')
     def set_locale_cookie(self):
         """
-        This view will set a language cookie
+        Set a language cookie to remember what language a user requested.
         """
         settings = get_current_registry().settings
         default_lang = settings.get('pyramid.default_locale_name')
@@ -255,6 +249,9 @@ class AtramhasisView:
     @audit
     @view_config(route_name='search_result_export', renderer='csv')
     def results_csv(self):
+        """
+        Download search results in CSV format, allowing further processing.
+        """
         header = ['conceptscheme', 'id', 'uri', 'type', 'label', 'prefLabels', 'altLabels', 'definition', 'broader',
                   'narrower', 'related']
         rows = []
