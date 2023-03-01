@@ -179,10 +179,7 @@ somewhat more work than creating a concept or collection. Generally it is
 best left to system admins and IT-experts who can also setup a URI generation scheme 
 and [handler](https://https://github.com/OnroerendErfgoed/urihandler), decide on 
 some special configuration settings and know how the conceptscheme will be used in other 
-applications. While this previously needed to be done by writing a small piece 
-of code, version 2.0.0 will provide a web interface for this. We still recommend 
-consulting a systems architect when creating new thesauri, especially if they are 
-meant to be integrated in a wider enterprise architecture.
+applications. 
 
 ![All conceptschemes in a single Atramhasis instance\label{fig:conceptschemes}](atramhasis_conceptschemes.png)
 
