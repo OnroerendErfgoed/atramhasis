@@ -1,9 +1,14 @@
 in progress
 -----------
 
-- Easier and more flexible configuration of analytics snippets, such as `Plausible Analytics <https://plausible.io>`_. (#738)
-- Show acutal language tags in admin interface drop downs, as opposed to just the labels to reduce confusion. (#766)
-- Update label of default language `vls` to `Vlaams` to be inline with the normal IANA label. (#767)
+- Jinja2 3.x is now the expected template engine. Uwers who have overridden and 
+  customised many templates might need to update them. (#747)
+- Easier and more flexible configuration of analytics snippets, such as 
+  `Plausible Analytics <https://plausible.io>`_. (#738)
+- Show acutal language tags in admin interface drop downs, as opposed to just 
+  the labels to reduce confusion. (#766)
+- Update label of default language `vls` to `Vlaams` to be inline with the normal 
+  IANA label. (#767)
 - Update language-tags to latest version. (#754)
 - Stop building universal wheels (#752)
 - Update docs to no longer reference mkvirtualenv, use standard venv instead (#773)
