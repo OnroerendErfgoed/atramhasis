@@ -55,8 +55,8 @@ requires = [
     'pyramid_openapi3',
     'openapi-spec-validator==0.4.0',  # https://github.com/p1c2u/openapi-core/issues/442
     'language_tags',
-    'jinja2 < 3.0.0',
-    'markupsafe==2.0.1',  # necessary for <3 jinja2 versions
+    'jinja2 >=  3.0.0',
+    'markupsafe',
     'pyramid_jinja2',
     'alembic',
     'babel',
