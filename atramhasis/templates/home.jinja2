@@ -4,7 +4,6 @@
     <link rel="canonical" href="{{ request.route_url('home') }}" />
 {% endblock %}
 {% set app_package = app_package|default('atramhasis', true) %}
-{% set copyright_year = copyright_year|default('2014-2021') %}
 
 {% block html_title %}Home{% endblock %}
 
@@ -17,7 +16,6 @@
     <div class="row">
       {% include 'welcome.jinja2' %}
       {% include 'search_form.jinja2' %}
-      {#    {% include 'd3cloud.jinja2' %}#}
     </div>
   </div>
 {% endblock %}
@@ -28,9 +26,7 @@
 {% endblock %}
 
 {% block footer %}
-  {% with copyright_year = copyright_year %}
-    {% include 'footer-main.jinja2' %}
-  {% endwith %}
+  {% include 'footer-main.jinja2' %}
 {% endblock %}
 
 {% block custom_js %}{% endblock %}
