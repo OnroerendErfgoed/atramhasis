@@ -1,7 +1,7 @@
 in progress
 -----------
 
-- Jinja2 3.x is now the expected template engine. Uwers who have overridden and 
+- Jinja2 3.x is now the expected template engine. Users who have overridden and
   customised many templates might need to update them. (#747)
 - Easier and more flexible configuration of analytics snippets, such as 
   `Plausible Analytics <https://plausible.io>`_. (#738)
