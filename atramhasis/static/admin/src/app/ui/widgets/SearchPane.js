@@ -72,6 +72,11 @@ define([
       this._grid.set('collection', store);
     },
 
+    reload: function () {
+      console.debug('SearchPane::reload');
+      this._grid.set('collection', this.appUi.conceptController.getConceptStore(this._scheme));
+    },
+
     _createGrid: function (node) {
       console.debug('SearchPane::_createGrid');
 

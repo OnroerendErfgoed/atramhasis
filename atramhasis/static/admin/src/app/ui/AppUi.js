@@ -600,6 +600,7 @@ define([
         var tab = this._getTab(schemeId + '_' + concept.id);
         this._closeTab(tab);
         this._openConcept(res.id, schemeId);
+        this._searchPane.reload();
         topic.publish('dGrowl', 'The concept was successfully saved.', {
           'title': 'Save successful',
           'sticky': false,
@@ -623,6 +624,7 @@ define([
         // save successful
         view._close();
         this._openConcept(res.id, schemeId);
+        this._searchPane.reload();
         topic.publish('dGrowl', 'The concept was successfully saved.', {
           'title': 'Save successful',
           'sticky': false,
