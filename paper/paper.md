@@ -133,7 +133,7 @@ setup a triplestore, thus keeping the required technology stack small. Implement
 who do need or want a full triplestore, could easily add one and use the 
 export capabilities provided by Atramhasis to populate the triplestore. 
 
-![Querying the Flanders Heritage thesaurus of styles and cultures with a SPARQL query from a comunica client\label{fig:comunica}](comunica_query.png)
+![Querying the Flanders Heritage thesaurus of styles and cultures served by an Atramhasis server with a SPARQL query from a comunica client\label{fig:comunica}](comunica_query.png)
 
 An Atramhasis instance can be connected to external vocabularies and thesauri through 
 an interface called a Skosprovider [@skosprovider:2022]. Any thesaurus providing one can 
