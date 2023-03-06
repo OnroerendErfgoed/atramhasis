@@ -119,16 +119,18 @@ services, publishing of linked data for external consumption is also supported.
 Individual concepts and collections can be downloaded as RDF data in Turtle, 
 RDF/XML and JSON-LD format [@jsonld:2020]. Entire conceptschemes can be downloaded 
 in Turtle or RDF/XML format. Finally, an 
-[integration with a Linked Data Fragments (LDF) server](https://atramhasis.readthedocs.io/en/latest/development.html#running-a-linked-data-fragments-server) 
-can be set up. An LDF server such as the 
+[integrated Linked Data Fragments (LDF) server](https://atramhasis.readthedocs.io/en/latest/development.html#running-a-linked-data-fragments-server) 
+is available, serving the thesauri through the 
+[Triple Pattern Fragments](https://linkeddatafragments.org/in-depth/#tpf)
+protocol [@Verborgh:2016], either from Turtle files or - for optimal performance -
+HDT files, a binary RDF representation [@Fernandez:2013]. An LDF server such as the 
 [Flanders Heritage Thesaurus LDF server](https://thesaurus.onroerenderfgoed.be/ldf/)
-can be browsed online for basic usage, but really shines in combination with an 
-LDF client (\autoref{fig:comunica}) such as [Comunica](https://comunica.dev/) 
-[@Taelman:2018]. Such a client provides a full SPARQL interface to the thesauri 
-in Atramhasis through the [Triple Pattern Fragments](https://linkeddatafragments.org/in-depth/#tpf)
-protocol [@Verborgh:2016]. This combination provides the power of SPARQL queries
-without having to setup a triplestore, thus keeping the required technology stack 
-small. Implementors needing a full triplestore, could easily add one and use the 
+can be browsed online for basic usage, but more importantly provides a full 
+SPARQL interface to the Atramhasis thesauri (\autoref{fig:comunica}) through
+an LDF client such as [Comunica](https://comunica.dev/) [@Taelman:2018]. 
+This makes all the versatility of SPARQL queries available without having to 
+setup a triplestore, thus keeping the required technology stack small. Implementors 
+who do need or want a full triplestore, could easily add one and use the 
 export capabilities provided by Atramhasis to populate the triplestore. 
 
 ![Querying the Flanders Heritage thesaurus of styles and cultures with a SPARQL query from a comunica client\label{fig:comunica}](comunica_query.png)
@@ -143,7 +145,7 @@ concepts from such a thesaurus and turning your vocabularies into true linked da
 
 ## Technical requirements
 
-As a government agency, Flanders Heritage has itss own corporate identity, part
+As a government agency, Flanders Heritage has its own corporate identity, part
 of the wider branding of the Flemsish Government. Therefore, Atramhasis comes 
 with a default style but is easy to extend with a custom corporate identity. This
 can be seen by comparing the [Flanders Heritage thesaurus](https://thesaurus.onroerenderfgoed.be) 
