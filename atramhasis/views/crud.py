@@ -255,14 +255,25 @@ class AtramhasisCrud:
         self.request.response.status = '200'
         return result
 
-    @view_config(route_name='atramhasis.providers', permission='view', request_method='GET')
+    @view_config(
+        route_name='atramhasis.providers',
+        permission='view',
+        request_method='GET',
+        openapi=True,
+    )
     def get_providers(self):
-        if 'subject' in self.request.GET:
-            filters = {'subject': self.request.GET['subject']}
+        query_params = self.request.openapi_validated.parameters.query
+        if 'subject' in query_params:
+            filters = {'subject': query_params['subject']}
         else:
             filters = {}
         return self.request.skos_registry.get_providers(**filters)
 
-    @view_config(route_name='atramhasis.provider', permission='view', request_method='GET')
+    @view_config(
+        route_name='atramhasis.provider',
+        permission='view',
+        request_method='GET',
+        openapi=True
+    )
     def get_provider(self):
         return self.request.skos_registry.get_provider(self.request.matchdict["id"])

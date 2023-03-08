@@ -509,7 +509,6 @@ class RestFunctionalTests(FunctionalTests):
                     'default_language': 'nl',
                     'force_display_language': None,
                     'id': 'TEST',
-                    'id_generation_strategy': None,
                     'subject': ['biology'],
                     'type': 'DictionaryProvider',
                     'uri_pattern': 'urn:x-skosprovider:%s:%s'
@@ -532,7 +531,7 @@ class RestFunctionalTests(FunctionalTests):
                 'default_language': None,
                 'subject': [],
                 'force_display_language': None,
-                'id_generation_strategy': None
+                'id_generation_strategy': 'NUMERIC'
             },
             response.json
         )

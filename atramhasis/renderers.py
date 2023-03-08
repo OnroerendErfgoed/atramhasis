@@ -20,6 +20,9 @@ from skosprovider_sqlalchemy.models import Label
 from skosprovider_sqlalchemy.models import Language
 from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Source
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
+from atramhasis.skos import IDGenerationStrategy
 
 
 class CSVRenderer:
@@ -198,7 +201,7 @@ def language_adaptor(obj, request):
 
 
 def provider_adapter(provider: VocabularyProvider, *_):
-    return {
+    data = {
        'id': provider.metadata['id'],
        'type': provider.__class__.__name__,
        'conceptscheme_uri': provider.concept_scheme.uri,
@@ -206,8 +209,17 @@ def provider_adapter(provider: VocabularyProvider, *_):
        'default_language': provider.metadata.get("default_language"),
        'subject': provider.metadata.get("subject"),
        'force_display_language': provider.metadata.get("atramhasis.force_display_language"),
-       'id_generation_strategy': provider.metadata.get("atramhasis.id_generation_strategy"),
     }
+    return data
+
+
+def sa_provider_adapter(provider: SQLAlchemyProvider, *args):
+    data = provider_adapter(provider, *args)
+    strategy = provider.metadata.get(
+       "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
+    )
+    data['id_generation_strategy'] = strategy.name
+    return data
 
 
 json_renderer_verbose.add_adapter(ConceptScheme, conceptscheme_adapter)
@@ -223,3 +235,4 @@ json_renderer_verbose.add_adapter(SkosLabel, skos_label_adapter)
 json_renderer_verbose.add_adapter(SkosNote, skos_note_adapter)
 json_renderer_verbose.add_adapter(SkosSource, skos_source_adapter)
 json_renderer_verbose.add_adapter(VocabularyProvider, provider_adapter)
+json_renderer_verbose.add_adapter(SQLAlchemyProvider, sa_provider_adapter)
