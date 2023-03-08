@@ -6,7 +6,7 @@
   attribute. (#794)
 - Update docs to no longer reference mkvirtualenv, use standard venv instead (#773)
 - Update CONTRIBUTING.md file (#756)
-- Remove unneeded reference to pytz (#780)
+- Remove unneeded references to pytz (#780, #796)
 
 1.3.0 (04-01-2023)
 -------------------
