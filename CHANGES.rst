@@ -9,6 +9,8 @@ in progress
   the labels to reduce confusion. (#766)
 - Update label of default language `vls` to `Vlaams` to be inline with the normal 
   IANA label. (#767)
+- JSON-LD export was broken because the provided context was missing a context 
+  attribute. (#794)
 - Update language-tags to latest version. (#754)
 - Stop building universal wheels (#752)
 - Update docs to no longer reference mkvirtualenv, use standard venv instead (#773)
