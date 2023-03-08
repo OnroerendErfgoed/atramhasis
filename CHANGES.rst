@@ -2,6 +2,8 @@
 ------------------
 
 - Show acutal language tags in admin interface drop downs, as opposed to just the labels to reduce confusion. (#766)
+- JSON-LD export was broken because the provided context was missing a context 
+  attribute. (#794)
 - Update docs to no longer reference mkvirtualenv, use standard venv instead (#773)
 - Update CONTRIBUTING.md file (#756)
 - Remove unneeded reference to pytz (#780)
