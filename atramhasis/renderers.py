@@ -7,6 +7,7 @@ from pyramid_skosprovider.renderers import concept_adapter as skos_concept_adapt
 from pyramid_skosprovider.renderers import label_adapter as skos_label_adapter
 from pyramid_skosprovider.renderers import note_adapter as skos_note_adapter
 from pyramid_skosprovider.renderers import source_adapter as skos_source_adapter
+from skosprovider.providers import VocabularyProvider
 from skosprovider.skos import Collection as SkosCollection
 from skosprovider.skos import Concept as SkosConcept
 from skosprovider.skos import Label as SkosLabel
@@ -19,6 +20,9 @@ from skosprovider_sqlalchemy.models import Label
 from skosprovider_sqlalchemy.models import Language
 from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Source
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+
+from atramhasis.skos import IDGenerationStrategy
 
 
 class CSVRenderer:
@@ -196,6 +200,28 @@ def language_adaptor(obj, request):
     }
 
 
+def provider_adapter(provider: VocabularyProvider, *_):
+    data = {
+       'id': provider.metadata['id'],
+       'type': provider.__class__.__name__,
+       'conceptscheme_uri': provider.concept_scheme.uri,
+       'uri_pattern': provider.uri_generator.pattern,
+       'default_language': provider.metadata.get("default_language"),
+       'subject': provider.metadata.get("subject"),
+       'force_display_language': provider.metadata.get("atramhasis.force_display_language"),
+    }
+    return data
+
+
+def sa_provider_adapter(provider: SQLAlchemyProvider, *args):
+    data = provider_adapter(provider, *args)
+    strategy = provider.metadata.get(
+       "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
+    )
+    data['id_generation_strategy'] = strategy.name
+    return data
+
+
 json_renderer_verbose.add_adapter(ConceptScheme, conceptscheme_adapter)
 json_renderer_verbose.add_adapter(Concept, concept_adapter)
 json_renderer_verbose.add_adapter(Collection, collection_adapter)
@@ -208,3 +234,5 @@ json_renderer_verbose.add_adapter(SkosCollection, skos_collection_adapter)
 json_renderer_verbose.add_adapter(SkosLabel, skos_label_adapter)
 json_renderer_verbose.add_adapter(SkosNote, skos_note_adapter)
 json_renderer_verbose.add_adapter(SkosSource, skos_source_adapter)
+json_renderer_verbose.add_adapter(VocabularyProvider, provider_adapter)
+json_renderer_verbose.add_adapter(SQLAlchemyProvider, sa_provider_adapter)

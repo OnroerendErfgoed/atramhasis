@@ -761,6 +761,57 @@ paths:
         404:
           description: The concept/collection was not found in the conceptscheme or the
             conceptscheme was not found.
+
+  /providers:
+    get:
+      summary: Get all registered providers.
+      description: Get all registered providers.
+      parameters:
+        - name: subject
+          in: query
+          description: A value to filter providers on their subject
+          schema:
+            type: string
+      tags:
+        - Atramhasis
+      responses:
+        200:
+          description: List of providers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Provider"
+        4XX:
+          description: Bad request.
+        5XX:
+          description: Unexpected error.
+  /providers/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: The identifier of the provider.
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get a single provider.
+      description: Get the details of a single provider.
+      tags:
+        - Atramhasis
+      responses:
+        200:
+          description: Provider retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Provider"
+        4XX:
+          description: Bad request.
+        5XX:
+          description: Unexpected error.
+
 components:
   schemas:
     Language:
@@ -1017,6 +1068,41 @@ components:
         errors:
           type: string
 
+    Provider:
+      type: object
+      required:
+        - id
+        - type
+        - conceptscheme_uri
+        - uri_pattern
+        - default_language
+        - subject
+        - force_display_language
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        conceptscheme_uri:
+          type: string
+        uri_pattern:
+          type: string
+        default_language:
+          type: string
+          nullable: true
+        subject:
+          type: array
+          items:
+            type: string
+        force_display_language:
+          type: string
+          nullable: true
+        id_generation_strategy:
+          type: string
+          enum:
+            - NUMERIC
+            - GUID
+            - MANUAL
     Error:
       type: object
       required:

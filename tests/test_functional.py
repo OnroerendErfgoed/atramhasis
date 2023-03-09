@@ -490,6 +490,52 @@ class RestFunctionalTests(FunctionalTests):
     def test_get_conceptschemes(self):
         self.testapp.get('/conceptschemes', headers=self._get_default_headers(), status=200)
 
+    def test_get_providers(self):
+        response = self.testapp.get(
+            url='/providers',
+            headers=self._get_default_headers(),
+            status=200
+        )
+        self.assertEqual(6, len(response.json))
+        response = self.testapp.get(
+            url='/providers?subject=biology',
+            headers=self._get_default_headers(),
+            status=200
+        )
+        self.assertEqual(
+            [
+                {
+                    'conceptscheme_uri': 'http://id.trees.org',
+                    'default_language': 'nl',
+                    'force_display_language': None,
+                    'id': 'TEST',
+                    'subject': ['biology'],
+                    'type': 'DictionaryProvider',
+                    'uri_pattern': 'urn:x-skosprovider:%s:%s'
+                }
+            ],
+            response.json)
+
+    def test_get_provider(self):
+        response = self.testapp.get(
+            url='/providers/GEOGRAPHY',
+            headers=self._get_default_headers(),
+            status=200
+        )
+        self.assertEqual(
+            {
+                'id': 'GEOGRAPHY',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'urn:x-vioe:geography',
+                'uri_pattern': 'urn:x-vioe:geography:%s',
+                'default_language': None,
+                'subject': [],
+                'force_display_language': None,
+                'id_generation_strategy': 'NUMERIC'
+            },
+            response.json
+        )
+
 
 class TestCookieView(FunctionalTests):
     def _get_default_headers(self):

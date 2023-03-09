@@ -96,3 +96,5 @@ def includeme(config):
                      accept='application/ld+json')
     config.add_route('atramhasis.rdf_individual_jsonld', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}',
                      accept='application/ld+json')
+    config.add_route('atramhasis.providers', pattern='/providers')
+    config.add_route('atramhasis.provider', pattern='/providers/{id}')
