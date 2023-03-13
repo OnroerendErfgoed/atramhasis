@@ -1,13 +1,14 @@
 <div data-dojo-attach-point="conceptDetailNode">
   <div class="large-12 columns" style="margin-top: 20px; padding-bottom: 20px;">
-    <div class="large-8 columns">
+    <div class="large-7 columns">
       <h1 data-dojo-attach-point="conceptTitleViewNode"></h1>
       <span class="concept-title-info" data-dojo-attach-point="idViewNode"></span>
       <span class="concept-title-info" data-dojo-attach-point="typeViewNode"></span>
       <span class="concept-title-info" data-dojo-attach-point="uriViewNode"></span>
     </div>
-    <div class="large-4 columns">
-      <a href="#" class="button tiny right" data-dojo-attach-event="onClick: _deleteConcept">DELETE</a>
+    <div class="large-5 columns">
+      <a href="#" class="button tiny right" target="_blank" data-dojo-attach-point="viewConceptNode">VIEW</a>
+      <a href="#" class="button tiny right" style="margin-right: 10px;" data-dojo-attach-event="onClick: _deleteConcept">DELETE</a>
       <a href="#" class="button tiny right" style="margin-right: 10px;" data-dojo-attach-event="onClick: _openEditDialog">EDIT</a>
       <button href="#" class="button tiny right" style="margin-right: 10px;" data-dojo-attach-event="onClick: _openMergeDialog"
          data-dojo-attach-point="mergeButton">MERGE</button>
