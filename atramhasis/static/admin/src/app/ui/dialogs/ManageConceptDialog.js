@@ -48,12 +48,14 @@ define([
     languageController: null,
     listController: null,
     conceptSchemeController: null,
+    providerController: null,
     relationManager: null,
     labelManager: null,
     noteManager: null,
     matchesManager: null,
     sourcesManager: null,
     _mode: 'add',
+    _strategy: 'NUMERIC',
 
     /**
      * Standaard widget functie
@@ -83,7 +85,7 @@ define([
       domUtils.addOptionsToSelect(this.schemeNode, {
         data: this.conceptSchemeController.conceptSchemeList,
         idProperty: 'id',
-        labelProperty: 'name'
+        labelProperty: 'label'
       });
       //on(this.schemeNode, 'change', lang.hitch(this, function(evt) {
       //  this.updateScheme(evt.target.value);
@@ -114,13 +116,13 @@ define([
     /**
      * Toont het dialog
      */
-    showDialog: function (scheme, concept, mode) {
+    showDialog: function (schemeId, concept, mode) {
       if (mode) {
         this._mode = mode;
       }
-      if (scheme) {
-        this.schemeNode.value = scheme;
-        this.updateScheme(scheme);
+      if (schemeId) {
+        this.schemeNode.value = schemeId;
+        this.updateScheme(schemeId);
         this.dialog.set('title', 'Add new concept or collection');
 
         this.relationManager.reset();
@@ -129,9 +131,22 @@ define([
         this.matchesManager.reset();
         this.sourcesManager.reset();
 
+        var scheme = this.conceptSchemeController.getConceptSchemeFromList(schemeId);
+        var provider = this.providerController.getProvider(scheme.uri);
+        if (provider.id_generation_strategy) {
+          this._strategy = provider.id_generation_strategy;
+        }
+        if (this._strategy === 'MANUAL') {
+          domAttr.set(this.idNode, 'disabled', false);
+          this.idNodeContainer.style.display = 'inline-table';
+        }
+
         if (concept) {
           if (concept.id) {
             this.dialog.set('title', 'Edit <strong>' + concept.label + '</strong>');
+            if (this._strategy === 'MANUAL') {
+              this.idNode.value = concept.id;
+            }
           }
           this.relationManager.setConcept(concept);
           this.labelManager.setConcept(concept);
@@ -198,6 +213,9 @@ define([
       if (this.concept) {
         concept.id = this.concept.id || undefined;
         concept.uri = this.concept.uri || undefined;
+      }
+      if (this._strategy === 'MANUAL') {
+        concept.id = this.idNode.value;
       }
       concept.concept_scheme = this.scheme;
       concept.type = this.typeNode.value;

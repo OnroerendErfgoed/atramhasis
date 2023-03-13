@@ -54,6 +54,15 @@ define([
       })
     },
 
+
+    getConceptSchemeFromList: function(id) {
+      console.debug('ConceptSchemeController::getConceptSchemeFromList', id);
+      var conceptschemeList = array.filter(this.conceptSchemeList, function(item){
+        return item.id === id;
+      });
+      return conceptschemeList.length > 0 ? conceptschemeList[0] : null;
+    },
+
     editConceptScheme: function(concept){
       console.debug('ConceptSchemeController::editConceptScheme', concept);
       var jData = json.stringify(concept);
