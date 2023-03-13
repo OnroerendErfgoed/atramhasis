@@ -71,12 +71,8 @@ define([
       return this.getConceptSchemes().then(lang.hitch(this, function (schemes) {
         var externalSchemelist = [];
         array.forEach(schemes, lang.hitch(this, function (scheme) {
-          if(array.indexOf(scheme.subject, 'external') == -1){
-            this.conceptSchemeList.push({name: scheme.label, id: scheme.id});
-            //this.stores[scheme.id] = new JsonRest({
-            //  'target': this._target + '/' + scheme.id + '/c/',
-            //  'accepts': 'application/json'
-            //});
+          if(array.indexOf(scheme.subject, 'external') === -1){
+            this.conceptSchemeList.push(scheme);
           }else{
             externalSchemelist.push(scheme);
           }
