@@ -9,11 +9,13 @@ in progress
   the labels to reduce confusion. (#766)
 - Update label of default language `vls` to `Vlaams` to be inline with the normal 
   IANA label. (#767)
+- JSON-LD export was broken because the provided context was missing a context 
+  attribute. (#794)
 - Update language-tags to latest version. (#754)
 - Stop building universal wheels (#752)
 - Update docs to no longer reference mkvirtualenv, use standard venv instead (#773)
 - Update CONTRIBUTING.md file (#756)
-- Remove unneeded reference to pytz (#780)
+- Remove unneeded references to pytz (#780, #796)
 - Minor refactoring of view method to get publically available conceptschemes (#777)
 
 1.3.0 (04-01-2023)
