@@ -11,10 +11,15 @@ in progress
 - Stop building universal wheels (#752)
 - Minor refactoring of view method to get publically available conceptschemes (#777)
 
+1.3.2 (14-03-2023)
+------------------
+
+- Fix broken CITATION.cff file. Otherwise this version is identical to 1.3.1
+
 1.3.1 (14-03-2023)
 ------------------
 
-- Show acutal language tags in admin interface drop downs, as opposed to just the labels to reduce confusion. (#766)
+- Show actual language tags in admin interface drop downs, as opposed to just the labels to reduce confusion. (#766)
 - JSON-LD export was broken because the provided context was missing a context 
   attribute. (#794)
 - Added a link from a concept page in the admin interface to the public interface. (#791)
