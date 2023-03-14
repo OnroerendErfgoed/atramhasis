@@ -49,20 +49,20 @@ Semantic Web. SKOS provides a standard way to represent these vocabularies using
 passing data between computer applications in an interoperable way.  
 
 SKOS vocabularies record controlled vocabularies as a set of concepts, collections
-and their relations. A concept being something a researcher wants to describe and define,
-a collection being a grouping of a number of concepts.
+and their relations. A concept is something a researcher wants to describe and define,
+and a collection is a grouping of a number of concepts.
 Flanders Heritage is active in the domain of cultural heritage and 
 describes concepts such as [Roman period](https://id.erfgoed.net/thesauri/dateringen/1223) [@Slechten:2004],
-[oppida](https://id.erfgoed.net/thesauri/erfgoedtypes/1052) or 
+[oppida](https://id.erfgoed.net/thesauri/erfgoedtypes/1052), and 
 [archaeological excavations](https://id.erfgoed.net/thesauri/gebeurtenistypes/38). A 
 typical collection would be [settlements by function](https://id.erfgoed.net/thesauri/erfgoedtypes/1034), 
 a grouping of settlement types according to their function, as opposed to by size or form. 
-Similar concepts and collections are grouped in a conceptscheme, eg. the 
-conceptscheme of [heritage types](https://id.erfgoed.net/thesauri/erfgoedtypes)
-consists of concepts and collections that describes types of heritage, ranging from 
+Similar concepts and collections are grouped in a conceptscheme, e.g., the 
+[heritage types](https://id.erfgoed.net/thesauri/erfgoedtypes) conceptscheme
+consists of concepts and collections that describe types of heritage, ranging from 
 [solitary trees](https://id.erfgoed.net/thesauri/erfgoedtypes/1654) 
 over [burial mounds](https://id.erfgoed.net/thesauri/erfgoedtypes/170)
- to [airfields](https://id.erfgoed.net/thesauri/erfgoedtypes/476) 
+to [airfields](https://id.erfgoed.net/thesauri/erfgoedtypes/476) 
 and [swimming pools](https://id.erfgoed.net/thesauri/erfgoedtypes/949). Concepts 
 and collections can be labelled with preferred labels and alternative labels, 
 more elaborately described with definitions and notes, and provided with references 
@@ -78,8 +78,8 @@ to concepts in other vocabularies such as the Art and Architecture Thesaurus (AA
 
 Atramhasis was written to be a user-friendly open source SKOS editor. First and 
 foremost, we wanted a system that adheres to the SKOS standard, yet is useable 
-for users without knowledge of SKOS or RDF. For a typical user, it had to feel 
-as if they were consulting a normal website, as opposed to a RDF vocabulary 
+for users without prior knowledge of SKOS or RDF. For a typical user, it had to feel 
+as if they were consulting a normal website, as opposed to a RDF vocabulary, 
 since the latter can feel rather daunting to non-technical users. This not only 
 applies to users consulting the thesauri, but also to those editing them. Our 
 thesaurus editors are not IT- or linked data specialists, but domain experts, 
@@ -87,14 +87,14 @@ researchers and other specialists in the field of cultural heritage. While a
 general understanding of thesauri is within their grasp, the technicalities of 
 RDF are not. Thus, editors in Atramhasis do not write RDF statements, but edit 
 data in a normal web admin interface, as seen in \autoref{fig:editingairfields}. 
-All mapping to RDF and SKOS is done behind the scene, invisible to the editors.
+All mapping to RDF and SKOS is done behind the scenes, invisible to the editors.
 
 ![Editing the concept of airfields is simple and straightforward.\label{fig:editingairfields}](atramhasis_screen_edit_airfields.png)
 
 The system was conceived as Flanders Heritage's 
 [central platform](https://thesaurus.onroerenderfgoed.be) for publication of 
 internal and regional vocabularies dealing with cultural heritage [@Mortier:2017]. 
-The publication website allows humans to browse, search and consult the vocabularies 
+The publication website allows humans to browse, search, and consult the vocabularies 
 online in a user-friendly way. Search results can be downloaded in CSV format 
 for further processing. Internal and external systems use the webservices provided 
 by Atramhasis to consult or download vocabularies. Concept URIs are used in 
@@ -103,7 +103,7 @@ indexing data in systems such as the
 [@VanDaele:2015; @deHaan:2021; @Hooft:2021] or the 
 [Flanders Heritage Image Database](https://beeldbank.onroerenderfgoed.be).
 This allows users to search those systems using the provided thesauri (\autoref{fig:searchingairfields}).
-For a typical end-user the thesauri are presented as dropdown lists or 
+For a typical end-user, the thesauri are presented as dropdown lists or 
 [specialised widgets](https://github.com/OnroerendErfgoed/thesaurus-widget) that 
 allow navigating the thesaurus from the top concepts along branches to the leafs. 
 For most transactions between internal Flanders Heritage systems and the
@@ -117,7 +117,7 @@ comfortable and productive.
 While interactions with internal system are done through plain JSON REST
 services, publishing of linked data for external consumption is also supported.
 Individual concepts and collections can be downloaded as RDF data in Turtle, 
-RDF/XML and JSON-LD format [@jsonld:2020]. Entire conceptschemes can be downloaded 
+RDF/XML, and JSON-LD format [@jsonld:2020]. Entire conceptschemes can be downloaded 
 in Turtle or RDF/XML format. Finally, an 
 [integrated Linked Data Fragments (LDF) server](https://atramhasis.readthedocs.io/en/latest/development.html#running-a-linked-data-fragments-server) 
 is available, serving the thesauri through the 
@@ -130,18 +130,18 @@ SPARQL interface to the Atramhasis thesauri (\autoref{fig:comunica}) through
 an LDF client such as [Comunica](https://comunica.dev/) [@Taelman:2018]. 
 This makes all the versatility of SPARQL queries available without having to 
 setup a triplestore, thus keeping the required technology stack small. Implementors 
-who do need or want a full triplestore, could easily add one and use the 
+who do need or want a full triplestore could easily add one and use the 
 export capabilities provided by Atramhasis to populate the triplestore. 
 
 ![Querying the Flanders Heritage thesaurus of styles and cultures served by an Atramhasis server with a SPARQL query from a comunica client\label{fig:comunica}](comunica_query.png)
 
 An Atramhasis instance can be connected to external vocabularies and thesauri through 
-an interface called a Skosprovider [@skosprovider:2022]. Any thesaurus providing one can 
+an interface called a Skosprovider [@skosprovider:2022], and any thesaurus providing one can 
 be used for linking external concepts. Out of the box skosproviders are available for Getty 
-vocabularies such as the AAT [@aat] or other Atramhasis instances, but any thesaurus adhering 
+vocabularies such as the AAT [@aat] and other Atramhasis instances, but any thesaurus adhering 
 to the SKOS standard can be added with a little development work. Connecting an external 
 thesaurus opens up the possibility of interlinking internal and external thesauri, importing 
-concepts from such a thesaurus and turning your vocabularies into true linked data. 
+concepts from such a thesaurus, and turning your vocabularies into true linked data. 
 
 ## Technical requirements
 
@@ -162,18 +162,18 @@ configured according to a user's own corporate security needs.
 Atramhasis uses [SQLAlchemy](https://sqlalchemy.org), a database abstraction 
 layer, so it can be run with different relational databases. We recommend 
 [PostgreSQL](https://postgresql.org) for an enterprise multi-user production 
-environment such as the Flanders Heritage thesaurus. It has been serving 
+environment such as the Flanders Heritage thesaurus, which has been serving 
 25.000 visitors annually. [SQLite](https://sqlite.org) is very well suited 
 for a single-user environment and rapid prototyping. By using this very 
-simple file-based backend and not configuring any authentication Atramhasis 
-has been used a quick SKOS editor by people not wanting to write SKOS by hand.
+simple file-based backend and not configuring any authentication, Atramhasis 
+has been used as a quick SKOS editor by people not wanting to write SKOS by hand.
  
 Since we already had multiple thesauri, a single instance of Atramhasis can host
 multiple conceptschemes (\autoref{fig:conceptschemes}). Creating a conceptscheme requires 
 somewhat more work than creating a concept or collection. Generally it is 
-best left to system admins and IT-experts who can also setup a URI generation scheme 
+best left to system admins and IT experts who can also set up a URI generation scheme 
 and [handler](https://https://github.com/OnroerendErfgoed/urihandler), decide on 
-some special configuration settings and know how the conceptscheme will be used in other 
+some special configuration settings, and know how the conceptscheme will be used in other 
 applications. 
 
 ![All conceptschemes in a single Atramhasis instance\label{fig:conceptschemes}](atramhasis_conceptschemes.png)
@@ -185,7 +185,7 @@ far and the software itself has no hardcoded limit. However, we do feel Atramhas
 is not ideal for hosting very large thesauri such as the AAT [@aat]. Often such a 
 thesaurus defines custom properties or has smaller subgroups to keep the thesarus 
 navigable. At Flanders Heritage we have avoided creating heterogenous conceptschemes, 
-opting for conceptschemes with a tight focus. Eg. the Flanders Heritage thesaurus 
+opting for conceptschemes with a tight focus. For example, the Flanders Heritage thesaurus 
 has different conceptschemes that each map to an AAT subgroup called a Facet 
 (Styles and Periods, Activities, Materials, Objects). While the end result is very 
 similar, Atramhasis does not currently support something like the facets the 
@@ -195,7 +195,7 @@ conceptscheme. So far, this has not proved to be an issue.
 # State of the field
 
 Having decided on our functional and technical requirements, we surveyed vocabulary 
-software available at the time (2014). Knowing we need to integrate existing 
+software available at the time (2014). Knowing we needed to integrate existing 
 software in our normal technical environment, requiring a great degree of flexibility 
 and customisation, we focussed our search on open source software.
 
@@ -211,7 +211,7 @@ but was difficult to evaluate properly since most of the documenation and code
 was in Spanish. Both TemaTres and [OpenSkos](https://openskos.org) are written
 in PHP. OpenSkos was also lacking good documentation so it was unclear how easy
 it would be to customise and adapt the software. [iQvoc](https://iqvoc.net) 
-had exactly the kind of end-user experience we were looking for. iQvoc runs on 
+had exactly the kind of end-user experience we were looking for, but it runs on 
 the idea that every conceptscheme requires a new instance of the application, 
 which would have required a lot of work whenever a new scheme was needed. None 
 of the available solutions had a ready-made integration with a single sign-on 
@@ -228,9 +228,9 @@ use cases in a sustainable way. So far this has proven to be the right decision.
  
 # Acknowledgements
 
-As with any long lived project, Atramhasis has benefitted from the input of 
+As with any long-lived project, Atramhasis has benefitted from the input of 
 several colleagues and software developers over the years. While it's impossible 
-to thank them all, we do want to thank Bart Saelen, Tinne Cahy and 
+to thank them all, we do want to thank Bart Saelen, Tinne Cahy, and 
 Cedrik Vanderhaegen for much of the original development. A full list of people 
 who contributed over the years can be found on GitHub. Leen Meganck and 
 Sophie Mortier were responsible for building most of the vocabularies that led to 
