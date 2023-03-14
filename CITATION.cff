@@ -66,8 +66,8 @@ references:
       - given-names: Leen
         family-names: Meganck
         email: leen.meganck@vlaanderen.be
-        affiliation: Agentschap Onroerend Erfgoed
-	orcid: 'https://orcid.org/0000-0002-9483-0851'
+     	affiliation: Agentschap Onroerend Erfgoed
+        orcid: 'https://orcid.org/0000-0002-9483-0851'
     journal: ISPRS Annals of Photogrammetry, Remote Sensing and Spatial Information Sciences
     volume: 4W2
     pages: 151-156
