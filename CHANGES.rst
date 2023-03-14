@@ -1,4 +1,4 @@
-1.3.1 (??-03-2023)
+1.3.1 (14-03-2023)
 ------------------
 
 - Show acutal language tags in admin interface drop downs, as opposed to just the labels to reduce confusion. (#766)
