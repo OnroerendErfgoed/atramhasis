@@ -71,7 +71,10 @@ We recommend installing Atramhasis in a virtual environment.
 
 .. code-block:: bash    
     
-    $ mkvirtualenv atramhasis_dev
+   $ python -m venv atramhasis_dev
+   $ . atramhasis_dev/bin/activate
+   # Make sure pip and setuptools are up to date
+   $ pip install --upgrade pip setuptools
 
 To install a fully working development environment a pip requirements-dev.txt
 file is provided. By passing this file to :command:`pip install -r` all 
@@ -86,6 +89,8 @@ to the admin module documentation.
 
     # Install dependencies
     $ pip install -r requirements-dev.txt
+    # Install packages in dev mode
+    $ pip install -e .
     # create or update database
     $ alembic upgrade head
     # insert sample data

@@ -10,13 +10,11 @@ from os.path import isfile
 from builtins import input
 from pyramid.paster import get_appsettings, bootstrap
 from pyramid.paster import setup_logging
-from pytz import timezone
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 
 from atramhasis.errors import SkosRegistryNotFoundException
 
-timezone_brussels = timezone('Europe/Brussels')
 log = logging.getLogger(__name__)
 
 
@@ -110,12 +108,12 @@ def create_index_sitemap(base_url, directory):
     sitemapindex = ElementTree.Element(
         "sitemapindex", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     )
+    today = datetime.date.today().isoformat()
 
     for file_name in list_sitemaps:
         sitemap_static_url = f"{base_url}/sitemaps/{file_name}"
         sitemap_area = ElementTree.SubElement(sitemapindex, "sitemap")
         ElementTree.SubElement(sitemap_area, "loc").text = sitemap_static_url
-        today = datetime.datetime.now(timezone_brussels).strftime("%Y-%m-%d")
         ElementTree.SubElement(sitemap_area, "lastmod").text = today
 
     write_element_to_xml("sitemap_index.xml", directory, sitemapindex)

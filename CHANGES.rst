@@ -1,3 +1,16 @@
+1.3.1 (14-03-2023)
+------------------
+
+- Show acutal language tags in admin interface drop downs, as opposed to just the labels to reduce confusion. (#766)
+- JSON-LD export was broken because the provided context was missing a context 
+  attribute. (#794)
+- Added a link from a concept page in the admin interface to the public interface. (#791)
+- Saving a concept in the admin interface triggers a reload of the list view. (#763)
+- Fix notation of JSON-LD. (#792)
+- Update docs to no longer reference mkvirtualenv, use standard venv instead (#773)
+- Update CONTRIBUTING.md file (#756)
+- Remove unneeded references to pytz (#780, #796)
+
 1.3.0 (04-01-2023)
 -------------------
 
