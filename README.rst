@@ -27,7 +27,7 @@ containing several vocabularies regarding cultural heritage, such as
 `heritagetypes <https://thesaurus.onroerenderfgoed.be/conceptschemes/ERFGOEDTYPES>`_, 
 `styles and cultures <https://thesaurus.onroerenderfgoed.be/conceptschemes/STIJLEN_EN_CULTUREN>`_, 
 `materials <https://thesaurus.onroerenderfgoed.be/conceptschemes/MATERIALEN>`_ 
-and `periods <https://thesaurus.onroerenderfgoed.be/conceptschemes/DATERINGEN`_.
+and `periods <https://thesaurus.onroerenderfgoed.be/conceptschemes/DATERINGEN>`_.
 Most of the vocabularies are in Dutch, but the interface is available in both 
 Dutch, English and French.
 
