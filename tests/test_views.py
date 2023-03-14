@@ -4,25 +4,35 @@ from unittest.mock import Mock
 
 from paste.deploy.loadwsgi import appconfig
 from pyramid import testing
+from pyramid.config.settings import Settings
+from pyramid.request import apply_request_extensions
+from pyramid.testing import DummyRequest
 from skosprovider.registry import Registry
+from skosprovider.uri import DefaultUrnGenerator
 from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.models import Label
 from skosprovider_sqlalchemy.models import LabelType
 from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Thing
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy.exc import NoResultFound
 from webob.multidict import MultiDict
+from skosprovider.skos import Concept as SkosConcept
 
+import atramhasis
 from atramhasis.errors import ConceptNotFoundException
 from atramhasis.errors import ConceptSchemeNotFoundException
 from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.skos import IDGenerationStrategy
+from atramhasis.views.crud import AtramhasisCrud
 from atramhasis.views.views import AtramhasisAdminView
 from atramhasis.views.views import AtramhasisListView
 from atramhasis.views.views import AtramhasisView
 from atramhasis.views.views import get_definition
-from atramhasis.views.views import labels_to_string
 from atramhasis.views.views import get_public_conceptschemes
+from atramhasis.views.views import labels_to_string
 from fixtures.data import trees
 
 TEST_DIR = os.path.dirname(__file__)
@@ -47,12 +57,14 @@ def hidden_provider(some_id):
     )
     return provider_mock
 
+
 def external_provider(some_id):
     provider_mock = provider(some_id)
     provider_mock.get_metadata = Mock(
         return_value={"id": some_id, "subject": ["external"]}
     )
     return provider_mock
+
 
 class DummySKOSManager:
     def get_thing(self, concept_id, conceptscheme_id):
@@ -581,6 +593,7 @@ class TestViewFunctions(unittest.TestCase):
         conceptschemes = get_public_conceptschemes(regis)
         self.assertEqual(1, len(conceptschemes))
 
+
 class TestListViews(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
@@ -602,3 +615,98 @@ class TestListViews(unittest.TestCase):
         labellist = atramhasis_list_view.labeltype_list_view()
         self.assertIsNotNone(labellist)
         self.assertIn({"key": "prefLabel", "label": "prefLabel"}, labellist)
+
+
+class TestAtramhasisCrudView(unittest.TestCase):
+    class SKOSRegistry:
+        pass
+
+    class SKOSManager:
+        def get_all_label_types(self):
+            return [LabelType(name='prefLabel', description=''),
+                    LabelType(name='sortLabel', description='')]
+
+        def get_next_cid(self, _, __):
+            return "next_cid"
+
+        def save(self, concept):
+            if concept.id is None:
+                concept.id = 1
+            concept.conceptscheme = ConceptScheme(uri='urn:x-skosprovider:test')
+            return concept
+
+        def get_thing(self, concept_id, scheme_id):
+            raise NoResultFound()
+
+    class LanguagesManager:
+        def count_languages(self, _):
+            return 1
+
+    class Provider(SQLAlchemyProvider):
+        metadata = {'subject': 'stub'}
+        conceptscheme_id = 'cs_id'
+        uri_generator = DefaultUrnGenerator("voc-id")
+
+        def __init__(self):
+            pass
+
+    def setUp(self):
+        pyramid_settings = Settings(settings)
+        config = testing.setUp(settings=pyramid_settings)
+        atramhasis.load_app(config, pyramid_settings)
+        self.request = DummyRequest()
+        self.request.application_url = "http://localhost:6543"
+        apply_request_extensions(self.request)
+        self.request.data_managers = {
+            "skos_manager": TestAtramhasisCrudView.SKOSManager(),
+            "conceptscheme_manager": None,
+            "audit_manager": None,
+            "languages_manager": TestAtramhasisCrudView.LanguagesManager(),
+        }
+        self.view = AtramhasisCrud(self.request)
+        self.view.skos_registry = TestAtramhasisCrudView.SKOSRegistry()
+        self.view.provider = TestAtramhasisCrudView.Provider()
+        self.view.scheme_id = "s_id"
+
+    def get_concept_json(self):
+        return {
+            "type": "concept",
+            "broader": [],
+            "narrower": [],
+            "related": [],
+            "labels": [
+                {
+                    "type": "prefLabel",
+                    "language": "en",
+                    "label": "The Larch"
+                },
+                {
+                    "type": "sortLabel",
+                    "language": "en",
+                    "label": "a"
+                }
+            ],
+            "notes": [],
+            "sources": [
+                {
+                    "citation": "Citation"
+                }
+            ]
+        }
+
+    def test_add_concept(self):
+        self.request.json_body = self.get_concept_json()
+        concept = self.view.add_concept()
+        self.assertIsInstance(concept, SkosConcept)
+        self.assertEqual('next_cid', concept.id)
+        self.assertEqual('urn:x-skosprovider:voc-id:next_cid', concept.uri)
+
+    def test_add_concept_manual_id_strategy(self):
+        strategy = IDGenerationStrategy.MANUAL
+        self.view.provider.metadata['atramhasis.id_generation_strategy'] = strategy
+        self.request.json_body = self.get_concept_json()
+        self.request.json_body["id"] = 'manual'
+
+        concept = self.view.add_concept()
+        self.assertIsInstance(concept, SkosConcept)
+        self.assertEqual('manual', concept.id)

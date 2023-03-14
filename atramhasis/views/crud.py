@@ -38,11 +38,10 @@ class AtramhasisCrud:
     This object groups CRUD REST views part of the private user interface.
     """
 
-    def __init__(self, context, request):
+    def __init__(self, request):
         self.request = request
         self.skos_manager = self.request.data_managers['skos_manager']
         self.conceptscheme_manager = self.request.data_managers['conceptscheme_manager']
-        self.context = context
         self.logged_in = request.authenticated_userid
         if 'scheme_id' in self.request.matchdict:
             self.scheme_id = self.request.matchdict['scheme_id']
@@ -174,7 +173,7 @@ class AtramhasisCrud:
                     "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
                 )
                 if id_generation_strategy == IDGenerationStrategy.MANUAL:
-                    concept.concept_id = validated_json_concept["concept_id"]
+                    concept.concept_id = validated_json_concept["id"]
                 else:
                     concept.concept_id = self.skos_manager.get_next_cid(
                         self.provider.conceptscheme_id, id_generation_strategy

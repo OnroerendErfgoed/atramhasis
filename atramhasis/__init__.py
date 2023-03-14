@@ -35,6 +35,10 @@ def main(global_config, **settings):
 
     config = Configurator(settings=settings)
 
+    return load_app(config, settings)
+
+
+def load_app(config, settings):
     from pyramid.session import SignedCookieSessionFactory
     atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
     config.set_session_factory(atramhasis_session_factory)
