@@ -1,7 +1,11 @@
 import unittest
+from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 from pyramid import testing
+from skosprovider.providers import VocabularyProvider
 from skosprovider.registry import Registry
+from skosprovider_getty.providers import AATProvider
 from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import ConceptScheme
@@ -11,7 +15,9 @@ from skosprovider_sqlalchemy.models import Match
 from skosprovider_sqlalchemy.models import MatchType
 from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Source
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
+from atramhasis import renderers
 from fixtures.data import trees
 
 
@@ -208,3 +214,85 @@ class TestJsonRenderer(unittest.TestCase):
         self.request.locale_name = 'en'
         conceptscheme = conceptscheme_adapter(c, self.request)
         self.assertIn(conceptscheme['label'], ['other label', 'and some other label'])
+
+    def test_provider_adapter(self):
+        provider = VocabularyProvider(
+            metadata={
+                'id': 'provider-id',
+                'default_language': 'nl-be',
+                'subject': 'sub',
+                'atramhasis.force_display_language': 'force-nl'
+            }
+        )
+        result = renderers.provider_adapter(provider)
+        self.assertEqual(
+            {
+                'conceptscheme_uri': 'urn:x-skosprovider:provider-id',
+                'default_language': 'nl-be',
+                'force_display_language': 'force-nl',
+                'id': 'provider-id',
+                'subject': 'sub',
+                'type': 'VocabularyProvider',
+                'uri_pattern': 'urn:x-skosprovider:%s:%s'
+            },
+            result
+        )
+
+    def test_provider_adapter_aat_provider(self):
+        provider = AATProvider(
+            metadata={
+                'id': 'provider-id',
+                'default_language': 'nl-be',
+                'subject': 'sub',
+                'atramhasis.force_display_language': 'force-nl'
+            }
+        )
+        result = renderers.provider_adapter(provider)
+        self.assertEqual(
+            {
+                'conceptscheme_uri': 'http://vocab.getty.edu/aat/',
+                'default_language': 'nl-be',
+                'force_display_language': 'force-nl',
+                'id': 'provider-id',
+                'subject': 'sub',
+                'type': 'AATProvider',
+                'uri_pattern': None
+            },
+            result
+        )
+
+    def test_provider_adapter_sqlalchemy_provider(self):
+        sessionmaker = Mock()
+        session = sessionmaker()
+        session.get.return_value = ConceptScheme(
+            id=1,
+            uri='urn:x-skosprovider:trees',
+            labels=[
+                Label('Verschillende soorten bomen', 'prefLabel', 'nl'),
+                Label('Different types of trees', 'prefLabel', 'en')
+            ]
+        )
+        provider = SQLAlchemyProvider(
+            metadata={
+                'id': 'provider-id',
+                'default_language': 'nl-be',
+                'subject': 'sub',
+                'atramhasis.force_display_language': 'force-nl',
+                'conceptscheme_id': 1,
+            },
+            session=sessionmaker,
+        )
+        result = renderers.sa_provider_adapter(provider)
+        self.assertEqual(
+            {
+                'conceptscheme_uri': 'urn:x-skosprovider:trees',
+                'default_language': 'nl-be',
+                'force_display_language': 'force-nl',
+                'id': 'provider-id',
+                'id_generation_strategy': 'NUMERIC',
+                'subject': 'sub',
+                'type': 'SQLAlchemyProvider',
+                'uri_pattern': 'urn:x-skosprovider:%s:%s'
+            },
+            result
+        )
