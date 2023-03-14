@@ -7,6 +7,8 @@ Atramhasis
         :target: http://atramhasis.readthedocs.io/en/latest/?badge=latest
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5801135.svg
         :target: https://doi.org/10.5281/zenodo.5801135
+.. image:: https://joss.theoj.org/papers/10.21105/joss.05040/status.svg
+        ::target: https://doi.org/10.21105/joss.05040
 .. image:: https://app.travis-ci.com/OnroerendErfgoed/atramhasis.svg?branch=develop
         :target: https://app.travis-ci.com/OnroerendErfgoed/atramhasis 
 .. image:: https://coveralls.io/repos/github/OnroerendErfgoed/atramhasis/badge.svg?branch=develop
