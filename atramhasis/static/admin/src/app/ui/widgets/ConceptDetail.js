@@ -98,6 +98,7 @@ define([
       this.uriViewNode.innerHTML = 'URI: ';
       domConstruct.create('a', { href: this.concept.uri, innerHTML: this.concept.uri, target: '_blank' },
         this.uriViewNode);
+      domAttr.set(this.viewConceptNode, 'href', '/conceptschemes/' + this.scheme + '/c/' + concept.id);
 
       // LABELS
       if (concept.labels && concept.label.length > 0) {

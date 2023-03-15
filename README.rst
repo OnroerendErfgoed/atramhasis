@@ -3,8 +3,6 @@ Atramhasis
 
 .. image:: https://img.shields.io/pypi/v/atramhasis.svg
         :target: https://pypi.python.org/pypi/atramhasis
-.. image:: https://readthedocs.org/projects/atramhasis/badge/?version=latest
-        :target: http://atramhasis.readthedocs.io/en/latest/?badge=latest
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5801135.svg
         :target: https://doi.org/10.5281/zenodo.5801135
 .. image:: https://app.travis-ci.com/OnroerendErfgoed/atramhasis.svg?branch=develop
@@ -13,6 +11,13 @@ Atramhasis
         :target: https://coveralls.io/github/OnroerendErfgoed/atramhasis?branch=develop
 .. image:: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/badges/quality-score.png?b=develop
         :target: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/?branch=develop
+
+----
+
+.. image:: https://readthedocs.org/projects/atramhasis/badge/?version=latest
+        :target: http://atramhasis.readthedocs.io/en/latest/?badge=latest
+.. image:: https://joss.theoj.org/papers/10.21105/joss.05040/status.svg
+        :target: https://doi.org/10.21105/joss.05040
 
 Atramhasis is an online SKOS editor. This webapplication enables
 users to create SKOS vocabularies consisting of Concepts and Collections. It 
@@ -27,7 +32,7 @@ containing several vocabularies regarding cultural heritage, such as
 `heritagetypes <https://thesaurus.onroerenderfgoed.be/conceptschemes/ERFGOEDTYPES>`_, 
 `styles and cultures <https://thesaurus.onroerenderfgoed.be/conceptschemes/STIJLEN_EN_CULTUREN>`_, 
 `materials <https://thesaurus.onroerenderfgoed.be/conceptschemes/MATERIALEN>`_ 
-and `periods <https://thesaurus.onroerenderfgoed.be/conceptschemes/DATERINGEN`_.
+and `periods <https://thesaurus.onroerenderfgoed.be/conceptschemes/DATERINGEN>`_.
 Most of the vocabularies are in Dutch, but the interface is available in both 
 Dutch, English and French.
 

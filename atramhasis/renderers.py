@@ -201,11 +201,16 @@ def language_adaptor(obj, request):
 
 
 def provider_adapter(provider: VocabularyProvider, *_):
+    if provider.uri_generator:
+        uri_pattern = provider.uri_generator.pattern
+    else:
+        uri_pattern = None
+
     data = {
        'id': provider.metadata['id'],
        'type': provider.__class__.__name__,
        'conceptscheme_uri': provider.concept_scheme.uri,
-       'uri_pattern': provider.uri_generator.pattern,
+       'uri_pattern': uri_pattern,
        'default_language': provider.metadata.get("default_language"),
        'subject': provider.metadata.get("subject"),
        'force_display_language': provider.metadata.get("atramhasis.force_display_language"),

@@ -13,26 +13,32 @@ authors:
     email: koen.vandaele@vlaanderen.be
     affiliation: Agentschap Onroerend Erfgoed
     orcid: 'https://orcid.org/0000-0002-8153-2978'
-  - given-names: Bart
-    family-names: Saelen
-    affiliation: Geo Solutions
-  - given-names: Maarten
-    family-names: Taeymans
-    affiliation: Geo Solutions
-  - given-names: Jonathan
-    family-names: Piraux
   - given-names: Tinne
     family-names: Cahy
-  - given-names: Cedrik
-    family-names: Vanderhaegen
+    affiliation: GEO Solutions
+  - given-names: Wim
+    family-names: De Clercq
+    affiliation: GEO Solutions
   - given-names: Jonas
     family-names: Geuens
     affiliation: Agentschap Onroerend Erfgoed
     orcid: 'https://orcid.org/0000-0001-8197-5034'
-  - given-names: Wim
-    family-names: De Clercq
   - given-names: Bram
     family-names: Goessens
+    affiliation: Agentschap Onroerend Erfgoed
+    orcid: 'https://orcid.org/0000-0001-6693-0866'
+  - given-names: Jonathan
+    family-names: Piraux
+    affiliation: GEO Solutions
+  - given-names: Bart
+    family-names: Saelen
+    affiliation: GEO Solutions
+  - given-names: Maarten
+    family-names: Taeymans
+    affiliation: GEO Solutions
+  - given-names: Cedrik
+    family-names: Vanderhaegen
+    affiliation: Agentschap Onroerend Erfgoed
 repository-code: 'https://github.com/OnroerendErfgoed/atramhasis'
 abstract: >-
   Atramhasis is an online SKOS editor. This
@@ -62,6 +68,7 @@ references:
         family-names: Meganck
         email: leen.meganck@vlaanderen.be
         affiliation: Agentschap Onroerend Erfgoed
+        orcid: 'https://orcid.org/0000-0002-9483-0851'
     journal: ISPRS Annals of Photogrammetry, Remote Sensing and Spatial Information Sciences
     volume: 4W2
     pages: 151-156
@@ -81,5 +88,5 @@ keywords:
   - vocabulary
   - python
 license: GPL-3.0
-version: 1.3.0
-date-released: '2023-01-04'
+version: 1.3.2
+date-released: '2023-03-14'
