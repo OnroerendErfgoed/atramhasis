@@ -1087,6 +1087,7 @@ components:
           type: string
         uri_pattern:
           type: string
+          nullable: true
         default_language:
           type: string
           nullable: true
