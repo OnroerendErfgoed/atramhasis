@@ -122,6 +122,7 @@ define([
       }
       if (schemeId) {
         this.schemeNode.value = schemeId;
+        this.idNode.value = concept.id;
         this.updateScheme(schemeId);
         this.dialog.set('title', 'Add new concept or collection');
 
@@ -136,17 +137,14 @@ define([
         if (provider.id_generation_strategy) {
           this._strategy = provider.id_generation_strategy;
         }
-        if (this._strategy === 'MANUAL') {
+
+        if (this._strategy === 'MANUAL' &&!concept && !concept.id) {
           domAttr.set(this.idNode, 'disabled', false);
-          this.idNodeContainer.style.display = 'inline-table';
         }
 
         if (concept) {
           if (concept.id) {
             this.dialog.set('title', 'Edit <strong>' + concept.label + '</strong>');
-            if (this._strategy === 'MANUAL') {
-              this.idNode.value = concept.id;
-            }
           }
           this.relationManager.setConcept(concept);
           this.labelManager.setConcept(concept);
