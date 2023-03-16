@@ -83,7 +83,8 @@ class TestValidation(unittest.TestCase):
             validator=concept_schema_validator
         ).bind(
             request=self.request,
-            provider=self.provider
+            provider=self.provider,
+            validate_id_generation=True,
         )
         self.language = LanguageTag(
             validator=languagetag_validator
@@ -774,19 +775,41 @@ class TestValidation(unittest.TestCase):
         self.assertEqual("Van Daele K. <strong>\n2014</strong>", source['citation'])
 
     def test_id_generation_manual_no_id(self):
+        concept_schema = self.concept_schema.bind(
+            request=self.request,
+            provider=self.provider,
+            validate_id_generation=True,
+        )
         self.provider.metadata["atramhasis.id_generation_strategy"] = (
             IDGenerationStrategy.MANUAL
         )
         del self.json_concept["id"]
         with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
+            concept_schema.deserialize(self.json_concept)
         self.assertIn({'id': 'Required for this provider.'}, e.exception.errors)
+        concept_schema = self.concept_schema.bind(
+            request=self.request,
+            provider=self.provider,
+            validate_id_generation=False,
+        )
+        concept_schema.deserialize(self.json_concept)
 
     def test_id_generation_manual_not_unique(self):
+        concept_schema = self.concept_schema.bind(
+            request=self.request,
+            provider=self.provider,
+            validate_id_generation=True,
+        )
         self.provider.metadata["atramhasis.id_generation_strategy"] = (
             IDGenerationStrategy.MANUAL
         )
         self.json_concept["id"] = "1"
         with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
+            concept_schema.deserialize(self.json_concept)
         self.assertIn({'id': '1 already exists.'}, e.exception.errors)
+        concept_schema = self.concept_schema.bind(
+            request=self.request,
+            provider=self.provider,
+            validate_id_generation=False,
+        )
+        concept_schema.deserialize(self.json_concept)
