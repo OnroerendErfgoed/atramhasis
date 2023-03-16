@@ -2,6 +2,7 @@ import os
 import unittest
 from unittest.mock import Mock
 
+import pytest
 from paste.deploy.loadwsgi import appconfig
 from pyramid import testing
 from pyramid.config.settings import Settings
@@ -25,6 +26,7 @@ import atramhasis
 from atramhasis.errors import ConceptNotFoundException
 from atramhasis.errors import ConceptSchemeNotFoundException
 from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.errors import ValidationError
 from atramhasis.skos import IDGenerationStrategy
 from atramhasis.views.crud import AtramhasisCrud
 from atramhasis.views.views import AtramhasisAdminView
@@ -710,3 +712,15 @@ class TestAtramhasisCrudView(unittest.TestCase):
         concept = self.view.add_concept()
         self.assertIsInstance(concept, SkosConcept)
         self.assertEqual('manual', concept.id)
+
+        del self.request.json_body["id"]
+        with pytest.raises(ValidationError):
+            self.view.add_concept()
+
+        # add_concept should fail without id, edit_concept should not because
+        # no id validation happens
+        self.request.matchdict["c_id"] = 'manual'
+        db_concept = Concept()
+        db_concept.conceptscheme = ConceptScheme(id=1, uri='urn:x-skosprovider:trees')
+        self.request.data_managers["skos_manager"].get_thing = lambda *_: db_concept
+        self.view.edit_concept()

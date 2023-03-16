@@ -172,6 +172,7 @@ def concept_schema_validator(node, cstruct):
     :param cstruct: The concept or collection being validated.
     """
     request = node.bindings['request']
+    validate_id_generation = node.bindings['validate_id_generation']
     skos_manager = request.data_managers['skos_manager']
     languages_manager = request.data_managers['languages_manager']
     provider = node.bindings['provider']
@@ -261,22 +262,23 @@ def concept_schema_validator(node, cstruct):
         msg = "'infer_concept_relations' can only be set for collections."
         errors.append(colander.Invalid(node['infer_concept_relations'], msg=msg))
 
-    id_generation_strategy = provider.metadata.get(
-        "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
-    )
-    if id_generation_strategy == IDGenerationStrategy.MANUAL:
-        if not cstruct.get("id"):
-            msg = "Required for this provider."
-            errors.append(colander.Invalid(node["id"], msg=msg))
-        else:
-            try:
-                skos_manager.get_thing(cstruct["id"], conceptscheme_id)
-            except NoResultFound:
-                # this is desired
-                pass
-            else:
-                msg = f"{cstruct['id']} already exists."
+    if validate_id_generation:
+        id_generation_strategy = provider.metadata.get(
+            "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
+        )
+        if id_generation_strategy == IDGenerationStrategy.MANUAL:
+            if not cstruct.get("id"):
+                msg = "Required for this provider."
                 errors.append(colander.Invalid(node["id"], msg=msg))
+            else:
+                try:
+                    skos_manager.get_thing(cstruct["id"], conceptscheme_id)
+                except NoResultFound:
+                    # this is desired
+                    pass
+                else:
+                    msg = f"{cstruct['id']} already exists."
+                    errors.append(colander.Invalid(node["id"], msg=msg))
 
     if len(errors) > 0:
         raise ValidationError(

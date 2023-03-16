@@ -59,7 +59,7 @@ class AtramhasisCrud:
             json_body['id'] = self.request.matchdict['c_id']
         return json_body
 
-    def _validate_concept(self, json_concept, provider):
+    def _validate_concept(self, json_concept, provider, validate_id_generation):
         from atramhasis.validators import (
             Concept as ConceptSchema,
             concept_schema_validator
@@ -69,7 +69,8 @@ class AtramhasisCrud:
             validator=concept_schema_validator
         ).bind(
             request=self.request,
-            provider=provider
+            provider=provider,
+            validate_id_generation=validate_id_generation
         )
         try:
             return concept_schema.deserialize(json_concept)
@@ -159,7 +160,9 @@ class AtramhasisCrud:
 
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         """
-        validated_json_concept = self._validate_concept(self._get_json_body(), self.provider)
+        validated_json_concept = self._validate_concept(
+            self._get_json_body(), self.provider, validate_id_generation=True
+        )
         exc = None
         id_generation_strategy = IDGenerationStrategy.NUMERIC
         for _ in range(5):
@@ -220,7 +223,9 @@ class AtramhasisCrud:
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         """
         c_id = self.request.matchdict['c_id']
-        validated_json_concept = self._validate_concept(self._get_json_body(), self.provider)
+        validated_json_concept = self._validate_concept(
+            self._get_json_body(), self.provider, validate_id_generation=False
+        )
         try:
             concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:
