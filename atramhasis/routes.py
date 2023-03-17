@@ -39,7 +39,7 @@ def includeme(config):
 
     config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html', request_method="GET")
     config.add_route('conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='text/html', request_method="GET")
-    config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}', accept='text/html',
+    config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
                      request_method="GET")
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
     config.add_route('scheme_root', pattern='/conceptschemes/{scheme_id}/c/', accept='text/html')
@@ -51,13 +51,13 @@ def includeme(config):
                      accept='application/json', request_method='PUT')
     config.add_route('atramhasis.get_conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='application/json')
     config.add_route('atramhasis.get_conceptschemes', pattern='/conceptschemes', accept='application/json')
-    config.add_route('atramhasis.get_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}',
+    config.add_route('atramhasis.get_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='application/json', request_method="GET")
     config.add_route('atramhasis.add_concept', pattern='/conceptschemes/{scheme_id}/c', accept='application/json',
                      request_method="POST")
-    config.add_route('atramhasis.edit_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}',
+    config.add_route('atramhasis.edit_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='application/json', request_method="PUT")
-    config.add_route('atramhasis.delete_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}',
+    config.add_route('atramhasis.delete_concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='application/json', request_method="DELETE")
     config.add_route('atramhasis.list_languages', pattern='/languages', accept='application/json',
                      request_method="GET")
@@ -86,15 +86,15 @@ def includeme(config):
                      accept='text/turtle')
     config.add_route('atramhasis.rdf_conceptscheme_export_turtle_x', pattern='/conceptschemes/{scheme_id}',
                      accept='application/x-turtle')
-    config.add_route('atramhasis.rdf_individual_export', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}',
+    config.add_route('atramhasis.rdf_individual_export', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='application/rdf+xml')
-    config.add_route('atramhasis.rdf_individual_export_turtle', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}',
+    config.add_route('atramhasis.rdf_individual_export_turtle', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='text/turtle')
-    config.add_route('atramhasis.rdf_individual_export_turtle_x', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}',
+    config.add_route('atramhasis.rdf_individual_export_turtle_x', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='application/x-turtle')
     config.add_route('atramhasis.rdf_conceptscheme_jsonld', pattern='/conceptschemes/{scheme_id}',
                      accept='application/ld+json')
-    config.add_route('atramhasis.rdf_individual_jsonld', pattern='/conceptschemes/{scheme_id}/c/{c_id:\\d{1,9}}',
+    config.add_route('atramhasis.rdf_individual_jsonld', pattern='/conceptschemes/{scheme_id}/c/{c_id}',
                      accept='application/ld+json')
     config.add_route('atramhasis.providers', pattern='/providers')
     config.add_route('atramhasis.provider', pattern='/providers/{id}')
