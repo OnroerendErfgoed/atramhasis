@@ -18,6 +18,7 @@ from sqlalchemy.orm import sessionmaker
 
 from atramhasis.cache import list_region
 from atramhasis.cache import tree_region
+from atramhasis.skos import IDGenerationStrategy
 from fixtures import data
 from fixtures import materials as material_data
 
@@ -98,6 +99,21 @@ def fill_db():
                 ),
                 ConceptScheme(id=9, uri='urn:x-vioe:test'),
                 session)
+            import_provider(
+                DictionaryProvider(
+                    {'id': 'manual-ids', 'default_language': 'nl'},
+                    [{'id': 'manual-1', 'uri': 'urn:x-skosprovider:manual/manual-1'},
+                     {
+                         'id': 'manual-2',
+                         'uri': 'urn:x-skosprovider:manual/manual-2',
+                         'labels': [
+                             {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
+                         ],
+                     }]
+                ),
+                ConceptScheme(id=10, uri='urn:x-vioe:manual'),
+                session,
+            )
             session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
             for scheme_id in (5, 6, 7, 8):
                 session.add(
@@ -193,6 +209,14 @@ def create_registry(request):
         {'id': 'MISSING_LABEL', 'conceptscheme_id': 9},
         request.db
     )
+    manual_ids = SQLAlchemyProvider(
+        {
+            'id': 'manual-ids',
+            'conceptscheme_id': 10,
+            'atramhasis.id_generation_strategy': IDGenerationStrategy.MANUAL
+        },
+        request.db
+    )
 
     registry.register_provider(trees)
     registry.register_provider(geo)
@@ -200,4 +224,5 @@ def create_registry(request):
     registry.register_provider(materials)
     registry.register_provider(test)
     registry.register_provider(missing_label)
+    registry.register_provider(manual_ids)
     return registry

@@ -240,6 +240,53 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['type'], 'concept')
 
+    def test_add_update_concept_manual_id(self):
+        json_value['id'] = 'manual-3'
+        json_value['sources'][0]['citation'] = 'short'
+        res = self.testapp.post_json(
+            '/conceptschemes/manual-ids/c',
+            headers=self._get_default_headers(),
+            params=json_value,
+        )
+        self.assertEqual(201, res.status_code)
+        res_json = res.json
+        self.assertDictEqual(
+            {
+                'id': 'manual-3',
+                'type': 'concept', 
+                'uri': 'urn:x-skosprovider:manual-ids:manual-3',
+                'label': 'The Larch',
+                'concept_scheme': {
+                    'uri': 'urn:x-vioe:manual', 'labels': []
+                }, 
+                'labels': [
+                    {'label': 'The Larch', 'type': 'prefLabel', 'language': 'en'}, 
+                    {'label': 'a', 'type': 'sortLabel', 'language': 'en'}
+                ], 
+                'notes': [], 
+                'sources': [
+                    {'citation': 'short', 'markup': None}
+                ],
+                'narrower': [], 
+                'broader': [],
+                'related': [], 
+                'member_of': [],
+                'subordinate_arrays': [], 
+                'matches': {
+                    'close': [], 'exact': [], 'related': [], 'broad': [], 'narrow': []
+                }
+            },
+            res_json
+        )
+        res_json['labels'][0]['label'] = 'updated'
+        res = self.testapp.put_json(
+            '/conceptschemes/manual-ids/c/manual-3',
+            headers=self._get_default_headers(),
+            params=res_json,
+        )
+        self.assertEqual(200, res.status_code)
+        self.assertEqual('updated', res.json['label'])
+
     def test_add_concept_empty_conceptscheme(self):
         res = self.testapp.post_json('/conceptschemes/STYLES/c', headers=self._get_default_headers(),
                                      params=json_value)
@@ -496,7 +543,7 @@ class RestFunctionalTests(FunctionalTests):
             headers=self._get_default_headers(),
             status=200
         )
-        self.assertEqual(6, len(response.json))
+        self.assertEqual(7, len(response.json))
         response = self.testapp.get(
             url='/providers?subject=biology',
             headers=self._get_default_headers(),
