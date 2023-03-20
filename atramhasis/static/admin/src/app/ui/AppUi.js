@@ -70,6 +70,7 @@ define([
     conceptController: null,
     languageController: null,
     listController: null,
+    providerController: null,
     _searchPane: null,
     _conceptContainer: null,
     _slideMenu: null,
@@ -94,7 +95,8 @@ define([
         parent: this,
         languageController: this.languageController,
         listController: this.listController,
-        conceptSchemeController: this.conceptSchemeController
+        conceptSchemeController: this.conceptSchemeController,
+        providerController: this.providerController
       });
       on(this._manageConceptDialog, 'new.concept.save', lang.hitch(this, function(evt) {
         this._saveNewConcept(this._manageConceptDialog, evt.concept, evt.schemeId);

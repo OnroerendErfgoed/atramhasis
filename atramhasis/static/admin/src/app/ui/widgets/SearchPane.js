@@ -152,7 +152,7 @@ define([
       domUtils.addOptionsToSelect(this.conceptSchemeSelect, {
         data: options,
         idProperty: 'id',
-        labelProperty: 'name'
+        labelProperty: 'label'
       });
 
       this.own(
