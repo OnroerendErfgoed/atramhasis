@@ -13,6 +13,7 @@ define([
   './controllers/ConceptController',
   './controllers/LanguageController',
   './controllers/ListController',
+  './controllers/ProviderController',
   'dGrowl'
 ], function (
   declare,
@@ -24,6 +25,7 @@ define([
   ConceptController,
   LanguageController,
   ListController,
+  ProviderController,
   dGrowl
 ) {
   return declare([WidgetBase], {
@@ -46,6 +48,7 @@ define([
       this._controllers.conceptController = new ConceptController({});
       this._controllers.languageController = new LanguageController({});
       this._controllers.listController = new ListController({});
+      this._controllers.providerController = new ProviderController({});
 
       //Start message handler
       new dGrowl({
@@ -67,11 +70,13 @@ define([
       console.debug('App::startup');
 
       var conceptSchemePromise = this._controllers.conceptSchemeController.loadConceptSchemeStores();
+      var providerPromise = this._controllers.providerController.loadProviders();
 
         all({
-          conceptScheme: conceptSchemePromise
+          conceptScheme: conceptSchemePromise,
+          providers: providerPromise
         }).then(
-          lang.hitch(this, function(results) {
+          lang.hitch(this, function() {
             new AppUi({
               loadingContainer: this.appConfig.loadingContainer,
               appContainer: this.appConfig.appContainer,
@@ -79,7 +84,8 @@ define([
               conceptSchemeController: this._controllers.conceptSchemeController,
               conceptController: this._controllers.conceptController,
               languageController: this._controllers.languageController,
-              listController: this._controllers.listController
+              listController: this._controllers.listController,
+              providerController: this._controllers.providerController
             }, this.appConfig.appContainer).startup();
           }),
           lang.hitch(this, function(error) {

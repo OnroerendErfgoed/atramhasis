@@ -54,6 +54,15 @@ define([
       })
     },
 
+
+    getConceptSchemeFromList: function(id) {
+      console.debug('ConceptSchemeController::getConceptSchemeFromList', id);
+      var conceptschemeList = array.filter(this.conceptSchemeList, function(item){
+        return item.id === id;
+      });
+      return conceptschemeList.length > 0 ? conceptschemeList[0] : null;
+    },
+
     editConceptScheme: function(concept){
       console.debug('ConceptSchemeController::editConceptScheme', concept);
       var jData = json.stringify(concept);
@@ -71,12 +80,8 @@ define([
       return this.getConceptSchemes().then(lang.hitch(this, function (schemes) {
         var externalSchemelist = [];
         array.forEach(schemes, lang.hitch(this, function (scheme) {
-          if(array.indexOf(scheme.subject, 'external') == -1){
-            this.conceptSchemeList.push({name: scheme.label, id: scheme.id});
-            //this.stores[scheme.id] = new JsonRest({
-            //  'target': this._target + '/' + scheme.id + '/c/',
-            //  'accepts': 'application/json'
-            //});
+          if(array.indexOf(scheme.subject, 'external') === -1){
+            this.conceptSchemeList.push(scheme);
           }else{
             externalSchemelist.push(scheme);
           }
