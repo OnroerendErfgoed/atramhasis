@@ -4,6 +4,7 @@ that abstract all interactions with the database away from the views.
 
 :versionadded: 0.4.1
 """
+import typing
 import uuid
 
 from datetime import date
@@ -27,7 +28,10 @@ from sqlalchemy.orm import joinedload
 from atramhasis.data import popular_concepts
 from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
+from atramhasis.data.models import Provider
+
+from typing import List
 
 
 class DataManager:
@@ -383,3 +387,21 @@ class CountsManager(DataManager):
             .order_by(desc('counted_at'))
         ).scalar_one()
         return recent
+
+
+class ProviderDataManager(DataManager):
+    """A data manager for managing Providers."""
+
+    def get_provider_by_id(self, provider_id):
+        return self.session.execute(
+            select(Provider)
+            .filter(Provider.id == provider_id)
+        ).scalar_one()
+
+    def get_all_providers(self) -> List[Provider]:
+        """
+        Retrieve all providers from the database.
+
+        :return: All providers
+        """
+        return self.session.execute(select(Provider)).scalars().all()

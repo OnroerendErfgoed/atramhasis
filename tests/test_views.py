@@ -27,7 +27,7 @@ from atramhasis.errors import ConceptNotFoundException
 from atramhasis.errors import ConceptSchemeNotFoundException
 from atramhasis.errors import SkosRegistryNotFoundException
 from atramhasis.errors import ValidationError
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.views.crud import AtramhasisCrud
 from atramhasis.views.views import AtramhasisAdminView
 from atramhasis.views.views import AtramhasisListView

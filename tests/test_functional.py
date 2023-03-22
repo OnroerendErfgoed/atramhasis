@@ -9,12 +9,14 @@ from pyramid.paster import get_appsettings
 from pyramid.request import Request
 from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.providers import DictionaryProvider
+from skosprovider_sqlalchemy.models import ConceptScheme
 from sqlalchemy.orm import sessionmaker
 from webtest import TestApp
 
 from atramhasis import main
 from atramhasis.cache import list_region
 from atramhasis.cache import tree_region
+from atramhasis.data.models import Provider
 from atramhasis.protected_resources import ProtectedResourceEvent
 from atramhasis.protected_resources import ProtectedResourceException
 from fixtures.data import chestnut
@@ -537,6 +539,153 @@ class RestFunctionalTests(FunctionalTests):
     def test_get_conceptschemes(self):
         self.testapp.get('/conceptschemes', headers=self._get_default_headers(), status=200)
 
+    def test_create_provider_openapi_validation(self):
+        response = self.testapp.post_json(
+            url='/providers',
+            params={
+                'uri_pattern': 'invalid',
+                'subject': 'wrong'
+            },
+            headers=self._get_default_headers(),
+            expect_errors=True
+        )
+        self.assertEqual(
+            {
+                'message': 'Request was not valid for schema.',
+                'errors': [
+                    "<root>: 'conceptscheme_uri' is a required property",
+                    "uri_pattern: 'invalid' does not match '.*%s.*'",
+                    "subject: 'wrong' is not of type array"
+                ]},
+            response.json
+        )
+
+    def test_create_minimal_provider(self):
+        response = self.testapp.post_json(
+            url='/providers',
+            params={
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s'
+            },
+            headers=self._get_default_headers(),
+            status=201
+        )
+        self.assertEqual(
+            {
+                'id': response.json["id"],
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': None,
+                'subject': [],
+                'force_display_language': None,
+                'metadata': {},
+                'id_generation_strategy': 'NUMERIC',
+                'expand_strategy': 'recurse'
+            },
+            response.json
+        )
+
+    def test_create_full_provider(self):
+        response = self.testapp.post_json(
+            url='/providers',
+            params={
+                'id': 'ERFGOEDTYPES',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': 'NL',
+                'force_display_language': 'NL',
+                'subject': ['hidden'],
+                'metadata': {'Info': 'Extra data about this provider'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit',
+            },
+            headers=self._get_default_headers(),
+            status=201
+        )
+        self.assertEqual(
+            {
+                'id': 'ERFGOEDTYPES',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': 'NL',
+                'force_display_language': 'NL',
+                'subject': ['hidden'],
+                'metadata': {'Info': 'Extra data about this provider'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit',
+            },
+            response.json
+        )
+
+    def test_update_provider(self):
+        conceptscheme = ConceptScheme(uri='https://id.erfgoed.net/thesauri/conceptschemes')
+        provider = Provider(
+            id='ERFGOEDTYPES',
+            uri_pattern='https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+            conceptscheme=conceptscheme,
+            meta={},
+        )
+        self.session.add(provider)
+        self.session.flush()
+
+        response = self.testapp.put_json(
+            url='/providers/ERFGOEDTYPES',
+            params={
+                'id': 'ERFGOEDTYPES',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/updated/%s',
+                'default_language': 'NL',
+                'subject': ['hidden'],
+                'force_display_language': 'NL',
+                'metadata': {'extra': 'test-extra'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit'
+            },
+            headers=self._get_default_headers(),
+            status=200
+        )
+
+        self.assertEqual(
+            {
+                'id': 'ERFGOEDTYPES',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/updated/%s',
+                'default_language': 'NL',
+                'subject': ['hidden'],
+                'force_display_language': 'NL',
+                'metadata': {'extra': 'test-extra'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit'
+            },
+            response.json
+        )
+
+    def test_delete_provider(self):
+        conceptscheme = ConceptScheme(uri='https://id.erfgoed.net/thesauri/conceptschemes')
+        provider = Provider(
+            id='ERFGOEDTYPES',
+            uri_pattern='https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+            conceptscheme=conceptscheme,
+            meta={},
+        )
+        self.session.add(provider)
+        self.session.flush()
+
+        self.session.expire_all()
+        self.assertIsNotNone(self.session.get(Provider, 'ERFGOEDTYPES'))
+
+        self.testapp.delete(
+            url='/providers/ERFGOEDTYPES',
+            headers=self._get_default_headers(),
+            status=204
+        )
+        self.session.expire_all()
+        self.assertIsNone(self.session.get(Provider, 'ERFGOEDTYPES'))
+
     def test_get_providers(self):
         response = self.testapp.get(
             url='/providers',
@@ -558,7 +707,8 @@ class RestFunctionalTests(FunctionalTests):
                     'id': 'TEST',
                     'subject': ['biology'],
                     'type': 'DictionaryProvider',
-                    'uri_pattern': 'urn:x-skosprovider:%s:%s'
+                    'uri_pattern': 'urn:x-skosprovider:%s:%s',
+                    'metadata': {},
                 }
             ],
             response.json)
@@ -578,7 +728,9 @@ class RestFunctionalTests(FunctionalTests):
                 'default_language': None,
                 'subject': [],
                 'force_display_language': None,
-                'id_generation_strategy': 'NUMERIC'
+                'id_generation_strategy': 'NUMERIC',
+                'metadata': {},
+                'expand_strategy': 'recurse'
             },
             response.json
         )

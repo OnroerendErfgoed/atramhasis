@@ -7,6 +7,7 @@ import time
 import colander
 import transaction
 from pyramid.httpexceptions import HTTPMethodNotAllowed
+from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid_skosprovider.views import ProviderView
@@ -16,8 +17,10 @@ from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import NoResultFound
 
+from atramhasis import mappers
 from atramhasis.audit import audit
 from atramhasis.cache import invalidate_scheme_cache
+from atramhasis.data.datamanagers import ProviderDataManager
 from atramhasis.errors import ConceptNotFoundException
 from atramhasis.errors import ConceptSchemeNotFoundException
 from atramhasis.errors import SkosRegistryNotFoundException
@@ -25,7 +28,8 @@ from atramhasis.errors import ValidationError
 from atramhasis.mappers import map_concept
 from atramhasis.mappers import map_conceptscheme
 from atramhasis.protected_resources import protected_operation
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
+from atramhasis.utils import db_provider_to_skosprovider
 from atramhasis.utils import from_thing
 from atramhasis.utils import internal_providers_only
 
@@ -281,3 +285,49 @@ class AtramhasisCrud:
     )
     def get_provider(self):
         return self.request.skos_registry.get_provider(self.request.matchdict["id"])
+
+    @view_config(
+        route_name='atramhasis.providers',
+        permission='edit',
+        request_method='POST',
+        openapi=True
+    )
+    def add_provider(self):
+        json_data = self.request.openapi_validated.body
+        db_provider = mappers.map_provider(json_data)
+        if not db_provider.id:
+            self.request.db.add(db_provider.conceptscheme)
+            self.request.db.flush()
+            db_provider.id = str(db_provider.conceptscheme.id)
+
+        self.request.db.add(db_provider)
+        self.request.db.flush()
+
+        self.request.response.status = 201
+        return db_provider_to_skosprovider(db_provider)
+
+    @view_config(
+        route_name='atramhasis.provider',
+        permission='edit',
+        request_method='PUT',
+        openapi=True
+    )
+    def update_provider(self):
+        manager = ProviderDataManager(self.request.db)
+        db_provider = manager.get_provider_by_id(self.request.matchdict["id"])
+        json_data = self.request.openapi_validated.body
+        db_provider = mappers.map_provider(json_data, provider=db_provider)
+        self.request.db.flush()
+        return db_provider_to_skosprovider(db_provider)
+
+    @view_config(
+        route_name='atramhasis.provider',
+        permission='delete',
+        request_method='DELETE',
+        openapi=True
+    )
+    def delete_provider(self):
+        manager = ProviderDataManager(self.request.db)
+        db_provider = manager.get_provider_by_id(self.request.matchdict["id"])
+        self.request.db.delete(db_provider)
+        return HTTPNoContent()
