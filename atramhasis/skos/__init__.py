@@ -151,9 +151,10 @@ def create_registry(request):
             {
                 'id': 'BLUEBIRDS',
                 'conceptscheme_id': 9,
-                'atramhasis.id_generation_strategy': 'manual'
+                'atramhasis.id_generation_strategy': IDGenerationStrategy.MANUAL
             },
-            request.db
+            request.db,
+            uri_generator=UriPatternGenerator('https://id.bluebirds.org/%s')
         )
 
         # use 'subject': ['external'] for read only external providers
