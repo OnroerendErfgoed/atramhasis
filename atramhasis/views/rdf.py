@@ -49,7 +49,7 @@ class AtramhasisRDF:
             raise ConceptSchemeNotFoundException(self.scheme_id)   # pragma: no cover
         if 'c_id' in self.request.matchdict.keys():
             self.c_id = self.request.matchdict['c_id']
-            if not self.c_id.isdigit() or not self.provider.get_by_id(int(self.c_id)):
+            if not self.provider.get_by_id(self.c_id):
                 raise ConceptNotFoundException(self.c_id)
 
     @audit

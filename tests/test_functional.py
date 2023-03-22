@@ -852,6 +852,26 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 
+    def test_rdf_individual_jsonld_ext_manual(self):
+        res = self.testapp.get('/conceptschemes/manual-ids/c/manual-1.jsonld')
+        self.assertEqual('200 OK', res.status)
+        self.assertEqual('application/ld+json', res.content_type)
+
+    def test_rdf_individual_xml_ext_manual(self):
+        rdf_response = self.testapp.get('/conceptschemes/manual-ids/c/manual-2.rdf')
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('application/rdf+xml', rdf_response.content_type)
+
+    def test_rdf_individual_turtle_manual(self):
+        ttl_response = self.testapp.get('/conceptschemes/manual-ids/c/manual-1.ttl')
+        self.assertEqual('200 OK', ttl_response.status)
+        self.assertEqual('text/turtle', ttl_response.content_type)
+
+    def test_rdf_individual_turtle_manual_uri(self):
+        ttl_response = self.testapp.get('/conceptschemes/manual-ids/c/http://id.manual.org/manual/68.ttl')
+        self.assertEqual('200 OK', ttl_response.status)
+        self.assertEqual('text/turtle', ttl_response.content_type)
+
     def test_rdf_individual_not_found(self):
         res = self.testapp.get('/conceptschemes/TREES/c/test.ttl', headers={'Accept': 'text/turtle'}, status=404,
                                expect_errors=True)

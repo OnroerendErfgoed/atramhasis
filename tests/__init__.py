@@ -109,6 +109,13 @@ def fill_db():
                          'labels': [
                              {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
                          ],
+                     },
+                     {
+                         'id': 'http://id.manual.org/manual/68',
+                         'uri': 'http://id.manual.org/manual/68',
+                         'labels': [
+                             {'type': 'prefLabel', 'language': 'nl', 'label': 'handmatig'}
+                         ],
                      }]
                 ),
                 ConceptScheme(id=10, uri='urn:x-vioe:manual'),

@@ -17,6 +17,7 @@ from tests import setup_db
 
 test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.rdf')
 test_data_ttl = os.path.join(TEST_DIR, 'data', 'trees.ttl')
+test_data_ttl_string_id = os.path.join(TEST_DIR, 'data', 'bluebirds.ttl')
 test_data_json = os.path.join(TEST_DIR, 'data', 'trees.json')
 test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 
@@ -84,6 +85,21 @@ class ImportTests(DbTest):
         self.assertIn('Mornay', eb.notes[0].note)
         self.assertEqual('note', eb.notes[0].type)
 
+    def _check_parrots(self, conceptscheme_label):
+        sql_prov = SQLAlchemyProvider({'id': 'PARROTS', 'conceptscheme_id': 1}, self.session)
+
+        bird = sql_prov.get_by_id('http://id.parrots.org/bird')
+        assert sql_prov.get_by_uri('http://id.parrots.org/bird') == \
+                sql_prov.get_by_id('http://id.parrots.org/bird')
+        parrot = sql_prov.get_by_id('parrot')
+        assert parrot 
+        assert not sql_prov.get_by_id('bird')
+        blue = sql_prov.get_by_id('norwegianblue')
+        assert blue in parrot.narrower
+        reiger = sql_prov.get_by_id('579A439C-1A7A-476A-92C3-8A74ABD6B3DB')
+        blauwereiger = sql_prov.get_by_id('blauwereiger')
+        assert blauwereiger in reiger.narrower
+
     def test_import_rdf(self):
         sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url']]
         import_file.main(sys.argv)
@@ -95,6 +111,11 @@ class ImportTests(DbTest):
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_trees('Different types of trees')
+
+    def test_import_ttl_string_id(self):
+        sys.argv = ['import_file', '--from', test_data_ttl_string_id, '--to', SETTINGS['sqlalchemy.url']]
+        import_file.main(sys.argv)
+        tests.db_filled = True
 
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json,
