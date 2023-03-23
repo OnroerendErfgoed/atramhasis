@@ -147,6 +147,16 @@ def create_registry(request):
             uri_generator=UriPatternGenerator('https://id.erfgoed.net/thesauri/soorten/%s')
         )
 
+        bluebirds = SQLAlchemyProvider(
+            {
+                'id': 'BLUEBIRDS',
+                'conceptscheme_id': 9,
+                'atramhasis.id_generation_strategy': IDGenerationStrategy.MANUAL
+            },
+            request.db,
+            uri_generator=UriPatternGenerator('https://id.bluebirds.org/%s')
+        )
+
         # use 'subject': ['external'] for read only external providers
         # (only available in REST service)
 
@@ -170,6 +180,7 @@ def create_registry(request):
         registry.register_provider(heritagetypes)
         registry.register_provider(periods)
         registry.register_provider(species)
+        registry.register_provider(bluebirds)
         registry.register_provider(aat)
         registry.register_provider(tgn)
         return registry

@@ -26,6 +26,7 @@ def main(argv=sys.argv):
     from fixtures.heritagetypes import heritagetypes
     from fixtures.periods import periods
     from fixtures.species import species
+    from fixtures.bluebirds import bluebirds
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]
@@ -126,6 +127,18 @@ def main(argv=sys.argv):
             labels=[
                 Label('Soorten', 'prefLabel', 'nl'),
                 Label('Species', 'prefLabel', 'en')
+            ]
+        ),
+        db_session
+    )
+    import_provider(
+        bluebirds,
+        ConceptScheme(
+            id=9,
+            uri='https://id.bluebirds.org',
+            labels=[
+                Label('Blauwe vogels', 'prefLabel', 'nl'),
+                Label('Blue birds', 'prefLabel', 'en')
             ]
         ),
         db_session
