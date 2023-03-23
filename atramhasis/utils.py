@@ -1,6 +1,7 @@
 """
 Module containing utility functions used by Atramhasis.
 """
+import contextlib
 import copy
 from collections import deque
 
@@ -13,10 +14,10 @@ from skosprovider.skos import Note
 from skosprovider.skos import Source
 from skosprovider.uri import UriPatternGenerator
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+from sqlalchemy import engine_from_config
 from sqlalchemy import orm
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import sessionmaker
 
-from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
 
 
@@ -142,3 +143,18 @@ def db_provider_to_skosprovider(db_provider: Provider) -> SQLAlchemyProvider:
         expand_strategy=db_provider.expand_strategy.value,
         uri_generator=UriPatternGenerator(db_provider.uri_pattern),
     )
+
+
+@contextlib.contextmanager
+def db_session(settings):
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    session_maker = sessionmaker(bind=engine)
+    session = session_maker()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
