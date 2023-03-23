@@ -1,6 +1,14 @@
 in progress
 -----------
 
+This releases is a new major release with some new features and some backwards
+incompatible changes that require a careful upgrade and some manual
+intervention. Lots of dependencies have been updated, so please test and
+evaluate your own integration carefully before updating a production version.
+
+- It is now possible to have non-numeric identifiers for concepts and collections. 
+  The current default (numeric ids) is still supported, but it's now also possible 
+  to use a UUID or assign one manually upon creation of a concept. (#732)
 - Jinja2 3.x is now the expected template engine. Users who have overridden and
   customised many templates might need to update them. (#747)
 - Easier and more flexible configuration of analytics snippets, such as 
