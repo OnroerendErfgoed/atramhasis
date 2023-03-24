@@ -4,11 +4,10 @@ that abstract all interactions with the database away from the views.
 
 :versionadded: 0.4.1
 """
-import typing
 import uuid
-
 from datetime import date
 from datetime import datetime
+from typing import List
 
 import dateutil.relativedelta
 from skosprovider_sqlalchemy.models import Collection
@@ -23,6 +22,7 @@ from skosprovider_sqlalchemy.models import Thing
 from sqlalchemy import desc
 from sqlalchemy import func
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
 from atramhasis.data import popular_concepts
@@ -30,8 +30,7 @@ from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
 from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
-
-from typing import List
+from atramhasis.scripts import delete_scheme
 
 
 class DataManager:
@@ -39,8 +38,8 @@ class DataManager:
     A DataManager abstracts all interactions with the database for a certain model.
     """
 
-    def __init__(self, session):
-        self.session = session
+    def __init__(self, session: Session) -> None:
+        self.session: Session = session
 
 
 class ConceptSchemeManager(DataManager):
@@ -405,3 +404,12 @@ class ProviderDataManager(DataManager):
         :return: All providers
         """
         return self.session.execute(select(Provider)).scalars().all()
+
+    def delete(self, provider: Provider) -> None:
+        """
+        Delete a provider and its related conceptscheme.
+
+        :param provider: The provider to be deleted
+        """
+        self.session.delete(provider)
+        delete_scheme.delete_scheme(self.session, provider.conceptscheme_id)

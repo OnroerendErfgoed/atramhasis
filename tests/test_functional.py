@@ -674,6 +674,7 @@ class RestFunctionalTests(FunctionalTests):
         )
         self.session.add(provider)
         self.session.flush()
+        conceptscheme_id = conceptscheme.id
 
         self.session.expire_all()
         self.assertIsNotNone(self.session.get(Provider, 'ERFGOEDTYPES'))
@@ -685,6 +686,7 @@ class RestFunctionalTests(FunctionalTests):
         )
         self.session.expire_all()
         self.assertIsNone(self.session.get(Provider, 'ERFGOEDTYPES'))
+        self.assertIsNone(self.session.get(ConceptScheme, conceptscheme_id))
 
     def test_get_providers(self):
         response = self.testapp.get(

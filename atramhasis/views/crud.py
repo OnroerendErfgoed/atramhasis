@@ -288,7 +288,7 @@ class AtramhasisCrud:
 
     @view_config(
         route_name='atramhasis.providers',
-        permission='edit',
+        permission='add-provider',
         request_method='POST',
         openapi=True
     )
@@ -308,7 +308,7 @@ class AtramhasisCrud:
 
     @view_config(
         route_name='atramhasis.provider',
-        permission='edit',
+        permission='edit-provider',
         request_method='PUT',
         openapi=True
     )
@@ -322,12 +322,12 @@ class AtramhasisCrud:
 
     @view_config(
         route_name='atramhasis.provider',
-        permission='delete',
+        permission='delete_provider',
         request_method='DELETE',
         openapi=True
     )
     def delete_provider(self):
         manager = ProviderDataManager(self.request.db)
         db_provider = manager.get_provider_by_id(self.request.matchdict["id"])
-        self.request.db.delete(db_provider)
+        manager.delete(db_provider)
         return HTTPNoContent()

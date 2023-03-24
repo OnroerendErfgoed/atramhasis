@@ -33,7 +33,7 @@ class DeleteSchemeTest(DbTest):
     def test_delete(self):
         with db_session() as session:
             for scheme_id in range(1, 10):
-                delete_scheme.delete_scheme(settings, scheme_id)
+                delete_scheme.delete_scheme(session, scheme_id)
             assert len(session.execute(select(ConceptScheme)).all()) == 0
             assert len(session.execute(select(Concept)).all()) == 0
             assert len(session.execute(select(Collection)).all()) == 0

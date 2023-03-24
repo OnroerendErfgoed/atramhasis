@@ -30,6 +30,7 @@ def upgrade():
         sa.ForeignKeyConstraint(
             ["conceptscheme_id"],
             ["conceptscheme.id"],
+            ondelete="CASCADE",
         ),
         sa.PrimaryKeyConstraint("id"),
     )
