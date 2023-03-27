@@ -10,6 +10,10 @@ from skosprovider_sqlalchemy.models import MatchType
 from skosprovider_sqlalchemy.models import Source
 from sqlalchemy.exc import NoResultFound
 
+from atramhasis import mappers
+from atramhasis.data.models import ExpandStrategy
+from atramhasis.data.models import IDGenerationStrategy
+from atramhasis.data.models import Provider
 from atramhasis.mappers import map_concept
 from atramhasis.mappers import map_conceptscheme
 
@@ -302,3 +306,88 @@ class TestMappers(unittest.TestCase):
         self.assertFalse(hasattr(result_concept, 'members'))
         self.assertEqual('HTML', result_concept.notes[0].markup)
         self.assertEqual('HTML', result_concept.sources[0].markup)
+
+
+def test_map_provider_new_provider_full():
+    data = {
+        'metadata': {'meta': 'meta'},
+        'default_language': 'nl',
+        'force_display_language': 'nl-force',
+        'id_generation_strategy': 'GUID',
+        'subject': ['hidden'],
+        'uri_pattern': 'uri-pattern',
+        'expand_strategy': 'visit',
+        'conceptscheme_uri': 'conceptscheme-uri',
+        'id': 'p-id'
+    }
+    result = mappers.map_provider(data)
+    assert result.conceptscheme is not None
+    assert result.conceptscheme.uri == 'conceptscheme-uri'
+    assert result.id == 'p-id'
+    assert result.meta == {
+        'atramhasis.force_display_language': 'nl-force',
+        'atramhasis.id_generation_strategy': 'GUID',
+        'default_language': 'nl',
+        'meta': 'meta',
+        'subject': ['hidden']
+    }
+    assert result.default_language == 'nl'
+    assert result.force_display_language == 'nl-force'
+    assert result.id_generation_strategy is IDGenerationStrategy.GUID
+    assert result.subject == ['hidden']
+    assert result.uri_pattern == 'uri-pattern'
+    assert result.expand_strategy is ExpandStrategy.VISIT
+
+
+def test_map_provider_new_provider_minimal():
+    data = {
+        'conceptscheme_uri': 'conceptscheme-uri',
+        'uri_pattern': 'uri-pattern',
+    }
+    result = mappers.map_provider(data)
+    assert result.conceptscheme is not None
+    assert result.conceptscheme.uri == 'conceptscheme-uri'
+    assert result.id is None
+    assert result.meta == {
+        'atramhasis.force_display_language': None,
+        'atramhasis.id_generation_strategy': 'NUMERIC',
+        'default_language': None,
+        'subject': []
+    }
+    assert result.default_language is None
+    assert result.force_display_language is None
+    assert result.id_generation_strategy is IDGenerationStrategy.NUMERIC
+    assert result.subject == []
+    assert result.uri_pattern == 'uri-pattern'
+    assert result.expand_strategy is ExpandStrategy.RECURSE
+
+
+def test_map_provider_existing():
+    data = {
+        'metadata': {'meta': 'meta'},
+        'default_language': 'nl',
+        'force_display_language': 'nl-force',
+        'id_generation_strategy': 'GUID',
+        'subject': ['hidden'],
+        'uri_pattern': 'uri-pattern',
+        'expand_strategy': 'visit',
+        'id': 'p-id'
+    }
+    existing = Provider(id='exists')
+    result = mappers.map_provider(data, existing)
+    assert result is existing
+    assert result.conceptscheme is None
+    assert result.id == 'exists'
+    assert result.meta == {
+        'atramhasis.force_display_language': 'nl-force',
+        'atramhasis.id_generation_strategy': 'GUID',
+        'default_language': 'nl',
+        'meta': 'meta',
+        'subject': ['hidden']
+    }
+    assert result.default_language == 'nl'
+    assert result.force_display_language == 'nl-force'
+    assert result.id_generation_strategy is IDGenerationStrategy.GUID
+    assert result.subject == ['hidden']
+    assert result.uri_pattern == 'uri-pattern'
+    assert result.expand_strategy is ExpandStrategy.VISIT

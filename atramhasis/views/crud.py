@@ -18,6 +18,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import NoResultFound
 
 from atramhasis import mappers
+from atramhasis import utils
 from atramhasis.audit import audit
 from atramhasis.cache import invalidate_scheme_cache
 from atramhasis.data.datamanagers import ProviderDataManager
@@ -25,6 +26,7 @@ from atramhasis.errors import ConceptNotFoundException
 from atramhasis.errors import ConceptSchemeNotFoundException
 from atramhasis.errors import SkosRegistryNotFoundException
 from atramhasis.errors import ValidationError
+from atramhasis.json_processors import provider
 from atramhasis.mappers import map_concept
 from atramhasis.mappers import map_conceptscheme
 from atramhasis.protected_resources import protected_operation
@@ -293,18 +295,12 @@ class AtramhasisCrud:
         openapi=True
     )
     def add_provider(self):
-        json_data = self.request.openapi_validated.body
-        db_provider = mappers.map_provider(json_data)
-        if not db_provider.id:
-            self.request.db.add(db_provider.conceptscheme)
-            self.request.db.flush()
-            db_provider.id = str(db_provider.conceptscheme.id)
-
-        self.request.db.add(db_provider)
-        self.request.db.flush()
-
-        self.request.response.status = 201
-        return db_provider_to_skosprovider(db_provider)
+        db_provider = provider.create_provider(
+            json_data=self.request.openapi_validated.body,
+            session=self.request.db,
+        )
+        self.request.response.status_code = 201
+        return utils.db_provider_to_skosprovider(db_provider)
 
     @view_config(
         route_name='atramhasis.provider',
@@ -313,12 +309,12 @@ class AtramhasisCrud:
         openapi=True
     )
     def update_provider(self):
-        manager = ProviderDataManager(self.request.db)
-        db_provider = manager.get_provider_by_id(self.request.matchdict["id"])
-        json_data = self.request.openapi_validated.body
-        db_provider = mappers.map_provider(json_data, provider=db_provider)
-        self.request.db.flush()
-        return db_provider_to_skosprovider(db_provider)
+        db_provider = provider.update_provider(
+            provider_id=self.request.matchdict["id"],
+            json_data=self.request.openapi_validated.body,
+            session=self.request.db,
+        )
+        return utils.db_provider_to_skosprovider(db_provider)
 
     @view_config(
         route_name='atramhasis.provider',
@@ -327,7 +323,8 @@ class AtramhasisCrud:
         openapi=True
     )
     def delete_provider(self):
-        manager = ProviderDataManager(self.request.db)
-        db_provider = manager.get_provider_by_id(self.request.matchdict["id"])
-        manager.delete(db_provider)
+        provider.delete_provider(
+            provider_id=self.request.matchdict["id"],
+            session=self.request.db,
+        )
         return HTTPNoContent()

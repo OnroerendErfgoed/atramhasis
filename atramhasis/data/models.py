@@ -68,7 +68,9 @@ class Provider(Base):
     meta = Column('metadata', JSON, nullable=False)  # metadata is reserved in sqlalchemy
     expand_strategy = Column(Enum(ExpandStrategy))
 
-    conceptscheme = relationship(ConceptScheme, uselist=False)
+    conceptscheme = relationship(
+        ConceptScheme, uselist=False, single_parent=True, cascade='all, delete-orphan',
+    )
 
     @hybrid_property
     def default_language(self):

@@ -391,7 +391,7 @@ class CountsManager(DataManager):
 class ProviderDataManager(DataManager):
     """A data manager for managing Providers."""
 
-    def get_provider_by_id(self, provider_id):
+    def get_provider_by_id(self, provider_id) -> Provider:
         return self.session.execute(
             select(Provider)
             .filter(Provider.id == provider_id)
@@ -404,12 +404,3 @@ class ProviderDataManager(DataManager):
         :return: All providers
         """
         return self.session.execute(select(Provider)).scalars().all()
-
-    def delete(self, provider: Provider) -> None:
-        """
-        Delete a provider and its related conceptscheme.
-
-        :param provider: The provider to be deleted
-        """
-        self.session.delete(provider)
-        delete_scheme.delete_scheme(self.session, provider.conceptscheme_id)

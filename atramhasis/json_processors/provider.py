@@ -1,0 +1,37 @@
+from typing import Mapping
+
+from sqlalchemy.orm import Session
+
+from atramhasis import mappers
+from atramhasis.data.datamanagers import ProviderDataManager
+from atramhasis.data.models import Provider
+
+
+def create_provider(json_data: Mapping, session: Session) -> Provider:
+    """Process a provider JSON into a newly stored Provider."""
+    db_provider = mappers.map_provider(json_data)
+    if not db_provider.id:
+        # Store conceptscheme first so we can copy its id
+        session.add(db_provider.conceptscheme)
+        session.flush()
+        db_provider.id = str(db_provider.conceptscheme.id)
+
+    session.add(db_provider)
+    session.flush()
+
+    return db_provider
+
+
+def update_provider(provider_id: str, json_data: Mapping, session: Session) -> Provider:
+    """Process a JSON into to update an existing provider."""
+    manager = ProviderDataManager(session)
+    db_provider = manager.get_provider_by_id(provider_id)
+    db_provider = mappers.map_provider(json_data, provider=db_provider)
+    session.flush()
+    return db_provider
+
+
+def delete_provider(provider_id, session: Session) -> None:
+    manager = ProviderDataManager(session)
+    db_provider = manager.get_provider_by_id(provider_id)
+    session.delete(db_provider)
