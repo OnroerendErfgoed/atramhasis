@@ -20,7 +20,7 @@ from tests import fill_db
 from tests import setup_db
 
 TEST_DIR = os.path.dirname(__file__)
-settings = appconfig('config:' + os.path.join(TEST_DIR, 'conf_test.ini'))
+settings = appconfig('config:' + os.path.join(TEST_DIR, '../conf_test.ini'))
 
 
 def setUpModule():
