@@ -221,12 +221,12 @@ def create_conceptscheme_from_skos(conceptscheme):
     )
 
 
-def provider_to_db(provider, conceptscheme, session):
+def provider_to_db(provider, session, conceptscheme):
     """
     import provider data into the database
     """
     session.add(conceptscheme)
-    import_provider(provider, conceptscheme, session)
+    import_provider(provider, session, conceptscheme)
     session.commit()
 
 
@@ -265,7 +265,7 @@ def main(argv=sys.argv):
         cs = create_conceptscheme(cs_label, cs_uri)
     else:
         cs = create_conceptscheme_from_skos(provider.concept_scheme)
-    provider_to_db(provider, cs, session)
+    provider_to_db(provider, session, cs)
 
     # Get info to return to the user
     prov_id = input_name.upper()
