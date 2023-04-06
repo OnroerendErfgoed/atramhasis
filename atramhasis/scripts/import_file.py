@@ -21,7 +21,7 @@ from sqlalchemy.engine import url
 from sqlalchemy.orm import sessionmaker
 
 
-def file_to_rdf_provider(**kwargs):
+def file_to_rdf_provider(**kwargs) -> RDFProvider:
     """
     Create RDF provider from the input file
     """
@@ -46,7 +46,7 @@ def _create_provider_kwargs(**kwargs):
     return provider_kwargs
 
 
-def file_to_csv_provider(**kwargs):
+def file_to_csv_provider(**kwargs) -> SimpleCsvProvider:
     """
     Create CSV provider from the input file
     """
@@ -62,7 +62,7 @@ def file_to_csv_provider(**kwargs):
         )
 
 
-def file_to_json_provider(**kwargs):
+def file_to_json_provider(**kwargs) -> DictionaryProvider:
     """
     Create Dictionary provider from the input file
     """
