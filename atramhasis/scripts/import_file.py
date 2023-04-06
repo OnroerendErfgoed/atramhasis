@@ -7,11 +7,11 @@ import sys
 from rdflib import Graph
 from rdflib.util import SUFFIX_FORMAT_MAP
 from rdflib.util import guess_format
+from skosprovider.skos import ConceptScheme
 from skosprovider.providers import DictionaryProvider
 from skosprovider.providers import SimpleCsvProvider
 from skosprovider.uri import UriPatternGenerator
 from skosprovider_rdf.providers import RDFProvider
-from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.models import Label
 from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Source
@@ -35,16 +35,26 @@ def file_to_rdf_provider(**kwargs):
     )
 
 
+def _create_provider_kwargs(**kwargs):
+    provider_kwargs = {}
+    uri_pattern = kwargs.get('uri_pattern')
+    if uri_pattern:
+        provider_kwargs['uri_generator'] =  UriPatternGenerator(uri_pattern)
+    concept_scheme = kwargs.get('concept_scheme')
+    if concept_scheme:
+        provider_kwargs['concept_scheme'] = concept_scheme
+    return provider_kwargs
+
+
 def file_to_csv_provider(**kwargs):
     """
     Create CSV provider from the input file
     """
     input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
+    provider_kwargs = _create_provider_kwargs(**kwargs)
     with open(input_file) as ifile:
         reader = csv.reader(ifile)
-        uri_pattern = kwargs.get('uri_pattern')
-        provider_kwargs = {'uri_generator': UriPatternGenerator(uri_pattern)} if uri_pattern else {}
         return SimpleCsvProvider(
             {'id': input_name.upper()},
             reader,
@@ -58,10 +68,9 @@ def file_to_json_provider(**kwargs):
     """
     input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
+    provider_kwargs = _create_provider_kwargs(**kwargs)
     with open(input_file) as data_file:
         dictionary = json.load(data_file)
-    uri_pattern = kwargs.get('uri_pattern')
-    provider_kwargs = {'uri_generator': UriPatternGenerator(uri_pattern)} if uri_pattern else {}
     return DictionaryProvider(
         {'id': input_name.upper()},
         dictionary,
@@ -187,47 +196,14 @@ def conn_str_to_session(conn_str):
     )()
 
 
-def create_conceptscheme(conceptscheme_label, conceptscheme_uri):
+def create_conceptscheme(conceptscheme_uri: str, conceptscheme_label: str) -> ConceptScheme:
     """
-    Configure output conceptscheme based on arg values
-    """
-    cs = ConceptScheme(uri=conceptscheme_uri)
-    label = Label(conceptscheme_label, 'prefLabel', 'und')
-    cs.labels.append(label)
-    return cs
-
-
-def create_conceptscheme_from_skos(conceptscheme):
-    """
-    Configure output conceptscheme based on a `skosprovider.skos.ConceptScheme`
+    Create a conceptscheme based on arg values
     """
     return ConceptScheme(
-        uri=conceptscheme.uri,
-        labels=[
-            Label(label.label, label.type, label.language)
-            for label in conceptscheme.labels
-        ],
-        notes=[
-            Note(n.note, n.type, n.language, n.markup)
-            for n in conceptscheme.notes
-        ],
-        sources=[
-            Source(s.citation, s.markup)
-            for s in conceptscheme.sources
-        ],
-        languages=[
-            language for language in conceptscheme.languages
-        ]
-    )
-
-
-def provider_to_db(provider, session, conceptscheme):
-    """
-    import provider data into the database
-    """
-    session.add(conceptscheme)
-    import_provider(provider, session, conceptscheme)
-    session.commit()
+            uri=conceptscheme_uri,
+            labels = [{'label': conceptscheme_label}]
+        )
 
 
 def main(argv=sys.argv):
@@ -262,10 +238,9 @@ def main(argv=sys.argv):
     if args.cs_uri:
         cs_uri = args.cs_uri
         cs_label = args.cs_label if args.cs_label else input_name.capitalize()
-        cs = create_conceptscheme(cs_label, cs_uri)
-    else:
-        cs = create_conceptscheme_from_skos(provider.concept_scheme)
-    provider_to_db(provider, session, cs)
+        args.concept_scheme = create_conceptscheme(cs_uri, cs_label)
+    provider = file_to_provider_function(**vars(args))
+    cs = import_provider(provider, session)
 
     # Get info to return to the user
     prov_id = input_name.upper()
