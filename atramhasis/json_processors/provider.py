@@ -1,14 +1,22 @@
 from typing import Mapping
 
+from skosprovider.registry import Registry
 from sqlalchemy.orm import Session
 
 from atramhasis import mappers
 from atramhasis.data.datamanagers import ProviderDataManager
 from atramhasis.data.models import Provider
+from atramhasis.errors import ValidationError
 
 
-def create_provider(json_data: Mapping, session: Session) -> Provider:
+def create_provider(json_data: Mapping, session: Session, skos_registry: Registry) -> Provider:
     """Process a provider JSON into a newly stored Provider."""
+    for provider in skos_registry.get_providers():
+        if provider.get_vocabulary_uri() == json_data["conceptscheme_uri"]:
+            raise ValidationError(
+                "Provider could not be validated.",
+                [{"conceptscheme_uri": "Collides with existing provider."}],
+            )
     db_provider = mappers.map_provider(json_data)
     if not db_provider.id:
         # Store conceptscheme first so we can copy its id

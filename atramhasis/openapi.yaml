@@ -1149,7 +1149,7 @@ components:
           nullable: false
         uri_pattern:
           type: string
-          nullable: false
+          nullable: true
           pattern: .*%s.*
           maxLength: 200
         default_language:

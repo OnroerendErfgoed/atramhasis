@@ -298,6 +298,7 @@ class AtramhasisCrud:
         db_provider = provider.create_provider(
             json_data=self.request.openapi_validated.body,
             session=self.request.db,
+            skos_registry=self.request.skos_registry,
         )
         self.request.response.status_code = 201
         return utils.db_provider_to_skosprovider(db_provider)

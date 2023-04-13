@@ -731,6 +731,7 @@ class TestAtramhasisCrudView(unittest.TestCase):
 
     def test_add_provider(self):
         self.request.openapi_validated = RequestValidationResult(body={})
+        self.request.skos_registry = Registry()
         view = 'atramhasis.views.crud'
 
         with mock.patch(f'{view}.provider.create_provider', autospec=True) as processor, \
