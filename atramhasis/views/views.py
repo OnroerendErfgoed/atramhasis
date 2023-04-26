@@ -1,4 +1,5 @@
 import os
+import urllib
 
 from pyramid.httpexceptions import HTTPFound
 from pyramid.i18n import TranslationStringFactory
@@ -350,7 +351,7 @@ class AtramhasisView:
         if parent_tree_id is None:
             return str(concept_id)
         else:
-            return parent_tree_id + "." + str(concept_id)
+            return parent_tree_id + "|" + urllib.parse.quote(str(concept_id))
 
     @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
     def results_tree_html(self):

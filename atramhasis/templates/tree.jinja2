@@ -240,7 +240,7 @@
       }
 
       function expandPath(id) {
-        var ids = id.split('.');
+        var ids = id.split('|');
         currentIds = ids;
         var childrenArray = root.children;
         for (i = 0; i < (ids.length - 1); ++i) {
