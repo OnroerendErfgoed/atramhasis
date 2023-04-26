@@ -9,6 +9,7 @@ from skosprovider.providers import DictionaryProvider
 from skosprovider.registry import Registry
 from skosprovider.skos import ConceptScheme
 from skosprovider.uri import UriPatternGenerator
+from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy import engine_from_config
