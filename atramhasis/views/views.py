@@ -351,7 +351,7 @@ class AtramhasisView:
         if parent_tree_id is None:
             return str(concept_id)
         else:
-            return parent_tree_id + "|" + urllib.parse.quote(str(concept_id))
+            return parent_tree_id + "|" + urllib.parse.quote_plus(str(concept_id))
 
     @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
     def results_tree_html(self):
