@@ -244,7 +244,7 @@
         currentIds = ids;
         var childrenArray = root.children;
         for (i = 0; i < (ids.length - 1); ++i) {
-          var child = $.grep(childrenArray, function(child){ return child.concept_id == ids[i]; });
+          var child = $.grep(childrenArray, function(child){ return child.concept_id == decodeURIComponent(ids[i]); });
           child[0].children = child[0]._children;
           child[0].highlight = true;
           child[0]._children = null;
