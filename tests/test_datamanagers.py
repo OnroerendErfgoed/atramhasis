@@ -1,4 +1,3 @@
-import re
 from datetime import date
 from datetime import datetime
 from unittest.mock import Mock
@@ -15,10 +14,12 @@ from atramhasis.data.datamanagers import AuditManager
 from atramhasis.data.datamanagers import ConceptSchemeManager
 from atramhasis.data.datamanagers import CountsManager
 from atramhasis.data.datamanagers import LanguagesManager
+from atramhasis.data.datamanagers import ProviderDataManager
 from atramhasis.data.datamanagers import SkosManager
 from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
+from atramhasis.data.models import Provider
 from tests import DbTest
 from tests import fill_db
 from tests import setup_db
@@ -225,3 +226,33 @@ class CountsManagerTest(DbTest):
         res = self.counts_manager.get_most_recent_count_for_scheme('TREES')
         self.assertIsNotNone(res)
         self.assertEqual(3, res.triples)
+
+
+class ProviderDataManagerTest(DbTest):
+    def setUp(self):
+        super().setUp()
+        self.manager = ProviderDataManager(self.session)
+
+    def test_get_provider_by_id(self):
+        provider = Provider(
+            id='a', conceptscheme=ConceptScheme(), uri_pattern='u-p', meta={}
+        )
+        self.session.add(provider)
+        self.session.flush()
+
+        result = self.manager.get_provider_by_id(provider.id)
+        self.assertEqual(result, provider)
+
+    def test_get_provider_by_id_no_result(self):
+        with self.assertRaises(NoResultFound):
+            self.manager.get_provider_by_id('...')
+
+    def test_get_all_providers(self):
+        provider = Provider(
+            id='a', conceptscheme=ConceptScheme(), uri_pattern='u-p', meta={}
+        )
+        self.session.add(provider)
+        self.session.flush()
+
+        result = self.manager.get_all_providers()
+        self.assertEqual(result, [provider])

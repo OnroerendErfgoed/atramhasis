@@ -1,3 +1,4 @@
+import copy
 import csv
 from io import StringIO
 
@@ -22,7 +23,7 @@ from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Source
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
 
 
 class CSVRenderer:
@@ -206,24 +207,29 @@ def provider_adapter(provider: VocabularyProvider, *_):
     else:
         uri_pattern = None
 
+    metadata = copy.deepcopy(provider.metadata)
+    metadata.pop('id', None)
+    metadata.pop('conceptscheme_id', None)
     data = {
-       'id': provider.metadata['id'],
-       'type': provider.__class__.__name__,
-       'conceptscheme_uri': provider.concept_scheme.uri,
-       'uri_pattern': uri_pattern,
-       'default_language': provider.metadata.get("default_language"),
-       'subject': provider.metadata.get("subject"),
-       'force_display_language': provider.metadata.get("atramhasis.force_display_language"),
+        'id': provider.metadata['id'],
+        'type': provider.__class__.__name__,
+        'conceptscheme_uri': provider.concept_scheme.uri,
+        'uri_pattern': uri_pattern,
+        'default_language': metadata.pop("default_language", None),
+        'subject': metadata.pop("subject", None),
+        'force_display_language': metadata.pop("atramhasis.force_display_language", None),
+        'metadata': metadata,
     }
     return data
 
 
 def sa_provider_adapter(provider: SQLAlchemyProvider, *args):
     data = provider_adapter(provider, *args)
-    strategy = provider.metadata.get(
+    strategy = data["metadata"].pop(
        "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
     )
     data['id_generation_strategy'] = strategy.name
+    data['expand_strategy'] = provider.expand_strategy
     return data
 
 

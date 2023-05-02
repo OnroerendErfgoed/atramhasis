@@ -17,9 +17,10 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.orm import sessionmaker
 
+from atramhasis import skos
 from atramhasis.cache import list_region
 from atramhasis.cache import tree_region
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
 from fixtures import data
 from fixtures import materials as material_data
 
@@ -234,4 +235,7 @@ def create_registry(request):
     registry.register_provider(test)
     registry.register_provider(missing_label)
     registry.register_provider(manual_ids)
+
+    skos.register_providers_from_db(registry, request.db)
+
     return registry

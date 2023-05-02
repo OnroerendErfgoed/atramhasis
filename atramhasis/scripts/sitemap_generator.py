@@ -1,5 +1,4 @@
 import argparse
-import contextlib
 import datetime
 import logging
 import os
@@ -11,27 +10,10 @@ from os.path import isfile
 from pyramid.paster import bootstrap
 from pyramid.paster import get_appsettings
 from pyramid.paster import setup_logging
-from sqlalchemy import engine_from_config
-from sqlalchemy.orm import sessionmaker
 
 from atramhasis.errors import SkosRegistryNotFoundException
 
 log = logging.getLogger(__name__)
-
-
-@contextlib.contextmanager
-def db_session(settings):
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    session_maker = sessionmaker(bind=engine)
-    session = session_maker()
-    try:
-        yield session
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
 
 
 def write_element_to_xml(filename, sitemap_dir, element):

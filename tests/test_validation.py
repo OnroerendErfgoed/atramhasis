@@ -8,8 +8,9 @@ from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import LabelType
 from sqlalchemy.exc import NoResultFound
 
+from atramhasis import validators
 from atramhasis.errors import ValidationError
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.validators import Concept as ConceptSchema
 from atramhasis.validators import ConceptScheme as ConceptSchemeSchema
 from atramhasis.validators import LanguageTag
@@ -813,3 +814,34 @@ class TestValidation(unittest.TestCase):
             validate_id_generation=False,
         )
         concept_schema.deserialize(self.json_concept)
+
+    def test_validate_provider(self):
+        """
+        This looks like it does not validate much, but openapi validates the majority.
+
+        We only need to manually validate what openapi cannot.
+        """
+        json_data = {'metadata': {}}
+        validators.validate_provider_json(json_data)
+
+    def test_validate_provider_forbidden_keys(self):
+        forbidden_metadata_keys = (
+            'default_language',
+            'subject',
+            'force_display_language',
+            'atramhasis.force_display_language',
+            'id_generation_strategy',
+            'atramhasis.id_generation_strategy',
+        )
+        for bad_key in forbidden_metadata_keys:
+            json_data = {'metadata': {bad_key: 'value'}}
+            with self.assertRaises(ValidationError):
+                validators.validate_provider_json(json_data)
+
+    def test_validate_provider_bad_language(self):
+        json_data = {'default_language': 'notalanguage'}
+        with self.assertRaises(ValidationError):
+            validators.validate_provider_json(json_data)
+        json_data = {'force_display_language': 'notalanguage'}
+        with self.assertRaises(ValidationError):
+            validators.validate_provider_json(json_data)

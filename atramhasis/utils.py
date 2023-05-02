@@ -1,6 +1,8 @@
 """
 Module containing utility functions used by Atramhasis.
 """
+import contextlib
+import copy
 from collections import deque
 
 from pyramid.httpexceptions import HTTPMethodNotAllowed
@@ -10,7 +12,13 @@ from skosprovider.skos import ConceptScheme
 from skosprovider.skos import Label
 from skosprovider.skos import Note
 from skosprovider.skos import Source
+from skosprovider.uri import UriPatternGenerator
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+from sqlalchemy import engine_from_config
+from sqlalchemy import orm
+from sqlalchemy.orm import sessionmaker
+
+from atramhasis.data.models import Provider
 
 
 def from_thing(thing):
@@ -118,3 +126,35 @@ def label_sort(concepts, language='any'):
                                                        language=language)
     )
 
+
+def db_provider_to_skosprovider(db_provider: Provider) -> SQLAlchemyProvider:
+    """Create a SQLAlchemyProvider from a atramhasis.data.models.Provider.
+
+    :param db_provider: The Provider to use as basis for the SQLAlchemyProvider.
+    :return: An SQLAlchemyProvider with the data from the `db_provider`
+    """
+    metadata = copy.deepcopy(db_provider.meta)
+    metadata["conceptscheme_id"] = db_provider.conceptscheme_id
+    metadata['atramhasis.id_generation_strategy'] = db_provider.id_generation_strategy
+    metadata["id"] = db_provider.id
+    return SQLAlchemyProvider(
+        metadata=metadata,
+        session=orm.object_session(db_provider),
+        expand_strategy=db_provider.expand_strategy.value,
+        uri_generator=UriPatternGenerator(db_provider.uri_pattern),
+    )
+
+
+@contextlib.contextmanager
+def db_session(settings):
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    session_maker = sessionmaker(bind=engine)
+    session = session_maker()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()

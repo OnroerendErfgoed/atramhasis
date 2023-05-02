@@ -2,10 +2,13 @@ import os
 import unittest
 from unittest.mock import Mock
 
+import mock
 import pytest
+from openapi_core.validation.request.datatypes import RequestValidationResult
 from paste.deploy.loadwsgi import appconfig
 from pyramid import testing
 from pyramid.config.settings import Settings
+from pyramid.httpexceptions import HTTPNoContent
 from pyramid.request import apply_request_extensions
 from pyramid.testing import DummyRequest
 from skosprovider.registry import Registry
@@ -19,6 +22,7 @@ from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Thing
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm import Session
 from webob.multidict import MultiDict
 from skosprovider.skos import Concept as SkosConcept
 
@@ -27,7 +31,7 @@ from atramhasis.errors import ConceptNotFoundException
 from atramhasis.errors import ConceptSchemeNotFoundException
 from atramhasis.errors import SkosRegistryNotFoundException
 from atramhasis.errors import ValidationError
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.views.crud import AtramhasisCrud
 from atramhasis.views.views import AtramhasisAdminView
 from atramhasis.views.views import AtramhasisListView
@@ -724,3 +728,41 @@ class TestAtramhasisCrudView(unittest.TestCase):
         db_concept.conceptscheme = ConceptScheme(id=1, uri='urn:x-skosprovider:trees')
         self.request.data_managers["skos_manager"].get_thing = lambda *_: db_concept
         self.view.edit_concept()
+
+    def test_add_provider(self):
+        self.request.openapi_validated = RequestValidationResult(body={})
+        self.request.skos_registry = Registry()
+        view = 'atramhasis.views.crud'
+
+        with mock.patch(f'{view}.provider.create_provider', autospec=True) as processor, \
+                mock.patch(f'{view}.utils.db_provider_to_skosprovider',
+                           autospec=True) as renderer:
+
+            response = self.view.add_provider()
+            self.assertEqual(201, self.request.response.status_code)
+            processor.assert_called()
+            renderer.assert_called()
+            self.assertEqual(response, renderer.return_value)
+
+    def test_update_provider(self):
+        self.request.openapi_validated = RequestValidationResult(body={})
+        self.request.matchdict = {"id": 1}
+        view = 'atramhasis.views.crud'
+
+        with mock.patch(f'{view}.provider.update_provider', autospec=True) as processor, \
+                mock.patch(f'{view}.utils.db_provider_to_skosprovider',
+                           autospec=True) as renderer:
+
+            response = self.view.update_provider()
+            processor.assert_called()
+            renderer.assert_called()
+            self.assertEqual(response, renderer.return_value)
+
+    def test_delete_provider(self):
+        self.request.matchdict = {"id": 1}
+        view = 'atramhasis.views.crud'
+
+        with mock.patch(f'{view}.provider.delete_provider', autospec=True) as processor:
+            response = self.view.delete_provider()
+            processor.assert_called()
+            self.assertIsInstance(response, HTTPNoContent)
