@@ -234,7 +234,6 @@ def main(argv=sys.argv):
     session = conn_str_to_session(args.to)
     file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
                                  if input_ext in supported_types[filetype]['extensions']][0]
-    provider = file_to_provider_function(**vars(args))
     if args.cs_uri:
         cs_uri = args.cs_uri
         cs_label = args.cs_label if args.cs_label else input_name.capitalize()
