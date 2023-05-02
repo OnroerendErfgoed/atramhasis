@@ -206,7 +206,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
-        self.assertEqual(res.json['id'], 1)
+        self.assertEqual(res.json['id'], '1')
         self.assertEqual(res.json['type'], 'concept')
         self.assertIn('sortLabel', [label['type'] for label in res.json['labels']])
 
@@ -353,11 +353,14 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_delete_concept(self):
-        new_id = 1
-        res = self.testapp.delete('/conceptschemes/TREES/c/' + str(new_id), headers=self._get_default_headers())
+        new_id = '1'
+        res = self.testapp.delete(f'/conceptschemes/TREES/c/{new_id}', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(new_id, res.json['id'])
+        from skosprovider_sqlalchemy.models import Concept
+        concepten = self.session.query(Concept).all()
+        print()
 
     def test_delete_concept_not_found(self):
         res = self.testapp.delete('/conceptschemes/TREES/c/7895', headers=self._get_default_headers(),
@@ -851,7 +854,7 @@ class SkosFunctionalTests(FunctionalTests):
         self.assertEqual(
             [
                 {
-                    'id': 1,
+                    'id': '1',
                     'uri': 'urn:x-skosprovider:trees/1',
                     'type': 'concept',
                     'label': 'De Lariks',

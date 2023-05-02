@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import List
 
 import dateutil.relativedelta
+import sqlalchemy as sa
 from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import ConceptScheme
@@ -224,7 +225,7 @@ class SkosManager(DataManager):
     def get_next_cid(self, conceptscheme_id, id_generation_strategy):
         if id_generation_strategy == IDGenerationStrategy.NUMERIC:
             max_id = self.session.execute(
-               select(func.max(Thing.concept_id))
+               select(func.max(sa.cast(Thing.concept_id, sa.Integer)))
                .filter_by(conceptscheme_id=conceptscheme_id)
             ).scalar_one()
             return max_id + 1 if max_id else 1
