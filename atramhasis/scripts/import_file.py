@@ -226,7 +226,7 @@ def provider_to_db(provider, conceptscheme, session):
     import provider data into the database
     """
     session.add(conceptscheme)
-    import_provider(provider, conceptscheme, session)
+    import_provider(provider, session, conceptscheme)
     session.commit()
 
 

@@ -78,14 +78,14 @@ def fill_db():
         from skosprovider_sqlalchemy.models import ConceptScheme
         with db_session() as session:
             import_provider(trees,
-                            ConceptScheme(id=1, uri='urn:x-skosprovider:trees'),
-                            session)
+                            session,
+                            ConceptScheme(id=1, uri='urn:x-skosprovider:trees'))
             import_provider(material_data.materials,
-                            ConceptScheme(id=4, uri='urn:x-vioe:materials'),
-                            session)
+                            session,
+                            ConceptScheme(id=4, uri='urn:x-vioe:materials'))
             import_provider(data.geo,
-                            ConceptScheme(id=2, uri='urn:x-vioe:geography'),
-                            session)
+                            session,
+                            ConceptScheme(id=2, uri='urn:x-vioe:geography'))
             import_provider(
                 DictionaryProvider(
                     {'id': 'MISSING_LABEL', 'default_language': 'nl'},
@@ -98,8 +98,9 @@ def fill_db():
                          ],
                      }]
                 ),
-                ConceptScheme(id=9, uri='urn:x-vioe:test'),
-                session)
+                session,
+                ConceptScheme(id=9, uri='urn:x-vioe:test')
+            )
             import_provider(
                 DictionaryProvider(
                     {'id': 'manual-ids', 'default_language': 'nl'},
@@ -119,8 +120,8 @@ def fill_db():
                          ],
                      }]
                 ),
-                ConceptScheme(id=10, uri='urn:x-vioe:manual'),
                 session,
+                ConceptScheme(id=10, uri='urn:x-vioe:manual'),
             )
             session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
             for scheme_id in (5, 6, 7, 8):
