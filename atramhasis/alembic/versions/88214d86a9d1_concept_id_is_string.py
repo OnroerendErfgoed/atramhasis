@@ -16,8 +16,12 @@ down_revision = '79ff53a30228'
 
 
 def upgrade():
-    op.alter_column('concept', 'concept_id', _type=sa.String)
+    with op.batch_alter_table('concept') as batch_op:
+        batch_op.alter_column('concept_id', type_=sa.String, existing_type=sa.Integer)
 
 
 def downgrade():
-    op.alter_column('concept', 'concept_id', _type=sa.Integer)
+    # Drop concepts which have non-integer concept_id
+    op.execute("DELETE FROM concept WHERE cast(cast(concept_id AS INTEGER) AS TEXT) != concept_id")
+    with op.batch_alter_table('concept') as batch_op:
+        batch_op.alter_column('concept_id', existing_type=sa.String, type_=sa.Integer)
