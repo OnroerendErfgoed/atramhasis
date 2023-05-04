@@ -7,7 +7,7 @@ import tests
 from atramhasis.data.models import ExpandStrategy
 from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
-from atramhasis.scripts import migrate_sqlalchemyproviders
+from atramhasis.scripts import migrate_sqlalchemy_providers
 from tests import DbTest
 
 
@@ -31,7 +31,7 @@ class TestMigrateTests(DbTest):
                 {"id": "EXTRA", "conceptscheme_id": conceptscheme.id}, self.session
             )
         )
-        other_providers = migrate_sqlalchemyproviders.get_atramhasis_sqlalchemy_providers(
+        other_providers = migrate_sqlalchemy_providers.get_atramhasis_sqlalchemy_providers(
             self.session
         )
         for provider in other_providers:
@@ -44,7 +44,7 @@ class TestMigrateTests(DbTest):
                 )
         self.session.flush()
 
-        migrate_sqlalchemyproviders.migrate(
+        migrate_sqlalchemy_providers.migrate(
             skos_registry=registry,
             session=self.session,
         )
