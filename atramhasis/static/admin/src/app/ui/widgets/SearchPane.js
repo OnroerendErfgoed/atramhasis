@@ -312,10 +312,9 @@ define([
       this.appUi._editConceptScheme(evt);
     },
 
-    _editProviders: function (evt) {
-      evt.preventDefault();
+    _editProviders: function () {
       console.debug('SearchPane::_editProviders');
-      // this.appUi._editConceptScheme(evt);
+      this.appUi._editProviders();
     }
   });
 });

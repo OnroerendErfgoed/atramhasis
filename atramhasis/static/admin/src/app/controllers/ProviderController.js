@@ -23,7 +23,7 @@ define([
       this.providerList = [];
     },
 
-    getProviders: function(){
+    getProviders: function() {
       console.debug('ProviderController::getProviders');
       return xhr.get(this._target, {
         handleAs: 'json',
@@ -31,7 +31,7 @@ define([
       });
     },
 
-    getProvider: function(uri){
+    getProvider: function(uri) {
       console.debug('ProviderController::getProvider', uri);
       var providerList = array.filter(this.providerList, function(item){
         return item.conceptscheme_uri === uri;
@@ -44,7 +44,7 @@ define([
       return this.getProviders().then(lang.hitch(this, function (providers) {
         this.providerList = providers;
       }));
-    },
+    }
   });
 });
 
