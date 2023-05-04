@@ -9,6 +9,7 @@ from skosprovider.providers import DictionaryProvider
 from skosprovider.registry import Registry
 from skosprovider.skos import ConceptScheme
 from skosprovider.uri import UriPatternGenerator
+from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy import engine_from_config
@@ -16,8 +17,10 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.orm import sessionmaker
 
+from atramhasis import skos
 from atramhasis.cache import list_region
 from atramhasis.cache import tree_region
+from atramhasis.data.models import IDGenerationStrategy
 from fixtures import data
 from fixtures import materials as material_data
 
@@ -76,14 +79,14 @@ def fill_db():
         from skosprovider_sqlalchemy.models import ConceptScheme
         with db_session() as session:
             import_provider(trees,
-                            ConceptScheme(id=1, uri='urn:x-skosprovider:trees'),
-                            session)
+                            session,
+                            ConceptScheme(id=1, uri='urn:x-skosprovider:trees'))
             import_provider(material_data.materials,
-                            ConceptScheme(id=4, uri='urn:x-vioe:materials'),
-                            session)
+                            session,
+                            ConceptScheme(id=4, uri='urn:x-vioe:materials'))
             import_provider(data.geo,
-                            ConceptScheme(id=2, uri='urn:x-vioe:geography'),
-                            session)
+                            session,
+                            ConceptScheme(id=2, uri='urn:x-vioe:geography'))
             import_provider(
                 DictionaryProvider(
                     {'id': 'MISSING_LABEL', 'default_language': 'nl'},
@@ -96,8 +99,31 @@ def fill_db():
                          ],
                      }]
                 ),
-                ConceptScheme(id=9, uri='urn:x-vioe:test'),
-                session)
+                session,
+                ConceptScheme(id=9, uri='urn:x-vioe:test')
+            )
+            import_provider(
+                DictionaryProvider(
+                    {'id': 'manual-ids', 'default_language': 'nl'},
+                    [{'id': 'manual-1', 'uri': 'urn:x-skosprovider:manual/manual-1'},
+                     {
+                         'id': 'manual-2',
+                         'uri': 'urn:x-skosprovider:manual/manual-2',
+                         'labels': [
+                             {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
+                         ],
+                     },
+                     {
+                         'id': 'http://id.manual.org/manual/68',
+                         'uri': 'http://id.manual.org/manual/68',
+                         'labels': [
+                             {'type': 'prefLabel', 'language': 'nl', 'label': 'handmatig'}
+                         ],
+                     }]
+                ),
+                session,
+                ConceptScheme(id=10, uri='urn:x-vioe:manual'),
+            )
             session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
             for scheme_id in (5, 6, 7, 8):
                 session.add(
@@ -193,6 +219,14 @@ def create_registry(request):
         {'id': 'MISSING_LABEL', 'conceptscheme_id': 9},
         request.db
     )
+    manual_ids = SQLAlchemyProvider(
+        {
+            'id': 'manual-ids',
+            'conceptscheme_id': 10,
+            'atramhasis.id_generation_strategy': IDGenerationStrategy.MANUAL
+        },
+        request.db
+    )
 
     registry.register_provider(trees)
     registry.register_provider(geo)
@@ -200,4 +234,8 @@ def create_registry(request):
     registry.register_provider(materials)
     registry.register_provider(test)
     registry.register_provider(missing_label)
+    registry.register_provider(manual_ids)
+
+    skos.register_providers_from_db(registry, request.db)
+
     return registry

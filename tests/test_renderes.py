@@ -233,7 +233,8 @@ class TestJsonRenderer(unittest.TestCase):
                 'id': 'provider-id',
                 'subject': 'sub',
                 'type': 'VocabularyProvider',
-                'uri_pattern': 'urn:x-skosprovider:%s:%s'
+                'uri_pattern': 'urn:x-skosprovider:%s:%s',
+                'metadata': {},
             },
             result
         )
@@ -256,7 +257,8 @@ class TestJsonRenderer(unittest.TestCase):
                 'id': 'provider-id',
                 'subject': 'sub',
                 'type': 'AATProvider',
-                'uri_pattern': None
+                'uri_pattern': None,
+                'metadata': {'uri': 'http://vocab.getty.edu/aat/'},
             },
             result
         )
@@ -289,10 +291,12 @@ class TestJsonRenderer(unittest.TestCase):
                 'default_language': 'nl-be',
                 'force_display_language': 'force-nl',
                 'id': 'provider-id',
+                'expand_strategy': 'recurse',
                 'id_generation_strategy': 'NUMERIC',
                 'subject': 'sub',
                 'type': 'SQLAlchemyProvider',
-                'uri_pattern': 'urn:x-skosprovider:%s:%s'
+                'uri_pattern': 'urn:x-skosprovider:%s:%s',
+                'metadata': {},
             },
             result
         )

@@ -5,11 +5,12 @@ that abstract all interactions with the database away from the views.
 :versionadded: 0.4.1
 """
 import uuid
-
 from datetime import date
 from datetime import datetime
+from typing import List
 
 import dateutil.relativedelta
+import sqlalchemy as sa
 from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import ConceptScheme
@@ -22,12 +23,15 @@ from skosprovider_sqlalchemy.models import Thing
 from sqlalchemy import desc
 from sqlalchemy import func
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
 from atramhasis.data import popular_concepts
 from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
+from atramhasis.data.models import Provider
+from atramhasis.scripts import delete_scheme
 
 
 class DataManager:
@@ -35,8 +39,8 @@ class DataManager:
     A DataManager abstracts all interactions with the database for a certain model.
     """
 
-    def __init__(self, session):
-        self.session = session
+    def __init__(self, session: Session) -> None:
+        self.session: Session = session
 
 
 class ConceptSchemeManager(DataManager):
@@ -221,7 +225,7 @@ class SkosManager(DataManager):
     def get_next_cid(self, conceptscheme_id, id_generation_strategy):
         if id_generation_strategy == IDGenerationStrategy.NUMERIC:
             max_id = self.session.execute(
-               select(func.max(Thing.concept_id))
+               select(func.max(sa.cast(Thing.concept_id, sa.Integer)))
                .filter_by(conceptscheme_id=conceptscheme_id)
             ).scalar_one()
             return max_id + 1 if max_id else 1
@@ -383,3 +387,21 @@ class CountsManager(DataManager):
             .order_by(desc('counted_at'))
         ).scalar_one()
         return recent
+
+
+class ProviderDataManager(DataManager):
+    """A data manager for managing Providers."""
+
+    def get_provider_by_id(self, provider_id) -> Provider:
+        return self.session.execute(
+            select(Provider)
+            .filter(Provider.id == provider_id)
+        ).scalar_one()
+
+    def get_all_providers(self) -> List[Provider]:
+        """
+        Retrieve all providers from the database.
+
+        :return: All providers
+        """
+        return self.session.execute(select(Provider)).scalars().all()

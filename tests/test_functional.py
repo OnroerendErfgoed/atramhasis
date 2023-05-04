@@ -9,12 +9,14 @@ from pyramid.paster import get_appsettings
 from pyramid.request import Request
 from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.providers import DictionaryProvider
+from skosprovider_sqlalchemy.models import ConceptScheme
 from sqlalchemy.orm import sessionmaker
 from webtest import TestApp
 
 from atramhasis import main
 from atramhasis.cache import list_region
 from atramhasis.cache import tree_region
+from atramhasis.data.models import Provider
 from atramhasis.protected_resources import ProtectedResourceEvent
 from atramhasis.protected_resources import ProtectedResourceException
 from fixtures.data import chestnut
@@ -204,7 +206,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
-        self.assertEqual(res.json['id'], 1)
+        self.assertEqual(res.json['id'], '1')
         self.assertEqual(res.json['type'], 'concept')
         self.assertIn('sortLabel', [label['type'] for label in res.json['labels']])
 
@@ -239,6 +241,53 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['type'], 'concept')
+
+    def test_add_update_concept_manual_id(self):
+        json_value['id'] = 'manual-3'
+        json_value['sources'][0]['citation'] = 'short'
+        res = self.testapp.post_json(
+            '/conceptschemes/manual-ids/c',
+            headers=self._get_default_headers(),
+            params=json_value,
+        )
+        self.assertEqual(201, res.status_code)
+        res_json = res.json
+        self.assertDictEqual(
+            {
+                'id': 'manual-3',
+                'type': 'concept', 
+                'uri': 'urn:x-skosprovider:manual-ids:manual-3',
+                'label': 'The Larch',
+                'concept_scheme': {
+                    'uri': 'urn:x-vioe:manual', 'labels': []
+                }, 
+                'labels': [
+                    {'label': 'The Larch', 'type': 'prefLabel', 'language': 'en'}, 
+                    {'label': 'a', 'type': 'sortLabel', 'language': 'en'}
+                ], 
+                'notes': [], 
+                'sources': [
+                    {'citation': 'short', 'markup': None}
+                ],
+                'narrower': [], 
+                'broader': [],
+                'related': [], 
+                'member_of': [],
+                'subordinate_arrays': [], 
+                'matches': {
+                    'close': [], 'exact': [], 'related': [], 'broad': [], 'narrow': []
+                }
+            },
+            res_json
+        )
+        res_json['labels'][0]['label'] = 'updated'
+        res = self.testapp.put_json(
+            '/conceptschemes/manual-ids/c/manual-3',
+            headers=self._get_default_headers(),
+            params=res_json,
+        )
+        self.assertEqual(200, res.status_code)
+        self.assertEqual('updated', res.json['label'])
 
     def test_add_concept_empty_conceptscheme(self):
         res = self.testapp.post_json('/conceptschemes/STYLES/c', headers=self._get_default_headers(),
@@ -304,11 +353,14 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_delete_concept(self):
-        new_id = 1
-        res = self.testapp.delete('/conceptschemes/TREES/c/' + str(new_id), headers=self._get_default_headers())
+        new_id = '1'
+        res = self.testapp.delete(f'/conceptschemes/TREES/c/{new_id}', headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(new_id, res.json['id'])
+        from skosprovider_sqlalchemy.models import Concept
+        concepten = self.session.query(Concept).all()
+        print()
 
     def test_delete_concept_not_found(self):
         res = self.testapp.delete('/conceptschemes/TREES/c/7895', headers=self._get_default_headers(),
@@ -490,13 +542,162 @@ class RestFunctionalTests(FunctionalTests):
     def test_get_conceptschemes(self):
         self.testapp.get('/conceptschemes', headers=self._get_default_headers(), status=200)
 
+    def test_create_provider_openapi_validation(self):
+        response = self.testapp.post_json(
+            url='/providers',
+            params={
+                'uri_pattern': 'invalid',
+                'subject': 'wrong'
+            },
+            headers=self._get_default_headers(),
+            expect_errors=True
+        )
+        self.assertEqual(
+            {
+                'message': 'Request was not valid for schema.',
+                'errors': [
+                    "<root>: 'conceptscheme_uri' is a required property",
+                    "uri_pattern: 'invalid' does not match '.*%s.*'",
+                    "subject: 'wrong' is not of type array"
+                ]},
+            response.json
+        )
+
+    def test_create_minimal_provider(self):
+        response = self.testapp.post_json(
+            url='/providers',
+            params={
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s'
+            },
+            headers=self._get_default_headers(),
+            status=201
+        )
+        self.assertEqual(
+            {
+                'id': response.json["id"],
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': None,
+                'subject': [],
+                'force_display_language': None,
+                'metadata': {},
+                'id_generation_strategy': 'NUMERIC',
+                'expand_strategy': 'recurse'
+            },
+            response.json
+        )
+
+    def test_create_full_provider(self):
+        response = self.testapp.post_json(
+            url='/providers',
+            params={
+                'id': 'ERFGOEDTYPES',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': 'NL',
+                'force_display_language': 'NL',
+                'subject': ['hidden'],
+                'metadata': {'Info': 'Extra data about this provider'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit',
+            },
+            headers=self._get_default_headers(),
+            status=201
+        )
+        self.assertEqual(
+            {
+                'id': 'ERFGOEDTYPES',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': 'NL',
+                'force_display_language': 'NL',
+                'subject': ['hidden'],
+                'metadata': {'Info': 'Extra data about this provider'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit',
+            },
+            response.json
+        )
+
+    def test_update_provider(self):
+        conceptscheme = ConceptScheme(uri='https://id.erfgoed.net/thesauri/conceptschemes')
+        provider = Provider(
+            id='ERFGOEDTYPES',
+            uri_pattern='https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+            conceptscheme=conceptscheme,
+            meta={},
+        )
+        self.session.add(provider)
+        self.session.flush()
+
+        response = self.testapp.put_json(
+            url='/providers/ERFGOEDTYPES',
+            params={
+                'id': 'ERFGOEDTYPES',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/updated/%s',
+                'default_language': 'NL',
+                'subject': ['hidden'],
+                'force_display_language': 'NL',
+                'metadata': {'extra': 'test-extra'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit'
+            },
+            headers=self._get_default_headers(),
+            status=200
+        )
+
+        self.assertEqual(
+            {
+                'id': 'ERFGOEDTYPES',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/updated/%s',
+                'default_language': 'NL',
+                'subject': ['hidden'],
+                'force_display_language': 'NL',
+                'metadata': {'extra': 'test-extra'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit'
+            },
+            response.json
+        )
+
+    def test_delete_provider(self):
+        conceptscheme = ConceptScheme(uri='https://id.erfgoed.net/thesauri/conceptschemes')
+        provider = Provider(
+            id='ERFGOEDTYPES',
+            uri_pattern='https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+            conceptscheme=conceptscheme,
+            meta={},
+        )
+        self.session.add(provider)
+        self.session.flush()
+        conceptscheme_id = conceptscheme.id
+
+        self.session.expire_all()
+        self.assertIsNotNone(self.session.get(Provider, 'ERFGOEDTYPES'))
+
+        self.testapp.delete(
+            url='/providers/ERFGOEDTYPES',
+            headers=self._get_default_headers(),
+            status=204
+        )
+        self.session.expire_all()
+        self.assertIsNone(self.session.get(Provider, 'ERFGOEDTYPES'))
+        self.assertIsNone(self.session.get(ConceptScheme, conceptscheme_id))
+
     def test_get_providers(self):
         response = self.testapp.get(
             url='/providers',
             headers=self._get_default_headers(),
             status=200
         )
-        self.assertEqual(6, len(response.json))
+        self.assertEqual(7, len(response.json))
         response = self.testapp.get(
             url='/providers?subject=biology',
             headers=self._get_default_headers(),
@@ -511,7 +712,8 @@ class RestFunctionalTests(FunctionalTests):
                     'id': 'TEST',
                     'subject': ['biology'],
                     'type': 'DictionaryProvider',
-                    'uri_pattern': 'urn:x-skosprovider:%s:%s'
+                    'uri_pattern': 'urn:x-skosprovider:%s:%s',
+                    'metadata': {},
                 }
             ],
             response.json)
@@ -531,7 +733,9 @@ class RestFunctionalTests(FunctionalTests):
                 'default_language': None,
                 'subject': [],
                 'force_display_language': None,
-                'id_generation_strategy': 'NUMERIC'
+                'id_generation_strategy': 'NUMERIC',
+                'metadata': {},
+                'expand_strategy': 'recurse'
             },
             response.json
         )
@@ -650,7 +854,7 @@ class SkosFunctionalTests(FunctionalTests):
         self.assertEqual(
             [
                 {
-                    'id': 1,
+                    'id': '1',
                     'uri': 'urn:x-skosprovider:trees/1',
                     'type': 'concept',
                     'label': 'De Lariks',
@@ -802,6 +1006,26 @@ class RdfFunctionalTests(FunctionalTests):
 
     def test_rdf_individual_turtle_ext(self):
         ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c/1.ttl')
+        self.assertEqual('200 OK', ttl_response.status)
+        self.assertEqual('text/turtle', ttl_response.content_type)
+
+    def test_rdf_individual_jsonld_ext_manual(self):
+        res = self.testapp.get('/conceptschemes/manual-ids/c/manual-1.jsonld')
+        self.assertEqual('200 OK', res.status)
+        self.assertEqual('application/ld+json', res.content_type)
+
+    def test_rdf_individual_xml_ext_manual(self):
+        rdf_response = self.testapp.get('/conceptschemes/manual-ids/c/manual-2.rdf')
+        self.assertEqual('200 OK', rdf_response.status)
+        self.assertEqual('application/rdf+xml', rdf_response.content_type)
+
+    def test_rdf_individual_turtle_manual(self):
+        ttl_response = self.testapp.get('/conceptschemes/manual-ids/c/manual-1.ttl')
+        self.assertEqual('200 OK', ttl_response.status)
+        self.assertEqual('text/turtle', ttl_response.content_type)
+
+    def test_rdf_individual_turtle_manual_uri(self):
+        ttl_response = self.testapp.get('/conceptschemes/manual-ids/c/http://id.manual.org/manual/68.ttl')
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 

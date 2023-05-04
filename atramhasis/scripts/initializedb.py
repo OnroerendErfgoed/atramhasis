@@ -26,6 +26,7 @@ def main(argv=sys.argv):
     from fixtures.heritagetypes import heritagetypes
     from fixtures.periods import periods
     from fixtures.species import species
+    from fixtures.bluebirds import bluebirds
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]
@@ -36,6 +37,7 @@ def main(argv=sys.argv):
     db_session = sessionmaker(bind=engine)()
     import_provider(
         trees,
+        db_session,
         ConceptScheme(
             id=1,
             uri='urn:x-skosprovider:trees',
@@ -44,10 +46,10 @@ def main(argv=sys.argv):
                 Label('Different types of trees', 'prefLabel', 'en')
             ]
         ),
-        db_session
     )
     import_provider(
         geo,
+        db_session,
         ConceptScheme(
             id=2,
             uri='urn:x-skosprovider:geo',
@@ -56,10 +58,10 @@ def main(argv=sys.argv):
                 Label('Geography', 'prefLabel', 'en')
             ]
         ),
-        db_session
     )
     import_provider(
         styles_and_cultures,
+        db_session,
         ConceptScheme(
             id=3,
             uri='https://id.erfgoed.net/thesauri/stijlen_en_culturen',
@@ -68,10 +70,10 @@ def main(argv=sys.argv):
                 Label('Styles and Cultures', 'prefLabel', 'en')
             ]
         ),
-        db_session
     )
     import_provider(
         materials,
+        db_session,
         ConceptScheme(
             id=4,
             uri='https://id.erfgoed.net/thesauri/materialen',
@@ -80,10 +82,10 @@ def main(argv=sys.argv):
                 Label('Materials', 'prefLabel', 'en')
             ]
         ),
-        db_session
     )
     import_provider(
         eventtypes,
+        db_session,
         ConceptScheme(
             id=5,
             uri='https://id.erfgoed.net/thesauri/gebeurtenistypes',
@@ -92,10 +94,10 @@ def main(argv=sys.argv):
                 Label('Event types', 'prefLabel', 'en')
             ]
         ),
-        db_session
     )
     import_provider(
         heritagetypes,
+        db_session,
         ConceptScheme(
             id=6,
             uri='https://id.erfgoed.net/thesauri/erfgoedtypes',
@@ -104,10 +106,10 @@ def main(argv=sys.argv):
                 Label('Heritage types', 'prefLabel', 'en')
             ]
         ),
-        db_session
     )
     import_provider(
         periods,
+        db_session,
         ConceptScheme(
             id=7,
             uri='https://id.erfgoed.net/thesauri/dateringen',
@@ -116,10 +118,10 @@ def main(argv=sys.argv):
                 Label('Periods', 'prefLabel', 'en')
             ]
         ),
-        db_session
     )
     import_provider(
         species,
+        db_session,
         ConceptScheme(
             id=8,
             uri='https://id.erfgoed.net/thesauri/soorten',
@@ -128,8 +130,23 @@ def main(argv=sys.argv):
                 Label('Species', 'prefLabel', 'en')
             ]
         ),
-        db_session
+    )
+    import_provider(
+        bluebirds,
+        db_session,
+        ConceptScheme(
+            id=9,
+            uri='https://id.bluebirds.org',
+            labels=[
+                Label('Blauwe vogels', 'prefLabel', 'nl'),
+                Label('Blue birds', 'prefLabel', 'en')
+            ]
+        ),
     )
     db_session.commit()
     db_session.close()
     print('--atramhasis-db-initialized--')
+
+
+if __name__ == '__main__':
+    main()

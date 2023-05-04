@@ -17,6 +17,7 @@ from tests import setup_db
 
 test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.rdf')
 test_data_ttl = os.path.join(TEST_DIR, 'data', 'trees.ttl')
+test_data_ttl_string_id = os.path.join(TEST_DIR, 'data', 'bluebirds.ttl')
 test_data_json = os.path.join(TEST_DIR, 'data', 'trees.json')
 test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 
@@ -46,8 +47,8 @@ class ImportTests(DbTest):
         self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.label('en').label)
         obj_1 = [item for item in dump if item['uri'] == 'http://id.trees.org/2'][0]
         self.assertEqual(obj_1['broader'], [])
-        self.assertEqual(obj_1['id'], 2)
-        self.assertEqual(obj_1['member_of'], [3])
+        self.assertEqual(obj_1['id'], '2')
+        self.assertEqual(obj_1['member_of'], ['3'])
         self.assertEqual(obj_1['narrower'], [])
         label_en = [label for label in obj_1['labels'] if label['language'] == 'en'][0]
         self.assertDictEqual(label_en, {'label': 'The Chestnut', 'language': 'en', 'type': 'prefLabel'})
@@ -65,24 +66,39 @@ class ImportTests(DbTest):
         self.assertEqual(11, len(sql_prov.get_all()))
         eb = sql_prov.get_by_id(1)
         self.assertIsInstance(eb, Concept)
-        self.assertEqual(1, eb.id)
+        self.assertEqual('1', eb.id)
         self.assertEqual(uri_pattern % '1', eb.uri)
         self.assertEqual('Egg and Bacon', eb.label().label)
         self.assertEqual('prefLabel', eb.label().type)
         self.assertEqual([], eb.notes)
         eb = sql_prov.get_by_uri(uri_pattern % '3')
         self.assertIsInstance(eb, Concept)
-        self.assertEqual(3, eb.id)
+        self.assertEqual('3', eb.id)
         self.assertEqual(uri_pattern % '3', eb.uri)
         spam = sql_prov.find({'label': 'Spam'})
         self.assertEqual(8, len(spam))
         eb = sql_prov.get_by_id(11)
         self.assertIsInstance(eb, Concept)
-        self.assertEqual(11, eb.id)
+        self.assertEqual('11', eb.id)
         self.assertEqual('Lobster Thermidor', eb.label().label)
         self.assertIsInstance(eb.notes[0], Note)
         self.assertIn('Mornay', eb.notes[0].note)
         self.assertEqual('note', eb.notes[0].type)
+
+    def _check_parrots(self, conceptscheme_label):
+        sql_prov = SQLAlchemyProvider({'id': 'PARROTS', 'conceptscheme_id': 1}, self.session)
+
+        bird = sql_prov.get_by_id('http://id.parrots.org/bird')
+        assert sql_prov.get_by_uri('http://id.parrots.org/bird') == \
+                sql_prov.get_by_id('http://id.parrots.org/bird')
+        parrot = sql_prov.get_by_id('parrot')
+        assert parrot 
+        assert not sql_prov.get_by_id('bird')
+        blue = sql_prov.get_by_id('norwegianblue')
+        assert blue in parrot.narrower
+        reiger = sql_prov.get_by_id('579A439C-1A7A-476A-92C3-8A74ABD6B3DB')
+        blauwereiger = sql_prov.get_by_id('blauwereiger')
+        assert blauwereiger in reiger.narrower
 
     def test_import_rdf(self):
         sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url']]
@@ -95,6 +111,11 @@ class ImportTests(DbTest):
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_trees('Different types of trees')
+
+    def test_import_ttl_string_id(self):
+        sys.argv = ['import_file', '--from', test_data_ttl_string_id, '--to', SETTINGS['sqlalchemy.url']]
+        import_file.main(sys.argv)
+        tests.db_filled = True
 
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json,

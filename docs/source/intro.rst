@@ -35,6 +35,11 @@ encountered a bug in Atramhasis or it's documentation, or if you want to ask
 us to consider implementing a feature, feel free to use our 
 `issue tracker <http://github.com/OnroerendErfgoed/Atramhasis/issues>`_.
 
+If you are using this software in and want to reference it, please 
+cite the following article in the Journal of Open Source Software:
+
+Koen Van Daele, Tinne Cahy, Wim De Clercq, Jonas Geuens, Bram Goessens, Jonathan Piraux, Bart Saelen, Maarten Taeymans, & Cedrik Vanderhaegen, 2023: Atramhasis: an online skos vocabulary editor. *Journal of Open Source Software*, 8(83), p. 5040, `doi:10.21105/joss.05040 <https://doi.org/10.21105/joss.05040>`_. 
+
 .. _skos_spec: http://www.w3.org/TR/skos-reference/
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
 .. _Art and Architecture Thesaurus: http://vocab.getty.edu/aat

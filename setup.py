@@ -48,7 +48,7 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'skosprovider',
-    'skosprovider_sqlalchemy==2.0.0',
+    'skosprovider_sqlalchemy>=2.1.1',
     'skosprovider_rdf',
     'skosprovider_getty',
     'pyramid_skosprovider',
@@ -106,6 +106,7 @@ setup(name='atramhasis',
       generate_ldf_config = atramhasis.scripts.generate_ldf_config:main
       sitemap_generator = atramhasis.scripts.sitemap_generator:main
       delete_scheme = atramhasis.scripts.delete_scheme:main
+      migrate_sqlalchemy_providers = atramhasis.scripts.migrate_sqlalchemy_providers:main
       """,
       cmdclass={
           'prepare': Prepare

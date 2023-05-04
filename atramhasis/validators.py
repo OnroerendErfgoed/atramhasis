@@ -13,7 +13,7 @@ from skosprovider_sqlalchemy.models import (
 from sqlalchemy.exc import NoResultFound
 
 from atramhasis.errors import ValidationError
-from atramhasis.skos import IDGenerationStrategy
+from atramhasis.data.models import IDGenerationStrategy
 
 
 class ForcedString(colander.String):
@@ -690,3 +690,35 @@ def superordinates_hierarchy_rule(errors, node_location, skos_manager, conceptsc
                    'members', 'collection',
                    'The superordinates of a collection must not itself be a member of the collection being edited.'
                    )
+
+
+def validate_provider_json(json_data):
+    errors = []
+
+    # Do not allow keys in the metadata which exist in the root of the json.
+    forbidden_metadata_keys = (
+        'default_language',
+        'subject',
+        'force_display_language',  # while not the same, this would just be confusing
+        'atramhasis.force_display_language',
+        'id_generation_strategy',  # while not the same, this would just be confusing
+        'atramhasis.id_generation_strategy',
+    )
+    metadata = json_data.get('metadata', {})
+    if wrong_keys := [k for k in forbidden_metadata_keys if k in metadata]:
+        errors.append({'metadata': f'Found disallowed key(s): {", ".join(wrong_keys)}.'})
+
+    if json_data.get('default_language'):
+        if not tags.check(json_data['default_language']):
+            errors.append({'default_language': 'Invalid language.'})
+
+    if json_data.get('force_display_language'):
+        if not tags.check(json_data['force_display_language']):
+            errors.append({'force_display_language': 'Invalid language.'})
+
+    if json_data.get('subject'):
+        if json_data['subject'] != ['hidden']:
+            errors.append({'subject': 'Subject must be one of: "hidden"'})
+
+    if errors:
+        raise ValidationError('Provider could not be validated.', errors)

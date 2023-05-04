@@ -4,11 +4,17 @@ Module containing mapping functions used by Atramhasis.
 
 from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
+from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.models import Label
 from skosprovider_sqlalchemy.models import Match
 from skosprovider_sqlalchemy.models import Note
 from skosprovider_sqlalchemy.models import Source
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy.exc import NoResultFound
+
+from atramhasis.data.models import ExpandStrategy
+from atramhasis.data.models import IDGenerationStrategy
+from atramhasis.data.models import Provider
 
 
 def is_html(value):
@@ -222,3 +228,34 @@ def map_conceptscheme(conceptscheme, conceptscheme_json):
         source = Source(citation=s.get('citation', ''))
         conceptscheme.sources.append(source)
     return conceptscheme
+
+
+def map_provider(provider_json: dict, provider: Provider = None) -> Provider:
+    """
+    Create a atramhasis.data.models.Provider from json data.
+
+    An existing provider can optionally be passed. When passed this one will be updated.
+
+    :param provider_json: JSON data as a dict.
+    :param provider: A provider which will be updated with the JSON data. When None
+       a new Provider instance will be returned.
+    :return: A Provider set with data from the JSON.
+    """
+    if provider is None:
+        # Only executed on creation.
+        provider = Provider()
+        provider.conceptscheme = ConceptScheme(uri=provider_json['conceptscheme_uri'])
+        provider.id = provider_json.get("id")
+
+    provider.meta = provider_json.get("metadata") or {}
+    provider.default_language = provider_json.get("default_language")
+    provider.force_display_language = provider_json.get("force_display_language")
+    provider.id_generation_strategy = IDGenerationStrategy[
+        provider_json.get("id_generation_strategy") or 'NUMERIC'
+    ]
+    provider.subject = provider_json.get("subject") or []
+    provider.uri_pattern = provider_json["uri_pattern"]
+    provider.expand_strategy = ExpandStrategy[
+        (provider_json.get("expand_strategy") or 'RECURSE').upper()
+    ]
+    return provider

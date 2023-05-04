@@ -1,0 +1,47 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://id.bluebirds.org/bird> a skos:Concept ;
+    skos:inScheme <http://id.bluebirds.org> ;
+    skos:narrower <http://id.bluebirds.org/parrot> ;
+    skos:narrower <http://id.bluebirds.org/579A439C-1A7A-476A-92C3-8A74ABD6B3DB> ;
+    skos:prefLabel "Bird"@en,
+        "Vogel"@nl .
+
+<http://id.bluebirds.org/parrot> a skos:Concept ;
+    dcterms:identifier "parrot" ;
+    skos:inScheme <http://id.bluebirds.org> ;
+    skos:narrower <http://id.bluebirds.org/norwegianblue> ;
+    skos:prefLabel "Parrot"@en,
+        "Papegaai"@nl .
+
+<http://id.bluebirds.org/norwegianblue> a skos:Concept ;
+    dcterms:identifier "norwegianblue" ;
+    skos:inScheme <http://id.bluebirds.org> ;
+    skos:broader <http://id.bluebirds.org/parrot> ;
+    skos:relatedMatch <http://id.slugs.org/slug> ;
+    skos:prefLabel "Norwegian Blue"@en,
+        "Noorse Blauwe"@nl .
+
+<http://id.bluebirds.org/579A439C-1A7A-476A-92C3-8A74ABD6B3DB> a skos:Concept ;
+    dcterms:identifier "579A439C-1A7A-476A-92C3-8A74ABD6B3DB" ;
+    skos:inScheme <http://id.bluebirds.org> ;
+    skos:narrower <http://id.bluebirds.org/blauwereiger> ;
+    skos:prefLabel "Heron"@en, 
+	"Héron"@fr,
+        "Reiger"@nl .
+
+<http://id.bluebirds.org/blauwereiger> a skos:Concept ;
+    dcterms:identifier "blauwereiger" ;
+    skos:inScheme <http://id.bluebirds.org> ;
+    skos:prefLabel "Grey heron"@en,
+	"Héron cendré"@fr,
+        "Blauwe reiger"@nl, 
+	"Ardea cinerea"@la .
+
+<http://id.bluebirds.org> a skos:ConceptScheme ;
+    dcterms:identifier "BLUEBIRDS" ;
+    skos:hasTopConcept <http://id.bluebirds.org/bird> ;
+    skos:prefLabel "Blue birds"@en,
+        "Blauwe vogels"@nl .

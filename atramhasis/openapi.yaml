@@ -787,6 +787,29 @@ paths:
           description: Bad request.
         5XX:
           description: Unexpected error.
+    post:
+      summary: Create a provider.
+      description: Create a provider with a conceptscheme.
+      tags:
+        - Atramhasis
+      requestBody:
+        required: true
+        description: Data to create provider.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Provider"
+      responses:
+        201:
+          description: Provider created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Provider"
+        4XX:
+          description: Bad request.
+        5XX:
+          description: Unexpected error.
   /providers/{id}:
     parameters:
       - name: id
@@ -807,6 +830,45 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Provider"
+        4XX:
+          description: Bad request.
+        5XX:
+          description: Unexpected error.
+    put:
+      summary: Update a provider.
+      description: Update a provider.
+      tags:
+        - Atramhasis
+      requestBody:
+        required: true
+        description: Data to update a provider.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/Provider"
+                - type: object
+                  required:
+                    - id
+      responses:
+        200:
+          description: Provider updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Provider"
+        4XX:
+          description: Bad request.
+        5XX:
+          description: Unexpected error.
+    delete:
+      summary: Delete a provider.
+      description: Delete a provider.
+      tags:
+        - Atramhasis
+      responses:
+        204:
+          description: Provider deleted successfully
         4XX:
           description: Bad request.
         5XX:
@@ -1071,39 +1133,56 @@ components:
     Provider:
       type: object
       required:
-        - id
-        - type
         - conceptscheme_uri
         - uri_pattern
-        - default_language
-        - subject
-        - force_display_language
       properties:
         id:
           type: string
+          nullable: true
+          maxLength: 200
         type:
           type: string
+          nullable: true
         conceptscheme_uri:
           type: string
+          maxLength: 200
+          nullable: false
         uri_pattern:
           type: string
           nullable: true
+          pattern: .*%s.*
+          maxLength: 200
         default_language:
           type: string
           nullable: true
+          maxLength: 100
         subject:
           type: array
+          nullable: true
           items:
             type: string
+            maxLength: 50
         force_display_language:
           type: string
           nullable: true
+          maxLength: 20
         id_generation_strategy:
           type: string
+          nullable: true
           enum:
             - NUMERIC
             - GUID
             - MANUAL
+        expand_strategy:
+          type: string
+          nullable: true
+          enum:
+            - recurse
+            - visit
+        metadata:
+          type: object
+          additionalProperties: true
+          nullable: true
     Error:
       type: object
       required:
