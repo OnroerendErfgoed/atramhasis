@@ -43,17 +43,21 @@
     <div data-dojo-attach-point="gridNode"></div>
   </div>
 
-  <div class="search-footer-buttons text-center large-8 columns large-offset-2">
-    <div class="large-4 columns">
+  <div class="search-footer-buttons text-center row">
+    <div class="large-3 columns">
       <button class="button tiny" href="#/concept/new" data-dojo-attach-event="onClick: _createConcept"
               data-dojo-attach-point="addConceptButton" disabled>+Add</button>
     </div>
-    <div class="large-4 columns">
+    <div class="large-3 columns">
       <button class="button tiny" href="#/concept/import" data-dojo-attach-event="onClick: _importConcept"
               data-dojo-attach-point="importConceptButton" disabled>Import</button>
     </div>
-    <div class="large-4 columns">
-      <a class="button tiny" href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</a>
+    <div class="large-3 columns">
+      <button class="button tiny admin-button" href="#/languages" data-dojo-attach-event="onClick: _editLanguages">Language</button>
+    </div>
+    <div class="large-3 columns">
+      <button class="button tiny admin-button" href="#/providers" data-dojo-attach-event="onClick: _editProviders"
+         data-dojo-attach-point="manageProvidersButton" disabled>Providers</button>
     </div>
   </div>
 

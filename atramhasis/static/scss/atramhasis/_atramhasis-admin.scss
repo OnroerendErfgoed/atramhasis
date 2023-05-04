@@ -309,6 +309,13 @@ a.admin-button:hover {
   .search-footer-buttons {
     margin-top: 20px;
     height: 60px;
+
+    .admin-button {
+      background-color: $blue;
+      &:hover:enabled {
+        background-color: $fresh-blue;
+      }
+    }
   }
 }
 

@@ -66,6 +66,7 @@ define([
     templateString: template,
     loadingContainer: null,
     staticAppPath: null,
+    canCreateProviders: null,
     conceptSchemeController: null,
     conceptController: null,
     languageController: null,

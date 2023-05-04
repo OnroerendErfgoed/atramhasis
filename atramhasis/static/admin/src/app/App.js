@@ -81,6 +81,7 @@ define([
               loadingContainer: this.appConfig.loadingContainer,
               appContainer: this.appConfig.appContainer,
               staticAppPath: this.appConfig.staticAppPath,
+              canCreateProviders: this.appConfig.canCreateProviders,
               conceptSchemeController: this._controllers.conceptSchemeController,
               conceptController: this._controllers.conceptController,
               languageController: this._controllers.languageController,

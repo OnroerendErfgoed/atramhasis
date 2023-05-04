@@ -44,7 +44,11 @@
 		dojoConfig.packages.pop();
 		dojoConfig.packages.push({ name: 'app', location: '{{ request.static_path(release_dir + '/app') }}' });
 		dojoConfig.cacheBust = {{ 'true' if request.registry.settings['dojo.mode'] == 'dist' else 'false' }};
-    var staticAppPath = "{{ request.static_path(app_package + ':static/') }}"
+    var staticAppPath = "{{ request.static_path(app_package + ':static/') }}";
+    var canCreateProviders = false;
+    {% if request.has_permission('add-provider') %}
+      canCreateProviders = true;
+    {% endif %}
 	</script>
   <script src="{{ request.static_path(modules_dir + '/dojo/dojo.js') }}"></script>
 	<script type="text/javascript">

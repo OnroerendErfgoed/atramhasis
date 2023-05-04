@@ -64,6 +64,9 @@ define([
       this._grid.startup();
       this._calculateGridHeight();
       on(window, 'resize', lang.hitch(this, function() { this._calculateGridHeight() }));
+      if (this.appUi.canCreateProviders) {
+        domAttr.set(this.manageProvidersButton, 'disabled', false);
+      }
     },
 
     init: function (scheme, store) {
@@ -307,6 +310,12 @@ define([
       evt.preventDefault();
       console.debug('SearchPane::_editConceptScheme');
       this.appUi._editConceptScheme(evt);
+    },
+
+    _editProviders: function (evt) {
+      evt.preventDefault();
+      console.debug('SearchPane::_editProviders');
+      // this.appUi._editConceptScheme(evt);
     }
   });
 });
