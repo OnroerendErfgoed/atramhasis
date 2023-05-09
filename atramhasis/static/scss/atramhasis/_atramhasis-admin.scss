@@ -446,7 +446,7 @@ a.admin-button:hover {
   }
 }
 
-.matches-dialog, .import-concept-dialog {
+.matches-dialog, .import-concept-dialog, .manage-providers-dialog {
   width: 800px;
   height: 635px;
 
@@ -473,6 +473,25 @@ a.admin-button:hover {
 
     .dgrid-selected .dgrid-row-table {
       background-color: #cee6fa;
+    }
+  }
+}
+
+.manage-providers-dialog {
+  width: 1000px;
+  .dgrid {
+    .dgrid-column-default_language, .dgrid-column-force_display_language {
+      width: 35px;
+    }
+
+    .dgrid-column-id, .dgrid-column-expand_strategy, .dgrid-column-id_generation_strategy, .dgrid-column-subject {
+      width: 75px;
+    }
+
+    .dgrid-column-actions {
+      width: 50px;
+      text-align: center;
+      vertical-align: middle;
     }
   }
 }

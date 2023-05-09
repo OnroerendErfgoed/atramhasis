@@ -5,22 +5,34 @@ define([
   'dojo/_base/declare',
   'dojo/_base/lang',
   'dojo/_base/array',
-  'dojo/request/xhr'
+  'dojo/request/xhr',
+  'dstore/Rest',
+  'dstore/Trackable',
+  'dstore/Cache',
+  'dstore/Memory'
 ], function (
   declare,
   lang,
   array,
-  xhr
+  xhr,
+  Rest,
+  Trackable,
+  Cache,
+  Memory
 ) {
   return declare( null, {
 
+    _baseUrl: '',
     _target: '/providers',
+    _providerStore: null,
     providerList: null,
+    TrackableRest: null,
 
     constructor: function(args) {
       console.debug('ProviderController::constructor');
       declare.safeMixin(this, args);
       this.providerList = [];
+      this.TrackableRest = declare([ Rest, Trackable ]);
     },
 
     getProviders: function() {
@@ -37,6 +49,24 @@ define([
         return item.conceptscheme_uri === uri;
       });
       return providerList.length > 0 ? providerList[0] : null;
+    },
+
+    getProviderStore: function () {
+      console.debug('ProviderController::getProviderStore');
+      if (!this._providerStore) {
+        var trackStore = new this.TrackableRest({
+          target: this._baseUrl + this._target,
+          idProperty: 'id',
+          sortParam: 'sort',
+          useRangeHeaders: true,
+          accepts: 'application/json'
+        });
+        this._providerStore = Cache.create(trackStore, {
+          cachingStore: new Memory(),
+          isValidFetchCache: true
+        });
+      }
+      return this._providerStore;
     },
 
     loadProviders: function() {

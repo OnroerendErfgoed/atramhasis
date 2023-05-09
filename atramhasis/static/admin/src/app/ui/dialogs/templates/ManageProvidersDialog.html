@@ -8,6 +8,20 @@
 		</span>
   </div>
   <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+    <div class="row">
+      <div class="large-12 columns">
+        <button data-dojo-attach-event="onClick: showProviderForm" class="button tiny">+ Add a provider</button>
+      </div>
+    </div>
+    <div class="row hide" data-dojo-attach-point="providerFormNode">
+test
+    </div>
+    <div class="row">
+      <div class="large-12 columns">
+        <div data-dojo-attach-point="providerGridNode">
+        </div>
+      </div>
+    </div>
     <div class="row footerButtons">
       <div class="large-12 columns text-center">
         <button data-dojo-attach-event="onClick: _cancelClick" class="button tiny">Close</button>
