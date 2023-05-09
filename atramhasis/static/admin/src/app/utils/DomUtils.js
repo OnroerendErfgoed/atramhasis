@@ -25,9 +25,14 @@ define([
      *   }
      */
     addOptionsToSelect: function (select, options) {
-      options.data.forEach(item => {
-        const itemProp = options.showId ? item[options.labelProperty] + ' (' + item[options.idProperty] + ')' : item[options.labelProperty];
-        domConstruct.place(`<option value="${item[options.idProperty]}">${itemProp}</option>`, select);
+      domConstruct.empty(select);
+      if (options.placeholder) {
+        domConstruct.place('<option value="">' + options.placeholder + '</option>', select);
+      }
+      array.forEach(options.data, function (item) {
+        var itemProp = options.showId ? item[options.labelProperty] + ' (' + item[options.idProperty] + ')' :
+          item[options.labelProperty];
+        domConstruct.place('<option value="' + item[options.idProperty] + '">' + itemProp + '</option>', select);
       });
     },
 
