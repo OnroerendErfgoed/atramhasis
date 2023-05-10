@@ -118,7 +118,8 @@ define([
 
       this._manageProvidersDialog = new ManageProvidersDialog({
         parentNode: this,
-        providerController: this.providerController
+        providerController: this.providerController,
+        languageController: this.languageController
       });
       this._manageProvidersDialog.startup();
 

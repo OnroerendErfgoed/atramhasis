@@ -36,7 +36,7 @@ define([
   ColumnResizer,
   template,
   ConfirmDialog,
-  DomUtils
+  domUtils
 ) {
   return declare([Dialog, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
@@ -45,6 +45,7 @@ define([
     baseClass: 'manage-providers-dialog',
     title: 'Manage providers',
     providerController: null,
+    languageController: null,
     _providerStore: null,
     _providerGrid: null,
 
@@ -54,6 +55,20 @@ define([
       this._providerGrid = this._createGrid({
         collection: this._providerStore
       }, this.providerGridNode);
+      this.languageController.getLanguageStore().fetch().then(lang.hitch(this, function(languages) {
+        domUtils.addOptionsToSelect(this.defaultLangNode, {
+          data: languages,
+          idProperty: 'id',
+          labelProperty: 'name',
+          placeholder: 'Choose a language'
+        });
+        domUtils.addOptionsToSelect(this.displayLangNode, {
+          data: languages,
+          idProperty: 'id',
+          labelProperty: 'name',
+          placeholder: 'Choose a language'
+        });
+      }));
     },
 
     startup: function () {
@@ -100,15 +115,15 @@ define([
           field: 'type'
         },
         default_language: {
-          label: 'Def. lan.',
+          label: 'Def. lang.',
           field: 'default_language'
         },
         force_display_language: {
-          label: 'Displ. lan.',
+          label: 'Displ. lang.',
           field: 'force_display_language'
         },
         id_generation_strategy: {
-          label: 'ID gen. strat.',
+          label: 'ID gen. strategy',
           field: 'id_generation_strategy'
         },
         subject: {
@@ -116,13 +131,13 @@ define([
           field: 'subject'
         },
         expand_strategy: {
-          label: 'Expand strat',
+          label: 'Expand strategy',
           field: 'expand_strategy'
         },
         actions: {
           label: '',
           renderCell: lang.hitch(this, function (object) {
-            if (object.id === undefined) {
+            if (object.type !=='SQLAlchemyProvider') {
               return null;
             }
             var div = domConstruct.create('div', {'class': 'dGridHyperlink'});
@@ -211,5 +226,34 @@ define([
 
       confirmationDialog.show();
     },
+
+    _addProvider: function () {
+      console.debug('addprovider');
+
+      var provider = {
+        id: this.idNode.value.trim() ? this.idNode.value.trim() : undefined,
+        conceptscheme_uri: this.uriNode.value.trim(),
+        uri_pattern: this.uriPatternNode.value.trim(),
+        id_generation_strategy: domUtils.getSelectedOption(this.idStrategyNode),
+        expand_strategy: domUtils.getSelectedOption(this.expandStrategyNode)
+      };
+
+      this._providerStore.add(provider).then(
+        lang.hitch(this, function (prov) {
+          var message = 'New provider added with id ' + prov.id;
+          topic.publish('dGrowl', message, {
+            'title': 'Languages',
+            'sticky': false,
+            'channel': 'info'
+          });
+        }),
+        function (error) {
+          topic.publish('dGrowl', error.message, {
+            'title': 'Error adding provider',
+            'sticky': true,
+            'channel': 'error'
+          });
+        });
+    }
   });
 });

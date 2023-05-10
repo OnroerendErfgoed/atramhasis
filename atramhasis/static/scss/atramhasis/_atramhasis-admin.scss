@@ -481,11 +481,15 @@ a.admin-button:hover {
   width: 1000px;
   .dgrid {
     .dgrid-column-default_language, .dgrid-column-force_display_language {
-      width: 35px;
+      width: 40px;
     }
 
-    .dgrid-column-id, .dgrid-column-expand_strategy, .dgrid-column-id_generation_strategy, .dgrid-column-subject {
+    .dgrid-column-expand_strategy, .dgrid-column-id_generation_strategy, .dgrid-column-subject {
       width: 75px;
+    }
+
+    .dgrid-column-id {
+      width: 50px;
     }
 
     .dgrid-column-actions {
@@ -610,6 +614,14 @@ a.admin-button:hover {
       width: 50px;
       text-align: center;
       vertical-align: middle;
+    }
+  }
+}
+
+.placeholder-container {
+  &.large-label {
+    label {
+      width: 50%;
     }
   }
 }

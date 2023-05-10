@@ -7,18 +7,14 @@ define([
   'dojo/_base/array',
   'dojo/request/xhr',
   'dstore/Rest',
-  'dstore/Trackable',
-  'dstore/Cache',
-  'dstore/Memory'
+  'dstore/Trackable'
 ], function (
   declare,
   lang,
   array,
   xhr,
   Rest,
-  Trackable,
-  Cache,
-  Memory
+  Trackable
 ) {
   return declare( null, {
 
@@ -54,16 +50,12 @@ define([
     getProviderStore: function () {
       console.debug('ProviderController::getProviderStore');
       if (!this._providerStore) {
-        var trackStore = new this.TrackableRest({
+        this._providerStore = new this.TrackableRest({
           target: this._baseUrl + this._target,
           idProperty: 'id',
           sortParam: 'sort',
           useRangeHeaders: true,
           accepts: 'application/json'
-        });
-        this._providerStore = Cache.create(trackStore, {
-          cachingStore: new Memory(),
-          isValidFetchCache: true
         });
       }
       return this._providerStore;
