@@ -65,8 +65,21 @@ class DbNotFoundException(Exception):
     """
     Atramhasis could not find a database.
     """
+
     def __init__(self, value='No database found, please check your application setup'):
         self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+
+class ProviderNotFoundException(HTTPNotFound):
+    """
+    A Concept or Collection could not be found.
+    """
+
+    def __init__(self, p_id):
+        self.value = 'No provider found with the given id ' + p_id
 
     def __str__(self):
         return repr(self.value)
