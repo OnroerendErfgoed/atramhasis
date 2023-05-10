@@ -48,4 +48,4 @@ class TestErrorsViews(unittest.TestCase):
     def test_integrity(self):
         error = IntegrityError(orig=MagicMock(), statement='', params={})
         res = data_integrity(error, MagicMock())
-        self.assertEqual({'message': 'this operation violates the data integrity and could not be executed '}, res)
+        self.assertEqual({'message': 'this operation violates the data integrity and could not be executed'}, res)
