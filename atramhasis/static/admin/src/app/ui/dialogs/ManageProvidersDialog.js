@@ -202,16 +202,15 @@ define([
         confirmationDialog.destroy();
       });
       on(confirmationDialog, 'execute', lang.hitch(this, function () {
-        this._providerStore.remove(provider.id).then(function(removedProvider) {
-          topic.publish('dGrowl', 'Provider removed: ' + removedProvider.id, {
+        this._providerStore.remove(provider.id).then(lang.hitch(this, function() {
+          topic.publish('dGrowl', 'Provider removed: ' + provider.id, {
             'title': 'Provider',
             'sticky': false,
             'channel': 'info'
           });
-          // this.languageController.updateLanguageStore();
           this._providerGrid.refresh();
           this._reset();
-        }, function(err) {
+        }), function(err) {
           if (err.response && err.response.status === '409' || err.response.status === 409) {
             topic.publish('dGrowl', provider.id + ' (' + provider.conceptscheme_uri +
               ') is in use and can\'t be removed', {
