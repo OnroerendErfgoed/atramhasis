@@ -82,7 +82,7 @@ define([
 
     show: function () {
       this.inherited(arguments);
-      this._reset();
+      this._reset(false);
     },
 
     _cancelClick: function (evt) {
@@ -91,7 +91,7 @@ define([
       this.hide();
     },
 
-    _reset: function () {
+    _reset: function (delayRefresh) {
       this._hideProviderForm();
       this.idNode.value = '';
       this.uriNode.value = '';
@@ -103,6 +103,12 @@ define([
       domUtils.setSelectedOptions(this.defaultLangNode, ['']);
       domUtils.setSelectedOptions(this.displayLangNode, ['']);
       this._providerGrid.resize();
+      if (delayRefresh) {
+        setTimeout(lang.hitch(this, function(){ this._providerGrid.refresh(); }), 1000);
+      }
+      else {
+        this._providerGrid.refresh();
+      }
     },
 
     _createGrid: function(options, node) {
@@ -223,8 +229,7 @@ define([
             'sticky': false,
             'channel': 'info'
           });
-          this._providerGrid.refresh();
-          this._reset();
+          this._reset(true);
         }), function(err) {
           if (err.response && err.response.status === '409' || err.response.status === 409) {
             topic.publish('dGrowl', provider.id + ' (' + provider.conceptscheme_uri +
@@ -278,7 +283,7 @@ define([
             'sticky': false,
             'channel': 'info'
           });
-          this._hideProviderForm();
+          this._reset(true);
         }),
         lang.hitch(this, function (error) {
           var message = this._parseError(error);
