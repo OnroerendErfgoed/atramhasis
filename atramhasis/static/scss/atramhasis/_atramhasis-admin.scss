@@ -478,7 +478,7 @@ a.admin-button:hover {
 }
 
 .manage-providers-dialog {
-  width: 1000px;
+  min-width: 1000px !important;
   .dgrid {
     .dgrid-column-default_language, .dgrid-column-force_display_language {
       width: 40px;

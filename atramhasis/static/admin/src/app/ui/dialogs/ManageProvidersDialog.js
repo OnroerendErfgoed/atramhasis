@@ -74,7 +74,6 @@ define([
     startup: function () {
       this.inherited(arguments);
       this._providerGrid.startup();
-      this._providerGrid.resize();
     },
 
     hide: function () {
@@ -93,7 +92,8 @@ define([
     },
 
     _reset: function () {
-      domClass.add(this.providerFormNode, 'hide');
+      this._hideProviderForm();
+      this._providerGrid.resize();
     },
 
     _createGrid: function(options, node) {
@@ -176,14 +176,20 @@ define([
       }, node);
 
       grid.on('dgrid-error', function(event) {
-        console.log(event.error.message);
+        console.error(event.error.message);
       });
 
       return grid;
     },
 
-    showProviderForm: function() {
+    _showProviderForm: function() {
       domClass.remove(this.providerFormNode, 'hide');
+      domClass.add(this.providerGridContainerNode, 'hide');
+    },
+
+     _hideProviderForm: function() {
+      domClass.add(this.providerFormNode, 'hide');
+      domClass.remove(this.providerGridContainerNode, 'hide');
     },
 
     _removeRow: function(provider) {
@@ -234,7 +240,8 @@ define([
         conceptscheme_uri: this.uriNode.value.trim(),
         uri_pattern: this.uriPatternNode.value.trim(),
         id_generation_strategy: domUtils.getSelectedOption(this.idStrategyNode),
-        expand_strategy: domUtils.getSelectedOption(this.expandStrategyNode)
+        expand_strategy: domUtils.getSelectedOption(this.expandStrategyNode),
+        default_language: domUtils.getSelectedOption(this.expandStrategyNode),
       };
 
       this._providerStore.add(provider).then(

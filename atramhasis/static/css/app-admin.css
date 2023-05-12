@@ -15127,7 +15127,7 @@ a.admin-button:hover {
 
 /* line 480, ../scss/atramhasis/_atramhasis-admin.scss */
 .manage-providers-dialog {
-  width: 1000px;
+  min-width: 1000px !important;
 }
 /* line 483, ../scss/atramhasis/_atramhasis-admin.scss */
 .manage-providers-dialog .dgrid .dgrid-column-default_language, .manage-providers-dialog .dgrid .dgrid-column-force_display_language {
