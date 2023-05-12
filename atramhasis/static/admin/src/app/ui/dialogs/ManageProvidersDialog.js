@@ -187,7 +187,7 @@ define([
       domClass.add(this.providerGridContainerNode, 'hide');
     },
 
-     _hideProviderForm: function() {
+    _hideProviderForm: function() {
       domClass.add(this.providerFormNode, 'hide');
       domClass.remove(this.providerGridContainerNode, 'hide');
     },
@@ -234,14 +234,24 @@ define([
 
     _addProvider: function () {
       console.debug('addprovider');
+      console.debug('subjects', this.subjectNode.value.split(','));
+      var subjects = this.subjectNode.value.split(',')
+        .map(function(item) {
+          return item.trim();
+        })
+        .filter(function(item) {
+          return item.length > 0;
+        });
 
       var provider = {
         id: this.idNode.value.trim() ? this.idNode.value.trim() : undefined,
         conceptscheme_uri: this.uriNode.value.trim(),
         uri_pattern: this.uriPatternNode.value.trim(),
+        subject: subjects,
         id_generation_strategy: domUtils.getSelectedOption(this.idStrategyNode),
         expand_strategy: domUtils.getSelectedOption(this.expandStrategyNode),
-        default_language: domUtils.getSelectedOption(this.expandStrategyNode),
+        default_language: domUtils.getSelectedOption(this.defaultLangNode),
+        force_display_language: domUtils.getSelectedOption(this.displayLangNode)
       };
 
       this._providerStore.add(provider).then(
@@ -259,7 +269,8 @@ define([
             'sticky': true,
             'channel': 'error'
           });
-        });
+        }
+      );
     }
   });
 });

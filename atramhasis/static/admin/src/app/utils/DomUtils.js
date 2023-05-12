@@ -42,7 +42,10 @@ define([
      * @returns {String} Value from the selected 'option'
      */
     getSelectedOption: function (select) {
-      return select.options[select.selectedIndex].value;
+      if(select.options[select.selectedIndex]) {
+        return select.options[select.selectedIndex].value;
+      }
+      else { return null; }
     }
 
   }
