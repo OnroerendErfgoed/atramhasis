@@ -93,6 +93,15 @@ define([
 
     _reset: function () {
       this._hideProviderForm();
+      this.idNode.value = '';
+      this.uriNode.value = '';
+      this.uriPatternNode.value = '';
+      this.subjectNode.value = '';
+      this.subjectNode.value = '';
+      domUtils.setSelectedOptions(this.idStrategyNode, ['NUMERIC']);
+      domUtils.setSelectedOptions(this.expandStrategyNode, ['recurse']);
+      domUtils.setSelectedOptions(this.defaultLangNode, ['']);
+      domUtils.setSelectedOptions(this.displayLangNode, ['']);
       this._providerGrid.resize();
     },
 
@@ -233,8 +242,6 @@ define([
     },
 
     _addProvider: function () {
-      console.debug('addprovider');
-      console.debug('subjects', this.subjectNode.value.split(','));
       var subjects = this.subjectNode.value.split(',')
         .map(function(item) {
           return item.trim();
@@ -254,6 +261,15 @@ define([
         force_display_language: domUtils.getSelectedOption(this.displayLangNode)
       };
 
+      if (!this._validate(provider)) {
+        topic.publish('dGrowl', 'Please fill in all required fields.', {
+          'title': 'Provider not valid',
+          'sticky': false,
+          'channel': 'warn'
+        });
+        return;
+      }
+
       this._providerStore.add(provider).then(
         lang.hitch(this, function (prov) {
           var message = 'New provider added with id ' + prov.id;
@@ -262,15 +278,42 @@ define([
             'sticky': false,
             'channel': 'info'
           });
+          this._hideProviderForm();
         }),
-        function (error) {
-          topic.publish('dGrowl', error.message, {
+        lang.hitch(this, function (error) {
+          var message = this._parseError(error);
+          topic.publish('dGrowl', message, {
             'title': 'Error adding provider',
             'sticky': true,
             'channel': 'error'
           });
-        }
+        })
       );
+    },
+
+    _validate: function (provider) {
+      console.debug('validate');
+      var valid = true;
+      if (provider.conceptscheme_uri === '' || provider.uri_pattern === '') {
+        valid = false;
+      }
+      return valid;
+    },
+
+    _parseError: function (error) {
+      var errorJson = JSON.parse(error.response.data);
+      var message = "",
+        prop = null;
+      array.forEach(errorJson.errors, function (errorObj) {
+        for (prop in errorObj) {
+          message += "-<em>";
+          message += prop;
+          message += "</em>: ";
+          message += errorObj[prop];
+          message += "<br>";
+        }
+      });
+      return message;
     }
   });
 });

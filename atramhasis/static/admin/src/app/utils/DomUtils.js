@@ -37,7 +37,7 @@ define([
     },
 
     /**
-     * Get the selected'option' from a 'select'.
+     * Get the selected 'option' from a 'select'.
      * @param {Object} select The 'select' element
      * @returns {String} Value from the selected 'option'
      */
@@ -46,7 +46,19 @@ define([
         return select.options[select.selectedIndex].value;
       }
       else { return null; }
-    }
+    },
+
+    /**
+     * Set the selected 'option(s)' from a 'select'.
+     * @param {Object} select The 'select' element
+     * @param {Array} values The 'option' value(s)
+     */
+    setSelectedOptions: function (select, values) {
+      var options = select && select.options;
+      for (var i=0, iLen=options.length; i<iLen; i++) {
+        options[i].selected = (values.indexOf(options[i].value) > -1);
+      }
+    },
 
   }
 });
