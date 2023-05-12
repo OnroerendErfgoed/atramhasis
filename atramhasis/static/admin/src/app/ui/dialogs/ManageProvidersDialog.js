@@ -11,6 +11,7 @@ define([
   'dojo/_base/array',
   'dojo/dom-construct',
   'dojo/dom-class',
+  'dojo/dom-attr',
   'dgrid/OnDemandGrid',
   'dgrid/extensions/DijitRegistry',
   'dgrid/extensions/ColumnResizer',
@@ -31,6 +32,7 @@ define([
   array,
   domConstruct,
   domClass,
+  domAttr,
   OnDemandGrid,
   DijitRegistry,
   ColumnResizer,
@@ -48,6 +50,7 @@ define([
     languageController: null,
     _providerStore: null,
     _providerGrid: null,
+    _editMode: false,
 
     postCreate: function () {
       this.inherited(arguments);
@@ -82,17 +85,19 @@ define([
 
     show: function () {
       this.inherited(arguments);
-      this._reset(false);
     },
 
-    _cancelClick: function (evt) {
-      console.debug('ProvidersDialog::_cancelClick');
+    _closeClick: function (evt) {
       evt.preventDefault();
+      this._reset(false);
       this.hide();
     },
 
     _reset: function (delayRefresh) {
+      this._editMode = false;
       this._hideProviderForm();
+      domAttr.remove(this.idNode, 'disabled');
+      domAttr.remove(this.uriNode, 'disabled');
       this.idNode.value = '';
       this.uriNode.value = '';
       this.uriPatternNode.value = '';
@@ -163,7 +168,7 @@ define([
               innerHTML: '',
               onclick: lang.hitch(this, function (evt) {
                 evt.preventDefault();
-                // this._showEditLanguageDialog(object);
+                this._openProvider(object);
               })
             }, div);
 
@@ -175,7 +180,7 @@ define([
               style: 'margin-left: 10px;',
               onclick: lang.hitch(this, function (evt) {
                 evt.preventDefault();
-                this._removeRow(object);
+                this._removeProvider(object);
               })
             }, div);
             return div;
@@ -198,6 +203,10 @@ define([
     },
 
     _showProviderForm: function() {
+      if (this._editMode) {
+        domAttr.set(this.idNode, 'disabled', true);
+        domAttr.set(this.uriNode, 'disabled', true);
+      }
       domClass.remove(this.providerFormNode, 'hide');
       domClass.add(this.providerGridContainerNode, 'hide');
     },
@@ -207,7 +216,13 @@ define([
       domClass.remove(this.providerGridContainerNode, 'hide');
     },
 
-    _removeRow: function(provider) {
+    _openProvider: function(provider) {
+      this._editMode = true;
+      this._setProvider(provider);
+      this._showProviderForm();
+    },
+
+    _removeProvider: function(provider) {
       var content = '<p style="font-size: 15px;">Are you sure you want to remove provider <strong>'+ provider.id +
         '</strong> (' + provider.conceptscheme_uri + ')?</p>';
 
@@ -246,7 +261,11 @@ define([
       confirmationDialog.show();
     },
 
-    _addProvider: function () {
+    _cancelProvider: function() {
+      this._reset();
+    },
+
+    _saveProvider: function () {
       var subjects = this.subjectNode.value.split(',')
         .map(function(item) {
           return item.trim();
@@ -275,29 +294,29 @@ define([
         return;
       }
 
-      this._providerStore.add(provider).then(
-        lang.hitch(this, function (prov) {
-          var message = 'New provider added with id ' + prov.id;
-          topic.publish('dGrowl', message, {
-            'title': 'Languages',
-            'sticky': false,
-            'channel': 'info'
-          });
-          this._reset(true);
-        }),
-        lang.hitch(this, function (error) {
-          var message = this._parseError(error);
-          topic.publish('dGrowl', message, {
-            'title': 'Error adding provider',
-            'sticky': true,
-            'channel': 'error'
-          });
-        })
-      );
+      this._editMode ? this._editProvider(provider) : this._addProvider(provider);
+    },
+
+    _setProvider: function(provider) {
+      this.idNode.value = provider.id;
+      this.uriNode.value = provider.conceptscheme_uri;
+      this.uriPatternNode.value = provider.uri_pattern;
+      this.subjectNode.value = provider.subject.join(', ');
+      if (provider.id_generation_strategy) {
+        domUtils.setSelectedOptions(this.idStrategyNode, [provider.id_generation_strategy]);
+      }
+      if (provider.expand_strategy) {
+        domUtils.setSelectedOptions(this.expandStrategyNode, [provider.expand_strategy]);
+      }
+      if (provider.default_language) {
+        domUtils.setSelectedOptions(this.defaultLangNode, [provider.default_language]);
+      }
+      if (provider.force_display_language) {
+        domUtils.setSelectedOptions(this.displayLangNode, [provider.force_display_language]);
+      }
     },
 
     _validate: function (provider) {
-      console.debug('validate');
       var valid = true;
       if (provider.conceptscheme_uri === '' || provider.uri_pattern === '') {
         valid = false;
@@ -319,6 +338,50 @@ define([
         }
       });
       return message;
+    },
+
+    _addProvider: function(provider) {
+      this._providerStore.add(provider).then(
+        lang.hitch(this, function (prov) {
+          var message = 'New provider added with id ' + prov.id;
+          topic.publish('dGrowl', message, {
+            'title': 'Provider',
+            'sticky': false,
+            'channel': 'info'
+          });
+          this._reset(true);
+        }),
+        lang.hitch(this, function (error) {
+          var message = this._parseError(error);
+          topic.publish('dGrowl', message, {
+            'title': 'Error adding provider',
+            'sticky': true,
+            'channel': 'error'
+          });
+        })
+      );
+    },
+
+    _editProvider: function(provider) {
+      this._providerStore.put(provider).then(
+        lang.hitch(this, function (prov) {
+          var message = 'Provider with id ' + prov.id + ' was saved.';
+          topic.publish('dGrowl', message, {
+            'title': 'Provider',
+            'sticky': false,
+            'channel': 'info'
+          });
+          this._reset();
+        }),
+        lang.hitch(this, function (error) {
+          var message = this._parseError(error);
+          topic.publish('dGrowl', message, {
+            'title': 'Error editing provider',
+            'sticky': true,
+            'channel': 'error'
+          });
+        })
+      );
     }
   });
 });

@@ -9,7 +9,7 @@
   </div>
   <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
     <div class="row hide" data-dojo-attach-point="providerFormNode">
-      <h5>Add a provider</h5>
+      <h5>Provider:</h5>
       <div class="row">
         <div class="large-12 columns">
           <div class="placeholder-container">
@@ -66,10 +66,10 @@
       </div>
       <div class="row">
         <div class="large-12 colums text-center">
-          <button data-dojo-attach-event="onClick: _addProvider" class="button tiny">
+          <button data-dojo-attach-event="onClick: _saveProvider" class="button tiny">
             Save</i>
           </button>
-          <button data-dojo-attach-event="onClick: _hideProviderForm" class="button tiny">
+          <button data-dojo-attach-event="onClick: _cancelProvider" class="button tiny">
             Cancel
           </button>
         </div>
@@ -85,8 +85,9 @@
       </div>
     </div>
     <div class="row footerButtons">
+      <hr>
       <div class="large-12 columns text-center">
-        <button data-dojo-attach-event="onClick: _cancelClick" class="button tiny">Close</button>
+        <button data-dojo-attach-event="onClick: _closeClick" class="button tiny">Close</button>
       </div>
     </div>
   </div>
