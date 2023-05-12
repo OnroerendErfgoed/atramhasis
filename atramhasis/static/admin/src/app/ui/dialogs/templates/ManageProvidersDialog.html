@@ -11,7 +11,7 @@
     <div class="row hide" data-dojo-attach-point="providerFormNode">
       <h5>Add a provider</h5>
       <div class="row">
-        <div class="large-7 columns">
+        <div class="large-12 columns">
           <div class="placeholder-container">
             <label for="idNode-provider">ID</label>
             <input type="text" id="idNode-provider" data-dojo-attach-point="idNode"
@@ -19,11 +19,13 @@
           </div>
           <div class="placeholder-container">
             <label for="uriNode-provider" title="required">Conceptscheme uri *</label>
-            <input type="text" id="uriNode-provider" data-dojo-attach-point="uriNode" />
+            <input type="text" id="uriNode-provider" data-dojo-attach-point="uriNode"
+            placeholder="e.g. https://id.test.net/thesauri/example" />
           </div>
           <div class="placeholder-container">
             <label for="uriPatternNode-provider" title="required">Uri pattern *</label>
-            <input type="text" id="uriPatternNode-provider" data-dojo-attach-point="uriPatternNode" />
+            <input type="text" id="uriPatternNode-provider" data-dojo-attach-point="uriPatternNode"
+            placeholder="e.g. https://id.test.net/thesauri/example/%s" />
           </div>
           <div class="placeholder-container">
             <label title="Provide a comma separated list for multiple subjects. For now, only hidden is supported"
@@ -32,7 +34,9 @@
                    title="Provide a comma separated list for multiple subjects. For now, only hidden is supported" />
           </div>
         </div>
-        <div class="large-5 columns">
+      </div>
+      <div class="row">
+        <div class="large-6 columns">
           <div class="placeholder-container large-label">
             <label for="defaultLangNode-provider">Default language</label>
             <select id="defaultLangNode-provider" data-dojo-attach-point="defaultLangNode"></select>
@@ -41,6 +45,8 @@
             <label for="displayLangNode-provider">Display language</label>
             <select id="displayLangNode-provider" data-dojo-attach-point="displayLangNode"></select>
           </div>
+        </div>
+        <div class="large-6 columns">
           <div class="placeholder-container large-label">
             <label for="idStrategyNode-provider">Id generating strategy</label>
             <select id="idStrategyNode-provider" data-dojo-attach-point="idStrategyNode">
