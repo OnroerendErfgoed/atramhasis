@@ -309,6 +309,13 @@ a.admin-button:hover {
   .search-footer-buttons {
     margin-top: 20px;
     height: 60px;
+
+    .admin-button {
+      background-color: $blue;
+      &:hover:enabled {
+        background-color: $fresh-blue;
+      }
+    }
   }
 }
 
@@ -439,7 +446,7 @@ a.admin-button:hover {
   }
 }
 
-.matches-dialog, .import-concept-dialog {
+.matches-dialog, .import-concept-dialog, .manage-providers-dialog {
   width: 800px;
   height: 635px;
 
@@ -466,6 +473,29 @@ a.admin-button:hover {
 
     .dgrid-selected .dgrid-row-table {
       background-color: #cee6fa;
+    }
+  }
+}
+
+.manage-providers-dialog {
+  min-width: 1000px !important;
+  .dgrid {
+    .dgrid-column-default_language, .dgrid-column-force_display_language {
+      width: 40px;
+    }
+
+    .dgrid-column-expand_strategy, .dgrid-column-id_generation_strategy, .dgrid-column-subject {
+      width: 75px;
+    }
+
+    .dgrid-column-id {
+      width: 50px;
+    }
+
+    .dgrid-column-actions {
+      width: 50px;
+      text-align: center;
+      vertical-align: middle;
     }
   }
 }
@@ -584,6 +614,14 @@ a.admin-button:hover {
       width: 50px;
       text-align: center;
       vertical-align: middle;
+    }
+  }
+}
+
+.placeholder-container {
+  &.large-label {
+    label {
+      width: 50%;
     }
   }
 }

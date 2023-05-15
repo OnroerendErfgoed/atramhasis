@@ -1,0 +1,94 @@
+<div class="dijitDialog" role="dialog" aria-labelledby="manageProvidersDialog_title">
+  <div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+    <span data-dojo-attach-point="titleNode" class="dijitDialogTitle" role="heading"></span>
+    <span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon"
+          data-dojo-attach-event="ondijitclick: onCancel" title="Annuleren" role="button" tabIndex="-1">
+			<span data-dojo-attach-point="closeText" class="closeText" title="Annuleren" tabIndex="-1">
+        <i class="fa fa-times"></i></span>
+		</span>
+  </div>
+  <div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent">
+    <div class="row hide" data-dojo-attach-point="providerFormNode">
+      <h5>Provider:</h5>
+      <div class="row">
+        <div class="large-12 columns">
+          <div class="placeholder-container">
+            <label for="idNode-provider">ID</label>
+            <input type="text" id="idNode-provider" data-dojo-attach-point="idNode"
+                   placeholder="Leave blank to use the conceptscheme id" />
+          </div>
+          <div class="placeholder-container">
+            <label for="uriNode-provider" title="required">Conceptscheme uri *</label>
+            <input type="text" id="uriNode-provider" data-dojo-attach-point="uriNode"
+            placeholder="e.g. https://id.test.net/thesauri/example" />
+          </div>
+          <div class="placeholder-container">
+            <label for="uriPatternNode-provider" title="required">Uri pattern *</label>
+            <input type="text" id="uriPatternNode-provider" data-dojo-attach-point="uriPatternNode"
+            placeholder="e.g. https://id.test.net/thesauri/example/%s" />
+          </div>
+          <div class="placeholder-container">
+            <label title="Provide a comma separated list for multiple subjects. For now, only hidden is supported"
+                   for="subjectNode-provider">Subject</label>
+            <input type="text" id="subjectNode-provider" data-dojo-attach-point="subjectNode" placeholder="e.g. hidden"
+                   title="Provide a comma separated list for multiple subjects. For now, only hidden is supported" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-6 columns">
+          <div class="placeholder-container large-label">
+            <label for="defaultLangNode-provider">Default language</label>
+            <select id="defaultLangNode-provider" data-dojo-attach-point="defaultLangNode"></select>
+          </div>
+          <div class="placeholder-container large-label">
+            <label for="displayLangNode-provider">Display language</label>
+            <select id="displayLangNode-provider" data-dojo-attach-point="displayLangNode"></select>
+          </div>
+        </div>
+        <div class="large-6 columns">
+          <div class="placeholder-container large-label">
+            <label for="idStrategyNode-provider">Id generating strategy</label>
+            <select id="idStrategyNode-provider" data-dojo-attach-point="idStrategyNode">
+              <option value="GUID">GUID</option>
+              <option value="MANUAL">MANUAL</option>
+              <option value="NUMERIC" selected>NUMERIC</option>
+            </select>
+          </div>
+          <div class="placeholder-container large-label">
+            <label for="expandStrategyNode-provider">Expand strategy</label>
+            <select id="expandStrategyNode-provider" data-dojo-attach-point="expandStrategyNode">
+              <option value="recurse" selected>recurse</option>
+              <option value="visit">visit</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-12 colums text-center">
+          <button data-dojo-attach-event="onClick: _saveProvider" class="button tiny">
+            Save</i>
+          </button>
+          <button data-dojo-attach-event="onClick: _cancelProvider" class="button tiny">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row" data-dojo-attach-point="providerGridContainerNode">
+      <div class="large-12 columns">
+        <button data-dojo-attach-event="onClick: _showProviderForm" class="button tiny">+ Add a provider</button>
+      </div>
+      <div class="large-12 columns">
+        <div data-dojo-attach-point="providerGridNode">
+        </div>
+      </div>
+    </div>
+    <div class="row footerButtons">
+      <hr>
+      <div class="large-12 columns text-center">
+        <button data-dojo-attach-event="onClick: _closeClick" class="button tiny">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

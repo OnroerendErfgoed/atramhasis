@@ -26,6 +26,7 @@ define([
   './widgets/SlideMenu',
   './dialogs/ManageConceptDialog',
   './dialogs/ManageLanguagesDialog',
+  './dialogs/ManageProvidersDialog',
   './dialogs/ImportConceptDialog',
   './dialogs/MergeConceptDialog',
   './dialogs/ManageSchemeDialog',
@@ -56,6 +57,7 @@ define([
   SlideMenu,
   ManageConceptDialog,
   ManageLanguagesDialog,
+  ManageProvidersDialog,
   ImportConceptDialog,
   MergeConceptDialog,
   ManageSchemeDialog,
@@ -66,6 +68,7 @@ define([
     templateString: template,
     loadingContainer: null,
     staticAppPath: null,
+    canCreateProviders: null,
     conceptSchemeController: null,
     conceptController: null,
     languageController: null,
@@ -76,6 +79,7 @@ define([
     _slideMenu: null,
     _manageConceptDialog: null,
     _manageLanguagesDialog: null,
+    _manageProvidersDialog: null,
     _importConceptDialog: null,
     _mergeConceptDialog: null,
     _selectedSchemeId: null,
@@ -111,6 +115,13 @@ define([
         languageController: this.languageController
       });
       this._manageLanguagesDialog.startup();
+
+      this._manageProvidersDialog = new ManageProvidersDialog({
+        parentNode: this,
+        providerController: this.providerController,
+        languageController: this.languageController
+      });
+      this._manageProvidersDialog.startup();
 
       this._importConceptDialog = new ImportConceptDialog({
         externalSchemeStore: this.conceptSchemeController.getExternalSchemeStore(),
@@ -334,6 +345,11 @@ define([
       evt.preventDefault();
       console.debug('AppUi::_editLanguages');
       this._manageLanguagesDialog.show();
+    },
+
+    _editProviders: function () {
+      console.debug('AppUi::_editProviders');
+      this._manageProvidersDialog.show();
     },
 
     _editConceptScheme: function (evt) {

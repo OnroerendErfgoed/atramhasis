@@ -319,7 +319,7 @@ class AtramhasisCrud:
 
     @view_config(
         route_name='atramhasis.provider',
-        permission='delete_provider',
+        permission='delete-provider',
         request_method='DELETE',
         openapi=True
     )
