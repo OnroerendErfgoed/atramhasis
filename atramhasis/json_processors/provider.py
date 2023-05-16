@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from atramhasis import mappers
 from atramhasis.data.datamanagers import ProviderDataManager
 from atramhasis.data.models import Provider
-from atramhasis.errors import ProviderNotFoundException
+from atramhasis.errors import SQLAlchemyProviderNotFoundException
 from atramhasis.errors import ValidationError
 from atramhasis.scripts.delete_scheme import delete_scheme
 
@@ -39,7 +39,7 @@ def update_provider(provider_id: str, json_data: Mapping, session: Session) -> P
     try:
         db_provider = manager.get_provider_by_id(provider_id)
     except NoResultFound:
-        raise ProviderNotFoundException(provider_id)
+        raise SQLAlchemyProviderNotFoundException(provider_id)
     db_provider = mappers.map_provider(json_data, provider=db_provider)
     session.flush()
     return db_provider
@@ -50,6 +50,6 @@ def delete_provider(provider_id, session: Session) -> None:
     try:
         db_provider = manager.get_provider_by_id(provider_id)
     except NoResultFound:
-        raise ProviderNotFoundException(provider_id)
+        raise SQLAlchemyProviderNotFoundException(provider_id)
     delete_scheme(session, db_provider.conceptscheme.id)
     session.delete(db_provider)

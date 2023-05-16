@@ -73,13 +73,13 @@ class DbNotFoundException(Exception):
         return repr(self.value)
 
 
-class ProviderNotFoundException(HTTPNotFound):
+class SQLAlchemyProviderNotFoundException(HTTPNotFound):
     """
-    A Concept or Collection could not be found.
+    SQLAlchemyProvider could not be found in the database.
     """
 
     def __init__(self, p_id):
-        self.value = 'No provider found with the given id ' + p_id
+        self.value = 'No SQLAlchemyProvider found with the given id ' + p_id
 
     def __str__(self):
         return repr(self.value)
