@@ -54,15 +54,14 @@ class TestMigrateTests(DbTest):
         expected_conceptscheme_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, conceptscheme.id]
         for expected in expected_conceptscheme_ids:
             self.assertIn(expected, db_conceptscheme_ids)
-        provider = next(p for p in db_providers if p.id == str(conceptscheme.id))
+        provider = next(p for p in db_providers if p.conceptscheme_id == conceptscheme.id)
         self.assertEqual(conceptscheme.id, provider.conceptscheme_id)
-        self.assertEqual(str(conceptscheme.id), provider.id)
         self.assertEqual(ExpandStrategy.RECURSE, provider.expand_strategy)
         self.assertEqual(IDGenerationStrategy.NUMERIC, provider.id_generation_strategy)
         self.assertEqual('urn:x-skosprovider:%s:%s', provider.uri_pattern)
         self.assertEqual(
             {
-                'id': int(provider.id),
+                'id': 'EXTRA',
                 'subject': [],
                 'atramhasis.id_generation_strategy': 'NUMERIC'
             },
