@@ -187,8 +187,9 @@ def migrate(skos_registry: Registry, session: Session):
             )
         else:
             provider.metadata['atramhasis.id_generation_strategy'] = 'NUMERIC'
-        db_provider.meta = json.loads(json.dumps(provider.metadata, default=json_serial))
-
+        meta = json.loads(json.dumps(provider.metadata, default=json_serial))
+        meta["id"] = provider.conceptscheme_id
+        db_provider.meta = meta
         db_provider.expand_strategy = ExpandStrategy[provider.expand_strategy.upper()]
         db_provider.conceptscheme = session.get(ConceptScheme, provider.conceptscheme_id)
         db_provider.id = provider.conceptscheme_id

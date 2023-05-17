@@ -62,7 +62,7 @@ class TestMigrateTests(DbTest):
         self.assertEqual('urn:x-skosprovider:%s:%s', provider.uri_pattern)
         self.assertEqual(
             {
-                'id': 'EXTRA',
+                'id': int(provider.id),
                 'subject': [],
                 'atramhasis.id_generation_strategy': 'NUMERIC'
             },
