@@ -7,6 +7,7 @@ from atramhasis import mappers
 from atramhasis.data.datamanagers import ProviderDataManager
 from atramhasis.data.models import Provider
 from atramhasis.errors import ValidationError
+from atramhasis.validators import validate_provider_json
 
 
 def create_provider(json_data: Mapping, session: Session, skos_registry: Registry) -> Provider:
@@ -17,6 +18,7 @@ def create_provider(json_data: Mapping, session: Session, skos_registry: Registr
                 "Provider could not be validated.",
                 [{"conceptscheme_uri": "Collides with existing provider."}],
             )
+    validate_provider_json(json_data)
     db_provider = mappers.map_provider(json_data)
     if not db_provider.id:
         # Store conceptscheme first so we can copy its id
@@ -32,6 +34,7 @@ def create_provider(json_data: Mapping, session: Session, skos_registry: Registr
 
 def update_provider(provider_id: str, json_data: Mapping, session: Session) -> Provider:
     """Process a JSON into to update an existing provider."""
+    validate_provider_json(json_data, provider_id)
     manager = ProviderDataManager(session)
     db_provider = manager.get_provider_by_id(provider_id)
     db_provider = mappers.map_provider(json_data, provider=db_provider)

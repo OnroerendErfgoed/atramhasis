@@ -622,6 +622,39 @@ class RestFunctionalTests(FunctionalTests):
             response.json
         )
 
+    def test_create_full_provider_via_put(self):
+        response = self.testapp.put_json(
+            url='/providers/ERFGOEDTYPES',
+            params={
+                'id': 'ERFGOEDTYPES',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': 'NL',
+                'force_display_language': 'NL',
+                'subject': ['hidden'],
+                'metadata': {'Info': 'Extra data about this provider'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit',
+            },
+            headers=self._get_default_headers(),
+            status=201
+        )
+        self.assertEqual(
+            {
+                'id': 'ERFGOEDTYPES',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': 'NL',
+                'force_display_language': 'NL',
+                'subject': ['hidden'],
+                'metadata': {'Info': 'Extra data about this provider'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit',
+            },
+            response.json
+        )
+
     def test_update_provider(self):
         conceptscheme = ConceptScheme(uri='https://id.erfgoed.net/thesauri/conceptschemes')
         provider = Provider(

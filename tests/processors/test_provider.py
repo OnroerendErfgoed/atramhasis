@@ -51,12 +51,14 @@ def test_create_provider_duplicate_uri():
 
 def test_update_provider_with_id():
     session = Mock()
-    with patch.object(provider.mappers, 'map_provider') as mapper:
+    with patch.object(provider.mappers, 'map_provider') as mapper,\
+        patch('atramhasis.json_processors.provider.validate_provider_json') as validator:
         mapper.return_value = Mock(id='1')
         data = {}
         provider.update_provider('1', data, session)
 
     mapper.assert_called()
+    validator.assert_called()
 
 
 def test_delete_provider_with_id():

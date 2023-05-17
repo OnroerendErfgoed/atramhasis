@@ -692,9 +692,14 @@ def superordinates_hierarchy_rule(errors, node_location, skos_manager, conceptsc
                    )
 
 
-def validate_provider_json(json_data):
+def validate_provider_json(json_data, provider_id=None):
     errors = []
 
+    if provider_id:
+        if provider_id != json_data.get('id'):
+            errors.append(
+                {"id": "Id does not match with id parameter in url."},
+            )
     # Do not allow keys in the metadata which exist in the root of the json.
     forbidden_metadata_keys = (
         'default_language',
