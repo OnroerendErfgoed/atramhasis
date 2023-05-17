@@ -12,7 +12,7 @@ from tests import DbTest
 
 
 def setUpModule():
-    tests.setup_db()
+    tests.setup_db(guarantee_empty=True)
     tests.fill_db()
 
 
