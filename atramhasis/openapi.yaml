@@ -835,8 +835,8 @@ paths:
         5XX:
           description: Unexpected error.
     put:
-      summary: Update a provider or create a new one if it does exist.
-      description: Update a provider or create a new one if it does exist.
+      summary: Update a provider or create a new one if it does not exist.
+      description: Update a provider or create a new one if it does not exist.
       tags:
         - Atramhasis
       requestBody:
