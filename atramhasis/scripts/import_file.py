@@ -7,18 +7,20 @@ import sys
 from rdflib import Graph
 from rdflib.util import SUFFIX_FORMAT_MAP
 from rdflib.util import guess_format
-from skosprovider.skos import ConceptScheme
 from skosprovider.providers import DictionaryProvider
 from skosprovider.providers import SimpleCsvProvider
+from skosprovider.skos import ConceptScheme
 from skosprovider.uri import UriPatternGenerator
 from skosprovider_rdf.providers import RDFProvider
-from skosprovider_sqlalchemy.models import Label
-from skosprovider_sqlalchemy.models import Note
-from skosprovider_sqlalchemy.models import Source
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy import create_engine
 from sqlalchemy.engine import url
 from sqlalchemy.orm import sessionmaker
+
+from atramhasis.data.models import ExpandStrategy
+from atramhasis.data.models import IDGenerationStrategy
+from atramhasis.data.models import Provider
+from atramhasis.scripts.migrate_sqlalchemy_providers import json_serial
 
 
 def file_to_rdf_provider(**kwargs) -> RDFProvider:
@@ -111,43 +113,77 @@ def parse_argv_for_import(argv):
             '--conceptscheme_label Labels '
             '--conceptscheme_uri urn:x-skosprovider:trees '
             '--uri_pattern urn:x-skosprovider:trees:%s'
+            '--create_provider True '
+            '--provider_id ERFGOEDTYPES '
+            '--id_generation_strategy numeric'
         )
     )
-    parser.add_argument('--from',
-                        dest='input_file',
-                        type=str,
-                        help='local path to the input file',
-                        required=True
-                        )
-    parser.add_argument('--to',
-                        dest='to',
-                        metavar='conn_string',
-                        type=str,
-                        help='Connection string of the output database',
-                        required=False,
-                        default='sqlite:///atramhasis.sqlite'
-                        )
-    parser.add_argument('--conceptscheme_label',
-                        dest='cs_label',
-                        type=str,
-                        help='Label of the conceptscheme',
-                        required=False,
-                        default=None
-                        )
-    parser.add_argument('--conceptscheme_uri',
-                        dest='cs_uri',
-                        type=str,
-                        help='URI of the conceptscheme',
-                        required=False,
-                        default=None
-                        )
-    parser.add_argument('--uri_pattern',
-                        dest='uri_pattern',
-                        type=str,
-                        help='URI pattern input for the URIGenerator',
-                        required=False,
-                        default=None
-                        )
+    parser.add_argument(
+        '--from',
+        dest='input_file',
+        type=str,
+        help='local path to the input file',
+        required=True
+    )
+    parser.add_argument(
+        '--to',
+        dest='to',
+        metavar='conn_string',
+        type=str,
+        help='Connection string of the output database',
+        required=False,
+        default='sqlite:///atramhasis.sqlite'
+    )
+    parser.add_argument(
+        '--conceptscheme_label',
+        dest='cs_label',
+        type=str,
+        help='Label of the conceptscheme',
+        required=False,
+        default=None
+    )
+    parser.add_argument(
+        '--conceptscheme_uri',
+        dest='cs_uri',
+        type=str,
+        help='URI of the conceptscheme',
+        required=False,
+        default=None
+    )
+    parser.add_argument(
+        '--uri_pattern',
+        dest='uri_pattern',
+        type=str,
+        help='URI pattern input for the URIGenerator',
+        required=True,
+    )
+    parser.add_argument(
+        '--create_provider',
+        dest='create_provider',
+        type=bool,
+        help='An optional boolean that defaults to True. '
+             'If set to False, no provider is created',
+        required=False,
+        default=True
+    )
+    parser.add_argument(
+        '--provider_id',
+        dest='provider_id',
+        type=str,
+        help='An optional string (eg. ERFGOEDTYPES) to be assigned to the provider id. '
+             'If not specified, assign the conceptscheme id to the provider id',
+        required=False,
+        default=None
+    )
+    parser.add_argument(
+        '--id_generation_strategy',
+        dest='id_generation_strategy',
+        type=str,
+        help='URI pattern input for the URIGenerator',
+        required=False,
+        choices=["numeric", "guid", "manual"],
+        default="numeric"
+    )
     args = parser.parse_args()
     if not validate_file(args.input_file) or not validate_connection_string(args.to):
         sys.exit(1)
@@ -209,7 +245,13 @@ def create_conceptscheme(conceptscheme_uri: str, conceptscheme_label: str) -> Co
 def main(argv=sys.argv):
     """
     Documentation: import -h
-    Run: import --from <path_input_file> --to <conn_string> --conceptscheme_label <cs_label> --conceptscheme_uri <cs_uri> --uri_pattern <uri_pattern>
+    Run: import
+    --from <path_input_file> --to <conn_string>
+    --conceptscheme_label <cs_label>
+    --conceptscheme_uri <cs_uri> --uri_pattern <uri_pattern>
+    --create_provider <True/False>
+    --provider_id <provider_id>
+    --id_generation_strategy <numeric/guid/manual>
 
     example path_input_file:
      atramhasis/scripts/my_file
@@ -240,6 +282,19 @@ def main(argv=sys.argv):
         args.concept_scheme = create_conceptscheme(cs_uri, cs_label)
     provider = file_to_provider_function(**vars(args))
     cs = import_provider(provider, session)
+    if args.create_provider:
+        db_provider = Provider()
+        provider.metadata[
+            'atramhasis.id_generation_strategy'
+        ] = args.id_generation_strategy.upper()
+        db_provider.meta = json.loads(json.dumps(provider.metadata, default=json_serial))
+        db_provider.expand_strategy = 'RECURSE'
+        db_provider.conceptscheme = cs
+        db_provider.id = args.provider_id or cs.id
+        db_provider.uri_pattern = args.uri_pattern
+    if 'conceptscheme_id' in db_provider.meta:
+        del db_provider.meta['conceptscheme_id']
+    session.add(db_provider)
 
     # Get info to return to the user
     prov_id = input_name.upper()

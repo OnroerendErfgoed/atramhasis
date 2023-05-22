@@ -7,8 +7,10 @@ from skosprovider.skos import Concept
 from skosprovider.skos import Note
 from skosprovider.utils import dict_dumper
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+from sqlalchemy import select
 
 import tests
+from atramhasis.data.models import Provider
 from atramhasis.scripts import import_file
 from tests import DbTest
 from tests import SETTINGS
@@ -84,6 +86,11 @@ class ImportTests(DbTest):
         self.assertIsInstance(eb.notes[0], Note)
         self.assertIn('Mornay', eb.notes[0].note)
         self.assertEqual('note', eb.notes[0].type)
+        provider = self.session.execute(select(Provider)).scalar_one()
+        self.assertEqual(provider.meta['atramhasis.id_generation_strategy'], 'NUMERIC')
+        self.assertEqual(provider.uri_pattern, uri_pattern)
+        self.assertEqual(provider.expand_strategy.value, 'recurse')
+        self.assertEqual(provider.id, str(provider.conceptscheme_id))
 
     def _check_parrots(self, conceptscheme_label):
         sql_prov = SQLAlchemyProvider({'id': 'PARROTS', 'conceptscheme_id': 1}, self.session)
@@ -101,19 +108,19 @@ class ImportTests(DbTest):
         assert blauwereiger in reiger.narrower
 
     def test_import_rdf(self):
-        sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url']]
+        sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url'], '--uri_pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_trees('Verschillende soorten bomen')
 
     def test_import_ttl(self):
-        sys.argv = ['import_file', '--from', test_data_ttl, '--to', SETTINGS['sqlalchemy.url']]
+        sys.argv = ['import_file', '--from', test_data_ttl, '--to', SETTINGS['sqlalchemy.url'], '--uri_pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_trees('Different types of trees')
 
     def test_import_ttl_string_id(self):
-        sys.argv = ['import_file', '--from', test_data_ttl_string_id, '--to', SETTINGS['sqlalchemy.url']]
+        sys.argv = ['import_file', '--from', test_data_ttl_string_id, '--to', SETTINGS['sqlalchemy.url'], '--uri_pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
         tests.db_filled = True
 
@@ -127,7 +134,11 @@ class ImportTests(DbTest):
         self._check_trees('Trees Conceptscheme')
 
     def test_import_csv(self):
-        sys.argv = ['import_file', '--from', test_data_csv, '--to', SETTINGS['sqlalchemy.url']]
+        sys.argv = [
+            'import_file', '--from', test_data_csv, '--to',
+            SETTINGS['sqlalchemy.url'],
+            '--uri_pattern', 'urn:x-skosprovider:menu:%s',
+        ]
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_menu()
@@ -139,3 +150,21 @@ class ImportTests(DbTest):
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_menu('http://id.menu.org/%s')
+
+    def test_import_csv_with_provider_all_args(self):
+        sys.argv = [
+            'import_file',
+            '--from', test_data_csv,
+            '--to', SETTINGS['sqlalchemy.url'],
+            '--uri_pattern', 'urn:x-skosprovider:test:%s',
+            '--provider_id', 'MENU',
+            '--create_provider', 'True',
+            '--id_generation_strategy', 'guid',
+        ]
+        import_file.main(sys.argv)
+        tests.db_filled = True
+        provider = self.session.execute(select(Provider)).scalar_one()
+        self.assertEqual(provider.meta['atramhasis.id_generation_strategy'], 'GUID')
+        self.assertEqual(provider.uri_pattern, 'urn:x-skosprovider:test:%s')
+        self.assertEqual(provider.expand_strategy.value, 'recurse')
+        self.assertEqual(provider.id, 'MENU')
