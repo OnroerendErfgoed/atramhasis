@@ -39,10 +39,7 @@ def update_provider(provider_id: str, json_data: Mapping, session: Session) -> P
     """Process a JSON into to update an existing provider."""
     validate_provider_json(json_data, provider_id)
     manager = ProviderDataManager(session)
-    try:
-        db_provider = manager.get_provider_by_id(provider_id)
-    except NoResultFound:
-        raise SQLAlchemyProviderNotFoundException(provider_id)
+    db_provider = manager.get_provider_by_id(provider_id)
     db_provider = mappers.map_provider(json_data, provider=db_provider)
     session.flush()
     return db_provider
