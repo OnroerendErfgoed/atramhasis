@@ -1,12 +1,15 @@
 from typing import Mapping
 
 from skosprovider.registry import Registry
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from atramhasis import mappers
 from atramhasis.data.datamanagers import ProviderDataManager
 from atramhasis.data.models import Provider
+from atramhasis.errors import SQLAlchemyProviderNotFoundException
 from atramhasis.errors import ValidationError
+from atramhasis.scripts.delete_scheme import delete_scheme
 from atramhasis.validators import validate_provider_json
 
 
@@ -36,7 +39,10 @@ def update_provider(provider_id: str, json_data: Mapping, session: Session) -> P
     """Process a JSON into to update an existing provider."""
     validate_provider_json(json_data, provider_id)
     manager = ProviderDataManager(session)
-    db_provider = manager.get_provider_by_id(provider_id)
+    try:
+        db_provider = manager.get_provider_by_id(provider_id)
+    except NoResultFound:
+        raise SQLAlchemyProviderNotFoundException(provider_id)
     db_provider = mappers.map_provider(json_data, provider=db_provider)
     session.flush()
     return db_provider
@@ -44,5 +50,9 @@ def update_provider(provider_id: str, json_data: Mapping, session: Session) -> P
 
 def delete_provider(provider_id, session: Session) -> None:
     manager = ProviderDataManager(session)
-    db_provider = manager.get_provider_by_id(provider_id)
+    try:
+        db_provider = manager.get_provider_by_id(provider_id)
+    except NoResultFound:
+        raise SQLAlchemyProviderNotFoundException(provider_id)
+    delete_scheme(session, db_provider.conceptscheme.id)
     session.delete(db_provider)

@@ -63,7 +63,8 @@ def test_update_provider_with_id():
 
 def test_delete_provider_with_id():
     session = Mock()
-    with patch.object(provider.mappers, 'map_provider') as mapper:
+    with patch.object(provider.mappers, 'map_provider') as mapper, \
+        patch.object(provider, 'delete_scheme'):
         mapper.return_value = Mock(id='1')
         provider.delete_provider('1', session)
 

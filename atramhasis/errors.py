@@ -65,8 +65,21 @@ class DbNotFoundException(Exception):
     """
     Atramhasis could not find a database.
     """
+
     def __init__(self, value='No database found, please check your application setup'):
         self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+
+class SQLAlchemyProviderNotFoundException(HTTPNotFound):
+    """
+    SQLAlchemyProvider could not be found in the database.
+    """
+
+    def __init__(self, p_id):
+        self.value = 'No SQLAlchemyProvider found with the given id ' + p_id
 
     def __str__(self):
         return repr(self.value)
