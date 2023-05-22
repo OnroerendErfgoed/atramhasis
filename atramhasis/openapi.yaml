@@ -835,8 +835,8 @@ paths:
         5XX:
           description: Unexpected error.
     put:
-      summary: Update a provider.
-      description: Update a provider.
+      summary: Update a provider or create a new one if it does not exist.
+      description: Update a provider or create a new one if it does not exist.
       tags:
         - Atramhasis
       requestBody:
@@ -853,6 +853,12 @@ paths:
       responses:
         200:
           description: Provider updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Provider"
+        201:
+          description: Provider created successfully
           content:
             application/json:
               schema:
