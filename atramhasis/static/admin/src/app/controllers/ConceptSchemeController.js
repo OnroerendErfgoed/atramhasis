@@ -43,7 +43,7 @@ define([
       return xhr.get(this._target, {
         handleAs: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
-      })
+      });
     },
 
     getConceptScheme: function(id) {
@@ -51,7 +51,7 @@ define([
       return xhr.get(this._target + '/' + id, {
         handleAs: 'json',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
-      })
+      });
     },
 
 
@@ -80,27 +80,29 @@ define([
       return this.getConceptSchemes().then(lang.hitch(this, function (schemes) {
         var externalSchemelist = [];
         array.forEach(schemes, lang.hitch(this, function (scheme) {
-          if(array.indexOf(scheme.subject, 'external') === -1){
+          if (!scheme.label) {
+            scheme.label = scheme.uri;
+          }
+          if (array.indexOf(scheme.subject, 'external') === -1) {
             this.conceptSchemeList.push(scheme);
-          }else{
+          } else {
             externalSchemelist.push(scheme);
           }
         }));
         this.externalSchemeStore = new dMemory({
-          idProperty: "id",
+          idProperty: 'id',
           data: externalSchemelist
         });
-      }))
+      }));
     },
 
     getConceptSchemeTree: function(scheme) {
-      var myStore = new Cache(new JsonRest({
+      return new Cache(new JsonRest({
         target: "/conceptschemes/" + scheme + "/tree",
         getChildren: function (object) {
           return object.children || [];
         }
       }), new Memory());
-      return myStore;
     },
 
     getMatch: function (uri, type) {
@@ -180,7 +182,7 @@ define([
           if (c.type != 'collection') {
             clone.matches = {
               exact: [uri]
-            }
+            };
           }
           deferred.resolve(clone);
         },
@@ -231,6 +233,6 @@ define([
       //  console.error(err);
       //});
     }
-  })
+  });
 });
 
