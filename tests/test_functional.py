@@ -9,6 +9,7 @@ from pyramid.paster import get_appsettings
 from pyramid.request import Request
 from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.providers import DictionaryProvider
+from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import ConceptScheme
 from sqlalchemy.orm import sessionmaker
 from webtest import TestApp
@@ -622,6 +623,39 @@ class RestFunctionalTests(FunctionalTests):
             response.json
         )
 
+    def test_create_full_provider_via_put(self):
+        response = self.testapp.put_json(
+            url='/providers/ERFGOEDTYPES',
+            params={
+                'id': 'ERFGOEDTYPES',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': 'NL',
+                'force_display_language': 'NL',
+                'subject': ['hidden'],
+                'metadata': {'Info': 'Extra data about this provider'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit',
+            },
+            headers=self._get_default_headers(),
+            status=201
+        )
+        self.assertEqual(
+            {
+                'id': 'ERFGOEDTYPES',
+                'type': 'SQLAlchemyProvider',
+                'conceptscheme_uri': 'https://id.erfgoed.net/thesauri/conceptschemes',
+                'uri_pattern': 'https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
+                'default_language': 'NL',
+                'force_display_language': 'NL',
+                'subject': ['hidden'],
+                'metadata': {'Info': 'Extra data about this provider'},
+                'id_generation_strategy': 'MANUAL',
+                'expand_strategy': 'visit',
+            },
+            response.json
+        )
+
     def test_update_provider(self):
         conceptscheme = ConceptScheme(uri='https://id.erfgoed.net/thesauri/conceptschemes')
         provider = Provider(
@@ -667,14 +701,20 @@ class RestFunctionalTests(FunctionalTests):
             response.json
         )
 
-    def test_delete_provider(self):
-        conceptscheme = ConceptScheme(uri='https://id.erfgoed.net/thesauri/conceptschemes')
+    def test_delete_provider_with_concepts(self):
+        conceptscheme = ConceptScheme(
+            uri='https://id.erfgoed.net/thesauri/conceptschemes')
+        concept = Concept(
+            concept_id="testconceptje",
+            conceptscheme=conceptscheme
+        )
         provider = Provider(
             id='ERFGOEDTYPES',
             uri_pattern='https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
             conceptscheme=conceptscheme,
             meta={},
         )
+        self.session.add(concept)
         self.session.add(provider)
         self.session.flush()
         conceptscheme_id = conceptscheme.id

@@ -845,3 +845,8 @@ class TestValidation(unittest.TestCase):
         json_data = {'force_display_language': 'notalanguage'}
         with self.assertRaises(ValidationError):
             validators.validate_provider_json(json_data)
+
+    def test_validate_provider_update_with_wrong_id(self):
+        json_data = {'id': 'notanid'}
+        with self.assertRaises(ValidationError):
+            validators.validate_provider_json(json_data, "test")
