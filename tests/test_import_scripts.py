@@ -108,27 +108,27 @@ class ImportTests(DbTest):
         assert blauwereiger in reiger.narrower
 
     def test_import_rdf(self):
-        sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url'], '--uri_pattern', 'http://id.trees.org/%s']
+        sys.argv = ['import_file', '--from', test_data_rdf, '--to', SETTINGS['sqlalchemy.url'], '--uri-pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_trees('Verschillende soorten bomen')
 
     def test_import_ttl(self):
-        sys.argv = ['import_file', '--from', test_data_ttl, '--to', SETTINGS['sqlalchemy.url'], '--uri_pattern', 'http://id.trees.org/%s']
+        sys.argv = ['import_file', '--from', test_data_ttl, '--to', SETTINGS['sqlalchemy.url'], '--uri-pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_trees('Different types of trees')
 
     def test_import_ttl_string_id(self):
-        sys.argv = ['import_file', '--from', test_data_ttl_string_id, '--to', SETTINGS['sqlalchemy.url'], '--uri_pattern', 'http://id.trees.org/%s']
+        sys.argv = ['import_file', '--from', test_data_ttl_string_id, '--to', SETTINGS['sqlalchemy.url'], '--uri-pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
         tests.db_filled = True
 
     def test_import_json(self):
         sys.argv = ['import_file', '--from', test_data_json,
                     '--to', SETTINGS['sqlalchemy.url'],
-                    '--conceptscheme_label', 'Trees Conceptscheme', '--conceptscheme_uri', 'http://id.trees.org',
-                    '--uri_pattern', 'http://id.trees.org/%s']
+                    '--conceptscheme-label', 'Trees Conceptscheme', '--conceptscheme-uri', 'http://id.trees.org',
+                    '--uri-pattern', 'http://id.trees.org/%s']
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_trees('Trees Conceptscheme')
@@ -137,7 +137,7 @@ class ImportTests(DbTest):
         sys.argv = [
             'import_file', '--from', test_data_csv, '--to',
             SETTINGS['sqlalchemy.url'],
-            '--uri_pattern', 'urn:x-skosprovider:menu:%s',
+            '--uri-pattern', 'urn:x-skosprovider:menu:%s',
         ]
         import_file.main(sys.argv)
         tests.db_filled = True
@@ -145,8 +145,8 @@ class ImportTests(DbTest):
 
     def test_import_csv_uri_generator(self):
         sys.argv = ['import_file', '--from', test_data_csv, '--to', SETTINGS['sqlalchemy.url'],
-                    '--conceptscheme_label', 'Menu Conceptscheme', '--conceptscheme_uri', 'http://id.menu.org',
-                    '--uri_pattern', 'http://id.menu.org/%s']
+                    '--conceptscheme-label', 'Menu Conceptscheme', '--conceptscheme-uri', 'http://id.menu.org',
+                    '--uri-pattern', 'http://id.menu.org/%s']
         import_file.main(sys.argv)
         tests.db_filled = True
         self._check_menu('http://id.menu.org/%s')
@@ -156,10 +156,10 @@ class ImportTests(DbTest):
             'import_file',
             '--from', test_data_csv,
             '--to', SETTINGS['sqlalchemy.url'],
-            '--uri_pattern', 'urn:x-skosprovider:test:%s',
-            '--provider_id', 'MENU',
-            '--create_provider', 'True',
-            '--id_generation_strategy', 'guid',
+            '--uri-pattern', 'urn:x-skosprovider:test:%s',
+            '--provider-id', 'MENU',
+            '--create-provider',
+            '--id-generation-strategy', 'guid',
         ]
         import_file.main(sys.argv)
         tests.db_filled = True

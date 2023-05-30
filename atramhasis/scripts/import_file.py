@@ -17,8 +17,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import url
 from sqlalchemy.orm import sessionmaker
 
-from atramhasis.data.models import ExpandStrategy
-from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
 from atramhasis.scripts.migrate_sqlalchemy_providers import json_serial
 
@@ -110,7 +108,7 @@ def parse_argv_for_import(argv):
             f'example: {cmd} '
             '--from atramhasis/scripts/my_file '
             '--to sqlite:///atramhasis.sqlite '
-            '--conceptscheme_label Labels '
+            '--conceptscheme-label Labels '
             '--conceptscheme_uri urn:x-skosprovider:trees '
             '--uri_pattern urn:x-skosprovider:trees:%s'
             '--create_provider True '
@@ -135,7 +133,7 @@ def parse_argv_for_import(argv):
         default='sqlite:///atramhasis.sqlite'
     )
     parser.add_argument(
-        '--conceptscheme_label',
+        '--conceptscheme-label',
         dest='cs_label',
         type=str,
         help='Label of the conceptscheme',
@@ -143,7 +141,7 @@ def parse_argv_for_import(argv):
         default=None
     )
     parser.add_argument(
-        '--conceptscheme_uri',
+        '--conceptscheme-uri',
         dest='cs_uri',
         type=str,
         help='URI of the conceptscheme',
@@ -151,23 +149,22 @@ def parse_argv_for_import(argv):
         default=None
     )
     parser.add_argument(
-        '--uri_pattern',
+        '--uri-pattern',
         dest='uri_pattern',
         type=str,
         help='URI pattern input for the URIGenerator',
         required=True,
     )
     parser.add_argument(
-        '--create_provider',
+        '--create-provider',
         dest='create_provider',
-        type=bool,
-        help='An optional boolean that defaults to True. '
-             'If set to False, no provider is created',
-        required=False,
-        default=True
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help='An optional parameter if given a provider is created. '
+             'Use --no-create-provider to not create a provider',
     )
     parser.add_argument(
-        '--provider_id',
+        '--provider-id',
         dest='provider_id',
         type=str,
         help='An optional string (eg. ERFGOEDTYPES) to be assigned to the provider id. '
@@ -176,7 +173,7 @@ def parse_argv_for_import(argv):
         default=None
     )
     parser.add_argument(
-        '--id_generation_strategy',
+        '--id-generation-strategy',
         dest='id_generation_strategy',
         type=str,
         help='URI pattern input for the URIGenerator',
@@ -247,11 +244,11 @@ def main(argv=sys.argv):
     Documentation: import -h
     Run: import
     --from <path_input_file> --to <conn_string>
-    --conceptscheme_label <cs_label>
-    --conceptscheme_uri <cs_uri> --uri_pattern <uri_pattern>
-    --create_provider <True/False>
-    --provider_id <provider_id>
-    --id_generation_strategy <numeric/guid/manual>
+    --conceptscheme-label <cs_label>
+    --conceptscheme-uri <cs_uri> --uri_pattern <uri_pattern>
+    --create-provider
+    --provider-id <provider_id>
+    --id-generation-strategy <numeric/guid/manual>
 
     example path_input_file:
      atramhasis/scripts/my_file
@@ -292,9 +289,9 @@ def main(argv=sys.argv):
         db_provider.conceptscheme = cs
         db_provider.id = args.provider_id or cs.id
         db_provider.uri_pattern = args.uri_pattern
-    if 'conceptscheme_id' in db_provider.meta:
-        del db_provider.meta['conceptscheme_id']
-    session.add(db_provider)
+        if 'conceptscheme_id' in db_provider.meta:
+            del db_provider.meta['conceptscheme_id']
+        session.add(db_provider)
 
     # Get info to return to the user
     prov_id = input_name.upper()

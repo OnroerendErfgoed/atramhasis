@@ -3,7 +3,6 @@ language: python
 os: linux
 dist: focal
 python:
- - 3.8
  - 3.9
  - 3.10
 before_install:
