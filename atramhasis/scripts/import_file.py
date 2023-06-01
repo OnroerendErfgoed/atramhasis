@@ -106,22 +106,25 @@ def parse_argv_for_import(argv):
         description='Import file to a database',
         epilog=(
             f'example: {cmd} '
-            '--from atramhasis/scripts/my_file '
+            'atramhasis/scripts/my_file '
+            'urn:x-skosprovider:trees:%s'
             '--to sqlite:///atramhasis.sqlite '
             '--conceptscheme-label Labels '
-            '--conceptscheme_uri urn:x-skosprovider:trees '
-            '--uri_pattern urn:x-skosprovider:trees:%s'
-            '--create_provider True '
-            '--provider_id ERFGOEDTYPES '
-            '--id_generation_strategy numeric'
+            '--conceptscheme-uri urn:x-skosprovider:trees '
+            '--create-provider True '
+            '--provider-id ERFGOEDTYPES '
+            '--id-generation-strategy numeric'
         )
     )
     parser.add_argument(
-        '--from',
-        dest='input_file',
+        'input_file',
         type=str,
         help='local path to the input file',
-        required=True
+    )
+    parser.add_argument(
+        'uri_pattern',
+        type=str,
+        help='URI pattern input for the URIGenerator',
     )
     parser.add_argument(
         '--to',
@@ -147,13 +150,6 @@ def parse_argv_for_import(argv):
         help='URI of the conceptscheme',
         required=False,
         default=None
-    )
-    parser.add_argument(
-        '--uri-pattern',
-        dest='uri_pattern',
-        type=str,
-        help='URI pattern input for the URIGenerator',
-        required=True,
     )
     parser.add_argument(
         '--create-provider',
@@ -243,9 +239,11 @@ def main(argv=sys.argv):
     """
     Documentation: import -h
     Run: import
-    --from <path_input_file> --to <conn_string>
+    <path_input_file>
+    <uri_pattern>
+    --to <conn_string>
+    --conceptscheme-uri <cs_uri>
     --conceptscheme-label <cs_label>
-    --conceptscheme-uri <cs_uri> --uri_pattern <uri_pattern>
     --create-provider
     --provider-id <provider_id>
     --id-generation-strategy <numeric/guid/manual>
