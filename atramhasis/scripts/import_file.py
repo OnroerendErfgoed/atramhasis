@@ -111,7 +111,7 @@ def parse_argv_for_import(argv):
             '--to sqlite:///atramhasis.sqlite '
             '--conceptscheme-label Labels '
             '--conceptscheme-uri urn:x-skosprovider:trees '
-            '--create-provider True '
+            '--create-provider '
             '--provider-id ERFGOEDTYPES '
             '--id-generation-strategy numeric'
         )

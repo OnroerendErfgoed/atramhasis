@@ -851,22 +851,48 @@ Call it with the `help` argument to see the possible arguments.
     $ workon my_thesarus
     $ import_file --help
 
-    usage: import_file [--from path_input_file] [--to conn_string] [--conceptscheme_label cs_label]
-     (example: "import_file --from atramhasis/scripts/my_file --to sqlite:///atramhasis.sqlite --conceptscheme_label Labels")
+    usage: import_file.py [-h] [--to conn_string] [--conceptscheme-label CS_LABEL]
+                          [--conceptscheme-uri CS_URI]
+                          [--create-provider | --no-create-provider]
+                          [--provider-id PROVIDER_ID]
+                          [--id-generation-strategy {numeric,guid,manual}]
+                          input_file uri_pattern
 
     Import file to a database
 
-    optional arguments:
+    positional arguments:
+      input_file            local path to the input file
+      uri_pattern           URI pattern input for the URIGenerator
+
+    options:
       -h, --help            show this help message and exit
-      --from INPUT_FILE     local path to the input file
-      --to TO               Connection string of the output database
-      --conceptscheme_label CS_LABEL
+      --to conn_string      Connection string of the output database
+      --conceptscheme-label CS_LABEL
                             Label of the conceptscheme
+      --conceptscheme-uri CS_URI
+                            URI of the conceptscheme
+      --create-provider, --no-create-provider
+                            An optional parameter if given a provider is created.
+                            Use --no-create-provider to not create a provider
+                            (default: True)
+      --provider-id PROVIDER_ID
+                            An optional string (eg. ERFGOEDTYPES) to be assigned
+                            to the provider id. If not specified, assign the
+                            conceptscheme id to the provider id
+      --id-generation-strategy {numeric,guid,manual}
+                            URI pattern input for the URIGenerator
+
+    example: import_file.py atramhasis/scripts/my_file urn:x-skosprovider:trees:%s
+    --to sqlite:///atramhasis.sqlite --conceptscheme-label Labels --conceptscheme-
+    uri urn:x-skosprovider:trees --create-provider --provider-id ERFGOEDTYPES
+    --id-generation-strategy numeric
 
 
-The `from` argument is required and details where the file you want to import is
+The `input_file` is a positional required argument and details where the file you want to import is
 located, for example :file:`my_thesaurus/data/trees.json`. It is relative to your
 current location.
+
+The `uri_pattern` positional required argument the URI pattern used to create the provider.
 
 The `to` argument contains the connection string of output database. Only
 PostGreSQL and SQLite are supported. The structure is either
@@ -955,7 +981,7 @@ We run the following command:
 .. code-block:: bash
 
     $ workon my_thesarus
-    $ import_file --from my_thesaurus/data/trees.json --to sqlite:///my_thesaurus.sqlite --conceptscheme_label Trees
+    $ import_file my_thesaurus/data/trees.json <uri-pattern> --to sqlite:///my_thesaurus.sqlite --conceptscheme_label Trees
 
 This will return output similar to this:
 
