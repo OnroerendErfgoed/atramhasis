@@ -107,7 +107,7 @@ def parse_argv_for_import(argv):
         epilog=(
             f'example: {cmd} '
             'atramhasis/scripts/my_file '
-            'urn:x-skosprovider:trees:%s'
+            'urn:x-skosprovider:trees:%s '
             '--to sqlite:///atramhasis.sqlite '
             '--conceptscheme-label Labels '
             '--conceptscheme-uri urn:x-skosprovider:trees '
