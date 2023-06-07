@@ -27,10 +27,11 @@ def file_to_rdf_provider(**kwargs) -> RDFProvider:
     """
     input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
+    meta_id = kwargs.get("provider_id") or input_name.upper()
     graph = Graph()
     graph.parse(input_file, format=guess_format(input_ext))
     return RDFProvider(
-        {'id': input_name.upper()},
+        {'id': meta_id},
         graph
     )
 
@@ -52,11 +53,12 @@ def file_to_csv_provider(**kwargs) -> SimpleCsvProvider:
     """
     input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
+    meta_id = kwargs.get("provider_id") or input_name.upper()
     provider_kwargs = _create_provider_kwargs(**kwargs)
     with open(input_file) as ifile:
         reader = csv.reader(ifile)
         return SimpleCsvProvider(
-            {'id': input_name.upper()},
+            {'id': meta_id},
             reader,
             **provider_kwargs
         )
@@ -68,11 +70,12 @@ def file_to_json_provider(**kwargs) -> DictionaryProvider:
     """
     input_file = kwargs.get('input_file')
     input_name, input_ext = os.path.splitext(os.path.basename(input_file))
+    meta_id = kwargs.get("provider_id") or input_name.upper()
     provider_kwargs = _create_provider_kwargs(**kwargs)
     with open(input_file) as data_file:
         dictionary = json.load(data_file)
     return DictionaryProvider(
-        {'id': input_name.upper()},
+        {'id': meta_id},
         dictionary,
         **provider_kwargs
     )
@@ -269,8 +272,11 @@ def main(argv=sys.argv):
     args = parse_argv_for_import(argv)
     input_name, input_ext = os.path.splitext(os.path.basename(args.input_file))
     session = conn_str_to_session(args.to)
-    file_to_provider_function = [supported_types[filetype]['file_to_provider'] for filetype in supported_types.keys()
-                                 if input_ext in supported_types[filetype]['extensions']][0]
+    file_to_provider_function = [
+        supported_types[filetype]['file_to_provider']
+        for filetype in supported_types.keys()
+        if input_ext in supported_types[filetype]['extensions']
+    ][0]
     if args.cs_uri:
         cs_uri = args.cs_uri
         cs_label = args.cs_label if args.cs_label else input_name.capitalize()
