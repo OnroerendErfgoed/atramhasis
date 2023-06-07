@@ -290,25 +290,45 @@ def main(argv=sys.argv):
         if 'conceptscheme_id' in db_provider.meta:
             del db_provider.meta['conceptscheme_id']
         session.add(db_provider)
+    session.commit()
 
     # Get info to return to the user
-    prov_id = input_name.upper()
     scheme_id = cs.id
-    print("\n\n*** The import of conceptscheme {0} from the {1} file to {2} was succesful. ***\
-          \n\nTo use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.\
-          \nAdd a configuration similar to:\
-            \n\ndef create_registry(request):\
-            \n\t# create the SKOS registry\
-            \n\tregistry = Registry(instance_scope='threaded_thread')\
-            \n\t{3} = SQLAlchemyProvider(\
-            \n\t\t{{'id': '{4}', 'conceptscheme_id': {5}}},\
-            \n\t\trequest.db\
-            \n\t)\
-            \n\tregistry.register_provider({6})\
-            \n\treturn registry\
-            \n\n".
-          format(prov_id, args.input_file, args.to,
-                 prov_id.replace(' ', '_'), prov_id, scheme_id, prov_id.replace(' ', '_')))
+    if not args.create_provider:
+        prov_id = getattr(args, 'provider_id', None) or input_name.upper()
+        print(
+            "\n\n*** The import of conceptscheme {0} from the {1} file to {2} was succesful. ***\
+              \n\nTo use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.\
+              \nAdd a configuration similar to:\
+                \n\ndef create_registry(request):\
+                \n\t# create the SKOS registry\
+                \n\tregistry = Registry(instance_scope='threaded_thread')\
+                \n\t{3} = SQLAlchemyProvider(\
+                \n\t\t{{'id': '{4}', 'conceptscheme_id': {5}}},\
+                \n\t\trequest.db\
+                \n\t)\
+                \n\tregistry.register_provider({6})\
+                \n\treturn registry\
+                \n\n".
+            format(
+                prov_id, args.input_file, args.to,
+                prov_id.replace(' ', '_'), prov_id, scheme_id, prov_id.replace(' ', '_')
+            )
+        )
+    else:
+        prov_id = args.provider_id or cs.id
+        msg = """
+***
+The import of conceptscheme {0} from the {1} file to {2} was succesful.
+You can now continue through the Atramhasis UI.
+***
+"""
+        print(
+            msg.format(
+                prov_id, args.input_file, args.to
+            )
+        )
+
 
 
 if __name__ == '__main__':
