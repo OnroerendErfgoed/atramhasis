@@ -131,102 +131,43 @@ and point your browser to `http://localhost:6543` to see the result.
 Creating conceptschemes
 -----------------------
 
-Atramhasis is now running but does not contain any ConceptSchemes. You will
-need to configure this by entering a database record for the ConceptScheme and
-writing a small piece of code.
+Atramhasis is now running but does not contain any conceptschemes. A conceptscheme
+is a single set of concepts and collections, also known sometimes as a thesaurus or 
+vocabulary. All concepts you describe in Atramhasis must be part of exactly one 
+conceptscheme. Every conceptscheme is handled by a provider. The conceptscheme is 
+the domain specific knowledge you are trying to describe, the provider contains 
+some logic on how to display this knowledge and handle it. We have split the two for 
+various, mostly technical, reasons. You might want to have staff with IT experience
+to create and maintain the providers, while the conceptschemes might be maintained 
+by domain experts you do not want to burden with technical decisions. Atramhasis 
+makes this possible.
 
 .. warning::
 
-    Instantiating providers has changed between version 0.6.x and 0.7.0. Make
-    sure to update your skos initialisation when updating. The old code is no
-    longer supported, although the changes you need to make are minor.
+    Prior to version 2.0.0, creating conceptschemes and providers required manual
+    interventions and writing a little bit of code. This has changes significantly.
+    If you have an older installation, please make sure to read the docs before 
+    upgrading.
 
-To enter the database record, you need to enter a record in the table
-`conceptscheme`. In this table you need to register an id for the conceptscheme
-and a uri. The id is for internal database use and has no other meaning. The
-uri can be used externally. To register a new ConceptScheme in the sqlite
-database that was created:
+Adding a new provider through the UI
+####################################
 
-.. code-block:: bash
+The easiest way to register a new provider is to use the UI. Surf to 
+`http://localhost:6543/admin`. On your right you will see the menu where most
+of the interaction takes place. Bottom right, there's a button labelled `Providers`.
+Pressing this button takes you into a menu that allows you to configure providers.
 
-    $ sqlite3 my_thesaurus.sqlite
+.. image:: images/admin_providers_list.png
+  :alt: The providers list dialog
 
-.. code-block:: sql
+This dialog lists all providers currently registerd in your Atramhasis instance. 
+Most of these will be regular SQLAlchemyProviders that will serve your conceptschemes
+and their concepts and collections. The dialog also lists other providers that cannot
+be managed through the UI. These are *external* providers that provide data from 
+another source, such as the Getty `Art and Architecture Thesaurus (AAT)`. See 
+`eternal_providers`_ for more information on how to do this. For now it's enough
+to understand there can be some providers that can't be edited through the UI.
 
-    INSERT INTO conceptscheme VALUES (1, 'urn:x-my-thesaurus:stuff')
-
-This takes care of the first step. Now you also need to tell Atramhasis where
-to find your conceptscheme and how to handle it. To do this, you need to edit
-the file called :file:`my_thesaurus/skos/__init__.py`. This is the default
-location for creating a registry factory. Be default, this function is called
-`create_registry`, but this can be changed in your development.ini file. The
-function itself needs to receive the current request as a parameter and return
-the instantiated :class:`skosprovider.registry.Registry`.
-
-In this funcion you will register 
-:class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
-instances to the SKOS registry. If not yet present, you need to tell Python where 
-to find such a provider by adding this code to the top of the file:
-
-.. code-block:: python
-
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-Then you need to instantiate such a provider within the `create_registry` function in
-this file. This provider needs a few arguments: an id for the provider, an id
-for the conceptscheme it's working with and a connectionb to a database session.
-The id for the provider is often a text string and will appear in certain url's 
-and might popup in the user interface from time to time. The database session
-is added to the Pyramid request that is passed to function and can be reached
-as `request.db`. Finally, you need to register this provider with the 
-:class:`skosprovider.registry.Registry`.
-
-.. code-block:: python
-
-    STUFF = SQLAlchemyProvider(
-        {
-            'id': 'STUFF',
-            'conceptscheme_id': 1
-        },
-        request.db
-    )
-
-    registry.register_provider(STUFF)
-
-After having registered your provider, the file should look more or less like
-this:
-
-.. code-block:: python
-
-    # -*- coding: utf-8 -*-
-
-    from skosprovider.registry import Registry
-    from skosprovider.uri import UriPatternGenerator
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-    import logging
-    log = logging.getLogger(__name__)
-
-
-    def create_registry(request):
-        # create the SKOS registry
-        registry = Registry(instance_scope='threaded_thread')
-
-        # create your own providers
-        STUFF = SQLAlchemyProvider(
-            {'id': 'STUFF', 'conceptscheme_id': 1},
-            request.db
-        )
-    
-        # Add your custom provider to the registry
-        registry.register_provider(STUFF)
-
-        # return the SKOS registry
-        return registry
-
-
-Now you can restart your server and then you front page will show you a new,
-but empty thesaurus.
 
 Creating concepts and collections
 ---------------------------------
@@ -695,6 +636,9 @@ Another example to add Plausible Analytics:
     tracking_snippet = <script defer data-domain="your.domain.com"
         src="https://your.plausibleinstance.com/js/script.js">
         </script>
+
+
+.. _external_providers:
 
 Adding external providers
 =========================
