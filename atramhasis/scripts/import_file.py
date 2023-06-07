@@ -323,11 +323,7 @@ The import of conceptscheme {0} from the {1} file to {2} was succesful.
 You can now continue through the Atramhasis UI.
 ***
 """
-        print(
-            msg.format(
-                prov_id, args.input_file, args.to
-            )
-        )
+        print(msg.format(prov_id, args.input_file, args.to))
 
 
 
