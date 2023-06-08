@@ -623,9 +623,9 @@ Importing a concept like this will automatically create a :term:`SKOS` match
 for you. Once a match is in place, you can also update your local concept with
 information from the external concept by performing a merge.
 
-To enable all this power, you again need to configure a provider in you
+To enable all this power, you need to configure an external provider in your
 application. Continuing with our :ref:`example project <own_project>`, we need
-to go back to our :file:`my_thesaurus/skos/__init__.py`. In this file you need
+to go and edit a :file:`my_thesaurus/skos/__init__.py`. In this file you need
 to register other instances of
 :class:`skosprovider.providers.VocabularyProvider`. Currently providers
 have already been written for Getty Vocabularies, English Heritage vocabularies
@@ -644,15 +644,12 @@ of :file:`my_thesaurus/skos/__init__.py`.
 
     from skosprovider_getty.providers import AATProvider
 
-Once this is done, we need to instantiate the provider within the `includeme`
-function and register it with the :class:`skosprovider.registry.Registry`. This
-is all quite similar to registering your own
-:class:`skosprovider_sqlalchemy.providers.SQLAlchemyProvider`. One thing you do
-need to do, is tagging this provider with a subject. By adding the `external`
-subject to the provider, we let Atramhasis know that this is not a regular,
-internal provider that can be stored in our database, but a special external
-one that can only be used for making matches. As such, it will not be present
-and visible to the public among your regular vocabularies.
+Once this is done, we need to instantiate the provider within the `create_registry`
+function and register it with the :class:`skosprovider.registry.Registry`. 
+By adding the `external` subject to the provider, we let Atramhasis know that 
+this is not a regular, internal provider that can be stored in our database, 
+but a special external one that can only be used for making matches. As such, 
+it will not be present and visible to the public among your regular vocabularies.
 
 .. code-block:: python
 
@@ -678,25 +675,13 @@ this:
     log = logging.getLogger(__name__)
 
     from skosprovider.registry import Registry
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     from skosprovider_getty.providers import AATProvider
-    from skosprovider.uri import UriPatternGenerator
+    from atramhasis.skos import register_providers_from_db
 
 
     def create_registry(request):
         # create the SKOS registry
         registry = Registry(instance_scope='threaded_thread')
-
-        STUFF = SQLAlchemyProvider(
-            {
-                'id': 'STUFF',
-                'conceptscheme_id': 1
-            },
-            request.db,
-            uri_generator=UriPatternGenerator(
-                'http://id.mydata.org/thesauri/stuff/%s'
-            )
-        )
 
         AAT = AATProvider(
             {
@@ -707,6 +692,8 @@ this:
 
         registry.register_provider(STUFF)
         registry.register_provider(AAT)
+
+        register_providers_from_db(registry, request.db)
 
         return registry
 
