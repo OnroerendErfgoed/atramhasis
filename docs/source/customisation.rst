@@ -742,13 +742,10 @@ The supported file types:
 
 Some things to take into account:
 
-- Atramhasis only supports concepts with a numeric id. This ensures they can be
-  auto-generated when adding new concepts or collections. These map to the
-  `concept_id` attribute in the database, which is unique per conceptscheme as
-  opposed to the `id` attribute that is unique for the entire database.
 - When importing from an RDF vocabulary, the id will be read from a `dc` or
-  `dcterms` `identifier` property if present. Please ensure this property 
-  contains a numeric id, not a string or a URI.
+  `dcterms` `identifier` property if present. If you have local identifiers,
+  please make sure to add them using this property. If not, your concept and
+  collections will use their URI's as id.
 - When importing from RDF, the import file could possibly contain more than one
   conceptscheme. Please ensure only one conceptscheme is present or
   no conceptschemes are presents and specify the URI and label on the command
@@ -802,11 +799,12 @@ Call it with the `help` argument to see the possible arguments.
     --id-generation-strategy numeric
 
 
-The `input_file` is a positional required argument and details where the file you want to import is
-located, for example :file:`my_thesaurus/data/trees.json`. It is relative to your
-current location.
+The `input_file` is a positional required argument and details where the file 
+you want to import is located, for example :file:`my_thesaurus/data/trees.json`. 
+It is relative to your current location.
 
-The `uri_pattern` positional required argument the URI pattern used to create the provider.
+The `uri_pattern` is a positional required argument that details the URI pattern 
+that will be used by the provider to create concept and collection URI's.
 
 The `to` argument contains the connection string of output database. Only
 PostGreSQL and SQLite are supported. The structure is either
@@ -819,11 +817,10 @@ in the RDF file. The other providers can specify it on the command line
 through the `conceptscheme_label` argument. If no `conceptscheme_label` is present,
 the default label is the name of the file.
 
-Once the data is loaded in the database, the configuration of the added provider must be
-included in the :file:`my_thesaurus/skos/__init__.py`. A successfull run of the
-script will give a suggestion of the code to add to this file. Make sure to use
-the same ConceptSchem ID since it is needed to connect your provider and the
-conceptscheme in the database.
+Once the data is loaded in the database, your conceptscheme and provider will 
+be ready, unless you chose the `--no-create-provider` option. This is rarely what 
+you want and is only useful if you are doing some manual interventions in your 
+database.
 
 For example, to insert this file:
 
@@ -983,41 +980,6 @@ This will return output similar to this:
 
     *** The import of the my_thesaurus/data/trees.json file with conceptscheme label 'Trees' to sqlite:///my_thesaurus.sqlite was successfull. ***
 
-    To use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.
-    Add next lines:
-
-    def includeme(config):
-            TREES = SQLAlchemyProvider(
-                    {'id': 'TREES', 'conceptscheme_id': 11},
-                    config.registry.dbmaker
-            )
-            skosregis = config.get_skos_registry()
-            skosregis.register_provider(TREES)
-
-Just follow these instructions and edit your :file:`my_thesaurus/skos/__init__.py` like this:
-
-.. code-block:: python
-
-    # -*- coding: utf-8 -*-
-
-    import logging
-    log = logging.getLogger(__name__)
-    
-    from skosprovider.registry import Registry
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-
-    def create_registry(request):
-        # create the SKOS registry
-        registry = Registry(instance_scope='threaded_thread')a
-
-        TREES = SQLAlchemyProvider(
-                {'id': 'TREES', 'conceptscheme_id': 11},
-                request.db
-        )
-        registry.register_provider(TREES)
-
-        return registry
 
 Now your thesaurus has been successfully imported and is ready to be browsed,
 expanded and edited.
