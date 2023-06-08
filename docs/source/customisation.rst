@@ -186,10 +186,11 @@ provider the following information needs to be provided:
   and the URI might be http://id.me.org/colours. This URI should redirect to 
   `http://data.me.org/colours`. Another common option is to use 
   `http://data.me.org/colours#id` as the URI for your conceptscheme.
-* `uri pattern`: A pattern that will be used to generate URI's for new concepts
-  and collections added to your conceptscheme. The pattern looks like a http URI
-  with the marker `%s` as a placeholder for you concept or collection id. Continuing
-  our example, this could be `http://id.me.org/colours/%s` or `http://data.me.org/colours/%s#id`.
+* `uri pattern`: A pattern that will be used by a :class:`~skosprovider.uri.UriGenerator` 
+  to generate URI's for new concepts and collections added to your conceptscheme. 
+  The pattern looks like a http URI with the marker `%s` as a placeholder for 
+  your concept or collection id. Continuing our example, this could be 
+  `http://id.me.org/colours/%s` or `http://data.me.org/colours/%s#id`.
 * `default language`: The default language of the provider. When a concept is 
   requested, a single label is always returned for ease of display. Normally 
   this is determined from browser settings or cookies, but if none of these are
@@ -234,6 +235,13 @@ an associated conceptscheme will be created. The conceptscheme will be very
 barebones, so it's recommended to add extra labels, notes and sources to
 the conceptscheme to inform end users.
 
+.. warning::
+
+   The :class:`~skosprovider.uri.UriGenerator` that you configure only generates
+   URI's when creating new concepts or collections. When importing existing
+   vocabularies, please be sure to create the URI's before or during import
+   (possbily by using a relevant generator yourself).
+
 Adding a new provider through the REST API
 ##########################################
 
@@ -268,83 +276,6 @@ Creating concepts and collections
 You can now start creating concepts and collections by
 going to the admin interface at `http://localhost:6543/admin`.
 
-You will notice that any concepts or collections you create wil get a
-:term:`URI` similar to `urn:x-skosprovider:STUFF:1`. This is due to the fact
-that your :class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
-has a :class:`~skosprovider.uri.UriGenerator` that generates uris for the
-provider. By default, the provider configures a
-:class:`~skosprovider.uri.DefaultUrnGenerator`, but it's expected that you
-will want to override this.
-
-.. warning::
-
-   The :class:`~skosprovider.uri.UriGenerator` that you configure only generates
-   URI's when creating new concepts or collections. When importing existing
-   vocabularies, please be sure to create the URI's before or during import
-   (possbily by using a relevant generator yourself).
-
-Suppose you have decided that your URI's should look like this:
-`http://id.mydata.org/thesauri/stuff/[id]`. You can do this by registering
-a :class:`~skosprovider.uri.UriPatternGenerator` with your provider:
-
-.. code-block:: python
-
-    STUFF = SQLAlchemyProvider(
-        {
-            'id': 'STUFF',
-            'conceptscheme_id': 1
-        },
-        request.db,
-        uri_generator=UriPatternGenerator(
-            'http://id.mydata.org/thesauri/stuff/%s'
-        )
-    )
-
-Don't forget to import the :class:`~skosprovider.uri.UriPatternGenerator` at the
-top of your file:
-
-.. code-block:: python
-
-    from skosprovider.uri import UriPatternGenerator
-
-Your final file should look similar to this:
-
-.. code-block:: python
-
-    # -*- coding: utf-8 -*-
-
-    from skosprovider.registry import Registry
-    from skosprovider.uri import UriPatternGenerator
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-    import logging
-    log = logging.getLogger(__name__)
-
-
-    def create_registry(request):
-        # create the SKOS registry
-        registry = Registry(instance_scope='threaded_thread')
-
-        # create your own providers
-        STUFF = SQLAlchemyProvider(
-            {'id': 'STUFF', 'conceptscheme_id': 1},
-            request.db,
-            uri_generator=UriPatternGenerator(
-                'http://id.mydata.org/thesauri/stuff/%s'
-            )
-        )
-    
-        # Add your custom provider to the registry
-        registry.register_provider(STUFF)
-
-        # return the SKOS registry
-        return registry
-
-
-If you need more complicated URI's, you can easily write you own generator
-with a small piece of python code. You just need to follow the interface
-provided by :class:`skosprovider.uri.UriGenerator`.
-
 .. _hidden_providers:
 
 Hiding a vocabulary
@@ -358,45 +289,6 @@ attention to. The only thing you need to do,
 is tagging this provider with a subject. By adding the `hidden`
 subject to the provider, we let Atramhasis know that this vocabulary should not 
 be present among your regular vocabularies.
-
-Suppose we wanted to hide our stuff:
-
-.. code-block:: python
-
-    # -*- coding: utf-8 -*-
-
-    import logging
-    log = logging.getLogger(__name__)
-
-    from skosprovider.registry import Registry
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-    from skosprovider.uri import UriPatternGenerator
-
-
-    def create_registry(request):
-        # create the SKOS registry
-        registry = Registry(instance_scope='threaded_thread')
-
-        # create your own providers
-        #
-        STUFF = SQLAlchemyProvider(
-            {
-                'id': 'STUFF',
-                'conceptscheme_id': 1,
-                'subject': ['hidden']
-            },
-            request.db,
-            uri_generator=UriPatternGenerator(
-                'http://id.mydata.org/thesauri/stuff/%s'
-            )
-        )
-    
-        # Add your custom provider to the registry
-        registry.register_provider(STUFF)
-
-        # return the SKOS registry
-        return registry
-
 
 Now the STUFF thesaurus will not show up in the public web interface, but REST
 calls to this conceptscheme will function as normal and you will be able to
@@ -683,7 +575,7 @@ concepts with a URI of less than 5 characters:
 
 
 Adding Analytics
-=======================
+================
 
 Out of the box, it's very easy to add any analytics integration to Atramhasis.
 All you need to do is add your tracking snippet to :file:`development.ini`.
