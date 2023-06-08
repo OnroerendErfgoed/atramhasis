@@ -128,6 +128,8 @@ and point your browser to `http://localhost:6543` to see the result.
     $ pserve development.ini
 
 
+.. _creating_conceptschemes:
+
 Creating conceptschemes
 -----------------------
 
@@ -227,10 +229,38 @@ provider the following information needs to be provided:
     regulary.
   When in doubt, use recurse and pay attention to caching.
 
-After filling out the required fields, and pressing submit a provider and
+After filling out the required fields, and pressing `Save` a provider and
 an associated conceptscheme will be created. The conceptscheme will be very 
 barebones, so it's recommended to add extra labels, notes and sources to
 the conceptscheme to inform end users.
+
+Adding a new provider through the REST API
+##########################################
+
+Apart from using the UI, it's also possible to create a provider through the 
+REST API, by POSTing to the `http://localhost:6543/providers` endpoint to have 
+the server assign an id or by PUTTing to the `http://localhost:6543/providers/<id>` 
+endpoint to assign your own id, using the following payload:
+
+.. code-block:: json
+
+    {
+        "id":"CHEESE",
+        "conceptscheme_uri":"https://id.python.org/cheese",
+        "uri_pattern":"https://id.python.org/cheese/%s",
+        "subject":[],
+        "id_generation_strategy":"NUMERIC",
+        "expand_strategy":"recurse",
+        "default_language":"en",
+        "force_display_language":""
+    }
+
+If all goes well, you'll be greeted with a `201 Created` status and your new
+provider and conceptscheme will be available through the UI.
+
+More information about the Atramhasis API can be found at the 
+`http://localhost:6543/api_doc` endpoint of your Atramhasis instance 
+or at `https://thesaurus.onroerenderfgoed.be/api_doc`.
 
 Creating concepts and collections
 ---------------------------------
@@ -399,32 +429,15 @@ measure. This was not as desired by our users. To that end, a special mechanism
 was created to force rendering labels of concepts and collections in a certain
 language, no matter what the end-user's browser is requesting.
 
-To set this, please edit the :file:`my_thesaurus/skos/__init__.py`. Look for the 
-thesaurus you want to override and add a setting `atramhasis.force_display_label_language`
-to the provider's metadata. Set it to a language supported by the provider
-(there's little sense to setting it to a language that isn't present in the
-vocabulary). Now Atramhasis will try serving concepts from this provider with
-this language. All labels will still be shown, but the page title or current
-label will be set to the selected language as much as possible. The normal
-language determination mechanisms will keep on working, so if the concept has
-no label in the requested language, Atramhasis will fall back on other labels
-present.
-
-Your provider should end up similar to this:
-
-.. code-block:: python
-
-    STUFF = SQLAlchemyProvider(
-        {
-            'id': 'STUFF',
-            'conceptscheme_id': 1,
-            'atramhasis.force_display_label_language': 'la'
-        },
-        request.db,
-        uri_generator=UriPatternGenerator(
-            'http://id.mydata.org/thesauri/stuff/%s'
-        )
-    )
+To set this, set the `force_display_language` attribute of your provider, either
+through the UI or the REST interface (`creating_conceptschemes`_). Set it to a 
+language supported by the provider (there's little sense to setting it to a 
+language that isn't present in the vocabulary). Now Atramhasis will try serving 
+concepts from this provider with this language. All labels will still be shown, 
+but the page title or current label will be set to the selected language as much 
+as possible. The normal language determination mechanisms will keep on working, 
+so if the concept has no label in the requested language, Atramhasis will fall 
+back on other labels present.
 
 Beware that this will only affect the Atramhasis UI, not the Atramhasis REST
 services. We looked into some solutions for our problem that would have also
