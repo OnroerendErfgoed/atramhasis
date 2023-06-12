@@ -12,9 +12,9 @@ mock==4.0.3
 testfixtures==6.18.3
 
 # Documentation
-Sphinx==4.3.2
-sphinxcontrib-httpdomain==1.8.0
-pygments==2.10.0
+Sphinx==6.2.1
+sphinxcontrib-httpdomain==1.8.1
+pygments==2.15.1
 
 # waitress
 waitress==2.1.2
