@@ -163,6 +163,8 @@ define([
       this._relatedGrid.set('collection', this._relatedStore);
       this._memberOfStore = new TrackableMemory({ data: [] });
       this._memberOfGrid.set('collection', this._memberOfStore);
+      this._membersStore = new TrackableMemory({ data: [] });
+      this._membersGrid.set('collection', this._membersStore);
       this._subordinateStore = new TrackableMemory({ data: [] });
       this._subordinateGrid.set('collection', this._subordinateStore);
       this._superordinatesCollStore = new TrackableMemory({ data: [] });
