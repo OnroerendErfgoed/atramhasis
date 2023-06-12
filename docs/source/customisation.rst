@@ -171,7 +171,7 @@ another source, such as the Getty `Art and Architecture Thesaurus (AAT)`. See
 to understand there can be some providers that can't be edited through the UI.
 
 To add a new provider, press the `Add a provider` button. This will add a new 
-provider and create the associated conceptscheme. One the provider is created,
+provider and create the associated conceptscheme. Once the provider is created,
 the conceptscheme can be edited through the UI for conceptschemes. To create a 
 provider the following information needs to be provided:
 
