@@ -125,11 +125,7 @@ define([
         this.updateScheme(schemeId);
         this.dialog.set('title', 'Add new concept or collection');
 
-        this.relationManager.reset();
-        this.labelManager.reset();
-        this.noteManager.reset();
-        this.matchesManager.reset();
-        this.sourcesManager.reset();
+        this._resetManagers();
 
         var scheme = this.conceptSchemeController.getConceptSchemeFromList(schemeId);
         var provider = this.providerController.getProvider(scheme.uri);
@@ -259,11 +255,16 @@ define([
       this.schemeNode.selectedIndex = 0;
       this.typeNode.selectedIndex = 0;
       this.idNode.value = '';
+      this._resetManagers();
+      domAttr.set(this.idNode, 'disabled', true);
+    },
+
+    _resetManagers: function() {
       this.labelManager.reset();
       this.noteManager.reset();
       this.relationManager.reset();
       this.matchesManager.reset();
-      domAttr.set(this.idNode, 'disabled', true);
+      this.sourcesManager.reset();
     },
 
     _createLabelsTab: function(concept) {
