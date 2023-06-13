@@ -9,6 +9,7 @@ define([
   'dojo/dom-attr',
   'dojo/json',
   'dojo/query',
+  'dojo/string',
   'dojo/on',
   'dojo/dom',
   'dijit/_WidgetBase',
@@ -27,6 +28,7 @@ define([
   domAttr,
   JSON,
   query,
+  string,
   on,
   dom,
   _WidgetBase,
@@ -107,17 +109,18 @@ define([
         var hidden = '';
         var sort = '';
         array.forEach(concept.labels, lang.hitch(this, function(label) {
+          var escapedLabel = string.escape(label.label);
           if (label.type === 'prefLabel') {
-            pref += label.label + ' (' + label.language + '), ';
+            pref += escapedLabel + ' (' + label.language + '), ';
           }
           if (label.type === 'altLabel') {
-            alt += label.label + ' (' + label.language + '), ';
+            alt += escapedLabel + ' (' + label.language + '), ';
           }
           if (label.type === 'hiddenLabel') {
-            hidden += label.label + ' (' + label.language + '), ';
+            hidden += escapedLabel + ' (' + label.language + '), ';
           }
           if (label.type === 'sortLabel') {
-            sort += label.label + ' (' + label.language + '), ';
+            sort += escapedLabel + ' (' + label.language + '), ';
           }
         }));
         if (alt.length > 2) {
