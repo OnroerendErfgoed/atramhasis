@@ -12,6 +12,7 @@ define([
   'dojo/window',
   'dojo/router',
   'dojo/query',
+  'dojo/string',
   'dijit/_WidgetBase',
   'dijit/_TemplatedMixin',
   'dijit/ConfirmDialog',
@@ -43,6 +44,7 @@ define([
   wind,
   router,
   query,
+  string,
   _WidgetBase,
   _TemplatedMixin,
   ConfirmDialog,
@@ -537,7 +539,7 @@ define([
     _addTab: function(content) {
       var tab = content;
       tab.tabId = content.scheme + '_' + content.conceptId;
-      tab.title = content.conceptLabel;
+      tab.title = string.escape(content.conceptLabel);
       tab.closable = true;
       tab.onClose = lang.hitch(this, function() {
         this._closeTab(tab);
