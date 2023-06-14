@@ -9,6 +9,11 @@ and an administrator's interface out of the box, you can also write your own cli
 side code that interacts with the Atramhasis services, either for reading 
 information or writing it.
 
+While this chapter provides more narrative documentation on the services available,
+the most up to date version of the API can be accessed through the `online API docs 
+at the Flander Heritage Thesaurus <https://thesaurus.onroerenderfgoed.be/api_doc>`_
+or in your local version at `/api_doc`.
+
 Pyramid_skosprovider
 ====================
 

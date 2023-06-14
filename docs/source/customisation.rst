@@ -128,119 +128,119 @@ and point your browser to `http://localhost:6543` to see the result.
     $ pserve development.ini
 
 
+.. _creating_conceptschemes:
+
 Creating conceptschemes
 -----------------------
 
-Atramhasis is now running but does not contain any ConceptSchemes. You will
-need to configure this by entering a database record for the ConceptScheme and
-writing a small piece of code.
+Atramhasis is now running but does not contain any conceptschemes. A conceptscheme
+is a single set of concepts and collections, also known sometimes as a thesaurus or 
+vocabulary. All concepts you describe in Atramhasis must be part of exactly one 
+conceptscheme. Every conceptscheme is handled by a provider. The conceptscheme is 
+the domain specific knowledge you are trying to describe, the provider contains 
+some logic on how to display this knowledge and handle it. We have split the two for 
+various, mostly technical, reasons. You might want to have staff with IT experience
+to create and maintain the providers, while the conceptschemes might be maintained 
+by domain experts you do not want to burden with technical decisions. Atramhasis 
+makes this possible.
 
 .. warning::
 
-    Instantiating providers has changed between version 0.6.x and 0.7.0. Make
-    sure to update your skos initialisation when updating. The old code is no
-    longer supported, although the changes you need to make are minor.
+    Prior to version 2.0.0, creating conceptschemes and providers required manual
+    interventions and writing a little bit of code. This has changes significantly.
+    If you have an older installation, please make sure to read the docs before 
+    upgrading.
 
-To enter the database record, you need to enter a record in the table
-`conceptscheme`. In this table you need to register an id for the conceptscheme
-and a uri. The id is for internal database use and has no other meaning. The
-uri can be used externally. To register a new ConceptScheme in the sqlite
-database that was created:
+Adding a new provider through the UI
+....................................
 
-.. code-block:: bash
+The easiest way to register a new provider is to use the UI. Surf to 
+`http://localhost:6543/admin`. On your right you will see the menu where most
+of the interaction takes place. Bottom right, there's a button labelled `Providers`.
+Pressing this button takes you into a menu that allows you to configure providers.
 
-    $ sqlite3 my_thesaurus.sqlite
+.. image:: images/admin_providers_list.png
+  :alt: The providers list dialog
 
-.. code-block:: sql
+This dialog lists all providers currently registerd in your Atramhasis instance. 
+Most of these will be regular SQLAlchemyProviders that will serve your conceptschemes
+and their concepts and collections. The dialog also lists other providers that cannot
+be managed through the UI. These are *external* providers that provide data from 
+another source, such as the Getty `Art and Architecture Thesaurus (AAT)`. See 
+`external_providers`_ for more information on how to do this. For now it's enough
+to understand there can be some providers that can't be edited through the UI.
 
-    INSERT INTO conceptscheme VALUES (1, 'urn:x-my-thesaurus:stuff')
+To add a new provider, press the `Add a provider` button. This will add a new 
+provider and create the associated conceptscheme. Once the provider is created,
+the conceptscheme can be edited through the UI for conceptschemes. To create a 
+provider the following information needs to be provided:
 
-This takes care of the first step. Now you also need to tell Atramhasis where
-to find your conceptscheme and how to handle it. To do this, you need to edit
-the file called :file:`my_thesaurus/skos/__init__.py`. This is the default
-location for creating a registry factory. Be default, this function is called
-`create_registry`, but this can be changed in your development.ini file. The
-function itself needs to receive the current request as a parameter and return
-the instantiated :class:`skosprovider.registry.Registry`.
+* `id`: An identifier for the provider, can be a string or a number, eg. 
+  `heritagetypes` or 5. When left blank, an id will be assigned by Atramhasis
+  equal to the DB identifier of the conceptscheme. The provider id is used
+  in constructing URL's for the application and will be visible in your final 
+  document URL.
+* `conceptscheme uri`: A URI for the conceptscheme. This should be a unique URI
+  that resolves to the conceptscheme's URL in Atramhasis. If you are creating a 
+  thesaurus of colours at http://data.me.org/colours, your `id` might be `colours`
+  and the URI might be http://id.me.org/colours. This URI should redirect to 
+  `http://data.me.org/colours`. Another common option is to use 
+  `http://data.me.org/colours#id` as the URI for your conceptscheme.
+* `uri pattern`: A pattern that will be used by a :class:`~skosprovider.uri.UriGenerator` 
+  to generate URI's for new concepts and collections added to your conceptscheme. 
+  The pattern looks like a http URI with the marker `%s` as a placeholder for 
+  your concept or collection id. Continuing our example, this could be 
+  `http://id.me.org/colours/%s` or `http://data.me.org/colours/%s#id`.
+* `default language`: The default language of the provider. When a concept is 
+  requested, a single label is always returned for ease of display. Normally 
+  this is determined from browser settings or cookies, but if none of these are
+  present, Atramhasis will try this language. Should generally be set to the 
+  main or prevalent language in your thesaurus. When not present, Atramhasis
+  falls back to English as the lingua franca.
+* `force display language`: Even though the client can generally choose which 
+  language a concept or tree view should be displayed in, there are times when
+  it's handy to force the display language. This has been used before for biological 
+  taxonomies where you might always want to display the name in Latin,
+  even though there's a more local name available. See `force_display_label_language`_ 
+  for more information. For most thesauri this will be blank.
+* `ID Generation Strategy`: Every concept or collection needs a unique 
+  identifier. This identifier is used in generating URI's. There are three
+  possible strategies for generating ID's:
 
-In this funcion you will register 
-:class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
-instances to the SKOS registry. If not yet present, you need to tell Python where 
-to find such a provider by adding this code to the top of the file:
+  * `numeric (default)`: Before Atramhasis 2.0.0 this was the only option. 
+    It generates a numeric id based on the current highest id in the conceptscheme.
+  * `guid`: Generate a GUID as identifier for your concept or collection.
+  * `manual`: No identifier is generated by Atramhasis, but the user
+    is required to generate them manually. Allows for full control
+    over ID's and URI's, at the cost of a little more work.
 
-.. code-block:: python
+* `subject`: Add a certain tag to a provider. Currently there are two
+  recognised tags:
+  
+  * `external`: Must be added to an external provider, in code.
+  * `hidden`: Used to obfuscate a conceptscheme. The scheme will not be
+    shown in the Atramhasis UI, except when the URL's of concepts or
+    collections are requested. This allows having a conceptscheme that
+    can be used in applications, but is not the main focus of your 
+    Atramhasis instance. See `hidden_providers`_ for more information.
 
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
+* `expand strategy`: One of the features of Atramhasis is quickly 
+  determining all the narrower concepts of a certain concept, mainly to 
+  be used in querying other systems. There are two options:
 
-Then you need to instantiate such a provider within the `create_registry` function in
-this file. This provider needs a few arguments: an id for the provider, an id
-for the conceptscheme it's working with and a connectionb to a database session.
-The id for the provider is often a text string and will appear in certain url's 
-and might popup in the user interface from time to time. The database session
-is added to the Pyramid request that is passed to function and can be reached
-as `request.db`. Finally, you need to register this provider with the 
-:class:`skosprovider.registry.Registry`.
-
-.. code-block:: python
-
-    STUFF = SQLAlchemyProvider(
-        {
-            'id': 'STUFF',
-            'conceptscheme_id': 1
-        },
-        request.db
-    )
-
-    registry.register_provider(STUFF)
-
-After having registered your provider, the file should look more or less like
-this:
-
-.. code-block:: python
-
-    # -*- coding: utf-8 -*-
-
-    from skosprovider.registry import Registry
-    from skosprovider.uri import UriPatternGenerator
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-    import logging
-    log = logging.getLogger(__name__)
-
-
-    def create_registry(request):
-        # create the SKOS registry
-        registry = Registry(instance_scope='threaded_thread')
-
-        # create your own providers
-        STUFF = SQLAlchemyProvider(
-            {'id': 'STUFF', 'conceptscheme_id': 1},
-            request.db
-        )
-    
-        # Add your custom provider to the registry
-        registry.register_provider(STUFF)
-
-        # return the SKOS registry
-        return registry
+  * `recurse`: Use recursive queries to determine the narrower concepts.
+    For large vocabularies this generally requires good caching.
+  * `visit`: Query a special visitation table that is pre-computed. Will
+    be much more performant, but requires that the table is recomputed
+    regulary.
+  
+  When in doubt, use recurse and pay attention to caching.
 
 
-Now you can restart your server and then you front page will show you a new,
-but empty thesaurus.
-
-Creating concepts and collections
----------------------------------
-
-You can now start creating concepts and collections by
-going to the admin interface at `http://localhost:6543/admin`.
-
-You will notice that any concepts or collections you create wil get a
-:term:`URI` similar to `urn:x-skosprovider:STUFF:1`. This is due to the fact
-that your :class:`~skosprovider_sqlalchemy.providers.SQLAlchemyProvider`
-has a :class:`~skosprovider.uri.UriGenerator` that generates uris for the
-provider. By default, the provider configures a
-:class:`~skosprovider.uri.DefaultUrnGenerator`, but it's expected that you
-will want to override this.
+After filling out the required fields and pressing `Save`, a provider and
+an associated conceptscheme will be created. The conceptscheme will be very 
+barebones, so it's recommended to add extra labels, notes and sources to
+the conceptscheme to inform end users.
 
 .. warning::
 
@@ -249,67 +249,41 @@ will want to override this.
    vocabularies, please be sure to create the URI's before or during import
    (possbily by using a relevant generator yourself).
 
-Suppose you have decided that your URI's should look like this:
-`http://id.mydata.org/thesauri/stuff/[id]`. You can do this by registering
-a :class:`~skosprovider.uri.UriPatternGenerator` with your provider:
+Adding a new provider through the REST API
+..........................................
 
-.. code-block:: python
+Apart from using the UI, it's also possible to create a provider through the 
+REST API, by POSTing to the `http://localhost:6543/providers` endpoint to have 
+the server assign an id or by PUTTing to the `http://localhost:6543/providers/<id>` 
+endpoint to assign your own id, using the following payload:
 
-    STUFF = SQLAlchemyProvider(
-        {
-            'id': 'STUFF',
-            'conceptscheme_id': 1
-        },
-        request.db,
-        uri_generator=UriPatternGenerator(
-            'http://id.mydata.org/thesauri/stuff/%s'
-        )
-    )
+.. code-block:: json
 
-Don't forget to import the :class:`~skosprovider.uri.UriPatternGenerator` at the
-top of your file:
+    {
+        "id":"CHEESE",
+        "conceptscheme_uri":"https://id.python.org/cheese",
+        "uri_pattern":"https://id.python.org/cheese/%s",
+        "subject":[],
+        "id_generation_strategy":"NUMERIC",
+        "expand_strategy":"recurse",
+        "default_language":"en",
+        "force_display_language":""
+    }
 
-.. code-block:: python
+If all goes well, you'll be greeted with a `201 Created` status and your new
+provider and conceptscheme will be available through the UI.
 
-    from skosprovider.uri import UriPatternGenerator
+More information about the Atramhasis API can be found at the 
+`http://localhost:6543/api_doc` endpoint of your Atramhasis instance 
+or at `https://thesaurus.onroerenderfgoed.be/api_doc`.
 
-Your final file should look similar to this:
+Creating concepts and collections
+---------------------------------
 
-.. code-block:: python
+You can now start creating concepts and collections by
+going to the admin interface at `http://localhost:6543/admin`.
 
-    # -*- coding: utf-8 -*-
-
-    from skosprovider.registry import Registry
-    from skosprovider.uri import UriPatternGenerator
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-    import logging
-    log = logging.getLogger(__name__)
-
-
-    def create_registry(request):
-        # create the SKOS registry
-        registry = Registry(instance_scope='threaded_thread')
-
-        # create your own providers
-        STUFF = SQLAlchemyProvider(
-            {'id': 'STUFF', 'conceptscheme_id': 1},
-            request.db,
-            uri_generator=UriPatternGenerator(
-                'http://id.mydata.org/thesauri/stuff/%s'
-            )
-        )
-    
-        # Add your custom provider to the registry
-        registry.register_provider(STUFF)
-
-        # return the SKOS registry
-        return registry
-
-
-If you need more complicated URI's, you can easily write you own generator
-with a small piece of python code. You just need to follow the interface
-provided by :class:`skosprovider.uri.UriGenerator`.
+.. _hidden_providers:
 
 Hiding a vocabulary
 ===================
@@ -322,45 +296,6 @@ attention to. The only thing you need to do,
 is tagging this provider with a subject. By adding the `hidden`
 subject to the provider, we let Atramhasis know that this vocabulary should not 
 be present among your regular vocabularies.
-
-Suppose we wanted to hide our stuff:
-
-.. code-block:: python
-
-    # -*- coding: utf-8 -*-
-
-    import logging
-    log = logging.getLogger(__name__)
-
-    from skosprovider.registry import Registry
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-    from skosprovider.uri import UriPatternGenerator
-
-
-    def create_registry(request):
-        # create the SKOS registry
-        registry = Registry(instance_scope='threaded_thread')
-
-        # create your own providers
-        #
-        STUFF = SQLAlchemyProvider(
-            {
-                'id': 'STUFF',
-                'conceptscheme_id': 1,
-                'subject': ['hidden']
-            },
-            request.db,
-            uri_generator=UriPatternGenerator(
-                'http://id.mydata.org/thesauri/stuff/%s'
-            )
-        )
-    
-        # Add your custom provider to the registry
-        registry.register_provider(STUFF)
-
-        # return the SKOS registry
-        return registry
-
 
 Now the STUFF thesaurus will not show up in the public web interface, but REST
 calls to this conceptscheme will function as normal and you will be able to
@@ -393,32 +328,15 @@ measure. This was not as desired by our users. To that end, a special mechanism
 was created to force rendering labels of concepts and collections in a certain
 language, no matter what the end-user's browser is requesting.
 
-To set this, please edit the :file:`my_thesaurus/skos/__init__.py`. Look for the 
-thesaurus you want to override and add a setting `atramhasis.force_display_label_language`
-to the provider's metadata. Set it to a language supported by the provider
-(there's little sense to setting it to a language that isn't present in the
-vocabulary). Now Atramhasis will try serving concepts from this provider with
-this language. All labels will still be shown, but the page title or current
-label will be set to the selected language as much as possible. The normal
-language determination mechanisms will keep on working, so if the concept has
-no label in the requested language, Atramhasis will fall back on other labels
-present.
-
-Your provider should end up similar to this:
-
-.. code-block:: python
-
-    STUFF = SQLAlchemyProvider(
-        {
-            'id': 'STUFF',
-            'conceptscheme_id': 1,
-            'atramhasis.force_display_label_language': 'la'
-        },
-        request.db,
-        uri_generator=UriPatternGenerator(
-            'http://id.mydata.org/thesauri/stuff/%s'
-        )
-    )
+To set this, set the `force_display_language` attribute of your provider, either
+through the UI or the REST interface (`creating_conceptschemes`_). Set it to a 
+language supported by the provider (there's little sense to setting it to a 
+language that isn't present in the vocabulary). Now Atramhasis will try serving 
+concepts from this provider with this language. All labels will still be shown, 
+but the page title or current label will be set to the selected language as much 
+as possible. The normal language determination mechanisms will keep on working, 
+so if the concept has no label in the requested language, Atramhasis will fall 
+back on other labels present.
 
 Beware that this will only affect the Atramhasis UI, not the Atramhasis REST
 services. We looked into some solutions for our problem that would have also
@@ -664,7 +582,7 @@ concepts with a URI of less than 5 characters:
 
 
 Adding Analytics
-=======================
+================
 
 Out of the box, it's very easy to add any analytics integration to Atramhasis.
 All you need to do is add your tracking snippet to :file:`development.ini`.
@@ -696,6 +614,9 @@ Another example to add Plausible Analytics:
         src="https://your.plausibleinstance.com/js/script.js">
         </script>
 
+
+.. _external_providers:
+
 Adding external providers
 =========================
 
@@ -709,9 +630,9 @@ Importing a concept like this will automatically create a :term:`SKOS` match
 for you. Once a match is in place, you can also update your local concept with
 information from the external concept by performing a merge.
 
-To enable all this power, you again need to configure a provider in you
+To enable all this power, you need to configure an external provider in your
 application. Continuing with our :ref:`example project <own_project>`, we need
-to go back to our :file:`my_thesaurus/skos/__init__.py`. In this file you need
+to go and edit a :file:`my_thesaurus/skos/__init__.py`. In this file you need
 to register other instances of
 :class:`skosprovider.providers.VocabularyProvider`. Currently providers
 have already been written for Getty Vocabularies, English Heritage vocabularies
@@ -730,15 +651,12 @@ of :file:`my_thesaurus/skos/__init__.py`.
 
     from skosprovider_getty.providers import AATProvider
 
-Once this is done, we need to instantiate the provider within the `includeme`
-function and register it with the :class:`skosprovider.registry.Registry`. This
-is all quite similar to registering your own
-:class:`skosprovider_sqlalchemy.providers.SQLAlchemyProvider`. One thing you do
-need to do, is tagging this provider with a subject. By adding the `external`
-subject to the provider, we let Atramhasis know that this is not a regular,
-internal provider that can be stored in our database, but a special external
-one that can only be used for making matches. As such, it will not be present
-and visible to the public among your regular vocabularies.
+Once this is done, we need to instantiate the provider within the `create_registry`
+function and register it with the :class:`skosprovider.registry.Registry`. 
+By adding the `external` subject to the provider, we let Atramhasis know that 
+this is not a regular, internal provider that can be stored in our database, 
+but a special external one that can only be used for making matches. As such, 
+it will not be present and visible to the public among your regular vocabularies.
 
 .. code-block:: python
 
@@ -764,25 +682,13 @@ this:
     log = logging.getLogger(__name__)
 
     from skosprovider.registry import Registry
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
     from skosprovider_getty.providers import AATProvider
-    from skosprovider.uri import UriPatternGenerator
+    from atramhasis.skos import register_providers_from_db
 
 
     def create_registry(request):
         # create the SKOS registry
         registry = Registry(instance_scope='threaded_thread')
-
-        STUFF = SQLAlchemyProvider(
-            {
-                'id': 'STUFF',
-                'conceptscheme_id': 1
-            },
-            request.db,
-            uri_generator=UriPatternGenerator(
-                'http://id.mydata.org/thesauri/stuff/%s'
-            )
-        )
 
         AAT = AATProvider(
             {
@@ -793,6 +699,8 @@ this:
 
         registry.register_provider(STUFF)
         registry.register_provider(AAT)
+
+        register_providers_from_db(registry, request.db)
 
         return registry
 
@@ -828,13 +736,10 @@ The supported file types:
 
 Some things to take into account:
 
-- Atramhasis only supports concepts with a numeric id. This ensures they can be
-  auto-generated when adding new concepts or collections. These map to the
-  `concept_id` attribute in the database, which is unique per conceptscheme as
-  opposed to the `id` attribute that is unique for the entire database.
 - When importing from an RDF vocabulary, the id will be read from a `dc` or
-  `dcterms` `identifier` property if present. Please ensure this property 
-  contains a numeric id, not a string or a URI.
+  `dcterms` `identifier` property if present. If you have local identifiers,
+  please make sure to add them using this property. If not, your concept and
+  collections will use their URI's as id.
 - When importing from RDF, the import file could possibly contain more than one
   conceptscheme. Please ensure only one conceptscheme is present or
   no conceptschemes are presents and specify the URI and label on the command
@@ -888,11 +793,12 @@ Call it with the `help` argument to see the possible arguments.
     --id-generation-strategy numeric
 
 
-The `input_file` is a positional required argument and details where the file you want to import is
-located, for example :file:`my_thesaurus/data/trees.json`. It is relative to your
-current location.
+The `input_file` is a positional required argument and details where the file 
+you want to import is located, for example :file:`my_thesaurus/data/trees.json`. 
+It is relative to your current location.
 
-The `uri_pattern` positional required argument the URI pattern used to create the provider.
+The `uri_pattern` is a positional required argument that details the URI pattern 
+that will be used by the provider to create concept and collection URI's.
 
 The `to` argument contains the connection string of output database. Only
 PostGreSQL and SQLite are supported. The structure is either
@@ -905,11 +811,10 @@ in the RDF file. The other providers can specify it on the command line
 through the `conceptscheme_label` argument. If no `conceptscheme_label` is present,
 the default label is the name of the file.
 
-Once the data is loaded in the database, the configuration of the added provider must be
-included in the :file:`my_thesaurus/skos/__init__.py`. A successfull run of the
-script will give a suggestion of the code to add to this file. Make sure to use
-the same ConceptSchem ID since it is needed to connect your provider and the
-conceptscheme in the database.
+Once the data is loaded in the database, your conceptscheme and provider will 
+be ready, unless you chose the `--no-create-provider` option. This is rarely what 
+you want and is only useful if you are doing some manual interventions in your 
+database.
 
 For example, to insert this file:
 
@@ -1069,41 +974,6 @@ This will return output similar to this:
 
     *** The import of the my_thesaurus/data/trees.json file with conceptscheme label 'Trees' to sqlite:///my_thesaurus.sqlite was successfull. ***
 
-    To use the data in Atramhasis, you must edit the file my_thesaurus/skos/__init__.py.
-    Add next lines:
-
-    def includeme(config):
-            TREES = SQLAlchemyProvider(
-                    {'id': 'TREES', 'conceptscheme_id': 11},
-                    config.registry.dbmaker
-            )
-            skosregis = config.get_skos_registry()
-            skosregis.register_provider(TREES)
-
-Just follow these instructions and edit your :file:`my_thesaurus/skos/__init__.py` like this:
-
-.. code-block:: python
-
-    # -*- coding: utf-8 -*-
-
-    import logging
-    log = logging.getLogger(__name__)
-    
-    from skosprovider.registry import Registry
-    from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-
-    def create_registry(request):
-        # create the SKOS registry
-        registry = Registry(instance_scope='threaded_thread')a
-
-        TREES = SQLAlchemyProvider(
-                {'id': 'TREES', 'conceptscheme_id': 11},
-                request.db
-        )
-        registry.register_provider(TREES)
-
-        return registry
 
 Now your thesaurus has been successfully imported and is ready to be browsed,
 expanded and edited.
