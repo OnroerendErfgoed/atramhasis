@@ -197,9 +197,9 @@ provider the following information needs to be provided:
   present, Atramhasis will try this language. Should generally be set to the 
   main or prevalent language in your thesaurus. When not present, Atramhasis
   falls back to English as the lingua franca.
-* `force diplay language`: Even though the client can generally choose which 
+* `force display language`: Even though the client can generally choose which 
   language a concept or tree view should be displayed in, there are times when
-  it's handy to force the issue. This has been used before for biological 
+  it's handy to force the display language. This has been used before for biological 
   taxonomies where you might always want to display the name in Latin,
   even though there's a more local name available. See `force_display_label_language`_ 
   for more information. For most thesauri this will be blank.
@@ -237,7 +237,7 @@ provider the following information needs to be provided:
   When in doubt, use recurse and pay attention to caching.
 
 
-After filling out the required fields, and pressing `Save` a provider and
+After filling out the required fields and pressing `Save`, a provider and
 an associated conceptscheme will be created. The conceptscheme will be very 
 barebones, so it's recommended to add extra labels, notes and sources to
 the conceptscheme to inform end users.
