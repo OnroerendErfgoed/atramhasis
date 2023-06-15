@@ -697,7 +697,6 @@ this:
             }
         )
 
-        registry.register_provider(STUFF)
         registry.register_provider(AAT)
 
         register_providers_from_db(registry, request.db)
@@ -990,3 +989,49 @@ You can change the default session factory in the __init__.py file.
     atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
     config.set_session_factory(atramhasis_session_factory)
 
+Updating an older installation of Atramhasis
+============================================
+
+If you are running an older installation of Atramhasis, it's important you 
+reconfigure how providers are created. While they were created in pre-2.0.0
+version by writing a little bit of code, since 2.0.0 they are created 
+through the UI or the REST service and stored in the database. Run the
+following command:
+
+.. code-block:: bash
+   $ workon my_thesaurus
+   $ migrate_sqlalchemy_providers --setings_file development.ini
+
+After running this command, all providers will be present in the DB and
+you can safely delete some code in the :file:`my_thesaurus/skos/__init__.py` 
+file so that it looks somewhat like this:
+
+.. code-block:: python
+
+    # -*- coding: utf-8 -*-
+
+    import logging
+    log = logging.getLogger(__name__)
+
+    from skosprovider.registry import Registry
+    from skosprovider_getty.providers import AATProvider
+    from atramhasis.skos import register_providers_from_db
+
+
+    def create_registry(request):
+        # create the SKOS registry
+        registry = Registry(instance_scope='threaded_thread')
+
+        AAT = AATProvider(
+            {
+                'id': 'AAT',
+                'subject': ['external']
+            }
+        )
+
+        registry.register_provider(AAT)
+
+        # Load all configured providers from the db
+        register_providers_from_db(registry, request.db)
+
+        return registry
