@@ -1,18 +1,37 @@
-in progress
------------
+2.0.0a1 (??-06-2023)
+--------------------
 
-This releases is a new major release with some new features and some backwards
+**This is a pre-release of version of 2.0.0**
+
+Atramhasis 2.0.0 is a new major release with some new features and some backwards
 incompatible changes that require a careful upgrade and some manual
 intervention. Lots of dependencies have been updated, so please test and
 evaluate your own integration carefully before updating a production version.
 
+This version provides two major new features:
+
 - It is now possible to have non-numeric identifiers for concepts and collections. 
-  The current default (numeric ids) is still supported, but it's now also possible 
-  to use a UUID or assign one manually upon creation of a concept. (#732)
+  The current default (numeric ids) is still supported, but we've made it 
+  possible to also use a UUID or assign one manually upon creation of a 
+  concept. (#732)
+- Creation of providers used to be done with a little bit of code, but is now
+  handled through the UI. A thesaurus administrator can be allowed to create new
+  conceptschemes by configuring a few parameter such as a URI pattern, a 
+  provider ID, what type of identifiers to use (numeric, guid or manual) 
+  and the provider's default language. We have provided a script for upgrading
+  an installation that was created for an older version of Atramhasis. Please
+  consult our documentation for instructions how to use it. (#744)
+
+Minor features added and bugs fixed:
+
+- Atramhasis is now tested on Python 3.11, 3.10 and 3.9. Support for older 
+  versions has been removed.
 - Jinja2 3.x is now the expected template engine. Users who have overridden and
   customised many templates might need to update them. (#747)
 - Easier and more flexible configuration of analytics snippets, such as 
   `Plausible Analytics <https://plausible.io>`_. (#738)
+- Refactoring of the import from file script, to avoid duplicate code and avoid
+  creating duplicate labels. (#818)
 - Update label of default language `vls` to `Vlaams` to be inline with the normal 
   IANA label. (#767)
 - Update language-tags to latest version. (#754)
