@@ -164,9 +164,9 @@ def migrate(skos_registry: Registry, session: Session):
         if not isinstance(provider, SQLAlchemyProvider):
             continue
 
-        if session.get(Provider, provider.conceptscheme_id) is not None:
+        if session.get(Provider, provider.get_vocabulary_id()) is not None:
             print(
-                f"Provider with id {provider.conceptscheme_id} already exists. "
+                f"Provider with id {provider.get_vocabulary_id()} already exists. "
                 f"Skipping creation of provider for conceptscheme "
                 f"{provider.metadata.get('id') or ''}"
             )
