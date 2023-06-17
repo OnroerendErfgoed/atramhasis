@@ -148,8 +148,8 @@ makes this possible.
 
     Prior to version 2.0.0, creating conceptschemes and providers required manual
     interventions and writing a little bit of code. This has changes significantly.
-    If you have an older installation, please make sure to read the docs before 
-    upgrading.
+    If you have an older installation, please make sure to read `upgrading_providers`_ 
+    before upgrading.
 
 Adding a new provider through the UI
 ....................................
@@ -276,6 +276,7 @@ provider and conceptscheme will be available through the UI.
 More information about the Atramhasis API can be found at the 
 `http://localhost:6543/api_doc` endpoint of your Atramhasis instance 
 or at `https://thesaurus.onroerenderfgoed.be/api_doc`.
+
 
 Creating concepts and collections
 ---------------------------------
@@ -989,6 +990,8 @@ You can change the default session factory in the __init__.py file.
     atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
     config.set_session_factory(atramhasis_session_factory)
 
+.. _upgrading_providers:
+   
 Updating an older installation of Atramhasis
 ============================================
 
@@ -999,12 +1002,18 @@ through the UI or the REST service and stored in the database. Run the
 following command:
 
 .. code-block:: bash
+
    $ workon my_thesaurus
    $ migrate_sqlalchemy_providers --setings_file development.ini
 
 After running this command, all providers will be present in the DB and
-you can safely delete some code in the :file:`my_thesaurus/skos/__init__.py` 
-file so that it looks somewhat like this:
+you can safely delete some code in the :file:`my_thesaurus/skos/__init__.py`. 
+You should edit you `create_registry` function. Where you would previously 
+have instantiated all SQLAlchemyProviders in this function, you need to remove 
+them and replace them with a call to 
+:func:`~atramhasis.skos.create_providers_from_db`. Any external providers
+you registered, such as AAT providers, should still be configured
+through code in this file. Your final code should looks somewhat like this:
 
 .. code-block:: python
 

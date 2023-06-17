@@ -44,6 +44,12 @@ atramhasis.routes
 .. automodule:: atramhasis.routes
    :members:
 
+atramhasis.skos
+===============
+
+.. automodule:: atramhasis.skos
+   :members:
+
 atramhasis.utils
 ================
 
@@ -70,6 +76,12 @@ atramhasis.views.crud
 ---------------------
 
 .. automodule:: atramhasis.views.crud
+   :members:
+
+atramhasis.views.languages_crud
+-------------------------------
+
+.. automodule:: atramhasis.views.languages_crud
    :members:
 
 atramhasis.views.exception_views
