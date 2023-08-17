@@ -7,27 +7,36 @@ tags:
   - vocabulary
   - linked data
 authors:
-  - name: Van Daele, Koen
+  - given-names: Koen
+    surname: Van Daele
     orcid: 0000-0002-8153-2978
     corresponding: True
     affiliation: 1
-  - name: Cahy, Tinne
+  - given-names: Tinne
+    surname: Cahy
     affiliation: 2
-  - name: De Clercq, Wim
+  - given-names: Wim
+    surname: De Clercq
     affiliation: 2
-  - name: Geuens, Jonas
+  - given-names: Jonas
+    surname: Geuens
     orcid: 0000-0001-8197-5034
     affiliation: 1
-  - name: Goessens, Bram
+  - given-names: Bram
+    surname: Goessens
     orcid: 0000-0001-6693-0866
     affiliation: 1
-  - name: Piraux, Jonathan
+  - given-names: Jonathan
+    surname: Piraux
     affiliation: 2
-  - name: Saelen, Bart
+  - given-names: Bart
+    surname: Saelen
     affiliation: 2
-  - name: Taeymans, Maarten
+  - given-names: Maarten
+    surname: Taeymans
     affiliation: 2
-  - name: Vanderhaegen, Cedrik
+  - given-names: Cedrik
+    surname: Vanderhaegen
     affiliation: 1
 affiliations:
  - name: Flanders Heritage Agency, Belgium
