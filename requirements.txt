@@ -1,5 +1,5 @@
 # pyramid
-pyramid==2.0.1
+pyramid==2.0.2
 pyramid-tm==2.5
 pyramid_rewrite==0.2
 pyramid_openapi3==0.14.3
