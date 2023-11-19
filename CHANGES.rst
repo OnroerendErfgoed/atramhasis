@@ -2,6 +2,8 @@
 ------------------
 
 - Added a configuration file for ReadTheDocs. (#846)
+- Update skosprovider_getty to get more robust services when dealing with the
+  conceptscheme.
 
 
 2.0.0b1 (17-06-2023)
