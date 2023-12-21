@@ -113,9 +113,23 @@ production environment.
 Admin development
 =================
 
-To work on the admin part, you'll need `npm`_ installed. Consult
-your operating system documentation on how to install these. The following
+To work on the admin part, you'll need `npm`_, `grunt`_ and `java`_ installed.
+Consult your operating system documentation on how to install these. The following
 instructions will assume you're running a recent Debian based Linux distribution.
+
+Confirmed known versions are as followed:
+
+.. code-block:: bash
+
+    $ npm -v
+    8.19.4
+
+    $ node -v
+    v16.20.2
+
+    $ grunt -V
+    grunt-cli v1.4.3
+
 
 .. code-block:: bash
 
@@ -158,33 +172,31 @@ To update the message catalogs, do as follows:
 
 .. code-block:: bash
 
-    $ python setup.py extract_messages
-    $ python setup.py update_catalog -l fr -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/fr/LC_MESSAGES/atramhasis.po
-    $ python setup.py update_catalog -l nl -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/nl/LC_MESSAGES/atramhasis.po
-    $ python setup.py update_catalog -l en -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/en/LC_MESSAGES/atramhasis.po
+    $ pybabel extract --add-comments 'TRANSLATORS:' --output-file 'atramhasis/locale/atramhasis.pot' --width 80 --mapping-file 'message-extraction.ini' atramhasis
+    $ pybabel update --input-file 'atramhasis/locale/atramhasis.pot' --output-dir 'atramhasis/locale' --previous true --domain atramhasis
 
 Update the catalogs accordingly and run:
 
 .. code-block:: bash
 
-    $ python setup.py compile_catalog
+    $ pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
 
 You might also want to add a new translation. Suppose you want to add a German
 translation.
 
 .. code-block:: bash
 
-    $ python setup.py init_catalog -l de -i atramhasis/locale/atramhasis.pot -o atramhasis/locale/de/LC_MESSAGES/atramhasis.po
+    $ pybabel init --locale de --input-file 'atramhasis/locale/atramhasis.pot' --output-dir atramhasis/locale --domain atramhasis
 
-Edit :file:`atramhasis/locale/do/LC_MESSAGES/atramhasis.po` and add the necessary
+Edit :file:`atramhasis/locale/de/LC_MESSAGES/atramhasis.po` and add the necessary
 translations. Just as with updating the catalogs, you need to recompile them.
 
 .. code-block:: bash
 
-    $ python setup.py compile_catalog
+    $ pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
 
 At this moment, Atramhasis will still only show the default languages in it's
-language switcher. If you want to add you new language, you need to edit your
+language switcher. If you want to add your new language, you need to edit your
 :file:`development.ini` (or similar file). Look for the line that says 
 `available_languages` and add your locale identifier.
 
@@ -320,3 +332,4 @@ This will build the dojo code in the static folder.
 .. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
 .. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
 .. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
+.. _java: https://www.java.com/en/download/manual.jsp

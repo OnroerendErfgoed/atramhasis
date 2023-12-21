@@ -10,8 +10,7 @@ before_install:
  - pip install --upgrade pip
  - pip install setuptools==59.6.0 #https://github.com/pypa/setuptools/issues/3293
 install:
-  - pip install -r requirements-dev.txt
-  - python setup.py develop
+  - pip install -e .[dev]
 script:
  - py.test --cov atramhasis --cov-report term-missing tests
 after_success:
