@@ -71,7 +71,7 @@ requires = [
 ]
 
 setup(name='atramhasis',
-      version='2.0.0b1',
+      version='2.0.0',
       description='A web based editor for thesauri adhering to the SKOS specification.',
       long_description=README + '\n\n' + CHANGES,
       long_description_content_type='text/x-rst',
@@ -85,6 +85,7 @@ setup(name='atramhasis',
           "Programming Language :: Python :: 3.9",
           "Programming Language :: Python :: 3.10",
           "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
       ],
       author='Flanders Heritage Agency',
       author_email='ict@onroerenderfgoed.be',

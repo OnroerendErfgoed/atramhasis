@@ -2,6 +2,8 @@
 ------------------
 
 - Added a configuration file for ReadTheDocs. (#846)
+- Initializedb script now generates providers in the database, where before they were 
+  created in code and then migrated. (#848)
 - Update skosprovider_getty to get more robust services when dealing with the
   conceptscheme.
 
