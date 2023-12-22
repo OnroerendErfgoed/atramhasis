@@ -1,5 +1,10 @@
-2.0.0 (??-??-2023)
+2.0.0 (22-12-2023)
 ------------------
+
+The final release of version 2.0.0 is very similar to the pre-release. Please read the
+notes for that version and be mindful when updating from an older version. You will 
+need to migrate some of your configuration to your database as described in
+our documentation.
 
 - Added a configuration file for ReadTheDocs. (#846)
 - Initializedb script now generates providers in the database, where before they were 
