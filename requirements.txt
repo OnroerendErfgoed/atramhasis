@@ -2,10 +2,14 @@
 pyramid==2.0.2
 pyramid-tm==2.5
 pyramid_rewrite==0.2
-pyramid_openapi3==0.14.3
-openapi-spec-validator==0.4.0  # https://github.com/p1c2u/openapi-core/issues/442
-# need to limit jsonschema until openapi-spec-validator 0.6.0 exists
+
+# The openapi stack is very vulnerable so we limit all the libraries in the
+# dependency tree.
+pyramid_openapi3==0.16.0
 jsonschema==4.17.0
+openapi-core==0.16.6
+openapi-schema-validator==0.4.4
+openapi-spec-validator==0.5.6
 
 # skosprovider
 skosprovider==1.2.0
