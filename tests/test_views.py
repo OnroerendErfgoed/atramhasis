@@ -730,7 +730,7 @@ class TestAtramhasisCrudView(unittest.TestCase):
         self.view.edit_concept()
 
     def test_add_provider(self):
-        self.request.openapi_validated = RequestValidationResult(body={})
+        self.request.openapi_validated = RequestValidationResult(errors=[])
         self.request.skos_registry = Registry()
         view = 'atramhasis.views.crud'
 
@@ -745,7 +745,7 @@ class TestAtramhasisCrudView(unittest.TestCase):
             self.assertEqual(response, renderer.return_value)
 
     def test_update_provider(self):
-        self.request.openapi_validated = RequestValidationResult(body={})
+        self.request.openapi_validated = RequestValidationResult(errors=[])
         self.request.matchdict = {"id": 1}
         view = 'atramhasis.views.crud'
 

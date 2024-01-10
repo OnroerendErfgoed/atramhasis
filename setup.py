@@ -52,8 +52,6 @@ requires = [
     'skosprovider_rdf',
     'skosprovider_getty',
     'pyramid_skosprovider',
-    'pyramid_openapi3',
-    'openapi-spec-validator==0.4.0',  # https://github.com/p1c2u/openapi-core/issues/442
     'language_tags',
     'jinja2 >=  3.0.0',
     'markupsafe',
@@ -68,6 +66,14 @@ requires = [
     'python-dateutil',
     'rdflib',
     'bleach',
+    # The openapi stack is very vulnerable to breaking changes even within minor
+    # version updates. (x.y.z -- even y updates are dangerous). So we limit to only
+    # patch updates.
+    'pyramid_openapi3>=0.16.0,<0.17.0',
+    'openapi-core>=0.16.6,<0.17.0',
+    'openapi-schema-validator>=0.4.4,<0.5.0',
+    'openapi-spec-validator>=0.5.6,<0.6.0',
+    'jsonschema>=4.17.0,<5.0.0',  # Does follow semantic versioning -- safe
 ]
 
 setup(name='atramhasis',

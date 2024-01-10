@@ -559,7 +559,7 @@ class RestFunctionalTests(FunctionalTests):
                 'errors': [
                     "<root>: 'conceptscheme_uri' is a required property",
                     "uri_pattern: 'invalid' does not match '.*%s.*'",
-                    "subject: 'wrong' is not of type array"
+                    "subject: 'wrong' is not of type 'array'"
                 ]},
             response.json
         )
