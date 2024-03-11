@@ -1104,3 +1104,12 @@ functionality might fail to run properly.
       PERIOD
       GEOGRAPHY
       MATERIALS
+
+    # DEFAULT - Run dojo from source (src) or distribution (dist)
+    dojo.mode = dist
+
+    # The Twitter @username the card should be attributed to.
+    twitter.site =
+
+    # Enter your tracking snippet
+    tracking_snippet =

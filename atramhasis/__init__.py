@@ -17,7 +17,7 @@ DEFAULT_SETTINGS = {
     "jinja2.filters": "label_sort = atramhasis.utils.label_sort",
     "dojo.mode": "dist",
     "layout.focus_conceptschemes": [],
-    "skosprovider.skosregistry_factory": "atramhasis:skos.create_registry",
+    "skosprovider.skosregistry_factory": "atramhasis.skos.create_registry",
     "skosprovider.skosregistry_location": "request",
 }
 
