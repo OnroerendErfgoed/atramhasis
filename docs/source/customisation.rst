@@ -1044,3 +1044,63 @@ through code in this file. Your final code should looks somewhat like this:
         register_providers_from_db(registry, request.db)
 
         return registry
+
+
+Application settings
+====================
+These are settings you can use to change the atramhasis behaviour.
+When a setting is marked with DEFAULT then writing the setting is optional.
+When a setting is marked with REQUIRED then it is strongly advised to fill in the
+setting. Skipping these may not prevent the application from starting, but some
+functionality might fail to run properly.
+
+.. code-block:: ini
+
+    [app:main]
+    use = egg:my_app
+
+    pyramid.default_locale_name = nl
+
+    # DEFAULT - If you wish to add your own values you should append to these values
+    jinja2.extensions =
+        jinja2.ext.do
+    # DEFAULT - If you wish to add your own values you should append to these values
+    jinja2.filters =
+        label_sort = atramhasis.utils.label_sort
+
+    available_languages = en nl it
+
+    # REQUIRED
+    sqlalchemy.url = sqlite:///test.db
+    # sqlalchemy.url = postgresql://postgres:postgres@localhost:5432/atramhasis_test
+
+    # DEFAULT
+    skosprovider.skosregistry_location = request
+    # DEFAULT
+    skosprovider.skosregistry_factory = tests.create_registry
+
+    # DEFAULT - cache which caches the data used for /conceptschemes/{scheme_id}/tree
+    cache.tree.backend = dogpile.cache.memory
+    cache.tree.arguments.cache_size = 5000
+    cache.tree.expiration_time = 7000
+
+    # DEFAULT - cache which caches the data used for /labeltypes and /notetypes
+    cache.list.backend = dogpile.cache.memory
+    cache.list.arguments.cache_size = 5000
+    cache.list.expiration_time = 7000
+
+    # REQUIRED - Filesystem location to dump exports
+    atramhasis.dump_location = path/to/folder
+
+    # REQUIRED - Assume an LDF server is present?
+    atramhasis.ldf.enabled = True
+
+    # External url of the LDF server
+    atramhasis.ldf.baseurl = http://demo.atramhasis.org/ldf
+
+    # DEFAULT empty list
+    layout.focus_conceptschemes =
+      HERITAGETYPE
+      PERIOD
+      GEOGRAPHY
+      MATERIALS
