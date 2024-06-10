@@ -4,7 +4,6 @@ from unittest.mock import Mock
 
 import mock
 import pytest
-from openapi_core.validation.request.datatypes import RequestValidationResult
 from paste.deploy.loadwsgi import appconfig
 from pyramid import testing
 from pyramid.config.settings import Settings
@@ -730,7 +729,7 @@ class TestAtramhasisCrudView(unittest.TestCase):
         self.view.edit_concept()
 
     def test_add_provider(self):
-        self.request.openapi_validated = RequestValidationResult(errors=[])
+        self.request.openapi_validated = Mock()
         self.request.skos_registry = Registry()
         view = 'atramhasis.views.crud'
 
@@ -745,7 +744,7 @@ class TestAtramhasisCrudView(unittest.TestCase):
             self.assertEqual(response, renderer.return_value)
 
     def test_update_provider(self):
-        self.request.openapi_validated = RequestValidationResult(errors=[])
+        self.request.openapi_validated = Mock()
         self.request.matchdict = {"id": 1}
         view = 'atramhasis.views.crud'
 

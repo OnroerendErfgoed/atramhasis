@@ -1138,9 +1138,6 @@ components:
 
     Provider:
       type: object
-      required:
-        - conceptscheme_uri
-        - uri_pattern
       properties:
         id:
           type: string
@@ -1189,6 +1186,9 @@ components:
           type: object
           additionalProperties: true
           nullable: true
+      required:
+        - conceptscheme_uri
+        - uri_pattern
     Error:
       type: object
       required:

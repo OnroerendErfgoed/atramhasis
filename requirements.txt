@@ -1,50 +1,225 @@
-# pyramid
-pyramid==2.0.2
-pyramid-tm==2.5
-pyramid_rewrite==0.2
-
-# The openapi stack is very vulnerable so we limit all the libraries in the
-# dependency tree.
-pyramid_openapi3==0.16.0
-jsonschema==4.17.0
-openapi-core==0.16.6
-openapi-schema-validator==0.4.4
-openapi-spec-validator==0.5.6
-
-# skosprovider
-skosprovider==1.2.0
-skosprovider_sqlalchemy==2.1.1
-pyramid_skosprovider==1.2.1
-skosprovider_rdf==1.3.0
-skosprovider_getty==1.2.0
-
-language-tags==1.2.0
-
-# database
-sqlalchemy==1.4.48
-zope.sqlalchemy==2.0
-transaction==3.1.0
-
-# jinja2
-jinja2==3.1.2
-markupsafe==2.1.2
-pyramid-jinja2==2.10
-Babel==2.12.1
-
-# alembic
-alembic==1.9.4
-
-# validation
+alembic==1.13.1
+    # via atramhasis (pyproject.toml)
+attrs==23.2.0
+    # via
+    #   jsonschema
+    #   referencing
+babel==2.15.0
+    # via atramhasis (pyproject.toml)
+bleach==6.1.0
+    # via atramhasis (pyproject.toml)
+cachecontrol==0.14.0
+    # via atramhasis (pyproject.toml)
+cachetools==5.3.3
+    # via pyld
+certifi==2024.6.2
+    # via requests
+charset-normalizer==3.3.2
+    # via requests
 colander==2.0
-
-# caching
-dogpile.cache==1.1.8
-
-# other
-python-dateutil==2.8.2
-rdflib==6.3.1
-bleach==5.0.1
-
-# requests
-requests==2.31.0
-cachecontrol==0.13.1
+    # via atramhasis (pyproject.toml)
+decorator==5.1.1
+    # via dogpile-cache
+dogpile-cache==1.3.3
+    # via atramhasis (pyproject.toml)
+frozendict==2.4.4
+    # via pyld
+greenlet==3.0.3
+    # via sqlalchemy
+html5lib==1.1
+    # via
+    #   skosprovider
+    #   skosprovider-rdf
+hupper==1.12.1
+    # via pyramid
+idna==3.7
+    # via requests
+iso8601==2.1.0
+    # via colander
+isodate==0.6.1
+    # via
+    #   openapi-core
+    #   rdflib
+jinja2==3.1.4
+    # via
+    #   atramhasis (pyproject.toml)
+    #   pyramid-jinja2
+jsonschema==4.22.0
+    # via
+    #   openapi-core
+    #   openapi-schema-validator
+    #   openapi-spec-validator
+jsonschema-path==0.3.2
+    # via
+    #   openapi-core
+    #   openapi-spec-validator
+jsonschema-specifications==2023.12.1
+    # via
+    #   jsonschema
+    #   openapi-schema-validator
+language-tags==1.2.0
+    # via
+    #   atramhasis (pyproject.toml)
+    #   skosprovider
+lazy-object-proxy==1.10.0
+    # via openapi-spec-validator
+lxml==5.2.2
+    # via pyld
+mako==1.3.5
+    # via alembic
+markupsafe==2.1.5
+    # via
+    #   atramhasis (pyproject.toml)
+    #   jinja2
+    #   mako
+    #   pyramid-jinja2
+    #   werkzeug
+more-itertools==10.2.0
+    # via openapi-core
+msgpack==1.0.8
+    # via cachecontrol
+openapi-core==0.19.1
+    # via pyramid-openapi3
+openapi-schema-validator==0.6.2
+    # via
+    #   openapi-core
+    #   openapi-spec-validator
+openapi-spec-validator==0.7.1
+    # via openapi-core
+packaging==24.1
+    # via zope-sqlalchemy
+parse==1.20.1
+    # via openapi-core
+pastedeploy==3.1.0
+    # via plaster-pastedeploy
+pathable==0.4.3
+    # via jsonschema-path
+pbr==6.0.0
+    # via stevedore
+plaster==1.1.2
+    # via
+    #   plaster-pastedeploy
+    #   pyramid
+plaster-pastedeploy==1.0.1
+    # via pyramid
+pyld==2.0.4
+    # via skosprovider
+pyparsing==3.1.2
+    # via rdflib
+pyramid==2.0.2
+    # via
+    #   atramhasis (pyproject.toml)
+    #   pyramid-jinja2
+    #   pyramid-openapi3
+    #   pyramid-rewrite
+    #   pyramid-skosprovider
+    #   pyramid-tm
+pyramid-jinja2==2.10.1
+    # via atramhasis (pyproject.toml)
+pyramid-openapi3==0.19
+    # via atramhasis (pyproject.toml)
+pyramid-rewrite==0.2
+    # via atramhasis (pyproject.toml)
+pyramid-skosprovider==1.2.1
+    # via atramhasis (pyproject.toml)
+pyramid-tm==2.5
+    # via atramhasis (pyproject.toml)
+python-dateutil==2.9.0.post0
+    # via atramhasis (pyproject.toml)
+pyyaml==6.0.1
+    # via jsonschema-path
+rdflib==7.0.0
+    # via
+    #   atramhasis (pyproject.toml)
+    #   skosprovider-getty
+    #   skosprovider-rdf
+referencing==0.31.1
+    # via
+    #   jsonschema
+    #   jsonschema-path
+    #   jsonschema-specifications
+requests==2.32.3
+    # via
+    #   atramhasis (pyproject.toml)
+    #   cachecontrol
+    #   jsonschema-path
+    #   skosprovider-getty
+rfc3339-validator==0.1.4
+    # via openapi-schema-validator
+rfc3987==1.3.8
+    # via skosprovider
+rpds-py==0.18.1
+    # via
+    #   jsonschema
+    #   referencing
+setuptools==70.0.0
+    # via
+    #   pyramid
+    #   zope-deprecation
+    #   zope-interface
+    #   zope-sqlalchemy
+six==1.16.0
+    # via
+    #   bleach
+    #   html5lib
+    #   isodate
+    #   python-dateutil
+    #   rfc3339-validator
+skosprovider==1.2.0
+    # via
+    #   atramhasis (pyproject.toml)
+    #   pyramid-skosprovider
+    #   skosprovider-getty
+    #   skosprovider-rdf
+    #   skosprovider-sqlalchemy
+skosprovider-getty==1.2.0
+    # via atramhasis (pyproject.toml)
+skosprovider-rdf==1.3.0
+    # via atramhasis (pyproject.toml)
+skosprovider-sqlalchemy==2.1.1
+    # via atramhasis (pyproject.toml)
+sqlalchemy==2.0.30
+    # via
+    #   atramhasis (pyproject.toml)
+    #   alembic
+    #   skosprovider-sqlalchemy
+    #   zope-sqlalchemy
+stevedore==5.2.0
+    # via dogpile-cache
+transaction==4.0
+    # via
+    #   atramhasis (pyproject.toml)
+    #   pyramid-tm
+    #   zope-sqlalchemy
+translationstring==1.4
+    # via
+    #   colander
+    #   pyramid
+typing-extensions==4.12.2
+    # via
+    #   alembic
+    #   dogpile-cache
+    #   sqlalchemy
+urllib3==2.2.1
+    # via requests
+venusian==3.1.0
+    # via pyramid
+webencodings==0.5.1
+    # via
+    #   bleach
+    #   html5lib
+webob==1.8.7
+    # via pyramid
+werkzeug==3.0.3
+    # via openapi-core
+zope-deprecation==5.0
+    # via
+    #   pyramid
+    #   pyramid-jinja2
+zope-interface==6.4.post2
+    # via
+    #   pyramid
+    #   transaction
+    #   zope-sqlalchemy
+zope-sqlalchemy==3.1
+    # via atramhasis (pyproject.toml)
