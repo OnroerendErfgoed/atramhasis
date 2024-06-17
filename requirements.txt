@@ -200,7 +200,7 @@ typing-extensions==4.12.2
     #   alembic
     #   dogpile-cache
     #   sqlalchemy
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 venusian==3.1.0
     # via pyramid
