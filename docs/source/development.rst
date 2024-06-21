@@ -291,18 +291,13 @@ Atramhasis is being developed as open source software by the
 
 Since we place a lot of importance of code quality, we expect to have a good 
 amount of code coverage present and run frequent unit tests. All commits and
-pull requests will be tested with `Travis-ci`_. Code coverage is being 
+pull requests will be tested with Github Workflow Actions tests. Code coverage is being
 monitored with `Coveralls`_.
 
-Locally you can run unit tests by using `pytest`_ or `tox`_. Running pytest 
-manually is good for running a distinct set of unit tests. For a full test run, 
-tox is preferred since this can run the unit tests against multiple versions of
-python.
+Locally you can run unit tests by using `pytest`_.
 
 .. code-block:: bash
 
-    # Run unit tests for all environments 
-    $ tox
     # No coverage
     $ py.test 
     # Coverage
@@ -310,7 +305,7 @@ python.
     # Only run a subset of the tests
     $ py.test atramhasis/tests/test_views.py
 
-Every pull request will be run through Travis-ci_. When providing a pull 
+Every pull request will be run through Github Workflow Actions tests. When providing a pull
 request, please run the unit tests first and make sure they all pass. Please 
 provide new unit tests to maintain 100% coverage. If you send us a pull request
 and this build doesn't function, please correct the issue at hand or let us 
@@ -341,10 +336,9 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
 .. _Github page for Atramhasis: https://github.com/OnroerendErfgoed/atramhasis
-.. _Travis-ci: https://travis-ci.org/OnroerendErfgoed/atramhasis
+.. _Github Workflow Actions tests: https://github.com/OnroerendErfgoed/atramhasis/actions/workflows/atramhasis_backend.yaml
 .. _Coveralls: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 .. _pytest: http://pytest.org
-.. _tox: http://tox.readthedocs.org
 .. _npm: https://www.npmjs.org/
 .. _grunt: http://gruntjs.com
 .. _waitress: http://waitress.readthedocs.org
