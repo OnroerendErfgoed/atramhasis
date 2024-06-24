@@ -5,8 +5,6 @@ Atramhasis
         :target: https://pypi.python.org/pypi/atramhasis
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5801135.svg
         :target: https://doi.org/10.5281/zenodo.5801135
-.. image:: https://app.travis-ci.com/OnroerendErfgoed/atramhasis.svg?branch=develop
-        :target: https://app.travis-ci.com/OnroerendErfgoed/atramhasis 
 .. image:: https://coveralls.io/repos/github/OnroerendErfgoed/atramhasis/badge.svg?branch=develop
         :target: https://coveralls.io/github/OnroerendErfgoed/atramhasis?branch=develop
 .. image:: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/badges/quality-score.png?b=develop
