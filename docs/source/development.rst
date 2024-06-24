@@ -322,17 +322,16 @@ built and included in the distribution package.
 
 .. code-block:: bash
 
-    $ pip install hatchling
-    $ pip install hatch-fancy-pypi-readme
-    $ hatchling build
+    $ pip install hatch
+    $ hatch build
 
 Alternatively, you can specify your build as a wheel or as a source distribution (sdist) using the
 `-t` or `--type` parameter.
 
 .. code-block:: bash
 
-    $ hatchling build -t wheel
-    $ hatchling build -t sdist
+    $ hatch build -t wheel
+    $ hatch build -t sdist
 
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
 .. _Github page for Atramhasis: https://github.com/OnroerendErfgoed/atramhasis
