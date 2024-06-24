@@ -23,18 +23,13 @@ contribution. For certain changes, such as updating a part of the documentation
 this is not necessary.
 
 We place a lot of importance on code quality, expect to have a good 
-amount of code coverage present and run frequent unit tests. All commits and
-pull requests will be tested with [Travis-ci]. Code coverage is being 
-monitored with [Coveralls].
+amount of code coverage present and run frequent unit tests. All commits and pull 
+requests will be automatically tested using [GitHub Actions workflows].
+Code coverage is being monitored with [Coveralls].
 
-Locally you can run unit tests by using [pytest] or [tox]. Running pytest 
-manually is good for running a distinct set of unit tests. For a full test run, 
-tox is preferred since this can run the unit tests against multiple versions of
-python.
+Locally you can run unit tests by using [pytest].
 
 ```bash
-    # Run unit tests for all environments 
-    $ tox
     # No coverage
     $ py.test 
     # Coverage
@@ -68,4 +63,4 @@ know why it's not working.
 [Travis-ci]: https://travis-ci.org/OnroerendErfgoed/atramhasis
 [Coveralls]: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 [pytest]: http://pytest.org
-[tox]: http://tox.readthedocs.org
+[GitHub Actions workflows]: https://github.com/OnroerendErfgoed/atramhasis/actions

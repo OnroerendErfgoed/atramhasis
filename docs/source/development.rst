@@ -335,7 +335,7 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
 .. _Github page for Atramhasis: https://github.com/OnroerendErfgoed/atramhasis
-.. _Github Workflow Actions tests: https://github.com/OnroerendErfgoed/atramhasis/actions/workflows/atramhasis_backend.yaml
+.. _GitHub Actions workflows: https://github.com/OnroerendErfgoed/atramhasis/actions
 .. _Coveralls: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 .. _pytest: http://pytest.org
 .. _npm: https://www.npmjs.org/
