@@ -23,18 +23,12 @@ contribution. For certain changes, such as updating a part of the documentation
 this is not necessary.
 
 We place a lot of importance on code quality, expect to have a good 
-amount of code coverage present and run frequent unit tests. All commits and
-pull requests will be tested with [Travis-ci]. Code coverage is being 
-monitored with [Coveralls].
+amount of code coverage present and run frequent unit tests.
+Code coverage is being monitored with [Coveralls].
 
-Locally you can run unit tests by using [pytest] or [tox]. Running pytest 
-manually is good for running a distinct set of unit tests. For a full test run, 
-tox is preferred since this can run the unit tests against multiple versions of
-python.
+Locally you can run unit tests by using [pytest].
 
 ```bash
-    # Run unit tests for all environments 
-    $ tox
     # No coverage
     $ py.test 
     # Coverage
@@ -53,9 +47,10 @@ feature/<ticketnumber>_description_of_feature
 Feature and bugfix branches should be branched from develop and will be merged 
 back into develop once approved through a pull request.
 
-Every pull request will be run through [Travis-ci]. When providing a pull 
-request, please run the unit tests first and make sure they all pass. Please 
-provide new unit tests to maintain 100% coverage. If you send us a pull request
+All commits and pull requests will be automatically tested using 
+[GitHub Actions workflows]. When providing a pull request, please run 
+the unit tests first and make sure they all pass. Please provide new unit tests
+to maintain 100% coverage. If you send us a pull request
 that doesn't pass all tests, please correct the issue at hand or let us 
 know why it's not working.
 
@@ -65,7 +60,6 @@ know why it's not working.
 [Github page for Atramhasis]: https://github.com/OnroerendErfgoed/atramhasis
 [Github issue]: https://github.com/OnroerendErfgoed/atramhasis/issues
 [development guidelines]: https://atramhasis.readthedocs.io/en/latest/development.html
-[Travis-ci]: https://travis-ci.org/OnroerendErfgoed/atramhasis
 [Coveralls]: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 [pytest]: http://pytest.org
-[tox]: http://tox.readthedocs.org
+[GitHub Actions workflows]: https://github.com/OnroerendErfgoed/atramhasis/actions
