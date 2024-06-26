@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+
+/*Panel content*/
+
+h1.panel-header {font-size:2em;color:$orange;margin:20px 0;}
+
+/*ID*/
+h2.id-header {font-size:0.9em;text-transform:uppercase;letter-spacing:4px;color:#999;margin:12px 0 20px 0;padding:0;}
+
+
+/* title result*/
+.title-result {padding:20px 0 0 0;font-size:1.2em;color:$steel;}
+.title-result strong {font-size:1em;}
+.title-result span {color:$orange;font-size:1em;}
+
+// list
+dl.infolist {font-size:0.8em;display:block;margin:0 0 20px 0}
+.infolist dt {padding:10px 0 0 0;color:$steel;font-weight:normal}
+.infolist dd {margin:-25px 0 0 105px}
+
+// text
+.scopeNote    {font-size:0.9em;border-top:1px solid $aluminum;}
+ul.scopeNote  {margin:0;padding:0;}
+.scopeNote li {list-style-type:none;list-style-position:outside !important;margin:0;padding:0 0 30px 0;}
+.scopeNote li:first-child {margin:20px 0 0 0;}
+/*result grid*/
+.result-grid  {background:$white;display: table; word-wrap: break-word;}
+.result-grid a {display:block;background:$white;margin:0;line-height:0.9em;border:1px solid $aluminum ;text-align:center;height:100px;overflow:hidden;padding:24px 0 0 0;}
+.result-grid a:hover {display:block;height:100px;transition: all 0.5s ease;background: $aluminum ;}
+.result-grid a h5 {font-size:0.7em;color:#2b709d;font-weight:bold;text-transform:uppercase;letter-spacing: 3px;padding:6px 0 5px 0;margin:0;}
+.result-grid a:hover h5 {font-size:0.7em;color:$orange;font-weight:bold;text-transform:uppercase;letter-spacing: 3px;padding:6px 0 5px 0;margin:0;}
+.result-grid span {font-size:0.6em;color:#999;line-height:8px;}
+.result-grid small {font-size:0.5em;text-transform:uppercase;letter-spacing:1px}
+
+/*download top*/
+ul.downloadtop {margin:30px 0 0 0;padding:0;}
+.downloadtop li {list-style-type:none;font-size:0.6em;padding:0 0 5px 15px;margin:0 0 20px 2px;float:left;}
+.downloadtop li a {border:1px solid #d6d6d6;background:$white;padding:8px 15px;}
+.downloadtop li:first-child {padding:0;}

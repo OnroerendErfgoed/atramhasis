@@ -1,0 +1,149 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: atramhasis 0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-02-23 21:28+0100\n"
+"PO-Revision-Date: 2017-06-28 15:47+0200\n"
+"Last-Translator: \n"
+"Language-Team: en <LL@li.org>\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+msgid "There is %(count)s result:"
+msgid_plural "There are %(count)s results:"
+msgstr[0] "There is %(count)s result:"
+msgstr[1] "There are %(count)s results:"
+
+msgid "altLabel"
+msgstr "alt labels"
+
+msgid "atramhasis_expl"
+msgstr ""
+"<p><strong>Atramhasis is an open-source, web-based <a href='http://www.w3."
+"org/2004/02/skos/'>SKOS</a> editor. You can use this webapplication to "
+"browse SKOS vocabularies, thesauri, authority files, word lists, ... through "
+"the public interface.</strong></p> <p>Atramhasis also comes with an <a "
+"href='%(admin_route)s'>admin interface</a> you can use to add, update and "
+"remove concepts to your vocabularies.<p>"
+
+msgid "broader"
+msgstr "broader"
+
+msgid "browse"
+msgstr "browse"
+
+msgid "collection"
+msgstr "collection"
+
+msgid "concept"
+msgstr "concept"
+
+msgid "discussion_forum"
+msgstr "Our discussion forum"
+
+msgid "export"
+msgstr "export"
+
+msgid "hiddenLabel"
+msgstr "hidden labels"
+
+msgid "sortLabel"
+msgstr "sort labels"
+
+msgid "issue_tracker"
+msgstr "Our issue tracker"
+
+msgid "labels"
+msgstr "labels"
+
+msgid "matches"
+msgstr "matches"
+
+msgid "member_of"
+msgstr "member of"
+
+msgid "members"
+msgstr "members"
+
+msgid "more_information"
+msgstr "You can find more information about this project at"
+
+msgid "narrower"
+msgstr "narrower"
+
+msgid "notes"
+msgstr "notes"
+
+msgid "online_documentation"
+msgstr "Our online documentation"
+
+msgid "open"
+msgstr "open"
+
+msgid "prefLabel"
+msgstr "preferred labels"
+
+msgid "related"
+msgstr "related"
+
+msgid "relations"
+msgstr "relations"
+
+msgid "search"
+msgstr "search"
+
+msgid "search_for"
+msgstr "Search for"
+
+msgid "select_scheme"
+msgstr "Select scheme"
+
+msgid "select_type"
+msgstr "Select type"
+
+msgid "submit"
+msgstr "submit"
+
+msgid "subordinate_arrays"
+msgstr "subordinate arrays"
+
+msgid "superordinates"
+msgstr "superordinates"
+
+msgid "type_all"
+msgstr "all types"
+
+msgid "type_collection"
+msgstr "collections"
+
+msgid "type_concept"
+msgstr "concepts"
+
+msgid "welcome_to"
+msgstr "Welcome to Atramhasis "
+
+msgid "recently_viewed"
+msgstr "Recently viewed"
+
+msgid "follow"
+msgstr "Follow Atramhasis"
+
+msgid "popular_category"
+msgstr "Popular in this category"
+
+msgid "view_tree"
+msgstr "View in tree structure"
+
+msgid "view_relations"
+msgstr "View all relations"
+
+msgid "tree_help"
+msgstr "Left click to expand nodes, right click to open concept(scheme)"
+
+msgid "select_scheme_error"
+msgstr "Please select a concept scheme"

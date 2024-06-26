@@ -1,0 +1,40 @@
+@charset "UTF-8";
+/*icons*/
+
+
+.ico-mglass, .ico-mglass-large {
+  position: relative;
+  display: inline-block;
+  background: transparent;
+  border-radius: 60px;
+  height: 16px;
+  width: 16px;
+  border: 2px solid $orange;margin:18px 0 0 16px;
+}
+.ico-mglass:after, .ico-mglass-large:after {
+  content: "";
+  height: 2px;
+  width: 12px;
+  background-color: $orange;
+  position: absolute;
+  top: 16px;
+  left: 10px;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+}
+
+.ico-mglass-large {
+  height: 30px;
+  width: 30px;
+  border: 3px solid $orange;
+  margin:10px 0 0 10px;
+}
+
+.ico-mglass-large:after {
+  height: 4px;
+  width: 16px;
+  top: 26px;
+  left: 18px;
+}

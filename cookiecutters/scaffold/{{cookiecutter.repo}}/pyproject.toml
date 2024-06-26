@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "My atramhasis"
+description = "My atramhasis setup"
+version = "0.0.1"
+
+dependencies = [
+    "atramhasis",
+    "pyramid",
+]
+
+[project.optional-dependencies]
+dev = [
+    "waitress"
+]
+
+[project.entry-points."paste.app_factory"]
+main = "{{ cookiecutter.package }}:main"
