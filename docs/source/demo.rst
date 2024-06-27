@@ -24,7 +24,7 @@ Once cookiecutter is installed, you use it to generate the demo site.
 
 .. code-block:: bash
 
-    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutter
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo
 
 Running this command will ask a few questions. Just accept the default answers,
 unless you want to give your project a different name. After the
@@ -35,9 +35,8 @@ requirements:
 .. code-block:: bash
 
     $ cd atramhasis_demo
-    # The [dev] optional requirement will install the waitress WSGI server.
-    # You are of course free to choose another.
-    $ pip install -e .[dev]
+    $ pip install -r requirements-dev.txt
+    $ pip install -e .
 
 Now it's time to setup our database (a simple SQLite database) and add some 
 testdata:
@@ -54,6 +53,13 @@ functionality:
 .. code-block:: bash
 
     $ dump_rdf development.ini
+
+Almost done! All we need now are some frontend dependencies:
+
+.. code-block:: bash
+
+    $ cd atramhasis_demo/static
+    $ npm install
 
 Finally, we can start our server. Return to the root of your project repo and
 run pserve:

@@ -1,0 +1,24 @@
+@charset "UTF-8";
+/* logo */
+
+.logo {margin:10px 20px 0 -32px;}
+h1.logotext  {color:$steel;letter-spacing:16px;font-size:0.8em;margin:30px 0;text-transform:uppercase}
+img.logo-small  {width:60px;margin:8px 15px 0 12px;}
+h1.logo-small-text  {letter-spacing:10px;color:$steel;font-size:0.7em !important;text-transform:uppercase;padding:0 13px 0 0;margin:0;}
+
+
+/*home*/
+.language {font-size:0.6em;margin:10px 5px 0 0;padding:0}
+.language-active a { color:$orange; }
+
+.bgcontainer {background:$white;padding:30px 0}
+
+.home-img_position {position:relative}
+.home-img_position form {position:absolute;z-index:100;width:100%;margin-top:50px}
+.home-img_position form input {background:#f9f9f9;}
+.home-img_position form button[type=submit] {background:transparent; padding: 0; margin:0;}
+
+
+
+.ptext {padding:30px 30px 0 0}
+.ptext p, .ptext li {font-size:0.8em}

@@ -1,0 +1,130 @@
+@charset "UTF-8";
+
+//custom
+small {font-size:0.6em;color:$steel}
+a {color:$blue;}
+a:hover {color:$orange !important;}
+
+// top menu
+.divider {border:1px solid $aluminum;}
+.dropdown {box-shadow:0px 2px 2px #ccc;border:1px solid $aluminum;}
+input.search-input-top {border:0;font-size:0.8em}
+
+// removes blue border when selected
+textarea:focus, input:focus, select:focus{ outline: none;}
+*:focus {outline: none;}
+
+
+// header search
+input.search-input-top {background:#fff;border:1px solid #fff !important;box-shadow:none}
+input.search-input-top:hover {background:#fff;border:1px solid #fff !important}
+
+
+.toggle-topbar {background:$white;font-weight:normal}
+.menu-icon  {color:$steel !important; }
+.menu-icon a {color:$steel !important; }
+.menu-icon a:hover {color:$steel !important; }
+.has-form {background-color:$white !important}
+
+.top-bar-section li {background:$white !important}
+.top-bar-section li select {border:0;padding:0 30px 0 10px;height:100%;margin-top: -16px;}
+.top-bar-section button[type=submit] {background:transparent; padding: 0; top:0;}
+
+
+// submenu
+.nostyleList {list-style:none;margin-left: 0;padding-left: 0 }
+h1 {font-size:0.9em;text-transform:uppercase;letter-spacing:4px;color:black;margin:30px 0;}
+h2 {font-size:0.8em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 0;}
+h3 {font-size:0.7em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 0;}
+h4 {font-size:0.6em;text-transform:uppercase;letter-spacing:4px;color:$steel;margin:30px 20px;}
+
+
+ul.no_bullet {
+  list-style-type: none;
+  padding: 0 ;
+  margin: 0 ;
+}
+
+li.cube {
+  background: url(listitem.png) no-repeat 0 6px;padding:0 0 15px 15px;
+}
+
+/*padding fix result page*/
+.large-3-pad {padding:0;}
+
+.large-3-pad.columns:last-child {
+  float: left;
+}
+
+/*download top*/
+ul.downloadtop {margin:30px 0 0 0;padding:0;}
+.downloadtop li {list-style-type:none;font-size:0.6em;padding:0 0 5px 15px;margin:0 0 20px 2px;float:$default-float;}
+.downloadtop li a {border:1px solid #d6d6d6;background:$white;padding:8px 15px;}
+.downloadtop li:first-child {padding:0;}
+
+
+/*tab nav*/
+.tabnav li {list-style-type:none;float:$default-float;text-transform: uppercase;margin-top: 20px;}
+.tabnav li a {border:1px solid #d6d6d6;background:$white;color:$blue !important}
+.tabnav li a:hover {color:$orange !important;background-color:$white !important}
+.tabnav li:first-child {padding:0;}
+.tabnav .tab-title > a {background-color:#efefef !important;}
+.tabnav .tab-title.active > a {background-color:$white !important; color: $black !important;}
+
+
+/* home form */
+.home-search-placer {padding:0 0 0 30px;}
+
+
+/* various small styles */
+ul.no_bullet {
+  list-style-type: none;
+  padding: 0 ;
+  margin: 0 ;
+}
+
+li.cube {
+  background: url('../img/listitem.png') no-repeat 0 6px;
+  padding:0 0 15px 15px;
+  font-size:0.8rem;
+}
+
+h3.relations-title {
+  margin-bottom: 0px;
+}
+
+h4.relations-subtitle {
+  margin: 20px 20px;
+}
+
+.pageOverlay { text-align: center;}
+.loadingMessage {font-size: 1em; margin: 30px; color: #999; }
+
+.editIcon {
+  float: right;
+  font-size: 20px;
+  margin: 10px 5px;
+}
+
+.word-wrap-element {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.treeHelpMessage {
+  font-size: 13px;
+  margin-left: 5px;
+}
+
+.highlightError {
+  border: 1px solid red !important;
+  margin-bottom: 5px;
+}
+
+.highlightErrorText {
+  color: red;
+  font-size: 13px;
+  padding-left: 5px;
+  margin-bottom: 5px;
+  display: inline-block;
+}

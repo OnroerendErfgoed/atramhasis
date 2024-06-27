@@ -1,0 +1,20 @@
+.treetab {
+  display: none;
+}
+
+.header {
+  display: none;
+}
+
+h1.concept {
+  margin-top: 20px;
+}
+
+.sticky.fixed {
+  display:none;
+}
+
+#pDebug {
+  display: none;
+}
+
