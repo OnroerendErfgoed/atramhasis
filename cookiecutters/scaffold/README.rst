@@ -11,6 +11,12 @@ Requirements
 Usage
 -----
 
+#. Use cookiecutter to generate the scaffold project
+
+.. code-block:: bash
+
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/scaffold
+
 #.  Create a virtual environment and install requirements
 
     .. code-block:: bash

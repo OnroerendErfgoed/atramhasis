@@ -16,7 +16,7 @@ instance with only these default settings.
 Creating your own project
 =========================
 
-Follow the README at `atramhasis_scaffold_cookiecutter <https://github.com/OnroerendErfgoed/atramhasis_scaffold_cookiecutter>`_
+Follow the README at `atramhasis scaffold cookiecutter <https://github.com/OnroerendErfgoed/atramhasis/tree/develop/cookiecutters/scaffold/README.rst>`_
 
 This gives you a clean slate to start your customisations on.
 

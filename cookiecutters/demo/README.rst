@@ -11,6 +11,12 @@ Requirements
 Usage
 -----
 
+#. Use cookiecutter to generate the demo project
+
+.. code-block:: bash
+
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo
+
 #.  Create a virtual environment and install requirements
 
     .. code-block:: bash
