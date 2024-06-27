@@ -1,6 +1,5 @@
 {
-    "repo": "atramhasis_demo",
-    "package": "atramhasis_demo",
-    "package_logger": "demo_logger",
-    "project": "atramhasis-demo"
+    "root_folder": "atramhasis_scaffold",
+    "python_package": "atramhasis_scaffold",
+    "package_logger": "scaffold_logger"
 } 

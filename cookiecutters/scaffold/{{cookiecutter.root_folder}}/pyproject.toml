@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "My atramhasis"
+name = "{{ cookiecutter.python_package }}"
 description = "My atramhasis setup"
 version = "0.0.1"
 
@@ -18,4 +18,4 @@ dev = [
 ]
 
 [project.entry-points."paste.app_factory"]
-main = "{{ cookiecutter.package }}:main"
+main = "{{ cookiecutter.python_package }}:main"

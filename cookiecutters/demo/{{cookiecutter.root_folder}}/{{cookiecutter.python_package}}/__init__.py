@@ -39,12 +39,12 @@ def main(global_config, **settings):
     config.include("atramhasis:data.db")
 
     # Set up translations
-    config.add_translation_dirs("{{cookiecutter.package}}:locale/")
+    config.add_translation_dirs("{{cookiecutter.python_package}}:locale/")
 
     # Override assets
     config.override_asset(
         to_override="atramhasis:static/",
-        override_with="{{cookiecutter.package}}:static/",
+        override_with="{{cookiecutter.python_package}}:static/",
     )
     # Add atramhasis static folder
     config.add_static_view(
