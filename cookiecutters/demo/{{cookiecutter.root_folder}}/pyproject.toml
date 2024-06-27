@@ -17,7 +17,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "waitress"
+    "waitress",
+    "pyramid_debugtoolbar",
 ]
 
 [project.entry-points."paste.app_factory"]
