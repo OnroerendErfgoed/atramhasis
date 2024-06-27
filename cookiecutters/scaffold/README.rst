@@ -1,6 +1,6 @@
-=======================
-atramhasis demo project
-=======================
+==================
+atramhasis project
+==================
 
 Requirements
 ------------
@@ -11,11 +11,11 @@ Requirements
 Usage
 -----
 
-#. Use cookiecutter to generate the scaffold project
+#.  Use cookiecutter to generate an atramhasis project
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/scaffold
+        $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/scaffold
 
 #.  Create a virtual environment and install requirements
 
@@ -23,8 +23,9 @@ Usage
 
         # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/atramhasis_demo_venv
         # Change directory into your newly created project if not already there.
-        $ pip install -r requirements-dev.txt
-        $ pip install -e .
+        # The [dev] optional requirement will install the waitress WSGI server.
+        # You are of course free to choose another.
+        $ pip install -e .[dev]
 
 #.  Setup database
 

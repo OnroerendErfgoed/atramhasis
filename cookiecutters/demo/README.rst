@@ -11,20 +11,21 @@ Requirements
 Usage
 -----
 
-#. Use cookiecutter to generate the demo project
+#.  Use cookiecutter to generate an atramhasis demo project
 
-.. code-block:: bash
+    .. code-block:: bash
 
-    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo
+        $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo
 
 #.  Create a virtual environment and install requirements
 
     .. code-block:: bash
-         
+
         # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/atramhasis_demo_venv
         # Change directory into your newly created project if not already there.
-        pip install -r requirements-dev.txt
-        pip install -e .
+        # The [dev] optional requirement will install the waitress WSGI server.
+        # You are of course free to choose another.
+        $ pip install -e .[dev]
 
 #.  Setup database
 
@@ -34,12 +35,6 @@ Usage
         # fill the database with data
         initialize_atramhasis_db development.ini
 
-#.  install frontend requirements
-
-    .. code-block:: bash
-
-        cd <package>/static
-        npm install
 
 #.  Run server
 
