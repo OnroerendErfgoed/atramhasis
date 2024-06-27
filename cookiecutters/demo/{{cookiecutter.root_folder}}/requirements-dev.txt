@@ -1,4 +1,0 @@
-# Runtime requirements
---requirement requirements.txt
-waitress
-pyramid-debugtoolbar
