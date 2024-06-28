@@ -123,6 +123,19 @@ production environment.
     $ pserve --reload development.ini
 
 
+Update requirements files
+=========================
+The dependencies are defined within pyproject.toml. There, you can add, modify, or remove libraries.
+Afterward, run pip-compile to generate the requirements files.
+
+.. code-block:: bash
+    # Update pyproject.toml and run pip-compile as follows:
+    $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
+    $ pip-compile $PIP_COMPILE_ARGS;
+    $ echo "requirements.txt generated"
+    $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
+    $ echo "requirements-dev.txt generated"
+
 Admin development
 =================
 
