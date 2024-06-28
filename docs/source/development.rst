@@ -129,11 +129,11 @@ The dependencies are defined within pyproject.toml. There, you can add, modify, 
 Afterward, run pip-compile to generate the requirements files.
 
 .. code-block:: bash
-
     # Update pyproject.toml and run pip-compile as follows:
-    $ pip-compile -q --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-trusted-host --no-emit-find-links -o requirements.txt pyproject.toml;
+    $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
+    $ pip-compile $PIP_COMPILE_ARGS;
     $ echo "requirements.txt generated"
-    $ pip-compile -q --strip-extras --no-header --resolver=backtracking --all-extras --no-emit-options --no-emit-trusted-host --no-emit-find-links -o requirements-dev.txt pyproject.toml;
+    $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
     $ echo "requirements-dev.txt generated"
 
 Admin development
