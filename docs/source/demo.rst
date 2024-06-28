@@ -16,9 +16,9 @@ This can be done through the `cookiecutter` package.
     
    $ python -m venv atramhasis_demo
    $ . atramhasis_demo/bin/activate
-   # Make sure pip and setuptools are up to date
-   $ pip install --upgrade pip setuptools
-   $ pip install -U cookiecutter
+   # Make sure pip and pip-tools are up to date
+   $ pip install --upgrade pip pip-tools
+   $ pip install --upgrade cookiecutter
 
 Once cookiecutter is installed, you use it to generate the demo site.
 
@@ -29,8 +29,21 @@ Once cookiecutter is installed, you use it to generate the demo site.
 Running this command will ask a few questions. Just accept the default answers,
 unless you want to give your project a different name. After the
 cookiecutter command, there should be a directory with the name of your
-project (default: atramhasis_demo). Enter this directory and install
-requirements:
+project (default: atramhasis_demo). Now enter this directory to start updating your virtual environment.
+
+You can use pip-sync to update your virtual environment to reflect exactly what's in there.
+This will install/upgrade/uninstall everything necessary to match the requirements.txt contents.:
+
+.. code-block:: bash
+
+    $ cd atramhasis_demo
+    $ pip-sync requirements-dev.txt
+    $ pip install -e .
+
+Note that pip-sync will uninstall all packages that are not listed in the requirements.
+If you started from an existing virtualenv and you have packages in your virtualenv that
+you want to keep or need, you should either reinstall them afterwards or use the
+pip install command as follows:
 
 .. code-block:: bash
 
