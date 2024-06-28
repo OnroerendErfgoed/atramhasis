@@ -16,9 +16,68 @@ instance with only these default settings.
 Creating your own project
 =========================
 
-Follow the README at `atramhasis scaffold cookiecutter <https://github.com/OnroerendErfgoed/atramhasis/tree/develop/cookiecutters/scaffold/README.rst>`_
+Requirements
+------------
 
-This gives you a clean slate to start your customisations on.
+*   Python 3.9+
+*   npm
+
+Usage
+-----
+
+
+1.  Preferably, create a virtual environment specifically to setup your project.
+You can alternatively use the atramhasis_dev environment that you created following the
+instructions in https://atramhasis.readthedocs.io/en/latest/development.html#general-installation.
+
+    .. code-block:: bash
+       # create a new virtual environment to setup your project
+       $ python -m venv atramhasis_setup
+       $ . atramhasis_dev/bin/activate
+       # Make sure pip and pip-tools are up to date
+       $ pip install --upgrade pip pip-tools
+       $ pip install --upgrade cookiecutter
+
+2.  Use cookiecutter to generate an atramhasis project
+
+    .. code-block:: bash
+
+        $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/scaffold
+
+3.  Create a virtual environment and install requirements
+
+    .. code-block:: bash
+
+        # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/atramhasis_demo_venv
+        # Change directory into your newly created project if not already there.
+        # The [dev] optional requirement will install the waitress WSGI server.
+        # You are of course free to choose another.
+        $ pip install -e .[dev]
+
+
+
+# Install dependencies
+$ pip-sync requirements-dev.txt
+# Install Inventaris in dev mode
+$ pip install -e .
+
+
+
+
+4.  Setup database
+
+    .. code-block:: bash
+
+        $ alembic upgrade head
+
+5.  Run server
+
+    .. code-block:: bash
+
+        $ cd <root of repo>
+        $ pserve development.ini
+
+
 
 Database
 --------
