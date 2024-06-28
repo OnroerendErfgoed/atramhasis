@@ -132,9 +132,7 @@ Afterward, run pip-compile to generate the requirements files.
     # Update pyproject.toml and run pip-compile as follows:
     $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
     $ pip-compile $PIP_COMPILE_ARGS;
-    $ echo "requirements.txt generated"
     $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
-    $ echo "requirements-dev.txt generated"
 
 Admin development
 =================

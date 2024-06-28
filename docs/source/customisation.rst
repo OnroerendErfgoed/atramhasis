@@ -25,43 +25,45 @@ Requirements
 Usage
 -----
 
-
-1.  Preferably, create a virtual environment specifically to setup your project.
-You can alternatively use the atramhasis_dev environment that you created following the
-instructions in https://atramhasis.readthedocs.io/en/latest/development.html#general-installation.
+1.  Create a virtual environment and install requirements
 
     .. code-block:: bash
-       # create a new virtual environment to setup your project
-       $ python -m venv atramhasis_setup
-       $ . atramhasis_dev/bin/activate
-       # Make sure pip and pip-tools are up to date
-       $ pip install --upgrade pip pip-tools
-       $ pip install --upgrade cookiecutter
+
+        # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/my_atramhasis
+        # Change directory into your newly created project if not already there.
+        $ python -m venv my_atramhasis
+        $ . my_atramhasis/bin/activate
+        # Make sure pip and pip-tools are up to date
+        $ pip install --upgrade pip pip-tools
+        $ pip install --upgrade cookiecutter
 
 2.  Use cookiecutter to generate an atramhasis project
 
     .. code-block:: bash
 
-        $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/scaffold
+        # Change the ATRAMHASIS_PATH to the path where your atramhasis project is located
+        $ ATRAMHASIS_PATH=$HOME/dev/atramhasis
+        $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory $ATRAMHASIS_PATH/cookiecutters/scaffold
 
-3.  Create a virtual environment and install requirements
+3.  Install requirements
 
     .. code-block:: bash
 
-        # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/atramhasis_demo_venv
-        # Change directory into your newly created project if not already there.
-        # The [dev] optional requirement will install the waitress WSGI server.
-        # You are of course free to choose another.
-        $ pip install -e .[dev]
+        $ cd <root of repo>
+        # Generate requirements files from the existing pyproject.toml
+        $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
+        # Generate requirements files for a production environment
+        $ pip-compile $PIP_COMPILE_ARGS;
+        # Generate requirements files for a development environment
+        $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
 
+        # Install dependencies
+        $ pip-sync requirements-dev.txt
+        # Install the new project in editable mode
+        $ pip install -e .
 
-
-# Install dependencies
-$ pip-sync requirements-dev.txt
-# Install Inventaris in dev mode
-$ pip install -e .
-
-
+    Note that pip-sync will uninstall all packages that are not listed in the requirements. The package cookiecutter
+    is no longer needed and will be uninstalled when executing pip-sync.
 
 
 4.  Setup database
@@ -74,7 +76,6 @@ $ pip install -e .
 
     .. code-block:: bash
 
-        $ cd <root of repo>
         $ pserve development.ini
 
 
