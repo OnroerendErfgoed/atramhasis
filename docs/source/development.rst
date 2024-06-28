@@ -135,8 +135,6 @@ Afterward, run pip-compile to generate the requirements files.
     $ echo "requirements.txt generated"
     $ pip-compile -q --strip-extras --no-header --resolver=backtracking --all-extras --no-emit-options --no-emit-trusted-host --no-emit-find-links -o requirements-dev.txt pyproject.toml;
     $ echo "requirements-dev.txt generated"
-    $ pip-compile -q --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-trusted-host --no-emit-find-links -o requirements-ci.txt pyproject.toml;
-    $ echo "requirements-ci.txt generated"
 
 Admin development
 =================
