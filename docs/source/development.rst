@@ -241,7 +241,7 @@ You can test them on a specific branch by running the following commands:
 
     # fe you are working on the branch feature/876_cookiecutters and you want to test the demo cookiecutter
     $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo --checkout feature/876_cookiecutters
-    $ cd atramhasis_demo
+    $ cd atramhasis_demo  # or whatever you named the root_folder of your project
     $ pip install "atramhasis @ git+ssh://git@github.com/OnroerendErfgoed/atramhasis.git@feature/876_cookiecutters"
     $ pip install -e .[dev]
     $ alembic upgrade head
