@@ -1,3 +1,10 @@
+2.1.0 (20-06-2023)
+------------------
+
+Migrated from setup.py to the hatchling build tool for improved packaging and distribution. (#854)
+Benefits include faster builds, modern configuration, and enhanced flexibility for future enhancements.
+
+
 2.0.0 (22-12-2023)
 ------------------
 
