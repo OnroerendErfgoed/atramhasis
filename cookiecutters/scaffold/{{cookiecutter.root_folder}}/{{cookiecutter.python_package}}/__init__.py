@@ -1,11 +1,35 @@
+import os
+
 from pyramid.config import Configurator
+from pyramid.session import SignedCookieSessionFactory
+from sqlalchemy import engine_from_config
+
+from atramhasis.data.models import Base
 
 
 def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application."""
-    with Configurator(settings=settings) as config:
-        config.include('atramhasis')
-        # Set up atramhasis db
-        config.include('atramhasis:data.db')
+    """This function returns a Pyramid WSGI application."""
 
+    # Set up sqlalchemy
+    engine = engine_from_config(settings, "sqlalchemy.")
+    Base.metadata.bind = engine
+
+    # set up dump location
+    dump_location = settings["atramhasis.dump_location"]
+    if not os.path.exists(dump_location):
+        os.makedirs(dump_location)
+
+    with Configurator(settings=settings) as config:
+        # set default session factory
+        atramhasis_session_factory = SignedCookieSessionFactory(
+            settings["atramhasis.session_factory.secret"]
+        )
+        config.set_session_factory(atramhasis_session_factory)
+
+        # Set up atramhasis
+        config.include("atramhasis")
+        # Set up atramhasis db
+        config.include("atramhasis:data.db")
+
+        config.scan()
         return config.make_wsgi_app()
