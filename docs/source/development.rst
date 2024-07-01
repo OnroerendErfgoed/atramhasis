@@ -231,6 +231,23 @@ language switcher. If you want to add your new language, you need to edit your
 After restarting your server you will now have the option of switching to
 German.
 
+Update Cookiecutters
+====================
+
+In case changes are needed for the cookiecutters, you may want to test them on an unreleased version of Atramhasis.
+You can test them on a specific branch by running the following commands:
+
+.. code-block:: bash
+
+    # fe you are working on the branch feature/876_cookiecutters and you want to test the demo cookiecutter
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo --checkout feature/876_cookiecutters
+    $ cd atramhasis_demo
+    $ pip install "atramhasis @ git+ssh://git@github.com/OnroerendErfgoed/atramhasis.git@feature/876_cookiecutters"
+    $ pip install -e .[dev]
+    $ alembic upgrade head
+    $ initialize_atramhasis_db development.ini  # (for demo only)
+    $ pserve development.ini
+
 Running a Linked Data Fragments server
 ======================================
 
