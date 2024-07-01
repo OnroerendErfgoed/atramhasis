@@ -1,7 +1,6 @@
 import os
 
 from pyramid.config import Configurator
-from pyramid.session import SignedCookieSessionFactory
 from sqlalchemy import engine_from_config
 
 from atramhasis.data.models import Base
@@ -20,12 +19,6 @@ def main(global_config, **settings):
         os.makedirs(dump_location)
 
     with Configurator(settings=settings) as config:
-        # set default session factory
-        atramhasis_session_factory = SignedCookieSessionFactory(
-            settings["atramhasis.session_factory.secret"]
-        )
-        config.set_session_factory(atramhasis_session_factory)
-
         # Set up atramhasis
         config.include("atramhasis")
         # Set up atramhasis db
