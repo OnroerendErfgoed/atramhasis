@@ -123,6 +123,17 @@ production environment.
     $ pserve --reload development.ini
 
 
+Update requirements files
+=========================
+The dependencies are defined within pyproject.toml. There, you can add, modify, or remove libraries.
+Afterward, run pip-compile to generate the requirements files.
+
+.. code-block:: bash
+    # Update pyproject.toml and run pip-compile as follows:
+    $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
+    $ pip-compile $PIP_COMPILE_ARGS;
+    $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
+
 Admin development
 =================
 
@@ -219,6 +230,23 @@ language switcher. If you want to add your new language, you need to edit your
 
 After restarting your server you will now have the option of switching to
 German.
+
+Update Cookiecutters
+====================
+
+In case changes are needed for the cookiecutters, you may want to test them on an unreleased version of Atramhasis.
+You can test them on a specific branch by running the following commands:
+
+.. code-block:: bash
+
+    # fe you are working on the branch feature/876_cookiecutters and you want to test the demo cookiecutter
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo --checkout feature/876_cookiecutters
+    $ cd atramhasis_demo  # or whatever you named the root_folder of your project
+    $ pip install "atramhasis @ git+ssh://git@github.com/OnroerendErfgoed/atramhasis.git@feature/876_cookiecutters"
+    $ pip install -e .[dev]
+    $ alembic upgrade head
+    $ initialize_atramhasis_db development.ini  # (for demo only)
+    $ pserve development.ini
 
 Running a Linked Data Fragments server
 ======================================

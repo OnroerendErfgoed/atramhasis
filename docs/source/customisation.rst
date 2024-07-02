@@ -16,9 +16,80 @@ instance with only these default settings.
 Creating your own project
 =========================
 
-Follow the README at `atramhasis_scaffold_cookiecutter <https://github.com/OnroerendErfgoed/atramhasis_scaffold_cookiecutter>`_
+Requirements
+------------
 
-This gives you a clean slate to start your customisations on.
+*   Python 3.9+
+*   npm
+
+Usage
+-----
+
+1.  Create a virtual environment and install requirements
+
+    .. code-block:: bash
+
+        # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/my_atramhasis
+        $ VENV_PATH=$HOME/Envs
+        $ python -m venv $VENV_PATH/my_atramhasis
+        $ . $VENV_PATH/my_atramhasis/bin/activate
+        # Make sure pip and pip-tools are up to date
+        $ pip install --upgrade pip pip-tools
+        $ pip install --upgrade cookiecutter
+
+2.  Use cookiecutter to generate an atramhasis project
+
+    .. code-block:: bash
+
+        $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/scaffold
+
+3.  Install requirements
+
+You can opt to generate requirements*.txt files from the pyproject.toml file and install the dependencies,
+or you can install them directly from the pyproject.toml file.
+
+*Using requirements*.txt files*:
+
+    .. code-block:: bash
+
+        $ cd <root of newly from scaffold created project>
+        # Generate requirements files from the existing pyproject.toml
+        $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
+        # Generate requirements files for a production environment
+        $ pip-compile $PIP_COMPILE_ARGS;
+        # Generate requirements files for a development environment
+        $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
+
+        # Install dependencies
+        $ pip-sync requirements-dev.txt
+        # Install the new project in editable mode
+        $ pip install -e .
+
+    Note that pip-sync will uninstall all packages that are not listed in the requirements. The package cookiecutter
+    is no longer needed and will be uninstalled when executing pip-sync.
+
+*Using pyproject.toml*:
+
+    .. code-block:: bash
+
+        $ cd <root of newly from scaffold created project>
+        # Install the new project in editable mode via argument -e
+        # Optional: Include [dev] to install the development dependencies
+        $ pip install -e .[dev]
+
+4.  Setup database
+
+    .. code-block:: bash
+
+        $ alembic upgrade head
+
+5.  Run server
+
+    .. code-block:: bash
+
+        $ pserve development.ini
+
+
 
 Database
 --------
