@@ -1,6 +1,6 @@
 {
 	"name": "atramhasis",
-	"version": "2.1.0a1",
+	"version": "2.1.0a2",
 	"description": "Node packages for building Atramhasis.",
 	"repository": {
 		"type": "git",
