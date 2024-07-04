@@ -17,10 +17,10 @@ This can be done through the `cookiecutter` package.
 
 .. code-block:: bash
 
-    # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/atramhasis_demo
-    # Change directory into your newly created project if not already there.
-    $ python -m venv atramhasis_demo
-    $ . atramhasis_demo/bin/activate
+    # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/my_atramhasis
+    $ VENV_PATH=$HOME/Envs
+    $ python -m venv $VENV_PATH/my_atramhasis
+    $ . $VENV_PATH/my_atramhasis/bin/activate
     # Make sure pip and pip-tools are up to date
     $ pip install --upgrade pip pip-tools
     $ pip install --upgrade cookiecutter
@@ -29,9 +29,7 @@ This can be done through the `cookiecutter` package.
 
 .. code-block:: bash
 
-    # Change the ATRAMHASIS_PATH to the path where your atramhasis project is located
-    $ ATRAMHASIS_PATH=$HOME/dev/atramhasis
-    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory $ATRAMHASIS_PATH/cookiecutters/demo
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo
 
 Running this command will ask a few questions. Just accept the default answers,
 unless you want to give your project a different name. After the
@@ -43,31 +41,9 @@ project (default: atramhasis_demo). Now enter this directory to start updating y
 
 .. code-block:: bash
 
-    # Change directory into your newly created project
-    $ cd atramhasis_demo
-    # Generate requirements files from the existing pyproject.toml
-    $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
-    # Generate requirements files for a production environment
-    $ pip-compile $PIP_COMPILE_ARGS;
-    # Generate requirements files for a development environment
-    $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
-
-    # Install dependencies
-    $ pip-sync requirements-dev.txt
-    # Install the new project in editable mode
-    $ pip install -e .
-
-Note that pip-sync will uninstall all packages that are not listed in the requirements.
-If you started from an existing virtualenv and you have packages in your virtualenv that
-you want to keep or need, you should either reinstall them afterwards or use the
-pip install command as follows:
-
-.. code-block:: bash
-
-    # Install dependencies
-    $ pip install -r requirements-dev.txt
-    # Install the new project in editable mode
-    $ pip install -e .
+    $ cd <root of newly from scaffold created project>
+    # Install the new project in editable mode via argument -e
+    $ pip install -e .[dev]
 
 
 4.  Setup database
@@ -90,14 +66,7 @@ functionality:
 
     $ dump_rdf development.ini
 
-6.  All we need now are some frontend dependencies:
-
-.. code-block:: bash
-
-    $ cd atramhasis_demo/static
-    $ npm install
-
-7.  Run server
+6.  Run server
 
 .. code-block:: bash
 
