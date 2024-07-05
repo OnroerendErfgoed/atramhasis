@@ -29,7 +29,7 @@ Usage
 
     .. code-block:: bash
 
-        # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/my_atramhasis
+        # create a new virtual environment for the project, set VENV_PATH to the desired location
         $ VENV_PATH=$HOME/Envs
         $ python -m venv $VENV_PATH/my_atramhasis
         $ . $VENV_PATH/my_atramhasis/bin/activate
