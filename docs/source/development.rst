@@ -161,6 +161,15 @@ Confirmed known versions are as followed:
     $ sudo apt install nodejs
     $ sudo apt install npm
     $ sudo npm install -g grunt-cli
+
+The JS dependencies are installed via a build hook (https://github.com/OnroerendErfgoed/atramhasis/blob/develop/build_hook.py).
+This will also create a build and place the resulting files in :file:`atramhasis/static/admin/dist`.
+The build hook is triggered when installing the project via `pip install -e .`, but also when building a wheel or an sdist via `hatch build`."
+
+If you want to install the JS dependencies manually, you can do so by running the following commands:
+
+.. code-block:: bash
+
     # install js dependencies for public site using npm
     $ cd atramhasis/static
     $ npm install
