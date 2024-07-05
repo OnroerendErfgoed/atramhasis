@@ -17,8 +17,9 @@ This can be done through the `cookiecutter` package.
 
 .. code-block:: bash
 
-    # create a new virtual environment for the project, set VENV_PATH to the desired location
+    # set VENV_PATH to the desired location for your new virtual environment
     $ VENV_PATH=$HOME/Envs
+    # create a new virtual environment for the project
     $ python -m venv $VENV_PATH/my_atramhasis
     $ . $VENV_PATH/my_atramhasis/bin/activate
     # Make sure pip and pip-tools are up to date
