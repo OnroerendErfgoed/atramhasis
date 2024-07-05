@@ -9,6 +9,8 @@ checks:
 
 
 build:
+  environment:
+      python: 3.12
   nodes:
     analysis:
       tests:
