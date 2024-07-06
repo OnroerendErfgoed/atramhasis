@@ -18,7 +18,7 @@ cachecontrol==0.14.0
     # via atramhasis (pyproject.toml)
 cachetools==5.3.3
     # via pyld
-certifi==2024.6.2
+certifi==2024.7.4
     # via requests
 charset-normalizer==3.3.2
     # via requests
