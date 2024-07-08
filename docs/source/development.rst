@@ -89,7 +89,7 @@ to the admin module documentation.
 
     # Install dependencies
     $ pip-sync requirements-dev.txt
-    # Install packages in dev mode
+    # Install packages in dev mode. During a pip install, the JS files will also be built.
     $ pip install -e .
     # create or update database
     $ alembic upgrade head
@@ -162,24 +162,25 @@ Confirmed known versions are as followed:
     $ sudo apt install npm
     $ sudo npm install -g grunt-cli
 
-The JS dependencies are installed via a build hook (https://github.com/OnroerendErfgoed/atramhasis/blob/develop/build_hook.py).
-This will also create a build and place the resulting files in :file:`atramhasis/static/admin/dist`.
+The JS dependencies are installed via a build hook (https://github.com/OnroerendErfgoed/atramhasis/blob/develop/build_hook.py)
+during the `General installation <#general-installation>`_.
+This will create a JS build and place the resulting files in :file:`atramhasis/static/admin/dist`.
 The build hook is triggered when installing the project via `pip install -e .`, but also when building a wheel or an sdist via `hatch build`."
 
 If you want to install the JS dependencies manually, you can do so by running the following commands:
 
 .. code-block:: bash
 
-    # install js dependencies for public site using npm
+    # install JS dependencies for public site using npm
     $ cd atramhasis/static
     $ npm install
-    # install js dependencies for admin using npm
+    # install JS dependencies for admin using npm
     $ cd atramhasis/static/admin
     $ npm install
 
-These commands will install a couple of js libraries that Atramhasis uses in
+These commands will install a couple of JS libraries that Atramhasis uses in
 :file:`/atramhasis/static/node_modules` and :file:`/atramhasis/static/admin/node_modules` and a set of tools to be able
-to generate js builds. Builds are carried out through a simple `grunt`_ file:
+to generate JS builds. Builds are carried out through a simple `grunt`_ file:
 
 .. code-block:: bash
 
@@ -350,10 +351,10 @@ know why it's not working.
 
 Distribution
 ============
-To build a distribution for your project, you can use the `hatchling build` command. This command
+To build a distribution for your project, you can use the `hatch build` command. This command
 will generate the necessary distribution archives, such as wheels and source distributions.
 
-In addition to building the Python distribution, the `hatchling build` command will also compile
+In addition to building the Python distribution, the `hatch build` command will also compile
 the JavaScript code located in the `static` folder. This ensures that all static assets are properly
 built and included in the distribution package.
 

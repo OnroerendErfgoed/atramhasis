@@ -1,7 +1,7 @@
 2.1.0 (4-07-2023)
 ------------------
 
-- Migrated from setup.py to the hatchling build tool for improved packaging and distribution (#854).
+- Migrated from setup.py to the hatch build tool for improved packaging and distribution (#854).
   Benefits include faster builds, modern configuration, and enhanced flexibility for future enhancements.
 - Integrate Cookiecutter Projects into Atramhasis for Improved Maintainability and Centralization (#876)
 
