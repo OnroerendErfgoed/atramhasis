@@ -17,12 +17,13 @@ This can be done through the `cookiecutter` package.
 
 .. code-block:: bash
 
-    # create a new virtual environment for the project, fe python -m venv $HOME/.virtualenvs/my_atramhasis
+    # set VENV_PATH to the desired location for your new virtual environment
     $ VENV_PATH=$HOME/Envs
+    # create a new virtual environment for the project
     $ python -m venv $VENV_PATH/my_atramhasis
     $ . $VENV_PATH/my_atramhasis/bin/activate
     # Make sure pip and pip-tools are up to date
-    $ pip install --upgrade pip pip-tools
+    $ pip install --upgrade pip
     $ pip install --upgrade cookiecutter
 
 2.  Use cookiecutter to generate an demo project
@@ -70,7 +71,6 @@ functionality:
 
 .. code-block:: bash
 
-    $ cd ../..
     # start server
     $ pserve development.ini
 
