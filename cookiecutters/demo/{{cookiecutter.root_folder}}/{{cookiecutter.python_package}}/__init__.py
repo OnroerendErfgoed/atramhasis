@@ -10,10 +10,6 @@ from sqlalchemy import engine_from_config
 def main(global_config, **settings):
     """This function returns a Pyramid WSGI application."""
 
-    # Set up sqlalchemy
-    engine = engine_from_config(settings, "sqlalchemy.")
-    Base.metadata.bind = engine
-
     # update settings
     settings["layout.focus_conceptschemes"] = aslist(
         settings["layout.focus_conceptschemes"], flatten=False
