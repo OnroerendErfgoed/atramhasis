@@ -9,10 +9,6 @@ from atramhasis.data.models import Base
 def main(global_config, **settings):
     """This function returns a Pyramid WSGI application."""
 
-    # Set up sqlalchemy
-    engine = engine_from_config(settings, "sqlalchemy.")
-    Base.metadata.bind = engine
-
     # set up dump location
     dump_location = settings["atramhasis.dump_location"]
     if not os.path.exists(dump_location):
