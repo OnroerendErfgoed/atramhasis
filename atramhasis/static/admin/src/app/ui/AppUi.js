@@ -174,10 +174,6 @@ define([
     },
     refresh_conceptschemes: function () {
       console.debug('AppUi::refresh_conceptschemes');
-      // this.conceptSchemeController.loadConceptSchemeStores();
-      // this._searchPane.conceptSchemeList = this.conceptSchemeController.conceptSchemeList;
-      // this._searchPane._fillConceptSchemeSelect(this.conceptSchemeController.conceptSchemeList);
-      // this._searchPane._initSelectedConceptSchemeAdmin();
       var message = 'Please manually reload the page to see the changes in the main menu.';
       topic.publish('dGrowl', message, {
         'title': 'New Provider added',
