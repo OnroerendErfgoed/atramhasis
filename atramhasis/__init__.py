@@ -34,7 +34,7 @@ def includeme(config):
     for key, value in DEFAULT_SETTINGS.items():
         if key not in settings:
             settings[key] = value
-
+    configure_session(config)
     config.include('pyramid_jinja2')
     config.include('pyramid_tm')
     config.add_static_view('static', 'static', cache_max_age=3600)
