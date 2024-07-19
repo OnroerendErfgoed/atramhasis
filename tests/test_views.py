@@ -658,7 +658,7 @@ class TestAtramhasisCrudView(unittest.TestCase):
     def setUp(self):
         pyramid_settings = Settings(settings)
         config = testing.setUp(settings=pyramid_settings)
-        atramhasis.load_app(config, pyramid_settings)
+        atramhasis.load_app(config)
         self.request = DummyRequest()
         self.request.application_url = "http://localhost:6543"
         apply_request_extensions(self.request)
