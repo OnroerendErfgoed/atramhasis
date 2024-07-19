@@ -67,6 +67,12 @@ define([
       if (this.appUi.canCreateProviders) {
         domAttr.set(this.manageProvidersButton, 'disabled', false);
       }
+      if (this.conceptSchemeList.length > 0) {
+        domAttr.set(this.addConceptButton, 'disabled', false);
+        domAttr.set(this.importConceptButton, 'disabled', false);
+        domAttr.set(this.editSchemeButton, 'disabled', false);
+        this._search();
+      }
     },
 
     init: function (scheme, store) {
@@ -163,10 +169,6 @@ define([
           this.emit('scheme.changed', {
             schemeId: this.conceptSchemeSelect.value
           });
-          // activate buttons for add and import, edit scheme
-          domAttr.set(this.addConceptButton, 'disabled', false);
-          domAttr.set(this.importConceptButton, 'disabled', false);
-          domAttr.set(this.editSchemeButton, 'disabled', false);
           this._search();
         }))
       );
