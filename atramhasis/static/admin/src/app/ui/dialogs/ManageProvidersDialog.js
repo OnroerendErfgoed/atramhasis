@@ -350,6 +350,7 @@ define([
             'channel': 'info'
           });
           this._reset(true);
+          this.parentNode.refresh_conceptschemes();
         }),
         lang.hitch(this, function (error) {
           var message = this._parseError(error);

@@ -172,6 +172,15 @@ define([
 
       router.startup('#');
     },
+    refresh_conceptschemes: function () {
+      console.debug('AppUi::refresh_conceptschemes');
+      var message = 'Please manually reload the page to see the changes in the main menu.';
+      topic.publish('dGrowl', message, {
+        'title': 'New Provider added',
+        'sticky': false,
+        'channel': 'info'
+      });
+    },
 
     /**
      * Hide the 'Loading'-overlay.
