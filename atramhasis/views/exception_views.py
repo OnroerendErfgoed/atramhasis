@@ -5,12 +5,13 @@ Module containing error views.
 import logging
 import sys
 
-from openapi_core.unmarshalling.schemas.exceptions import InvalidSchemaValue
+from openapi_core.validation.schemas.exceptions import InvalidSchemaValue
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 from pyramid.view import notfound_view_config
 from pyramid.view import view_config
 from pyramid_openapi3 import RequestValidationError
 from pyramid_openapi3 import ResponseValidationError
+from pyramid_openapi3 import extract_errors
 from pyramid_openapi3 import openapi_validation_error
 from skosprovider.exceptions import ProviderUnavailableException
 from sqlalchemy.exc import IntegrityError
@@ -117,17 +118,13 @@ def failed_openapi_validation(exc, request):
         # noinspection PyTypeChecker
         errors.extend(
             [
-                str(error)
-                for error in exc.errors
-                if not isinstance(error, InvalidSchemaValue)
+                f'{error.get("field")}: {error.get("message")}'
+                for error in
+                list(extract_errors(request, exc.errors))
             ]
         )
         request.response.status_int = 400
-        if isinstance(exc, RequestValidationError):
-            subject = "Request"
-        else:
-            subject = "Response"
-        return {"message": f"{subject} was not valid for schema.", "errors": errors}
+        return {"message": "Request was not valid for schema.", "errors": errors}
     except Exception:
         log.exception("Issue with exception handling.")
         return openapi_validation_error(exc, request)

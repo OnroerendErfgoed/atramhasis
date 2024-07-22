@@ -156,8 +156,9 @@ class FunctionalTests(DbTest):
     def mock_event_handler(event):
         if event.uri == 'urn:x-vioe:geography:9':
             referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
-            raise ProtectedResourceException(f'resource {event.uri} is still in use, preventing operation',
-                                             referenced_in)
+            raise ProtectedResourceException(
+                f'resource {event.uri} is still in use, preventing operation',
+                referenced_in)
 
     @staticmethod
     def mock_event_handler_provider_unavailable(event):
@@ -180,22 +181,26 @@ class CsvFunctionalTests(FunctionalTests):
         response = self.testapp.get('/conceptschemes/TREES/c.csv?type=collection&label=')
         self.assertEqual('200 OK', response.status)
         self.assertIn('text/csv', response.headers['Content-Type'])
-        self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
+        self.assertIn('attachment;filename="atramhasis_export.csv"',
+                      response.headers['Content-Disposition'])
 
     def test_unicode_csv(self):
-        response = self.testapp.get('/conceptschemes/TREES/c.csv?label=Chestnut&_LOCALE_=fr')
+        response = self.testapp.get(
+            '/conceptschemes/TREES/c.csv?label=Chestnut&_LOCALE_=fr')
         data = response.body.decode('utf-8')
         self.assertIsInstance(data, str)
         self.assertEqual('200 OK', response.status)
         self.assertIn('text/csv', response.headers['Content-Type'])
-        self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
+        self.assertIn('attachment;filename="atramhasis_export.csv"',
+                      response.headers['Content-Disposition'])
         self.assertIn('la châtaigne', data)
 
     def test_get_csv_all(self):
         response = self.testapp.get('/conceptschemes/TREES/c.csv')
         self.assertEqual('200 OK', response.status)
         self.assertIn('text/csv', response.headers['Content-Type'])
-        self.assertIn('attachment;filename="atramhasis_export.csv"', response.headers['Content-Disposition'])
+        self.assertIn('attachment;filename="atramhasis_export.csv"',
+                      response.headers['Content-Disposition'])
 
 
 class RestFunctionalTests(FunctionalTests):
@@ -203,7 +208,8 @@ class RestFunctionalTests(FunctionalTests):
         return {'Accept': 'application/json'}
 
     def test_get_concept(self):
-        res = self.testapp.get('/conceptschemes/TREES/c/1', headers=self._get_default_headers())
+        res = self.testapp.get('/conceptschemes/TREES/c/1',
+                               headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
@@ -212,32 +218,38 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('sortLabel', [label['type'] for label in res.json['labels']])
 
     def test_get_conceptscheme(self):
-        res = self.testapp.get('/conceptschemes/TREES', headers=self._get_default_headers())
+        res = self.testapp.get('/conceptschemes/TREES',
+                               headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
 
     def test_get_concept_dictprovider(self):
-        res = self.testapp.get('/conceptschemes/TEST/c/1', headers=self._get_default_headers())
+        res = self.testapp.get('/conceptschemes/TEST/c/1',
+                               headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(res.json['type'], 'concept')
 
     def test_get_concept_not_found(self):
-        res = self.testapp.get('/conceptschemes/TREES/c/89', headers=self._get_default_headers(), status=404,
+        res = self.testapp.get('/conceptschemes/TREES/c/89',
+                               headers=self._get_default_headers(), status=404,
                                expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_get_concept_dictprovider_not_found(self):
-        res = self.testapp.get('/conceptschemes/TEST/c/89', headers=self._get_default_headers(), status=404,
+        res = self.testapp.get('/conceptschemes/TEST/c/89',
+                               headers=self._get_default_headers(), status=404,
                                expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_add_concept(self):
-        res = self.testapp.post_json('/conceptschemes/TREES/c', headers=self._get_default_headers(), params=json_value)
+        res = self.testapp.post_json('/conceptschemes/TREES/c',
+                                     headers=self._get_default_headers(),
+                                     params=json_value)
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json['id'])
@@ -256,25 +268,25 @@ class RestFunctionalTests(FunctionalTests):
         self.assertDictEqual(
             {
                 'id': 'manual-3',
-                'type': 'concept', 
+                'type': 'concept',
                 'uri': 'urn:x-skosprovider:manual-ids:manual-3',
                 'label': 'The Larch',
                 'concept_scheme': {
                     'uri': 'urn:x-vioe:manual', 'labels': []
-                }, 
+                },
                 'labels': [
-                    {'label': 'The Larch', 'type': 'prefLabel', 'language': 'en'}, 
+                    {'label': 'The Larch', 'type': 'prefLabel', 'language': 'en'},
                     {'label': 'a', 'type': 'sortLabel', 'language': 'en'}
-                ], 
-                'notes': [], 
+                ],
+                'notes': [],
                 'sources': [
                     {'citation': 'short', 'markup': None}
                 ],
-                'narrower': [], 
+                'narrower': [],
                 'broader': [],
-                'related': [], 
+                'related': [],
                 'member_of': [],
-                'subordinate_arrays': [], 
+                'subordinate_arrays': [],
                 'matches': {
                     'close': [], 'exact': [], 'related': [], 'broad': [], 'narrow': []
                 }
@@ -291,7 +303,8 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('updated', res.json['label'])
 
     def test_add_concept_empty_conceptscheme(self):
-        res = self.testapp.post_json('/conceptschemes/STYLES/c', headers=self._get_default_headers(),
+        res = self.testapp.post_json('/conceptschemes/STYLES/c',
+                                     headers=self._get_default_headers(),
                                      params=json_value)
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
@@ -299,27 +312,31 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_add_concept_invalid_json(self):
         res = self.testapp.post_json(
-            '/conceptschemes/TREES/c', headers=self._get_default_headers(), params=json_value_invalid, status=400)
+            '/conceptschemes/TREES/c', headers=self._get_default_headers(),
+            params=json_value_invalid, status=400)
         self.assertEqual('400 Bad Request', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_add_concept_conceptscheme_not_found(self):
         res = self.testapp.post_json(
-            '/conceptschemes/GARDENNNN/c', headers=self._get_default_headers(), params=json_value, status=404,
+            '/conceptschemes/GARDENNNN/c', headers=self._get_default_headers(),
+            params=json_value, status=404,
             expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_edit_conceptscheme(self):
         res = self.testapp.put_json(
-            '/conceptschemes/TREES', headers=self._get_default_headers(), params=json_collection_value)
+            '/conceptschemes/TREES', headers=self._get_default_headers(),
+            params=json_collection_value)
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_edit_conceptscheme_invalid(self):
         json_collection_value.pop('labels')
         res = self.testapp.put_json(
-            '/conceptschemes/TREES', headers=self._get_default_headers(), params=json_collection_value,
+            '/conceptschemes/TREES', headers=self._get_default_headers(),
+            params=json_collection_value,
             expect_errors=True)
         self.assertEqual('400 Bad Request', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
@@ -335,27 +352,31 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_edit_concept(self):
         res = self.testapp.put_json(
-            '/conceptschemes/TREES/c/1', headers=self._get_default_headers(), params=json_value)
+            '/conceptschemes/TREES/c/1', headers=self._get_default_headers(),
+            params=json_value)
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_edit_concept_has_relations(self):
         res = self.testapp.put_json(
-            '/conceptschemes/MATERIALS/c/13', headers=self._get_default_headers(), params=json_value_relations)
+            '/conceptschemes/MATERIALS/c/13', headers=self._get_default_headers(),
+            params=json_value_relations)
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertEqual(2, len(res.json['narrower']))
 
     def test_edit_concept_not_found(self):
         res = self.testapp.put_json(
-            '/conceptschemes/TREES/c/89', headers=self._get_default_headers(), params=json_value, status=404,
+            '/conceptschemes/TREES/c/89', headers=self._get_default_headers(),
+            params=json_value, status=404,
             expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_delete_concept(self):
         new_id = '1'
-        res = self.testapp.delete(f'/conceptschemes/TREES/c/{new_id}', headers=self._get_default_headers())
+        res = self.testapp.delete(f'/conceptschemes/TREES/c/{new_id}',
+                                  headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(new_id, res.json['id'])
@@ -364,12 +385,14 @@ class RestFunctionalTests(FunctionalTests):
         print()
 
     def test_delete_concept_not_found(self):
-        res = self.testapp.delete('/conceptschemes/TREES/c/7895', headers=self._get_default_headers(),
+        res = self.testapp.delete('/conceptschemes/TREES/c/7895',
+                                  headers=self._get_default_headers(),
                                   expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
 
     def test_add_collection(self):
-        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_default_headers(),
+        res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c',
+                                     headers=self._get_default_headers(),
                                      params=json_collection_value, expect_errors=True)
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
@@ -379,7 +402,8 @@ class RestFunctionalTests(FunctionalTests):
     def test_edit_collection(self):
         json_collection_value['members'] = [{"id": 7}, {"id": 8}]
         json_collection_value['infer_concept_relations'] = False
-        res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers(),
+        res = self.testapp.put_json('/conceptschemes/GEOGRAPHY/c/333',
+                                    headers=self._get_default_headers(),
                                     params=json_collection_value)
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
@@ -389,12 +413,14 @@ class RestFunctionalTests(FunctionalTests):
         self.assertFalse(res.json['infer_concept_relations'])
 
     def test_delete_collection(self):
-        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers())
+        res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/333',
+                                  headers=self._get_default_headers())
         self.assertEqual('200 OK', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_uri(self):
-        res = self.testapp.post_json('/conceptschemes/MATERIALS/c', headers=self._get_default_headers(),
+        res = self.testapp.post_json('/conceptschemes/MATERIALS/c',
+                                     headers=self._get_default_headers(),
                                      params=json_value)
         self.assertEqual('201 Created', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
@@ -403,6 +429,7 @@ class RestFunctionalTests(FunctionalTests):
     def test_provider_unavailable_view(self):
         def raise_provider_unavailable_exception():
             raise ProviderUnavailableException('test msg')
+
         with patch('atramhasis.views.crud.AtramhasisCrud.delete_concept',
                    Mock(side_effect=raise_provider_unavailable_exception)):
             res = self.testapp.delete('/conceptschemes/GEOGRAPHY/c/55',
@@ -442,7 +469,8 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('German', res.json['name'])
 
     def test_get_language_not_found(self):
-        res = self.testapp.get('/languages/jos', headers=self._get_default_headers(), expect_errors=True)
+        res = self.testapp.get('/languages/jos', headers=self._get_default_headers(),
+                               expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
@@ -457,13 +485,16 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['name'], 'Afrikaans')
 
     def test_add_language_non_valid(self):
-        res = self.testapp.put_json('/languages/flup', headers=self._get_default_headers(),
-                                    params={"id": "flup", "name": "flup"}, expect_errors=True)
+        res = self.testapp.put_json('/languages/flup',
+                                    headers=self._get_default_headers(),
+                                    params={"id": "flup", "name": "flup"},
+                                    expect_errors=True)
         self.assertEqual('400 Bad Request', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
         self.assertEqual(res.json, {
-            "errors": [{"id": "Invalid language tag: Unknown code 'flup', Missing language tag in 'flup'."}],
+            "errors": [{
+                "id": "Invalid language tag: Unknown code 'flup', Missing language tag in 'flup'."}],
             "message": "Language could not be validated"})
 
     def test_add_language_non_valid_json(self):
@@ -472,7 +503,8 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('400 Bad Request', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
-        self.assertEqual(res.json, {'errors': {'name': 'Required'}, 'message': 'Language could not be validated'})
+        self.assertEqual(res.json, {'errors': {'name': 'Required'},
+                                    'message': 'Language could not be validated'})
 
     def test_edit_language(self):
         res = self.testapp.put_json('/languages/de', headers=self._get_default_headers(),
@@ -483,13 +515,16 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(res.json['name'], 'Duits')
 
     def test_edit_language_invalid_language_tag(self):
-        res = self.testapp.put_json('/languages/joss', headers=self._get_default_headers(),
-                                    params={"id": "joss", "name": "Duits"}, expect_errors=True)
+        res = self.testapp.put_json('/languages/joss',
+                                    headers=self._get_default_headers(),
+                                    params={"id": "joss", "name": "Duits"},
+                                    expect_errors=True)
         self.assertEqual('400 Bad Request', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
         self.assertEqual(res.json, {
-            'errors': [{'id': "Invalid language tag: Unknown code 'joss', Missing language tag in 'joss'."}]
+            'errors': [{
+                'id': "Invalid language tag: Unknown code 'joss', Missing language tag in 'joss'."}]
             , "message": "Language could not be validated"})
 
     def test_edit_language_no_id(self):
@@ -506,7 +541,8 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_delete_language_not_found(self):
-        res = self.testapp.delete('/languages/jos', headers=self._get_default_headers(), expect_errors=True)
+        res = self.testapp.delete('/languages/jos', headers=self._get_default_headers(),
+                                  expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
         self.assertIn('application/json', res.headers['Content-Type'])
         self.assertIsNotNone(res.json)
@@ -514,7 +550,7 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_delete_protected_resource(self):
         def mock_event_handler(event):
-            if isinstance(event,  ProtectedResourceEvent):
+            if isinstance(event, ProtectedResourceEvent):
                 referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
                 raise ProtectedResourceException(
                     'resource {} is still in use, preventing operation'
@@ -537,11 +573,14 @@ class RestFunctionalTests(FunctionalTests):
         })
 
     def test_method_not_allowed(self):
-        self.testapp.delete('/conceptschemes/TREES', headers=self._get_default_headers(), status=405)
-        self.testapp.post('/conceptschemes', headers=self._get_default_headers(), status=405)
+        self.testapp.delete('/conceptschemes/TREES', headers=self._get_default_headers(),
+                            status=405)
+        self.testapp.post('/conceptschemes', headers=self._get_default_headers(),
+                          status=405)
 
     def test_get_conceptschemes(self):
-        self.testapp.get('/conceptschemes', headers=self._get_default_headers(), status=200)
+        self.testapp.get('/conceptschemes', headers=self._get_default_headers(),
+                         status=200)
 
     def test_create_provider_openapi_validation(self):
         response = self.testapp.post_json(
@@ -555,12 +594,28 @@ class RestFunctionalTests(FunctionalTests):
         )
         self.assertEqual(
             {
-                'message': 'Request was not valid for schema.',
+                'errors': ['None: Failed to cast value to array type: wrong'],
+                'message': 'Request was not valid for schema.'
+            },
+            response.json
+        )
+        response = self.testapp.post_json(
+            url='/providers',
+            params={
+                'uri_pattern': 'invalid',
+                'subject': ['right']
+            },
+            headers=self._get_default_headers(),
+            expect_errors=True
+        )
+        self.assertEqual(
+            {
                 'errors': [
-                    "<root>: 'conceptscheme_uri' is a required property",
                     "uri_pattern: 'invalid' does not match '.*%s.*'",
-                    "subject: 'wrong' is not of type array"
-                ]},
+                    "uri_pattern: 'conceptscheme_uri' is a required property"
+                ],
+                'message': 'Request was not valid for schema.'
+            },
             response.json
         )
 
@@ -657,7 +712,8 @@ class RestFunctionalTests(FunctionalTests):
         )
 
     def test_update_provider(self):
-        conceptscheme = ConceptScheme(uri='https://id.erfgoed.net/thesauri/conceptschemes')
+        conceptscheme = ConceptScheme(
+            uri='https://id.erfgoed.net/thesauri/conceptschemes')
         provider = Provider(
             id='ERFGOEDTYPES',
             uri_pattern='https://id.erfgoed.net/thesauri/erfgoedtypes/%s',
@@ -786,15 +842,18 @@ class TestCookieView(FunctionalTests):
         return {'Accept': 'text/html'}
 
     def test_cookie(self):
-        response = self.testapp.get('/locale?language=nl', headers=self._get_default_headers())
+        response = self.testapp.get('/locale?language=nl',
+                                    headers=self._get_default_headers())
         self.assertIsNotNone(response.headers['Set-Cookie'])
         self.assertEqual(response.status, '302 Found')
         self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=nl'))
 
     def test_unsupported_language(self):
         config_default_lang = settings.get('pyramid.default_locale_name')
-        response = self.testapp.get('/locale?language=fr', headers=self._get_default_headers())
-        self.assertTrue((response.headers.get('Set-Cookie')).startswith('_LOCALE_=' + config_default_lang))
+        response = self.testapp.get('/locale?language=fr',
+                                    headers=self._get_default_headers())
+        self.assertTrue((response.headers.get('Set-Cookie')).startswith(
+            '_LOCALE_=' + config_default_lang))
 
 
 class JsonTreeFunctionalTests(FunctionalTests):
@@ -802,7 +861,8 @@ class JsonTreeFunctionalTests(FunctionalTests):
         return {'Accept': 'application/json'}
 
     def test_tree(self):
-        response = self.testapp.get('/conceptschemes/GEOGRAPHY/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        response = self.testapp.get('/conceptschemes/GEOGRAPHY/tree?_LOCALE_=nl',
+                                    headers=self._get_default_headers())
         self.assertEqual('200 OK', response.status)
         self.assertIn('application/json', response.headers['Content-Type'])
         self.assertIsNotNone(response.json)
@@ -810,7 +870,8 @@ class JsonTreeFunctionalTests(FunctionalTests):
         self.assertEqual('World', response.json[0]['label'])
 
     def test_missing_labels(self):
-        response = self.testapp.get('/conceptschemes/MISSING_LABEL/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        response = self.testapp.get('/conceptschemes/MISSING_LABEL/tree?_LOCALE_=nl',
+                                    headers=self._get_default_headers())
         self.assertEqual('200 OK', response.status)
         self.assertIsNotNone(response.json)
         self.assertEqual(2, len(response.json))
@@ -834,7 +895,8 @@ class JsonTreeFunctionalTests(FunctionalTests):
         )
 
     def test_no_tree(self):
-        response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
+        response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl',
+                                    headers=self._get_default_headers(),
                                     status=404, expect_errors=True)
         self.assertEqual('404 Not Found', response.status)
 
@@ -844,14 +906,17 @@ class HtmlTreeFunctionalTests(FunctionalTests):
         return {'Accept': 'text/html'}
 
     def test_tree(self):
-        response = self.testapp.get('/conceptschemes/GEOGRAPHY/tree?_LOCALE_=nl', headers=self._get_default_headers())
+        response = self.testapp.get('/conceptschemes/GEOGRAPHY/tree?_LOCALE_=nl',
+                                    headers=self._get_default_headers())
         self.assertEqual('200 OK', response.status)
         self.assertIn('text/html', response.headers['Content-Type'])
 
     def test_no_tree(self):
-        response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl', headers=self._get_default_headers(),
+        response = self.testapp.get('/conceptschemes/FOO/tree?_LOCALE_=nl',
+                                    headers=self._get_default_headers(),
                                     status=404, expect_errors=True)
         self.assertEqual('404 Not Found', response.status)
+
 
 class SkosFunctionalTests(FunctionalTests):
 
@@ -864,19 +929,23 @@ class SkosFunctionalTests(FunctionalTests):
     def test_admin_no_skos_provider(self):
         with patch.dict(self.app.request_extensions.descriptors):
             del self.app.request_extensions.descriptors['skos_registry']
-            res = self.testapp.get('/admin', headers=self._get_default_headers(), expect_errors=True)
+            res = self.testapp.get('/admin', headers=self._get_default_headers(),
+                                   expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertTrue('message' in res)
-        self.assertTrue('No SKOS registry found, please check your application setup' in res)
+        self.assertTrue(
+            'No SKOS registry found, please check your application setup' in res)
 
     def test_crud_no_skos_provider(self):
         with patch.dict(self.app.request_extensions.descriptors):
             del self.app.request_extensions.descriptors['skos_registry']
-            res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c', headers=self._get_json_headers(),
+            res = self.testapp.post_json('/conceptschemes/GEOGRAPHY/c',
+                                         headers=self._get_json_headers(),
                                          params=json_collection_value, expect_errors=True)
         self.assertEqual('500 Internal Server Error', res.status)
         self.assertTrue('message' in res)
-        self.assertTrue('No SKOS registry found, please check your application setup' in res)
+        self.assertTrue(
+            'No SKOS registry found, please check your application setup' in res)
 
     def test_match_filter(self):
         response = self.testapp.get(
@@ -919,8 +988,9 @@ class CacheFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', tree_response.status)
         self.assertIsNotNone(tree_response.json)
 
-        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
-                                                headers=self._get_default_headers())
+        cached_tree_response = self.testapp.get(
+            '/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+            headers=self._get_default_headers())
         self.assertEqual('200 OK', cached_tree_response.status)
         self.assertIsNotNone(cached_tree_response.json)
 
@@ -941,8 +1011,9 @@ class CacheFunctionalTests(FunctionalTests):
 
         tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
                                          headers=self._get_default_headers())
-        cached_tree_response = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
-                                                headers=self._get_default_headers())
+        cached_tree_response = self.testapp.get(
+            '/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+            headers=self._get_default_headers())
         self.assertEqual(tree_response.json, cached_tree_response.json)
 
         delete_response = self.testapp.delete('/conceptschemes/MATERIALS/c/31',
@@ -954,8 +1025,9 @@ class CacheFunctionalTests(FunctionalTests):
                                           headers=self._get_default_headers())
         self.assertNotEqual(tree_response.json, tree_response2.json)
 
-        cached_tree_response2 = self.testapp.get('/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
-                                                 headers=self._get_default_headers())
+        cached_tree_response2 = self.testapp.get(
+            '/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
+            headers=self._get_default_headers())
         self.assertEqual(tree_response2.json, cached_tree_response2.json)
 
         tree_region.configure('dogpile.cache.null', replace_existing_backend=True)
@@ -970,7 +1042,8 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('text/turtle', rdf_response.content_type)
 
     def test_rdf_full_xml(self):
-        rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c', headers={'Accept': 'application/rdf+xml'})
+        rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c',
+                                        headers={'Accept': 'application/rdf+xml'})
         self.assertEqual('200 OK', rdf_response.status)
         self.assertEqual('application/rdf+xml', rdf_response.content_type)
 
@@ -980,7 +1053,8 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('application/rdf+xml', rdf_response.content_type)
 
     def test_rdf_full_turtle(self):
-        ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c', headers={'Accept': 'text/turtle'})
+        ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c',
+                                        headers={'Accept': 'text/turtle'})
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 
@@ -990,7 +1064,8 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('text/turtle', ttl_response.content_type)
 
     def test_rdf_conceptscheme_xml(self):
-        rdf_response = self.testapp.get('/conceptschemes/MATERIALS', headers={'Accept': 'application/rdf+xml'})
+        rdf_response = self.testapp.get('/conceptschemes/MATERIALS',
+                                        headers={'Accept': 'application/rdf+xml'})
         self.assertEqual('200 OK', rdf_response.status)
         self.assertEqual('application/rdf+xml', rdf_response.content_type)
 
@@ -1000,7 +1075,8 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('application/rdf+xml', rdf_response.content_type)
 
     def test_rdf_conceptscheme_turtle(self):
-        ttl_response = self.testapp.get('/conceptschemes/MATERIALS', headers={'Accept': 'text/turtle'})
+        ttl_response = self.testapp.get('/conceptschemes/MATERIALS',
+                                        headers={'Accept': 'text/turtle'})
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 
@@ -1010,7 +1086,8 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('text/turtle', ttl_response.content_type)
 
     def test_rdf_conceptscheme_jsonld(self):
-        res = self.testapp.get('/conceptschemes/MATERIALS', headers={'Accept': 'application/ld+json'})
+        res = self.testapp.get('/conceptschemes/MATERIALS',
+                               headers={'Accept': 'application/ld+json'})
         self.assertEqual('200 OK', res.status)
         self.assertEqual('application/ld+json', res.content_type)
 
@@ -1020,7 +1097,8 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('application/ld+json', res.content_type)
 
     def test_rdf_individual_jsonld(self):
-        res = self.testapp.get('/conceptschemes/MATERIALS/c/1', headers={'Accept': 'application/ld+json'})
+        res = self.testapp.get('/conceptschemes/MATERIALS/c/1',
+                               headers={'Accept': 'application/ld+json'})
         self.assertEqual('200 OK', res.status)
         self.assertEqual('application/ld+json', res.content_type)
 
@@ -1030,7 +1108,8 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('application/ld+json', res.content_type)
 
     def test_rdf_individual_xml(self):
-        rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c/1', headers={'Accept': 'application/rdf+xml'})
+        rdf_response = self.testapp.get('/conceptschemes/MATERIALS/c/1',
+                                        headers={'Accept': 'application/rdf+xml'})
         self.assertEqual('200 OK', rdf_response.status)
         self.assertEqual('application/rdf+xml', rdf_response.content_type)
 
@@ -1040,7 +1119,8 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('application/rdf+xml', rdf_response.content_type)
 
     def test_rdf_individual_turtle(self):
-        ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c/1', headers={'Accept': 'text/turtle'})
+        ttl_response = self.testapp.get('/conceptschemes/MATERIALS/c/1',
+                                        headers={'Accept': 'text/turtle'})
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 
@@ -1065,12 +1145,14 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual('text/turtle', ttl_response.content_type)
 
     def test_rdf_individual_turtle_manual_uri(self):
-        ttl_response = self.testapp.get('/conceptschemes/manual-ids/c/http://id.manual.org/manual/68.ttl')
+        ttl_response = self.testapp.get(
+            '/conceptschemes/manual-ids/c/http://id.manual.org/manual/68.ttl')
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)
 
     def test_rdf_individual_not_found(self):
-        res = self.testapp.get('/conceptschemes/TREES/c/test.ttl', headers={'Accept': 'text/turtle'}, status=404,
+        res = self.testapp.get('/conceptschemes/TREES/c/test.ttl',
+                               headers={'Accept': 'text/turtle'}, status=404,
                                expect_errors=True)
         self.assertEqual('404 Not Found', res.status)
 

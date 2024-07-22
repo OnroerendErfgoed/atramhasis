@@ -1,0 +1,126 @@
+[build-system]
+requires = ["hatchling", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+[project]
+version = "2.1.0"
+name = "atramhasis"
+dynamic = ["readme"]
+authors = [
+    { name = "Flanders Heritage Agency", email = "ict@onroerenderfgoed.be" },
+]
+#license = "GPL-3.0-or-later"
+description = "A web based editor for thesauri adhering to the SKOS specification."
+requires-python = ">=3.10,<3.13"
+keywords = ["web", "wsgi", "pyramid", "SKOS", "thesaurus", "vocabulary"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python",
+    "Framework :: Pyramid",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "pyramid",
+    "pyramid_tm",
+    "SQLAlchemy",
+    "transaction",
+    "zope.sqlalchemy",
+    "skosprovider",
+    "skosprovider_sqlalchemy>=2.1.1",
+    "skosprovider_rdf",
+    "skosprovider_getty",
+    "pyramid_skosprovider",
+    "language_tags",
+    "jinja2 >=  3.0.0",
+    "markupsafe",
+    "pyramid_jinja2",
+    "alembic",
+    "babel",
+    "colander",
+    "requests",
+    "cachecontrol",
+    "dogpile.cache",
+    "pyramid_rewrite",
+    "python-dateutil",
+    "rdflib",
+    "bleach",
+    "pyramid_openapi3==0.19",
+]
+
+[project.urls]
+History = "https://github.com/OnroerendErfgoed/atramhasis/blob/master/CHANGES.rst"
+Tracker = "https://github.com/OnroerendErfgoed/atramhasis/issues"
+Source = "https://github.com/OnroerendErfgoed/atramhasis"
+Documentation = "https://atramhasis.readthedocs.io/en/latest/"
+
+[project.optional-dependencies]
+dev = [
+    "pyramid-debugtoolbar==4.10",
+    "pytest==7.4.2",
+    "pytest-cov==4.1.0",
+    "coveralls==3.3.1",
+    "webtest==3.0.0",
+    "mock==5.1.0",
+    "testfixtures==7.2.2",
+    "Sphinx==6.2.1",
+    "sphinxcontrib-httpdomain==1.8.1",
+    "pygments==2.15.1",
+    "waitress==2.1.2",
+    "flake8==4.0.1",
+    "mccabe==0.6.1",
+    "pep8==1.7.1",
+    "pyflakes==2.4.0",
+]
+
+[project.entry-points."paste.app_factory"]
+main = "atramhasis:main"
+
+[project.scripts]
+initialize_atramhasis_db = "atramhasis.scripts.initializedb:main"
+import_file = "atramhasis.scripts.import_file:main"
+dump_rdf = "atramhasis.scripts.dump_rdf:main"
+generate_ldf_config = "atramhasis.scripts.generate_ldf_config:main"
+sitemap_generator = "atramhasis.scripts.sitemap_generator:main"
+delete_scheme = "atramhasis.scripts.delete_scheme:main"
+migrate_sqlalchemy_providers = "atramhasis.scripts.migrate_sqlalchemy_providers:main"
+
+
+##
+# Build tool specific
+##
+[tool.hatch.build.targets.wheel]
+# In the wheel we want to have atramhasis in the root as python module.
+only-include = [
+    "/atramhasis",
+    "/fixtures",
+]
+# In the wheel we do not need the frontend sources. We provide the dist.
+exclude = [
+    "/atramhasis/static/admin"
+]
+# these folders are (partially) in gitignore and would otherwise not be part of the builds
+artifacts = [
+    "/atramhasis/static/admin/dist",
+    # including node_modules bloats the build but we need refactoring
+    "/atramhasis/static/admin/node_modules",
+    "/atramhasis/static/node_modules",
+]
+
+[tool.hatch.build.targets.wheel.hooks.custom]
+path = "build_hook.py"
+
+
+[tool.hatch.metadata]
+# This allows us to use github links as dependencies
+allow-direct-references = true
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/x-rst"
+fragments = [
+  { path = "README.rst" },
+  { path = "CHANGES.rst" },
+]

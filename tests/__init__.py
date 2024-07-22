@@ -13,6 +13,7 @@ from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy import engine_from_config
+from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.orm import sessionmaker
@@ -61,13 +62,16 @@ def setup_db(guarantee_empty=False):
 
 def _reset_db():
     engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
+    session = sessionmaker(bind=engine)()
     try:
-        engine.execute("DELETE FROM concept_note")
-        engine.execute("DELETE FROM note")
-        engine.execute("DELETE FROM concept_label")
-        engine.execute("DELETE FROM label")
+        session.execute(text("DELETE FROM concept_note"))
+        session.execute(text("DELETE FROM note"))
+        session.execute(text("DELETE FROM concept_label"))
+        session.execute(text("DELETE FROM label"))
     except (ProgrammingError, OperationalError):
         """The tables may not exist if it's first time."""
+    session.commit()
+    session.close()
     command.downgrade(ALEMBIC_CONFIG, 'base')
     engine.dispose()
 

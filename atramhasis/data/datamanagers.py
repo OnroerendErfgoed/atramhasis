@@ -74,7 +74,7 @@ class ConceptSchemeManager(DataManager):
         """
         db_query = (
             select(Thing)
-            .options(joinedload('labels'))
+            .options(joinedload(Thing.labels))
             .filter(Thing.conceptscheme_id == conceptscheme_id)
         )
         if 'type' in query and query['type'] in ['concept', 'collection']:
@@ -127,7 +127,7 @@ class ConceptSchemeManager(DataManager):
         """
         all_results = self.session.execute(
             select(Thing)
-            .options(joinedload('labels'))
+            .options(joinedload(Thing.labels))
             .filter(Thing.conceptscheme_id == conceptscheme_id)
         ).unique().scalars().all()
         return all_results
