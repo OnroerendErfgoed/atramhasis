@@ -1067,16 +1067,29 @@ You can change the default session factory in the __init__.py file.
 Updating an older installation of Atramhasis
 ============================================
 
-If you are running an older installation of Atramhasis, it's important you 
-reconfigure how providers are created. While they were created in pre-2.0.0
-version by writing a little bit of code, since 2.0.0 they are created 
-through the UI or the REST service and stored in the database. Run the
-following command:
+If you are running an older installation of Atramhasis, it's important to reconfigure
+how providers are created. In pre-2.0.0 versions, providers were created by writing a
+bit of code. However, since version 2.0.0, they are created through the UI or the REST
+service and stored in the database.
+
+To migrate the providers, you can create your own migrate_sqlalchemy_providers script.
+Use the one that comes with Atramhasis as a starting point. Copy the file to
+migrate_myatramhasis_sqlalchemy_providers.py and edit it to suit your needs.
+Additionally, add it to your pyproject.toml file to ensure it is installed with your
+project. After adding the script, you can install it with the following command:
+
+.. code-block:: bash
+
+    # Install the new project in editable mode
+    $ pip install -e .
+
+
+Run the following command execute the script:
 
 .. code-block:: bash
 
    $ workon my_thesaurus
-   $ migrate_sqlalchemy_providers --setings_file development.ini
+   $ migrate_myatramhasis_sqlalchemy_providers --setings_file development.ini
 
 After running this command, all providers will be present in the DB and
 you can safely delete some code in the :file:`my_thesaurus/skos/__init__.py`. 
