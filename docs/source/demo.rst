@@ -10,35 +10,46 @@ Running a demo site with Cookiecutter
 Checking a working instance of the Atramhasis can be done at `the Flanders
 Heritage Thesaurus <https://thesaurus.onroerenderfgoed.be>`_ or by running a
 demo yourself. This allows you to quickly evaluate and inspect the software. 
-This can be done through the `cookiecutter` package. 
+This can be done through the `cookiecutter` package.
 
-.. code-block:: bash    
-    
-   $ python -m venv atramhasis_demo
-   $ . atramhasis_demo/bin/activate
-   # Make sure pip and setuptools are up to date
-   $ pip install --upgrade pip setuptools
-   $ pip install -U cookiecutter
 
-Once cookiecutter is installed, you use it to generate the demo site.
+1.  Create a virtual environment and install requirements
 
 .. code-block:: bash
 
-    $ cookiecutter gh:OnroerendErfgoed/atramhasis_demo_cookiecutter
+    # set VENV_PATH to the desired location for your new virtual environment
+    $ VENV_PATH=$HOME/Envs
+    # create a new virtual environment for the project
+    $ python -m venv $VENV_PATH/my_atramhasis
+    $ . $VENV_PATH/my_atramhasis/bin/activate
+    # Make sure pip and pip-tools are up to date
+    $ pip install --upgrade pip
+    $ pip install --upgrade cookiecutter
+
+2.  Use cookiecutter to generate an demo project
+
+.. code-block:: bash
+
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo
 
 Running this command will ask a few questions. Just accept the default answers,
 unless you want to give your project a different name. After the
 cookiecutter command, there should be a directory with the name of your
-project (default: atramhasis_demo). Enter this directory and install
-requirements:
+project (default: atramhasis_demo). Now enter this directory to start updating your virtual environment.
+
+
+3.  Install requirements
 
 .. code-block:: bash
 
-    $ cd atramhasis_demo
-    $ pip install -r requirements-dev.txt
-    $ pip install -e .
+    $ cd <root of newly from scaffold created project>
+    # Install the new project in editable mode via argument -e
+    $ pip install -e .[dev]
 
-Now it's time to setup our database (a simple SQLite database) and add some 
+
+4.  Setup database
+
+Now it's time to setup our database (a simple SQLite database) and add some
 testdata:
 
 .. code-block:: bash
@@ -47,6 +58,8 @@ testdata:
     # fill the database with data
     $ initialize_atramhasis_db development.ini
 
+5.  Create RDF dumps
+
 Optionally, we can create RDF dumps, but this is not necessary for basic
 functionality:
 
@@ -54,21 +67,13 @@ functionality:
 
     $ dump_rdf development.ini
 
-Almost done! All we need now are some frontend dependencies:
+6.  Run server
 
 .. code-block:: bash
 
-    $ cd atramhasis_demo/static
-    $ npm install
-
-Finally, we can start our server. Return to the root of your project repo and
-run pserve:
-
-.. code-block:: bash
-
-    $ cd ../..
     # start server
     $ pserve development.ini
+
 
 The Atramhasis demo instance is now running on your localhost at port 6543. To
 reach it, open your browser and surf to the address `<http://localhost:6543>`_.

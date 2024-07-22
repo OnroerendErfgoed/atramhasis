@@ -12,7 +12,7 @@ cachecontrol==0.14.0
     # via atramhasis (pyproject.toml)
 cachetools==5.3.3
     # via pyld
-certifi==2024.6.2
+certifi==2024.7.4
     # via requests
 charset-normalizer==3.3.2
     # via requests
@@ -152,12 +152,6 @@ rpds-py==0.18.1
     # via
     #   jsonschema
     #   referencing
-setuptools==70.0.0
-    # via
-    #   pyramid
-    #   zope-deprecation
-    #   zope-interface
-    #   zope-sqlalchemy
 six==1.16.0
     # via
     #   bleach
@@ -180,8 +174,8 @@ skosprovider-sqlalchemy==2.1.1
     # via atramhasis (pyproject.toml)
 sqlalchemy==2.0.30
     # via
-    #   atramhasis (pyproject.toml)
     #   alembic
+    #   atramhasis (pyproject.toml)
     #   skosprovider-sqlalchemy
     #   zope-sqlalchemy
 stevedore==5.2.0
@@ -198,7 +192,6 @@ translationstring==1.4
 typing-extensions==4.12.2
     # via
     #   alembic
-    #   dogpile-cache
     #   sqlalchemy
 urllib3==2.2.2
     # via requests
@@ -223,3 +216,6 @@ zope-interface==6.4.post2
     #   zope-sqlalchemy
 zope-sqlalchemy==3.1
     # via atramhasis (pyproject.toml)
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

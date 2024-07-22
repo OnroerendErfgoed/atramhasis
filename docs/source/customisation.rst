@@ -16,9 +16,81 @@ instance with only these default settings.
 Creating your own project
 =========================
 
-Follow the README at `atramhasis_scaffold_cookiecutter <https://github.com/OnroerendErfgoed/atramhasis_scaffold_cookiecutter>`_
+Requirements
+------------
 
-This gives you a clean slate to start your customisations on.
+*   Python 3.9+
+*   npm
+
+Usage
+-----
+
+1.  Create a virtual environment and install requirements
+
+    .. code-block:: bash
+
+        # set VENV_PATH to the desired location for your new virtual environment
+        $ VENV_PATH=$HOME/Envs
+        # create a new virtual environment for the project
+        $ python -m venv $VENV_PATH/my_atramhasis
+        $ . $VENV_PATH/my_atramhasis/bin/activate
+        # Make sure pip and pip-tools are up to date
+        $ pip install --upgrade pip pip-tools
+        $ pip install --upgrade cookiecutter
+
+2.  Use cookiecutter to generate an atramhasis project
+
+    .. code-block:: bash
+
+        $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/scaffold
+
+3.  Install requirements
+
+You can opt to generate requirements*.txt files from the pyproject.toml file and install the dependencies,
+or you can install them directly from the pyproject.toml file.
+
+*Using requirements*.txt files*:
+
+    .. code-block:: bash
+
+        $ cd <root of newly from scaffold created project>
+        # Generate requirements files from the existing pyproject.toml
+        $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
+        # Generate requirements files for a production environment
+        $ pip-compile $PIP_COMPILE_ARGS;
+        # Generate requirements files for a development environment
+        $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
+
+        # Install dependencies
+        $ pip-sync requirements-dev.txt
+        # Install the new project in editable mode
+        $ pip install -e .
+
+    Note that pip-sync will uninstall all packages that are not listed in the requirements. The package cookiecutter
+    is no longer needed and will be uninstalled when executing pip-sync.
+
+*Using pyproject.toml*:
+
+    .. code-block:: bash
+
+        $ cd <root of newly from scaffold created project>
+        # Install the new project in editable mode via argument -e
+        # Optional: Include [dev] to install the development dependencies
+        $ pip install -e .[dev]
+
+4.  Setup database
+
+    .. code-block:: bash
+
+        $ alembic upgrade head
+
+5.  Run server
+
+    .. code-block:: bash
+
+        $ pserve development.ini
+
+
 
 Database
 --------
@@ -995,16 +1067,29 @@ You can change the default session factory in the __init__.py file.
 Updating an older installation of Atramhasis
 ============================================
 
-If you are running an older installation of Atramhasis, it's important you 
-reconfigure how providers are created. While they were created in pre-2.0.0
-version by writing a little bit of code, since 2.0.0 they are created 
-through the UI or the REST service and stored in the database. Run the
-following command:
+If you are running an older installation of Atramhasis, it's important to reconfigure
+how providers are created. In pre-2.0.0 versions, providers were created by writing a
+bit of code. However, since version 2.0.0, they are created through the UI or the REST
+service and stored in the database.
+
+To migrate the providers, you can create your own migrate_sqlalchemy_providers script.
+Use the one that comes with Atramhasis as a starting point. Copy the file to
+migrate_myatramhasis_sqlalchemy_providers.py and edit it to suit your needs.
+Additionally, add it to your pyproject.toml file to ensure it is installed with your
+project. After adding the script, you can install it with the following command:
+
+.. code-block:: bash
+
+    # Install the new project in editable mode
+    $ pip install -e .
+
+
+Run the following command execute the script:
 
 .. code-block:: bash
 
    $ workon my_thesaurus
-   $ migrate_sqlalchemy_providers --setings_file development.ini
+   $ migrate_myatramhasis_sqlalchemy_providers --setings_file development.ini
 
 After running this command, all providers will be present in the DB and
 you can safely delete some code in the :file:`my_thesaurus/skos/__init__.py`. 

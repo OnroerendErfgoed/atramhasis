@@ -73,13 +73,13 @@ We recommend installing Atramhasis in a virtual environment.
     
    $ python -m venv atramhasis_dev
    $ . atramhasis_dev/bin/activate
-   # Make sure pip and setuptools are up to date
-   $ pip install --upgrade pip setuptools
+   # Make sure pip and pip-tools are up to date
+   $ pip install --upgrade pip pip-tools
 
 To install a fully working development environment a pip requirements-dev.txt
-file is provided. By passing this file to :command:`pip install -r` all 
-requirements for Atramhasis and development of the software (Sphinx, py.test,
-tox) will be installed.
+file is provided. By passing this file to :command:`pip sync` all
+requirements for Atramhasis and development of the software (Sphinx, py.test)
+will be installed.
 
 The following step will help you get the python development environment up and
 running. If you also need to work on the javascript admin backend, please refer
@@ -88,8 +88,8 @@ to the admin module documentation.
 .. code-block:: bash
 
     # Install dependencies
-    $ pip install -r requirements-dev.txt
-    # Install packages in dev mode
+    $ pip-sync requirements-dev.txt
+    # Install packages in dev mode. During a pip install, the JS files will also be built.
     $ pip install -e .
     # create or update database
     $ alembic upgrade head
@@ -98,7 +98,20 @@ to the admin module documentation.
     # generate first RDF download
     $ dump_rdf development.ini
     # compile the Message Catalog Files
-    $ python setup.py compile_catalog
+    $ pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
+
+Alternatively to pip-sync, you can also use pip to install the requirements.
+
+.. code-block:: bash
+
+    # Install dependencies
+    $ pip install -r requirements-dev.txt
+    # Install packages in dev mode
+    ...
+
+Note that pip-sync will uninstall all packages that are not listed in the requirements.
+If you have packages in your virtualenv that you want to keep or need, you should
+either reinstall them afterwards or use the pip install command instead of pip-sync.
 
 Once you've executed these steps, you can run a development server. This uses
 the standard pyramid server (`Waitress`_) and should not be used as-is in a
@@ -109,6 +122,17 @@ production environment.
     # run a local development server
     $ pserve --reload development.ini
 
+
+Update requirements files
+=========================
+The dependencies are defined within pyproject.toml. There, you can add, modify, or remove libraries.
+Afterward, run pip-compile to generate the requirements files.
+
+.. code-block:: bash
+    # Update pyproject.toml and run pip-compile as follows:
+    $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
+    $ pip-compile $PIP_COMPILE_ARGS;
+    $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
 
 Admin development
 =================
@@ -122,10 +146,10 @@ Confirmed known versions are as followed:
 .. code-block:: bash
 
     $ npm -v
-    8.19.4
+    10.2.4
 
     $ node -v
-    v16.20.2
+    v21.6.2
 
     $ grunt -V
     grunt-cli v1.4.3
@@ -137,16 +161,26 @@ Confirmed known versions are as followed:
     $ sudo apt install nodejs
     $ sudo apt install npm
     $ sudo npm install -g grunt-cli
-    # install js dependencies for public site using npm
+
+The JS dependencies are installed via a build hook (https://github.com/OnroerendErfgoed/atramhasis/blob/develop/build_hook.py)
+during the `General installation <#general-installation>`_.
+This will create a JS build and place the resulting files in :file:`atramhasis/static/admin/dist`.
+The build hook is triggered when installing the project via `pip install -e .`, but also when building a wheel or an sdist via `hatch build`."
+
+If you want to install the JS dependencies manually, you can do so by running the following commands:
+
+.. code-block:: bash
+
+    # install JS dependencies for public site using npm
     $ cd atramhasis/static
     $ npm install
-    # install js dependencies for admin using npm
+    # install JS dependencies for admin using npm
     $ cd atramhasis/static/admin
     $ npm install
 
-These commands will install a couple of js libraries that Atramhasis uses in
+These commands will install a couple of JS libraries that Atramhasis uses in
 :file:`/atramhasis/static/node_modules` and :file:`/atramhasis/static/admin/node_modules` and a set of tools to be able
-to generate js builds. Builds are carried out through a simple `grunt`_ file:
+to generate JS builds. Builds are carried out through a simple `grunt`_ file:
 
 .. code-block:: bash
 
@@ -154,7 +188,7 @@ to generate js builds. Builds are carried out through a simple `grunt`_ file:
    $ cd atramhasis/static/admin
    $ grunt -v build
 
-This will create a build a place the resulting files in 
+This will create a build and place the resulting files in
 :file:`atramhasis/static/admin/dist`. The web application can be told to use
 this build by setting `dojo.mode` in :file:`development.ini` to `dist`.
 
@@ -206,6 +240,23 @@ language switcher. If you want to add your new language, you need to edit your
 
 After restarting your server you will now have the option of switching to
 German.
+
+Update Cookiecutters
+====================
+
+In case changes are needed for the cookiecutters, you may want to test them on an unreleased version of Atramhasis.
+You can test them on a specific branch by running the following commands:
+
+.. code-block:: bash
+
+    # fe you are working on the branch feature/876_cookiecutters and you want to test the demo cookiecutter
+    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo --checkout feature/876_cookiecutters
+    $ cd atramhasis_demo  # or whatever you named the root_folder of your project
+    $ pip install "atramhasis @ git+ssh://git@github.com/OnroerendErfgoed/atramhasis.git@feature/876_cookiecutters"
+    $ pip install -e .[dev]
+    $ alembic upgrade head
+    $ initialize_atramhasis_db development.ini  # (for demo only)
+    $ pserve development.ini
 
 Running a Linked Data Fragments server
 ======================================
@@ -278,18 +329,13 @@ Atramhasis is being developed as open source software by the
 
 Since we place a lot of importance of code quality, we expect to have a good 
 amount of code coverage present and run frequent unit tests. All commits and
-pull requests will be tested with `Travis-ci`_. Code coverage is being 
+pull requests will be tested with Github Workflow Actions tests. Code coverage is being
 monitored with `Coveralls`_.
 
-Locally you can run unit tests by using `pytest`_ or `tox`_. Running pytest 
-manually is good for running a distinct set of unit tests. For a full test run, 
-tox is preferred since this can run the unit tests against multiple versions of
-python.
+Locally you can run unit tests by using `pytest`_.
 
 .. code-block:: bash
 
-    # Run unit tests for all environments 
-    $ tox
     # No coverage
     $ py.test 
     # Coverage
@@ -297,7 +343,7 @@ python.
     # Only run a subset of the tests
     $ py.test atramhasis/tests/test_views.py
 
-Every pull request will be run through Travis-ci_. When providing a pull 
+Every pull request will be run through Github Workflow Actions tests. When providing a pull
 request, please run the unit tests first and make sure they all pass. Please 
 provide new unit tests to maintain 100% coverage. If you send us a pull request
 and this build doesn't function, please correct the issue at hand or let us 
@@ -305,21 +351,31 @@ know why it's not working.
 
 Distribution
 ============
+To build a distribution for your project, you can use the `hatch build` command. This command
+will generate the necessary distribution archives, such as wheels and source distributions.
 
-For building a distribution use the prepare command before the distribution command.
-This will build the dojo code in the static folder.
+In addition to building the Python distribution, the `hatch build` command will also compile
+the JavaScript code located in the `static` folder. This ensures that all static assets are properly
+built and included in the distribution package.
 
 .. code-block:: bash
 
-    $ python setup.py prepare sdist bdist_wheel
+    $ pip install hatch
+    $ hatch build
 
+Alternatively, you can specify your build as a wheel or as a source distribution (sdist) using the
+`-t` or `--type` parameter.
+
+.. code-block:: bash
+
+    $ hatch build -t wheel
+    $ hatch build -t sdist
 
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
 .. _Github page for Atramhasis: https://github.com/OnroerendErfgoed/atramhasis
-.. _Travis-ci: https://travis-ci.org/OnroerendErfgoed/atramhasis
+.. _GitHub Actions workflows: https://github.com/OnroerendErfgoed/atramhasis/actions
 .. _Coveralls: https://coveralls.io/r/OnroerendErfgoed/atramhasis
 .. _pytest: http://pytest.org
-.. _tox: http://tox.readthedocs.org
 .. _npm: https://www.npmjs.org/
 .. _grunt: http://gruntjs.com
 .. _waitress: http://waitress.readthedocs.org

@@ -1,9 +1,15 @@
+import logging
 import os
 
 from pyramid.config import Configurator
+from pyramid.config import PHASE3_CONFIG
+from pyramid.interfaces import ISessionFactory
+from pyramid.session import SignedCookieSessionFactory
 from pyramid.settings import aslist
 
 from atramhasis.renderers import json_renderer_verbose
+
+LOG = logging.getLogger(__name__)
 
 
 DEFAULT_SETTINGS = {
@@ -28,7 +34,7 @@ def includeme(config):
     for key, value in DEFAULT_SETTINGS.items():
         if key not in settings:
             settings[key] = value
-
+    configure_session(config)
     config.include('pyramid_jinja2')
     config.include('pyramid_tm')
     config.add_static_view('static', 'static', cache_max_age=3600)
@@ -47,6 +53,38 @@ def includeme(config):
     config.scan()
 
 
+def configure_session(config):
+    """
+    Configure pyramid's session factory.
+
+    People can configure their own session factory, but if no factory is registered
+    atramhasis will try configuring its own.
+    """
+
+    def check_session_factory_set():
+        session_factory = config.registry.queryUtility(ISessionFactory)
+        if session_factory:
+            return
+
+        settings = config.registry.settings
+        if 'atramhasis.session_factory.secret' not in settings:
+            msg = (
+                'No session factory is configured, and '
+                'atramhasis.session_factory.secret setting is missing.'
+            )
+            raise ValueError(msg)
+
+        LOG.info('Using default SignedCookieSessionFactory.')
+        default_session_factory = SignedCookieSessionFactory(
+            settings['atramhasis.session_factory.secret']
+        )
+        config.registry.registerUtility(default_session_factory, ISessionFactory)
+
+    config.action(
+        'check_session_factory_set', check_session_factory_set, order=PHASE3_CONFIG + 1
+    )
+
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
@@ -58,14 +96,10 @@ def main(global_config, **settings):
 
     config = Configurator(settings=settings)
 
-    return load_app(config, settings)
+    return load_app(config)
 
 
-def load_app(config, settings):
-    from pyramid.session import SignedCookieSessionFactory
-    atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
-    config.set_session_factory(atramhasis_session_factory)
-
+def load_app(config):
     includeme(config)
 
     config.include('atramhasis.data:db')

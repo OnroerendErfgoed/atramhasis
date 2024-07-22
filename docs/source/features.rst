@@ -85,7 +85,7 @@ other concepts or collectons. Dropdown lists are present to facilitate editing.
 .. image:: images/admin_kerken_matches_tab.png
   :alt: The matches tab on a concept
 
-The matches tab allows an editorto match a local concept to a concept in a
+The matches tab allows an editor to match a local concept to a concept in a
 remote conceptscheme.
 
 .. image:: images/admin_kerken_matches.png
