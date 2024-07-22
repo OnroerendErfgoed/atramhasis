@@ -1,4 +1,4 @@
-2.1.0 (4-07-2023)
+2.1.0 (22-07-2023)
 ------------------
 
 - Migrated from setup.py to the hatch build tool for improved packaging and distribution (#854).
