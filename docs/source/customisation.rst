@@ -1053,14 +1053,18 @@ expanded and edited.
 SessionFactory
 ==============
 
-You can change the default session factory in the __init__.py file.
+If you don't provide a session factory in your Pyramid application, Atramhasis will use its default session factory,
+which is a SignedCookieSessionFactory.
+
+You can change the default session factory in the __init__.py file within the load_app function. To do this,
+ensure you pass the settings variable to the load_app function from within the main() function.
 
 .. code-block:: python
-
-    # set default session factory
-    from pyramid.session import SignedCookieSessionFactory
-    atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
-    config.set_session_factory(atramhasis_session_factory)
+    def load_app(config, settings):
+        # Override default session factory
+        from pyramid.session import SignedCookieSessionFactory
+        atramhasis_session_factory = SignedCookieSessionFactory(settings['atramhasis.session_factory.secret'])
+        config.set_session_factory(atramhasis_session_factory)
 
 .. _upgrading_providers:
    
