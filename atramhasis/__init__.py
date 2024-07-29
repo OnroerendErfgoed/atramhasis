@@ -34,6 +34,8 @@ def includeme(config):
     for key, value in DEFAULT_SETTINGS.items():
         if key not in settings:
             settings[key] = value
+    # Regexes in path params clash with this validation.
+    settings["pyramid_openapi3.enable_endpoint_validation"] = False
     configure_session(config)
     config.include('pyramid_jinja2')
     config.include('pyramid_tm')
@@ -44,9 +46,10 @@ def includeme(config):
     config.include('pyramid_rewrite')
     config.include("pyramid_openapi3")
     config.include('atramhasis.routes')
+    # pyramid_skosprovider must be included after the atramhasis routes
+    # because it contains a regex in the path which consumes a lot of routes.
     config.include('pyramid_skosprovider')
     config.include('atramhasis.cache')
-    config.scan('pyramid_skosprovider')
 
     config.add_translation_dirs('atramhasis:locale/')
 

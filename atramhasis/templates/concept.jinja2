@@ -2,7 +2,7 @@
 {% block head %}
   {{ super() }}
   <meta name="og:type" content="website" />
-  <meta name="og:url" content="{{ request.route_url('concept', scheme_id=scheme_id, c_id=concept.concept_id) }}" />
+  <meta name="og:url" content="{{ request.route_url('skosprovider.c', scheme_id=scheme_id, c_id=concept.concept_id) }}" />
   <meta name="og:title" content="{{ concept.label(locale).label|safe }}" />
   {% if concept.notes|length > 0 %}
     <meta name="og:description" content="{{ concept.notes[0]|safe }}" />
@@ -13,7 +13,7 @@
   {% if concept.notes|length > 0 %}
     <meta name="twitter:description" content="{{ concept.notes[0]|safe }}" />
   {% endif %}
-  <link rel="canonical" href="{{ request.route_url('concept', scheme_id=scheme_id, c_id=concept.concept_id) }}" />
+  <link rel="canonical" href="{{ request.route_url('skosprovider.c', scheme_id=scheme_id, c_id=concept.concept_id) }}" />
 {% endblock %}
 {% block html_title %}{{ concept.label(locale).label|title }}{% endblock %}
 
@@ -31,9 +31,9 @@
       <div class="clearfix">
         <ul class="downloadtop right">
           <li>DOWNLOAD</li>
-          <li><a href="{{ request.route_path('atramhasis.rdf_individual_export_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">RDF/XML</a></li>
-          <li><a href="{{ request.route_path('atramhasis.rdf_individual_jsonld_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">JSON-LD</a></li>
-          <li><a href="{{ request.route_path('atramhasis.rdf_individual_export_turtle_ext', scheme_id=scheme_id, c_id=concept.concept_id) }}">N3/Turtle</a></li>
+          <li><a href="{{ request.route_path('skosprovider.c.rdf', scheme_id=scheme_id, c_id=concept.concept_id) }}">RDF/XML</a></li>
+          <li><a href="{{ request.route_path('skosprovider.c.jsonld', scheme_id=scheme_id, c_id=concept.concept_id) }}">JSON-LD</a></li>
+          <li><a href="{{ request.route_path('skosprovider.c.ttl', scheme_id=scheme_id, c_id=concept.concept_id) }}">N3/Turtle</a></li>
         </ul>
       </div>
       {% if concept %}
@@ -53,7 +53,7 @@
               <dd class="word-wrap-element"><a href="{{ concept.uri }}">{{ concept.uri }}</a></dd>
             {% endif %}
             <dt>schema</dt>
-            <dd><a href="{{ request.route_path('conceptscheme', scheme_id=scheme_id) }}">{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name) }}</a></dd>
+            <dd><a href="{{ request.route_path('skosprovider.conceptscheme', scheme_id=scheme_id) }}">{{ get_conceptscheme_label(concept.conceptscheme, request.locale_name) }}</a></dd>
             {% if concept.labels %}
               {{ print_labels(concept.labels) }}
             {% endif %}
