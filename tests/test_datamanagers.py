@@ -178,36 +178,34 @@ class AuditManagerTest(DbTest):
     @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 9, 15))))
     def test_get_most_popular_concepts_for_conceptscheme(self):
         self.session.add(
-            ConceptVisitLog(concept_id=1, conceptscheme_id='1', origin='REST',
+            ConceptVisitLog(concept_id='1', conceptscheme_id='1', origin='REST',
                             visited_at=datetime(2015, 8, 27, 10, 58, 3))
         )
         self.session.add(
-            ConceptVisitLog(concept_id=1, conceptscheme_id='1', origin='REST',
+            ConceptVisitLog(concept_id='1', conceptscheme_id='1', origin='REST',
                             visited_at=datetime(2015, 8, 27, 11, 58, 3))
         )
         self.session.add(
-            ConceptVisitLog(concept_id=2, conceptscheme_id='1', origin='REST',
+            ConceptVisitLog(concept_id='2', conceptscheme_id='1', origin='REST',
                             visited_at=datetime(2015, 8, 27, 10, 58, 3))
         )
         self.session.add(
-            ConceptVisitLog(concept_id=2, conceptscheme_id='2', origin='REST',
+            ConceptVisitLog(concept_id='2', conceptscheme_id='2', origin='REST',
                             visited_at=datetime(2015, 8, 27, 10, 58, 3))
         )
-        self.assertListEqual(
-            [
-                {'concept_id': 1, 'scheme_id': 1},
-                {'concept_id': 2, 'scheme_id': 1}
-            ],
-            self.audit_manager.get_most_popular_concepts_for_conceptscheme(
-                1, 5, 'last_month'
-            )
-        )
-        self.assertListEqual([{'concept_id': 2, 'scheme_id': 2}],
-                             self.audit_manager.get_most_popular_concepts_for_conceptscheme(2, 5, 'last_month'))
-        self.assertListEqual([{'concept_id': 1, 'scheme_id': 1}],
-                             self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 1, 'last_month'))
-        self.assertListEqual([],
-                             self.audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_day'))
+
+        manager = self.audit_manager
+        result = manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_month')
+        expected = [
+            {'concept_id': '1', 'scheme_id': 1}, {'concept_id': '2', 'scheme_id': 1}
+        ]
+        self.assertListEqual(expected, result)
+        result = manager.get_most_popular_concepts_for_conceptscheme(2, 5, 'last_month')
+        self.assertListEqual([{'concept_id': '2', 'scheme_id': 2}], result)
+        result = manager.get_most_popular_concepts_for_conceptscheme(1, 1, 'last_month')
+        self.assertListEqual([{'concept_id': '1', 'scheme_id': 1}], result)
+        result = manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_day')
+        self.assertListEqual([], result)
 
 
 class CountsManagerTest(DbTest):
