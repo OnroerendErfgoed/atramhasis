@@ -349,8 +349,18 @@ define([
             'sticky': false,
             'channel': 'info'
           });
-          this._reset(true);
-          this.parentNode.refresh_conceptschemes();
+          // Update the provider lists with the new data
+          this.providerController.loadProviders().then(lang.hitch(this, function() {
+            this._reset(true);
+            this.parentNode.refresh_conceptschemes();
+          }), lang.hitch(this, function (error) {
+            var message = this._parseError(error);
+            topic.publish('dGrowl', message, {
+              'title': 'Error updating provider list',
+              'sticky': true,
+              'channel': 'error'
+            });
+          }));
         }),
         lang.hitch(this, function (error) {
           var message = this._parseError(error);
@@ -372,7 +382,17 @@ define([
             'sticky': false,
             'channel': 'info'
           });
-          this._reset();
+          // Update the provider lists with the updated data
+          this.providerController.loadProviders().then(lang.hitch(this, function() {
+            this._reset();
+          }), lang.hitch(this, function (error) {
+            var message = this._parseError(error);
+            topic.publish('dGrowl', message, {
+              'title': 'Error updating provider list',
+              'sticky': true,
+              'channel': 'error'
+            });
+          }));
         }),
         lang.hitch(this, function (error) {
           var message = this._parseError(error);
