@@ -29,6 +29,7 @@ def includeme(config):
 
     # APIs with extensions instead of accept headers
     config.add_route('atramhasis.rdf_void_turtle_ext', pattern='/void.ttl', accept='text/turtle')
+    # The routes below extend the existing skosprovider routes with extensions
     config.add_route('skosprovider.conceptscheme.cs.rdf', pattern='/conceptschemes/{scheme_id}/c.rdf')
     config.add_route('skosprovider.conceptscheme.cs.ttl', pattern='/conceptschemes/{scheme_id}/c.ttl')
     config.add_route('skosprovider.conceptscheme.rdf', pattern='/conceptschemes/{scheme_id}.rdf')
