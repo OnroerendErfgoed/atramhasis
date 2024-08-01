@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-fancy-pypi-readme"]
 build-backend = "hatchling.build"
 
 [project]
-version = "2.1.0"
+version = "2.1.1"
 name = "atramhasis"
 dynamic = ["readme"]
 authors = [
@@ -33,7 +33,7 @@ dependencies = [
     "skosprovider_sqlalchemy>=2.1.1",
     "skosprovider_rdf",
     "skosprovider_getty",
-    "pyramid_skosprovider",
+    "pyramid_skosprovider>=1.2.2",
     "language_tags",
     "jinja2 >=  3.0.0",
     "markupsafe",

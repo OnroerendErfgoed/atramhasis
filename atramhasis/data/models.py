@@ -39,7 +39,7 @@ class ConceptschemeVisitLog(Base):
 class ConceptVisitLog(Base):
     __tablename__ = 'concept_visit_log'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    concept_id = Column(Integer, nullable=False)
+    concept_id = Column(String, nullable=False)
     conceptscheme_id = Column(String(25), nullable=False)
     visited_at = Column(DateTime, default=func.now(), nullable=False)
     origin = Column(String(25), nullable=False)

@@ -1,3 +1,11 @@
+2.1.1 (01-08-2023)
+------------------
+
+- ConceptVisitLog has an integer concept_id in the ConceptVisitLog class #906
+- skosprovider route /expand does not work #903
+- Manual ID text box not writable #902
+
+
 2.1.0 (22-07-2023)
 ------------------
 

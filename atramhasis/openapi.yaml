@@ -2,7 +2,7 @@ openapi: 3.0.3
 
 info:
   title: Atramhasis API
-  version: 2.1.0
+  version: 2.1.1
 
 servers:
   - url: '/'
@@ -142,7 +142,7 @@ paths:
           description: The identifier for a certain concept or collection.
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         200:
           description: The concept was found in the conceptscheme.
@@ -172,7 +172,7 @@ paths:
           description: The identifier for a certain concept or collection.
           required: true
           schema:
-            type: integer
+            type: string
       requestBody:
         required: true
         description: Data to create concept or collection
@@ -222,7 +222,7 @@ paths:
           description: The identifier for a certain concept or collection.
           required: true
           schema:
-            type: integer
+            type: string
 
       responses:
         200:
@@ -692,7 +692,7 @@ paths:
           description: The identifier for a certain concept or collection.
           required: true
           schema:
-            type: integer
+            type: string
         - name: language
           in: query
           description: Returns the label with the corresponding language-tag if present.
@@ -748,7 +748,7 @@ paths:
           description: The identifier for a certain concept or collection.
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         200:
           description: The concept/collection was found in the conceptscheme.
@@ -900,7 +900,7 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
     Label:
       type: object
       properties:
@@ -952,7 +952,7 @@ components:
       type: object
       properties:
         id:
-          type: integer
+          type: string
         type:
           type: string
         labels:
@@ -990,7 +990,7 @@ components:
         - type: object
           properties:
             id:
-              type: integer
+              type: string
             uri:
               type: string
     ConceptTree:

@@ -380,9 +380,6 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual('200 OK', res.status)
         self.assertIsNotNone(res.json['id'])
         self.assertEqual(new_id, res.json['id'])
-        from skosprovider_sqlalchemy.models import Concept
-        concepten = self.session.query(Concept).all()
-        print()
 
     def test_delete_concept_not_found(self):
         res = self.testapp.delete('/conceptschemes/TREES/c/7895',
@@ -571,12 +568,6 @@ class RestFunctionalTests(FunctionalTests):
             "message": "resource urn:x-vioe:geography:9 is still in use, preventing operation",
             "referenced_in": ["urn:someobject", "http://test.test.org/object/2"]
         })
-
-    def test_method_not_allowed(self):
-        self.testapp.delete('/conceptschemes/TREES', headers=self._get_default_headers(),
-                            status=405)
-        self.testapp.post('/conceptschemes', headers=self._get_default_headers(),
-                          status=405)
 
     def test_get_conceptschemes(self):
         self.testapp.get('/conceptschemes', headers=self._get_default_headers(),
@@ -835,6 +826,13 @@ class RestFunctionalTests(FunctionalTests):
             },
             response.json
         )
+
+    def test_expand_concept(self):
+        res = self.testapp.get(
+            '/conceptschemes/TREES/c/1/expand', headers=self._get_default_headers(),
+            status=200,
+        )
+        self.assertEqual(res.json, ['1'])
 
 
 class TestCookieView(FunctionalTests):

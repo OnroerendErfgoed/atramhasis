@@ -104,14 +104,12 @@ class AtramhasisCrud:
             )
 
     @audit
-    @view_config(route_name='atramhasis.get_conceptscheme', permission='view')
+    @view_config(route_name='skosprovider.conceptscheme', permission='view', request_method='GET')
     def get_conceptscheme(self):
-        if self.request.method == 'DELETE':
-            raise HTTPMethodNotAllowed
-        # is the same as the pyramid_skosprovider get_conceptscheme function, but wrapped with the audit function
+        # is the same as pyramid_skosprovider but wrapped with the audit decorator
         return ProviderView(self.request).get_conceptscheme()
 
-    @view_config(route_name='atramhasis.edit_conceptscheme', permission='edit')
+    @view_config(route_name='skosprovider.conceptscheme', permission='edit', request_method='PUT')
     def edit_conceptscheme(self):
         """
         Edit an existing concept
@@ -125,16 +123,8 @@ class AtramhasisCrud:
         self.request.response.status = '200'
         return conceptscheme
 
-    @view_config(route_name='atramhasis.get_conceptschemes', permission='view')
-    def get_conceptschemes(self):
-        if self.request.method == 'POST':
-            raise HTTPMethodNotAllowed
-        # is the same as the pyramid_skosprovider get_conceptscheme function, method not allowed included
-        from pyramid_skosprovider.views import ProviderView
-        return ProviderView(self.request).get_conceptschemes()
-
     @audit
-    @view_config(route_name='atramhasis.get_concept', permission='view')
+    @view_config(route_name='skosprovider.c', permission='view', request_method='GET')
     def get_concept(self):
         """
         Get an existing concept
@@ -156,7 +146,7 @@ class AtramhasisCrud:
         return concept
 
     @internal_providers_only
-    @view_config(route_name='atramhasis.add_concept', permission='edit')
+    @view_config(route_name='skosprovider.conceptscheme.cs', permission='edit', request_method='POST')
     def add_concept(self):
         """
         Add a new concept to a conceptscheme
@@ -217,7 +207,7 @@ class AtramhasisCrud:
         return from_thing(concept)
 
     @internal_providers_only
-    @view_config(route_name='atramhasis.edit_concept', permission='edit')
+    @view_config(route_name='skosprovider.c', permission='edit', request_method='PUT')
     def edit_concept(self):
         """
         Edit an existing concept
@@ -242,7 +232,7 @@ class AtramhasisCrud:
 
     @internal_providers_only
     @protected_operation
-    @view_config(route_name='atramhasis.delete_concept', permission='delete')
+    @view_config(route_name='skosprovider.c', permission='delete', request_method='DELETE')
     def delete_concept(self):
         """
         Delete an existing concept

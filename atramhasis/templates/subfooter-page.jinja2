@@ -22,7 +22,7 @@
       <h5>{% trans %}select_scheme{% endtrans %}</h5>
       <ul class="no_bullet">
         {% for c in conceptschemes %}
-          <li class="cube"><a href="{{ request.route_path('conceptscheme', scheme_id=c.id) }}">{{ c.conceptscheme.label(request.locale_name).label }}</a></li>
+          <li class="cube"><a href="{{ request.route_path('skosprovider.conceptscheme', scheme_id=c.id) }}">{{ c.conceptscheme.label(request.locale_name).label }}</a></li>
         {% endfor %}
       </ul>
     </div>
