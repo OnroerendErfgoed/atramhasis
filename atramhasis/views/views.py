@@ -57,7 +57,8 @@ def get_public_conceptschemes(skos_registry):
 
     return conceptschemes
 
-@view_defaults(accept='text/html')
+
+@view_defaults(accept='text/html', request_method='GET')
 class AtramhasisView:
     """
     This object groups HTML views part of the public user interface.
@@ -102,7 +103,7 @@ class AtramhasisView:
         """
         return {'conceptschemes': get_public_conceptschemes(self.skos_registry)}
 
-    @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
+    @view_config(route_name='skosprovider.conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
         """
         Display a list of available conceptschemes.
@@ -110,7 +111,7 @@ class AtramhasisView:
         return {'conceptschemes': get_public_conceptschemes(self.skos_registry)}
 
     @audit
-    @view_config(route_name='conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
+    @view_config(route_name='skosprovider.conceptscheme', renderer='atramhasis:templates/conceptscheme.jinja2')
     def conceptscheme_view(self):
         """
         Display a single conceptscheme.
@@ -141,7 +142,7 @@ class AtramhasisView:
                 'locale': locale}
 
     @audit
-    @view_config(route_name='concept', renderer='atramhasis:templates/concept.jinja2')
+    @view_config(route_name='skosprovider.c', renderer='atramhasis:templates/concept.jinja2')
     def concept_view(self):
         """
         Display all about a single concept or collection.
@@ -173,7 +174,7 @@ class AtramhasisView:
                 concept_type = "Collection"
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
-            url = self.request.route_url('concept', scheme_id=scheme_id, c_id=c_id)
+            url = self.request.route_url('skosprovider.c', scheme_id=scheme_id, c_id=c_id)
             update_last_visited_concepts(self.request, {'label': c.label(locale).label, 'url': url})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
                     'conceptschemes': conceptschemes, 'provider': provider,
@@ -181,7 +182,7 @@ class AtramhasisView:
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
-    @view_config(route_name='search_result', renderer='atramhasis:templates/search_result.jinja2')
+    @view_config(route_name='skosprovider.conceptscheme.cs', renderer='atramhasis:templates/search_result.jinja2')
     def search_result(self):
         """
         Display search results
@@ -248,7 +249,7 @@ class AtramhasisView:
         return response
 
     @audit
-    @view_config(route_name='search_result_export', renderer='csv')
+    @view_config(route_name='skosprovider.conceptscheme.csv', renderer='csv')
     def results_csv(self):
         """
         Download search results in CSV format, allowing further processing.
@@ -352,11 +353,6 @@ class AtramhasisView:
             return urllib.parse.quote(str(concept_id), safe="")
         else:
             return parent_tree_id + "|" + urllib.parse.quote(str(concept_id), safe="")
-
-    @view_config(route_name='scheme_root', renderer='atramhasis:templates/concept.jinja2')
-    def results_tree_html(self):
-        scheme_id = self.request.matchdict['scheme_id']
-        return {'concept': None, 'conceptType': None, 'scheme_id': scheme_id}
 
 
 @view_defaults(accept='application/json', renderer='json')

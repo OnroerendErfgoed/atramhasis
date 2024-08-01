@@ -249,7 +249,7 @@ class TestConceptView(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         self.config.add_route(
-            "concept",
+            "skosprovider.c",
             pattern="/conceptschemes/{scheme_id}/c/{c_id}",
             accept="text/html",
             request_method="GET",
@@ -531,15 +531,6 @@ class TestHtmlTreeView(unittest.TestCase):
 
     def tearDown(self):
         testing.tearDown()
-
-    def test_passing_view(self):
-        self.request.skos_registry = self.regis
-        self.request.matchdict["scheme_id"] = "TREES"
-        atramhasisview = AtramhasisView(self.request)
-        response = atramhasisview.results_tree_html()
-        self.assertEqual(response["conceptType"], None)
-        self.assertEqual(response["concept"], None)
-        self.assertEqual(response["scheme_id"], "TREES")
 
 
 class TestAdminView(unittest.TestCase):

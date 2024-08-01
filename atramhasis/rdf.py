@@ -76,12 +76,12 @@ def _add_provider(graph, provider, dataseturi, request):
     graph.add((dataseturi, VOID.subset, pd))
     graph.add((pd, DCTERMS.identifier, Literal(pid)))
     graph.add((pd, VOID.rootResource, URIRef(provider.concept_scheme.uri)))
-    graph.add((pd, FOAF.homepage, URIRef(request.route_url('conceptscheme', scheme_id=pid))))
+    graph.add((pd, FOAF.homepage, URIRef(request.route_url('skosprovider.conceptscheme', scheme_id=pid))))
     _add_labels(graph, provider.concept_scheme, pd)
     _add_metadataset(graph, pd, metadataset)
     fmap = [
-        ('rdf', FORMATS.RDF_XML, 'atramhasis.rdf_full_export_ext'),
-        ('ttl', FORMATS.Turtle, 'atramhasis.rdf_full_export_turtle_ext')
+        ('rdf', FORMATS.RDF_XML, 'skosprovider.conceptscheme.cs.rdf'),
+        ('ttl', FORMATS.Turtle, 'skosprovider.conceptscheme.cs.ttl')
     ]
     for f in fmap:
         graph.add((pd, VOID.feature, f[1]))

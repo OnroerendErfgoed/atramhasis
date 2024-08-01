@@ -175,7 +175,7 @@ pyramid-openapi3==0.19
     # via atramhasis (pyproject.toml)
 pyramid-rewrite==0.2
     # via atramhasis (pyproject.toml)
-pyramid-skosprovider==1.2.1
+pyramid-skosprovider==1.2.2
     # via atramhasis (pyproject.toml)
 pyramid-tm==2.5
     # via atramhasis (pyproject.toml)
