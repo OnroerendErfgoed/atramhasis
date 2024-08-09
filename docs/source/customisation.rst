@@ -1070,7 +1070,8 @@ ensure you pass the settings variable to the load_app function from within the m
    
 Updating an older installation of Atramhasis
 ============================================
-
+Update to 2.0.0
+---------------
 If you are running an older installation of Atramhasis, it's important to reconfigure
 how providers are created. In pre-2.0.0 versions, providers were created by writing a
 bit of code. However, since version 2.0.0, they are created through the UI or the REST
@@ -1134,6 +1135,53 @@ through code in this file. Your final code should looks somewhat like this:
 
         return registry
 
+
+Update to 2.1.1
+---------------
+A route cleanup has happened because atramhasis was duplicating a lot of pre-existing
+pyramid routes and these duplicate routes could cause issues in certain cases.
+
+Atramhasis no longer duplicates routes, which means the names of some routes may
+be different now. Below is a table of all old and new route names.
+
+A lot of routes which used to have different names, now share the same name. This is
+because they differ in accept headers and/or HTTP methods which are no longer bound
+to the route, but rather on the view.
+
+.. csv-table:: Route name migration
+    :header: "Old route name", "new route name"
+
+    "concept", "skosprovider.c"
+    "conceptscheme", "skosprovider.conceptscheme"
+    "search_result", "skosprovider.conceptscheme.cs"
+    "search_result_export", "skosprovider.conceptscheme.csv"
+    "atramhasis.get_concept", "skosprovider.c"
+    "atramhasis.add_concept", "skosprovider.conceptscheme.cs"
+    "atramhasis.edit_concept", "skosprovider.c"
+    "atramhasis.delete_concept", "skosprovider.c"
+    "scheme_root", "<DELETED>"
+    "atramhasis.get_conceptscheme", "skosprovider.conceptscheme"
+    "atramhasis.get_conceptschemes", "skosprovider.conceptschemes"
+    "atramhasis.edit_conceptscheme", "skosprovider.conceptscheme"
+    "atramhasis.rdf_full_export", "skosprovider.conceptscheme.cs"
+    "atramhasis.rdf_full_export_ext", "skosprovider.conceptscheme.cs.rdf"
+    "atramhasis.rdf_full_export_turtle", "skosprovider.conceptscheme.cs"
+    "atramhasis.rdf_full_export_turtle_x", "skosprovider.conceptscheme.cs"
+    "atramhasis.rdf_full_export_turtle_ext", "skosprovider.conceptscheme.cs.ttl"
+    "atramhasis.rdf_conceptscheme_export", "skosprovider.conceptscheme"
+    "atramhasis.rdf_conceptscheme_export_ext", "skosprovider.conceptscheme.rdf"
+    "atramhasis.rdf_conceptscheme_export_turtle", "skosprovider.conceptscheme"
+    "atramhasis.rdf_conceptscheme_export_turtle_x", "skosprovider.conceptscheme"
+    "atramhasis.rdf_conceptscheme_export_turtle_ext", "skosprovider.conceptscheme.ttl"
+    "atramhasis.rdf_conceptscheme_jsonld", "skosprovider.conceptscheme"
+    "atramhasis.rdf_conceptscheme_jsonld_ext", "skosprovider.conceptscheme.jsonld"
+    "atramhasis.rdf_individual_export", "skosprovider.c"
+    "atramhasis.rdf_individual_export_ext", "skosprovider.c.rdf"
+    "atramhasis.rdf_individual_jsonld", "skosprovider.c"
+    "atramhasis.rdf_individual_jsonld_ext", "skosprovider.c.jsonld"
+    "atramhasis.rdf_individual_export_turtle", "skosprovider.c"
+    "atramhasis.rdf_individual_export_turtle_x", "skosprovider.c"
+    "atramhasis.rdf_individual_export_turtle_ext", "skosprovider.c.ttl"
 
 Application settings
 ====================

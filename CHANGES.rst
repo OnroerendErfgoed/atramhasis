@@ -3,6 +3,11 @@
 
 - ConceptVisitLog has an integer concept_id in the ConceptVisitLog class #906
 - skosprovider route /expand does not work #903
+
+  **If you are using custom pages or custom views with atramhasis routes, please see**
+  `the docs <https://atramhasis.readthedocs.io/en/latest/customisation.html#update-to-2-1-1>`_
+  **for a list of route name changes**
+
 - Manual ID text box not writable #902
 
 
