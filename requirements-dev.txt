@@ -293,7 +293,7 @@ webencodings==0.5.1
     # via
     #   bleach
     #   html5lib
-webob==1.8.7
+webob==1.8.8
     # via
     #   pyramid
     #   webtest
