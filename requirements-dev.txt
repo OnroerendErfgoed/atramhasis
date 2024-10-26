@@ -299,7 +299,7 @@ webob==1.8.7
     #   webtest
 webtest==3.0.0
     # via atramhasis (pyproject.toml)
-werkzeug==3.0.3
+werkzeug==3.0.6
     # via openapi-core
 zope-deprecation==5.0
     # via
