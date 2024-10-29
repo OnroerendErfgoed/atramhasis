@@ -69,7 +69,7 @@ dev = [
     "Sphinx==6.2.1",
     "sphinxcontrib-httpdomain==1.8.1",
     "pygments==2.15.1",
-    "waitress==2.1.2",
+    "waitress==3.0.1",
     "flake8==4.0.1",
     "mccabe==0.6.1",
     "pep8==1.7.1",
