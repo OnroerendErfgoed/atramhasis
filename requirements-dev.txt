@@ -285,7 +285,7 @@ urllib3==2.2.2
     # via requests
 venusian==3.1.0
     # via pyramid
-waitress==2.1.2
+waitress==3.0.1
     # via
     #   atramhasis (pyproject.toml)
     #   webtest
