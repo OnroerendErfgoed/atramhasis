@@ -6,8 +6,8 @@ import logging
 import sys
 
 from openapi_core.validation.schemas.exceptions import InvalidSchemaValue
-from pyramid.httpexceptions import HTTPMethodNotAllowed
-from pyramid.view import notfound_view_config
+from pyramid.httpexceptions import HTTPFound, HTTPMethodNotAllowed
+from pyramid.view import forbidden_view_config, notfound_view_config
 from pyramid.view import view_config
 from pyramid_openapi3 import RequestValidationError
 from pyramid_openapi3 import ResponseValidationError
@@ -23,7 +23,8 @@ from atramhasis.protected_resources import ProtectedResourceException
 log = logging.getLogger(__name__)
 
 
-@notfound_view_config(renderer='json')
+@notfound_view_config(accept="application/json", renderer='json')
+@notfound_view_config(accept="text/html", renderer='notfound.jinja2')
 def failed_not_found(exc, request):
     """
     View invoked when a resource could not be found.
@@ -33,7 +34,8 @@ def failed_not_found(exc, request):
     return {'message': exc.explanation}
 
 
-@view_config(context=SkosRegistryNotFoundException, renderer='json')
+@view_config(accept="application/json", context=SkosRegistryNotFoundException, renderer='json')
+@view_config(accept="text/html", context=SkosRegistryNotFoundException, renderer='notfound.jinja2')
 def failed_skos(exc, request):
     """
     View invoked when Atramhasis can't find a SKOS registry.
@@ -43,7 +45,7 @@ def failed_skos(exc, request):
     return {'message': exc.value}
 
 
-@view_config(context=ValidationError, renderer='json')
+@view_config(accept="application/json", context=ValidationError, renderer='json')
 def failed_validation(exc, request):
     """
     View invoked when bad data was submitted to Atramhasis.
@@ -53,7 +55,7 @@ def failed_validation(exc, request):
     return {'message': exc.value, 'errors': exc.errors}
 
 
-@view_config(context=ProtectedResourceException, renderer='json')
+@view_config(accept="application/json", context=ProtectedResourceException, renderer='json')
 def protected(exc, request):
     """
     when a protected operation is called on a resource that is still referenced
@@ -63,7 +65,7 @@ def protected(exc, request):
     return {'message': exc.value, 'referenced_in': exc.referenced_in}
 
 
-@view_config(context=ProviderUnavailableException, renderer='json')
+@view_config(accept="application/json", context=ProviderUnavailableException, renderer='json')
 def provider_unavailable(exc, request):
     """
     View invoked when ProviderUnavailableException was raised.
@@ -73,7 +75,7 @@ def provider_unavailable(exc, request):
     return {'message': exc.message}
 
 
-@view_config(context=IntegrityError, renderer='json')
+@view_config(accept="application/json", context=IntegrityError, renderer='json')
 def data_integrity(exc, request):
     """
     View invoked when IntegrityError was raised.
@@ -85,7 +87,8 @@ def data_integrity(exc, request):
     }
 
 
-@view_config(context=Exception, renderer='json')
+@view_config(accept="application/json", context=Exception, renderer='json')
+@view_config(accept="text/html", context=Exception, renderer='error.jinja2')
 def failed(exc, request):  # pragma no cover
     """
     View invoked when bad data was submitted to Atramhasis.
@@ -95,7 +98,7 @@ def failed(exc, request):  # pragma no cover
     return {'message': 'unexpected server error'}
 
 
-@view_config(context=HTTPMethodNotAllowed, renderer='json')
+@view_config(accept="application/json", context=HTTPMethodNotAllowed, renderer='json')
 def failed_not_method_not_allowed(exc, request):
     """
     View invoked when a method is not allowed.
@@ -105,8 +108,8 @@ def failed_not_method_not_allowed(exc, request):
     return {'message': exc.explanation}
 
 
-@view_config(context=RequestValidationError, renderer="json")
-@view_config(context=ResponseValidationError, renderer="json")
+@view_config(accept="application/json", context=RequestValidationError, renderer="json")
+@view_config(accept="application/json", context=ResponseValidationError, renderer="json")
 def failed_openapi_validation(exc, request):
     try:
         errors = [
