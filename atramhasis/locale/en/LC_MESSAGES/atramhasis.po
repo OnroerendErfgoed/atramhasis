@@ -1,149 +1,223 @@
+
 msgid ""
 msgstr ""
 "Project-Id-Version: atramhasis 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-23 21:28+0100\n"
+"POT-Creation-Date: 2025-11-04 09:21+0100\n"
 "PO-Revision-Date: 2017-06-28 15:47+0200\n"
 "Last-Translator: \n"
-"Language-Team: en <LL@li.org>\n"
 "Language: en\n"
+"Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"Generated-By: Babel 2.10.3\n"
 
+#: atramhasis/templates/concept.jinja2:47
+msgid "concept"
+msgstr "concept"
+
+#: atramhasis/templates/concept.jinja2:49
+msgid "collection"
+msgstr "collection"
+
+#: atramhasis/templates/concept.jinja2:64
+#: atramhasis/templates/conceptscheme.jinja2:60
+msgid "notes"
+msgstr "notes"
+
+#: atramhasis/templates/concept.jinja2:75
+#: atramhasis/templates/conceptscheme.jinja2:73
+msgid "sources"
+msgstr ""
+
+#: atramhasis/templates/concept.jinja2:95
+msgid "view_relations"
+msgstr "View all relations"
+
+#: atramhasis/templates/concept.jinja2:96
+msgid "view_tree"
+msgstr "View in tree structure"
+
+#: atramhasis/templates/concept.jinja2:102
+msgid "relations"
+msgstr "relations"
+
+#: atramhasis/templates/concept.jinja2:107
+#: atramhasis/templates/concept.jinja2:143
+msgid "broader"
+msgstr "broader"
+
+#: atramhasis/templates/concept.jinja2:120
+#: atramhasis/templates/concept.jinja2:155
+msgid "narrower"
+msgstr "narrower"
+
+#: atramhasis/templates/concept.jinja2:133
+msgid "related"
+msgstr "related"
+
+#: atramhasis/templates/concept.jinja2:166
+msgid "matches"
+msgstr "matches"
+
+#: atramhasis/templates/concept.jinja2:175
+#: atramhasis/templates/conceptscheme.jinja2:96
+#: atramhasis/templates/tree.jinja2:11
+msgid "tree_help"
+msgstr "Left click to expand nodes, right click to open concept(scheme)"
+
+#: atramhasis/templates/conceptschemes.jinja2:13
+#: atramhasis/templates/header-page.jinja2:23
+#: atramhasis/templates/search_form.jinja2:11
+#: atramhasis/templates/subfooter-page.jinja2:22
+msgid "select_scheme"
+msgstr "Select scheme"
+
+#: atramhasis/templates/error.jinja2:3
+msgid "500_title"
+msgstr "Error"
+
+#: atramhasis/templates/error.jinja2:9
+msgid "500_error"
+msgstr "500: There is a technical problem."
+
+#: atramhasis/templates/error.jinja2:11
+msgid "500_explanation"
+msgstr ""
+"Sorry! Our website has a technical problem. This means you cannot access "
+"this page."
+
+#: atramhasis/templates/header-page.jinja2:34
+#: atramhasis/templates/search_form.jinja2:20
+msgid "select_type"
+msgstr "Select type"
+
+#: atramhasis/templates/header-page.jinja2:35
+#: atramhasis/templates/search_form.jinja2:21
+msgid "type_all"
+msgstr "all types"
+
+#: atramhasis/templates/header-page.jinja2:36
+#: atramhasis/templates/search_form.jinja2:22
+msgid "type_concept"
+msgstr "concepts"
+
+#: atramhasis/templates/header-page.jinja2:37
+#: atramhasis/templates/search_form.jinja2:23
+msgid "type_collection"
+msgstr "collections"
+
+#: atramhasis/templates/header-page.jinja2:49
+#: atramhasis/templates/search_form.jinja2:26
+msgid "search_for"
+msgstr "Search for"
+
+#: atramhasis/templates/header-page.jinja2:49
+#: atramhasis/templates/search_form.jinja2:26
+msgid "labels"
+msgstr "labels"
+
+#: atramhasis/templates/notfound.jinja2:3
+msgid "404_title"
+msgstr "Not found"
+
+#: atramhasis/templates/notfound.jinja2:9
+msgid "404_error"
+msgstr "The page was not found."
+
+#: atramhasis/templates/notfound.jinja2:11
+msgid "404_explanation"
+msgstr "The page you requested does not exist (anymore) or it has been moved."
+
+#: atramhasis/templates/search_form.jinja2:40
+msgid "select_scheme_error"
+msgstr "Please select a concept scheme"
+
+#: atramhasis/templates/search_result.jinja2:10
+#, python-format
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
 msgstr[0] "There is %(count)s result:"
 msgstr[1] "There are %(count)s results:"
 
-msgid "altLabel"
-msgstr "alt labels"
-
-msgid "atramhasis_expl"
-msgstr ""
-"<p><strong>Atramhasis is an open-source, web-based <a href='http://www.w3."
-"org/2004/02/skos/'>SKOS</a> editor. You can use this webapplication to "
-"browse SKOS vocabularies, thesauri, authority files, word lists, ... through "
-"the public interface.</strong></p> <p>Atramhasis also comes with an <a "
-"href='%(admin_route)s'>admin interface</a> you can use to add, update and "
-"remove concepts to your vocabularies.<p>"
-
-msgid "broader"
-msgstr "broader"
-
-msgid "browse"
-msgstr "browse"
-
-msgid "collection"
-msgstr "collection"
-
-msgid "concept"
-msgstr "concept"
-
-msgid "discussion_forum"
-msgstr "Our discussion forum"
-
-msgid "export"
-msgstr "export"
-
-msgid "hiddenLabel"
-msgstr "hidden labels"
-
-msgid "sortLabel"
-msgstr "sort labels"
-
-msgid "issue_tracker"
-msgstr "Our issue tracker"
-
-msgid "labels"
-msgstr "labels"
-
-msgid "matches"
-msgstr "matches"
-
-msgid "member_of"
-msgstr "member of"
-
-msgid "members"
-msgstr "members"
-
-msgid "more_information"
-msgstr "You can find more information about this project at"
-
-msgid "narrower"
-msgstr "narrower"
-
-msgid "notes"
-msgstr "notes"
-
-msgid "online_documentation"
-msgstr "Our online documentation"
-
-msgid "open"
-msgstr "open"
-
-msgid "prefLabel"
-msgstr "preferred labels"
-
-msgid "related"
-msgstr "related"
-
-msgid "relations"
-msgstr "relations"
-
-msgid "search"
-msgstr "search"
-
-msgid "search_for"
-msgstr "Search for"
-
-msgid "select_scheme"
-msgstr "Select scheme"
-
-msgid "select_type"
-msgstr "Select type"
-
-msgid "submit"
-msgstr "submit"
-
-msgid "subordinate_arrays"
-msgstr "subordinate arrays"
-
-msgid "superordinates"
-msgstr "superordinates"
-
-msgid "type_all"
-msgstr "all types"
-
-msgid "type_collection"
-msgstr "collections"
-
-msgid "type_concept"
-msgstr "concepts"
-
-msgid "welcome_to"
-msgstr "Welcome to Atramhasis "
-
-msgid "recently_viewed"
-msgstr "Recently viewed"
-
-msgid "follow"
-msgstr "Follow Atramhasis"
-
+#: atramhasis/templates/subfooter-page.jinja2:6
 msgid "popular_category"
 msgstr "Popular in this category"
 
-msgid "view_tree"
-msgstr "View in tree structure"
+#: atramhasis/templates/subfooter-page.jinja2:12
+msgid "recently_viewed"
+msgstr "Recently viewed"
 
-msgid "view_relations"
-msgstr "View all relations"
+#: atramhasis/templates/welcome.jinja2:3
+msgid "atramhasis_expl"
+msgstr ""
+"<p><strong>Atramhasis is an open-source, web-based <a "
+"href='http://www.w3.org/2004/02/skos/'>SKOS</a> editor. You can use this "
+"webapplication to browse SKOS vocabularies, thesauri, authority files, "
+"word lists, ... through the public interface.</strong></p> <p>Atramhasis "
+"also comes with an <a href='%(admin_route)s'>admin interface</a> you can "
+"use to add, update and remove concepts to your vocabularies.<p>"
 
-msgid "tree_help"
-msgstr "Left click to expand nodes, right click to open concept(scheme)"
+#: atramhasis/templates/welcome.jinja2:4
+msgid "more_information"
+msgstr "You can find more information about this project at"
 
-msgid "select_scheme_error"
-msgstr "Please select a concept scheme"
+#: atramhasis/templates/welcome.jinja2:6
+msgid "discussion_forum"
+msgstr "Our discussion forum"
+
+#: atramhasis/templates/welcome.jinja2:7
+msgid "online_documentation"
+msgstr "Our online documentation"
+
+#: atramhasis/templates/welcome.jinja2:8
+msgid "issue_tracker"
+msgstr "Our issue tracker"
+
+#~ msgid "altLabel"
+#~ msgstr "alt labels"
+
+#~ msgid "browse"
+#~ msgstr "browse"
+
+#~ msgid "export"
+#~ msgstr "export"
+
+#~ msgid "hiddenLabel"
+#~ msgstr "hidden labels"
+
+#~ msgid "sortLabel"
+#~ msgstr "sort labels"
+
+#~ msgid "member_of"
+#~ msgstr "member of"
+
+#~ msgid "members"
+#~ msgstr "members"
+
+#~ msgid "open"
+#~ msgstr "open"
+
+#~ msgid "prefLabel"
+#~ msgstr "preferred labels"
+
+#~ msgid "search"
+#~ msgstr "search"
+
+#~ msgid "submit"
+#~ msgstr "submit"
+
+#~ msgid "subordinate_arrays"
+#~ msgstr "subordinate arrays"
+
+#~ msgid "superordinates"
+#~ msgstr "superordinates"
+
+#~ msgid "welcome_to"
+#~ msgstr "Welcome to Atramhasis "
+
+#~ msgid "follow"
+#~ msgstr "Follow Atramhasis"
+

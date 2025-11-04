@@ -1,15 +1,14 @@
 {% extends 'layout.jinja2' %}
 
-{% block html_title %}Not found{% endblock %}
+{% block html_title %}{% trans %}404_title{% endtrans %}{% endblock %}
 
 {% block content %}
   <div class="large-12 columns">
     <div class="row">
       <div class="large-12 columns panel">
-        <h1 class="panel-header">De pagina werd niet gevonden.</h1>
+        <h1 class="panel-header">{% trans %}404_error{% endtrans %}</h1>
         <h5 style="font-size: 20px;">
-          De pagina die je hebt opgevraagd, bestaat niet (meer) of ze is
-          verplaatst.
+          {% trans %}404_explanation{% endtrans %}
         </h5>
       </div>
     </div>

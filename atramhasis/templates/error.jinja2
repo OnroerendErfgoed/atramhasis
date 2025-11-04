@@ -1,15 +1,14 @@
 {% extends 'layout.jinja2' %}
 
-{% block html_title %}Not found{% endblock %}
+{% block html_title %}{% trans %}500_title{% endtrans %}{% endblock %}
 
 {% block content %}
   <div class="large-12 columns">
     <div class="row">
       <div class="large-12 columns panel">
-        <h1 class="panel-header">500: Er is een technisch probleem.</h1>
+        <h1 class="panel-header">{% trans %}500_error{% endtrans %}</h1>
         <h5 style="font-size: 20px;">
-          Sorry! Onze website heeft een technisch probleem. Hierdoor kan je deze
-          pagina niet raadplegen.
+          {% trans %}500_explanation{% endtrans %}
         </h5>
       </div>
     </div>
