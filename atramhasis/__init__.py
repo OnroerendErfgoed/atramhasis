@@ -36,22 +36,24 @@ def includeme(config):
             settings[key] = value
     # Regexes in path params clash with this validation.
     settings["pyramid_openapi3.enable_endpoint_validation"] = False
+    # Better to return the response we give rather than a validation error.
+    settings["pyramid_openapi3.enable_response_validation"] = False
     configure_session(config)
-    config.include('pyramid_jinja2')
-    config.include('pyramid_tm')
-    config.add_static_view('static', 'static', cache_max_age=3600)
-    config.add_renderer('csv', 'atramhasis.renderers.CSVRenderer')
-    config.add_renderer('skosrenderer_verbose', json_renderer_verbose)
+    config.include("pyramid_jinja2")
+    config.include("pyramid_tm")
+    config.add_static_view("static", "static", cache_max_age=3600)
+    config.add_renderer("csv", "atramhasis.renderers.CSVRenderer")
+    config.add_renderer("skosrenderer_verbose", json_renderer_verbose)
     # Rewrite urls with trailing slash
-    config.include('pyramid_rewrite')
+    config.include("pyramid_rewrite")
     config.include("pyramid_openapi3")
-    config.include('atramhasis.routes')
+    config.include("atramhasis.routes")
     # pyramid_skosprovider must be included after the atramhasis routes
     # because it contains a regex in the path which consumes a lot of routes.
-    config.include('pyramid_skosprovider')
-    config.include('atramhasis.cache')
+    config.include("pyramid_skosprovider")
+    config.include("atramhasis.cache")
 
-    config.add_translation_dirs('atramhasis:locale/')
+    config.add_translation_dirs("atramhasis:locale/")
 
     config.scan()
 
@@ -70,30 +72,31 @@ def configure_session(config):
             return
 
         settings = config.registry.settings
-        if 'atramhasis.session_factory.secret' not in settings:
+        if "atramhasis.session_factory.secret" not in settings:
             msg = (
-                'No session factory is configured, and '
-                'atramhasis.session_factory.secret setting is missing.'
+                "No session factory is configured, and "
+                "atramhasis.session_factory.secret setting is missing."
             )
             raise ValueError(msg)
 
-        LOG.info('Using default SignedCookieSessionFactory.')
+        LOG.info("Using default SignedCookieSessionFactory.")
         default_session_factory = SignedCookieSessionFactory(
-            settings['atramhasis.session_factory.secret']
+            settings["atramhasis.session_factory.secret"]
         )
         config.registry.registerUtility(default_session_factory, ISessionFactory)
 
     config.action(
-        'check_session_factory_set', check_session_factory_set, order=PHASE3_CONFIG + 1
+        "check_session_factory_set", check_session_factory_set, order=PHASE3_CONFIG + 1
     )
 
 
 def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application.
-    """
-    settings['layout.focus_conceptschemes'] = aslist(settings['layout.focus_conceptschemes'], flatten=False)
+    """This function returns a Pyramid WSGI application."""
+    settings["layout.focus_conceptschemes"] = aslist(
+        settings["layout.focus_conceptschemes"], flatten=False
+    )
 
-    dump_location = settings['atramhasis.dump_location']
+    dump_location = settings["atramhasis.dump_location"]
     if not os.path.exists(dump_location):
         os.makedirs(dump_location)
 
@@ -105,6 +108,6 @@ def main(global_config, **settings):
 def load_app(config):
     includeme(config)
 
-    config.include('atramhasis.data:db')
+    config.include("atramhasis.data:db")
 
     return config.make_wsgi_app()

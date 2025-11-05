@@ -76,7 +76,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ConceptListItem'
+                  $ref: '#/components/schemas/ThingReduced'
         404:
           description: The conceptscheme was not found.
 
@@ -100,7 +100,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ConceptRequest"
+              $ref: "#/components/schemas/ThingCreate"
 
       responses:
         201:
@@ -108,7 +108,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ConceptResponse"
+                $ref: "#/components/schemas/ThingDetail"
         400:
           description: The concept or collection could not be added because
             the submitted json was invalid due to eg. validation errors.
@@ -149,7 +149,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ConceptResponse"
+                $ref: "#/components/schemas/ThingDetail"
         404:
           description: The concept was not found in the conceptscheme or the
             conceptscheme was not found.
@@ -179,7 +179,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ConceptRequest"
+              $ref: "#/components/schemas/ThingDetail"
 
       responses:
         200:
@@ -187,7 +187,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ConceptResponse"
+                $ref: "#/components/schemas/ThingDetail"
         400:
           description: The concept or collection could not be edited because
             the submitted json was invalid due to eg. validation errors.
@@ -230,7 +230,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ConceptResponse"
+                $ref: "#/components/schemas/ThingDetail"
         400:
           description: The concept or collection could not be deleted because
             the submitted json was invalid due to eg. validation errors.
@@ -254,8 +254,7 @@ paths:
 
   /conceptschemes/{scheme_id}/tree:
     get:
-      summary: Display a tree of a conceptscheme and its children
-      description: List all languages known to this Atramhasis instance.
+      summary: Display a tree of a conceptscheme's children
       tags:
         - Pyramid_skosprovider
       parameters:
@@ -273,12 +272,11 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ConceptTree"
+                  $ref: "#/components/schemas/ThingTree"
 
   /conceptschemes/{scheme_id}:
     get:
       summary: Get information about a concept scheme.
-      description: Get information about a concept scheme.
       tags:
         - Pyramid_skosprovider
       parameters:
@@ -294,10 +292,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseConceptScheme"
+                $ref: "#/components/schemas/ConceptSchemeDetail"
     put:
-      summary: Edit the conceptschemes
-      description: Edit the conceptschemes with scheme_id. The response body will
+      summary: Edit the conceptscheme
+      description: Edit the conceptscheme with scheme_id. The response body will
         contain a representation of the conceptscheme.
       tags:
         - Pyramid_skosprovider
@@ -314,14 +312,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RequestConceptScheme"
+              $ref: "#/components/schemas/ConceptSchemeDetail"
       responses:
         200:
-          description: The concept or collection was edited succesfully.
+          description: The conceptscheme was edited succesfully.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseConceptScheme"
+                $ref: "#/components/schemas/ConceptSchemeDetail"
         400:
           description: The conceptscheme could not be edited because
             the submitted json was invalid due to eg. validation errors.
@@ -348,11 +346,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ConceptSchemeListItem"
+                  $ref: "#/components/schemas/ConceptSchemeReduced"
   /languages:
     get:
       summary: List all languages known to this Atramhasis instance.
-      description: List all languages known to this Atramhasis instance.
       tags:
         - Atramhasis
       parameters:
@@ -458,7 +455,6 @@ paths:
   /labeltypes:
     get:
       summary: Get labeltypes.
-      description: Get labeltypes.
       tags:
         - Lists
       responses:
@@ -474,16 +470,8 @@ paths:
   /notetypes:
     get:
       summary: Get notetypes.
-      description: Get notetypes.
       tags:
         - Lists
-      parameters:
-        - name: l_id
-          in: path
-          description: The identifier for a certain language.
-          required: true
-          schema:
-            type: string
       responses:
         200:
           description: The notetypes were found.
@@ -518,7 +506,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  context:
+                  '@context':
                     $ref: '#/components/schemas/Context'
                   type:
                     type: string
@@ -527,7 +515,13 @@ paths:
                   id:
                     type: integer
                   concept_scheme:
+                    description: Only present when the URI maps to a concept or collection.
                     $ref: '#/components/schemas/ConceptSchemeLimited'
+                required:
+                  - '@context'
+                  - type
+                  - uri
+                  - id
         404:
           description: The URI can't be found by pyramid_skosprovider.
   /c:
@@ -601,7 +595,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ConceptListItem'
+                  $ref: '#/components/schemas/ThingReduced'
 
   /conceptschemes/{scheme_id}/topconcepts:
     get:
@@ -634,7 +628,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ConceptListItem"
+                  $ref: "#/components/schemas/ThingReduced"
         404:
           description: The conceptscheme was not found.
 
@@ -669,7 +663,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ConceptListItem"
+                  $ref: "#/components/schemas/ThingReduced"
         404:
           description: The conceptscheme was not found.
 
@@ -710,7 +704,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ConceptListItem"
+                  $ref: "#/components/schemas/ThingReduced"
         404:
           description: The concept was not found in the conceptscheme or the
             conceptscheme was not found.
@@ -757,7 +751,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: integer
+                  type: string
         404:
           description: The concept/collection was not found in the conceptscheme or the
             conceptscheme was not found.
@@ -765,7 +759,6 @@ paths:
   /providers:
     get:
       summary: Get all registered providers.
-      description: Get all registered providers.
       parameters:
         - name: subject
           in: query
@@ -903,13 +896,22 @@ components:
           type: string
     Label:
       type: object
+      example:
+        type: "prefLabel"
+        language: "en"
+        label: "Apple"
       properties:
         type:
           type: string
         language:
+          description: IANA language tag
           type: string
         label:
           type: string
+      required:
+        - type
+        - label
+        - language
     Note:
       type: object
       properties:
@@ -919,11 +921,17 @@ components:
           type: string
         language:
           type: string
+        markup:
+          type: string
+          nullable: true
     Source:
       type: object
       properties:
         citation:
           type: string
+        markup:
+          type: string
+          nullable: true
     Concepts:
       type: array
       items:
@@ -933,28 +941,32 @@ components:
       items:
         type: string
     Matches:
-      type: array
-      items:
-        type: object
-        properties:
-          broad:
-            $ref: "#/components/schemas/MatchList"
-          close:
-            $ref: "#/components/schemas/MatchList"
-          exact:
-            $ref: "#/components/schemas/MatchList"
-          narrow:
-            $ref: "#/components/schemas/MatchList"
-          related:
-            $ref: "#/components/schemas/MatchList"
+      type: object
+      properties:
+        broad:
+          $ref: "#/components/schemas/MatchList"
+        close:
+          $ref: "#/components/schemas/MatchList"
+        exact:
+          $ref: "#/components/schemas/MatchList"
+        narrow:
+          $ref: "#/components/schemas/MatchList"
+        related:
+          $ref: "#/components/schemas/MatchList"
 
-    ConceptRequest:
+    ThingCreate:
+      oneOf:
+        - $ref: "#/components/schemas/ConceptCreate"
+        - $ref: "#/components/schemas/CollectionCreate"
+
+    ConceptCommon:
       type: object
       properties:
         id:
           type: string
         type:
           type: string
+          enum: [ "concept" ]
         labels:
           type: array
           items:
@@ -967,57 +979,178 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Source"
-        broader:
-          $ref: "#/components/schemas/Concepts"
-        narrower:
-          $ref: "#/components/schemas/Concepts"
-        related:
-          $ref: "#/components/schemas/Concepts"
-        members:
-          $ref: "#/components/schemas/Concepts"
         member_of:
-          $ref: "#/components/schemas/Concepts"
-        subordinate_arrays:
-          $ref: "#/components/schemas/Concepts"
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: A collection id
+                type: string
+        related:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: A concept id
+                type: string
+        broader:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: A concept id
+                type: string
+        narrower:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: A concept id
+                type: string
         matches:
           $ref: "#/components/schemas/Matches"
-        infer_concept_relations:
-          type: boolean
+        subordinate_arrays:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: A collection id
+                type: string
+      required:
+        - type
+        - labels
 
-    ConceptResponse:
+    ConceptCreate:
       allOf:
-        - $ref: '#/components/schemas/ConceptRequest'
+        - $ref: "#/components/schemas/ConceptCommon"
+
+    ConceptDetail:
+      allOf:
+        - $ref: "#/components/schemas/ConceptCommon"
         - type: object
           properties:
-            id:
+            label:
               type: string
-            uri:
+            uri: 
               type: string
-    ConceptTree:
+            concept_scheme: 
+              type: object
+              properties:
+                uri:
+                  type: string
+                labels:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Label"
+      
+    CollectionCommon:
+      type: object
+      properties:
+        id:
+          description: 'If the provider is set to have a manual id_generation_strategy'
+          type: string
+        type:
+          type: string
+          enum: [ "collection" ]
+        labels:
+          type: array
+          items:
+            $ref: "#/components/schemas/Label"
+        notes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Note"
+        sources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Source"
+        member_of:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: A collection id
+                type: string
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: A concept or collection id
+                type: string
+        superordinates:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                description: A concept id
+                type: string
+        infer_concept_relations:
+          type: boolean
+      required:
+        - type
+        - labels
+
+    CollectionCreate:
+      allOf:
+        - $ref: "#/components/schemas/CollectionCommon"
+
+    CollectionDetail:
+      allOf:
+        - $ref: "#/components/schemas/CollectionCommon"
+        - type: object
+          properties:
+            label:
+              type: string
+            uri: 
+              type: string
+
+    ThingDetail:
+      oneOf:
+        - $ref: '#/components/schemas/ConceptDetail'
+        - $ref: '#/components/schemas/CollectionDetail'
+
+    ThingTree:
       type: object
       properties:
         id:
           type: string
         concept_id:
           type: integer
+        type:
+          type: string
+          enum: [concept, collection]
         label:
           type: string
+          nullable: true
         children:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-              concept_id:
-                type: integer
-              label:
-                type: string
-              children:
-                type: array
-    RequestConceptScheme:
+            $ref: '#/components/schemas/ThingTree'
+    ConceptSchemeDetail:
       type: object
       properties:
+        id:
+          oneOf:
+            - type: string
+            - type: integer
+        uri:
+          type: string
+        label:
+          type: string
+          nullable: true
+        languages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Language"
         labels:
           type: array
           items:
@@ -1030,21 +1163,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Source"
-    ResponseConceptScheme:
-      allOf:
-        - $ref: "#/components/schemas/RequestConceptScheme"
-        - type: object
-          properties:
-            id:
-              type: integer
-            uri:
-              type: string
-            label:
-              type: string
-            languages:
-              type: array
-              items:
-                $ref: "#/components/schemas/Language"
+        subject:
+          type: array
+          items:
+            type: string
+      required:
+        - labels
     Context:
       type: object
       properties:
@@ -1088,10 +1212,10 @@ components:
               type: string
             type:
               type: string
-    ConceptSchemeListItem:
+    ConceptSchemeReduced:
       type: object
       properties:
-        context:
+        '@context':
           $ref: "#/components/schemas/Context"
         type:
           type: string
@@ -1114,8 +1238,14 @@ components:
           type: string
         id:
           type: string
-    ConceptListItem:
+    ThingReduced:
       type: object
+      description: A reduced representation of a Concept or Collection
+      example:
+        id: "22"
+        uri: "https://id.erfgoed.net/thesauri/stijlen_en_culturen/22"
+        type: "concept"
+        label: "Art Deco"
       properties:
         type:
           type: string
@@ -1134,7 +1264,9 @@ components:
         message:
           type: string
         errors:
-          type: string
+          type: array
+          items:
+            type: string
 
     Provider:
       type: object
