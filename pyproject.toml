@@ -94,14 +94,9 @@ migrate_sqlalchemy_providers = "atramhasis.scripts.migrate_sqlalchemy_providers:
 ##
 [tool.hatch.build.targets.wheel]
 # In the wheel we want to have atramhasis in the root as python module.
-only-include = [
-    "/atramhasis",
-    "/fixtures",
-]
+only-include = ["/atramhasis", "/fixtures"]
 # In the wheel we do not need the frontend sources. We provide the dist.
-exclude = [
-    "/atramhasis/static/admin"
-]
+exclude = ["/atramhasis/static/admin"]
 # these folders are (partially) in gitignore and would otherwise not be part of the builds
 artifacts = [
     "/atramhasis/static/admin/dist",
@@ -120,7 +115,7 @@ allow-direct-references = true
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/x-rst"
-fragments = [
-  { path = "README.rst" },
-  { path = "CHANGES.rst" },
-]
+fragments = [{ path = "README.rst" }, { path = "CHANGES.rst" }]
+
+[tool.ruff.format]
+quote-style = "single"
