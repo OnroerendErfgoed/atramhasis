@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from unittest import mock
 from unittest.mock import Mock
 from unittest.mock import patch
 
@@ -99,8 +100,7 @@ TEST = DictionaryProvider(
 
 
 class FunctionalTests(DbTest):
-    app = None
-    testapp = None
+    testapp: TestApp
 
     @classmethod
     def setUpClass(cls):
@@ -109,8 +109,8 @@ class FunctionalTests(DbTest):
 
     @classmethod
     def init_app(cls):
-        cls.app = main({}, **SETTINGS)
-        cls.testapp = TestApp(cls.app)
+        app = main({}, **SETTINGS)
+        cls.testapp = TestApp(app)
 
         # Commit at end of every request. This will trigger listeners.
         class CommittingRequest(Request):
@@ -151,6 +151,26 @@ class HtmlFunctionalTests(FunctionalTests):
         res = self.testapp.get("/", headers=self._get_default_headers())
         self.assertEqual("200 OK", res.status)
         self.assertIn("text/html", res.headers["Content-Type"])
+
+    def test_get_unknown_conceptscheme(self):
+        res = self.testapp.get(
+            "/conceptschemes/does-not-exist",
+            headers=self._get_default_headers(),
+            status=404,
+        )
+        self.assertIn("niet gevonden", res.text)
+
+    def test_exception_page(self):
+        with mock.patch(
+            "atramhasis.views.views.get_public_conceptschemes",
+            side_effect=Exception("Test exception"),
+        ):
+            res = self.testapp.get(
+                "/conceptschemes/does-not-exist",
+                headers=self._get_default_headers(),
+                status=500,
+            )
+            self.assertIn("technisch probleem", res.text)
 
 
 class CsvFunctionalTests(FunctionalTests):
@@ -1016,30 +1036,25 @@ class SkosFunctionalTests(FunctionalTests):
         return {"Accept": "application/json"}
 
     def test_admin_no_skos_provider(self):
-        with patch.dict(self.app.request_extensions.descriptors):
-            del self.app.request_extensions.descriptors["skos_registry"]
+        with patch.dict(self.testapp.app.request_extensions.descriptors):
+            del self.testapp.app.request_extensions.descriptors["skos_registry"]
             res = self.testapp.get(
-                "/admin", headers=self._get_default_headers(), expect_errors=True
+                "/admin", headers=self._get_default_headers(), status=404
             )
-        self.assertEqual("500 Internal Server Error", res.status)
-        self.assertTrue("message" in res)
-        self.assertTrue(
-            "No SKOS registry found, please check your application setup" in res
-        )
+        self.assertIn("niet gevonden", res.text)
 
     def test_crud_no_skos_provider(self):
-        with patch.dict(self.app.request_extensions.descriptors):
-            del self.app.request_extensions.descriptors["skos_registry"]
+        with patch.dict(self.testapp.app.request_extensions.descriptors):
+            del self.testapp.app.request_extensions.descriptors["skos_registry"]
             res = self.testapp.post_json(
                 "/conceptschemes/GEOGRAPHY/c",
                 headers=self._get_json_headers(),
                 params=json_collection_value,
-                expect_errors=True,
+                status=404,
             )
-        self.assertEqual("500 Internal Server Error", res.status)
-        self.assertTrue("message" in res)
-        self.assertTrue(
-            "No SKOS registry found, please check your application setup" in res
+        self.assertEqual(
+            {"message": "No SKOS registry found, please check your application setup"},
+            res.json,
         )
 
     def test_match_filter(self):
@@ -1268,13 +1283,11 @@ class RdfFunctionalTests(FunctionalTests):
         self.assertEqual("text/turtle", ttl_response.content_type)
 
     def test_rdf_individual_not_found(self):
-        res = self.testapp.get(
+        self.testapp.get(
             "/conceptschemes/TREES/c/test.ttl",
             headers={"Accept": "text/turtle"},
             status=404,
-            expect_errors=True,
         )
-        self.assertEqual("404 Not Found", res.status)
 
 
 class ListFunctionalTests(FunctionalTests):

@@ -119,7 +119,11 @@ class AtramhasisView:
         conceptschemes = get_public_conceptschemes(self.skos_registry)
 
         scheme_id = self.request.matchdict['scheme_id']
+
         provider = self.request.skos_registry.get_provider(scheme_id)
+        if provider is False:
+            raise ConceptSchemeNotFoundException(scheme_id)
+
         conceptscheme = provider.concept_scheme
         if 'atramhasis.force_display_label_language' in provider.metadata:
             locale = provider.metadata['atramhasis.force_display_label_language']
