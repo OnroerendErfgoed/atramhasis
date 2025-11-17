@@ -124,3 +124,6 @@ fragments = [
   { path = "README.rst" },
   { path = "CHANGES.rst" },
 ]
+
+[tool.uv]
+managed = false  # Because we do not use the uv lockfile (yet)
