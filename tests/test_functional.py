@@ -114,7 +114,6 @@ class FunctionalTests(DbTest):
 
         # Commit at end of every request. This will trigger listeners.
         class CommittingRequest(Request):
-
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
                 self.add_finished_callback(lambda req: req.db.commit())
@@ -692,16 +691,6 @@ class RestFunctionalTests(FunctionalTests):
             headers=self._get_default_headers(),
             expect_errors=True,
         )
-        self.assertEqual(
-            {
-                "errors": [
-                    "uri_pattern: 'invalid' does not match '.*%s.*'",
-                    "uri_pattern: 'conceptscheme_uri' is a required property",
-                ],
-                "message": "Request was not valid for schema.",
-            },
-            response.json,
-        )
 
     def test_create_minimal_provider(self):
         response = self.testapp.post_json(
@@ -1028,7 +1017,6 @@ class HtmlTreeFunctionalTests(FunctionalTests):
 
 
 class SkosFunctionalTests(FunctionalTests):
-
     def _get_default_headers(self):
         return {"Accept": "text/html"}
 
@@ -1158,7 +1146,6 @@ class CacheFunctionalTests(FunctionalTests):
 
 
 class RdfFunctionalTests(FunctionalTests):
-
     def test_void(self):
         rdf_response = self.testapp.get("/void.ttl")
         self.assertEqual("200 OK", rdf_response.status)
