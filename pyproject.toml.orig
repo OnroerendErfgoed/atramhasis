@@ -115,10 +115,17 @@ allow-direct-references = true
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/x-rst"
+<<<<<<< HEAD
 fragments = [{ path = "README.rst" }, { path = "CHANGES.rst" }]
-
-[tool.uv]
-managed = false  # Because we do not use the uv lockfile (yet)
 
 [tool.ruff.format]
 quote-style = "single"
+=======
+fragments = [
+  { path = "README.rst" },
+  { path = "CHANGES.rst" },
+]
+
+[tool.uv]
+managed = false  # Because we do not use the uv lockfile (yet)
+>>>>>>> df6284aede3871d1d607a498f421de4f612c4484
