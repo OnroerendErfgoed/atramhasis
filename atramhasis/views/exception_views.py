@@ -24,24 +24,24 @@ from atramhasis.protected_resources import ProtectedResourceException
 log = logging.getLogger(__name__)
 
 
-@notfound_view_config(accept="application/json", renderer="json")
-@notfound_view_config(accept="text/html", renderer="notfound.jinja2")
+@notfound_view_config(accept='application/json', renderer='json')
+@notfound_view_config(accept='text/html', renderer='notfound.jinja2')
 def failed_not_found(exc, request):
     """
     View invoked when a resource could not be found.
     """
     log.debug(exc.explanation)
     request.response.status_int = 404
-    return {"message": exc.explanation}
+    return {'message': exc.explanation}
 
 
 @view_config(
-    accept="application/json", context=SkosRegistryNotFoundException, renderer="json"
+    accept='application/json', context=SkosRegistryNotFoundException, renderer='json'
 )
 @view_config(
-    accept="text/html",
+    accept='text/html',
     context=SkosRegistryNotFoundException,
-    renderer="notfound.jinja2",
+    renderer='notfound.jinja2',
 )
 def failed_skos(exc, request):
     """
@@ -49,21 +49,21 @@ def failed_skos(exc, request):
     """
     log.error(exc.value, exc_info=sys.exc_info())
     request.response.status_int = 404
-    return {"message": exc.value}
+    return {'message': exc.value}
 
 
-@view_config(accept="application/json", context=ValidationError, renderer="json")
+@view_config(accept='application/json', context=ValidationError, renderer='json')
 def failed_validation(exc, request):
     """
     View invoked when bad data was submitted to Atramhasis.
     """
     log.debug(f"'message': {exc.value}, 'errors': {exc.errors}")
     request.response.status_int = 400
-    return {"message": exc.value, "errors": exc.errors}
+    return {'message': exc.value, 'errors': exc.errors}
 
 
 @view_config(
-    accept="application/json", context=ProtectedResourceException, renderer="json"
+    accept='application/json', context=ProtectedResourceException, renderer='json'
 )
 def protected(exc, request):
     """
@@ -71,11 +71,11 @@ def protected(exc, request):
     """
     log.warning(f"'message': {exc.value}, 'referenced_in': {exc.referenced_in}")
     request.response.status_int = 409
-    return {"message": exc.value, "referenced_in": exc.referenced_in}
+    return {'message': exc.value, 'referenced_in': exc.referenced_in}
 
 
 @view_config(
-    accept="application/json", context=ProviderUnavailableException, renderer="json"
+    accept='application/json', context=ProviderUnavailableException, renderer='json'
 )
 def provider_unavailable(exc, request):
     """
@@ -83,10 +83,10 @@ def provider_unavailable(exc, request):
     """
     log.error(exc, exc_info=sys.exc_info())
     request.response.status_int = 503
-    return {"message": exc.message}
+    return {'message': exc.message}
 
 
-@view_config(accept="application/json", context=IntegrityError, renderer="json")
+@view_config(accept='application/json', context=IntegrityError, renderer='json')
 def data_integrity(exc, request):
     """
     View invoked when IntegrityError was raised.
@@ -94,34 +94,34 @@ def data_integrity(exc, request):
     log.warning(exc)
     request.response.status_int = 409
     return {
-        "message": "this operation violates the data integrity and could not be executed"
+        'message': 'this operation violates the data integrity and could not be executed'
     }
 
 
-@view_config(accept="application/json", context=Exception, renderer="json")
-@view_config(accept="text/html", context=Exception, renderer="error.jinja2")
+@view_config(accept='application/json', context=Exception, renderer='json')
+@view_config(accept='text/html', context=Exception, renderer='error.jinja2')
 def failed(exc, request):  # pragma no cover
     """
     View invoked when bad data was submitted to Atramhasis.
     """
     log.error(exc, exc_info=sys.exc_info())
     request.response.status_int = 500
-    return {"message": "unexpected server error"}
+    return {'message': 'unexpected server error'}
 
 
-@view_config(accept="application/json", context=HTTPMethodNotAllowed, renderer="json")
+@view_config(accept='application/json', context=HTTPMethodNotAllowed, renderer='json')
 def failed_not_method_not_allowed(exc, request):
     """
     View invoked when a method is not allowed.
     """
     log.debug(exc.explanation)
     request.response.status_int = 405
-    return {"message": exc.explanation}
+    return {'message': exc.explanation}
 
 
-@view_config(accept="application/json", context=RequestValidationError, renderer="json")
+@view_config(accept='application/json', context=RequestValidationError, renderer='json')
 @view_config(
-    accept="application/json", context=ResponseValidationError, renderer="json"
+    accept='application/json', context=ResponseValidationError, renderer='json'
 )
 def failed_openapi_validation(exc, request):
     try:
@@ -139,15 +139,16 @@ def failed_openapi_validation(exc, request):
             ]
         )
         request.response.status_int = 400
-        return {"message": "Request was not valid for schema.", "errors": errors}
+        source = 'Request' if isinstance(exc, RequestValidationError) else 'Response'
+        return {'message': f'{source} was not valid for schema.', 'errors': errors}
     except Exception:
-        log.exception("Issue with exception handling.")
+        log.exception('Issue with exception handling.')
         return openapi_validation_error(exc, request)
 
 
-def _handle_validation_error(error, path=""):
-    if error.validator in ("anyOf", "oneOf", "allOf"):
-        for schema_type in ("anyOf", "oneOf", "allOf"):
+def _handle_validation_error(error, path=''):
+    if error.validator in ('anyOf', 'oneOf', 'allOf'):
+        for schema_type in ('anyOf', 'oneOf', 'allOf'):
             if schema_type not in error.schema:
                 continue
             schemas = error.schema.get(schema_type)
@@ -157,24 +158,24 @@ def _handle_validation_error(error, path=""):
 
         response = []
         for i, schema in enumerate(schemas):
-            schema.pop("x-scope", None)
+            schema.pop('x-scope', None)
             errors = [
                 sub_error
                 for sub_error in error.context
                 if sub_error.relative_schema_path[0] == i
             ]
             if error.path:
-                schema = {".".join(str(p) for p in error.path): schema}
+                schema = {'.'.join(str(p) for p in error.path): schema}
             response.append(
                 {
-                    "schema": schema,
-                    "errors": [_handle_validation_error(error) for error in errors],
+                    'schema': schema,
+                    'errors': [_handle_validation_error(error) for error in errors],
                 }
             )
         return {schema_type: response}
     if path:
-        path += "."
-    path += ".".join(str(item) for item in error.path)
+        path += '.'
+    path += '.'.join(str(item) for item in error.path)
     if not path:
-        path = "<root>"
-    return f"{path}: {error.message}"
+        path = '<root>'
+    return f'{path}: {error.message}'

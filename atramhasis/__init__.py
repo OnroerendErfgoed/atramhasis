@@ -13,18 +13,18 @@ LOG = logging.getLogger(__name__)
 
 
 DEFAULT_SETTINGS = {
-    "cache.tree.backend": "dogpile.cache.memory",
-    "cache.tree.arguments.cache_size": "5000",
-    "cache.tree.expiration_time": "7000",
-    "cache.list.backend": "dogpile.cache.memory",
-    "cache.list.arguments.cache_size": "5000",
-    "cache.list.expiration_time": "7000",
-    "jinja2.extensions": "jinja2.ext.do",
-    "jinja2.filters": "label_sort = atramhasis.utils.label_sort",
-    "dojo.mode": "dist",
-    "layout.focus_conceptschemes": [],
-    "skosprovider.skosregistry_factory": "atramhasis.skos.create_registry",
-    "skosprovider.skosregistry_location": "request",
+    'cache.tree.backend': 'dogpile.cache.memory',
+    'cache.tree.arguments.cache_size': '5000',
+    'cache.tree.expiration_time': '7000',
+    'cache.list.backend': 'dogpile.cache.memory',
+    'cache.list.arguments.cache_size': '5000',
+    'cache.list.expiration_time': '7000',
+    'jinja2.extensions': 'jinja2.ext.do',
+    'jinja2.filters': 'label_sort = atramhasis.utils.label_sort',
+    'dojo.mode': 'dist',
+    'layout.focus_conceptschemes': [],
+    'skosprovider.skosregistry_factory': 'atramhasis.skos.create_registry',
+    'skosprovider.skosregistry_location': 'request',
 }
 
 
@@ -35,7 +35,9 @@ def includeme(config):
         if key not in settings:
             settings[key] = value
     # Regexes in path params clash with this validation.
-    settings["pyramid_openapi3.enable_endpoint_validation"] = False
+    settings['pyramid_openapi3.enable_endpoint_validation'] = False
+    # Better to return the response we give rather than a validation error.
+    settings['pyramid_openapi3.enable_response_validation'] = False
     configure_session(config)
     config.include('pyramid_jinja2')
     config.include('pyramid_tm')
@@ -44,7 +46,7 @@ def includeme(config):
     config.add_renderer('skosrenderer_verbose', json_renderer_verbose)
     # Rewrite urls with trailing slash
     config.include('pyramid_rewrite')
-    config.include("pyramid_openapi3")
+    config.include('pyramid_openapi3')
     config.include('atramhasis.routes')
     # pyramid_skosprovider must be included after the atramhasis routes
     # because it contains a regex in the path which consumes a lot of routes.
@@ -89,9 +91,10 @@ def configure_session(config):
 
 
 def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application.
-    """
-    settings['layout.focus_conceptschemes'] = aslist(settings['layout.focus_conceptschemes'], flatten=False)
+    """This function returns a Pyramid WSGI application."""
+    settings['layout.focus_conceptschemes'] = aslist(
+        settings['layout.focus_conceptschemes'], flatten=False
+    )
 
     dump_location = settings['atramhasis.dump_location']
     if not os.path.exists(dump_location):
