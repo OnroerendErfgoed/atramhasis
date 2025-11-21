@@ -1,10 +1,10 @@
-@prefix dcterms: <https://purl.org/dc/terms/> .
-@prefix rdf: <https://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <https://www.w3.org/2000/01/rdf-schema#> .
-@prefix skos: <https://www.w3.org/2004/02/skos/core#> .
-@prefix skos-thes: <https://purl.org/iso25964/skos-thes#> .
-@prefix xml: <https://www.w3.org/XML/1998/namespace> .
-@prefix xsd: <https://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skos-thes: <http://purl.org/iso25964/skos-thes#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://id.erfgoed.net/thesauri/materialen/10> a skos:Concept ;
     dcterms:identifier 10 ;

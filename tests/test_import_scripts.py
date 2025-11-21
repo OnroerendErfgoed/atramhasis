@@ -54,7 +54,7 @@ class ImportTests(DbTest):
         dump = dict_dumper(sql_prov)
 
         self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.label('en').label)
-        obj_1 = [item for item in dump if item['uri'] == 'https://id.trees.org/2'][0]
+        obj_1 = [item for item in dump if item['uri'] == 'http://id.trees.org/2'][0]
         self.assertEqual(obj_1['broader'], [])
         self.assertEqual(obj_1['id'], '2')
         self.assertEqual(obj_1['member_of'], ['3'])
@@ -136,7 +136,7 @@ class ImportTests(DbTest):
             'import_file',
             test_data_rdf,
             '--uri-pattern',
-            'https://id.trees.org/%s',
+            'http://id.trees.org/%s',
             '--to',
             SETTINGS['sqlalchemy.url'],
         ]
@@ -149,7 +149,7 @@ class ImportTests(DbTest):
             'import_file',
             test_data_ttl,
             '--uri-pattern',
-            'https://id.trees.org/%s',
+            'http://id.trees.org/%s',
             '--to',
             SETTINGS['sqlalchemy.url'],
         ]
@@ -162,7 +162,7 @@ class ImportTests(DbTest):
             'import_file',
             test_data_ttl_string_id,
             '--uri-pattern',
-            'https://id.trees.org/%s',
+            'http://id.trees.org/%s',
             '--to',
             SETTINGS['sqlalchemy.url'],
         ]
@@ -174,13 +174,13 @@ class ImportTests(DbTest):
             'import_file',
             test_data_json,
             '--uri-pattern',
-            'https://id.trees.org/%s',
+            'http://id.trees.org/%s',
             '--to',
             SETTINGS['sqlalchemy.url'],
             '--conceptscheme-label',
             'Trees Conceptscheme',
             '--conceptscheme-uri',
-            'https://id.trees.org',
+            'http://id.trees.org',
         ]
         import_file.main(sys.argv)
         tests.db_filled = True

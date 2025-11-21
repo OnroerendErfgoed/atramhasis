@@ -1,17 +1,17 @@
-@prefix dcterms: <https://purl.org/dc/terms/> .
-@prefix skos: <https://www.w3.org/2004/02/skos/core#> .
-@prefix xsd: <https://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://id.trees.org/3> a skos:Collection ;
+<http://id.trees.org/3> a skos:Collection ;
     dcterms:identifier 3 ;
     skos:hiddenLabel "b"@nl ;
     skos:inScheme <urn:x-skosprovider:trees> ;
-    skos:member <https://id.trees.org/1>,
-        <https://id.trees.org/2> ;
+    skos:member <http://id.trees.org/1>,
+        <http://id.trees.org/2> ;
     skos:prefLabel "Trees by species"@en,
         "Bomen per soort"@nl .
 
-<https://id.trees.org/1> a skos:Concept ;
+<http://id.trees.org/1> a skos:Concept ;
     dcterms:identifier 1 ;
     skos:closeMatch <https://id.python.org/different/types/of/trees/nr/1/the/larch> ;
     skos:definition "A type of tree."@en ;
@@ -20,7 +20,7 @@
     skos:prefLabel "The Larch"@en,
         "De Lariks"@nl .
 
-<https://id.trees.org/2> a skos:Concept ;
+<http://id.trees.org/2> a skos:Concept ;
     dcterms:identifier 2 ;
     skos:altLabel "la châtaigne"@fr,
         "De Paardekastanje"@nl ;
@@ -32,7 +32,7 @@
 
 <urn:x-skosprovider:trees> a skos:ConceptScheme ;
     dcterms:identifier "TREES" ;
-    skos:hasTopConcept <https://id.trees.org/1>,
-        <https://id.trees.org/2> ;
+    skos:hasTopConcept <http://id.trees.org/1>,
+        <http://id.trees.org/2> ;
     skos:prefLabel "Different types of trees"@en,
         "Verschillende soorten bomen"@nl .

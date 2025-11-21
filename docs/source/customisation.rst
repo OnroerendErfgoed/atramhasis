@@ -960,7 +960,7 @@ For example, to insert this file:
       "related": [],
       "subordinate_arrays": [],
       "type": "concept",
-      "uri": "https://id.trees.org/1"},
+      "uri": "http://id.trees.org/1"},
      {"broader": [],
       "id": 2,
       "labels": [{"label": "The Chestnut",
@@ -985,7 +985,7 @@ For example, to insert this file:
       "related": [],
       "subordinate_arrays": [],
       "type": "concept",
-      "uri": "https://id.trees.org/2"},
+      "uri": "http://id.trees.org/2"},
      {"id": 3,
       "labels": [{"label": "Bomen per soort",
                    "language": "nl",
@@ -998,7 +998,7 @@ For example, to insert this file:
       "notes": [],
       "superordinates": [],
       "type": "collection",
-      "uri": "https://id.trees.org/3"}]
+      "uri": "http://id.trees.org/3"}]
 
 We run the following command:
 
@@ -1041,11 +1041,11 @@ This will return output similar to this:
     sqlalchemy.engine.base.Engine INSERT INTO conceptscheme_label (conceptscheme_id, label_id) VALUES (?, ?)
     sqlalchemy.engine.base.Engine (11, 3548)
     sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('concept', 1, 'https://id.trees.org/1', 11)
+    sqlalchemy.engine.base.Engine ('concept', 1, 'http://id.trees.org/1', 11)
     sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('concept', 2, 'https://id.trees.org/2', 11)
+    sqlalchemy.engine.base.Engine ('concept', 2, 'http://id.trees.org/2', 11)
     sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('collection', 3, 'https://id.trees.org/3', 11)
+    sqlalchemy.engine.base.Engine ('collection', 3, 'http://id.trees.org/3', 11)
     sqlalchemy.engine.base.Engine INSERT INTO concept_label (concept_id, label_id) VALUES (?, ?)
     sqlalchemy.engine.base.Engine ((2558, 3551), (2558, 3552), (2558, 3553), (2557, 3549), (2557, 3550), (2559, 3554), (2559, 3555))
     sqlalchemy.engine.base.Engine INSERT INTO concept_note (concept_id, note_id) VALUES (?, ?)

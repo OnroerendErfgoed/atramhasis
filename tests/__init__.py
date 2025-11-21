@@ -217,7 +217,7 @@ def create_registry(request):
             'subject': ['biology']
         },
         [data.larch, data.chestnut, data.species],
-        concept_scheme=ConceptScheme('https://id.trees.org')
+        concept_scheme=ConceptScheme('http://id.trees.org')
     )
     missing_label = SQLAlchemyProvider(
         {'id': 'MISSING_LABEL', 'conceptscheme_id': 9},

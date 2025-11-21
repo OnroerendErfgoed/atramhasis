@@ -1,6 +1,6 @@
-@prefix dcterms: <https://purl.org/dc/terms/> .
-@prefix skos: <https://www.w3.org/2004/02/skos/core#> .
-@prefix xsd: <https://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <https://id.bluebirds.org/bird> a skos:Concept ;
     skos:inScheme <https://id.bluebirds.org> ;

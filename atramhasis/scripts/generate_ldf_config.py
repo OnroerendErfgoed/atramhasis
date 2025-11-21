@@ -71,14 +71,14 @@ def main():
         "title": "Atramhasis LDF server",
         "datasources": [],
         "prefixes": [
-            {"prefix": "rdf", "uri": "https://www.w3.org/1999/02/22-rdf-syntax-ns#"},
-            {"prefix": "rdfs", "uri": "https://www.w3.org/2000/01/rdf-schema#"},
-            {"prefix": "owl", "uri": "https://www.w3.org/2002/07/owl#"},
-            {"prefix": "xsd", "uri": "https://www.w3.org/2001/XMLSchema#"},
-            {"prefix": "hydra", "uri": "https://www.w3.org/ns/hydra/core#"},
-            {"prefix": "void", "uri": "https://rdfs.org/ns/void#"},
-            {"prefix": "skos", "uri": "https://www.w3.org/2004/02/skos/core#"},
-            {"prefix": "skos-thes", "uri": "https://purl.org/iso25964/skos-thes#"},
+            {"prefix": "rdf", "uri": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"},
+            {"prefix": "rdfs", "uri": "http://www.w3.org/2000/01/rdf-schema#"},
+            {"prefix": "owl", "uri": "http://www.w3.org/2002/07/owl#"},
+            {"prefix": "xsd", "uri": "http://www.w3.org/2001/XMLSchema#"},
+            {"prefix": "hydra", "uri": "http://www.w3.org/ns/hydra/core#"},
+            {"prefix": "void", "uri": "http://rdfs.org/ns/void#"},
+            {"prefix": "skos", "uri": "http://www.w3.org/2004/02/skos/core#"},
+            {"prefix": "skos-thes", "uri": "http://purl.org/iso25964/skos-thes#"},
         ],
     }
 

@@ -21,7 +21,7 @@ from atramhasis.utils import update_last_visited_concepts
 
 species = {
     'id': 3,
-    'uri': 'https://id.trees.org/3',
+    'uri': 'http://id.trees.org/3',
     'labels': [
         {'type': 'prefLabel', 'language': 'en', 'label': 'Trees by species'},
         {'type': 'prefLabel', 'language': 'nl', 'label': 'Bomen per soort'}

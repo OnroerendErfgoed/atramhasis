@@ -95,7 +95,7 @@ json_collection_value = {
 TEST = DictionaryProvider(
     {'id': 'TEST', 'default_language': 'nl', 'subject': ['biology']},
     [larch, chestnut, species],
-    concept_scheme=skosprovider.skos.ConceptScheme('https://id.trees.org'),
+    concept_scheme=skosprovider.skos.ConceptScheme('http://id.trees.org'),
 )
 
 
@@ -870,7 +870,7 @@ class RestFunctionalTests(FunctionalTests):
         self.assertEqual(
             [
                 {
-                    'conceptscheme_uri': 'https://id.trees.org',
+                    'conceptscheme_uri': 'http://id.trees.org',
                     'default_language': 'nl',
                     'force_display_language': None,
                     'id': 'TEST',
