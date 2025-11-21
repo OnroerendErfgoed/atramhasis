@@ -118,8 +118,8 @@ def fill_db():
                          ],
                      },
                      {
-                         'id': 'http://id.manual.org/manual/68',
-                         'uri': 'http://id.manual.org/manual/68',
+                         'id': 'https://id.manual.org/manual/68',
+                         'uri': 'https://id.manual.org/manual/68',
                          'labels': [
                              {'type': 'prefLabel', 'language': 'nl', 'label': 'handmatig'}
                          ],

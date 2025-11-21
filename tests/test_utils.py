@@ -164,11 +164,11 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
         c = Concept()
         c.id = 2
         c.labels = [Label('test', language_id='en-us')]
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{55}'})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'https://test.test/{55}'})
         c = Concept()
         c.id = 33
         c.labels = [Label('test', language_id='nl-be')]
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{2}'})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'https://test.test/{2}'})
         self.assertEqual(2, len(self.request.session['last_visited']))
 
     def test_update_last_visited_concepts_max(self):
@@ -177,20 +177,20 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
             c.id = concept_id
             c.labels = [Label('test', language_id='en-us')]
             update_last_visited_concepts(
-                self.request, {'label': c.label(), 'url': f'http://test.test/{concept_id}'}
+                self.request, {'label': c.label(), 'url': f'https://test.test/{concept_id}'}
             )
         self.assertEqual(4, len(self.request.session['last_visited']))
         last = self.request.session['last_visited'].pop()
-        self.assertEqual('http://test.test/49', last['url'])
+        self.assertEqual('https://test.test/49', last['url'])
 
     def test_no_double_last_visited_concepts(self):
         c = Concept()
         c.id = 2
         c.labels = [Label('test', language_id='en-us')]
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{55}'})
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{55}'})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'https://test.test/{55}'})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'https://test.test/{55}'})
         c = Concept()
         c.id = 33
         c.labels = [Label('test', language_id='nl-be')]
-        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'http://test.test/{2}'})
+        update_last_visited_concepts(self.request, {'label': c.label(), 'url': f'https://test.test/{2}'})
         self.assertEqual(2, len(self.request.session['last_visited']))

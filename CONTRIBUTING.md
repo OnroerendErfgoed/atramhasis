@@ -61,5 +61,5 @@ know why it's not working.
 [Github issue]: https://github.com/OnroerendErfgoed/atramhasis/issues
 [development guidelines]: https://atramhasis.readthedocs.io/en/latest/development.html
 [Coveralls]: https://coveralls.io/r/OnroerendErfgoed/atramhasis
-[pytest]: http://pytest.org
+[pytest]: https://pytest.org
 [GitHub Actions workflows]: https://github.com/OnroerendErfgoed/atramhasis/actions

@@ -254,15 +254,15 @@ provider the following information needs to be provided:
   document URL.
 * `conceptscheme uri`: A URI for the conceptscheme. This should be a unique URI
   that resolves to the conceptscheme's URL in Atramhasis. If you are creating a 
-  thesaurus of colours at http://data.me.org/colours, your `id` might be `colours`
-  and the URI might be http://id.me.org/colours. This URI should redirect to 
-  `http://data.me.org/colours`. Another common option is to use 
-  `http://data.me.org/colours#id` as the URI for your conceptscheme.
+  thesaurus of colours at https://data.me.org/colours, your `id` might be `colours`
+  and the URI might be https://id.me.org/colours. This URI should redirect to
+  `https://data.me.org/colours`. Another common option is to use
+  `https://data.me.org/colours#id` as the URI for your conceptscheme.
 * `uri pattern`: A pattern that will be used by a :class:`~skosprovider.uri.UriGenerator` 
   to generate URI's for new concepts and collections added to your conceptscheme. 
   The pattern looks like a http URI with the marker `%s` as a placeholder for 
   your concept or collection id. Continuing our example, this could be 
-  `http://id.me.org/colours/%s` or `http://data.me.org/colours/%s#id`.
+  `https://id.me.org/colours/%s` or `https://data.me.org/colours/%s#id`.
 * `default language`: The default language of the provider. When a concept is 
   requested, a single label is always returned for ease of display. Normally 
   this is determined from browser settings or cookies, but if none of these are
@@ -325,8 +325,8 @@ Adding a new provider through the REST API
 ..........................................
 
 Apart from using the UI, it's also possible to create a provider through the 
-REST API, by POSTing to the `http://localhost:6543/providers` endpoint to have 
-the server assign an id or by PUTTing to the `http://localhost:6543/providers/<id>` 
+REST API, by POSTing to the `http://localhost:6543/providers` endpoint to have
+the server assign an id or by PUTTing to the `http://localhost:6543/providers/<id>`
 endpoint to assign your own id, using the following payload:
 
 .. code-block:: json
@@ -346,7 +346,7 @@ If all goes well, you'll be greeted with a `201 Created` status and your new
 provider and conceptscheme will be available through the UI.
 
 More information about the Atramhasis API can be found at the 
-`http://localhost:6543/api_doc` endpoint of your Atramhasis instance 
+`http://localhost:6543/api_doc` endpoint of your Atramhasis instance
 or at `https://thesaurus.onroerenderfgoed.be/api_doc`.
 
 
@@ -417,7 +417,7 @@ changed the underlying service, but decided against that because it would have
 prevented you from making your own choices when interacting with Atramhasis. If
 you want to render the tree of concepts using a preferred language different
 from what a browser would advocate for, you can pass the language parameter in
-a url, eg. `http://my.thesaurus.org/conceptschemes/STUFF/tree?language=la`.
+a url, eg. `https://my.thesaurus.org/conceptschemes/STUFF/tree?language=la`.
 
 .. _i18n:
 
@@ -646,7 +646,7 @@ the files (used and unused).
 Since a sitemap needs to contain abolute URL's, the script needs to know where
 the application is being hosted. This can be controlled with a setting
 `atramhasis.url` in the application's ini file. Set this to the root of your
-webapplication, eg. `http://my.thesaurus.org` (no trailing slash needed).
+webapplication, eg. `https://my.thesaurus.org` (no trailing slash needed).
 
 Foreign Keys
 ============
@@ -788,7 +788,7 @@ it will not be present and visible to the public among your regular vocabularies
 That's all. You can do the same with the
 :class:`~skosprovider_getty.providers.TGNProvider` for the
 `Thesaurus of Geographic Names (TGN)` or any of the providers for
-`heritagedata.org <http://heritagedata.org>`_ that can be found in
+`heritagedata.org <https://heritagedata.org>`_ that can be found in
 skosprovider_heritagedata_.
 
 In the end your :file:`my_thesaurus/skos/__init__.py` should look somewhat like
@@ -828,8 +828,8 @@ Now you'll be able to import from the AAT to your heart's delight. For an
 extended example that adds even more providers, you could have a look at the
 `demo` scaffold that comes with Atramhasis.
 
-.. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
-.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
+.. _skosprovider_getty: https://skosprovider-getty.readthedocs.io
+.. _skosprovider_heritagedata: https://skosprovider-heritagedata.readthedocs.io
 
 Import a controlled vocabulary
 ==============================
@@ -1281,7 +1281,7 @@ functionality might fail to run properly.
     atramhasis.ldf.enabled = True
 
     # External url of the LDF server
-    atramhasis.ldf.baseurl = http://demo.atramhasis.org/ldf
+    atramhasis.ldf.baseurl = https://demo.atramhasis.org/ldf
 
     # DEFAULT empty list
     layout.focus_conceptschemes =

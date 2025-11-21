@@ -13,7 +13,7 @@
 
 <http://id.trees.org/1> a skos:Concept ;
     dcterms:identifier 1 ;
-    skos:closeMatch <http://id.python.org/different/types/of/trees/nr/1/the/larch> ;
+    skos:closeMatch <https://id.python.org/different/types/of/trees/nr/1/the/larch> ;
     skos:definition "A type of tree."@en ;
     skos:hiddenLabel "c"@nl ;
     skos:inScheme <urn:x-skosprovider:trees> ;
@@ -28,7 +28,7 @@
     skos:hiddenLabel "a"@nl ;
     skos:inScheme <urn:x-skosprovider:trees> ;
     skos:prefLabel "The Chestnut"@en ;
-    skos:relatedMatch <http://id.python.org/different/types/of/trees/nr/17/the/other/chestnut> .
+    skos:relatedMatch <https://id.python.org/different/types/of/trees/nr/17/the/other/chestnut> .
 
 <urn:x-skosprovider:trees> a skos:ConceptScheme ;
     dcterms:identifier "TREES" ;

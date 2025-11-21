@@ -130,7 +130,7 @@ class FunctionalTests(DbTest):
     @staticmethod
     def mock_event_handler(event):
         if event.uri == 'urn:x-vioe:geography:9':
-            referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
+            referenced_in = ['urn:someobject', 'https://test.test.org/object/2']
             raise ProtectedResourceException(
                 f'resource {event.uri} is still in use, preventing operation',
                 referenced_in,
@@ -638,7 +638,7 @@ class RestFunctionalTests(FunctionalTests):
     def test_delete_protected_resource(self):
         def mock_event_handler(event):
             if isinstance(event, ProtectedResourceEvent):
-                referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
+                referenced_in = ['urn:someobject', 'https://test.test.org/object/2']
                 raise ProtectedResourceException(
                     'resource {} is still in use, preventing operation'.format(
                         event.uri
@@ -660,7 +660,7 @@ class RestFunctionalTests(FunctionalTests):
             res.json,
             {
                 'message': 'resource urn:x-vioe:geography:9 is still in use, preventing operation',
-                'referenced_in': ['urn:someobject', 'http://test.test.org/object/2'],
+                'referenced_in': ['urn:someobject', 'https://test.test.org/object/2'],
             },
         )
 
@@ -1051,7 +1051,7 @@ class SkosFunctionalTests(FunctionalTests):
         self.assertEqual(3, len(response.json))
         response = self.testapp.get(
             '/conceptschemes/TREES/c'
-            '?match=http://id.python.org/different/types/of/trees/nr/1/the/larch',
+            '?match=https://id.python.org/different/types/of/trees/nr/1/the/larch',
             headers={'Accept': 'application/json'},
         )
         self.assertEqual(200, response.status_code)
@@ -1262,7 +1262,7 @@ class RdfFunctionalTests(FunctionalTests):
 
     def test_rdf_individual_turtle_manual_uri(self):
         ttl_response = self.testapp.get(
-            '/conceptschemes/manual-ids/c/http://id.manual.org/manual/68.ttl'
+            '/conceptschemes/manual-ids/c/https://id.manual.org/manual/68.ttl'
         )
         self.assertEqual('200 OK', ttl_response.status)
         self.assertEqual('text/turtle', ttl_response.content_type)

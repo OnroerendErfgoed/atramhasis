@@ -120,8 +120,8 @@ class ImportTests(DbTest):
             {'id': 'PARROTS', 'conceptscheme_id': 1}, self.session
         )
 
-        bird = sql_prov.get_by_id('http://id.parrots.org/bird')
-        assert sql_prov.get_by_uri('http://id.parrots.org/bird') == bird
+        bird = sql_prov.get_by_id('https://id.parrots.org/bird')
+        assert sql_prov.get_by_uri('https://id.parrots.org/bird') == bird
         parrot = sql_prov.get_by_id('parrot')
         assert parrot
         assert not sql_prov.get_by_id('bird')
@@ -204,17 +204,17 @@ class ImportTests(DbTest):
             'import_file',
             test_data_csv,
             '--uri-pattern',
-            'http://id.menu.org/%s',
+            'https://id.menu.org/%s',
             '--to',
             SETTINGS['sqlalchemy.url'],
             '--conceptscheme-label',
             'Menu Conceptscheme',
             '--conceptscheme-uri',
-            'http://id.menu.org',
+            'https://id.menu.org',
         ]
         import_file.main(sys.argv)
         tests.db_filled = True
-        self._check_menu('http://id.menu.org/%s')
+        self._check_menu('https://id.menu.org/%s')
 
     def test_import_csv_with_provider_all_args(self):
         sys.argv = [
@@ -246,7 +246,7 @@ class ValidateUriPatternTests(unittest.TestCase):
         """Test that a valid URI pattern passes validation"""
         # This should not raise SystemExit
         try:
-            import_file.validate_uri_pattern('http://example.org/%s')
+            import_file.validate_uri_pattern('https://example.org/%s')
         except SystemExit:
             self.fail(
                 'validate_uri_pattern() raised SystemExit unexpectedly for valid pattern'
@@ -267,13 +267,13 @@ class ValidateUriPatternTests(unittest.TestCase):
     def test_validate_uri_pattern_no_placeholder(self):
         """Test that URI pattern without %s placeholder raises SystemExit"""
         with self.assertRaises(SystemExit) as cm:
-            import_file.validate_uri_pattern('http://example.org/concept')
+            import_file.validate_uri_pattern('https://example.org/concept')
         self.assertEqual(cm.exception.code, 1)
 
     def test_validate_uri_pattern_multiple_placeholders(self):
         """Test that URI pattern with multiple %s placeholders raises SystemExit"""
         with self.assertRaises(SystemExit) as cm:
-            import_file.validate_uri_pattern('http://example.org/%s/concept/%s')
+            import_file.validate_uri_pattern('https://example.org/%s/concept/%s')
         self.assertEqual(cm.exception.code, 1)
 
     def test_validate_uri_pattern_valid_complex(self):
@@ -288,7 +288,7 @@ class ValidateUriPatternTests(unittest.TestCase):
     def test_validate_uri_pattern_valid_with_numbers(self):
         """Test that URI pattern with numbers but single %s passes validation"""
         try:
-            import_file.validate_uri_pattern('http://example.org/v1/concepts/%s')
+            import_file.validate_uri_pattern('https://example.org/v1/concepts/%s')
         except SystemExit:
             self.fail(
                 'validate_uri_pattern() raised SystemExit unexpectedly for valid pattern with numbers'
@@ -372,7 +372,7 @@ class ParseArgvForImportTests(unittest.TestCase):
             self.temp_input_file,
             '--no-create-provider',
             '--uri-pattern',
-            'http://example.org/%s',
+            'https://example.org/%s',
             '--to',
             f'sqlite:///{self.temp_db_file}',
         ]

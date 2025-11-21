@@ -64,7 +64,7 @@ edit them and delete them.
     .. sourcecode:: http
 
         HTTP/1.1 201 Created
-        Location: http://demo.atramhasis.org/conceptschemes/TREES/c/1
+        Location: https://demo.atramhasis.org/conceptschemes/TREES/c/1
         Content-Type: application/json
 
         {
@@ -113,7 +113,7 @@ edit them and delete them.
     .. sourcecode:: http
 
         HTTP/1.1 400 Bad Request
-        Location: http://demo.atramhasis.org/conceptschemes/TREES/c/1
+        Location: https://demo.atramhasis.org/conceptschemes/TREES/c/1
         Content-Type: application/json
 
         {

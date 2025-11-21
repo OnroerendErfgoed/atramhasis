@@ -15,7 +15,7 @@ Atramhasis
 ----
 
 .. image:: https://readthedocs.org/projects/atramhasis/badge/?version=latest
-        :target: http://atramhasis.readthedocs.io/en/latest/?badge=latest
+        :target: https://atramhasis.readthedocs.io/en/latest/?badge=latest
 .. image:: https://joss.theoj.org/papers/10.21105/joss.05040/status.svg
         :target: https://doi.org/10.21105/joss.05040
 

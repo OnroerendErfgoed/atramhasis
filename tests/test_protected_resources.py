@@ -30,7 +30,7 @@ class ProtectedTests(unittest.TestCase):
         self.assertEqual('request', event.request)
 
     def test_protected_resource_exception(self):
-        referenced_in = ['urn:someobject', 'http://test.test.org/object/2']
+        referenced_in = ['urn:someobject', 'https://test.test.org/object/2']
         error = ProtectedResourceException('test_msg', referenced_in)
         self.assertIsNotNone(error)
         self.assertEqual("'test_msg'", str(error))

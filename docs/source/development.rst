@@ -27,7 +27,7 @@ application.
   serves a vocabulary based on a simple python :class:`dict` as datasource.
 * skosprovider_sqlalchemy_: An implementation of the 
   :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` 
-  interface with a `SQLAlchemy <http://www.sqlalchemy.org>`_ backend. This allows
+  interface with a `SQLAlchemy <https://www.sqlalchemy.org>`_ backend. This allows
   using a RDBMS for reading, but also writing, :term:`SKOS` concepts.
 * skosprovider_rdf_: An implemenation of the 
   :class:`~skosprovider.providers.VocabularyProvider` interface with an :term:`RDF`
@@ -50,9 +50,9 @@ application.
   An implementation of the
   :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` against
   the vocabularies published by EH, RCAHMS and RCAHMW at 
-  `heritagedata.org <http://heritagedata.org>`_.
+  `heritagedata.org <https://heritagedata.org>`_.
 
-Atramhasis can easily be set up with a `Linked Data Fragments (LDF) <http://linkeddatafragments.org>`_ 
+Atramhasis can easily be set up with a `Linked Data Fragments (LDF) <https://linkeddatafragments.org>`_
 server. This server allows posing simple `triple pattern` queries of your dataset. 
 Combined with a Linked Data Fragments client, similar functionalities to a 
 traditional `SPARQL` endpoint can be achieved. Atramhasis facilitates the setup
@@ -261,7 +261,7 @@ You can test them on a specific branch by running the following commands:
 Running a Linked Data Fragments server
 ======================================
 
-If you want to add a `Linked Data Fragments <http://linkeddatafragments.org>`_
+If you want to add a `Linked Data Fragments <https://linkeddatafragments.org>`_
 server, Atramhasis makes it easy for you. First you need to decide if you want
 to run the server with :term:`HDT` files. If not, you can always use raw `Turtle`
 files, but be aware that the :term:`HDT` files offer much better performance.
@@ -317,7 +317,7 @@ on port `6543` and LDF server on port `3000`, but serve both through `nginx`.
 You can easily do this by setting the `atramhasis.ldf.baseurl` in your ini file.
 Suppose you want to server both on the host `demo.atramhasis.org` with
 Atramhasis as the root of your domain and the LDF server at `/ldf`. In this
-case, set `atramhasis.ldf.baseurl` to `http://demo.atramhasis.org/ldf`.
+case, set `atramhasis.ldf.baseurl` to `https://demo.atramhasis.org/ldf`.
 
 
 Contributing
@@ -375,17 +375,17 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 .. _Github page for Atramhasis: https://github.com/OnroerendErfgoed/atramhasis
 .. _GitHub Actions workflows: https://github.com/OnroerendErfgoed/atramhasis/actions
 .. _Coveralls: https://coveralls.io/r/OnroerendErfgoed/atramhasis
-.. _pytest: http://pytest.org
+.. _pytest: https://pytest.org
 .. _npm: https://www.npmjs.org/
-.. _grunt: http://gruntjs.com
-.. _waitress: http://waitress.readthedocs.org
+.. _grunt: https://gruntjs.com
+.. _waitress: https://waitress.readthedocs.io
 .. _python: https://wwww.python.org
-.. _pyramid: http://www.pylonsproject.org/
-.. _sqlalchemy: http://www.sqlalchemy.org
-.. _skosprovider: http://skosprovider.readthedocs.org
-.. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
-.. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org
-.. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
-.. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
-.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
+.. _pyramid: https://www.pylonsproject.org/
+.. _sqlalchemy: https://www.sqlalchemy.org
+.. _skosprovider: https://skosprovider.readthedocs.io
+.. _skosprovider_sqlalchemy: https://skosprovider-sqlalchemy.readthedocs.io
+.. _skosprovider_rdf: https://skosprovider-rdf.readthedocs.io
+.. _pyramid_skosprovider: https://pyramid-skosprovider.readthedocs.io
+.. _skosprovider_getty: https://skosprovider-getty.readthedocs.io
+.. _skosprovider_heritagedata: https://skosprovider-heritagedata.readthedocs.io
 .. _java: https://www.java.com/en/download/manual.jsp

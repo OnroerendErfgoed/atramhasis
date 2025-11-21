@@ -25,7 +25,7 @@ class AddProviderTests(unittest.TestCase):
         pass
 
     def _get_duri(self):
-        return URIRef('http://test.atramhasis.org/void.ttl#bigdataset')
+        return URIRef('https://test.atramhasis.org/void.ttl#bigdataset')
 
     def _get_graph(self, duri):
         g = Graph()
@@ -45,22 +45,22 @@ class AddProviderTests(unittest.TestCase):
     def testEmptyProvider(self):
         duri = self._get_duri()
         g = self._get_graph(duri)
-        sduri = 'http://test.atramhasis.org/void.ttl#smalldataset'
+        sduri = 'https://test.atramhasis.org/void.ttl#smalldataset'
         p = self._get_provider({'uri': sduri})
-        homepage = 'http://test.atramhasis.org/conceptschemes/TREES'
-        rdfdump = 'http://test.atramhasis.org/conceptschemes/TREES/c.rdf'
-        ttldump = 'http://test.atramhasis.org/conceptschemes/TREES/c.rdf'
+        homepage = 'https://test.atramhasis.org/conceptschemes/TREES'
+        rdfdump = 'https://test.atramhasis.org/conceptschemes/TREES/c.rdf'
+        ttldump = 'https://test.atramhasis.org/conceptschemes/TREES/c.rdf'
         req = Mock()
         req.route_url = Mock()
         req.route_url.side_effect = [
             sduri,
             homepage,
-            'http://test.atramhasis.org/conceptschemes/TREES/c.rdf',
-            'http://test.atramhasis.org/conceptschemes/TREES/c.ttl'
+            'https://test.atramhasis.org/conceptschemes/TREES/c.rdf',
+            'https://test.atramhasis.org/conceptschemes/TREES/c.ttl'
         ]
         req.registry.settings = {
             'atramhasis.ldf.enabled': True,
-            'atramhasis.ldf.baseurl': 'http://test.atramhasis.org/ldf'
+            'atramhasis.ldf.baseurl': 'https://test.atramhasis.org/ldf'
         }
         g = _add_provider(g, p, duri, req)
         sd = URIRef(sduri)
@@ -88,7 +88,7 @@ class MetadatasetTests(unittest.TestCase):
     def test_add_empty_metadataset(self):
         metadataset = {}
         g = self._get_graph()
-        uri = URIRef('http://test.atramhasis.org/void.ttl#emptyset')
+        uri = URIRef('https://test.atramhasis.org/void.ttl#emptyset')
         g.add((uri, RDF.type, VOID.Dataset))
         g = _add_metadataset(g, uri, metadataset)
         assert len(g) == 1
@@ -100,11 +100,11 @@ class MetadatasetTests(unittest.TestCase):
             'language': ['nl', 'en', 'fr'],
             'license': [
                 'https://creativecommons.org/licenses/by/4.0/',
-                'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+                'https://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
             ]
         }
         g = self._get_graph()
-        uri = URIRef('http://id.python.org/datasets/different_types_of_trees')
+        uri = URIRef('https://id.python.org/datasets/different_types_of_trees')
         g.add((uri, RDF.type, VOID.Dataset))
         g = _add_metadataset(g, uri, metadataset)
         assert len(g) == 8
@@ -113,7 +113,7 @@ class MetadatasetTests(unittest.TestCase):
         self.assertIn((uri, DCTERMS.language, Literal('en')), g)
         self.assertIn((uri, DCTERMS.publisher, URIRef('https://id.erfgoed.net/actoren/501')), g)
         self.assertIn((uri, DCTERMS.license, URIRef('https://creativecommons.org/licenses/by/4.0/')), g)
-        self.assertIn((uri, DCTERMS.license, URIRef('http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0')), g)
+        self.assertIn((uri, DCTERMS.license, URIRef('https://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0')), g)
         self.assertIn((uri, DCTERMS.created, Literal(date(year=2016, month=9, day=14))), g)
 
 
@@ -128,9 +128,9 @@ class LdfServerTests(unittest.TestCase):
         return Graph()
 
     def test_add_ldf_server(self):
-        url = Literal('http://demo.atramhasis.org/ldf{?s,p,o}')
+        url = Literal('https://demo.atramhasis.org/ldf{?s,p,o}')
         g = self._get_graph()
-        uri = URIRef('http://test.atramhasis.org/void.ttl#emptyset')
+        uri = URIRef('https://test.atramhasis.org/void.ttl#emptyset')
         g.add((uri, RDF.type, VOID.Dataset))
         g = _add_ldf_server(g, uri, url)
         self.assertIn((uri, HYDRA.search, None), g)

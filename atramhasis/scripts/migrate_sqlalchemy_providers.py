@@ -23,7 +23,7 @@ from atramhasis.data.models import Provider
 def get_atramhasis_sqlalchemy_providers(session):
     licenses = [
         'https://creativecommons.org/licenses/by/4.0/',
-        'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+        'https://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
     ]
     dataseturigenerator = UriPatternGenerator(
         'https://id.erfgoed.net/datasets/thesauri/%s'
