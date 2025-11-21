@@ -6,7 +6,7 @@ on:
       - atramhasis/**
       - scripts/**
       - tests/**
-      - '!atramhasis/static/**'
+      - "!atramhasis/static/**"
       - .github/workflows/atramhasis_backend.yaml
       - pyproject.toml
       - requirements*.txt
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ "3.10", "3.11", "3.12" ]
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v4
@@ -38,6 +38,9 @@ jobs:
           pip install pip-tools
           pip-sync requirements-dev.txt
           pip install -e .
+
+      - name: Compile message catalogs
+        run: pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
 
       - name: Python tests
         run: pytest tests --exitfirst --capture=no -vvv --full-trace
