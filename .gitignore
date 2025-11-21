@@ -79,3 +79,6 @@ atramhasis/static/admin/node_modules
 
 # sqlite database created for tests.
 test.db
+
+# compiled locale files
+atramhasis/locale/*/LC_MESSAGES/*.mo
