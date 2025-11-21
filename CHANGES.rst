@@ -1,3 +1,18 @@
+3.0.0 (21-11-2025)
+-------------------
+- conceptschemes/unknown should not cause a 500 server error #910
+- openapi could be better #909
+- sqlite3.OperationalError: no such table: conceptscheme #890
+- Add note types: Example, EditorialNote, ChangeNote #941
+- Add workflow: Verify that the package can be built and is ready for upload to PyPI. #937
+- Wrong years in changelog #916
+- Wrong link to discussion forum #935
+- Inconsistent response code for deletes #938
+- Add pybabel tasks to the build hook #900
+- Fix test cleanup of a dump folder #946
+- Requirements upgrade. #950
+
+
 2.1.1 (01-08-2024)
 ------------------
 
