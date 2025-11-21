@@ -508,12 +508,12 @@ Upgrading from `0.4.0` should be simple and cause no or few problems.
 - Integration of skosprovider_sqlalchemy_
 
 
-.. _skosprovider: http://skosprovider.readthedocs.io
-.. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.io
-.. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.io
-.. _skosprovider_getty: http://skosprovider-getty.readthedocs.io
+.. _skosprovider: https://skosprovider.readthedocs.io
+.. _skosprovider_sqlalchemy: https://skosprovider-sqlalchemy.readthedocs.io
+.. _skosprovider_rdf: https://skosprovider-rdf.readthedocs.io
+.. _skosprovider_getty: https://skosprovider-getty.readthedocs.io
 .. _skosprovider_oe: https://github.com/koenedaele/skosprovider_oe
-.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.io
-.. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.io
-.. _language_tags: http://language-tags.readthedocs.io
+.. _skosprovider_heritagedata: https://skosprovider-heritagedata.readthedocs.io
+.. _pyramid_skosprovider: https://pyramid-skosprovider.readthedocs.io
+.. _language_tags: https://language-tags.readthedocs.io
 .. _heroku: https://www.heroku.com

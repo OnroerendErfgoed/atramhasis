@@ -828,8 +828,8 @@ Now you'll be able to import from the AAT to your heart's delight. For an
 extended example that adds even more providers, you could have a look at the
 `demo` scaffold that comes with Atramhasis.
 
-.. _skosprovider_getty: http://skosprovider-getty.readthedocs.io
-.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.io
+.. _skosprovider_getty: https://skosprovider-getty.readthedocs.io
+.. _skosprovider_heritagedata: https://skosprovider-heritagedata.readthedocs.io
 
 Import a controlled vocabulary
 ==============================
