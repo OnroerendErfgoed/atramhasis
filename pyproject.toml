@@ -99,6 +99,7 @@ only-include = ["/atramhasis", "/fixtures"]
 exclude = ["/atramhasis/static/admin"]
 # these folders are (partially) in gitignore and would otherwise not be part of the builds
 artifacts = [
+    "/atramhasis/locale/*/LC_MESSAGES/*.mo",
     "/atramhasis/static/admin/dist",
     # including node_modules bloats the build but we need refactoring
     "/atramhasis/static/admin/node_modules",
@@ -118,7 +119,7 @@ content-type = "text/x-rst"
 fragments = [{ path = "README.rst" }, { path = "CHANGES.rst" }]
 
 [tool.uv]
-managed = false  # Because we do not use the uv lockfile (yet)
+managed = false # Because we do not use the uv lockfile (yet)
 
 [tool.ruff.format]
 quote-style = "single"

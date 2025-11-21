@@ -39,5 +39,8 @@ jobs:
           pip-sync requirements-dev.txt
           pip install -e .
 
+      - name: Compile message catalogs
+        run: pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
+
       - name: Python tests
         run: pytest tests --exitfirst --capture=no -vvv --full-trace
