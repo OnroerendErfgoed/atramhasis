@@ -1,4 +1,4 @@
-2.1.1 (01-08-2023)
+2.1.1 (01-08-2024)
 ------------------
 
 - ConceptVisitLog has an integer concept_id in the ConceptVisitLog class #906
@@ -11,7 +11,7 @@
 - Manual ID text box not writable #902
 
 
-2.1.0 (22-07-2023)
+2.1.0 (22-07-2024)
 ------------------
 
 - Migrated from setup.py to the hatch build tool for improved packaging and distribution (#854).
