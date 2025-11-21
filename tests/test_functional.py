@@ -411,13 +411,11 @@ class RestFunctionalTests(FunctionalTests):
         self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_delete_concept(self):
-        new_id = '1'
-        res = self.testapp.delete(
-            f'/conceptschemes/TREES/c/{new_id}', headers=self._get_default_headers()
+        self.testapp.delete(
+            f'/conceptschemes/TREES/c/1',
+            headers=self._get_default_headers(),
+            status=204,
         )
-        self.assertEqual('200 OK', res.status)
-        self.assertIsNotNone(res.json['id'])
-        self.assertEqual(new_id, res.json['id'])
 
     def test_delete_concept_not_found(self):
         res = self.testapp.delete(
@@ -455,11 +453,11 @@ class RestFunctionalTests(FunctionalTests):
         self.assertFalse(res.json['infer_concept_relations'])
 
     def test_delete_collection(self):
-        res = self.testapp.delete(
-            '/conceptschemes/GEOGRAPHY/c/333', headers=self._get_default_headers()
+        self.testapp.delete(
+            '/conceptschemes/GEOGRAPHY/c/333',
+            headers=self._get_default_headers(),
+            status=204,
         )
-        self.assertEqual('200 OK', res.status)
-        self.assertIn('application/json', res.headers['Content-Type'])
 
     def test_uri(self):
         res = self.testapp.post_json(
@@ -1123,11 +1121,11 @@ class CacheFunctionalTests(FunctionalTests):
         )
         self.assertEqual(tree_response.json, cached_tree_response.json)
 
-        delete_response = self.testapp.delete(
-            '/conceptschemes/MATERIALS/c/31', headers=self._get_default_headers()
+        self.testapp.delete(
+            '/conceptschemes/MATERIALS/c/31',
+            headers=self._get_default_headers(),
+            status=204,
         )
-        self.assertEqual('200 OK', delete_response.status)
-        self.assertIsNotNone(delete_response.json['id'])
 
         tree_response2 = self.testapp.get(
             '/conceptschemes/MATERIALS/tree?_LOCALE_=nl',
