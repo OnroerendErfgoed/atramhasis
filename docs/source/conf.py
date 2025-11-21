@@ -265,7 +265,7 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('http://docs.python.org/', None),
+    'python': ('https://docs.python.org/', None),
     'skosprovider': ('https://skosprovider.readthedocs.io/en/latest', None),
     'pyramidskosprovider': ('https://pyramid-skosprovider.readthedocs.io/en/latest', None),
     'skosprovidersqlalchemy': ('https://skosprovider-sqlalchemy.readthedocs.io/en/latest', None),

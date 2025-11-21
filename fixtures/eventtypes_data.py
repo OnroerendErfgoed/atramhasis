@@ -156,7 +156,7 @@ EVENTTYPESDATA = [
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 2) 9.2.4. Hout en houtskool, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                 ),
                 "type": "note",
             },
@@ -375,7 +375,7 @@ EVENTTYPESDATA = [
                 "note": (
                     "1) 12.2.4. Veldkartering, in: Onderzoeksbalans Onroerend Erfgoed"
                     " Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                     " 2) Carver M. 1999, Fieldarchaeology, in: G. Barker (ed.),"
                     " Companion Encyclopedia of Archaeology, pp. 128-181. 3) VIOE"
                 ),
@@ -573,7 +573,7 @@ EVENTTYPESDATA = [
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 2) 9.3. Archeozo\xf6logisch onderzoek, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                 ),
                 "type": "note",
             },
@@ -969,7 +969,7 @@ EVENTTYPESDATA = [
                 "note": (
                     "1) 12.2.4. Veldkartering, in: Onderzoeksbalans Onroerend Erfgoed"
                     " Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                     " 2) Groenewoudt B.J. 1994, Prospectie, waardering en selectie van"
                     " archeologische vindplaatsen: een beleidsgerichte verkenning van"
                     " middelen en mogelijkheden, Nederlandse Archeologische Rapporten"
@@ -1091,7 +1091,7 @@ EVENTTYPESDATA = [
                 "note": (
                     "1) 12.2.3. Geofysische en geochemische onderzoeksmethoden, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                     " 2) Ervynck A., Degryse P., Vandenabeele P. &amp; Verstraeten G."
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 3) Renfrew C. &amp; Bahn P. 2000,"
@@ -1132,7 +1132,7 @@ EVENTTYPESDATA = [
                 "language": "nl",
                 "note": (
                     "National Monuments Record thesaurus (English Heritage), <a"
-                    ' href="http://thesaurus.english-heritage.org.uk/frequentuser.htm">http://thesaurus.english-heritage.org.uk/frequentuser.htm</a>'
+                    ' href="https://thesaurus.english-heritage.org.uk/frequentuser.htm">https://thesaurus.english-heritage.org.uk/frequentuser.htm</a>'
                 ),
                 "type": "note",
             },
@@ -1266,7 +1266,7 @@ EVENTTYPESDATA = [
                 "note": (
                     "1) 12.2.3. Geofysische en geochemische onderzoeksmethoden, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                     " 2) Ervynck A., Degryse P., Vandenabeele P. &amp; Verstraeten G."
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 3) Renfrew C. &amp; Bahn P. 2000,"
@@ -1420,7 +1420,7 @@ EVENTTYPESDATA = [
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 2) 9.4. Fysisch-antropologisch onderzoek,"
                     " in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                 ),
                 "type": "note",
             },
@@ -1486,7 +1486,7 @@ EVENTTYPESDATA = [
                 "note": (
                     "1) 12.2.3. Geofysische en geochemische onderzoeksmethoden, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                     " 2) Ervynck A., Degryse P., Vandenabeele P. &amp; Verstraeten G."
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 3) Renfrew C. &amp; Bahn P. 2000,"
@@ -1531,7 +1531,7 @@ EVENTTYPESDATA = [
                     " en interpretatie, Leuven. 3) 12.2.3. Geofysische en geochemische"
                     " onderzoeksmethoden. in: Onderzoeksbalans Onroerend Erfgoed"
                     " Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                 ),
                 "type": "note",
             },
@@ -1624,7 +1624,7 @@ EVENTTYPESDATA = [
                 "note": (
                     "1) 12.2.3. Geofysische en geochemische onderzoeksmethoden, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                     " 2) Ervynck A., Degryse P., Vandenabeele P. &amp; Verstraeten G."
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 3) Renfrew C. &amp; Bahn P. 2000,"
@@ -1699,7 +1699,7 @@ EVENTTYPESDATA = [
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 2) 9.2.4. Hout en houtskool, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                 ),
                 "type": "note",
             },
@@ -1870,7 +1870,7 @@ EVENTTYPESDATA = [
                 "language": "nl",
                 "note": (
                     "AGIV, <a"
-                    ' href="http://www.agiv.be/gis/knowhow/?artid=548">http://www.agiv.be/gis/knowhow/?artid=548</a>'
+                    ' href="https://www.agiv.be/gis/knowhow/?artid=548">https://www.agiv.be/gis/knowhow/?artid=548</a>'
                 ),
                 "type": "note",
             },
@@ -1986,7 +1986,7 @@ EVENTTYPESDATA = [
                 "language": "nl",
                 "note": (
                     "1) L\u2019Arch\xe9ologie a\xe9rienne dans la France du Nord, <a"
-                    ' href="http://www.archeologie-aerienne.culture.gouv.fr/fr/">http://www.archeologie-aerienne.culture.gouv.fr/fr/</a>'
+                    ' href="https://www.archeologie-aerienne.culture.gouv.fr/fr/">https://www.archeologie-aerienne.culture.gouv.fr/fr/</a>'
                     " 2) Bourgeois J. &amp; Meganck M. (eds.) 2003, Aerial photography"
                     " and archaeology 2003. A century of information, Archaeological"
                     " Reports Ghent University 4, Gent. 3) Carver M. 1999,"
@@ -2035,7 +2035,7 @@ EVENTTYPESDATA = [
                 "note": (
                     "1) 12.2.3. Geofysische en geochemische onderzoeksmethoden, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                     " 2) Ervynck A., Degryse P., Vandenabeele P. &amp; Verstraeten G."
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 3) Renfrew C. &amp; Bahn P. 2000,"
@@ -2455,7 +2455,7 @@ EVENTTYPESDATA = [
                 "language": "nl",
                 "note": (
                     "1) Dutch Expertise Centre for Archaeological Remote Sensing, <a"
-                    ' href="http://www.decars.nl/index.php?option=com_content&amp;task=view&amp;id=32&amp;Itemid=63">http://www.decars.nl/index.php?option=com_content&amp;task=view&amp;id=32&amp;Itemid=63</a>'
+                    ' href="https://www.decars.nl/index.php?option=com_content&amp;task=view&amp;id=32&amp;Itemid=63">https://www.decars.nl/index.php?option=com_content&amp;task=view&amp;id=32&amp;Itemid=63</a>'
                     " 2) Roskams S. 2001, Excavation (Cambridge manuals in"
                     " archaeology), Cambridge."
                 ),
@@ -2638,7 +2638,7 @@ EVENTTYPESDATA = [
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 2) 9.2.2. Pollen en sporen, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                 ),
                 "type": "note",
             },
@@ -3224,7 +3224,7 @@ EVENTTYPESDATA = [
                     " 2009, Natuurwetenschappen en archeologie. Methode en"
                     " interpretatie, Leuven. 2) 9.2.3. Zaden en vruchten, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                 ),
                 "type": "note",
             },

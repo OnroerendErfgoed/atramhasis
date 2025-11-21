@@ -507,7 +507,7 @@ class TestLocaleView(unittest.TestCase):
 
     def test_referer(self):
         testlang = "it"
-        testurl = "http://www.foo.bar"
+        testurl = "https://www.foo.bar"
         self.request.GET["language"] = testlang.upper()
         self.request.referer = testurl
         self.request.skos_registry = self.regis

@@ -71,7 +71,7 @@ STIJLDATA = [
                 "citation": (
                     "1) cursusmateriaal UGent (Prof. Ph. Cromb\xe9) \n2) Nederlandse"
                     " Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n3) Louwe Kooijmans L., van den Broecke P.W., Fokkens H. en van"
                     " Gijn A. (eds.), 2005, Nederland in de prehistorie, Amsterdam."
                 ),
@@ -957,7 +957,7 @@ STIJLDATA = [
             {
                 "citation": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "markup": "HTML",
@@ -1228,7 +1228,7 @@ STIJLDATA = [
                 "citation": (
                     "1) Deeben J. e.a. (red.) 2005, De Steentijd van Nederland,"
                     " Zutphen.  2) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -1267,7 +1267,7 @@ STIJLDATA = [
             {
                 "citation": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "markup": "HTML",
@@ -1350,7 +1350,7 @@ STIJLDATA = [
                 "citation": (
                     "1) cursusmateriaal UGent (Prof. Ph. Cromb\xe9) \n2) Nederlandse"
                     " Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n3) VIOE"
                 ),
                 "markup": "HTML",
@@ -1429,7 +1429,7 @@ STIJLDATA = [
                     " Cromb\xe9 &amp; G. Van Der Haeghen (eds.), Het"
                     " midden-paleolithicum in Noordwestelijk Belgi\xeb, pp. 49-95. 2)"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>'
+                    ' href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>'
                 ),
                 "markup": "HTML",
             }
@@ -1524,7 +1524,7 @@ STIJLDATA = [
             {
                 "citation": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Deeben J. e.a. (red.) 2005, De Steentijd van Nederland,"
                     " Zutphen."
                 ),
@@ -1825,7 +1825,7 @@ STIJLDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300021464"],
+            "exact": ["https://vocab.getty.edu/aat/300021464"],
             "narrow": [],
             "related": [],
         },
@@ -2074,7 +2074,7 @@ STIJLDATA = [
             {
                 "citation": (
                     "1) De Plainseau-cultuur <a"
-                    ' href="http://www.patrimoine-mobilier.be/patrimoine/additional_info.aspx?id=214684&amp;LangType=2067">http://www.patrimoine-mobilier.be/patrimoine/additional_info.aspx?id=214684&amp;LangType=2067</a>'
+                    ' href="https://www.patrimoine-mobilier.be/patrimoine/additional_info.aspx?id=214684&amp;LangType=2067">https://www.patrimoine-mobilier.be/patrimoine/additional_info.aspx?id=214684&amp;LangType=2067</a>'
                     " \n2) VIOE"
                 ),
                 "markup": "HTML",
@@ -2593,7 +2593,7 @@ STIJLDATA = [
             {
                 "citation": (
                     "1) Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/">http://www.onderzoeksbalans.be/</a>'
+                    ' href="https://www.onderzoeksbalans.be/">https://www.onderzoeksbalans.be/</a>'
                     " \n2) Louwe Kooijmans L., van den Broecke P.W., Fokkens H. en van"
                     " Gijn A. (eds.), 2005, Nederland in de prehistorie, Amsterdam."
                 ),
@@ -2684,7 +2684,7 @@ STIJLDATA = [
             {
                 "citation": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Louwe Kooijmans L., van den Broecke P.W., Fokkens H. en van"
                     " Gijn A. (eds.), 2005, Nederland in de prehistorie, Amsterdam."
                     " \n3) cursusmateriaal UGent (Prof. Ph. Cromb\xe9)"

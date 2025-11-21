@@ -7,7 +7,7 @@ from pyramid.events import subscriber
 @subscriber(ProtectedResourceEvent)
 def sample_impl(event):
     if event.uri.endswith("2"):
-        referenced_in = ["urn:someobject", "http://test.test.org/object/2"]
+        referenced_in = ["urn:someobject", "https://test.test.org/object/2"]
         raise ProtectedResourceException(
             "resource {0} is still in use, preventing operation".format(event.uri),
             referenced_in,

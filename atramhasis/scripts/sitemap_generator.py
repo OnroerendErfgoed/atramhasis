@@ -58,7 +58,7 @@ def create_deel_sitemaps(objecturls, limit_per_deel, sitemap_dir, name):
     """
     log.info("Beginning creation of sitemaps...")
     urlset = ElementTree.Element(
-        "urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        "urlset", xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
     )
     sitemap_counter = 1
 
@@ -72,7 +72,7 @@ def create_deel_sitemaps(objecturls, limit_per_deel, sitemap_dir, name):
             write_element_to_xml(filename, sitemap_dir, urlset)
             sitemap_counter += 1
             urlset = ElementTree.Element(
-                "urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+                "urlset", xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
             )
     if len(urlset):
         filename = f'{name}_sitemap_deel_{sitemap_counter}.xml'
@@ -89,7 +89,7 @@ def create_index_sitemap(base_url, directory):
         and "sitemap" in f and "sitemap_index.xml" not in f
     ]
     sitemapindex = ElementTree.Element(
-        "sitemapindex", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        "sitemapindex", xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
     )
     today = datetime.date.today().isoformat()
 

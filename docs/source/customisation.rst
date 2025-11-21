@@ -254,15 +254,15 @@ provider the following information needs to be provided:
   document URL.
 * `conceptscheme uri`: A URI for the conceptscheme. This should be a unique URI
   that resolves to the conceptscheme's URL in Atramhasis. If you are creating a 
-  thesaurus of colours at http://data.me.org/colours, your `id` might be `colours`
-  and the URI might be http://id.me.org/colours. This URI should redirect to 
-  `http://data.me.org/colours`. Another common option is to use 
-  `http://data.me.org/colours#id` as the URI for your conceptscheme.
+  thesaurus of colours at https://data.me.org/colours, your `id` might be `colours`
+  and the URI might be https://id.me.org/colours. This URI should redirect to
+  `https://data.me.org/colours`. Another common option is to use
+  `https://data.me.org/colours#id` as the URI for your conceptscheme.
 * `uri pattern`: A pattern that will be used by a :class:`~skosprovider.uri.UriGenerator` 
   to generate URI's for new concepts and collections added to your conceptscheme. 
   The pattern looks like a http URI with the marker `%s` as a placeholder for 
   your concept or collection id. Continuing our example, this could be 
-  `http://id.me.org/colours/%s` or `http://data.me.org/colours/%s#id`.
+  `https://id.me.org/colours/%s` or `https://data.me.org/colours/%s#id`.
 * `default language`: The default language of the provider. When a concept is 
   requested, a single label is always returned for ease of display. Normally 
   this is determined from browser settings or cookies, but if none of these are
@@ -325,8 +325,8 @@ Adding a new provider through the REST API
 ..........................................
 
 Apart from using the UI, it's also possible to create a provider through the 
-REST API, by POSTing to the `http://localhost:6543/providers` endpoint to have 
-the server assign an id or by PUTTing to the `http://localhost:6543/providers/<id>` 
+REST API, by POSTing to the `http://localhost:6543/providers` endpoint to have
+the server assign an id or by PUTTing to the `http://localhost:6543/providers/<id>`
 endpoint to assign your own id, using the following payload:
 
 .. code-block:: json
@@ -346,7 +346,7 @@ If all goes well, you'll be greeted with a `201 Created` status and your new
 provider and conceptscheme will be available through the UI.
 
 More information about the Atramhasis API can be found at the 
-`http://localhost:6543/api_doc` endpoint of your Atramhasis instance 
+`http://localhost:6543/api_doc` endpoint of your Atramhasis instance
 or at `https://thesaurus.onroerenderfgoed.be/api_doc`.
 
 
@@ -417,7 +417,7 @@ changed the underlying service, but decided against that because it would have
 prevented you from making your own choices when interacting with Atramhasis. If
 you want to render the tree of concepts using a preferred language different
 from what a browser would advocate for, you can pass the language parameter in
-a url, eg. `http://my.thesaurus.org/conceptschemes/STUFF/tree?language=la`.
+a url, eg. `https://my.thesaurus.org/conceptschemes/STUFF/tree?language=la`.
 
 .. _i18n:
 
@@ -646,7 +646,7 @@ the files (used and unused).
 Since a sitemap needs to contain abolute URL's, the script needs to know where
 the application is being hosted. This can be controlled with a setting
 `atramhasis.url` in the application's ini file. Set this to the root of your
-webapplication, eg. `http://my.thesaurus.org` (no trailing slash needed).
+webapplication, eg. `https://my.thesaurus.org` (no trailing slash needed).
 
 Foreign Keys
 ============
@@ -788,7 +788,7 @@ it will not be present and visible to the public among your regular vocabularies
 That's all. You can do the same with the
 :class:`~skosprovider_getty.providers.TGNProvider` for the
 `Thesaurus of Geographic Names (TGN)` or any of the providers for
-`heritagedata.org <http://heritagedata.org>`_ that can be found in
+`heritagedata.org <https://heritagedata.org>`_ that can be found in
 skosprovider_heritagedata_.
 
 In the end your :file:`my_thesaurus/skos/__init__.py` should look somewhat like
@@ -960,7 +960,7 @@ For example, to insert this file:
       "related": [],
       "subordinate_arrays": [],
       "type": "concept",
-      "uri": "http://id.trees.org/1"},
+      "uri": "https://id.trees.org/1"},
      {"broader": [],
       "id": 2,
       "labels": [{"label": "The Chestnut",
@@ -985,7 +985,7 @@ For example, to insert this file:
       "related": [],
       "subordinate_arrays": [],
       "type": "concept",
-      "uri": "http://id.trees.org/2"},
+      "uri": "https://id.trees.org/2"},
      {"id": 3,
       "labels": [{"label": "Bomen per soort",
                    "language": "nl",
@@ -998,7 +998,7 @@ For example, to insert this file:
       "notes": [],
       "superordinates": [],
       "type": "collection",
-      "uri": "http://id.trees.org/3"}]
+      "uri": "https://id.trees.org/3"}]
 
 We run the following command:
 
@@ -1041,11 +1041,11 @@ This will return output similar to this:
     sqlalchemy.engine.base.Engine INSERT INTO conceptscheme_label (conceptscheme_id, label_id) VALUES (?, ?)
     sqlalchemy.engine.base.Engine (11, 3548)
     sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('concept', 1, 'http://id.trees.org/1', 11)
+    sqlalchemy.engine.base.Engine ('concept', 1, 'https://id.trees.org/1', 11)
     sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('concept', 2, 'http://id.trees.org/2', 11)
+    sqlalchemy.engine.base.Engine ('concept', 2, 'https://id.trees.org/2', 11)
     sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('collection', 3, 'http://id.trees.org/3', 11)
+    sqlalchemy.engine.base.Engine ('collection', 3, 'https://id.trees.org/3', 11)
     sqlalchemy.engine.base.Engine INSERT INTO concept_label (concept_id, label_id) VALUES (?, ?)
     sqlalchemy.engine.base.Engine ((2558, 3551), (2558, 3552), (2558, 3553), (2557, 3549), (2557, 3550), (2559, 3554), (2559, 3555))
     sqlalchemy.engine.base.Engine INSERT INTO concept_note (concept_id, note_id) VALUES (?, ?)
@@ -1281,7 +1281,7 @@ functionality might fail to run properly.
     atramhasis.ldf.enabled = True
 
     # External url of the LDF server
-    atramhasis.ldf.baseurl = http://demo.atramhasis.org/ldf
+    atramhasis.ldf.baseurl = https://demo.atramhasis.org/ldf
 
     # DEFAULT empty list
     layout.focus_conceptschemes =

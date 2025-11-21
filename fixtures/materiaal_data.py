@@ -27,7 +27,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -146,7 +146,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -178,7 +178,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -211,7 +211,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -300,7 +300,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -357,7 +357,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -390,7 +390,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -427,7 +427,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -467,7 +467,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -501,7 +501,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -535,7 +535,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -584,7 +584,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -619,7 +619,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -769,7 +769,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -820,7 +820,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -860,7 +860,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -893,7 +893,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -927,7 +927,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -964,7 +964,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " 2) VIOE"
                 ),
                 "markup": "HTML",
@@ -999,7 +999,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -1056,7 +1056,7 @@ MATERIAALDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300014922"],
+            "exact": ["https://vocab.getty.edu/aat/300014922"],
             "narrow": [],
             "related": [],
         },
@@ -1159,7 +1159,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -1235,7 +1235,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -1268,7 +1268,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -1303,7 +1303,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }
@@ -1376,7 +1376,7 @@ MATERIAALDATA = [
             {
                 "citation": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "markup": "HTML",
             }

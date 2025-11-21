@@ -17,9 +17,9 @@ from rdflib.term import Literal
 from rdflib.term import URIRef
 from skosprovider_rdf.utils import _add_labels
 
-FORMATS = Namespace('http://www.w3.org/ns/formats/')
-SKOS_THES = Namespace('http://purl.org/iso25964/skos-thes#')
-HYDRA = Namespace('http://www.w3.org/ns/hydra/core#')
+FORMATS = Namespace('https://www.w3.org/ns/formats/')
+SKOS_THES = Namespace('https://purl.org/iso25964/skos-thes#')
+HYDRA = Namespace('https://www.w3.org/ns/hydra/core#')
 
 
 def void_dumper(request, registry):

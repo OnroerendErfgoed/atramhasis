@@ -14,7 +14,7 @@ from atramhasis.data.datamanagers import ProviderDataManager
 log = logging.getLogger(__name__)
 LICENSES = [
     'https://creativecommons.org/licenses/by/4.0/',
-    'http://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+    'https://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
 ]
 
 

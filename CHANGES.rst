@@ -438,7 +438,7 @@ Upgrading from `0.4.0` should be simple and cause no or few problems.
   as an alembic migration. So only effective when creating a new database.
   If you already have a database created from an older version of Atramhasis,
   please modify accordingly. Modifying column length on SQLite is not possible
-  (see http://www.sqlite.org/omitted.html ).
+  (see https://www.sqlite.org/omitted.html ).
 - Abiltity to match Concepts in an Atramhasis ConceptScheme to Concepts in
   external ConceptSchemes through properties such as *skos:exactMatch* and
   *skos:closeMatch*.

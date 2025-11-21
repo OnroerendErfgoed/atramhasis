@@ -118,8 +118,8 @@ def fill_db():
                          ],
                      },
                      {
-                         'id': 'http://id.manual.org/manual/68',
-                         'uri': 'http://id.manual.org/manual/68',
+                         'id': 'https://id.manual.org/manual/68',
+                         'uri': 'https://id.manual.org/manual/68',
                          'labels': [
                              {'type': 'prefLabel', 'language': 'nl', 'label': 'handmatig'}
                          ],
@@ -217,7 +217,7 @@ def create_registry(request):
             'subject': ['biology']
         },
         [data.larch, data.chestnut, data.species],
-        concept_scheme=ConceptScheme('http://id.trees.org')
+        concept_scheme=ConceptScheme('https://id.trees.org')
     )
     missing_label = SQLAlchemyProvider(
         {'id': 'MISSING_LABEL', 'conceptscheme_id': 9},

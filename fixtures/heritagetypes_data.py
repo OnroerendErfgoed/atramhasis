@@ -703,7 +703,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004895"],
+            "exact": ["https://vocab.getty.edu/aat/300004895"],
             "narrow": [],
             "related": [],
         },
@@ -738,7 +738,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["http://vocab.getty.edu/aat/300008631"],
+            "related": ["https://vocab.getty.edu/aat/300008631"],
         },
         "member_of": [1847],
         "narrower": [],
@@ -798,7 +798,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["http://vocab.getty.edu/aat/300132443"],
+            "related": ["https://vocab.getty.edu/aat/300132443"],
         },
         "member_of": [1840],
         "narrower": [1906, 1907, 1908, 1909],
@@ -819,7 +819,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>',
+                "citation": 'Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>',
                 "markup": "HTML",
             }
         ],
@@ -1004,7 +1004,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "altaren", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300003725"],
+            "close": ["https://vocab.getty.edu/aat/300003725"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -1376,7 +1376,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300002580"],
+            "exact": ["https://vocab.getty.edu/aat/300002580"],
             "narrow": [],
             "related": [],
         },
@@ -1613,7 +1613,7 @@ HERITAGETYPESDATA = [
         "related": [328],
         "sources": [
             {
-                "citation": 'Nederlandse Art and Architecture Thesaurus (www.aat-ned.nl); Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/</a>)',
+                "citation": 'Nederlandse Art and Architecture Thesaurus (www.aat-ned.nl); Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/</a>)',
                 "markup": "HTML",
             }
         ],
@@ -1666,7 +1666,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300000611"],
+            "exact": ["https://vocab.getty.edu/aat/300000611"],
             "narrow": [],
             "related": [],
         },
@@ -1835,7 +1835,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300266040"],
+            "exact": ["https://vocab.getty.edu/aat/300266040"],
             "narrow": [],
             "related": [],
         },
@@ -1858,7 +1858,7 @@ HERITAGETYPESDATA = [
         "related": [39],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -2007,7 +2007,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300001989"],
+            "exact": ["https://vocab.getty.edu/aat/300001989"],
             "narrow": [],
             "related": [],
         },
@@ -2072,7 +2072,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Van Dale groot woordenboek der Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005. 2) Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>',
+                "citation": '1) Van Dale groot woordenboek der Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005. 2) Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>',
                 "markup": "HTML",
             }
         ],
@@ -2283,7 +2283,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300260407"],
+            "exact": ["https://vocab.getty.edu/aat/300260407"],
             "narrow": [],
             "related": [],
         },
@@ -2376,7 +2376,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Onderzoeksbalans <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) Hiddink H. 2003, Het grafritueel in de Late IJzertijd en Romeinse tijd in het Maas-Demer-Scheldegebied in het bijzonder van twee grafvelden bij Weert, Zuidnederlandse Archeologische Rapporten vol. 11. 3) VIOE',
+                "citation": '1) Onderzoeksbalans <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) Hiddink H. 2003, Het grafritueel in de Late IJzertijd en Romeinse tijd in het Maas-Demer-Scheldegebied in het bijzonder van twee grafvelden bij Weert, Zuidnederlandse Archeologische Rapporten vol. 11. 3) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -2604,7 +2604,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008703"],
+            "exact": ["https://vocab.getty.edu/aat/300008703"],
             "narrow": [],
             "related": [],
         },
@@ -2754,7 +2754,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/900031486"],
+            "close": ["https://vocab.getty.edu/aat/900031486"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -2907,7 +2907,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'National Monuments Record thesaurus (English Heritage), <a href="http://thesaurus.english-heritage.org.uk/frequentuser.htm">http://thesaurus.english-heritage.org.uk/frequentuser.htm</a>',
+                "citation": 'National Monuments Record thesaurus (English Heritage), <a href="https://thesaurus.english-heritage.org.uk/frequentuser.htm">https://thesaurus.english-heritage.org.uk/frequentuser.htm</a>',
                 "markup": "HTML",
             }
         ],
@@ -3044,8 +3044,8 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [
-                "http://vocab.getty.edu/aat/300008001",
-                "http://vocab.getty.edu/aat/300004062",
+                "https://vocab.getty.edu/aat/300008001",
+                "https://vocab.getty.edu/aat/300004062",
             ],
             "related": [],
         },
@@ -3085,7 +3085,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004095"],
+            "exact": ["https://vocab.getty.edu/aat/300004095"],
             "narrow": [],
             "related": [],
         },
@@ -3228,7 +3228,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300237566"],
+            "exact": ["https://vocab.getty.edu/aat/300237566"],
             "narrow": [],
             "related": [],
         },
@@ -3280,7 +3280,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008135"],
+            "exact": ["https://vocab.getty.edu/aat/300008135"],
             "narrow": [],
             "related": [],
         },
@@ -3820,7 +3820,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007838"],
+            "exact": ["https://vocab.getty.edu/aat/300007838"],
             "narrow": [],
             "related": [],
         },
@@ -3994,7 +3994,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300047457"],
+            "exact": ["https://vocab.getty.edu/aat/300047457"],
             "narrow": [],
             "related": [],
         },
@@ -4086,7 +4086,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["http://vocab.getty.edu/aat/300132451"],
+            "related": ["https://vocab.getty.edu/aat/300132451"],
         },
         "member_of": [1840],
         "narrower": [2161],
@@ -4367,7 +4367,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Onderzoeksbalans <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) Hiddink H. 2003, Het grafritueel in de Late IJzertijd en Romeinse tijd in het Maas-Demer-Scheldegebied in het bijzonder van twee grafvelden bij Weert, Zuidnederlandse Archeologische Rapporten vol. 11.',
+                "citation": '1) Onderzoeksbalans <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) Hiddink H. 2003, Het grafritueel in de Late IJzertijd en Romeinse tijd in het Maas-Demer-Scheldegebied in het bijzonder van twee grafvelden bij Weert, Zuidnederlandse Archeologische Rapporten vol. 11.',
                 "markup": "HTML",
             }
         ],
@@ -4438,7 +4438,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -4512,7 +4512,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300003853"],
+            "close": ["https://vocab.getty.edu/aat/300003853"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -4645,7 +4645,7 @@ HERITAGETYPESDATA = [
         "related": [500],
         "sources": [
             {
-                "citation": 'Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>',
+                "citation": 'Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>',
                 "markup": "HTML",
             }
         ],
@@ -4807,7 +4807,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005495"],
+            "exact": ["https://vocab.getty.edu/aat/300005495"],
             "narrow": [],
             "related": [],
         },
@@ -5000,7 +5000,7 @@ HERITAGETYPESDATA = [
         "related": [1229],
         "sources": [
             {
-                "citation": '1) Onderzoeksbalans <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) VIOE',
+                "citation": '1) Onderzoeksbalans <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -5119,7 +5119,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300006792"],
+            "exact": ["https://vocab.getty.edu/aat/300006792"],
             "narrow": [],
             "related": [],
         },
@@ -5262,7 +5262,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -5323,7 +5323,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -5597,7 +5597,7 @@ HERITAGETYPESDATA = [
         "related": [141, 88],
         "sources": [
             {
-                "citation": 'Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005; Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/</a>)',
+                "citation": 'Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005; Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/</a>)',
                 "markup": None,
             }
         ],
@@ -6097,7 +6097,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -6115,7 +6115,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004618"],
+            "exact": ["https://vocab.getty.edu/aat/300004618"],
             "narrow": [],
             "related": [],
         },
@@ -6138,7 +6138,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandstalige Art &amp; Architecture Thesaurus (<a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>)\n2) Haslinghuis E.J. &amp; Janse H. 1997: <em>Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie</em>, Leiden.',
+                "citation": '1) Nederlandstalige Art &amp; Architecture Thesaurus (<a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>)\n2) Haslinghuis E.J. &amp; Janse H. 1997: <em>Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie</em>, Leiden.',
                 "markup": "HTML",
             }
         ],
@@ -6313,7 +6313,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300002098"],
+            "exact": ["https://vocab.getty.edu/aat/300002098"],
             "narrow": [],
             "related": [],
         },
@@ -6330,7 +6330,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Haslinghuis E.J. &amp; Janse H. 1997: Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.\n2) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": '1) Haslinghuis E.J. &amp; Janse H. 1997: Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.\n2) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -6364,7 +6364,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -6379,7 +6379,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008131"],
+            "exact": ["https://vocab.getty.edu/aat/300008131"],
             "narrow": [],
             "related": [],
         },
@@ -6673,7 +6673,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300002803"],
+            "exact": ["https://vocab.getty.edu/aat/300002803"],
             "narrow": [],
             "related": [],
         },
@@ -6853,7 +6853,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004963"],
+            "exact": ["https://vocab.getty.edu/aat/300004963"],
             "narrow": [],
             "related": [],
         },
@@ -7047,7 +7047,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300003788"],
+            "exact": ["https://vocab.getty.edu/aat/300003788"],
             "narrow": [],
             "related": [],
         },
@@ -7081,7 +7081,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900032157"],
+            "exact": ["https://vocab.getty.edu/aat/900032157"],
             "narrow": [],
             "related": [],
         },
@@ -7336,7 +7336,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900031987"],
+            "exact": ["https://vocab.getty.edu/aat/900031987"],
             "narrow": [],
             "related": [],
         },
@@ -7718,7 +7718,7 @@ HERITAGETYPESDATA = [
         "related": [1100],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -7945,7 +7945,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007937"],
+            "exact": ["https://vocab.getty.edu/aat/300007937"],
             "narrow": [],
             "related": [],
         },
@@ -7980,7 +7980,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300112185"],
+            "exact": ["https://vocab.getty.edu/aat/300112185"],
             "narrow": [],
             "related": [],
         },
@@ -8122,7 +8122,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300122175"],
+            "exact": ["https://vocab.getty.edu/aat/300122175"],
             "narrow": [],
             "related": [],
         },
@@ -8823,7 +8823,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "fonteinen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300006179"],
+            "close": ["https://vocab.getty.edu/aat/300006179"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -8853,7 +8853,7 @@ HERITAGETYPESDATA = [
         "related": [500],
         "sources": [
             {
-                "citation": '1) Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005\n2) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n3) Onroerend Erfgoed',
+                "citation": '1) Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005\n2) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n3) Onroerend Erfgoed',
                 "markup": "HTML",
             }
         ],
@@ -8894,7 +8894,7 @@ HERITAGETYPESDATA = [
         "related": [88, 99, 1184, 1793, 124],
         "sources": [
             {
-                "citation": '1) Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/</a>)\n2) Kamps P.J.M. (red.) 1999, Terminologie verdedigingswerken. Inrichting, aanval en verdediging, Utrecht.',
+                "citation": '1) Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/</a>)\n2) Kamps P.J.M. (red.) 1999, Terminologie verdedigingswerken. Inrichting, aanval en verdediging, Utrecht.',
                 "markup": "HTML",
             }
         ],
@@ -9110,7 +9110,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -9176,7 +9176,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004843"],
+            "exact": ["https://vocab.getty.edu/aat/300004843"],
             "narrow": [],
             "related": [],
         },
@@ -9365,7 +9365,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300265418"],
+            "close": ["https://vocab.getty.edu/aat/300265418"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -9523,7 +9523,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300122139"],
+            "close": ["https://vocab.getty.edu/aat/300122139"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -9664,7 +9664,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300129541"],
+            "exact": ["https://vocab.getty.edu/aat/300129541"],
             "narrow": [],
             "related": [],
         },
@@ -9689,7 +9689,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300253852"],
+            "close": ["https://vocab.getty.edu/aat/300253852"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -9716,7 +9716,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005213"],
+            "exact": ["https://vocab.getty.edu/aat/300005213"],
             "narrow": [],
             "related": [],
         },
@@ -9742,7 +9742,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005147"],
+            "exact": ["https://vocab.getty.edu/aat/300005147"],
             "narrow": [],
             "related": [],
         },
@@ -9776,7 +9776,7 @@ HERITAGETYPESDATA = [
             "broad": [],
             "close": [],
             "exact": [],
-            "narrow": ["http://vocab.getty.edu/aat/300006304"],
+            "narrow": ["https://vocab.getty.edu/aat/300006304"],
             "related": [],
         },
         "member_of": [],
@@ -9988,7 +9988,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '- Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>\n- agentschap Onroerend Erfgoed',
+                "citation": '- Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>\n- agentschap Onroerend Erfgoed',
                 "markup": "HTML",
             }
         ],
@@ -10216,7 +10216,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) Van Dale groot woordenboek (1994)',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) Van Dale groot woordenboek (1994)',
                 "markup": "HTML",
             }
         ],
@@ -10668,7 +10668,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "gevels", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300076168"],
+            "close": ["https://vocab.getty.edu/aat/300076168"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -11130,7 +11130,7 @@ HERITAGETYPESDATA = [
         "related": [1080],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -11277,7 +11277,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -11410,7 +11410,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["http://vocab.getty.edu/aat/300008874"],
+            "related": ["https://vocab.getty.edu/aat/300008874"],
         },
         "member_of": [1840],
         "narrower": [],
@@ -11708,7 +11708,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -12075,7 +12075,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005048"],
+            "exact": ["https://vocab.getty.edu/aat/300005048"],
             "narrow": [],
             "related": [],
         },
@@ -12207,7 +12207,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "hallen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300005238"],
+            "close": ["https://vocab.getty.edu/aat/300005238"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -12230,7 +12230,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005230"],
+            "exact": ["https://vocab.getty.edu/aat/300005230"],
             "narrow": [],
             "related": [],
         },
@@ -12263,7 +12263,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007868"],
+            "exact": ["https://vocab.getty.edu/aat/300007868"],
             "narrow": [],
             "related": [],
         },
@@ -12391,7 +12391,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "heiden", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/900020898"],
+            "close": ["https://vocab.getty.edu/aat/900020898"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -12686,7 +12686,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300047170"],
+            "exact": ["https://vocab.getty.edu/aat/300047170"],
             "narrow": [],
             "related": [],
         },
@@ -13671,7 +13671,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -13729,7 +13729,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -14121,7 +14121,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -14260,7 +14260,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300008553"],
+            "close": ["https://vocab.getty.edu/aat/300008553"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -14302,7 +14302,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300007926"],
+            "close": ["https://vocab.getty.edu/aat/300007926"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -14381,7 +14381,7 @@ HERITAGETYPESDATA = [
             }
         ],
         "matches": {
-            "broad": ["http://vocab.getty.edu/aat/300007800"],
+            "broad": ["https://vocab.getty.edu/aat/300007800"],
             "close": [],
             "exact": [],
             "narrow": [],
@@ -14409,7 +14409,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300000678"],
+            "exact": ["https://vocab.getty.edu/aat/300000678"],
             "narrow": [],
             "related": [],
         },
@@ -14435,7 +14435,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300169606"],
+            "exact": ["https://vocab.getty.edu/aat/300169606"],
             "narrow": [],
             "related": [],
         },
@@ -14518,7 +14518,7 @@ HERITAGETYPESDATA = [
         "related": [1310],
         "sources": [
             {
-                "citation": '1) 5.6.2.3.4.3. Landelijke bewoning uit de Romeinse tijd in Vlaanderen, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a> 2) VIOE',
+                "citation": '1) 5.6.2.3.4.3. Landelijke bewoning uit de Romeinse tijd in Vlaanderen, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -14614,7 +14614,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900025956"],
+            "exact": ["https://vocab.getty.edu/aat/900025956"],
             "narrow": [],
             "related": [],
         },
@@ -14696,7 +14696,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "interieur", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300124520"],
+            "close": ["https://vocab.getty.edu/aat/300124520"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -14783,7 +14783,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900032050"],
+            "exact": ["https://vocab.getty.edu/aat/900032050"],
             "narrow": [],
             "related": [],
         },
@@ -15195,7 +15195,7 @@ HERITAGETYPESDATA = [
         "related": [1296],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -15478,7 +15478,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -15700,7 +15700,7 @@ HERITAGETYPESDATA = [
         "id": 1776,
         "labels": [{"label": "kapellen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
-            "broad": ["http://vocab.getty.edu/aat/300004590"],
+            "broad": ["https://vocab.getty.edu/aat/300004590"],
             "close": [],
             "exact": [],
             "narrow": [],
@@ -15837,7 +15837,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007418"],
+            "exact": ["https://vocab.getty.edu/aat/300007418"],
             "narrow": [],
             "related": [],
         },
@@ -16167,7 +16167,7 @@ HERITAGETYPESDATA = [
         "related": [225],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -16205,7 +16205,7 @@ HERITAGETYPESDATA = [
         "related": [1371],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -16400,7 +16400,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005073"],
+            "exact": ["https://vocab.getty.edu/aat/300005073"],
             "narrow": [],
             "related": [],
         },
@@ -16426,7 +16426,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "keersluizen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/900031582"],
+            "close": ["https://vocab.getty.edu/aat/900031582"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -16479,7 +16479,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004759"],
+            "exact": ["https://vocab.getty.edu/aat/300004759"],
             "narrow": [],
             "related": [],
         },
@@ -16502,7 +16502,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -16517,7 +16517,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007466"],
+            "exact": ["https://vocab.getty.edu/aat/300007466"],
             "narrow": [],
             "related": [],
         },
@@ -16665,7 +16665,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300003625"],
+            "exact": ["https://vocab.getty.edu/aat/300003625"],
             "narrow": [],
             "related": [],
         },
@@ -16989,7 +16989,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -17139,7 +17139,7 @@ HERITAGETYPESDATA = [
         "related": [48],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -17376,7 +17376,7 @@ HERITAGETYPESDATA = [
         "related": [242, 4, 102, 240, 354, 1786, 1788, 1789, 1790],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -17392,7 +17392,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300008124"],
+            "close": ["https://vocab.getty.edu/aat/300008124"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -17624,7 +17624,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004565"],
+            "exact": ["https://vocab.getty.edu/aat/300004565"],
             "narrow": [],
             "related": [],
         },
@@ -17800,7 +17800,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008706"],
+            "exact": ["https://vocab.getty.edu/aat/300008706"],
             "narrow": [],
             "related": [],
         },
@@ -18420,7 +18420,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -19259,7 +19259,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300026005"],
+            "exact": ["https://vocab.getty.edu/aat/300026005"],
             "narrow": [],
             "related": [],
         },
@@ -19277,7 +19277,7 @@ HERITAGETYPESDATA = [
         "id": 2093,
         "labels": [{"label": "liften", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
-            "broad": ["http://vocab.getty.edu/aat/300051186"],
+            "broad": ["https://vocab.getty.edu/aat/300051186"],
             "close": [],
             "exact": [],
             "narrow": [],
@@ -19302,7 +19302,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) Haslinghuis E.J. &amp; Janse H. 1997: Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) Haslinghuis E.J. &amp; Janse H. 1997: Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.',
                 "markup": "HTML",
             }
         ],
@@ -19392,7 +19392,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -19484,7 +19484,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -19676,7 +19676,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005; Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/</a>)',
+                "citation": 'Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005; Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/</a>)',
                 "markup": "HTML",
             }
         ],
@@ -20243,7 +20243,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'National Monuments Record thesaurus (English Heritage), <a href="http://thesaurus.english-heritage.org.uk/frequentuser.htm">http://thesaurus.english-heritage.org.uk/frequentuser.htm</a>',
+                "citation": 'National Monuments Record thesaurus (English Heritage), <a href="https://thesaurus.english-heritage.org.uk/frequentuser.htm">https://thesaurus.english-heritage.org.uk/frequentuser.htm</a>',
                 "markup": "HTML",
             }
         ],
@@ -20290,7 +20290,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008727"],
+            "exact": ["https://vocab.getty.edu/aat/300008727"],
             "narrow": [],
             "related": [],
         },
@@ -20348,7 +20348,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005703"],
+            "exact": ["https://vocab.getty.edu/aat/300005703"],
             "narrow": [],
             "related": [],
         },
@@ -20370,7 +20370,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["http://vocab.getty.edu/aat/300007937"],
+            "related": ["https://vocab.getty.edu/aat/300007937"],
         },
         "member_of": [],
         "narrower": [],
@@ -20474,7 +20474,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Boeren I. e.a. 2009, Een archeologische evaluatie en waardering van houtskoolmeilers in het Zoerselbos (Zoersel, provincie Antwerpen), Instituut voor Natuur- en Bosonderzoek (INBO). <a href="http://www.onroerenderfgoed.be/nl/uploads/b1126.pdf">http://www.onroerenderfgoed.be/nl/uploads/b1126.pdf</a>',
+                "citation": 'Boeren I. e.a. 2009, Een archeologische evaluatie en waardering van houtskoolmeilers in het Zoerselbos (Zoersel, provincie Antwerpen), Instituut voor Natuur- en Bosonderzoek (INBO). <a href="https://www.onroerenderfgoed.be/nl/uploads/b1126.pdf">https://www.onroerenderfgoed.be/nl/uploads/b1126.pdf</a>',
                 "markup": "HTML",
             }
         ],
@@ -20591,7 +20591,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008680"],
+            "exact": ["https://vocab.getty.edu/aat/300008680"],
             "narrow": [],
             "related": [],
         },
@@ -20614,7 +20614,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>',
+                "citation": 'Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>',
                 "markup": "HTML",
             }
         ],
@@ -20859,7 +20859,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "mijngebouwen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300006423"],
+            "close": ["https://vocab.getty.edu/aat/300006423"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -21236,7 +21236,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "moerassen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300008903"],
+            "close": ["https://vocab.getty.edu/aat/300008903"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -21675,7 +21675,7 @@ HERITAGETYPESDATA = [
         "related": [1391],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -21731,7 +21731,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -21812,7 +21812,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300033644"],
+            "exact": ["https://vocab.getty.edu/aat/300033644"],
             "narrow": [],
             "related": [],
         },
@@ -22089,7 +22089,7 @@ HERITAGETYPESDATA = [
         "related": [931],
         "sources": [
             {
-                "citation": 'Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>',
+                "citation": 'Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>',
                 "markup": "HTML",
             }
         ],
@@ -22320,7 +22320,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300121918"],
+            "close": ["https://vocab.getty.edu/aat/300121918"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -22950,7 +22950,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300006495"],
+            "exact": ["https://vocab.getty.edu/aat/300006495"],
             "narrow": [],
             "related": [],
         },
@@ -23098,7 +23098,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300122263"],
+            "exact": ["https://vocab.getty.edu/aat/300122263"],
             "narrow": [],
             "related": [],
         },
@@ -23320,7 +23320,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008059"],
+            "exact": ["https://vocab.getty.edu/aat/300008059"],
             "narrow": [],
             "related": [],
         },
@@ -23408,7 +23408,7 @@ HERITAGETYPESDATA = [
         "related": [129, 281],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -23658,7 +23658,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008072"],
+            "exact": ["https://vocab.getty.edu/aat/300008072"],
             "narrow": [],
             "related": [],
         },
@@ -23821,7 +23821,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008280"],
+            "exact": ["https://vocab.getty.edu/aat/300008280"],
             "narrow": [],
             "related": [],
         },
@@ -24037,7 +24037,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300041686"],
+            "exact": ["https://vocab.getty.edu/aat/300041686"],
             "narrow": [],
             "related": [],
         },
@@ -24054,7 +24054,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -24550,7 +24550,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -24569,7 +24569,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300006805"],
+            "exact": ["https://vocab.getty.edu/aat/300006805"],
             "narrow": [],
             "related": [],
         },
@@ -24599,7 +24599,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007423"],
+            "exact": ["https://vocab.getty.edu/aat/300007423"],
             "narrow": [],
             "related": [],
         },
@@ -24616,7 +24616,7 @@ HERITAGETYPESDATA = [
         "related": [4, 243],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -24633,7 +24633,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300006308"],
+            "exact": ["https://vocab.getty.edu/aat/300006308"],
             "narrow": [],
             "related": [],
         },
@@ -25483,7 +25483,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -25573,7 +25573,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '5.6.2.3.4.3. Landelijke bewoning uit de Romeinse tijd in Vlaanderen, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen, <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/civiele_nederzettingen/landelijk/vlaanderen">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/civiele_nederzettingen/landelijk/vlaanderen</a>',
+                "citation": '5.6.2.3.4.3. Landelijke bewoning uit de Romeinse tijd in Vlaanderen, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen, <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/civiele_nederzettingen/landelijk/vlaanderen">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/civiele_nederzettingen/landelijk/vlaanderen</a>',
                 "markup": "HTML",
             }
         ],
@@ -25926,7 +25926,7 @@ HERITAGETYPESDATA = [
         "id": 2090,
         "labels": [{"label": "poorten", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
-            "broad": ["http://vocab.getty.edu/aat/300069189"],
+            "broad": ["https://vocab.getty.edu/aat/300069189"],
             "close": [],
             "exact": [],
             "narrow": [],
@@ -26060,8 +26060,8 @@ HERITAGETYPESDATA = [
             "exact": [],
             "narrow": [],
             "related": [
-                "http://vocab.getty.edu/aat/300076641",
-                "http://vocab.getty.edu/aat/300083076",
+                "https://vocab.getty.edu/aat/300076641",
+                "https://vocab.getty.edu/aat/300083076",
             ],
         },
         "member_of": [1767],
@@ -26274,7 +26274,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300006781"],
+            "exact": ["https://vocab.getty.edu/aat/300006781"],
             "narrow": [],
             "related": [],
         },
@@ -26784,7 +26784,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -26804,7 +26804,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004347"],
+            "exact": ["https://vocab.getty.edu/aat/300004347"],
             "narrow": [],
             "related": [],
         },
@@ -26930,7 +26930,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007391"],
+            "exact": ["https://vocab.getty.edu/aat/300007391"],
             "narrow": [],
             "related": [],
         },
@@ -27374,7 +27374,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) cursusmateriaal UGent (Prof. J. Bourgeois) 2) 4.7.3.1. Riviervondsten, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>',
+                "citation": '1) cursusmateriaal UGent (Prof. J. Bourgeois) 2) 4.7.3.1. Riviervondsten, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>',
                 "markup": "HTML",
             }
         ],
@@ -27416,7 +27416,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008707"],
+            "exact": ["https://vocab.getty.edu/aat/300008707"],
             "narrow": [],
             "related": [],
         },
@@ -27653,7 +27653,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300248615"],
+            "exact": ["https://vocab.getty.edu/aat/300248615"],
             "narrow": [],
             "related": [],
         },
@@ -27760,7 +27760,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004631"],
+            "exact": ["https://vocab.getty.edu/aat/300004631"],
             "narrow": [],
             "related": [],
         },
@@ -27777,7 +27777,7 @@ HERITAGETYPESDATA = [
         "related": [1005],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -28087,7 +28087,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004627"],
+            "exact": ["https://vocab.getty.edu/aat/300004627"],
             "narrow": [],
             "related": [],
         },
@@ -28210,7 +28210,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300048816"],
+            "exact": ["https://vocab.getty.edu/aat/300048816"],
             "narrow": [],
             "related": [],
         },
@@ -28482,7 +28482,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300235059"],
+            "exact": ["https://vocab.getty.edu/aat/300235059"],
             "narrow": [],
             "related": [],
         },
@@ -28520,7 +28520,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300132308"],
+            "exact": ["https://vocab.getty.edu/aat/300132308"],
             "narrow": [],
             "related": [],
         },
@@ -28660,7 +28660,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004938"],
+            "exact": ["https://vocab.getty.edu/aat/300004938"],
             "narrow": [],
             "related": [],
         },
@@ -28770,7 +28770,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Luchtfotografie boven Vlaanderen: Wat is luchtfotografie?, <a href="http://www.archaeology.ugent.be/luchtfotografie">http://www.archaeology.ugent.be/luchtfotografie</a>',
+                "citation": 'Luchtfotografie boven Vlaanderen: Wat is luchtfotografie?, <a href="https://www.archaeology.ugent.be/luchtfotografie">https://www.archaeology.ugent.be/luchtfotografie</a>',
                 "markup": "HTML",
             }
         ],
@@ -28796,7 +28796,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -28872,7 +28872,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900026566"],
+            "exact": ["https://vocab.getty.edu/aat/900026566"],
             "narrow": [],
             "related": [],
         },
@@ -29365,7 +29365,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300101336"],
+            "exact": ["https://vocab.getty.edu/aat/300101336"],
             "narrow": [],
             "related": [],
         },
@@ -29778,7 +29778,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007250"],
+            "exact": ["https://vocab.getty.edu/aat/300007250"],
             "narrow": [],
             "related": [],
         },
@@ -29881,7 +29881,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900032084"],
+            "exact": ["https://vocab.getty.edu/aat/900032084"],
             "narrow": [],
             "related": [],
         },
@@ -30506,7 +30506,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -30657,7 +30657,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "steilranden", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300132356"],
+            "close": ["https://vocab.getty.edu/aat/300132356"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -30939,7 +30939,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900027035"],
+            "exact": ["https://vocab.getty.edu/aat/900027035"],
             "narrow": [],
             "related": [],
         },
@@ -31266,7 +31266,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300006640"],
+            "exact": ["https://vocab.getty.edu/aat/300006640"],
             "narrow": [],
             "related": [],
         },
@@ -31335,7 +31335,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900019825"],
+            "exact": ["https://vocab.getty.edu/aat/900019825"],
             "narrow": [],
             "related": [],
         },
@@ -31679,7 +31679,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -31974,7 +31974,7 @@ HERITAGETYPESDATA = [
         "related": [1127],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) Haslinghuis E.J. &amp; Janse H. 1997, Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) Haslinghuis E.J. &amp; Janse H. 1997, Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.',
                 "markup": "HTML",
             }
         ],
@@ -32114,7 +32114,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300061887"],
+            "exact": ["https://vocab.getty.edu/aat/300061887"],
             "narrow": [],
             "related": [],
         },
@@ -32149,7 +32149,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300164243"],
+            "exact": ["https://vocab.getty.edu/aat/300164243"],
             "narrow": [],
             "related": [],
         },
@@ -32172,7 +32172,7 @@ HERITAGETYPESDATA = [
         "related": [521],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -32204,7 +32204,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -32358,7 +32358,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004645"],
+            "exact": ["https://vocab.getty.edu/aat/300004645"],
             "narrow": [],
             "related": [],
         },
@@ -33014,7 +33014,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) VIOE 2) National Monuments Record thesaurus (English Heritage), <a href="http://thesaurus.english-heritage.org.uk/frequentuser.htm">http://thesaurus.english-heritage.org.uk/frequentuser.htm</a> (MDA archaeological objects thesaurus)',
+                "citation": '1) VIOE 2) National Monuments Record thesaurus (English Heritage), <a href="https://thesaurus.english-heritage.org.uk/frequentuser.htm">https://thesaurus.english-heritage.org.uk/frequentuser.htm</a> (MDA archaeological objects thesaurus)',
                 "markup": "HTML",
             }
         ],
@@ -33031,7 +33031,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/900031054"],
+            "exact": ["https://vocab.getty.edu/aat/900031054"],
             "narrow": [],
             "related": [],
         },
@@ -33246,7 +33246,7 @@ HERITAGETYPESDATA = [
         "related": [1235],
         "sources": [
             {
-                "citation": 'Onderzoeksbalans <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a>',
+                "citation": 'Onderzoeksbalans <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a>',
                 "markup": "HTML",
             }
         ],
@@ -33439,7 +33439,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -33763,7 +33763,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Louwe Kooijmans L., van den Broecke P.W., Fokkens H. en van Gijn A. (eds.), 2005, Nederland in de prehistorie, Amsterdam. 2) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": '1) Louwe Kooijmans L., van den Broecke P.W., Fokkens H. en van Gijn A. (eds.), 2005, Nederland in de prehistorie, Amsterdam. 2) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -34142,7 +34142,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -34161,7 +34161,7 @@ HERITAGETYPESDATA = [
             "broad": [],
             "close": [],
             "exact": [],
-            "narrow": ["http://vocab.getty.edu/aat/300006888"],
+            "narrow": ["https://vocab.getty.edu/aat/300006888"],
             "related": [],
         },
         "member_of": [],
@@ -34239,7 +34239,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007063"],
+            "exact": ["https://vocab.getty.edu/aat/300007063"],
             "narrow": [],
             "related": [],
         },
@@ -34462,7 +34462,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300179263"],
+            "exact": ["https://vocab.getty.edu/aat/300179263"],
             "narrow": [],
             "related": [],
         },
@@ -34491,7 +34491,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300006707"],
+            "exact": ["https://vocab.getty.edu/aat/300006707"],
             "narrow": [],
             "related": [],
         },
@@ -34572,7 +34572,7 @@ HERITAGETYPESDATA = [
         "related": [771],
         "sources": [
             {
-                "citation": 'Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/)</a>',
+                "citation": 'Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/)</a>',
                 "markup": "HTML",
             }
         ],
@@ -34650,7 +34650,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007890"],
+            "exact": ["https://vocab.getty.edu/aat/300007890"],
             "narrow": [],
             "related": [],
         },
@@ -35102,7 +35102,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300082991"],
+            "exact": ["https://vocab.getty.edu/aat/300082991"],
             "narrow": [],
             "related": [],
         },
@@ -35159,7 +35159,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300008805"],
+            "exact": ["https://vocab.getty.edu/aat/300008805"],
             "narrow": [],
             "related": [],
         },
@@ -35321,7 +35321,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300007768"],
+            "exact": ["https://vocab.getty.edu/aat/300007768"],
             "narrow": [],
             "related": [],
         },
@@ -35461,7 +35461,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -35476,7 +35476,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300219258"],
+            "exact": ["https://vocab.getty.edu/aat/300219258"],
             "narrow": [],
             "related": [],
         },
@@ -35519,7 +35519,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300001656"],
+            "exact": ["https://vocab.getty.edu/aat/300001656"],
             "narrow": [],
             "related": [],
         },
@@ -35717,7 +35717,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300004104"],
+            "exact": ["https://vocab.getty.edu/aat/300004104"],
             "narrow": [],
             "related": [],
         },
@@ -36377,7 +36377,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -37128,7 +37128,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "weilanden", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300008876"],
+            "close": ["https://vocab.getty.edu/aat/300008876"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -37223,7 +37223,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -37302,7 +37302,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "wijngaarden", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300000248"],
+            "close": ["https://vocab.getty.edu/aat/300000248"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -37569,7 +37569,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005639"],
+            "exact": ["https://vocab.getty.edu/aat/300005639"],
             "narrow": [],
             "related": [],
         },
@@ -37650,7 +37650,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300005433"],
+            "exact": ["https://vocab.getty.edu/aat/300005433"],
             "narrow": [],
             "related": [],
         },
@@ -37818,7 +37818,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'R. Annaert, J. Bourgeois &amp; G. Creemers, Onderzoeksbalans Archeologie. Bronstijd/ijzertijd: Nederzettingen. <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/metaaltijden/bronnen/archeologisch/nederzettingen">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/metaaltijden/bronnen/archeologisch/nederzettingen</a>',
+                "citation": 'R. Annaert, J. Bourgeois &amp; G. Creemers, Onderzoeksbalans Archeologie. Bronstijd/ijzertijd: Nederzettingen. <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/metaaltijden/bronnen/archeologisch/nederzettingen">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/metaaltijden/bronnen/archeologisch/nederzettingen</a>',
                 "markup": "HTML",
             }
         ],
@@ -37832,7 +37832,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "woontorens", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["http://vocab.getty.edu/aat/300182716"],
+            "close": ["https://vocab.getty.edu/aat/300182716"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -37860,7 +37860,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300000762"],
+            "exact": ["https://vocab.getty.edu/aat/300000762"],
             "narrow": [],
             "related": [],
         },
@@ -38267,7 +38267,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["http://vocab.getty.edu/aat/300006820"],
+            "exact": ["https://vocab.getty.edu/aat/300006820"],
             "narrow": [],
             "related": [],
         },

@@ -1,15 +1,15 @@
-@prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix skos-thes: <http://purl.org/iso25964/skos-thes#> .
-@prefix xml: <http://www.w3.org/XML/1998/namespace> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <https://purl.org/dc/terms/> .
+@prefix rdf: <https://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <https://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <https://www.w3.org/2004/02/skos/core#> .
+@prefix skos-thes: <https://purl.org/iso25964/skos-thes#> .
+@prefix xml: <https://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <https://www.w3.org/2001/XMLSchema#> .
 
 <https://id.erfgoed.net/thesauri/materialen/10> a skos:Concept ;
     dcterms:identifier 10 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/9> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "bladgoud"@nl-BE ;
@@ -18,7 +18,7 @@
 <https://id.erfgoed.net/thesauri/materialen/11> a skos:Concept ;
     dcterms:identifier 11 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/8> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "ijzer"@nl-BE ;
@@ -34,7 +34,7 @@
 <https://id.erfgoed.net/thesauri/materialen/15> a skos:Concept ;
     dcterms:identifier 15 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/13> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "messing"@nl-BE ;
@@ -43,7 +43,7 @@
 <https://id.erfgoed.net/thesauri/materialen/16> a skos:Concept ;
     dcterms:identifier 16 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/8> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "lood"@nl-BE ;
@@ -59,7 +59,7 @@
 <https://id.erfgoed.net/thesauri/materialen/18> a skos:Concept ;
     dcterms:identifier 18 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/8> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "tin"@nl-BE ;
@@ -68,7 +68,7 @@
 <https://id.erfgoed.net/thesauri/materialen/19> a skos:Concept ;
     dcterms:identifier 19 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/8> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "zilver"@nl-BE ;
@@ -95,7 +95,7 @@
 <https://id.erfgoed.net/thesauri/materialen/23> a skos:Concept ;
     dcterms:identifier 23 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/21> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "bont"@nl-BE ;
@@ -104,7 +104,7 @@
 <https://id.erfgoed.net/thesauri/materialen/25> a skos:Concept ;
     dcterms:identifier 25 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/24> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "dierlijk botmateriaal"@nl-BE ;
@@ -113,7 +113,7 @@
 <https://id.erfgoed.net/thesauri/materialen/26> a skos:Concept ;
     dcterms:identifier 26 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/24> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "menselijk botmateriaal"@nl-BE ;
@@ -122,7 +122,7 @@
 <https://id.erfgoed.net/thesauri/materialen/27> a skos:Concept ;
     dcterms:identifier 27 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/21> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "gewei"@nl-BE ;
@@ -131,7 +131,7 @@
 <https://id.erfgoed.net/thesauri/materialen/28> a skos:Concept ;
     dcterms:identifier 28 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/21> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:note "Te onderscheiden van 'gewei', dat bestaat uit aangepast been."@nl-BE ;
@@ -141,7 +141,7 @@
 <https://id.erfgoed.net/thesauri/materialen/30> a skos:Concept ;
     dcterms:identifier 30 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/29> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "leer"@nl-BE ;
@@ -166,7 +166,7 @@
 <https://id.erfgoed.net/thesauri/materialen/35> a skos:Concept ;
     dcterms:identifier 35 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/32> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "hout"@nl-BE ;
@@ -175,7 +175,7 @@
 <https://id.erfgoed.net/thesauri/materialen/36> a skos:Concept ;
     dcterms:identifier 36 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/32> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "houtskool"@nl-BE ;
@@ -184,7 +184,7 @@
 <https://id.erfgoed.net/thesauri/materialen/37> a skos:Concept ;
     dcterms:identifier 37 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/32> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "textiel"@nl-BE ;
@@ -200,7 +200,7 @@
 <https://id.erfgoed.net/thesauri/materialen/41> a skos:Concept ;
     dcterms:identifier 41 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "1) Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a> 2) VIOE"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "1) Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a> 2) VIOE"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/40> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "natuursteen"@nl-BE ;
@@ -227,7 +227,7 @@
 <https://id.erfgoed.net/thesauri/materialen/46> a skos:Concept ;
     dcterms:identifier 46 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:altLabel "vuursteen"@nl-BE ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/42> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
@@ -264,7 +264,7 @@
     dcterms:identifier 50 ;
     dcterms:source [ a dcterms:BibliographicResource ;
             dcterms:bibliographicCitation "Art &amp; Architecture Thesaurus" ] ;
-    skos:exactMatch <http://vocab.getty.edu/aat/300014922> ;
+    skos:exactMatch <https://vocab.getty.edu/aat/300014922> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "pleister"@nl-BE ;
     skos:scopeNote "Pleister verwijst naar zacht, plastisch materiaal dat kan worden uitgerold of uitgestreken op een muur, plafond of ander oppervlak waarop het vervolgens verhardt. In de context van kunst en architectuur verwijst het meestal specifiek naar een mengsel van water, kalk en zand, vaak in combinatie met andere materialen zoals dierenhaar, waardoor het materiaal meer kracht, textuur en - als het oppervlak daarna wordt geschilderd - poreusheid krijgt."@nl-BE .
@@ -272,7 +272,7 @@
 <https://id.erfgoed.net/thesauri/materialen/6> a skos:Concept ;
     dcterms:identifier 6 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/1> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "steengoed"@nl-BE ;
@@ -281,7 +281,7 @@
 <https://id.erfgoed.net/thesauri/materialen/7> a skos:Concept ;
     dcterms:identifier 7 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "glas"@nl-BE ;
     skos:scopeNote "Glas is een amorfe, anorganische substantie die wordt gemaakt door silica (siliciumdioxide) te fuseren met een basisoxide, meestal transparant maar vaak ook doorzichtig of ondoorschijnend."@nl-BE .
@@ -289,7 +289,7 @@
 <https://id.erfgoed.net/thesauri/materialen/12> a skos:Concept ;
     dcterms:identifier 12 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/8> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:narrower <https://id.erfgoed.net/thesauri/materialen/13> ;
@@ -315,7 +315,7 @@
 <https://id.erfgoed.net/thesauri/materialen/9> a skos:Concept ;
     dcterms:identifier 9 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/8> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:narrower <https://id.erfgoed.net/thesauri/materialen/10> ;
@@ -336,7 +336,7 @@
 <https://id.erfgoed.net/thesauri/materialen/24> a skos:Concept ;
     dcterms:identifier 24 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:broader <https://id.erfgoed.net/thesauri/materialen/21> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:narrower <https://id.erfgoed.net/thesauri/materialen/25>,
@@ -371,7 +371,7 @@
 <https://id.erfgoed.net/thesauri/materialen/1> a skos:Concept ;
     dcterms:identifier 1 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:altLabel "ceramiek"@nl-BE,
         "keramiek"@nl-BE ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
@@ -394,7 +394,7 @@
 <https://id.erfgoed.net/thesauri/materialen/21> a skos:Concept ;
     dcterms:identifier 21 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:narrower <https://id.erfgoed.net/thesauri/materialen/23>,
         <https://id.erfgoed.net/thesauri/materialen/24>,
@@ -408,7 +408,7 @@
 <https://id.erfgoed.net/thesauri/materialen/8> a skos:Concept ;
     dcterms:identifier 8 ;
     dcterms:source [ a dcterms:BibliographicResource ;
-            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"http://browser.aat-ned.nl/\">http://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
+            dcterms:bibliographicCitation "Nederlandse Art &amp; Architecture Thesaurus, <a href=\"https://browser.aat-ned.nl/\">https://browser.aat-ned.nl/</a>"^^rdf:HTML ] ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:narrower <https://id.erfgoed.net/thesauri/materialen/11>,
         <https://id.erfgoed.net/thesauri/materialen/12>,
