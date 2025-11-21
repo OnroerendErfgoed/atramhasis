@@ -703,7 +703,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004895"],
+            "exact": ["http://vocab.getty.edu/aat/300004895"],
             "narrow": [],
             "related": [],
         },
@@ -738,7 +738,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["https://vocab.getty.edu/aat/300008631"],
+            "related": ["http://vocab.getty.edu/aat/300008631"],
         },
         "member_of": [1847],
         "narrower": [],
@@ -798,7 +798,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["https://vocab.getty.edu/aat/300132443"],
+            "related": ["http://vocab.getty.edu/aat/300132443"],
         },
         "member_of": [1840],
         "narrower": [1906, 1907, 1908, 1909],
@@ -1004,7 +1004,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "altaren", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300003725"],
+            "close": ["http://vocab.getty.edu/aat/300003725"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -1376,7 +1376,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300002580"],
+            "exact": ["http://vocab.getty.edu/aat/300002580"],
             "narrow": [],
             "related": [],
         },
@@ -1666,7 +1666,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300000611"],
+            "exact": ["http://vocab.getty.edu/aat/300000611"],
             "narrow": [],
             "related": [],
         },
@@ -1835,7 +1835,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300266040"],
+            "exact": ["http://vocab.getty.edu/aat/300266040"],
             "narrow": [],
             "related": [],
         },
@@ -2007,7 +2007,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300001989"],
+            "exact": ["http://vocab.getty.edu/aat/300001989"],
             "narrow": [],
             "related": [],
         },
@@ -2283,7 +2283,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300260407"],
+            "exact": ["http://vocab.getty.edu/aat/300260407"],
             "narrow": [],
             "related": [],
         },
@@ -2604,7 +2604,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008703"],
+            "exact": ["http://vocab.getty.edu/aat/300008703"],
             "narrow": [],
             "related": [],
         },
@@ -2754,7 +2754,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/900031486"],
+            "close": ["http://vocab.getty.edu/aat/900031486"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -3044,8 +3044,8 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [
-                "https://vocab.getty.edu/aat/300008001",
-                "https://vocab.getty.edu/aat/300004062",
+                "http://vocab.getty.edu/aat/300008001",
+                "http://vocab.getty.edu/aat/300004062",
             ],
             "related": [],
         },
@@ -3085,7 +3085,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004095"],
+            "exact": ["http://vocab.getty.edu/aat/300004095"],
             "narrow": [],
             "related": [],
         },
@@ -3228,7 +3228,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300237566"],
+            "exact": ["http://vocab.getty.edu/aat/300237566"],
             "narrow": [],
             "related": [],
         },
@@ -3280,7 +3280,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008135"],
+            "exact": ["http://vocab.getty.edu/aat/300008135"],
             "narrow": [],
             "related": [],
         },
@@ -3820,7 +3820,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007838"],
+            "exact": ["http://vocab.getty.edu/aat/300007838"],
             "narrow": [],
             "related": [],
         },
@@ -3994,7 +3994,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300047457"],
+            "exact": ["http://vocab.getty.edu/aat/300047457"],
             "narrow": [],
             "related": [],
         },
@@ -4086,7 +4086,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["https://vocab.getty.edu/aat/300132451"],
+            "related": ["http://vocab.getty.edu/aat/300132451"],
         },
         "member_of": [1840],
         "narrower": [2161],
@@ -4512,7 +4512,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300003853"],
+            "close": ["http://vocab.getty.edu/aat/300003853"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -4807,7 +4807,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005495"],
+            "exact": ["http://vocab.getty.edu/aat/300005495"],
             "narrow": [],
             "related": [],
         },
@@ -5119,7 +5119,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300006792"],
+            "exact": ["http://vocab.getty.edu/aat/300006792"],
             "narrow": [],
             "related": [],
         },
@@ -6115,7 +6115,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004618"],
+            "exact": ["http://vocab.getty.edu/aat/300004618"],
             "narrow": [],
             "related": [],
         },
@@ -6313,7 +6313,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300002098"],
+            "exact": ["http://vocab.getty.edu/aat/300002098"],
             "narrow": [],
             "related": [],
         },
@@ -6379,7 +6379,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008131"],
+            "exact": ["http://vocab.getty.edu/aat/300008131"],
             "narrow": [],
             "related": [],
         },
@@ -6673,7 +6673,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300002803"],
+            "exact": ["http://vocab.getty.edu/aat/300002803"],
             "narrow": [],
             "related": [],
         },
@@ -6853,7 +6853,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004963"],
+            "exact": ["http://vocab.getty.edu/aat/300004963"],
             "narrow": [],
             "related": [],
         },
@@ -7047,7 +7047,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300003788"],
+            "exact": ["http://vocab.getty.edu/aat/300003788"],
             "narrow": [],
             "related": [],
         },
@@ -7081,7 +7081,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900032157"],
+            "exact": ["http://vocab.getty.edu/aat/900032157"],
             "narrow": [],
             "related": [],
         },
@@ -7336,7 +7336,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900031987"],
+            "exact": ["http://vocab.getty.edu/aat/900031987"],
             "narrow": [],
             "related": [],
         },
@@ -7945,7 +7945,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007937"],
+            "exact": ["http://vocab.getty.edu/aat/300007937"],
             "narrow": [],
             "related": [],
         },
@@ -7980,7 +7980,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300112185"],
+            "exact": ["http://vocab.getty.edu/aat/300112185"],
             "narrow": [],
             "related": [],
         },
@@ -8122,7 +8122,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300122175"],
+            "exact": ["http://vocab.getty.edu/aat/300122175"],
             "narrow": [],
             "related": [],
         },
@@ -8823,7 +8823,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "fonteinen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300006179"],
+            "close": ["http://vocab.getty.edu/aat/300006179"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -9176,7 +9176,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004843"],
+            "exact": ["http://vocab.getty.edu/aat/300004843"],
             "narrow": [],
             "related": [],
         },
@@ -9365,7 +9365,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300265418"],
+            "close": ["http://vocab.getty.edu/aat/300265418"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -9523,7 +9523,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300122139"],
+            "close": ["http://vocab.getty.edu/aat/300122139"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -9664,7 +9664,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300129541"],
+            "exact": ["http://vocab.getty.edu/aat/300129541"],
             "narrow": [],
             "related": [],
         },
@@ -9689,7 +9689,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300253852"],
+            "close": ["http://vocab.getty.edu/aat/300253852"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -9716,7 +9716,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005213"],
+            "exact": ["http://vocab.getty.edu/aat/300005213"],
             "narrow": [],
             "related": [],
         },
@@ -9742,7 +9742,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005147"],
+            "exact": ["http://vocab.getty.edu/aat/300005147"],
             "narrow": [],
             "related": [],
         },
@@ -9776,7 +9776,7 @@ HERITAGETYPESDATA = [
             "broad": [],
             "close": [],
             "exact": [],
-            "narrow": ["https://vocab.getty.edu/aat/300006304"],
+            "narrow": ["http://vocab.getty.edu/aat/300006304"],
             "related": [],
         },
         "member_of": [],
@@ -10668,7 +10668,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "gevels", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300076168"],
+            "close": ["http://vocab.getty.edu/aat/300076168"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -11410,7 +11410,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["https://vocab.getty.edu/aat/300008874"],
+            "related": ["http://vocab.getty.edu/aat/300008874"],
         },
         "member_of": [1840],
         "narrower": [],
@@ -12075,7 +12075,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005048"],
+            "exact": ["http://vocab.getty.edu/aat/300005048"],
             "narrow": [],
             "related": [],
         },
@@ -12207,7 +12207,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "hallen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300005238"],
+            "close": ["http://vocab.getty.edu/aat/300005238"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -12230,7 +12230,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005230"],
+            "exact": ["http://vocab.getty.edu/aat/300005230"],
             "narrow": [],
             "related": [],
         },
@@ -12263,7 +12263,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007868"],
+            "exact": ["http://vocab.getty.edu/aat/300007868"],
             "narrow": [],
             "related": [],
         },
@@ -12391,7 +12391,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "heiden", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/900020898"],
+            "close": ["http://vocab.getty.edu/aat/900020898"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -12686,7 +12686,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300047170"],
+            "exact": ["http://vocab.getty.edu/aat/300047170"],
             "narrow": [],
             "related": [],
         },
@@ -14260,7 +14260,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300008553"],
+            "close": ["http://vocab.getty.edu/aat/300008553"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -14302,7 +14302,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300007926"],
+            "close": ["http://vocab.getty.edu/aat/300007926"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -14381,7 +14381,7 @@ HERITAGETYPESDATA = [
             }
         ],
         "matches": {
-            "broad": ["https://vocab.getty.edu/aat/300007800"],
+            "broad": ["http://vocab.getty.edu/aat/300007800"],
             "close": [],
             "exact": [],
             "narrow": [],
@@ -14409,7 +14409,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300000678"],
+            "exact": ["http://vocab.getty.edu/aat/300000678"],
             "narrow": [],
             "related": [],
         },
@@ -14435,7 +14435,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300169606"],
+            "exact": ["http://vocab.getty.edu/aat/300169606"],
             "narrow": [],
             "related": [],
         },
@@ -14614,7 +14614,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900025956"],
+            "exact": ["http://vocab.getty.edu/aat/900025956"],
             "narrow": [],
             "related": [],
         },
@@ -14696,7 +14696,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "interieur", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300124520"],
+            "close": ["http://vocab.getty.edu/aat/300124520"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -14783,7 +14783,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900032050"],
+            "exact": ["http://vocab.getty.edu/aat/900032050"],
             "narrow": [],
             "related": [],
         },
@@ -15700,7 +15700,7 @@ HERITAGETYPESDATA = [
         "id": 1776,
         "labels": [{"label": "kapellen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
-            "broad": ["https://vocab.getty.edu/aat/300004590"],
+            "broad": ["http://vocab.getty.edu/aat/300004590"],
             "close": [],
             "exact": [],
             "narrow": [],
@@ -15837,7 +15837,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007418"],
+            "exact": ["http://vocab.getty.edu/aat/300007418"],
             "narrow": [],
             "related": [],
         },
@@ -16400,7 +16400,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005073"],
+            "exact": ["http://vocab.getty.edu/aat/300005073"],
             "narrow": [],
             "related": [],
         },
@@ -16426,7 +16426,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "keersluizen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/900031582"],
+            "close": ["http://vocab.getty.edu/aat/900031582"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -16479,7 +16479,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004759"],
+            "exact": ["http://vocab.getty.edu/aat/300004759"],
             "narrow": [],
             "related": [],
         },
@@ -16517,7 +16517,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007466"],
+            "exact": ["http://vocab.getty.edu/aat/300007466"],
             "narrow": [],
             "related": [],
         },
@@ -16665,7 +16665,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300003625"],
+            "exact": ["http://vocab.getty.edu/aat/300003625"],
             "narrow": [],
             "related": [],
         },
@@ -17392,7 +17392,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300008124"],
+            "close": ["http://vocab.getty.edu/aat/300008124"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -17624,7 +17624,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004565"],
+            "exact": ["http://vocab.getty.edu/aat/300004565"],
             "narrow": [],
             "related": [],
         },
@@ -17800,7 +17800,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008706"],
+            "exact": ["http://vocab.getty.edu/aat/300008706"],
             "narrow": [],
             "related": [],
         },
@@ -19259,7 +19259,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300026005"],
+            "exact": ["http://vocab.getty.edu/aat/300026005"],
             "narrow": [],
             "related": [],
         },
@@ -19277,7 +19277,7 @@ HERITAGETYPESDATA = [
         "id": 2093,
         "labels": [{"label": "liften", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
-            "broad": ["https://vocab.getty.edu/aat/300051186"],
+            "broad": ["http://vocab.getty.edu/aat/300051186"],
             "close": [],
             "exact": [],
             "narrow": [],
@@ -20290,7 +20290,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008727"],
+            "exact": ["http://vocab.getty.edu/aat/300008727"],
             "narrow": [],
             "related": [],
         },
@@ -20348,7 +20348,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005703"],
+            "exact": ["http://vocab.getty.edu/aat/300005703"],
             "narrow": [],
             "related": [],
         },
@@ -20370,7 +20370,7 @@ HERITAGETYPESDATA = [
             "close": [],
             "exact": [],
             "narrow": [],
-            "related": ["https://vocab.getty.edu/aat/300007937"],
+            "related": ["http://vocab.getty.edu/aat/300007937"],
         },
         "member_of": [],
         "narrower": [],
@@ -20591,7 +20591,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008680"],
+            "exact": ["http://vocab.getty.edu/aat/300008680"],
             "narrow": [],
             "related": [],
         },
@@ -20859,7 +20859,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "mijngebouwen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300006423"],
+            "close": ["http://vocab.getty.edu/aat/300006423"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -21236,7 +21236,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "moerassen", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300008903"],
+            "close": ["http://vocab.getty.edu/aat/300008903"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -21812,7 +21812,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300033644"],
+            "exact": ["http://vocab.getty.edu/aat/300033644"],
             "narrow": [],
             "related": [],
         },
@@ -22320,7 +22320,7 @@ HERITAGETYPESDATA = [
         ],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300121918"],
+            "close": ["http://vocab.getty.edu/aat/300121918"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -22950,7 +22950,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300006495"],
+            "exact": ["http://vocab.getty.edu/aat/300006495"],
             "narrow": [],
             "related": [],
         },
@@ -23098,7 +23098,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300122263"],
+            "exact": ["http://vocab.getty.edu/aat/300122263"],
             "narrow": [],
             "related": [],
         },
@@ -23320,7 +23320,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008059"],
+            "exact": ["http://vocab.getty.edu/aat/300008059"],
             "narrow": [],
             "related": [],
         },
@@ -23658,7 +23658,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008072"],
+            "exact": ["http://vocab.getty.edu/aat/300008072"],
             "narrow": [],
             "related": [],
         },
@@ -23821,7 +23821,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008280"],
+            "exact": ["http://vocab.getty.edu/aat/300008280"],
             "narrow": [],
             "related": [],
         },
@@ -24037,7 +24037,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300041686"],
+            "exact": ["http://vocab.getty.edu/aat/300041686"],
             "narrow": [],
             "related": [],
         },
@@ -24569,7 +24569,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300006805"],
+            "exact": ["http://vocab.getty.edu/aat/300006805"],
             "narrow": [],
             "related": [],
         },
@@ -24599,7 +24599,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007423"],
+            "exact": ["http://vocab.getty.edu/aat/300007423"],
             "narrow": [],
             "related": [],
         },
@@ -24633,7 +24633,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300006308"],
+            "exact": ["http://vocab.getty.edu/aat/300006308"],
             "narrow": [],
             "related": [],
         },
@@ -25926,7 +25926,7 @@ HERITAGETYPESDATA = [
         "id": 2090,
         "labels": [{"label": "poorten", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
-            "broad": ["https://vocab.getty.edu/aat/300069189"],
+            "broad": ["http://vocab.getty.edu/aat/300069189"],
             "close": [],
             "exact": [],
             "narrow": [],
@@ -26060,8 +26060,8 @@ HERITAGETYPESDATA = [
             "exact": [],
             "narrow": [],
             "related": [
-                "https://vocab.getty.edu/aat/300076641",
-                "https://vocab.getty.edu/aat/300083076",
+                "http://vocab.getty.edu/aat/300076641",
+                "http://vocab.getty.edu/aat/300083076",
             ],
         },
         "member_of": [1767],
@@ -26274,7 +26274,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300006781"],
+            "exact": ["http://vocab.getty.edu/aat/300006781"],
             "narrow": [],
             "related": [],
         },
@@ -26804,7 +26804,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004347"],
+            "exact": ["http://vocab.getty.edu/aat/300004347"],
             "narrow": [],
             "related": [],
         },
@@ -26930,7 +26930,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007391"],
+            "exact": ["http://vocab.getty.edu/aat/300007391"],
             "narrow": [],
             "related": [],
         },
@@ -27416,7 +27416,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008707"],
+            "exact": ["http://vocab.getty.edu/aat/300008707"],
             "narrow": [],
             "related": [],
         },
@@ -27653,7 +27653,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300248615"],
+            "exact": ["http://vocab.getty.edu/aat/300248615"],
             "narrow": [],
             "related": [],
         },
@@ -27760,7 +27760,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004631"],
+            "exact": ["http://vocab.getty.edu/aat/300004631"],
             "narrow": [],
             "related": [],
         },
@@ -28087,7 +28087,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004627"],
+            "exact": ["http://vocab.getty.edu/aat/300004627"],
             "narrow": [],
             "related": [],
         },
@@ -28210,7 +28210,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300048816"],
+            "exact": ["http://vocab.getty.edu/aat/300048816"],
             "narrow": [],
             "related": [],
         },
@@ -28482,7 +28482,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300235059"],
+            "exact": ["http://vocab.getty.edu/aat/300235059"],
             "narrow": [],
             "related": [],
         },
@@ -28520,7 +28520,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300132308"],
+            "exact": ["http://vocab.getty.edu/aat/300132308"],
             "narrow": [],
             "related": [],
         },
@@ -28660,7 +28660,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004938"],
+            "exact": ["http://vocab.getty.edu/aat/300004938"],
             "narrow": [],
             "related": [],
         },
@@ -28872,7 +28872,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900026566"],
+            "exact": ["http://vocab.getty.edu/aat/900026566"],
             "narrow": [],
             "related": [],
         },
@@ -29365,7 +29365,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300101336"],
+            "exact": ["http://vocab.getty.edu/aat/300101336"],
             "narrow": [],
             "related": [],
         },
@@ -29778,7 +29778,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007250"],
+            "exact": ["http://vocab.getty.edu/aat/300007250"],
             "narrow": [],
             "related": [],
         },
@@ -29881,7 +29881,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900032084"],
+            "exact": ["http://vocab.getty.edu/aat/900032084"],
             "narrow": [],
             "related": [],
         },
@@ -30657,7 +30657,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "steilranden", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300132356"],
+            "close": ["http://vocab.getty.edu/aat/300132356"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -30939,7 +30939,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900027035"],
+            "exact": ["http://vocab.getty.edu/aat/900027035"],
             "narrow": [],
             "related": [],
         },
@@ -31266,7 +31266,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300006640"],
+            "exact": ["http://vocab.getty.edu/aat/300006640"],
             "narrow": [],
             "related": [],
         },
@@ -31335,7 +31335,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900019825"],
+            "exact": ["http://vocab.getty.edu/aat/900019825"],
             "narrow": [],
             "related": [],
         },
@@ -32114,7 +32114,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300061887"],
+            "exact": ["http://vocab.getty.edu/aat/300061887"],
             "narrow": [],
             "related": [],
         },
@@ -32149,7 +32149,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300164243"],
+            "exact": ["http://vocab.getty.edu/aat/300164243"],
             "narrow": [],
             "related": [],
         },
@@ -32358,7 +32358,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004645"],
+            "exact": ["http://vocab.getty.edu/aat/300004645"],
             "narrow": [],
             "related": [],
         },
@@ -33031,7 +33031,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/900031054"],
+            "exact": ["http://vocab.getty.edu/aat/900031054"],
             "narrow": [],
             "related": [],
         },
@@ -34161,7 +34161,7 @@ HERITAGETYPESDATA = [
             "broad": [],
             "close": [],
             "exact": [],
-            "narrow": ["https://vocab.getty.edu/aat/300006888"],
+            "narrow": ["http://vocab.getty.edu/aat/300006888"],
             "related": [],
         },
         "member_of": [],
@@ -34239,7 +34239,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007063"],
+            "exact": ["http://vocab.getty.edu/aat/300007063"],
             "narrow": [],
             "related": [],
         },
@@ -34462,7 +34462,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300179263"],
+            "exact": ["http://vocab.getty.edu/aat/300179263"],
             "narrow": [],
             "related": [],
         },
@@ -34491,7 +34491,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300006707"],
+            "exact": ["http://vocab.getty.edu/aat/300006707"],
             "narrow": [],
             "related": [],
         },
@@ -34650,7 +34650,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007890"],
+            "exact": ["http://vocab.getty.edu/aat/300007890"],
             "narrow": [],
             "related": [],
         },
@@ -35102,7 +35102,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300082991"],
+            "exact": ["http://vocab.getty.edu/aat/300082991"],
             "narrow": [],
             "related": [],
         },
@@ -35159,7 +35159,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300008805"],
+            "exact": ["http://vocab.getty.edu/aat/300008805"],
             "narrow": [],
             "related": [],
         },
@@ -35321,7 +35321,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300007768"],
+            "exact": ["http://vocab.getty.edu/aat/300007768"],
             "narrow": [],
             "related": [],
         },
@@ -35476,7 +35476,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300219258"],
+            "exact": ["http://vocab.getty.edu/aat/300219258"],
             "narrow": [],
             "related": [],
         },
@@ -35519,7 +35519,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300001656"],
+            "exact": ["http://vocab.getty.edu/aat/300001656"],
             "narrow": [],
             "related": [],
         },
@@ -35717,7 +35717,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300004104"],
+            "exact": ["http://vocab.getty.edu/aat/300004104"],
             "narrow": [],
             "related": [],
         },
@@ -37128,7 +37128,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "weilanden", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300008876"],
+            "close": ["http://vocab.getty.edu/aat/300008876"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -37302,7 +37302,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "wijngaarden", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300000248"],
+            "close": ["http://vocab.getty.edu/aat/300000248"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -37569,7 +37569,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005639"],
+            "exact": ["http://vocab.getty.edu/aat/300005639"],
             "narrow": [],
             "related": [],
         },
@@ -37650,7 +37650,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300005433"],
+            "exact": ["http://vocab.getty.edu/aat/300005433"],
             "narrow": [],
             "related": [],
         },
@@ -37832,7 +37832,7 @@ HERITAGETYPESDATA = [
         "labels": [{"label": "woontorens", "language": "nl-BE", "type": "prefLabel"}],
         "matches": {
             "broad": [],
-            "close": ["https://vocab.getty.edu/aat/300182716"],
+            "close": ["http://vocab.getty.edu/aat/300182716"],
             "exact": [],
             "narrow": [],
             "related": [],
@@ -37860,7 +37860,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300000762"],
+            "exact": ["http://vocab.getty.edu/aat/300000762"],
             "narrow": [],
             "related": [],
         },
@@ -38267,7 +38267,7 @@ HERITAGETYPESDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300006820"],
+            "exact": ["http://vocab.getty.edu/aat/300006820"],
             "narrow": [],
             "related": [],
         },

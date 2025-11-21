@@ -42,4 +42,4 @@ Koen Van Daele, Tinne Cahy, Wim De Clercq, Jonas Geuens, Bram Goessens, Jonathan
 
 .. _skos_spec: http://www.w3.org/TR/skos-reference/
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
-.. _Art and Architecture Thesaurus: https://vocab.getty.edu/aat
+.. _Art and Architecture Thesaurus: http://vocab.getty.edu/aat

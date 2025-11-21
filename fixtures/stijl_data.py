@@ -1825,7 +1825,7 @@ STIJLDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300021464"],
+            "exact": ["http://vocab.getty.edu/aat/300021464"],
             "narrow": [],
             "related": [],
         },

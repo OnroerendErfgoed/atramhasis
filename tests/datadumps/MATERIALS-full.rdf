@@ -470,7 +470,7 @@
     <skos:prefLabel xml:lang="nl-BE">pleister</skos:prefLabel>
     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</dcterms:identifier>
     <skos:inScheme rdf:resource="https://id.erfgoed.net/thesauri/materialen"/>
-    <skos:exactMatch rdf:resource="https://vocab.getty.edu/aat/300014922"/>
+    <skos:exactMatch rdf:resource="http://vocab.getty.edu/aat/300014922"/>
     <skos:scopeNote xml:lang="nl-BE">Pleister verwijst naar zacht, plastisch materiaal dat kan worden uitgerold of uitgestreken op een muur, plafond of ander oppervlak waarop het vervolgens verhardt. In de context van kunst en architectuur verwijst het meestal specifiek naar een mengsel van water, kalk en zand, vaak in combinatie met andere materialen zoals dierenhaar, waardoor het materiaal meer kracht, textuur en - als het oppervlak daarna wordt geschilderd - poreusheid krijgt.</skos:scopeNote>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N9069e64e625a458a8a332f1090095785">

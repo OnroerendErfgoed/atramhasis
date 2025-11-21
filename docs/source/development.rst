@@ -43,7 +43,7 @@ application.
   An implemenation of the 
   :class:`VocabularyProvider <skosprovider.providers.VocabularyProvider>` 
   against the Linked Open Data vocabularies published by the Getty Research 
-  Institute at `https://vocab.getty.edu <https://vocab.getty.edu>`_ such as the
+  Institute at `http://vocab.getty.edu <http://vocab.getty.edu>`_ such as the
   `Art and Architecture Thesaurus (AAT)` and the 
   `Thesaurus of Geographic Names (TGN)`.
 * skosprovider_heritagedata_:

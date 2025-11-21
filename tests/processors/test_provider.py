@@ -40,7 +40,7 @@ def test_create_provider_duplicate_uri():
     registry.register_provider(GettyProvider({}))
     with patch.object(provider.mappers, 'map_provider') as mapper:
         mapper.return_value = Mock(id=None)
-        data = {"conceptscheme_uri": 'https://vocab.getty.edu/aat/'}
+        data = {"conceptscheme_uri": 'http://vocab.getty.edu/aat/'}
         with pytest.raises(ValidationError) as e:
             provider.create_provider(data, session, registry)
         assert e.value.value == 'Provider could not be validated.'

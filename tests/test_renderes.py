@@ -251,14 +251,14 @@ class TestJsonRenderer(unittest.TestCase):
         result = renderers.provider_adapter(provider)
         self.assertEqual(
             {
-                'conceptscheme_uri': 'https://vocab.getty.edu/aat/',
+                'conceptscheme_uri': 'http://vocab.getty.edu/aat/',
                 'default_language': 'nl-be',
                 'force_display_language': 'force-nl',
                 'id': 'provider-id',
                 'subject': 'sub',
                 'type': 'AATProvider',
                 'uri_pattern': None,
-                'metadata': {'uri': 'https://vocab.getty.edu/aat/'},
+                'metadata': {'uri': 'http://vocab.getty.edu/aat/'},
             },
             result
         )

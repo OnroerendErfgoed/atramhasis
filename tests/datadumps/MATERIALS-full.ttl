@@ -264,7 +264,7 @@
     dcterms:identifier 50 ;
     dcterms:source [ a dcterms:BibliographicResource ;
             dcterms:bibliographicCitation "Art &amp; Architecture Thesaurus" ] ;
-    skos:exactMatch <https://vocab.getty.edu/aat/300014922> ;
+    skos:exactMatch <http://vocab.getty.edu/aat/300014922> ;
     skos:inScheme <https://id.erfgoed.net/thesauri/materialen> ;
     skos:prefLabel "pleister"@nl-BE ;
     skos:scopeNote "Pleister verwijst naar zacht, plastisch materiaal dat kan worden uitgerold of uitgestreken op een muur, plafond of ander oppervlak waarop het vervolgens verhardt. In de context van kunst en architectuur verwijst het meestal specifiek naar een mengsel van water, kalk en zand, vaak in combinatie met andere materialen zoals dierenhaar, waardoor het materiaal meer kracht, textuur en - als het oppervlak daarna wordt geschilderd - poreusheid krijgt."@nl-BE .

@@ -1056,7 +1056,7 @@ MATERIAALDATA = [
         "matches": {
             "broad": [],
             "close": [],
-            "exact": ["https://vocab.getty.edu/aat/300014922"],
+            "exact": ["http://vocab.getty.edu/aat/300014922"],
             "narrow": [],
             "related": [],
         },
