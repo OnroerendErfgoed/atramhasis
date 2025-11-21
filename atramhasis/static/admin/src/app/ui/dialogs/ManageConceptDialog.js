@@ -211,7 +211,6 @@ define([
       if (this._strategy === 'MANUAL') {
         concept.id = this.idNode.value;
       }
-      concept.concept_scheme = this.scheme;
       concept.type = this.typeNode.value;
 
       // mixin tab data
