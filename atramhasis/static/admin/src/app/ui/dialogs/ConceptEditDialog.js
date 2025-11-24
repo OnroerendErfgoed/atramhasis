@@ -139,9 +139,6 @@ define([
       if (this.concept) {
         concept.id = this.concept.id;
         concept.uri = this.concept.uri;
-        /* jshint -W106 */
-        concept.concept_scheme = this.scheme;
-        /* jshint +W106 */
       }
 
       concept.type = this.typeNode.value;
