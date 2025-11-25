@@ -1,13 +1,18 @@
 3.0.0 (21-11-2025)
 -------------------
-- conceptschemes/unknown should not cause a 500 server error #910
-- openapi could be better #909
-- sqlite3.OperationalError: no such table: conceptscheme #890
+Features:
 - Add note types: Example, EditorialNote, ChangeNote #941
-- Add workflow: Verify that the package can be built and is ready for upload to PyPI. #937
+
+Bugfixes:
+- Inconsistent response code for deletes #938 - Breaking change -
+- openapi could be better #909
+- conceptschemes/unknown should not cause a 500 server error #910
+- sqlite3.OperationalError: no such table: conceptscheme #890
 - Wrong years in changelog #916
 - Wrong link to discussion forum #935
-- Inconsistent response code for deletes #938
+
+Other:
+- Add workflow: Verify that the package can be built and is ready for upload to PyPI. #937
 - Add pybabel tasks to the build hook #900
 - Fix test cleanup of a dump folder #946
 - Requirements upgrade. #950
