@@ -3,8 +3,8 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from unittest.mock import MagicMock
 
-from mock import MagicMock
 from skosprovider.skos import Concept
 from skosprovider.skos import Note
 from skosprovider.utils import dict_dumper
