@@ -1,10 +1,12 @@
 3.0.0 (21-11-2025)
 -------------------
+Breaking changes:
+- Inconsistent response code for deletes #938
+
 Features:
 - Add note types: Example, EditorialNote, ChangeNote #941
 
 Bugfixes:
-- Inconsistent response code for deletes #938 - Breaking change -
 - openapi could be better #909
 - conceptschemes/unknown should not cause a 500 server error #910
 - sqlite3.OperationalError: no such table: conceptscheme #890
