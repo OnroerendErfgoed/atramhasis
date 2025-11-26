@@ -28,7 +28,7 @@ from atramhasis.data.models import Provider
 from atramhasis.scripts.migrate_sqlalchemy_providers import json_serial
 
 
-def file_to_rdf_provider(**kwargs) -> RDFProvider:
+def file_to_rdf_provider(uri_pattern: str | None = None, **kwargs) -> RDFProvider:
     """
     Create RDF provider from the input file
     """
@@ -37,7 +37,11 @@ def file_to_rdf_provider(**kwargs) -> RDFProvider:
     meta_id = kwargs.get('provider_id')
     graph = Graph()
     graph.parse(input_file, format=guess_format(input_ext))
-    return RDFProvider({'id': meta_id}, graph)
+    provider_kwargs = {}
+    if uri_pattern:
+        uri_generator = UriPatternGenerator(uri_pattern)
+        provider_kwargs['uri_generator'] = uri_generator
+    return RDFProvider({'id': meta_id}, graph, **provider_kwargs)
 
 
 def _create_provider_kwargs(**kwargs):
