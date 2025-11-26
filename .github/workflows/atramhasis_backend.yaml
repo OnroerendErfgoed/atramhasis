@@ -7,7 +7,7 @@ on:
       - scripts/**
       - tests/**
       - "!atramhasis/static/**"
-      - .github/workflows/backend.yaml
+      - .github/workflows/atramhasis_backend.yaml
       - pyproject.toml
       - requirements*.txt
 
