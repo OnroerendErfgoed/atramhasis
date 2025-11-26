@@ -1,4 +1,4 @@
-3.0.0 (21-11-2025)
+3.0.0 (26-11-2025)
 -------------------
 Breaking changes:
 - Inconsistent response code for deletes #938
@@ -18,6 +18,7 @@ Other:
 - Add pybabel tasks to the build hook #900
 - Fix test cleanup of a dump folder #946
 - Requirements upgrade. #950
+- Add test coverage #933
 
 
 2.1.1 (01-08-2024)
