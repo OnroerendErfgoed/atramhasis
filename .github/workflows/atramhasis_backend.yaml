@@ -1,7 +1,7 @@
 name: Atramhasis backend tests
 
 on:
-  push:
+  pull_request:
     paths:
       - atramhasis/**
       - scripts/**
@@ -43,4 +43,14 @@ jobs:
         run: pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
 
       - name: Python tests
-        run: pytest tests --exitfirst --capture=no -vvv --full-trace
+        run: pytest tests --exitfirst --capture=no -vvv --full-trace --cov-report xml:${{ runner.temp }}/coverage.xml --cov=atramhasis
+
+      - name: Get Cover
+        uses: orgoro/coverage@v3.2
+        with:
+          coverageFile: ${{ runner.temp }}/coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sourceDir: atramhasis
+          thresholdAll: 0.9
+          thresholdNew: 0.9
+          thresholdModified: 0.8
