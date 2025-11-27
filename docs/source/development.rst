@@ -329,8 +329,8 @@ Atramhasis is being developed as open source software by the
 
 Since we place a lot of importance of code quality, we expect to have a good 
 amount of code coverage present and run frequent unit tests. All commits and
-pull requests will be tested with Github Workflow Actions tests. Code coverage is being
-monitored with `Coveralls`_.
+pull requests will be tested with Github Workflow Actions tests.
+We monitor code coverage on all pull requests using `Github Actions workflows`_ and `orgoro/coverage`_.
 
 Locally you can run unit tests by using `pytest`_.
 
@@ -374,7 +374,7 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 .. _Flanders Heritage Agency: https://www.onroerenderfgoed.be
 .. _Github page for Atramhasis: https://github.com/OnroerendErfgoed/atramhasis
 .. _GitHub Actions workflows: https://github.com/OnroerendErfgoed/atramhasis/actions
-.. _Coveralls: https://coveralls.io/r/OnroerendErfgoed/atramhasis
+.. _orgoro/coverage: https://github.com/orgoro/coverage
 .. _pytest: https://pytest.org
 .. _npm: https://www.npmjs.org/
 .. _grunt: https://gruntjs.com

@@ -150,6 +150,10 @@ rpds-py==0.29.0
     # via
     #   jsonschema
     #   referencing
+setuptools==80.9.0
+    # via
+    #   pyramid
+    #   zope-deprecation
 six==1.17.0
     # via
     #   html5lib
@@ -170,8 +174,8 @@ skosprovider-sqlalchemy==2.1.1
     # via atramhasis (pyproject.toml)
 sqlalchemy==2.0.44
     # via
-    #   alembic
     #   atramhasis (pyproject.toml)
+    #   alembic
     #   skosprovider-sqlalchemy
     #   zope-sqlalchemy
 stevedore==5.6.0
@@ -215,8 +219,5 @@ zope-interface==8.1.1
     #   pyramid
     #   transaction
     #   zope-sqlalchemy
-zope-sqlalchemy==4.0
+zope-sqlalchemy==4.1
     # via atramhasis (pyproject.toml)
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools

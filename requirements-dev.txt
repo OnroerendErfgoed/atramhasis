@@ -25,15 +25,9 @@ charset-normalizer==3.4.4
 colander==2.0
     # via atramhasis (pyproject.toml)
 coverage==7.12.0
-    # via
-    #   coveralls
-    #   pytest-cov
-coveralls==4.0.2
-    # via atramhasis (pyproject.toml)
+    # via pytest-cov
 decorator==5.2.1
     # via dogpile-cache
-docopt==0.6.2
-    # via coveralls
 docutils==0.21.2
     # via sphinx
 dogpile-cache==1.5.0
@@ -198,7 +192,6 @@ requests==2.32.5
     # via
     #   atramhasis (pyproject.toml)
     #   cachecontrol
-    #   coveralls
     #   jsonschema-path
     #   skosprovider-getty
     #   sphinx
@@ -210,6 +203,10 @@ rpds-py==0.29.0
     # via
     #   jsonschema
     #   referencing
+setuptools==80.9.0
+    # via
+    #   pyramid
+    #   zope-deprecation
 six==1.17.0
     # via
     #   html5lib
@@ -253,8 +250,8 @@ sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sqlalchemy==2.0.44
     # via
-    #   alembic
     #   atramhasis (pyproject.toml)
+    #   alembic
     #   skosprovider-sqlalchemy
     #   zope-sqlalchemy
 stevedore==5.6.0
@@ -314,8 +311,5 @@ zope-interface==8.1.1
     #   pyramid
     #   transaction
     #   zope-sqlalchemy
-zope-sqlalchemy==4.0
+zope-sqlalchemy==4.1
     # via atramhasis (pyproject.toml)
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
