@@ -330,7 +330,7 @@ Atramhasis is being developed as open source software by the
 Since we place a lot of importance of code quality, we expect to have a good 
 amount of code coverage present and run frequent unit tests. All commits and
 pull requests will be tested with Github Workflow Actions tests.
-We monitor code coverage on all pull requests using [GitHub Actions] and [orgoro/coverage].
+We monitor code coverage on all pull requests using `Github Actions workflows`_ and `orgoro/coverage`_.
 
 Locally you can run unit tests by using `pytest`_.
 
