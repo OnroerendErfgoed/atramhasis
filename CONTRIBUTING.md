@@ -62,3 +62,4 @@ know why it's not working.
 [development guidelines]: https://atramhasis.readthedocs.io/en/latest/development.html
 [pytest]: https://pytest.org
 [GitHub Actions workflows]: https://github.com/OnroerendErfgoed/atramhasis/actions
+[orgoro/coverage]: https://github.com/orgoro/coverage
