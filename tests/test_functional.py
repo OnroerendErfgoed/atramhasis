@@ -412,7 +412,7 @@ class RestFunctionalTests(FunctionalTests):
 
     def test_delete_concept(self):
         self.testapp.delete(
-            f'/conceptschemes/TREES/c/1',
+            '/conceptschemes/TREES/c/1',
             headers=self._get_default_headers(),
             status=204,
         )

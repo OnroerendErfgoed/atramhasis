@@ -5,7 +5,6 @@ Module containing error views.
 import logging
 import sys
 
-from openapi_core.validation.schemas.exceptions import InvalidSchemaValue
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 from pyramid.view import notfound_view_config
 from pyramid.view import view_config
@@ -110,7 +109,7 @@ def failed(exc, request):  # pragma no cover
 
 
 @view_config(accept='application/json', context=HTTPMethodNotAllowed, renderer='json')
-def failed_not_method_not_allowed(exc, request):
+def failed_method_not_allowed(exc, request):  # pragma no cover
     """
     View invoked when a method is not allowed.
     """
@@ -126,56 +125,15 @@ def failed_not_method_not_allowed(exc, request):
 def failed_openapi_validation(exc, request):
     try:
         errors = [
-            _handle_validation_error(validation_error)
-            for error in exc.errors
-            if isinstance(error, InvalidSchemaValue)
-            for validation_error in error.schema_errors
+            f'{error.get("field")}: {error["message"]}'
+            for error in list(extract_errors(request, exc.errors))
         ]
-        # noinspection PyTypeChecker
-        errors.extend(
-            [
-                f'{error.get("field")}: {error.get("message")}'
-                for error in list(extract_errors(request, exc.errors))
-            ]
-        )
         request.response.status_int = 400
-        source = 'Request' if isinstance(exc, RequestValidationError) else 'Response'
-        return {'message': f'{source} was not valid for schema.', 'errors': errors}
-    except Exception:
+        if isinstance(exc, RequestValidationError):
+            subject = 'Request'
+        else:
+            subject = 'Response'
+        return {'message': f'{subject} was not valid for schema.', 'errors': errors}
+    except Exception as e:
         log.exception('Issue with exception handling.')
         return openapi_validation_error(exc, request)
-
-
-def _handle_validation_error(error, path=''):
-    if error.validator in ('anyOf', 'oneOf', 'allOf'):
-        for schema_type in ('anyOf', 'oneOf', 'allOf'):
-            if schema_type not in error.schema:
-                continue
-            schemas = error.schema.get(schema_type)
-            break
-        else:
-            return None
-
-        response = []
-        for i, schema in enumerate(schemas):
-            schema.pop('x-scope', None)
-            errors = [
-                sub_error
-                for sub_error in error.context
-                if sub_error.relative_schema_path[0] == i
-            ]
-            if error.path:
-                schema = {'.'.join(str(p) for p in error.path): schema}
-            response.append(
-                {
-                    'schema': schema,
-                    'errors': [_handle_validation_error(error) for error in errors],
-                }
-            )
-        return {schema_type: response}
-    if path:
-        path += '.'
-    path += '.'.join(str(item) for item in error.path)
-    if not path:
-        path = '<root>'
-    return f'{path}: {error.message}'

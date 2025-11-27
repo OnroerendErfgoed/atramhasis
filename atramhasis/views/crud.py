@@ -7,7 +7,6 @@ import time
 
 import colander
 import transaction
-from pyramid.httpexceptions import HTTPMethodNotAllowed
 from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 from pyramid.view import view_defaults
