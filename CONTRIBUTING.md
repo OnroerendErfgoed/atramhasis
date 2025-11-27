@@ -24,7 +24,7 @@ this is not necessary.
 
 We place a lot of importance on code quality, expect to have a good 
 amount of code coverage present and run frequent unit tests.
-We monitor code coverage on all pull requests using [GitHub Actions] and [orgoro/coverage].
+We monitor code coverage on all pull requests using [GitHub Actions workflows] and [orgoro/coverage].
 
 Locally you can run unit tests by using [pytest].
 
