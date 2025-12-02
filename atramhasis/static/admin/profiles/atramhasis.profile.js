@@ -104,7 +104,7 @@ var profile = {
   // Keep in mind that dead code removal only happens in minifiers that support it! Currently, only Closure Compiler
   // to the Dojo build system with dead code removal.
   // A documented list of has-flags in use within the toolkit can be found at
-  // <http://dojotoolkit.org/reference-guide/dojo/has.html>.
+  // <https://dojotoolkit.org/reference-guide/dojo/has.html>.
   staticHasFeatures: {
 		'host-browser': true,
 		'host-node': false,

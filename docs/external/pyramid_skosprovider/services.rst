@@ -42,7 +42,7 @@ The following API can be used by clients:
 
     .. sourcecode:: http
 
-        GET /uris/?uri=http://python.com/trees/larch HTTP/1.1
+        GET /uris/?uri=https://python.com/trees/larch HTTP/1.1
         Host: localhost:6543
         Accept: application/json
 
@@ -55,7 +55,7 @@ The following API can be used by clients:
 
         {
             "id": "1",
-            "uri": "http://python.com/trees/larch",
+            "uri": "https://python.com/trees/larch",
             "type": "concept",
             "concept_scheme": {
                 "id": "TREES",
@@ -452,7 +452,7 @@ The following API can be used by clients:
             "label": "The Larch",
             "matches": {
                 "close": [
-                    "http://id.python.org/different/types/of/trees/nr/1/the/larch"
+                    "https://id.python.org/different/types/of/trees/nr/1/the/larch"
                 ]
             },
             "concept_scheme": {

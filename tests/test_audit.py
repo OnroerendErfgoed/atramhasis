@@ -55,7 +55,7 @@ class AuditTests(unittest.TestCase):
             self.assertEqual('1', getattr(self.audit_manager.saved_objects[nr - 1], type_id))
 
     def test_audit_rest(self):
-        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+        self.dummy_parent.request.url = "https://host/conceptschemes/STYLES"
         self.dummy_parent.request.accept = ['application/json']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
@@ -65,7 +65,7 @@ class AuditTests(unittest.TestCase):
         self._check(2, 'REST', ['conceptscheme_id', 'concept_id'])
 
     def test_audit_html(self):
-        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+        self.dummy_parent.request.url = "https://host/conceptschemes/STYLES"
         self.dummy_parent.request.accept = ['text/html']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
@@ -83,7 +83,7 @@ class AuditTests(unittest.TestCase):
         self._check(2, 'RDF', ['conceptscheme_id', 'concept_id'])
 
     def test_audit_csv(self):
-        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES.csv"
+        self.dummy_parent.request.url = "https://host/conceptschemes/STYLES.csv"
         self.dummy_parent.request.accept = "text/csv"
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
@@ -93,7 +93,7 @@ class AuditTests(unittest.TestCase):
         self._check(2, 'CSV', ['conceptscheme_id', 'concept_id'])
 
     def test_audit_other(self):
-        self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+        self.dummy_parent.request.url = "https://host/conceptschemes/STYLES"
         self.dummy_parent.request.accept = ['application/octet-stream']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.dummy()
@@ -103,7 +103,7 @@ class AuditTests(unittest.TestCase):
         self._check(2, None, ['conceptscheme_id', 'concept_id'])
 
     def test_audit_do_not_record_external(self):
-        self.dummy_parent.request.url = "http://host/conceptschemes/EXT"
+        self.dummy_parent.request.url = "https://host/conceptschemes/EXT"
         self.dummy_parent.request.accept = ['application/octet-stream']
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.request.skos_registry.get_provider = Mock(return_value=cs_mock)
@@ -115,7 +115,7 @@ class AuditTests(unittest.TestCase):
 
     def test_invalid_use(self):
         with LogCapture() as logs:
-            self.dummy_parent.request.url = "http://host/conceptschemes/STYLES"
+            self.dummy_parent.request.url = "https://host/conceptschemes/STYLES"
             self.dummy_parent.request.accept = ['application/json']
             self.dummy_parent.request.matchdict = {'invalid_parameter_id': '1'}
             self.dummy_parent.dummy()

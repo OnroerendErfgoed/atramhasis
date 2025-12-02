@@ -1,183 +1,170 @@
-# Translations template for atramhasis.
-# Copyright (C) 2015 ORGANIZATION
-# This file is distributed under the same license as the atramhasis project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: atramhasis 0.4.1-dev\n"
+"Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-23 21:37+0100\n"
-"PO-Revision-Date: 2016-09-27 14:32+0100\n"
+"POT-Creation-Date: 2025-11-04 09:21+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
-"X-Generator: Poedit 1.5.4\n"
+"Generated-By: Babel 2.10.3\n"
 
-#: atramhasis/templates/browse_schemes_sidebar.jinja2:7
-msgid "browse"
-msgstr ""
-
-#: atramhasis/templates/concept.jinja2:29
+#: atramhasis/templates/concept.jinja2:47
 msgid "concept"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:31
+#: atramhasis/templates/concept.jinja2:49
 msgid "collection"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:40
-#: atramhasis/templates/conceptscheme.jinja2:27
-msgid "labels"
-msgstr ""
-
-#: atramhasis/templates/concept.jinja2:48
-#: atramhasis/templates/conceptscheme.jinja2:36
+#: atramhasis/templates/concept.jinja2:64
+#: atramhasis/templates/conceptscheme.jinja2:60
 msgid "notes"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:59
-msgid "relations"
+#: atramhasis/templates/concept.jinja2:75
+#: atramhasis/templates/conceptscheme.jinja2:73
+msgid "sources"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:63
-msgid "broader"
-msgstr ""
-
-#: atramhasis/templates/concept.jinja2:68
-msgid "narrower"
-msgstr ""
-
-#: atramhasis/templates/concept.jinja2:73
-msgid "related"
-msgstr ""
-
-#: atramhasis/templates/concept.jinja2:78
-msgid "subordinate_arrays"
-msgstr ""
-
-#: atramhasis/templates/concept.jinja2:85
-msgid "members"
-msgstr ""
-
-#: atramhasis/templates/concept.jinja2:90
-msgid "superordinates"
+#: atramhasis/templates/concept.jinja2:95
+msgid "view_relations"
 msgstr ""
 
 #: atramhasis/templates/concept.jinja2:96
-msgid "member_of"
+msgid "view_tree"
 msgstr ""
 
-#: atramhasis/templates/concept.jinja2:101
+#: atramhasis/templates/concept.jinja2:102
+msgid "relations"
+msgstr ""
+
+#: atramhasis/templates/concept.jinja2:107 atramhasis/templates/concept.jinja2:143
+msgid "broader"
+msgstr ""
+
+#: atramhasis/templates/concept.jinja2:120 atramhasis/templates/concept.jinja2:155
+msgid "narrower"
+msgstr ""
+
+#: atramhasis/templates/concept.jinja2:133
+msgid "related"
+msgstr ""
+
+#: atramhasis/templates/concept.jinja2:166
 msgid "matches"
 msgstr ""
 
-#: atramhasis/templates/conceptscheme.jinja2:45
-#: atramhasis/templates/search_form.jinja2:39
-msgid "type_concept"
+#: atramhasis/templates/concept.jinja2:175
+#: atramhasis/templates/conceptscheme.jinja2:96 atramhasis/templates/tree.jinja2:11
+msgid "tree_help"
 msgstr ""
 
-#: atramhasis/templates/conceptschemes.jinja2:12
+#: atramhasis/templates/conceptschemes.jinja2:13
+#: atramhasis/templates/header-page.jinja2:23
 #: atramhasis/templates/search_form.jinja2:11
+#: atramhasis/templates/subfooter-page.jinja2:22
 msgid "select_scheme"
 msgstr ""
 
-#: atramhasis/templates/macros.jinja2:22
-msgid "prefLabel"
+#: atramhasis/templates/error.jinja2:3
+msgid "500_title"
 msgstr ""
 
-#: atramhasis/templates/macros.jinja2:24
-msgid "altLabel"
+#: atramhasis/templates/error.jinja2:9
+msgid "500_error"
 msgstr ""
 
-#: atramhasis/templates/macros.jinja2:26
-msgid "hiddenLabel"
+#: atramhasis/templates/error.jinja2:11
+msgid "500_explanation"
 msgstr ""
 
-msgid "sortLabel"
-msgstr ""
-
-#: atramhasis/templates/search_form.jinja2:7
-msgid "search"
-msgstr ""
-
-#: atramhasis/templates/search_form.jinja2:26
-msgid "open"
-msgstr ""
-
-#: atramhasis/templates/search_form.jinja2:27
-#: atramhasis/templates/search_form.jinja2:28
-msgid "export"
-msgstr ""
-
-#: atramhasis/templates/search_form.jinja2:34
+#: atramhasis/templates/header-page.jinja2:34
+#: atramhasis/templates/search_form.jinja2:20
 msgid "select_type"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:38
+#: atramhasis/templates/header-page.jinja2:35
+#: atramhasis/templates/search_form.jinja2:21
 msgid "type_all"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:40
+#: atramhasis/templates/header-page.jinja2:36
+#: atramhasis/templates/search_form.jinja2:22
+msgid "type_concept"
+msgstr ""
+
+#: atramhasis/templates/header-page.jinja2:37
+#: atramhasis/templates/search_form.jinja2:23
 msgid "type_collection"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:46
+#: atramhasis/templates/header-page.jinja2:49
+#: atramhasis/templates/search_form.jinja2:26
 msgid "search_for"
 msgstr ""
 
-#: atramhasis/templates/search_form.jinja2:54
-msgid "submit"
+#: atramhasis/templates/header-page.jinja2:49
+#: atramhasis/templates/search_form.jinja2:26
+msgid "labels"
 msgstr ""
 
-#: atramhasis/templates/search_result.jinja2:13
+#: atramhasis/templates/notfound.jinja2:3
+msgid "404_title"
+msgstr ""
+
+#: atramhasis/templates/notfound.jinja2:9
+msgid "404_error"
+msgstr ""
+
+#: atramhasis/templates/notfound.jinja2:11
+msgid "404_explanation"
+msgstr ""
+
+#: atramhasis/templates/search_form.jinja2:40
+msgid "select_scheme_error"
+msgstr ""
+
+#: atramhasis/templates/search_result.jinja2:10
 #, python-format
 msgid "There is %(count)s result:"
 msgid_plural "There are %(count)s results:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: atramhasis/templates/welcome.jinja2:3
-msgid "welcome_to"
-msgstr ""
-
-#: atramhasis/templates/welcome.jinja2:5
-msgid "atramhasis_expl"
-msgstr ""
-
-#: atramhasis/templates/welcome.jinja2:7
-msgid "more_information"
-msgstr ""
-
-#: atramhasis/templates/welcome.jinja2:9
-msgid "discussion_forum"
-msgstr ""
-
-#: atramhasis/templates/welcome.jinja2:10
-msgid "online_documentation"
-msgstr ""
-
-#: atramhasis/templates/welcome.jinja2:11
-msgid "issue_tracker"
-msgstr ""
-
-msgid "recently_viewed"
-msgstr ""
-
-msgid "follow"
-msgstr ""
-
+#: atramhasis/templates/subfooter-page.jinja2:6
 msgid "popular_category"
 msgstr ""
 
-msgid "view_tree"
+#: atramhasis/templates/subfooter-page.jinja2:12
+msgid "recently_viewed"
 msgstr ""
 
-msgid "view_relations"
+#: atramhasis/templates/welcome.jinja2:3
+msgid "atramhasis_expl"
 msgstr ""
 
-msgid "tree_help"
+#: atramhasis/templates/welcome.jinja2:4
+msgid "more_information"
 msgstr ""
+
+#: atramhasis/templates/welcome.jinja2:6
+msgid "discussion_forum"
+msgstr ""
+
+#: atramhasis/templates/welcome.jinja2:7
+msgid "online_documentation"
+msgstr ""
+
+#: atramhasis/templates/welcome.jinja2:8
+msgid "issue_tracker"
+msgstr ""
+

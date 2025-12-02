@@ -7,15 +7,13 @@ Atramhasis
         :target: https://doi.org/10.5281/zenodo.5801135
 .. image:: https://github.com/OnroerendErfgoed/atramhasis/actions/workflows/atramhasis_backend.yaml/badge.svg
         :target: https://github.com/OnroerendErfgoed/atramhasis/actions/workflows/atramhasis_backend.yaml
-.. image:: https://coveralls.io/repos/github/OnroerendErfgoed/atramhasis/badge.svg?branch=develop
-        :target: https://coveralls.io/github/OnroerendErfgoed/atramhasis?branch=develop
 .. image:: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/badges/quality-score.png?b=develop
         :target: https://scrutinizer-ci.com/g/OnroerendErfgoed/atramhasis/?branch=develop
 
 ----
 
 .. image:: https://readthedocs.org/projects/atramhasis/badge/?version=latest
-        :target: http://atramhasis.readthedocs.io/en/latest/?badge=latest
+        :target: https://atramhasis.readthedocs.io/en/latest/?badge=latest
 .. image:: https://joss.theoj.org/papers/10.21105/joss.05040/status.svg
         :target: https://doi.org/10.21105/joss.05040
 

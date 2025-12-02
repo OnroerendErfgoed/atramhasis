@@ -1,9 +1,9 @@
 [build-system]
-requires = ["hatchling", "hatch-fancy-pypi-readme"]
+requires = ["hatchling", "hatch-fancy-pypi-readme", "babel"]
 build-backend = "hatchling.build"
 
 [project]
-version = "2.1.1"
+version = "3.0.0"
 name = "atramhasis"
 dynamic = ["readme"]
 authors = [
@@ -59,21 +59,16 @@ Documentation = "https://atramhasis.readthedocs.io/en/latest/"
 
 [project.optional-dependencies]
 dev = [
-    "pyramid-debugtoolbar==4.10",
-    "pytest==7.4.2",
-    "pytest-cov==4.1.0",
-    "coveralls==3.3.1",
-    "webtest==3.0.0",
-    "mock==5.1.0",
-    "testfixtures==7.2.2",
-    "Sphinx==6.2.1",
-    "sphinxcontrib-httpdomain==1.8.1",
-    "pygments==2.15.1",
-    "waitress==2.1.2",
-    "flake8==4.0.1",
-    "mccabe==0.6.1",
-    "pep8==1.7.1",
-    "pyflakes==2.4.0",
+    "pyramid-debugtoolbar>=4.10",
+    "pytest>=7.4.2",
+    "pytest-cov>=4.1.0",
+    "webtest>=3.0.0",
+    "testfixtures>=7.2.2",
+    "Sphinx>=6.2.1",
+    "sphinxcontrib-httpdomain>=1.8.1",
+    "pygments>=2.15.1",
+    "waitress>=2.1.2",
+    "flake8>=4.0.1",
 ]
 
 [project.entry-points."paste.app_factory"]
@@ -94,16 +89,12 @@ migrate_sqlalchemy_providers = "atramhasis.scripts.migrate_sqlalchemy_providers:
 ##
 [tool.hatch.build.targets.wheel]
 # In the wheel we want to have atramhasis in the root as python module.
-only-include = [
-    "/atramhasis",
-    "/fixtures",
-]
+only-include = ["/atramhasis", "/fixtures"]
 # In the wheel we do not need the frontend sources. We provide the dist.
-exclude = [
-    "/atramhasis/static/admin"
-]
+exclude = ["/atramhasis/static/admin"]
 # these folders are (partially) in gitignore and would otherwise not be part of the builds
 artifacts = [
+    "/atramhasis/locale/*/LC_MESSAGES/*.mo",
     "/atramhasis/static/admin/dist",
     # including node_modules bloats the build but we need refactoring
     "/atramhasis/static/admin/node_modules",
@@ -120,7 +111,10 @@ allow-direct-references = true
 
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/x-rst"
-fragments = [
-  { path = "README.rst" },
-  { path = "CHANGES.rst" },
-]
+fragments = [{ path = "README.rst" }, { path = "CHANGES.rst" }]
+
+[tool.uv]
+managed = false # Because we do not use the uv lockfile (yet)
+
+[tool.ruff.format]
+quote-style = "single"

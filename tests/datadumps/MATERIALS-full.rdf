@@ -19,7 +19,7 @@
         <skos:narrower rdf:resource="https://id.erfgoed.net/thesauri/materialen/19"/>
         <dcterms:source>
           <dcterms:BibliographicResource rdf:nodeID="N8a530f38f9dc428dacf388ff59c8fb83">
-            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
           </dcterms:BibliographicResource>
         </dcterms:source>
         <skos:narrower rdf:resource="https://id.erfgoed.net/thesauri/materialen/12"/>
@@ -28,7 +28,7 @@
     </skos:broader>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nf9d44e5758194afbacb46200c9a29219">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:inScheme>
@@ -56,7 +56,7 @@
     <skos:scopeNote xml:lang="nl-BE">Gewei wordt gevormd door enkele uitstulpingen van been op de voorhoofdsbeenderen van gehoefde dieren die behoren tot de hertenfamilie. Het wordt jaarlijks afgeworpen. Gewei wordt door de mens gebruikt als grondstof voor het maken van artefacten.</skos:scopeNote>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N2bee4c0f002e4b6badb89f29705333e2">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:prefLabel xml:lang="nl-BE">gewei</skos:prefLabel>
@@ -69,7 +69,7 @@
         <skos:scopeNote xml:lang="nl-BE">Organisch materiaal is materiaal dat koolstof bevat, inclusief de materialen die afkomstig zijn van levende organismen.</skos:scopeNote>
         <dcterms:source>
           <dcterms:BibliographicResource rdf:nodeID="Nbe24ded07f2f48f8a6d15c07e8b5b3e3">
-            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
           </dcterms:BibliographicResource>
         </dcterms:source>
         <skos:narrower rdf:resource="https://id.erfgoed.net/thesauri/materialen/23"/>
@@ -85,7 +85,7 @@
   <skos:Concept rdf:about="https://id.erfgoed.net/thesauri/materialen/19">
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N96f41f0fdd4f40009e3726cc37d9969e">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:broader rdf:resource="https://id.erfgoed.net/thesauri/materialen/8"/>
@@ -115,7 +115,7 @@
         <skos:inScheme rdf:resource="https://id.erfgoed.net/thesauri/materialen"/>
         <dcterms:source>
           <dcterms:BibliographicResource rdf:nodeID="N35932c03182245eb9e08fbed3769b8fd">
-            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
           </dcterms:BibliographicResource>
         </dcterms:source>
         <skos:scopeNote xml:lang="nl-BE">Een fijnkorrelig, compact sedimentair gesteente dat bestaat uit kwartskristallen.</skos:scopeNote>
@@ -137,7 +137,7 @@
   <skos:Concept rdf:about="https://id.erfgoed.net/thesauri/materialen/6">
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nb40a2bcf0cb94999b0518d27aa01cf6a">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:broader>
@@ -147,7 +147,7 @@
         <skos:scopeNote xml:lang="nl-BE">Aardewerk of keramiek is gebakken klei. Aardewerk wordt gebruikt voor het vervaardigen van vaatwerk, bouwmaterialen, beeldjes, enz…</skos:scopeNote>
         <dcterms:source>
           <dcterms:BibliographicResource rdf:nodeID="N1471eb5f31bf405e813111788cd2c894">
-            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
           </dcterms:BibliographicResource>
         </dcterms:source>
         <skos:narrower rdf:resource="https://id.erfgoed.net/thesauri/materialen/6"/>
@@ -166,7 +166,7 @@
   <skos:Concept rdf:about="https://id.erfgoed.net/thesauri/materialen/28">
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nc09e1eb172c24d26965b1f9fa612e60b">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:scopeNote xml:lang="nl-BE">Hoorn is een uitgroei van aangepaste huid of zeer compact haar, vaak in paren die uitsteken vanaf de voorhoofdsbotten aan beide zijden van de schedel en bestaat uit een permanente opperhuid van keratine. De benen kern van een hoorn wordt hoornpit genoemd.</skos:scopeNote>
@@ -225,7 +225,7 @@
         <skos:broader rdf:resource="https://id.erfgoed.net/thesauri/materialen/8"/>
         <dcterms:source>
           <dcterms:BibliographicResource rdf:nodeID="Nc54ab2cba1494b689fb31c9e2d68c55a">
-            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
           </dcterms:BibliographicResource>
         </dcterms:source>
         <skos:scopeNote xml:lang="nl-BE">Te gebruiken voor het zuivere metaalelement met het symbool Au. Het is een zacht, zwaar, chemisch inactief en geel metaal en wordt al sinds de oudheid als edel beschouwd. Het dient in vele culturen als de basis voor materiële handelswaarden. Ook te gebruiken voor het metaal wanneer het wordt bewerkt en vervormd om, meestal in combinatie met andere stoffen, verschillende voorwerpen en materialen te maken.</skos:scopeNote>
@@ -236,7 +236,7 @@
     <skos:scopeNote xml:lang="nl-BE">Bladgoud is een term die verwijst naar platen goud die tot een zeer geringe dikte (meestal circa 0,1 micrometer) zijn gehamerd of gewalst.</skos:scopeNote>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nc41ab1888d6143baba1c29fa16540b12">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</dcterms:identifier>
@@ -254,7 +254,7 @@
         <skos:inScheme rdf:resource="https://id.erfgoed.net/thesauri/materialen"/>
         <dcterms:source>
           <dcterms:BibliographicResource rdf:nodeID="Na4aff938471d4ec492ac01f5c6fea1c9">
-            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
           </dcterms:BibliographicResource>
         </dcterms:source>
         <skos:prefLabel xml:lang="nl-BE">leer</skos:prefLabel>
@@ -266,7 +266,7 @@
     <skos:scopeNote xml:lang="nl-BE">Houtskool is een onzuivere vorm van grafietkoolstof die ontstaat als reststof bij de gedeeltelijke verbranding van koolstofhoudend materiaal, of bij verhitting van dit materiaal waarbij zuurstof in beperkte hoeveelheid aanwezig is.</skos:scopeNote>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nd55db3c7732b4e51a4ed26e8af79ea53">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:broader>
@@ -303,7 +303,7 @@
     </skos:broader>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N80f7f2bbf9e142c0b978a0f1d66c0994">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:inScheme rdf:resource="https://id.erfgoed.net/thesauri/materialen"/>
@@ -318,7 +318,7 @@
     <skos:scopeNote xml:lang="nl-BE">Botmateriaal of been is een combinatie van organisch en anorganisch materiaal die hoofdzakelijk bestaat uit collageen en calciumfosfaat; het vormt het geraamte van de meeste gewervelde dieren.</skos:scopeNote>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nae79a499b4104dd6bd4562a06bf6cd68">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:broader>
@@ -332,7 +332,7 @@
         <skos:scopeNote xml:lang="nl-BE">Botmateriaal of been is een combinatie van organisch en anorganisch materiaal die hoofdzakelijk bestaat uit collageen en calciumfosfaat.</skos:scopeNote>
         <dcterms:source>
           <dcterms:BibliographicResource rdf:nodeID="N0d8db3cd5f544037b801195cd826d7a0">
-            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+            <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
           </dcterms:BibliographicResource>
         </dcterms:source>
       </skos:Concept>
@@ -360,7 +360,7 @@
     <skos:broader rdf:resource="https://id.erfgoed.net/thesauri/materialen/8"/>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nffea278d2cd9437abbbc5b9705794e4d">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
   </skos:Concept>
@@ -414,7 +414,7 @@
     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</dcterms:identifier>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N1e03aeff44d145a59ea95f32888243c3">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
   </skos:Concept>
@@ -424,7 +424,7 @@
     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">26</dcterms:identifier>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N26ca82a1b4714a9eb1c1f3090050c2bd">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:scopeNote xml:lang="nl-BE">Botmateriaal of been is een combinatie van organisch en/of anorganisch materiaal die hoofdzakelijk bestaat uit collageen en calciumfosfaat; het vormt het geraamte van de meeste gewervelden, waaronder de mens.</skos:scopeNote>
@@ -434,7 +434,7 @@
     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">41</dcterms:identifier>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N7523a72a662c466c865bae9fbdb00e84">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:scopeNote xml:lang="nl-BE">Natuursteen is een term die wordt gebruik voor gesteenten die in de natuur worden aangetroffen en die, na eventuele bewerking, kunnen dienen als bouwmateriaal. Hieronder vallen steensoorten zoals graniet, tefriet, Doornikse kalksteen, zandsteen, Balegemse kalkzandsteen, Gobertangesteen, arduin (blauwe hardsteen), ijzerzandsteen, veldsteen, Ypresiaanse nummilietenkalksteen, Avendersteen, schieffer, enz...</skos:scopeNote>
@@ -449,7 +449,7 @@
     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">18</dcterms:identifier>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N34a7b01da75f489ebd6da32c035ef807">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:broader rdf:resource="https://id.erfgoed.net/thesauri/materialen/8"/>
@@ -462,7 +462,7 @@
     <skos:broader rdf:resource="https://id.erfgoed.net/thesauri/materialen/32"/>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nce17e360351d4b2eaee6934038b742ae">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
   </skos:Concept>
@@ -481,7 +481,7 @@
   <skos:Concept rdf:about="https://id.erfgoed.net/thesauri/materialen/23">
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N5ce4690e385e40588fd5f67e9ef35643">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:inScheme rdf:resource="https://id.erfgoed.net/thesauri/materialen"/>
@@ -494,7 +494,7 @@
     <skos:broader rdf:resource="https://id.erfgoed.net/thesauri/materialen/32"/>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="Nf1ab51dcb3dd4de194a1b6d45a8b5c39">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
     <skos:prefLabel xml:lang="nl-BE">textiel</skos:prefLabel>
@@ -528,7 +528,7 @@
     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</dcterms:identifier>
     <dcterms:source>
       <dcterms:BibliographicResource rdf:nodeID="N0d9713e84ee44155865e3ca3cb2d3a3b">
-        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
+        <dcterms:bibliographicCitation rdf:datatype="http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"><![CDATA[Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>]]></dcterms:bibliographicCitation>
       </dcterms:BibliographicResource>
     </dcterms:source>
   </skos:Concept>

@@ -1,12 +1,40 @@
-2.1.1 (01-08-2023)
+3.0.0 (26-11-2025)
+-------------------
+Breaking changes:
+- Inconsistent response code for deletes #938
+
+Features:
+- Add note types: Example, EditorialNote, ChangeNote #941
+
+Bugfixes:
+- openapi could be better #909
+- conceptschemes/unknown should not cause a 500 server error #910
+- sqlite3.OperationalError: no such table: conceptscheme #890
+- Wrong years in changelog #916
+- Wrong link to discussion forum #935
+
+Other:
+- Add workflow: Verify that the package can be built and is ready for upload to PyPI. #937
+- Add pybabel tasks to the build hook #900
+- Fix test cleanup of a dump folder #946
+- Requirements upgrade. #950
+- Add test coverage #933
+
+
+2.1.1 (01-08-2024)
 ------------------
 
 - ConceptVisitLog has an integer concept_id in the ConceptVisitLog class #906
 - skosprovider route /expand does not work #903
+
+  **If you are using custom pages or custom views with atramhasis routes, please see**
+  `the docs <https://atramhasis.readthedocs.io/en/latest/customisation.html#update-to-2-1-1>`_
+  **for a list of route name changes**
+
 - Manual ID text box not writable #902
 
 
-2.1.0 (22-07-2023)
+2.1.0 (22-07-2024)
 ------------------
 
 - Migrated from setup.py to the hatch build tool for improved packaging and distribution (#854).
@@ -433,7 +461,7 @@ Upgrading from `0.4.0` should be simple and cause no or few problems.
   as an alembic migration. So only effective when creating a new database.
   If you already have a database created from an older version of Atramhasis,
   please modify accordingly. Modifying column length on SQLite is not possible
-  (see http://www.sqlite.org/omitted.html ).
+  (see https://www.sqlite.org/omitted.html ).
 - Abiltity to match Concepts in an Atramhasis ConceptScheme to Concepts in
   external ConceptSchemes through properties such as *skos:exactMatch* and
   *skos:closeMatch*.
@@ -503,12 +531,12 @@ Upgrading from `0.4.0` should be simple and cause no or few problems.
 - Integration of skosprovider_sqlalchemy_
 
 
-.. _skosprovider: http://skosprovider.readthedocs.org
-.. _skosprovider_sqlalchemy: http://skosprovider-sqlalchemy.readthedocs.org
-.. _skosprovider_rdf: http://skosprovider-rdf.readthedocs.org
-.. _skosprovider_getty: http://skosprovider-getty.readthedocs.org
+.. _skosprovider: https://skosprovider.readthedocs.io
+.. _skosprovider_sqlalchemy: https://skosprovider-sqlalchemy.readthedocs.io
+.. _skosprovider_rdf: https://skosprovider-rdf.readthedocs.io
+.. _skosprovider_getty: https://skosprovider-getty.readthedocs.io
 .. _skosprovider_oe: https://github.com/koenedaele/skosprovider_oe
-.. _skosprovider_heritagedata: http://skosprovider-heritagedata.readthedocs.org
-.. _pyramid_skosprovider: http://pyramid-skosprovider.readthedocs.org
-.. _language_tags: http://language-tags.readthedocs.org
+.. _skosprovider_heritagedata: https://skosprovider-heritagedata.readthedocs.io
+.. _pyramid_skosprovider: https://pyramid-skosprovider.readthedocs.io
+.. _language_tags: https://language-tags.readthedocs.io
 .. _heroku: https://www.heroku.com

@@ -30,10 +30,10 @@ in the larger field of cultural heritage such as the
 If you have questions about the project, want to help out, want to report a
 bug or just want to have a conversation with us, please get in touch. For 
 general conversations, you can use our 
-`Google Group <https://groups.google.com/d/forum/atramhasis>`_. If you have 
+`GitHub Discussions page <https://github.com/OnroerendErfgoed/atramhasis/discussions>`_. If you have
 encountered a bug in Atramhasis or it's documentation, or if you want to ask
 us to consider implementing a feature, feel free to use our 
-`issue tracker <http://github.com/OnroerendErfgoed/Atramhasis/issues>`_.
+`issue tracker <https://github.com/OnroerendErfgoed/Atramhasis/issues>`_.
 
 If you are using this software in and want to reference it, please 
 cite the following article in the Journal of Open Source Software:

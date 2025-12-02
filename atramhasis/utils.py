@@ -1,6 +1,7 @@
 """
 Module containing utility functions used by Atramhasis.
 """
+
 import contextlib
 import copy
 from collections import deque
@@ -23,14 +24,14 @@ from atramhasis.data.models import Provider
 
 def from_thing(thing):
     """
-        Map a :class:`skosprovider_sqlalchemy.models.Thing` to a
-        :class:`skosprovider.skos.Concept` or
-        a :class:`skosprovider.skos.Collection`, depending on the type.
+    Map a :class:`skosprovider_sqlalchemy.models.Thing` to a
+    :class:`skosprovider.skos.Concept` or
+    a :class:`skosprovider.skos.Collection`, depending on the type.
 
-        :param skosprovider_sqlalchemy.models.Thing thing: Thing to map.
-        :rtype: :class:`~skosprovider.skos.Concept` or
-            :class:`~skosprovider.skos.Collection`.
-        """
+    :param skosprovider_sqlalchemy.models.Thing thing: Thing to map.
+    :rtype: :class:`~skosprovider.skos.Concept` or
+        :class:`~skosprovider.skos.Collection`.
+    """
     if thing.type and thing.type == 'collection':
         return Collection(
             id=thing.concept_id,
@@ -40,23 +41,21 @@ def from_thing(thing):
                 Label(label.label, label.labeltype_id, label.language_id)
                 for label in thing.labels
             ],
-            notes=[
-                Note(n.note, n.notetype_id, n.language_id)
-                for n in thing.notes
-            ],
-            sources=[
-                Source(s.citation)
-                for s in thing.sources
-            ],
-            members=[member.concept_id for member in thing.members] if hasattr(thing, 'members') else [],
+            notes=[Note(n.note, n.notetype_id, n.language_id) for n in thing.notes],
+            sources=[Source(s.citation) for s in thing.sources],
+            members=[member.concept_id for member in thing.members]
+            if hasattr(thing, 'members')
+            else [],
             member_of=[c.concept_id for c in thing.member_of],
-            superordinates=[broader_concept.concept_id for broader_concept in thing.broader_concepts],
-            infer_concept_relations=thing.infer_concept_relations
+            superordinates=[
+                broader_concept.concept_id for broader_concept in thing.broader_concepts
+            ],
+            infer_concept_relations=thing.infer_concept_relations,
         )
     else:
         matches = {}
         for m in thing.matches:
-            key = m.matchtype.name[:m.matchtype.name.find('Match')]
+            key = m.matchtype.name[: m.matchtype.name.find('Match')]
             if key not in matches:
                 matches[key] = []
             matches[key].append(m.uri)
@@ -68,19 +67,16 @@ def from_thing(thing):
                 Label(label.label, label.labeltype_id, label.language_id)
                 for label in thing.labels
             ],
-            notes=[
-                Note(n.note, n.notetype_id, n.language_id)
-                for n in thing.notes
-            ],
-            sources=[
-                Source(s.citation)
-                for s in thing.sources
-            ],
+            notes=[Note(n.note, n.notetype_id, n.language_id) for n in thing.notes],
+            sources=[Source(s.citation) for s in thing.sources],
             broader=[c.concept_id for c in thing.broader_concepts],
             narrower=[c.concept_id for c in thing.narrower_concepts],
             related=[c.concept_id for c in thing.related_concepts],
             member_of=[c.concept_id for c in thing.member_of],
-            subordinate_arrays=[narrower_collection.concept_id for narrower_collection in thing.narrower_collections],
+            subordinate_arrays=[
+                narrower_collection.concept_id
+                for narrower_collection in thing.narrower_collections
+            ],
             matches=matches,
         )
 
@@ -93,10 +89,12 @@ def internal_providers_only(fn):
     :return: around advice
     :raises pyramid.httpexceptions.HTTPMethodNotAllowed: when provider is not internal
     """
-    def advice(parent_object, *args, **kw):
 
-        if isinstance(parent_object.provider, SQLAlchemyProvider) and \
-                'external' not in parent_object.provider.get_metadata()['subject']:
+    def advice(parent_object, *args, **kw):
+        if (
+            isinstance(parent_object.provider, SQLAlchemyProvider)
+            and 'external' not in parent_object.provider.get_metadata()['subject']
+        ):
             return fn(parent_object, *args, **kw)
         else:
             raise HTTPMethodNotAllowed()
@@ -122,8 +120,8 @@ def label_sort(concepts, language='any'):
     if not concepts:
         return []
     return sorted(
-        concepts, key=lambda concept: concept._sortkey(key='sortlabel',
-                                                       language=language)
+        concepts,
+        key=lambda concept: concept._sortkey(key='sortlabel', language=language),
     )
 
 
@@ -134,9 +132,9 @@ def db_provider_to_skosprovider(db_provider: Provider) -> SQLAlchemyProvider:
     :return: An SQLAlchemyProvider with the data from the `db_provider`
     """
     metadata = copy.deepcopy(db_provider.meta)
-    metadata["conceptscheme_id"] = db_provider.conceptscheme_id
+    metadata['conceptscheme_id'] = db_provider.conceptscheme_id
     metadata['atramhasis.id_generation_strategy'] = db_provider.id_generation_strategy
-    metadata["id"] = db_provider.id
+    metadata['id'] = db_provider.id
     return SQLAlchemyProvider(
         metadata=metadata,
         session=orm.object_session(db_provider),
@@ -146,7 +144,7 @@ def db_provider_to_skosprovider(db_provider: Provider) -> SQLAlchemyProvider:
 
 
 @contextlib.contextmanager
-def db_session(settings):
+def db_session(settings):  # pragma: no cover
     engine = engine_from_config(settings, 'sqlalchemy.')
     session_maker = sessionmaker(bind=engine)
     session = session_maker()

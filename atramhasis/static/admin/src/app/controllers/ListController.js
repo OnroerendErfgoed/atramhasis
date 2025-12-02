@@ -25,9 +25,12 @@ define([
       {label: "Sort", value: "sortLabel"}
     ],
     noteTypes: [
+      {label: "Change note", value: "changeNote"},
       {label: "Definition", value: "definition"},
-      {label: "Note", value: "note"},
+      {label: "Editorial note", value: "editorialNote"},
+      {label: "Example", value: "example"},
       {label: 'History note', value: 'historyNote'},
+      {label: "Note", value: "note"},
       {label: 'Scope note', value: 'scopeNote'}
     ],
     matchTypes: [

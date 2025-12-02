@@ -4,7 +4,8 @@ tree_region = make_region()
 list_region = make_region()
 
 
-def includeme(config):
+def includeme(config):  # pragma: no cover
+    """Configure caching regions from settings."""
     settings = config.registry.settings
     if not tree_region.is_configured:
         tree_region.configure_from_config(settings, 'cache.tree.')

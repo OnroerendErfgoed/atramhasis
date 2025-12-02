@@ -1,6 +1,8 @@
 [run]
 source = atramhasis
-omit = atramhasis/scripts/*
+omit = 
+    atramhasis/scripts/*
+    atramhasis/alembic/env.py
 
 [report]
 show_missing = True

@@ -819,7 +819,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>',
+                "citation": 'Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>',
                 "markup": "HTML",
             }
         ],
@@ -1613,7 +1613,7 @@ HERITAGETYPESDATA = [
         "related": [328],
         "sources": [
             {
-                "citation": 'Nederlandse Art and Architecture Thesaurus (www.aat-ned.nl); Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/</a>)',
+                "citation": 'Nederlandse Art and Architecture Thesaurus (www.aat-ned.nl); Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/</a>)',
                 "markup": "HTML",
             }
         ],
@@ -1858,7 +1858,7 @@ HERITAGETYPESDATA = [
         "related": [39],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -2072,7 +2072,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Van Dale groot woordenboek der Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005. 2) Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>',
+                "citation": '1) Van Dale groot woordenboek der Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005. 2) Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>',
                 "markup": "HTML",
             }
         ],
@@ -2376,7 +2376,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Onderzoeksbalans <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) Hiddink H. 2003, Het grafritueel in de Late IJzertijd en Romeinse tijd in het Maas-Demer-Scheldegebied in het bijzonder van twee grafvelden bij Weert, Zuidnederlandse Archeologische Rapporten vol. 11. 3) VIOE',
+                "citation": '1) Onderzoeksbalans <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) Hiddink H. 2003, Het grafritueel in de Late IJzertijd en Romeinse tijd in het Maas-Demer-Scheldegebied in het bijzonder van twee grafvelden bij Weert, Zuidnederlandse Archeologische Rapporten vol. 11. 3) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -2907,7 +2907,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'National Monuments Record thesaurus (English Heritage), <a href="http://thesaurus.english-heritage.org.uk/frequentuser.htm">http://thesaurus.english-heritage.org.uk/frequentuser.htm</a>',
+                "citation": 'National Monuments Record thesaurus (English Heritage), <a href="https://thesaurus.english-heritage.org.uk/frequentuser.htm">https://thesaurus.english-heritage.org.uk/frequentuser.htm</a>',
                 "markup": "HTML",
             }
         ],
@@ -4367,7 +4367,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Onderzoeksbalans <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) Hiddink H. 2003, Het grafritueel in de Late IJzertijd en Romeinse tijd in het Maas-Demer-Scheldegebied in het bijzonder van twee grafvelden bij Weert, Zuidnederlandse Archeologische Rapporten vol. 11.',
+                "citation": '1) Onderzoeksbalans <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) Hiddink H. 2003, Het grafritueel in de Late IJzertijd en Romeinse tijd in het Maas-Demer-Scheldegebied in het bijzonder van twee grafvelden bij Weert, Zuidnederlandse Archeologische Rapporten vol. 11.',
                 "markup": "HTML",
             }
         ],
@@ -4438,7 +4438,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -4645,7 +4645,7 @@ HERITAGETYPESDATA = [
         "related": [500],
         "sources": [
             {
-                "citation": 'Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>',
+                "citation": 'Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>',
                 "markup": "HTML",
             }
         ],
@@ -5000,7 +5000,7 @@ HERITAGETYPESDATA = [
         "related": [1229],
         "sources": [
             {
-                "citation": '1) Onderzoeksbalans <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) VIOE',
+                "citation": '1) Onderzoeksbalans <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -5262,7 +5262,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -5323,7 +5323,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -5597,7 +5597,7 @@ HERITAGETYPESDATA = [
         "related": [141, 88],
         "sources": [
             {
-                "citation": 'Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005; Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/</a>)',
+                "citation": 'Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005; Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/</a>)',
                 "markup": None,
             }
         ],
@@ -6097,7 +6097,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -6138,7 +6138,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandstalige Art &amp; Architecture Thesaurus (<a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>)\n2) Haslinghuis E.J. &amp; Janse H. 1997: <em>Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie</em>, Leiden.',
+                "citation": '1) Nederlandstalige Art &amp; Architecture Thesaurus (<a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>)\n2) Haslinghuis E.J. &amp; Janse H. 1997: <em>Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie</em>, Leiden.',
                 "markup": "HTML",
             }
         ],
@@ -6330,7 +6330,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Haslinghuis E.J. &amp; Janse H. 1997: Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.\n2) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": '1) Haslinghuis E.J. &amp; Janse H. 1997: Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.\n2) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -6364,7 +6364,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -7718,7 +7718,7 @@ HERITAGETYPESDATA = [
         "related": [1100],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -8853,7 +8853,7 @@ HERITAGETYPESDATA = [
         "related": [500],
         "sources": [
             {
-                "citation": '1) Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005\n2) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n3) Onroerend Erfgoed',
+                "citation": '1) Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005\n2) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n3) Onroerend Erfgoed',
                 "markup": "HTML",
             }
         ],
@@ -8894,7 +8894,7 @@ HERITAGETYPESDATA = [
         "related": [88, 99, 1184, 1793, 124],
         "sources": [
             {
-                "citation": '1) Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/</a>)\n2) Kamps P.J.M. (red.) 1999, Terminologie verdedigingswerken. Inrichting, aanval en verdediging, Utrecht.',
+                "citation": '1) Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/</a>)\n2) Kamps P.J.M. (red.) 1999, Terminologie verdedigingswerken. Inrichting, aanval en verdediging, Utrecht.',
                 "markup": "HTML",
             }
         ],
@@ -9110,7 +9110,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -9988,7 +9988,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '- Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>\n- agentschap Onroerend Erfgoed',
+                "citation": '- Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>\n- agentschap Onroerend Erfgoed',
                 "markup": "HTML",
             }
         ],
@@ -10216,7 +10216,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) Van Dale groot woordenboek (1994)',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) Van Dale groot woordenboek (1994)',
                 "markup": "HTML",
             }
         ],
@@ -11130,7 +11130,7 @@ HERITAGETYPESDATA = [
         "related": [1080],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -11277,7 +11277,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -11708,7 +11708,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -13671,7 +13671,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -13729,7 +13729,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -14121,7 +14121,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -14518,7 +14518,7 @@ HERITAGETYPESDATA = [
         "related": [1310],
         "sources": [
             {
-                "citation": '1) 5.6.2.3.4.3. Landelijke bewoning uit de Romeinse tijd in Vlaanderen, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a> 2) VIOE',
+                "citation": '1) 5.6.2.3.4.3. Landelijke bewoning uit de Romeinse tijd in Vlaanderen, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -15195,7 +15195,7 @@ HERITAGETYPESDATA = [
         "related": [1296],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -15478,7 +15478,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -16167,7 +16167,7 @@ HERITAGETYPESDATA = [
         "related": [225],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -16205,7 +16205,7 @@ HERITAGETYPESDATA = [
         "related": [1371],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -16502,7 +16502,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -16989,7 +16989,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -17139,7 +17139,7 @@ HERITAGETYPESDATA = [
         "related": [48],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -17376,7 +17376,7 @@ HERITAGETYPESDATA = [
         "related": [242, 4, 102, 240, 354, 1786, 1788, 1789, 1790],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -18420,7 +18420,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -19302,7 +19302,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>\n2) Haslinghuis E.J. &amp; Janse H. 1997: Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>\n2) Haslinghuis E.J. &amp; Janse H. 1997: Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.',
                 "markup": "HTML",
             }
         ],
@@ -19392,7 +19392,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -19484,7 +19484,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -19676,7 +19676,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005; Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/</a>)',
+                "citation": 'Van Dale groot woordenboek van de Nederlandse taal. 14de editie, Utrecht/Antwerpen, 2005; Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/</a>)',
                 "markup": "HTML",
             }
         ],
@@ -20243,7 +20243,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'National Monuments Record thesaurus (English Heritage), <a href="http://thesaurus.english-heritage.org.uk/frequentuser.htm">http://thesaurus.english-heritage.org.uk/frequentuser.htm</a>',
+                "citation": 'National Monuments Record thesaurus (English Heritage), <a href="https://thesaurus.english-heritage.org.uk/frequentuser.htm">https://thesaurus.english-heritage.org.uk/frequentuser.htm</a>',
                 "markup": "HTML",
             }
         ],
@@ -20474,7 +20474,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Boeren I. e.a. 2009, Een archeologische evaluatie en waardering van houtskoolmeilers in het Zoerselbos (Zoersel, provincie Antwerpen), Instituut voor Natuur- en Bosonderzoek (INBO). <a href="http://www.onroerenderfgoed.be/nl/uploads/b1126.pdf">http://www.onroerenderfgoed.be/nl/uploads/b1126.pdf</a>',
+                "citation": 'Boeren I. e.a. 2009, Een archeologische evaluatie en waardering van houtskoolmeilers in het Zoerselbos (Zoersel, provincie Antwerpen), Instituut voor Natuur- en Bosonderzoek (INBO). <a href="https://www.onroerenderfgoed.be/nl/uploads/b1126.pdf">https://www.onroerenderfgoed.be/nl/uploads/b1126.pdf</a>',
                 "markup": "HTML",
             }
         ],
@@ -20614,7 +20614,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>',
+                "citation": 'Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>',
                 "markup": "HTML",
             }
         ],
@@ -21675,7 +21675,7 @@ HERITAGETYPESDATA = [
         "related": [1391],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -21731,7 +21731,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -22089,7 +22089,7 @@ HERITAGETYPESDATA = [
         "related": [931],
         "sources": [
             {
-                "citation": 'Objectencatalogus NGI: <a href="http://www.ngi.be/gdes/">http://www.ngi.be/gdes/</a>',
+                "citation": 'Objectencatalogus NGI: <a href="https://www.ngi.be/gdes/">https://www.ngi.be/gdes/</a>',
                 "markup": "HTML",
             }
         ],
@@ -23408,7 +23408,7 @@ HERITAGETYPESDATA = [
         "related": [129, 281],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -24054,7 +24054,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -24550,7 +24550,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -24616,7 +24616,7 @@ HERITAGETYPESDATA = [
         "related": [4, 243],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -25483,7 +25483,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -25573,7 +25573,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '5.6.2.3.4.3. Landelijke bewoning uit de Romeinse tijd in Vlaanderen, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen, <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/civiele_nederzettingen/landelijk/vlaanderen">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/civiele_nederzettingen/landelijk/vlaanderen</a>',
+                "citation": '5.6.2.3.4.3. Landelijke bewoning uit de Romeinse tijd in Vlaanderen, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen, <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/civiele_nederzettingen/landelijk/vlaanderen">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/civiele_nederzettingen/landelijk/vlaanderen</a>',
                 "markup": "HTML",
             }
         ],
@@ -26784,7 +26784,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -27374,7 +27374,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) cursusmateriaal UGent (Prof. J. Bourgeois) 2) 4.7.3.1. Riviervondsten, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="http://www.onderzoeksbalans.be/.">http://www.onderzoeksbalans.be/.</a>',
+                "citation": '1) cursusmateriaal UGent (Prof. J. Bourgeois) 2) 4.7.3.1. Riviervondsten, in: Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a href="https://www.onderzoeksbalans.be/.">https://www.onderzoeksbalans.be/.</a>',
                 "markup": "HTML",
             }
         ],
@@ -27777,7 +27777,7 @@ HERITAGETYPESDATA = [
         "related": [1005],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -28770,7 +28770,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Luchtfotografie boven Vlaanderen: Wat is luchtfotografie?, <a href="http://www.archaeology.ugent.be/luchtfotografie">http://www.archaeology.ugent.be/luchtfotografie</a>',
+                "citation": 'Luchtfotografie boven Vlaanderen: Wat is luchtfotografie?, <a href="https://www.archaeology.ugent.be/luchtfotografie">https://www.archaeology.ugent.be/luchtfotografie</a>',
                 "markup": "HTML",
             }
         ],
@@ -28796,7 +28796,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -30506,7 +30506,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -31679,7 +31679,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -31974,7 +31974,7 @@ HERITAGETYPESDATA = [
         "related": [1127],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) Haslinghuis E.J. &amp; Janse H. 1997, Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) Haslinghuis E.J. &amp; Janse H. 1997, Bouwkundige termen. Verklarend woordenboek van de westerse architectuur- en bouwhistorie, Leiden.',
                 "markup": "HTML",
             }
         ],
@@ -32172,7 +32172,7 @@ HERITAGETYPESDATA = [
         "related": [521],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -32204,7 +32204,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -33014,7 +33014,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) VIOE 2) National Monuments Record thesaurus (English Heritage), <a href="http://thesaurus.english-heritage.org.uk/frequentuser.htm">http://thesaurus.english-heritage.org.uk/frequentuser.htm</a> (MDA archaeological objects thesaurus)',
+                "citation": '1) VIOE 2) National Monuments Record thesaurus (English Heritage), <a href="https://thesaurus.english-heritage.org.uk/frequentuser.htm">https://thesaurus.english-heritage.org.uk/frequentuser.htm</a> (MDA archaeological objects thesaurus)',
                 "markup": "HTML",
             }
         ],
@@ -33246,7 +33246,7 @@ HERITAGETYPESDATA = [
         "related": [1235],
         "sources": [
             {
-                "citation": 'Onderzoeksbalans <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a>',
+                "citation": 'Onderzoeksbalans <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/romeinse_tijd/bronnen/archeologisch/begraving</a>',
                 "markup": "HTML",
             }
         ],
@@ -33439,7 +33439,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -33763,7 +33763,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Louwe Kooijmans L., van den Broecke P.W., Fokkens H. en van Gijn A. (eds.), 2005, Nederland in de prehistorie, Amsterdam. 2) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": '1) Louwe Kooijmans L., van den Broecke P.W., Fokkens H. en van Gijn A. (eds.), 2005, Nederland in de prehistorie, Amsterdam. 2) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -34142,7 +34142,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>',
+                "citation": 'Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>',
                 "markup": "HTML",
             }
         ],
@@ -34572,7 +34572,7 @@ HERITAGETYPESDATA = [
         "related": [771],
         "sources": [
             {
-                "citation": 'Begrippenlijst van de Stichting Menno van Coehoorn (<a href="http://www.coehoorn.nl/">http://www.coehoorn.nl/)</a>',
+                "citation": 'Begrippenlijst van de Stichting Menno van Coehoorn (<a href="https://www.coehoorn.nl/">https://www.coehoorn.nl/)</a>',
                 "markup": "HTML",
             }
         ],
@@ -35461,7 +35461,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -36377,7 +36377,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -37223,7 +37223,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> 2) VIOE',
+                "citation": '1) Nederlandse Art &amp; Architecture Thesaurus, <a href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> 2) VIOE',
                 "markup": "HTML",
             }
         ],
@@ -37818,7 +37818,7 @@ HERITAGETYPESDATA = [
         "related": [],
         "sources": [
             {
-                "citation": 'R. Annaert, J. Bourgeois &amp; G. Creemers, Onderzoeksbalans Archeologie. Bronstijd/ijzertijd: Nederzettingen. <a href="http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/metaaltijden/bronnen/archeologisch/nederzettingen">http://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/metaaltijden/bronnen/archeologisch/nederzettingen</a>',
+                "citation": 'R. Annaert, J. Bourgeois &amp; G. Creemers, Onderzoeksbalans Archeologie. Bronstijd/ijzertijd: Nederzettingen. <a href="https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/metaaltijden/bronnen/archeologisch/nederzettingen">https://www.onderzoeksbalans.be/onderzoeksbalans/archeologie/metaaltijden/bronnen/archeologisch/nederzettingen</a>',
                 "markup": "HTML",
             }
         ],

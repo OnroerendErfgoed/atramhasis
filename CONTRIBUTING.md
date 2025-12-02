@@ -26,7 +26,7 @@ this is not necessary.
 
 We place a lot of importance on code quality, expect to have a good 
 amount of code coverage present and run frequent unit tests.
-Code coverage is being monitored with [Coveralls].
+We monitor code coverage on all pull requests using [GitHub Actions workflows] and [orgoro/coverage].
 
 Locally you can run unit tests by using [pytest].
 
@@ -63,6 +63,6 @@ know why it's not working.
 [Github issue]: https://github.com/OnroerendErfgoed/atramhasis/issues
 [discussion forum]: https://github.com/OnroerendErfgoed/atramhasis/discussions>
 [development guidelines]: https://atramhasis.readthedocs.io/en/latest/development.html
-[Coveralls]: https://coveralls.io/r/OnroerendErfgoed/atramhasis
-[pytest]: http://pytest.org
+[pytest]: https://pytest.org
 [GitHub Actions workflows]: https://github.com/OnroerendErfgoed/atramhasis/actions
+[orgoro/coverage]: https://github.com/orgoro/coverage

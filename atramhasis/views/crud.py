@@ -1,12 +1,12 @@
 """
 Module containing views related to the REST service.
 """
+
 import logging
 import time
 
 import colander
 import transaction
-from pyramid.httpexceptions import HTTPMethodNotAllowed
 from pyramid.httpexceptions import HTTPNoContent
 from pyramid.view import view_config
 from pyramid.view import view_defaults
@@ -35,7 +35,7 @@ from atramhasis.utils import internal_providers_only
 LOG = logging.getLogger(__name__)
 
 
-@view_defaults(accept='application/json', renderer='skosrenderer_verbose')
+@view_defaults(accept='application/json', renderer='skosrenderer_verbose', openapi=True)
 class AtramhasisCrud:
     """
     This object groups CRUD REST views part of the private user interface.
@@ -65,58 +65,54 @@ class AtramhasisCrud:
     def _validate_concept(self, json_concept, provider, validate_id_generation):
         from atramhasis.validators import (
             Concept as ConceptSchema,
-            concept_schema_validator
+            concept_schema_validator,
         )
 
-        concept_schema = ConceptSchema(
-            validator=concept_schema_validator
-        ).bind(
+        concept_schema = ConceptSchema(validator=concept_schema_validator).bind(
             request=self.request,
             provider=provider,
-            validate_id_generation=validate_id_generation
+            validate_id_generation=validate_id_generation,
         )
         try:
             return concept_schema.deserialize(json_concept)
         except colander.Invalid as e:
-            raise ValidationError(
-                'Concept could not be validated',
-                e.asdict()
-            )
+            raise ValidationError('Concept could not be validated', e.asdict())
 
     def _validate_conceptscheme(self, json_conceptscheme):
         from atramhasis.validators import (
             ConceptScheme as ConceptSchemeSchema,
-            conceptscheme_schema_validator
+            conceptscheme_schema_validator,
         )
 
         conceptscheme_schema = ConceptSchemeSchema(
             validator=conceptscheme_schema_validator
-        ).bind(
-            request=self.request
-        )
+        ).bind(request=self.request)
         try:
             return conceptscheme_schema.deserialize(json_conceptscheme)
         except colander.Invalid as e:  # pragma no cover
             # I doubt this code will ever be reached, keeping it here just in case
-            raise ValidationError(
-                'Conceptscheme could not be validated',
-                e.asdict()
-            )
+            raise ValidationError('Conceptscheme could not be validated', e.asdict())
 
     @audit
-    @view_config(route_name='skosprovider.conceptscheme', permission='view', request_method='GET')
+    @view_config(
+        route_name='skosprovider.conceptscheme', permission='view', request_method='GET'
+    )
     def get_conceptscheme(self):
         # is the same as pyramid_skosprovider but wrapped with the audit decorator
         return ProviderView(self.request).get_conceptscheme()
 
-    @view_config(route_name='skosprovider.conceptscheme', permission='edit', request_method='PUT')
+    @view_config(
+        route_name='skosprovider.conceptscheme', permission='edit', request_method='PUT'
+    )
     def edit_conceptscheme(self):
         """
         Edit an existing concept
 
         :raises atramhasis.errors.ValidationError: If the provided json can't be validated
         """
-        validated_json_conceptscheme = self._validate_conceptscheme(self._get_json_body())
+        validated_json_conceptscheme = self._validate_conceptscheme(
+            self._get_json_body()
+        )
         conceptscheme = self.conceptscheme_manager.get(self.provider.conceptscheme_id)
         conceptscheme = map_conceptscheme(conceptscheme, validated_json_conceptscheme)
         conceptscheme = self.conceptscheme_manager.save(conceptscheme)
@@ -134,7 +130,9 @@ class AtramhasisCrud:
         c_id = self.request.matchdict['c_id']
         if isinstance(self.provider, SQLAlchemyProvider):
             try:
-                concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
+                concept = self.skos_manager.get_thing(
+                    c_id, self.provider.conceptscheme_id
+                )
             except NoResultFound:
                 raise ConceptNotFoundException(c_id)
         else:
@@ -146,7 +144,11 @@ class AtramhasisCrud:
         return concept
 
     @internal_providers_only
-    @view_config(route_name='skosprovider.conceptscheme.cs', permission='edit', request_method='POST')
+    @view_config(
+        route_name='skosprovider.conceptscheme.cs',
+        permission='edit',
+        request_method='POST',
+    )
     def add_concept(self):
         """
         Add a new concept to a conceptscheme
@@ -166,17 +168,19 @@ class AtramhasisCrud:
                     concept = Collection()
 
                 id_generation_strategy = self.provider.metadata.get(
-                    "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
+                    'atramhasis.id_generation_strategy', IDGenerationStrategy.NUMERIC
                 )
                 if id_generation_strategy == IDGenerationStrategy.MANUAL:
-                    concept.concept_id = validated_json_concept["id"]
+                    concept.concept_id = validated_json_concept['id']
                 else:
                     concept.concept_id = self.skos_manager.get_next_cid(
                         self.provider.conceptscheme_id, id_generation_strategy
                     )
 
                 concept.conceptscheme_id = self.provider.conceptscheme_id
-                concept.uri = self.provider.uri_generator.generate(id=concept.concept_id)
+                concept.uri = self.provider.uri_generator.generate(
+                    id=concept.concept_id
+                )
                 map_concept(concept, validated_json_concept, self.skos_manager)
                 concept = self.skos_manager.save(concept)
                 break
@@ -184,26 +188,26 @@ class AtramhasisCrud:
                 if id_generation_strategy == IDGenerationStrategy.MANUAL:
                     # Technically the concept_id is not 100% guaranteed to be the cause
                     # of an IntegrityError, so log trace just in case.
-                    LOG.exception("Integrity error")
+                    LOG.exception('Integrity error')
 
-                    concept_id = validated_json_concept["concept_id"]
+                    concept_id = validated_json_concept['concept_id']
                     raise ValidationError(
-                        "Integrity error", [{"concept_id": f"{concept_id} already exists."}]
+                        'Integrity error',
+                        [{'concept_id': f'{concept_id} already exists.'}],
                     )
                 # There is a small chance that another concept gets added at the same
                 # time. There is nothing wrong with the request, so we try again.
                 transaction.abort()
                 time.sleep(0.05)
         else:
-            raise Exception(
-                f"Could not save new concept due to IntegrityErrors. {exc}"
-            )
+            raise Exception(f'Could not save new concept due to IntegrityErrors. {exc}')
 
         invalidate_scheme_cache(self.scheme_id)
 
         self.request.response.status = '201'
         self.request.response.location = self.request.route_path(
-            'skosprovider.c', scheme_id=self.scheme_id, c_id=concept.concept_id)
+            'skosprovider.c', scheme_id=self.scheme_id, c_id=concept.concept_id
+        )
         return from_thing(concept)
 
     @internal_providers_only
@@ -232,7 +236,9 @@ class AtramhasisCrud:
 
     @internal_providers_only
     @protected_operation
-    @view_config(route_name='skosprovider.c', permission='delete', request_method='DELETE')
+    @view_config(
+        route_name='skosprovider.c', permission='delete', request_method='DELETE'
+    )
     def delete_concept(self):
         """
         Delete an existing concept
@@ -244,19 +250,15 @@ class AtramhasisCrud:
             concept = self.skos_manager.get_thing(c_id, self.provider.conceptscheme_id)
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
-        result = from_thing(concept)
         self.skos_manager.delete_thing(concept)
 
         invalidate_scheme_cache(self.scheme_id)
-
-        self.request.response.status = '200'
-        return result
+        return HTTPNoContent()
 
     @view_config(
         route_name='atramhasis.providers',
         permission='view',
         request_method='GET',
-        openapi=True,
     )
     def get_providers(self):
         query_params = self.request.openapi_validated.parameters.query
@@ -270,16 +272,14 @@ class AtramhasisCrud:
         route_name='atramhasis.provider',
         permission='view',
         request_method='GET',
-        openapi=True
     )
     def get_provider(self):
-        return self.request.skos_registry.get_provider(self.request.matchdict["id"])
+        return self.request.skos_registry.get_provider(self.request.matchdict['id'])
 
     @view_config(
         route_name='atramhasis.providers',
         permission='add-provider',
         request_method='POST',
-        openapi=True
     )
     def add_provider(self):
         db_provider = provider.create_provider(
@@ -294,12 +294,11 @@ class AtramhasisCrud:
         route_name='atramhasis.provider',
         permission='edit-provider',
         request_method='PUT',
-        openapi=True
     )
     def update_provider(self):
         try:
             db_provider = provider.update_provider(
-                provider_id=self.request.matchdict["id"],
+                provider_id=self.request.matchdict['id'],
                 json_data=self.request.openapi_validated.body,
                 session=self.request.db,
             )
@@ -317,11 +316,10 @@ class AtramhasisCrud:
         route_name='atramhasis.provider',
         permission='delete-provider',
         request_method='DELETE',
-        openapi=True
     )
     def delete_provider(self):
         provider.delete_provider(
-            provider_id=self.request.matchdict["id"],
+            provider_id=self.request.matchdict['id'],
             session=self.request.db,
         )
         return HTTPNoContent()

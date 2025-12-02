@@ -309,10 +309,10 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) 4. Bronstijd/ijzertijd, in: Onderzoeksbalans Onroerend"
                     " Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/">http://www.onderzoeksbalans.be/</a>'
+                    ' href="https://www.onderzoeksbalans.be/">https://www.onderzoeksbalans.be/</a>'
                     " \n3) Van Dale groot woordenboek der Nederlandse taal."
                 ),
                 "type": "note",
@@ -1161,7 +1161,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Van Dale groot woordenboek der Nederlandse taal \n3)"
                     " Cursusmateriaal UGent (Prof. J. Bourgeois) \n4) VIOE"
                 ),
@@ -1236,7 +1236,7 @@ PERIODSDATA = [
                     "1) Van Dale groot woordenboek der Nederlandse taal. 14de editie,"
                     " Utrecht/Antwerpen, 2005. \n2) Nederlandse Art &amp; Architecture"
                     " Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n3) VIOE"
                 ),
                 "type": "note",
@@ -1402,7 +1402,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "type": "note",
@@ -1494,7 +1494,7 @@ PERIODSDATA = [
                 "note": (
                     "1) Cursusmateriaal UGent (Prof. J. Bourgeois) \n2) Nederlandse Art"
                     " &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "type": "note",
             },
@@ -1536,7 +1536,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "type": "note",
@@ -1579,7 +1579,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Bourgeois J., Cromb\xe9 P., De Mulder G. &amp; Rogge M."
                     " (red.), 2001, Een duik in het verleden. Schelde Maas en Rijn in"
                     " pre- en protohistorie, Zottegem. \n3) VIOE"
@@ -1612,7 +1612,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "type": "note",
@@ -1687,7 +1687,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Van Dale groot woordenboek der Nederlandse taal. 14de"
                     " editie, Utrecht/Antwerpen, 2005. \n3) VIOE"
                 ),
@@ -1730,7 +1730,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Van Dale groot woordenboek der Nederlandse taal. 14de"
                     " editie, Utrecht/Antwerpen, 2005. \n3) Louwe Kooijmans L., van den"
                     " Broecke P.W., Fokkens H. en van Gijn A. (eds.), 2005, Nederland"
@@ -1807,7 +1807,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "type": "note",
@@ -1849,11 +1849,11 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Van Dale groot woordenboek der Nederlandse taal. 14de"
                     " editie, Utrecht/Antwerpen, 2005. \n3) 4.1.3. Middenbronstijd, in:"
                     " Onderzoeksbalans Onroerend Erfgoed Vlaanderen <a"
-                    ' href="http://www.onderzoeksbalans.be/">http://www.onderzoeksbalans.be/</a>'
+                    ' href="https://www.onderzoeksbalans.be/">https://www.onderzoeksbalans.be/</a>'
                 ),
                 "type": "note",
             },
@@ -1988,7 +1988,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Van Dale groot woordenboek der Nederlandse taal. 14de"
                     " editie, Utrecht/Antwerpen, 2005. \n3) VIOE"
                 ),
@@ -2106,7 +2106,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "type": "note",
@@ -2261,7 +2261,7 @@ PERIODSDATA = [
                     "1) Van Dale groot woordenboek der Nederlandse taal. 14de editie,"
                     " Utrecht/Antwerpen, 2005. \n2) Nederlandse Art &amp; Architecture"
                     " Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "type": "note",
             },
@@ -2453,7 +2453,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "type": "note",
@@ -2698,7 +2698,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                 ),
                 "type": "note",
             },
@@ -2790,7 +2790,7 @@ PERIODSDATA = [
                 "note": (
                     "1) Van Dale groot woordenboek der Nederlandse taal. \n2)"
                     " Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a> \n'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a> \n'
                 ),
                 "type": "note",
             },
@@ -3445,7 +3445,7 @@ PERIODSDATA = [
                 "note": (
                     "1) Van Dale groot woordenboek der Nederlandse taal. \n2)"
                     " Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n3) VIOE"
                 ),
                 "type": "note",
@@ -3489,7 +3489,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) Bourgeois J., Cromb\xe9 P., De Mulder G. &amp; Rogge M."
                     " (red.), 2001, Een duik in het verleden. Schelde Maas en Rijn in"
                     " pre- en protohistorie, Zottegem. \n3) Hendriks J. 1994, Prisma"
@@ -3525,7 +3525,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://www.aat-ned.nl/">http://www.aat-ned.nl/</a>'
+                    ' href="https://www.aat-ned.nl/">https://www.aat-ned.nl/</a>'
                 ),
                 "type": "note",
             },
@@ -3700,7 +3700,7 @@ PERIODSDATA = [
                 "language": "nl",
                 "note": (
                     "1) Nederlandse Art &amp; Architecture Thesaurus, <a"
-                    ' href="http://browser.aat-ned.nl/">http://browser.aat-ned.nl/</a>'
+                    ' href="https://browser.aat-ned.nl/">https://browser.aat-ned.nl/</a>'
                     " \n2) VIOE"
                 ),
                 "type": "note",
