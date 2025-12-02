@@ -208,7 +208,7 @@ webencodings==0.5.1
     #   html5lib
 webob==1.8.9
     # via pyramid
-werkzeug==3.1.1
+werkzeug==3.1.4
     # via openapi-core
 zope-deprecation==6.0
     # via
