@@ -198,7 +198,7 @@ typing-extensions==4.15.0
     #   openapi-core
     #   referencing
     #   sqlalchemy
-urllib3==2.5.0
+urllib3==2.6.0
     # via requests
 venusian==3.1.1
     # via pyramid
