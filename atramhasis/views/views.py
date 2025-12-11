@@ -190,10 +190,17 @@ class AtramhasisView:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
             url = self.request.route_url('skosprovider.c', scheme_id=scheme_id, c_id=c_id)
             update_last_visited_concepts(self.request, {'label': c.label(locale).label, 'url': url})
-            return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
-                    'conceptschemes': conceptschemes, 'provider': provider,
-                    'locale': locale, 'type': requested_type, 'label': label,
-                    'show_tree': not provider_is_external(provider)}
+            return {
+                'concept': c, 
+                'conceptType': concept_type, 
+                'scheme_id': scheme_id,
+                'conceptschemes': conceptschemes, 
+                'provider': provider,
+                'locale': locale,
+                'type': requested_type,
+                'label': label,
+                'show_tree': not provider_is_external(provider)
+            }
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
