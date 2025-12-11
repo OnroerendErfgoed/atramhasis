@@ -142,8 +142,12 @@ class AtramhasisView:
             'top_concepts': provider.get_top_concepts(),
         }
 
-        return {'conceptscheme': scheme, 'conceptschemes': conceptschemes,
-                'locale': locale}
+        return {
+            'conceptscheme': scheme,
+            'conceptschemes': conceptschemes,
+            'locale': locale,
+            'provider': provider,
+        }
 
     @audit
     @view_config(route_name='skosprovider.c', renderer='atramhasis:templates/concept.jinja2')

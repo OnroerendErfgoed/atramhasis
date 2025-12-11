@@ -2,6 +2,12 @@
 	  get_conceptscheme_label
   %}
 
+{% if provider is defined %}
+  {% set subjects = provider.get_metadata().get('subject') %}
+{% else %}
+  {% set subjects = [] %}
+{% endif %}
+{% if 'external' not in (subjects or []) %}
 <div id="tree">
   <div id="loadingOverlay" class="pageOverlay">
     <div style="padding-top: 20px;"><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
@@ -467,3 +473,4 @@
       $('.treeHelpMessage').show();
   });
 </script>
+{% endif %}
