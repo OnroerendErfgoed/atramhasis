@@ -152,7 +152,6 @@ class AtramhasisView:
             'conceptscheme': scheme,
             'conceptschemes': conceptschemes,
             'locale': locale,
-            'provider': provider,
             'show_tree': not provider_is_external(provider),
         }
 
