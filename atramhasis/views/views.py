@@ -58,6 +58,12 @@ def get_public_conceptschemes(skos_registry):
     return conceptschemes
 
 
+def provider_is_external(provider):
+    """Check if a provider is marked as external via its metadata."""
+    subjects = provider.get_metadata().get('subject') or []
+    return any(str(subject).lower() == 'external' for subject in subjects)
+
+
 @view_defaults(accept='text/html', request_method='GET')
 class AtramhasisView:
     """
@@ -147,6 +153,7 @@ class AtramhasisView:
             'conceptschemes': conceptschemes,
             'locale': locale,
             'provider': provider,
+            'show_tree': not provider_is_external(provider),
         }
 
     @audit
@@ -186,7 +193,8 @@ class AtramhasisView:
             update_last_visited_concepts(self.request, {'label': c.label(locale).label, 'url': url})
             return {'concept': c, 'conceptType': concept_type, 'scheme_id': scheme_id,
                     'conceptschemes': conceptschemes, 'provider': provider,
-                    'locale': locale, 'type': requested_type, 'label': label}
+                    'locale': locale, 'type': requested_type, 'label': label,
+                    'show_tree': not provider_is_external(provider)}
         except NoResultFound:
             raise ConceptNotFoundException(c_id)
 
