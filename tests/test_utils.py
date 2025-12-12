@@ -18,6 +18,7 @@ from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from atramhasis.utils import from_thing
 from atramhasis.utils import internal_providers_only
 from atramhasis.utils import label_sort
+from atramhasis.utils import provider_is_external
 from atramhasis.utils import update_last_visited_concepts
 
 
@@ -287,3 +288,38 @@ def test_label_sort_with_language():
         'banaan',
         'kers',
     ]
+
+
+class TestProviderIsExternal(unittest.TestCase):
+    def test_provider_is_external_with_external_subject(self):
+        provider = MockProvider({'subject': ['external', 'other']})
+        assert provider_is_external(provider) is True
+
+    def test_provider_is_external_case_insensitive(self):
+        provider = MockProvider({'subject': ['EXTERNAL']})
+        assert provider_is_external(provider) is True
+
+        provider = MockProvider({'subject': ['External']})
+        assert provider_is_external(provider) is True
+
+    def test_provider_is_not_external(self):
+        provider = MockProvider({'subject': ['hidden', 'other']})
+        assert provider_is_external(provider) is False
+
+    def test_provider_is_external_no_subjects(self):
+        provider = MockProvider({})
+        assert provider_is_external(provider) is False
+
+    def test_provider_is_external_empty_subjects(self):
+        provider = MockProvider({'subject': []})
+        assert provider_is_external(provider) is False
+
+
+class MockProvider:
+    """Mock provider for testing."""
+
+    def __init__(self, metadata):
+        self._metadata = metadata
+
+    def get_metadata(self):
+        return self._metadata

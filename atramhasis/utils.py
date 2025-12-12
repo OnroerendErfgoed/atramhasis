@@ -143,6 +143,12 @@ def db_provider_to_skosprovider(db_provider: Provider) -> SQLAlchemyProvider:
     )
 
 
+def provider_is_external(provider):
+    """Check if a provider is marked as external via its metadata."""
+    subjects = provider.get_metadata().get('subject') or []
+    return any(str(subject).lower() == 'external' for subject in subjects)
+
+
 @contextlib.contextmanager
 def db_session(settings):  # pragma: no cover
     engine = engine_from_config(settings, 'sqlalchemy.')
