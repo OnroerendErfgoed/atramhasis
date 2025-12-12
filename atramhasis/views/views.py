@@ -22,6 +22,7 @@ from atramhasis.cache import tree_region
 from atramhasis.errors import ConceptNotFoundException
 from atramhasis.errors import ConceptSchemeNotFoundException
 from atramhasis.errors import SkosRegistryNotFoundException
+from atramhasis.utils import provider_is_external
 from atramhasis.utils import update_last_visited_concepts
 
 
@@ -56,12 +57,6 @@ def get_public_conceptschemes(skos_registry):
         ]
 
     return conceptschemes
-
-
-def provider_is_external(provider):
-    """Check if a provider is marked as external via its metadata."""
-    subjects = provider.get_metadata().get('subject') or []
-    return any(str(subject).lower() == 'external' for subject in subjects)
 
 
 @view_defaults(accept='text/html', request_method='GET')
