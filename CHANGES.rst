@@ -1,3 +1,14 @@
+3.1.0 (15-12-2025)
+-------------------
+Features:
+- Upgrade skosprovider dependency
+    - https://github.com/OnroerendErfgoed/skosprovider/releases/tag/1.4.0
+    - https://github.com/OnroerendErfgoed/skosprovider/releases/tag/1.5.0
+
+Other:
+- Limit conceptscheme tree call #967
+
+
 3.0.0 (26-11-2025)
 -------------------
 Breaking changes:
