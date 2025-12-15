@@ -2,6 +2,7 @@
 	  get_conceptscheme_label
   %}
 
+{% if show_tree %}
 <div id="tree">
   <div id="loadingOverlay" class="pageOverlay">
     <div style="padding-top: 20px;"><i class="fa fa-4x fa-spinner fa-pulse"></i></div>
@@ -467,3 +468,4 @@
       $('.treeHelpMessage').show();
   });
 </script>
+{% endif %}
