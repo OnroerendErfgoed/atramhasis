@@ -3,9 +3,11 @@ Contributing
 
 Atramhasis is an open source SKOS editor developed by [Flanders Heritage].
 Consult the [Atramhasis documentation] for more information. All development 
-is done through our [Github page for Atramhasis]. If you run into bugs or 
-would like to request a new feature, please open a [Github issue]. Please 
-provide some context to your question such as the operating system, 
+is done through our [Github page for Atramhasis]. If you run into a bug, 
+feel free to open a [Github issue]. If you have 
+trouble installing the software, want to suggest a new idea or feature or just 
+want to have a chat about what it can and can't do, use our [discussion forum].
+Please provide some context to your question such as the operating system, 
 Python and Atramhasis versions you are running. If you have specific questions 
 about the software or the datasets hosted at [Flanders Heritage Thesaurus] 
 you would rather not address in a public forum, please mail us at 
@@ -59,6 +61,7 @@ know why it's not working.
 [Flanders Heritage Thesaurus]: https://thesaurus.onroerenderfgoed.be
 [Github page for Atramhasis]: https://github.com/OnroerendErfgoed/atramhasis
 [Github issue]: https://github.com/OnroerendErfgoed/atramhasis/issues
+[discussion forum]: https://github.com/OnroerendErfgoed/atramhasis/discussions>
 [development guidelines]: https://atramhasis.readthedocs.io/en/latest/development.html
 [pytest]: https://pytest.org
 [GitHub Actions workflows]: https://github.com/OnroerendErfgoed/atramhasis/actions

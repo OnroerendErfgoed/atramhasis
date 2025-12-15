@@ -35,13 +35,16 @@ Most of the vocabularies are in Dutch, but the interface is available in both
 Dutch, English and French.
 
 All development is done through `Github <https://github.com/OnroerendErfgoed/atramhasis>`_. 
-If you run into bugs or would like to request a new feature, please open a 
-`Github issue <https://github.com/OnroerendErfgoed/atramhasis/issues>`_. Please
-provide some context to your question such as the operating system,
+If you run into a bug, open an 
+`issue <https://github.com/OnroerendErfgoed/atramhasis/issues>`_. If you have 
+trouble installing the software, want to suggest a new idea or feature 
+or just want to have a chat about what it can and can't do, use our 
+`discussion forum <https://github.com/OnroerendErfgoed/atramhasis/discussions>`_.
+Please provide some context to your question such as the operating system,
 Python and Atramhasis versions you are running. If you have specific questions
 about the software or the datasets hosted at
 `Flanders Heritage Thesaurus <https://thesaurus.onroerenderfgoed.be>`_
-you would rather not address in a public forum, please mail us at
+you would rather not address in a public forum, mail us at
 ict@onroerenderfgoed.be.
 
 Contributions are welcome. This could be improvements to the code, updated 
