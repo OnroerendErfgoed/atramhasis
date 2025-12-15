@@ -2,8 +2,9 @@
 -------------------
 Features:
 - Upgrade skosprovider dependency
-    - https://github.com/OnroerendErfgoed/skosprovider/releases/tag/1.4.0
-    - https://github.com/OnroerendErfgoed/skosprovider/releases/tag/1.5.0
+
+  * https://github.com/OnroerendErfgoed/skosprovider/releases/tag/1.4.0
+  * https://github.com/OnroerendErfgoed/skosprovider/releases/tag/1.5.0
 
 Other:
 - Limit conceptscheme tree call #967
