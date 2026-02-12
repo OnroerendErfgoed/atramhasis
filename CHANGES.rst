@@ -1,4 +1,4 @@
-3.2.0 (12-02-2026)
+3.1.1 (12-02-2026)
 ------------------
 Bugfixes:
 - Inefficient recursive logic in hierarchy_build causing exponential duplication #983
