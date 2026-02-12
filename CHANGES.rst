@@ -1,3 +1,10 @@
+3.2.0 (12-02-2026)
+------------------
+Bugfixes:
+- Inefficient recursive logic in hierarchy_build causing exponential duplication #983
+- Pin setuptools #985
+
+
 3.1.0 (15-12-2025)
 -------------------
 Features:
