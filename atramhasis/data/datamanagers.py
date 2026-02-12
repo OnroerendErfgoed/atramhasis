@@ -271,12 +271,12 @@ class SkosManager(DataManager):
 
         # Resolve the starting concept_ids to internal surrogate ids,
         # filtering by conceptscheme and optionally by type.
-        start_query = select(Thing.id, Thing.concept_id).filter(
+        start_query = select(Thing.id, Thing.concept_id).where(
             Thing.concept_id.in_(start_ids),
             Thing.conceptscheme_id == conceptscheme_id,
         )
         if concept_type is not None:
-            start_query = start_query.filter(Thing.type == concept_type)
+            start_query = start_query.where(Thing.type == concept_type)
 
         start_rows = self.session.execute(start_query).all()
         if not start_rows:
