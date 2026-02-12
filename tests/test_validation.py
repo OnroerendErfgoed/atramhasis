@@ -1,3 +1,4 @@
+import time
 import unittest
 from unittest.mock import Mock
 
@@ -850,3 +851,129 @@ class TestValidation(unittest.TestCase):
         json_data = {'id': 'notanid'}
         with self.assertRaises(ValidationError):
             validators.validate_provider_json(json_data, "test")
+
+
+class TestHierarchyBuildPerformance(unittest.TestCase):
+    """
+    Benchmark tests proving the BFS hierarchy_build completes in linear time.
+
+    The old recursive implementation had an exponential duplication bug: for
+    each parent with N children, it recursed N times with the *entire* child
+    list, causing N^depth processing. A tree with branching factor 3 and depth
+    7 (~3,000 nodes) would take minutes. The fixed BFS must finish in under
+    1 second.
+    """
+
+    def _build_tree_manager(self, branching_factor, depth):
+        """
+        Build a DummySkosManager-like object backed by a dict of Concepts
+        wired into a tree with the given branching factor and depth.
+
+        Returns (manager, root_ids) where root_ids are the top-level
+        concept_ids.
+        """
+        concepts = {}
+        next_id = 0
+
+        def make_node(current_depth):
+            nonlocal next_id
+            node_id = str(next_id)
+            next_id += 1
+            concept = Concept(concept_id=node_id, conceptscheme_id=1)
+            concepts[node_id] = concept
+            if current_depth < depth:
+                children = []
+                for _ in range(branching_factor):
+                    child = make_node(current_depth + 1)
+                    children.append(child)
+                concept.narrower_concepts = set(children)
+            else:
+                concept.narrower_concepts = set()
+            return concept
+
+        root = make_node(0)
+
+        class TreeSkosManager:
+            def get_thing(self, concept_id, conceptscheme_id):
+                if concept_id in concepts:
+                    return concepts[concept_id]
+                raise NoResultFound()
+
+        return TreeSkosManager(), [root.concept_id]
+
+    def test_wide_tree_completes_fast(self):
+        """
+        A tree with branching factor 3, depth 7 (~3,280 nodes).
+
+        The old code would process this in O(3^(2*7)) = ~4.8 million
+        iterations. The fixed BFS visits each node once: ~3,280 iterations.
+        """
+
+        manager, root_ids = self._build_tree_manager(branching_factor=3, depth=7)
+        result = []
+
+        start = time.perf_counter()
+        validators.hierarchy_build(
+            manager, 1, root_ids, result, 'concept', 'narrower_concepts'
+        )
+        elapsed = time.perf_counter() - start
+
+        # Should complete nearly instantly (well under 1 second).
+        self.assertLess(
+            elapsed, 1.0, f'hierarchy_build took {elapsed:.2f}s, expected < 1s'
+        )
+        # Verify correctness: all non-root nodes should be in the result.
+        # Total nodes = (3^8 - 1) / (3 - 1) = 3280, minus 1 root = 3279 descendants.
+        self.assertEqual(3279, len(result))
+
+    def test_deep_chain_completes_fast(self):
+        """
+        A linear chain of 500 nodes (depth=500, branching=1).
+
+        Tests that the BFS handles deep hierarchies without stack overflow
+        (which the old recursive approach risked).
+        """
+        manager, root_ids = self._build_tree_manager(branching_factor=1, depth=500)
+        result = []
+
+        start = time.perf_counter()
+        validators.hierarchy_build(
+            manager, 1, root_ids, result, 'concept', 'narrower_concepts'
+        )
+        elapsed = time.perf_counter() - start
+
+        self.assertLess(
+            elapsed, 1.0, f'hierarchy_build took {elapsed:.2f}s, expected < 1s'
+        )
+        self.assertEqual(len(result), 500)
+
+    def test_cycle_does_not_loop_forever(self):
+        """
+        A small hierarchy with a cycle must terminate (not loop forever).
+        """
+
+        # Build a cycle: A -> B -> C -> A
+        a = Concept(concept_id='A', conceptscheme_id=1)
+        b = Concept(concept_id='B', conceptscheme_id=1)
+        c = Concept(concept_id='C', conceptscheme_id=1)
+        a.narrower_concepts = {b}
+        b.narrower_concepts = {c}
+        c.narrower_concepts = {a}
+        concepts = {'A': a, 'B': b, 'C': c}
+
+        class CyclicManager:
+            def get_thing(self, concept_id, conceptscheme_id):
+                return concepts[concept_id]
+
+        manager = CyclicManager()
+        result = []
+
+        start = time.perf_counter()
+        validators.hierarchy_build(
+            manager, 1, ['A'], result, 'concept', 'narrower_concepts'
+        )
+        elapsed = time.perf_counter() - start
+
+        self.assertLess(elapsed, 1.0)
+        # All three nodes should appear in the result (B, C, A as descendants).
+        self.assertEqual(set(result), {'A', 'B', 'C'})

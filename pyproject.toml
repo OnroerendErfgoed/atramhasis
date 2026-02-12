@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-fancy-pypi-readme", "babel"]
 build-backend = "hatchling.build"
 
 [project]
-version = "3.1.0"
+version = "3.1.1"
 name = "atramhasis"
 dynamic = ["readme"]
 authors = [
@@ -51,6 +51,7 @@ dependencies = [
     "rdflib",
     "bleach",
     "pyramid_openapi3==0.19",
+    "setuptools<82",
 ]
 
 [project.urls]

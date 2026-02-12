@@ -7,6 +7,7 @@ from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.models import LabelType
 from skosprovider_sqlalchemy.models import Language
+from sqlalchemy import event
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 
@@ -254,3 +255,167 @@ class ProviderDataManagerTest(DbTest):
 
         result = self.manager.get_all_providers()
         self.assertEqual(result, [provider])
+
+
+class TestGetHierarchyIdsQueryCount(DbTest):
+    """
+    Tests that ``SkosManager.get_hierarchy_ids`` traverses the hierarchy
+    in a constant number of SQL queries (via a recursive CTE), rather than
+    issuing one query per node (N+1 problem).
+
+    Uses the geography fixture (conceptscheme_id=2):
+
+        World (1)
+        +-- Europe (2)
+        |   +-- Belgium (4)
+        |   |   +-- Flanders (7)
+        |   |   +-- Brussels (8)
+        |   |   +-- Wallonie (9)
+        |   +-- United Kingdom (5)
+        +-- North-America (3)
+            +-- USA (6)
+        Collection 333: members [4, 7, 8]
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.skos_manager = SkosManager(self.session)
+        self.query_log = []
+
+    def _start_counting(self):
+        """Start recording SQL statements executed on the connection."""
+        self.query_log.clear()
+        event.listen(self.connection, 'before_cursor_execute', self._log_query)
+
+    def _stop_counting(self):
+        """Stop recording and return the count."""
+        event.remove(self.connection, 'before_cursor_execute', self._log_query)
+        return len(self.query_log)
+
+    def _log_query(self, conn, cursor, statement, parameters, context, executemany):
+        self.query_log.append(statement)
+
+    def test_narrower_concepts_query_count(self):
+        """
+        Traversing narrower_concepts from World should find all 8 descendants
+        in a small, constant number of queries.
+        """
+        # Flush any pending lazy loads before counting.
+        self.session.flush()
+
+        self._start_counting()
+        result = self.skos_manager.get_hierarchy_ids(
+            conceptscheme_id=2,
+            start_ids=['1'],
+            concept_type='concept',
+            property_list_name='narrower_concepts',
+        )
+        count = self._stop_counting()
+
+        # Should find all descendants of World.
+        expected_descendants = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+        self.assertEqual(result, expected_descendants)
+
+        # CTE approach: expect a small constant number of queries (typically
+        # 2-3: one to resolve start_ids, one for the CTE, one to map back).
+        # The old N+1 approach would issue 9+ queries (one per node).
+        self.assertLessEqual(
+            count,
+            5,
+            f'Expected <= 5 queries but got {count}. Queries: {self.query_log}',
+        )
+
+    def test_broader_concepts_query_count(self):
+        """
+        Traversing broader_concepts from Flanders (7) should find Belgium (4),
+        Europe (2), World (1) in a small number of queries.
+        """
+        self.session.flush()
+
+        self._start_counting()
+        result = self.skos_manager.get_hierarchy_ids(
+            conceptscheme_id=2,
+            start_ids=['7'],
+            concept_type='concept',
+            property_list_name='broader_concepts',
+        )
+        count = self._stop_counting()
+
+        # Flanders -> Belgium -> Europe -> World.
+        self.assertIn('4', result)
+        self.assertIn('2', result)
+        self.assertIn('1', result)
+
+        self.assertLessEqual(
+            count,
+            5,
+            f'Expected <= 5 queries but got {count}. Queries: {self.query_log}',
+        )
+
+    def test_members_query_count(self):
+        """
+        Traversing members from collection 333 should find its members
+        in a small number of queries.
+        """
+        self.session.flush()
+
+        self._start_counting()
+        result = self.skos_manager.get_hierarchy_ids(
+            conceptscheme_id=2,
+            start_ids=['333'],
+            concept_type=None,
+            property_list_name='members',
+        )
+        count = self._stop_counting()
+
+        # Collection 333 has members: Belgium (4), Flanders (7), Brussels (8).
+        self.assertIn('4', result)
+        self.assertIn('7', result)
+        self.assertIn('8', result)
+
+        self.assertLessEqual(
+            count,
+            5,
+            f'Expected <= 5 queries but got {count}. Queries: {self.query_log}',
+        )
+
+    def test_empty_start_ids_no_queries(self):
+        """
+        Passing empty start_ids should return immediately with no DB queries.
+        """
+        self.session.flush()
+
+        self._start_counting()
+        result = self.skos_manager.get_hierarchy_ids(
+            conceptscheme_id=2,
+            start_ids=[],
+            concept_type='concept',
+            property_list_name='narrower_concepts',
+        )
+        count = self._stop_counting()
+
+        self.assertEqual(result, set())
+        self.assertEqual(
+            count, 0, f'Expected 0 queries for empty start_ids but got {count}'
+        )
+
+    def test_nonexistent_start_ids_minimal_queries(self):
+        """
+        Passing start_ids that don't exist should return empty after
+        just the initial lookup query.
+        """
+        self.session.flush()
+
+        self._start_counting()
+        result = self.skos_manager.get_hierarchy_ids(
+            conceptscheme_id=2,
+            start_ids=['99999'],
+            concept_type='concept',
+            property_list_name='narrower_concepts',
+        )
+        count = self._stop_counting()
+
+        self.assertEqual(result, set())
+        self.assertLessEqual(
+            count, 1, f'Expected <= 1 query for nonexistent IDs but got {count}'
+        )
