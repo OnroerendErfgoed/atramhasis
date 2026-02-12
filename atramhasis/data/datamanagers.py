@@ -21,6 +21,8 @@ from skosprovider_sqlalchemy.models import Language
 from skosprovider_sqlalchemy.models import Match
 from skosprovider_sqlalchemy.models import MatchType
 from skosprovider_sqlalchemy.models import Thing
+from skosprovider_sqlalchemy.models import collection_concept
+from skosprovider_sqlalchemy.models import concept_hierarchy_concept
 from sqlalchemy import desc
 from sqlalchemy import func
 from sqlalchemy import select
@@ -244,6 +246,119 @@ class SkosManager(DataManager):
             return str(uuid.uuid4())
         else:
             raise ValueError('unsupported id_generation_strategy')
+
+    def get_hierarchy_ids(
+        self, conceptscheme_id, start_ids, concept_type, property_list_name
+    ):
+        """
+        Get all concept_ids reachable by following a relationship recursively.
+
+        Uses a recursive CTE query to efficiently traverse the hierarchy in a
+        single database round-trip, instead of issuing one query per node.
+
+        :param conceptscheme_id: The conceptscheme to search within.
+        :param list start_ids: Starting concept_ids to traverse from.
+        :param str concept_type: Only follow nodes of this type
+            (``'concept'`` or ``'collection'``), or ``None`` for any type.
+        :param str property_list_name: The relationship to follow
+            (``'narrower_concepts'``, ``'broader_concepts'``, ``'members'``,
+            ``'member_of'``).
+        :rtype: set
+        :returns: A set of all reachable concept_ids (strings).
+        """
+        if not start_ids:
+            return set()
+
+        # Resolve the starting concept_ids to internal surrogate ids,
+        # filtering by conceptscheme and optionally by type.
+        start_query = select(Thing.id, Thing.concept_id).where(
+            Thing.concept_id.in_(start_ids),
+            Thing.conceptscheme_id == conceptscheme_id,
+        )
+        if concept_type is not None:
+            start_query = start_query.where(Thing.type == concept_type)
+
+        start_rows = self.session.execute(start_query).all()
+        if not start_rows:
+            return set()
+
+        start_internal_ids = [row[0] for row in start_rows]
+        result_concept_ids = {row[1] for row in start_rows}
+
+        # Build the recursive CTE based on the relationship type.
+        hierarchy_cte = self._build_hierarchy_cte(
+            start_internal_ids, concept_type, property_list_name
+        )
+
+        # Execute the CTE and collect all reachable concept_ids.
+        query = select(Thing.concept_id).join(
+            hierarchy_cte, Thing.id == hierarchy_cte.c.id
+        )
+        rows = self.session.execute(query).all()
+        result_concept_ids |= {row[0] for row in rows}
+        return result_concept_ids
+
+    def _build_hierarchy_cte(
+        self, start_internal_ids, concept_type, property_list_name
+    ):
+        """
+        Build a recursive CTE that traverses a hierarchy relationship.
+
+        :param list start_internal_ids: Internal surrogate ids to start from.
+        :param str concept_type: Type filter or ``None``.
+        :param str property_list_name: The relationship to follow.
+        :returns: A CTE query yielding all reachable internal ids.
+        """
+        # Determine the association table and join columns based on the
+        # relationship being traversed.
+        if property_list_name == 'narrower_concepts':
+            assoc_table = concept_hierarchy_concept
+            from_col = assoc_table.c.concept_id_broader
+            to_col = assoc_table.c.concept_id_narrower
+        elif property_list_name == 'broader_concepts':
+            assoc_table = concept_hierarchy_concept
+            from_col = assoc_table.c.concept_id_narrower
+            to_col = assoc_table.c.concept_id_broader
+        elif property_list_name == 'members':
+            assoc_table = collection_concept
+            from_col = assoc_table.c.collection_id
+            to_col = assoc_table.c.concept_id
+        elif property_list_name == 'member_of':
+            assoc_table = collection_concept
+            from_col = assoc_table.c.concept_id
+            to_col = assoc_table.c.collection_id
+        else:
+            raise ValueError(f'Unsupported property_list_name: {property_list_name}')
+
+        # Base case: direct children of the starting nodes.
+        base = select(
+            to_col.label('id'),
+        ).where(
+            from_col.in_(start_internal_ids),
+        )
+
+        # Apply type filter by joining with the concept table.
+        if concept_type is not None:
+            base = base.join(Thing, Thing.id == to_col).where(
+                Thing.type == concept_type,
+            )
+
+        hierarchy = base.cte(name='hierarchy', recursive=True)
+
+        # Recursive case: follow the relationship from results found so far.
+        recursive = select(
+            to_col.label('id'),
+        ).where(
+            from_col == hierarchy.c.id,
+        )
+
+        if concept_type is not None:
+            recursive = recursive.join(Thing, Thing.id == to_col).where(
+                Thing.type == concept_type,
+            )
+
+        hierarchy = hierarchy.union(recursive)
+        return hierarchy
 
 
 class LanguagesManager(DataManager):
