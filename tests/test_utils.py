@@ -1,7 +1,9 @@
 import unittest
+import unittest.mock
 
 from pyramid import testing
 from pyramid.httpexceptions import HTTPMethodNotAllowed
+from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.providers import DictionaryProvider
 from skosprovider.skos import Collection as SkosCollection
 from skosprovider.skos import Concept as SkosConcept
@@ -19,6 +21,7 @@ from atramhasis.utils import from_thing
 from atramhasis.utils import internal_providers_only
 from atramhasis.utils import label_sort
 from atramhasis.utils import provider_is_external
+from atramhasis.utils import safe_get_by_uri
 from atramhasis.utils import update_last_visited_concepts
 
 
@@ -313,6 +316,21 @@ class TestProviderIsExternal(unittest.TestCase):
     def test_provider_is_external_empty_subjects(self):
         provider = MockProvider({'subject': []})
         assert provider_is_external(provider) is False
+
+
+class TestSafeGetByUri(unittest.TestCase):
+    def test_returns_result_on_success(self):
+        mock_registry = unittest.mock.MagicMock()
+        mock_registry.get_by_uri.return_value = 'concept'
+        result = safe_get_by_uri(mock_registry, 'urn:test')
+        self.assertEqual(result, 'concept')
+        mock_registry.get_by_uri.assert_called_once_with('urn:test')
+
+    def test_returns_none_on_provider_unavailable(self):
+        mock_registry = unittest.mock.MagicMock()
+        mock_registry.get_by_uri.side_effect = ProviderUnavailableException('down')
+        result = safe_get_by_uri(mock_registry, 'urn:test')
+        self.assertIsNone(result)
 
 
 class MockProvider:
