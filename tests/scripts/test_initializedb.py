@@ -19,16 +19,12 @@ def _fast_import_provider(provider, session, conceptscheme):
 
 
 class TestMigrateTests:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
     @patch(
         'atramhasis.scripts.initializedb.skosprovider_utils.import_provider',
         side_effect=_fast_import_provider,
     )
-    def test_initialize_providers(self, mock_import):
-        script.initialize_providers(self.session)
+    def test_initialize_providers(self, mock_import, db_session):
+        script.initialize_providers(db_session)
 
         expected_ids = [
             'TREES',
@@ -42,7 +38,7 @@ class TestMigrateTests:
             'BLUEBIRDS',
         ]
         expected_concept_scheme_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        for db_provider in self.session.execute(select(Provider)).scalars():  # type: Provider
+        for db_provider in db_session.execute(select(Provider)).scalars():  # type: Provider
             assert db_provider.conceptscheme.id in expected_concept_scheme_ids
             assert db_provider.id_generation_strategy == IDGenerationStrategy.NUMERIC
             assert db_provider.expand_strategy == ExpandStrategy.RECURSE

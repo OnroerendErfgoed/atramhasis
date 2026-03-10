@@ -149,34 +149,64 @@ class DummySkosManager:
                 raise NoResultFound()
 
 
-class TestMappers:
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        self.skos_manager = DummySkosManager()
-        self.concept = Concept()
-        self.concept.concept_id = 1
-        self.concept.conceptscheme_id = 1
-        self.collection = Collection()
-        self.collection.concept_id = 0
-        self.collection.conceptscheme_id = 1
-        self.collection.uri = "urn:x-skosprovider:trees/3"
-        self.conceptscheme = ConceptScheme()
-        self.conceptscheme.id = 1
-        member_concept_1 = Concept()
-        member_concept_1.concept_id = 5
-        member_concept_1.conceptscheme_id = 1
-        member_concept_2 = Collection()
-        member_concept_2.concept_id = 6
-        member_concept_2.conceptscheme_id = 1
-        self.collection.members.add(member_concept_1)
-        self.collection.members.add(member_concept_2)
-        self.concept.narrower_concepts.add(member_concept_1)
-        self.concept.narrower_collections.add(member_concept_2)
-        self.test_json = copy.deepcopy(_test_json)
-        self.json_collection = copy.deepcopy(_json_collection)
+@pytest.fixture()
+def skos_manager():
+    return DummySkosManager()
 
-    def test_mapping(self):
-        result_concept = map_concept(self.concept, self.test_json, self.skos_manager)
+
+@pytest.fixture()
+def mapper_concept():
+    concept = Concept()
+    concept.concept_id = 1
+    concept.conceptscheme_id = 1
+    member_concept_1 = Concept()
+    member_concept_1.concept_id = 5
+    member_concept_1.conceptscheme_id = 1
+    member_concept_2 = Collection()
+    member_concept_2.concept_id = 6
+    member_concept_2.conceptscheme_id = 1
+    concept.narrower_concepts.add(member_concept_1)
+    concept.narrower_collections.add(member_concept_2)
+    return concept
+
+
+@pytest.fixture()
+def mapper_collection():
+    collection = Collection()
+    collection.concept_id = 0
+    collection.conceptscheme_id = 1
+    collection.uri = "urn:x-skosprovider:trees/3"
+    member_concept_1 = Concept()
+    member_concept_1.concept_id = 5
+    member_concept_1.conceptscheme_id = 1
+    member_concept_2 = Collection()
+    member_concept_2.concept_id = 6
+    member_concept_2.conceptscheme_id = 1
+    collection.members.add(member_concept_1)
+    collection.members.add(member_concept_2)
+    return collection
+
+
+@pytest.fixture()
+def mapper_conceptscheme():
+    conceptscheme = ConceptScheme()
+    conceptscheme.id = 1
+    return conceptscheme
+
+
+@pytest.fixture()
+def test_json():
+    return copy.deepcopy(_test_json)
+
+
+@pytest.fixture()
+def json_collection():
+    return copy.deepcopy(_json_collection)
+
+
+class TestMappers:
+    def test_mapping(self, mapper_concept, test_json, skos_manager):
+        result_concept = map_concept(mapper_concept, test_json, skos_manager)
         assert result_concept is not None
         assert 3 == len(result_concept.narrower_concepts)
         assert 2 == len(result_concept.broader_concepts)
@@ -188,16 +218,16 @@ class TestMappers:
         assert not hasattr(result_concept, 'members')
         assert result_concept.notes[0].markup is None
 
-    def test_mapping_collections_filled(self):
+    def test_mapping_collections_filled(self, mapper_concept, test_json, skos_manager):
         label = Label(label='test', labeltype_id='altLabel', language_id='nl')
-        self.concept.labels.append(label)
+        mapper_concept.labels.append(label)
         related_concept = Concept(concept_id=6, conceptscheme_id=1)
-        self.concept.related_concepts.add(related_concept)
+        mapper_concept.related_concepts.add(related_concept)
         source = Source(citation='testCitation')
-        self.concept.sources.append(source)
+        mapper_concept.sources.append(source)
         source = Source(citation='AnotherTestCitation')
-        self.concept.sources.append(source)
-        result_concept = map_concept(self.concept, self.test_json, self.skos_manager)
+        mapper_concept.sources.append(source)
+        result_concept = map_concept(mapper_concept, test_json, skos_manager)
         assert 3 == len(result_concept.narrower_concepts)
         assert 2 == len(result_concept.broader_concepts)
         assert 2 == len(result_concept.related_concepts)
@@ -206,22 +236,22 @@ class TestMappers:
         assert 1 == len(result_concept.notes)
         assert 1 == len(result_concept.sources)
 
-    def test_mapping_check_db_lookup(self):
-        result_concept = map_concept(self.concept, self.test_json, self.skos_manager)
+    def test_mapping_check_db_lookup(self, mapper_concept, test_json, skos_manager):
+        result_concept = map_concept(mapper_concept, test_json, skos_manager)
         for narrower_concept in result_concept.narrower_concepts:
             assert narrower_concept is not None
             if narrower_concept.concept_id == 7:
                 assert narrower_concept.id is None
 
-    def test_mapping_check_db_lookup_member_of(self):
-        result_concept = map_concept(self.concept, self.test_json, self.skos_manager)
+    def test_mapping_check_db_lookup_member_of(self, mapper_concept, test_json, skos_manager):
+        result_concept = map_concept(mapper_concept, test_json, skos_manager)
         for member_of in result_concept.member_of:
             assert member_of is not None
             if member_of.concept_id == 7:
                 assert member_of.id is None
 
-    def test_mapping_collection(self):
-        result_collection = map_concept(self.collection, self.json_collection, self.skos_manager)
+    def test_mapping_collection(self, mapper_collection, json_collection, skos_manager):
+        result_collection = map_concept(mapper_collection, json_collection, skos_manager)
         assert result_collection is not None
         assert 3 == len(result_collection.members)
         assert 2 == len(result_collection.member_of)
@@ -229,57 +259,57 @@ class TestMappers:
         assert 1 == len(result_collection.notes)
         assert not hasattr(result_collection, 'related_concepts')
 
-    def test_mapping_matches(self):
-        self.test_json["matches"] = {"exact": ["urn:sample:666"], "broad": ["urn:somewhere:93"]}
-        result_concept = map_concept(self.concept, self.test_json, self.skos_manager)
+    def test_mapping_matches(self, mapper_concept, test_json, skos_manager):
+        test_json["matches"] = {"exact": ["urn:sample:666"], "broad": ["urn:somewhere:93"]}
+        result_concept = map_concept(mapper_concept, test_json, skos_manager)
         assert result_concept is not None
         assert hasattr(result_concept, 'matches')
         assert 2 == len(result_concept.matches)
         assert result_concept.matches[0].uri in ["urn:sample:666", "urn:somewhere:93"]
 
-    def test_mapping_matches_new_concept(self):
-        self.test_json["matches"] = {"exact": ["urn:sample:666"], "broad": ["urn:somewhere:93"]}
-        del self.test_json["id"]
-        result_concept = map_concept(self.concept, self.test_json, self.skos_manager)
+    def test_mapping_matches_new_concept(self, mapper_concept, test_json, skos_manager):
+        test_json["matches"] = {"exact": ["urn:sample:666"], "broad": ["urn:somewhere:93"]}
+        del test_json["id"]
+        result_concept = map_concept(mapper_concept, test_json, skos_manager)
         assert result_concept is not None
         assert hasattr(result_concept, 'matches')
         assert 2 == len(result_concept.matches)
         assert result_concept.matches[0].uri in ["urn:sample:666", "urn:somewhere:93"]
 
-    def test_mapping_subordinate_arrays(self):
-        self.test_json["subordinate_arrays"] = [{"id": 19}]
-        result_concept = map_concept(self.concept, self.test_json, self.skos_manager)
+    def test_mapping_subordinate_arrays(self, mapper_concept, test_json, skos_manager):
+        test_json["subordinate_arrays"] = [{"id": 19}]
+        result_concept = map_concept(mapper_concept, test_json, skos_manager)
         assert result_concept is not None
         assert hasattr(result_concept, 'narrower_collections')
         assert 1 == len(result_concept.narrower_collections)
         assert [c for c in result_concept.narrower_collections][0].concept_id == 19
 
-    def test_mapping_subordinate_arrays_no_result(self):
-        self.test_json["subordinate_arrays"] = [{"id": 11}]
-        result_concept = map_concept(self.concept, self.test_json, self.skos_manager)
+    def test_mapping_subordinate_arrays_no_result(self, mapper_concept, test_json, skos_manager):
+        test_json["subordinate_arrays"] = [{"id": 11}]
+        result_concept = map_concept(mapper_concept, test_json, skos_manager)
         assert result_concept is not None
         assert hasattr(result_concept, 'narrower_collections')
         assert 1 == len(result_concept.narrower_collections)
         assert [c for c in result_concept.narrower_collections][0].concept_id == 11
 
-    def test_mapping_superordinates(self):
-        self.json_collection["superordinates"] = [{"id": 12}]
-        result_collection = map_concept(self.collection, self.json_collection, self.skos_manager)
+    def test_mapping_superordinates(self, mapper_collection, json_collection, skos_manager):
+        json_collection["superordinates"] = [{"id": 12}]
+        result_collection = map_concept(mapper_collection, json_collection, skos_manager)
         assert result_collection is not None
         assert hasattr(result_collection, 'broader_concepts')
         assert 1 == len(result_collection.broader_concepts)
         assert [c for c in result_collection.broader_concepts][0].concept_id == 12
 
-    def test_mapping_concept_to_collection(self):
-        result_collection = map_concept(self.concept, self.json_collection, self.skos_manager)
+    def test_mapping_concept_to_collection(self, mapper_concept, json_collection, skos_manager):
+        result_collection = map_concept(mapper_concept, json_collection, skos_manager)
         assert result_collection is not None
         assert hasattr(result_collection, 'members')
         assert not hasattr(result_collection, 'related_concepts')
         assert not hasattr(result_collection, 'narrower_concepts')
         assert not hasattr(result_collection, 'narrower_collections')
 
-    def test_mapping_collection_to_concept(self):
-        result_concept = map_concept(self.collection, self.test_json, self.skos_manager)
+    def test_mapping_collection_to_concept(self, mapper_collection, test_json, skos_manager):
+        result_concept = map_concept(mapper_collection, test_json, skos_manager)
         assert result_concept is not None
         assert not hasattr(result_concept, 'members')
         assert hasattr(result_concept, 'related_concepts')
@@ -287,15 +317,15 @@ class TestMappers:
         assert hasattr(result_concept, 'narrower_collections')
         assert result_concept.uri == 'urn:x-skosprovider:trees/3'
 
-    def test_mapping_conceptscheme(self):
-        result_conceptscheme = map_conceptscheme(self.conceptscheme, test_json_conceptscheme)
+    def test_mapping_conceptscheme(self, mapper_conceptscheme):
+        result_conceptscheme = map_conceptscheme(mapper_conceptscheme, test_json_conceptscheme)
         assert result_conceptscheme is not None
         assert 1 == len(result_conceptscheme.labels)
         assert 1 == len(result_conceptscheme.notes)
         assert 1 == len(result_conceptscheme.sources)
 
-    def test_mapping_html_note(self):
-        result_concept = map_concept(self.concept, test_json_html, self.skos_manager)
+    def test_mapping_html_note(self, mapper_concept, skos_manager):
+        result_concept = map_concept(mapper_concept, test_json_html, skos_manager)
         assert result_concept is not None
         assert 3 == len(result_concept.narrower_concepts)
         assert 2 == len(result_concept.broader_concepts)

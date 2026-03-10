@@ -44,64 +44,74 @@ species = {
 }
 
 
+@pytest.fixture()
+def from_thing_concept():
+    conceptscheme = ConceptScheme()
+    conceptscheme.uri = 'urn:x-atramhasis-demo'
+    conceptscheme.id = 1
+    concept = Concept()
+    concept.id = 11
+    concept.concept_id = 101
+    concept.uri = 'urn:x-atramhasis-demo:TREES:101'
+    concept.conceptscheme_id = 1
+    concept.conceptscheme = conceptscheme
+
+    notes = []
+    note = Note(note='test note', notetype_id='example', language_id='en')
+    note2 = Note(note='note def', notetype_id='definition', language_id='en')
+    notes.append(note)
+    notes.append(note2)
+    concept.notes = notes
+
+    labels = []
+    label = Label(label='een label', labeltype_id='prefLabel', language_id='nl')
+    label2 = Label(label='other label', labeltype_id='altLabel', language_id='en')
+    label3 = Label(
+        label='and some other label', labeltype_id='altLabel', language_id='en'
+    )
+    labels.append(label)
+    labels.append(label2)
+    labels.append(label3)
+    concept.labels = labels
+
+    sources = []
+    source = Source(citation='Kinsella S. & Carlisle P. 2015: Alice.')
+    sources.append(source)
+    concept.sources = sources
+
+    matches = []
+    match1 = Match()
+    match1.uri = 'urn:test'
+    match1.concept = concept
+    match1.matchtype = MatchType(name='closeMatch', description='')
+    match2 = Match()
+    match2.uri = 'urn:test'
+    match2.concept = concept
+    match2.matchtype = MatchType(name='closeMatch', description='')
+    matches.append(match1)
+    matches.append(match2)
+    concept.matches = matches
+
+    return concept
+
+
+@pytest.fixture()
+def from_thing_collection():
+    conceptscheme = ConceptScheme()
+    conceptscheme.uri = 'urn:x-atramhasis-demo'
+    conceptscheme.id = 1
+    collection = Collection()
+    collection.id = 12
+    collection.concept_id = 102
+    collection.uri = 'urn:x-atramhasis-demo:TREES:102'
+    collection.conceptscheme_id = 1
+    collection.conceptscheme = conceptscheme
+    return collection
+
+
 class TestFromThing:
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        conceptscheme = ConceptScheme()
-        conceptscheme.uri = 'urn:x-atramhasis-demo'
-        conceptscheme.id = 1
-        self.concept = Concept()
-        self.concept.id = 11
-        self.concept.concept_id = 101
-        self.concept.uri = 'urn:x-atramhasis-demo:TREES:101'
-        self.concept.conceptscheme_id = 1
-        self.concept.conceptscheme = conceptscheme
-
-        notes = []
-        note = Note(note='test note', notetype_id='example', language_id='en')
-        note2 = Note(note='note def', notetype_id='definition', language_id='en')
-        notes.append(note)
-        notes.append(note2)
-        self.concept.notes = notes
-
-        labels = []
-        label = Label(label='een label', labeltype_id='prefLabel', language_id='nl')
-        label2 = Label(label='other label', labeltype_id='altLabel', language_id='en')
-        label3 = Label(
-            label='and some other label', labeltype_id='altLabel', language_id='en'
-        )
-        labels.append(label)
-        labels.append(label2)
-        labels.append(label3)
-        self.concept.labels = labels
-
-        sources = []
-        source = Source(citation='Kinsella S. & Carlisle P. 2015: Alice.')
-        sources.append(source)
-        self.concept.sources = sources
-
-        matches = []
-        match1 = Match()
-        match1.uri = 'urn:test'
-        match1.concept = self.concept
-        match1.matchtype = MatchType(name='closeMatch', description='')
-        match2 = Match()
-        match2.uri = 'urn:test'
-        match2.concept = self.concept
-        match2.matchtype = MatchType(name='closeMatch', description='')
-        matches.append(match1)
-        matches.append(match2)
-        self.matches = matches
-
-        self.collection = Collection()
-        self.collection.id = 12
-        self.collection.concept_id = 102
-        self.collection.uri = 'urn:x-atramhasis-demo:TREES:102'
-        self.collection.conceptscheme_id = 1
-        self.collection.conceptscheme = conceptscheme
-
-    def test_thing_to_concept(self):
-        skosconcept = from_thing(self.concept)
+    def test_thing_to_concept(self, from_thing_concept):
+        skosconcept = from_thing(from_thing_concept)
         assert isinstance(skosconcept, SkosConcept)
         assert skosconcept.id == 101
         assert len(skosconcept.labels) == 3
@@ -109,8 +119,8 @@ class TestFromThing:
         assert len(skosconcept.sources) == 1
         assert skosconcept.uri == 'urn:x-atramhasis-demo:TREES:101'
 
-    def test_thing_to_collection(self):
-        skoscollection = from_thing(self.collection)
+    def test_thing_to_collection(self, from_thing_collection):
+        skoscollection = from_thing(from_thing_collection)
         assert isinstance(skoscollection, SkosCollection)
         assert skoscollection.id == 102
         assert skoscollection.uri == 'urn:x-atramhasis-demo:TREES:102'
@@ -129,97 +139,104 @@ class DummyViewClassForTest:
         self.dummy = dummy
 
 
-class TestInternalProviderOnly:
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        self.dummy = DummyViewClassForTest()
+@pytest.fixture()
+def dummy_view():
+    return DummyViewClassForTest()
 
-    def test_all_providers(self):
-        self.dummy.provider = DictionaryProvider(
+
+class TestInternalProviderOnly:
+    def test_all_providers(self, dummy_view):
+        dummy_view.provider = DictionaryProvider(
             list=[species], metadata={'id': 'Test'}
         )
-        self.dummy.all_providers('ok')
-        assert self.dummy.dummy == 'ok'
+        dummy_view.all_providers('ok')
+        assert dummy_view.dummy == 'ok'
 
-    def test_internal_providers(self):
-        self.dummy.provider = SQLAlchemyProvider(
+    def test_internal_providers(self, dummy_view):
+        dummy_view.provider = SQLAlchemyProvider(
             metadata={'id': 'Test', 'conceptscheme_id': 1}, session=None
         )
-        self.dummy.internal_providers('ok')
-        assert self.dummy.dummy == 'ok'
+        dummy_view.internal_providers('ok')
+        assert dummy_view.dummy == 'ok'
 
-    def test_external_providers(self):
-        self.dummy.provider = SQLAlchemyProvider(
+    def test_external_providers(self, dummy_view):
+        dummy_view.provider = SQLAlchemyProvider(
             metadata={'id': 'Test', 'conceptscheme_id': 1, 'subject': ['external']},
             session=None,
         )
         with pytest.raises(HTTPMethodNotAllowed):
-            self.dummy.internal_providers('ok')
-        assert self.dummy.dummy is None
+            dummy_view.internal_providers('ok')
+        assert dummy_view.dummy is None
 
-    def test_no_sqlalchemyprovider(self):
-        self.dummy.provider = DictionaryProvider(
+    def test_no_sqlalchemyprovider(self, dummy_view):
+        dummy_view.provider = DictionaryProvider(
             list=[species], metadata={'id': 'Test'}
         )
         with pytest.raises(HTTPMethodNotAllowed):
-            self.dummy.internal_providers('ok')
-        assert self.dummy.dummy is None
+            dummy_view.internal_providers('ok')
+        assert dummy_view.dummy is None
+
+
+@pytest.fixture()
+def pyramid_config():
+    config = testing.setUp()
+    yield config
+    testing.tearDown()
+
+
+@pytest.fixture()
+def dummy_request(pyramid_config):
+    request = testing.DummyRequest()
+    request.session = {}
+    return request
 
 
 class TestUpdateLastVisitedConceptsProviderOnly:
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        self.config = testing.setUp()
-        self.request = testing.DummyRequest()
-        self.request.session = {}
-        yield
-        testing.tearDown()
-
-    def test_update_last_visited_concepts(self):
+    def test_update_last_visited_concepts(self, dummy_request):
         c = Concept()
         c.id = 2
         c.labels = [Label('test', language_id='en-us')]
         update_last_visited_concepts(
-            self.request, {'label': c.label(), 'url': f'https://test.test/{55}'}
+            dummy_request, {'label': c.label(), 'url': f'https://test.test/{55}'}
         )
         c = Concept()
         c.id = 33
         c.labels = [Label('test', language_id='nl-be')]
         update_last_visited_concepts(
-            self.request, {'label': c.label(), 'url': f'https://test.test/{2}'}
+            dummy_request, {'label': c.label(), 'url': f'https://test.test/{2}'}
         )
-        assert 2 == len(self.request.session['last_visited'])
+        assert 2 == len(dummy_request.session['last_visited'])
 
-    def test_update_last_visited_concepts_max(self):
+    def test_update_last_visited_concepts_max(self, dummy_request):
         for concept_id in range(50):
             c = Concept()
             c.id = concept_id
             c.labels = [Label('test', language_id='en-us')]
             update_last_visited_concepts(
-                self.request,
+                dummy_request,
                 {'label': c.label(), 'url': f'https://test.test/{concept_id}'},
             )
-        assert 4 == len(self.request.session['last_visited'])
-        last = self.request.session['last_visited'].pop()
+        assert 4 == len(dummy_request.session['last_visited'])
+        last = dummy_request.session['last_visited'].pop()
         assert 'https://test.test/49' == last['url']
 
-    def test_no_double_last_visited_concepts(self):
+    def test_no_double_last_visited_concepts(self, dummy_request):
         c = Concept()
         c.id = 2
         c.labels = [Label('test', language_id='en-us')]
         update_last_visited_concepts(
-            self.request, {'label': c.label(), 'url': f'https://test.test/{55}'}
+            dummy_request, {'label': c.label(), 'url': f'https://test.test/{55}'}
         )
         update_last_visited_concepts(
-            self.request, {'label': c.label(), 'url': f'https://test.test/{55}'}
+            dummy_request, {'label': c.label(), 'url': f'https://test.test/{55}'}
         )
         c = Concept()
         c.id = 33
         c.labels = [Label('test', language_id='nl-be')]
         update_last_visited_concepts(
-            self.request, {'label': c.label(), 'url': f'https://test.test/{2}'}
+            dummy_request, {'label': c.label(), 'url': f'https://test.test/{2}'}
         )
-        assert 2 == len(self.request.session['last_visited'])
+        assert 2 == len(dummy_request.session['last_visited'])
 
 
 class DummyConcept:

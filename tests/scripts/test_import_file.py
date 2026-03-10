@@ -18,10 +18,6 @@ pytestmark = pytest.mark.empty_db
 
 
 class TestValidateFile:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
     def test_valid_json_file(self):
         with tempfile.NamedTemporaryFile(suffix='.json', delete=False) as f:
             f.write(b'[]')
@@ -48,10 +44,6 @@ class TestValidateFile:
 
 
 class TestValidateConnectionString:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
     def test_valid_sqlite(self):
         with tempfile.NamedTemporaryFile(suffix='.sqlite', delete=False) as f:
             pass
@@ -74,10 +66,6 @@ class TestValidateConnectionString:
 
 
 class TestCreateConceptscheme:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
     def test_create_conceptscheme(self):
         cs = import_file.create_conceptscheme('urn:test', 'Test Label')
         assert cs.uri == 'urn:test'
@@ -85,10 +73,6 @@ class TestCreateConceptscheme:
 
 
 class TestFileToJsonProvider:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
     def test_file_to_json_provider(self):
         data = [
             {
@@ -114,10 +98,6 @@ class TestFileToJsonProvider:
 
 
 class TestFileToCsvProvider:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
     def test_file_to_csv_provider(self):
         with tempfile.NamedTemporaryFile(
                 suffix='.csv', mode='w', delete=False
@@ -134,10 +114,6 @@ class TestFileToCsvProvider:
 
 
 class TestFileToRdfProvider:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
     def test_file_to_rdf_provider(self):
         rdf_content = """<?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -164,14 +140,10 @@ class TestFileToRdfProvider:
 
 
 class TestCreateProvider:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
-    def test_create_provider(self):
+    def test_create_provider(self, db_session):
         cs = ConceptScheme(uri='urn:x-test:create-provider')
-        self.session.add(cs)
-        self.session.flush()
+        db_session.add(cs)
+        db_session.flush()
 
         provider = DictionaryProvider(
             {'id': 'CREATETEST', 'subject': []},
@@ -181,12 +153,12 @@ class TestCreateProvider:
         import_file.create_provider(
             id_generation_strategy='NUMERIC',
             provider=provider,
-            session=self.session,
+            session=db_session,
             conceptscheme=cs,
         )
-        self.session.flush()
+        db_session.flush()
 
-        db_provider = self.session.execute(
+        db_provider = db_session.execute(
             select(Provider).filter(Provider.id == 'CREATETEST')
         ).scalar_one()
         assert db_provider.conceptscheme_id == cs.id
@@ -195,10 +167,6 @@ class TestCreateProvider:
 
 
 class TestValidateUriPattern:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
     def test_valid_pattern(self):
         # Should not exit
         import_file.validate_uri_pattern('urn:x-test:%s')

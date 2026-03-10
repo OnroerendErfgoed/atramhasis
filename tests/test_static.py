@@ -5,13 +5,14 @@ from atramhasis import main
 from tests import SETTINGS
 
 
+@pytest.fixture()
+def testapp():
+    return TestApp(TestStatic.app)
+
+
 class TestStatic:
     app = main({}, **SETTINGS)
 
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        self.testapp = TestApp(self.app)
-
-    def test_sitemap_view(self):
-        response = self.testapp.get('/sitemap_index.xml')
+    def test_sitemap_view(self, testapp):
+        response = testapp.get('/sitemap_index.xml')
         assert 200 == response.status_code

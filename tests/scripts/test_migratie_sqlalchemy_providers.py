@@ -11,43 +11,39 @@ from atramhasis.scripts import migrate_sqlalchemy_providers
 
 
 class TestMigrateTests:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
-    def test_migrate(self):
+    def test_migrate(self, db_session):
         conceptscheme = ConceptScheme(uri='urn:x-skosprovider:trees')
-        self.session.add(conceptscheme)
-        self.session.flush()
+        db_session.add(conceptscheme)
+        db_session.flush()
 
-        db_providers = self.session.execute(select(Provider)).scalars().all()
+        db_providers = db_session.execute(select(Provider)).scalars().all()
         assert len(db_providers) == 0
 
         registry = Registry()
         registry.register_provider(
             SQLAlchemyProvider(
-                {"id": "EXTRA", "conceptscheme_id": conceptscheme.id}, self.session
+                {"id": "EXTRA", "conceptscheme_id": conceptscheme.id}, db_session
             )
         )
         other_providers = migrate_sqlalchemy_providers.get_atramhasis_sqlalchemy_providers(
-            self.session
+            db_session
         )
         for provider in other_providers:
-            if self.session.get(ConceptScheme, provider.conceptscheme_id) is None:
-                self.session.add(
+            if db_session.get(ConceptScheme, provider.conceptscheme_id) is None:
+                db_session.add(
                     ConceptScheme(
                         id=provider.conceptscheme_id,
                         uri=f'urn:x-skosprovider:{provider.conceptscheme_id}'
                     )
                 )
-        self.session.flush()
+        db_session.flush()
 
         migrate_sqlalchemy_providers.migrate(
             skos_registry=registry,
-            session=self.session,
+            session=db_session,
         )
 
-        db_providers = self.session.execute(select(Provider)).scalars().all()
+        db_providers = db_session.execute(select(Provider)).scalars().all()
         db_conceptscheme_ids = [p.conceptscheme_id for p in db_providers]
         expected_conceptscheme_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, conceptscheme.id]
         for expected in expected_conceptscheme_ids:

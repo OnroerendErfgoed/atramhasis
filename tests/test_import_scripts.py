@@ -25,100 +25,98 @@ test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 pytestmark = pytest.mark.empty_db
 
 
+def check_trees(session, conceptscheme_label):
+    sql_prov = SQLAlchemyProvider(
+        {'id': 'TREES', 'conceptscheme_id': 1}, session
+    )
+    dump = dict_dumper(sql_prov)
+
+    assert sql_prov.concept_scheme.label('en').label == conceptscheme_label
+    obj_1 = [item for item in dump if item['uri'] == 'http://id.trees.org/2'][0]
+    assert obj_1['broader'] == []
+    assert obj_1['id'] == '2'
+    assert obj_1['member_of'] == ['3']
+    assert obj_1['narrower'] == []
+    label_en = [label for label in obj_1['labels'] if label['language'] == 'en'][0]
+    assert label_en == {'label': 'The Chestnut', 'language': 'en', 'type': 'prefLabel'}
+    label_nl = [label for label in obj_1['labels'] if label['language'] == 'nl'][0]
+    assert label_nl == {
+        'label': 'De Paardekastanje', 'language': 'nl', 'type': 'altLabel'
+    }
+    label_fr = [label for label in obj_1['labels'] if label['language'] == 'fr'][0]
+    assert label_fr == {
+        'label': 'la châtaigne', 'language': 'fr', 'type': 'altLabel'
+    }
+    assert obj_1['notes'][0] == {
+        'language': 'en',
+        'note': 'A different type of tree.',
+        'type': 'definition',
+        'markup': None,
+    }
+
+
+def check_menu(session, uri_pattern=None):
+    if not uri_pattern:
+        uri_pattern = 'urn:x-skosprovider:menu:%s'
+    sql_prov = SQLAlchemyProvider(
+        {'id': 'MENU', 'conceptscheme_id': 1}, session
+    )
+    assert len(sql_prov.get_all()) == 11
+    eb = sql_prov.get_by_id(1)
+    assert isinstance(eb, Concept)
+    assert eb.id == '1'
+    assert eb.uri == uri_pattern % '1'
+    assert eb.label().label == 'Egg and Bacon'
+    assert eb.label().type == 'prefLabel'
+    assert eb.notes == []
+    eb = sql_prov.get_by_uri(uri_pattern % '3')
+    assert isinstance(eb, Concept)
+    assert eb.id == '3'
+    assert eb.uri == uri_pattern % '3'
+    spam = sql_prov.find({'label': 'Spam'})
+    assert len(spam) == 8
+    eb = sql_prov.get_by_id(11)
+    assert isinstance(eb, Concept)
+    assert eb.id == '11'
+    assert eb.label().label == 'Lobster Thermidor'
+    assert isinstance(eb.notes[0], Note)
+    assert 'Mornay' in eb.notes[0].note
+    assert eb.notes[0].type == 'note'
+    provider = session.execute(select(Provider)).scalar_one()
+    assert provider.meta['atramhasis.id_generation_strategy'] == 'NUMERIC'
+    assert provider.uri_pattern == uri_pattern
+    assert provider.expand_strategy.value == 'recurse'
+    assert provider.id == str(provider.conceptscheme_id)
+
+
+def check_parrots(session):
+    sql_prov = SQLAlchemyProvider(
+        {'id': 'PARROTS', 'conceptscheme_id': 1}, session
+    )
+
+    bird = sql_prov.get_by_id('https://id.parrots.org/bird')
+    assert sql_prov.get_by_uri('https://id.parrots.org/bird') == bird
+    parrot = sql_prov.get_by_id('parrot')
+    assert parrot
+    assert not sql_prov.get_by_id('bird')
+    blue = sql_prov.get_by_id('norwegianblue')
+    assert blue in parrot.narrower
+    reiger = sql_prov.get_by_id('579A439C-1A7A-476A-92C3-8A74ABD6B3DB')
+    blauwereiger = sql_prov.get_by_id('blauwereiger')
+    assert blauwereiger in reiger.narrower
+
+
+@pytest.fixture()
+def patched_session(db_session):
+    """Patch import_file.db_session to use the test's db_session."""
+    db_session_context_manager = MagicMock()
+    db_session_context_manager().__enter__.return_value = db_session
+    with patch.object(import_file, 'db_session', db_session_context_manager):
+        yield db_session
+
+
 class TestImport:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-        # Patch the session that scripts will use to the session of the tests.
-        # This makes everything rollback after every test.
-        db_session_context_manager = MagicMock()
-        db_session_context_manager().__enter__.return_value = self.session
-        self.patcher = patch.object(
-            import_file, 'db_session', db_session_context_manager
-        )
-        self.patcher.start()
-        yield
-        self.patcher.stop()
-
-    def _check_trees(self, conceptscheme_label):
-        sql_prov = SQLAlchemyProvider(
-            {'id': 'TREES', 'conceptscheme_id': 1}, self.session
-        )
-        dump = dict_dumper(sql_prov)
-
-        assert sql_prov.concept_scheme.label('en').label == conceptscheme_label
-        obj_1 = [item for item in dump if item['uri'] == 'http://id.trees.org/2'][0]
-        assert obj_1['broader'] == []
-        assert obj_1['id'] == '2'
-        assert obj_1['member_of'] == ['3']
-        assert obj_1['narrower'] == []
-        label_en = [label for label in obj_1['labels'] if label['language'] == 'en'][0]
-        assert label_en == {'label': 'The Chestnut', 'language': 'en', 'type': 'prefLabel'}
-        label_nl = [label for label in obj_1['labels'] if label['language'] == 'nl'][0]
-        assert label_nl == {
-            'label': 'De Paardekastanje', 'language': 'nl', 'type': 'altLabel'
-        }
-        label_fr = [label for label in obj_1['labels'] if label['language'] == 'fr'][0]
-        assert label_fr == {
-            'label': 'la châtaigne', 'language': 'fr', 'type': 'altLabel'
-        }
-        assert obj_1['notes'][0] == {
-            'language': 'en',
-            'note': 'A different type of tree.',
-            'type': 'definition',
-            'markup': None,
-        }
-
-    def _check_menu(self, uri_pattern=None):
-        if not uri_pattern:
-            uri_pattern = 'urn:x-skosprovider:menu:%s'
-        sql_prov = SQLAlchemyProvider(
-            {'id': 'MENU', 'conceptscheme_id': 1}, self.session
-        )
-        assert len(sql_prov.get_all()) == 11
-        eb = sql_prov.get_by_id(1)
-        assert isinstance(eb, Concept)
-        assert eb.id == '1'
-        assert eb.uri == uri_pattern % '1'
-        assert eb.label().label == 'Egg and Bacon'
-        assert eb.label().type == 'prefLabel'
-        assert eb.notes == []
-        eb = sql_prov.get_by_uri(uri_pattern % '3')
-        assert isinstance(eb, Concept)
-        assert eb.id == '3'
-        assert eb.uri == uri_pattern % '3'
-        spam = sql_prov.find({'label': 'Spam'})
-        assert len(spam) == 8
-        eb = sql_prov.get_by_id(11)
-        assert isinstance(eb, Concept)
-        assert eb.id == '11'
-        assert eb.label().label == 'Lobster Thermidor'
-        assert isinstance(eb.notes[0], Note)
-        assert 'Mornay' in eb.notes[0].note
-        assert eb.notes[0].type == 'note'
-        provider = self.session.execute(select(Provider)).scalar_one()
-        assert provider.meta['atramhasis.id_generation_strategy'] == 'NUMERIC'
-        assert provider.uri_pattern == uri_pattern
-        assert provider.expand_strategy.value == 'recurse'
-        assert provider.id == str(provider.conceptscheme_id)
-
-    def _check_parrots(self):
-        sql_prov = SQLAlchemyProvider(
-            {'id': 'PARROTS', 'conceptscheme_id': 1}, self.session
-        )
-
-        bird = sql_prov.get_by_id('https://id.parrots.org/bird')
-        assert sql_prov.get_by_uri('https://id.parrots.org/bird') == bird
-        parrot = sql_prov.get_by_id('parrot')
-        assert parrot
-        assert not sql_prov.get_by_id('bird')
-        blue = sql_prov.get_by_id('norwegianblue')
-        assert blue in parrot.narrower
-        reiger = sql_prov.get_by_id('579A439C-1A7A-476A-92C3-8A74ABD6B3DB')
-        blauwereiger = sql_prov.get_by_id('blauwereiger')
-        assert blauwereiger in reiger.narrower
-
-    def test_import_rdf(self):
+    def test_import_rdf(self, patched_session):
         sys.argv = [
             'import_file',
             test_data_rdf,
@@ -128,9 +126,9 @@ class TestImport:
             SETTINGS['sqlalchemy.url'],
         ]
         import_file.main(sys.argv)
-        self._check_trees('Verschillende soorten bomen')
+        check_trees(patched_session, 'Verschillende soorten bomen')
 
-    def test_import_ttl(self):
+    def test_import_ttl(self, patched_session):
         sys.argv = [
             'import_file',
             test_data_ttl,
@@ -140,9 +138,9 @@ class TestImport:
             SETTINGS['sqlalchemy.url'],
         ]
         import_file.main(sys.argv)
-        self._check_trees('Different types of trees')
+        check_trees(patched_session, 'Different types of trees')
 
-    def test_import_ttl_string_id(self):
+    def test_import_ttl_string_id(self, patched_session):
         sys.argv = [
             'import_file',
             test_data_ttl_string_id,
@@ -153,7 +151,7 @@ class TestImport:
         ]
         import_file.main(sys.argv)
 
-    def test_import_json(self):
+    def test_import_json(self, patched_session):
         sys.argv = [
             'import_file',
             test_data_json,
@@ -167,9 +165,9 @@ class TestImport:
             'http://id.trees.org',
         ]
         import_file.main(sys.argv)
-        self._check_trees('Trees Conceptscheme')
+        check_trees(patched_session, 'Trees Conceptscheme')
 
-    def test_import_csv(self):
+    def test_import_csv(self, patched_session):
         sys.argv = [
             'import_file',
             test_data_csv,
@@ -179,9 +177,9 @@ class TestImport:
             SETTINGS['sqlalchemy.url'],
         ]
         import_file.main(sys.argv)
-        self._check_menu()
+        check_menu(patched_session)
 
-    def test_import_csv_uri_generator(self):
+    def test_import_csv_uri_generator(self, patched_session):
         sys.argv = [
             'import_file',
             test_data_csv,
@@ -195,9 +193,9 @@ class TestImport:
             'https://id.menu.org',
         ]
         import_file.main(sys.argv)
-        self._check_menu('https://id.menu.org/%s')
+        check_menu(patched_session, 'https://id.menu.org/%s')
 
-    def test_import_csv_with_provider_all_args(self):
+    def test_import_csv_with_provider_all_args(self, patched_session):
         sys.argv = [
             'import_file',
             test_data_csv,
@@ -212,7 +210,7 @@ class TestImport:
             'guid',
         ]
         import_file.main(sys.argv)
-        provider = self.session.execute(select(Provider)).scalar_one()
+        provider = patched_session.execute(select(Provider)).scalar_one()
         assert provider.meta['atramhasis.id_generation_strategy'] == 'GUID'
         assert provider.uri_pattern == 'urn:x-skosprovider:test:%s'
         assert provider.expand_strategy.value == 'recurse'
@@ -325,38 +323,40 @@ class TestValidateConnectionString:
             import_file.validate_connection_string(connection_string)
 
 
+@pytest.fixture()
+def temp_input_file():
+    with tempfile.NamedTemporaryFile(suffix='.csv', delete=False) as f:
+        f.write(b'id,label\n1,test\n')
+        path = f.name
+    yield path
+    if os.path.exists(path):
+        os.unlink(path)
+
+
+@pytest.fixture()
+def temp_db_file():
+    with tempfile.NamedTemporaryFile(suffix='.sqlite', delete=False) as f:
+        path = f.name
+    yield path
+    if os.path.exists(path):
+        os.unlink(path)
+
+
 class TestParseArgvForImport:
     """Test cases for the parse_argv_for_import function"""
 
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        # Create a temporary file for testing
-        with tempfile.NamedTemporaryFile(suffix='.csv', delete=False) as temp_file:
-            temp_file.write(b'id,label\n1,test\n')
-            self.temp_input_file = temp_file.name
-
-        # Create a temporary SQLite database for testing
-        with tempfile.NamedTemporaryFile(suffix='.sqlite', delete=False) as temp_db:
-            self.temp_db_file = temp_db.name
-
-        yield
-
-        # Clean up temporary files
-        if os.path.exists(self.temp_input_file):
-            os.unlink(self.temp_input_file)
-        if os.path.exists(self.temp_db_file):
-            os.unlink(self.temp_db_file)
-
-    def test_parse_argv_create_provider_false_with_conflicting_args(self):
+    def test_parse_argv_create_provider_false_with_conflicting_args(
+        self, temp_input_file, temp_db_file
+    ):
         """Test that --no-create-provider with conflicting args prints error and exits"""
         argv = [
             'import_file',
-            self.temp_input_file,
+            temp_input_file,
             '--no-create-provider',
             '--uri-pattern',
             'https://example.org/%s',
             '--to',
-            f'sqlite:///{self.temp_db_file}',
+            f'sqlite:///{temp_db_file}',
         ]
 
         # Mock sys.argv to control argparse

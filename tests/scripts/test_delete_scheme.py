@@ -15,23 +15,19 @@ from atramhasis.scripts import delete_scheme
 
 
 class TestDeleteScheme:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
-    def test_delete(self):
+    def test_delete(self, db_session):
         query = select(ConceptScheme.id)
-        scheme_ids = self.session.execute(query).scalars().all()
+        scheme_ids = db_session.execute(query).scalars().all()
         for scheme_id in scheme_ids:
-            delete_scheme.delete_scheme(self.session, scheme_id)
+            delete_scheme.delete_scheme(db_session, scheme_id)
 
-        assert len(self.session.execute(select(ConceptScheme)).all()) == 0
-        assert len(self.session.execute(select(Concept)).all()) == 0
-        assert len(self.session.execute(select(Collection)).all()) == 0
-        assert len(self.session.execute(select(Note)).all()) == 0
-        assert len(self.session.execute(select(Source)).all()) == 0
-        assert len(self.session.execute(select(Visitation)).all()) == 0
-        assert len(self.session.execute(select(Label)).all()) == 0
-        assert len(self.session.execute(select(LabelType)).all()) != 0
-        assert len(self.session.execute(select(NoteType)).all()) != 0
-        assert len(self.session.execute(select(Language)).all()) != 0
+        assert len(db_session.execute(select(ConceptScheme)).all()) == 0
+        assert len(db_session.execute(select(Concept)).all()) == 0
+        assert len(db_session.execute(select(Collection)).all()) == 0
+        assert len(db_session.execute(select(Note)).all()) == 0
+        assert len(db_session.execute(select(Source)).all()) == 0
+        assert len(db_session.execute(select(Visitation)).all()) == 0
+        assert len(db_session.execute(select(Label)).all()) == 0
+        assert len(db_session.execute(select(LabelType)).all()) != 0
+        assert len(db_session.execute(select(NoteType)).all()) != 0
+        assert len(db_session.execute(select(Language)).all()) != 0

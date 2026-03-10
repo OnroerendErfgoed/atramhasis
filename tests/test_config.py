@@ -11,15 +11,11 @@ settings = get_appsettings(os.path.join(here, '../', 'tests/conf_test.ini'))
 
 
 class TestConfig:
-    @pytest.fixture(autouse=True)
-    def setup(self, db_session):
-        self.session = db_session
-
-    def test_config(self):
+    def test_config(self, db_session):
         app = main({}, **settings)
         assert app is not None
 
-    def test_config_alt_dump_location(self):
+    def test_config_alt_dump_location(self, db_session):
         with tempfile.TemporaryDirectory() as temp_dir:
             settings['atramhasis.dump_location'] = temp_dir
             app = main({}, **settings)

@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+import types
 from unittest.mock import Mock
 
 import pytest
@@ -29,100 +29,108 @@ from atramhasis.renderers import source_adapter
 from fixtures.data import trees
 
 
+@pytest.fixture()
+def renderer_data():
+    concept = Concept()
+    concept.id = 11
+    concept.concept_id = 101
+    concept.uri = 'urn:x-atramhasis-demo:TREES:101'
+    concept.conceptscheme_id = 1
+
+    notes = []
+    note = Note(note='test note', notetype_id='example', language_id='en')
+    note2 = Note(note='note def', notetype_id='definition', language_id='en')
+    notes.append(note)
+    notes.append(note2)
+    concept.notes = notes
+
+    labels = []
+    label = Label(label='een label', labeltype_id='prefLabel', language_id='nl')
+    label2 = Label(label='other label', labeltype_id='altLabel', language_id='en')
+    label3 = Label(label='and some other label', labeltype_id='altLabel', language_id='en')
+    labels.append(label)
+    labels.append(label2)
+    labels.append(label3)
+    concept.labels = labels
+
+    sources = []
+    source = Source('Van Daele K. 2009')
+    sources.append(source)
+    concept.sources = sources
+
+    matches = []
+    match = Match()
+    match.matchtype = MatchType(name='closeMatch', description='test')
+    match.uri = 'urn:somethingelse:st1'
+    matches.append(match)
+    match2 = Match()
+    match2.matchtype = MatchType(name='closeMatch', description='test')
+    match2.uri = 'urn:somethingelse:st2'
+    matches.append(match2)
+    match3 = Match()
+    match3.matchtype = MatchType(name='exactMatch', description='test')
+    match3.uri = 'urn:something:thingy'
+    matches.append(match3)
+    concept.matches = matches
+
+    collection = Collection()
+    collection.id = 12
+    collection.concept_id = 102
+    collection.uri = 'urn:x-atramhasis-demo:TREES:102'
+    collection.conceptscheme_id = 1
+
+    conceptscheme = ConceptScheme()
+    conceptscheme.id = 1
+    conceptscheme.labels = labels
+    conceptscheme.notes = notes
+    conceptscheme.sources = sources
+    conceptscheme.uri = None
+
+    regis = Registry()
+    regis.register_provider(trees)
+    request = testing.DummyRequest()
+    request.skos_registry = regis
+    request.matchdict = {'scheme_id': 'TREES'}
+    request.locale_name = 'nl'
+
+    concept.member_of.add(collection)
+    collection.members.add(concept)
+
+    return types.SimpleNamespace(
+        concept=concept,
+        collection=collection,
+        conceptscheme=conceptscheme,
+        regis=regis,
+        request=request,
+    )
+
+
 class TestJsonRenderer:
-
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        self.concept = Concept()
-        self.concept.id = 11
-        self.concept.concept_id = 101
-        self.concept.uri = 'urn:x-atramhasis-demo:TREES:101'
-        self.concept.conceptscheme_id = 1
-
-        notes = []
-        note = Note(note='test note', notetype_id='example', language_id='en')
-        note2 = Note(note='note def', notetype_id='definition', language_id='en')
-        notes.append(note)
-        notes.append(note2)
-        self.concept.notes = notes
-
-        labels = []
-        label = Label(label='een label', labeltype_id='prefLabel', language_id='nl')
-        label2 = Label(label='other label', labeltype_id='altLabel', language_id='en')
-        label3 = Label(label='and some other label', labeltype_id='altLabel', language_id='en')
-        labels.append(label)
-        labels.append(label2)
-        labels.append(label3)
-        self.concept.labels = labels
-
-        sources = []
-        source = Source('Van Daele K. 2009')
-        sources.append(source)
-        self.concept.sources = sources
-
-        matches = []
-        match = Match()
-        match.matchtype = MatchType(name='closeMatch', description='test')
-        match.uri = 'urn:somethingelse:st1'
-        matches.append(match)
-        match2 = Match()
-        match2.matchtype = MatchType(name='closeMatch', description='test')
-        match2.uri = 'urn:somethingelse:st2'
-        matches.append(match2)
-        match3 = Match()
-        match3.matchtype = MatchType(name='exactMatch', description='test')
-        match3.uri = 'urn:something:thingy'
-        matches.append(match3)
-        self.concept.matches = matches
-
-        self.collection = Collection()
-        self.collection.id = 12
-        self.collection.concept_id = 102
-        self.collection.uri = 'urn:x-atramhasis-demo:TREES:102'
-        self.collection.conceptscheme_id = 1
-
-        self.conceptscheme = ConceptScheme()
-        self.conceptscheme.id = 1
-        self.conceptscheme.labels = labels
-        self.conceptscheme.notes = notes
-        self.conceptscheme.sources = sources
-        self.conceptscheme.uri = None
-
-        self.regis = Registry()
-        self.regis.register_provider(trees)
-        self.request = testing.DummyRequest()
-        self.request.skos_registry = self.regis
-        self.request.matchdict = {'scheme_id': 'TREES'}
-        self.request.locale_name = 'nl'
-
-        self.concept.member_of.add(self.collection)
-        self.collection.members.add(self.concept)
-
-    def test_label_adapter(self):
-        label = self.concept.labels[2]
+    def test_label_adapter(self, renderer_data):
+        label = renderer_data.concept.labels[2]
         label = label_adapter(label, {})
         assert isinstance(label, dict)
         assert label['label'] == 'and some other label'
         assert label['type'] == 'altLabel'
         assert label['language'] == 'en'
 
-    def test_note_adapter(self):
-        n = self.concept.notes[0]
+    def test_note_adapter(self, renderer_data):
+        n = renderer_data.concept.notes[0]
         note = note_adapter(n, {})
         assert isinstance(note, dict)
         assert note['note'] == 'test note'
         assert note['type'] == 'example'
         assert note['language'] == 'en'
 
-    def test_source_adapter(self):
-        s = self.concept.sources[0]
+    def test_source_adapter(self, renderer_data):
+        s = renderer_data.concept.sources[0]
         source = source_adapter(s, {})
         assert isinstance(source, dict)
         assert source['citation'] == 'Van Daele K. 2009'
 
-    def test_concept_adapter(self):
-        c = self.concept
-        concept = concept_adapter(c, self.request)
+    def test_concept_adapter(self, renderer_data):
+        c = renderer_data.concept
+        concept = concept_adapter(c, renderer_data.request)
         assert isinstance(concept, dict)
         assert concept['id'] == 101
         assert concept['type'] == 'concept'
@@ -146,9 +154,9 @@ class TestJsonRenderer:
         assert len(concept['matches']['exact']) == 1
         assert len(concept['matches']['close']) == 2
 
-    def test_collection_adapter(self):
-        c = self.collection
-        collection = collection_adapter(c, self.request)
+    def test_collection_adapter(self, renderer_data):
+        c = renderer_data.collection
+        collection = collection_adapter(c, renderer_data.request)
         assert isinstance(collection, dict)
         assert collection['id'] == 102
         assert collection['type'] == 'collection'
@@ -161,8 +169,8 @@ class TestJsonRenderer:
         assert isinstance(collection['members'], list)
         assert len(collection['members']) == 1
 
-    def test_map_relation_concept(self):
-        c = self.concept
+    def test_map_relation_concept(self, renderer_data):
+        c = renderer_data.concept
         relation = map_relation(c)
         assert isinstance(relation, dict)
         assert relation['id'] == 101
@@ -180,8 +188,8 @@ class TestJsonRenderer:
         with pytest.raises(KeyError):
             relation['related']
 
-    def test_map_relation_collection(self):
-        c = self.collection
+    def test_map_relation_collection(self, renderer_data):
+        c = renderer_data.collection
         relation = map_relation(c)
         assert isinstance(relation, dict)
         assert relation['id'] == 102
@@ -201,9 +209,9 @@ class TestJsonRenderer:
         assert res['id'] == 'af'
         assert res['name'] == 'Afrikaans'
 
-    def test_conceptscheme_adapter(self):
-        c = self.conceptscheme
-        conceptscheme = conceptscheme_adapter(c, self.request)
+    def test_conceptscheme_adapter(self, renderer_data):
+        c = renderer_data.conceptscheme
+        conceptscheme = conceptscheme_adapter(c, renderer_data.request)
         assert len(conceptscheme['notes']) > 0
         assert len(conceptscheme['labels']) > 0
         assert len(conceptscheme['sources']) > 0
@@ -213,12 +221,12 @@ class TestJsonRenderer:
         assert 0 == len(conceptscheme['subject'])
         assert isinstance(conceptscheme, dict)
 
-    def test_conceptscheme_language_handling(self):
-        c = self.conceptscheme
-        conceptscheme = conceptscheme_adapter(c, self.request)
+    def test_conceptscheme_language_handling(self, renderer_data):
+        c = renderer_data.conceptscheme
+        conceptscheme = conceptscheme_adapter(c, renderer_data.request)
         assert 'een label' == conceptscheme['label']
-        self.request.locale_name = 'en'
-        conceptscheme = conceptscheme_adapter(c, self.request)
+        renderer_data.request.locale_name = 'en'
+        conceptscheme = conceptscheme_adapter(c, renderer_data.request)
         assert conceptscheme['label'] in ['other label', 'and some other label']
 
     def test_provider_adapter(self):
