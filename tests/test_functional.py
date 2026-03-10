@@ -1264,3 +1264,67 @@ class TestListFunctional:
         assert '200 OK' == labeltypeslist_res.status
         assert 'application/json' == labeltypeslist_res.content_type
         assert labeltypeslist_res.json is not None
+
+
+class TestHeadRequestsFunctional:
+    """Test that HEAD requests return the same status code and headers as GET, with no body."""
+
+    def _get_default_headers(self):
+        return {'Accept': 'application/json'}
+
+    def test_head_languages(self, testapp):
+        get_res = testapp.get('/languages', headers=self._get_default_headers())
+        head_res = testapp.head('/languages', headers=self._get_default_headers())
+        assert get_res.status == head_res.status
+        assert get_res.content_type == head_res.content_type
+        assert head_res.body == b''
+
+    def test_head_language(self, testapp):
+        get_res = testapp.get('/languages/de', headers=self._get_default_headers())
+        head_res = testapp.head('/languages/de', headers=self._get_default_headers())
+        assert get_res.status == head_res.status
+        assert get_res.content_type == head_res.content_type
+        assert head_res.body == b''
+
+    def test_head_labeltypes(self, testapp):
+        get_res = testapp.get('/labeltypes', headers=self._get_default_headers())
+        head_res = testapp.head('/labeltypes', headers=self._get_default_headers())
+        assert get_res.status == head_res.status
+        assert get_res.content_type == head_res.content_type
+        assert head_res.body == b''
+
+    def test_head_notetypes(self, testapp):
+        get_res = testapp.get('/notetypes', headers=self._get_default_headers())
+        head_res = testapp.head('/notetypes', headers=self._get_default_headers())
+        assert get_res.status == head_res.status
+        assert get_res.content_type == head_res.content_type
+        assert head_res.body == b''
+
+    def test_head_concept(self, testapp):
+        get_res = testapp.get(
+            '/conceptschemes/TREES/c/1', headers=self._get_default_headers()
+        )
+        head_res = testapp.head(
+            '/conceptschemes/TREES/c/1', headers=self._get_default_headers()
+        )
+        assert get_res.status == head_res.status
+        assert get_res.content_type == head_res.content_type
+        assert head_res.body == b''
+
+    def test_head_conceptscheme(self, testapp):
+        get_res = testapp.get(
+            '/conceptschemes/TREES', headers=self._get_default_headers()
+        )
+        head_res = testapp.head(
+            '/conceptschemes/TREES', headers=self._get_default_headers()
+        )
+        assert get_res.status == head_res.status
+        assert get_res.content_type == head_res.content_type
+        assert head_res.body == b''
+
+    def test_head_providers(self, testapp):
+        get_res = testapp.get('/providers', headers=self._get_default_headers())
+        head_res = testapp.head('/providers', headers=self._get_default_headers())
+        assert get_res.status == head_res.status
+        assert get_res.content_type == head_res.content_type
+        assert head_res.body == b''

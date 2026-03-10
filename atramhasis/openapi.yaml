@@ -14,7 +14,7 @@ paths:
       description: Search for concepts or collections in a scheme.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &conceptscheme_cs_get_params
         - name: scheme_id
           in: path
           description: The identifier for a certain concept scheme.
@@ -79,6 +79,16 @@ paths:
                   $ref: '#/components/schemas/ThingReduced'
         404:
           description: The conceptscheme was not found.
+    head:
+      summary: Check if concepts or collections exist in a scheme.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *conceptscheme_cs_get_params
+      responses:
+        200:
+          description: The concepts in this conceptscheme were found.
+        404:
+          description: The conceptscheme was not found.
 
     post:
       summary: Add a concept or collection to a conceptscheme.
@@ -130,7 +140,7 @@ paths:
       description: Get information about a concept or collection.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &conceptscheme_c_params
         - name: scheme_id
           in: path
           description: The identifier for a certain concept scheme.
@@ -150,6 +160,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ThingDetail"
+        404:
+          description: The concept was not found in the conceptscheme or the
+            conceptscheme was not found.
+    head:
+      summary: Check if a concept or collection exists.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *conceptscheme_c_params
+      responses:
+        200:
+          description: The concept was found in the conceptscheme.
         404:
           description: The concept was not found in the conceptscheme or the
             conceptscheme was not found.
@@ -257,7 +278,7 @@ paths:
       summary: Display a tree of a conceptscheme's children
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &scheme_id_param
         - name: scheme_id
           in: path
           description: The identifier for a certain concept scheme.
@@ -273,13 +294,21 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ThingTree"
+    head:
+      summary: Check if a conceptscheme tree exists.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *scheme_id_param
+      responses:
+        200:
+          description: A tree view of the conceptscheme was returned.
 
   /conceptschemes/{scheme_id}:
     get:
       summary: Get information about a concept scheme.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &conceptscheme_params
         - name: scheme_id
           in: path
           description: The identifier for a certain concept scheme.
@@ -293,6 +322,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConceptSchemeDetail"
+    head:
+      summary: Check if a concept scheme exists.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *conceptscheme_params
+      responses:
+        200:
+          description: The conceptscheme exists.
     put:
       summary: Edit the conceptscheme
       description: Edit the conceptscheme with scheme_id. The response body will
@@ -347,12 +384,19 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ConceptSchemeReduced"
+    head:
+      summary: Check conceptschemes availability.
+      tags:
+        - Pyramid_skosprovider
+      responses:
+        200:
+          description: The list of conceptschemes was found.
   /languages:
     get:
       summary: List all languages known to this Atramhasis instance.
       tags:
         - Atramhasis
-      parameters:
+      parameters: &languages_get_params
         - name: sort
           in: query
           description: Which field to sort on. Use `-` and `+` to indicate sort order.
@@ -370,6 +414,14 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Language"
+    head:
+      summary: Check languages availability.
+      tags:
+        - Atramhasis
+      parameters: *languages_get_params
+      responses:
+        200:
+          description: The list of languages was returned.
 
   /languages/{l_id}:
     get:
@@ -377,7 +429,7 @@ paths:
       description: Get information on a certain language.
       tags:
         - Atramhasis
-      parameters:
+      parameters: &language_id_param
         - name: l_id
           in: path
           description: The identifier for a certain language.
@@ -391,6 +443,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Language"
+        404:
+          description: The language was not found in this instance.
+    head:
+      summary: Check if a language exists.
+      tags:
+        - Atramhasis
+      parameters: *language_id_param
+      responses:
+        200:
+          description: The language was found.
         404:
           description: The language was not found in this instance.
 
@@ -466,6 +528,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Type"
+    head:
+      summary: Check labeltypes availability.
+      tags:
+        - Lists
+      responses:
+        200:
+          description: The labeltypes were found.
 
   /notetypes:
     get:
@@ -481,6 +550,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Type"
+    head:
+      summary: Check notetypes availability.
+      tags:
+        - Lists
+      responses:
+        200:
+          description: The notetypes were found.
 
   /uris:
     get:
@@ -490,7 +566,7 @@ paths:
         registry.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &uris_params
         - name: uri
           in: query
           description: The URI to search for.
@@ -524,13 +600,23 @@ paths:
                   - id
         404:
           description: The URI can't be found by pyramid_skosprovider.
+    head:
+      summary: Check if a URI can be found.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *uris_params
+      responses:
+        200:
+          description: The URI maps to something known by pyramid_skosprovider.
+        404:
+          description: The URI can't be found by pyramid_skosprovider.
   /c:
     get:
       summary: Search concepts or collections.
       description: Search for concepts or collections, no matter what scheme they're a part of.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &c_get_params
         - name: type
           in: query
           description: Define if you want to show concepts or collections. Leave
@@ -596,6 +682,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ThingReduced'
+    head:
+      summary: Check concepts or collections availability.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *c_get_params
+      responses:
+        200:
+          description: The concepts were found.
 
   /conceptschemes/{scheme_id}/topconcepts:
     get:
@@ -604,7 +698,7 @@ paths:
         in the conceptscheme that have no broader concept.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &scheme_language_params
         - name: scheme_id
           in: path
           description: The identifier for a certain conceptscheme.
@@ -631,6 +725,16 @@ paths:
                   $ref: "#/components/schemas/ThingReduced"
         404:
           description: The conceptscheme was not found.
+    head:
+      summary: Check if top concepts exist in a scheme.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *scheme_language_params
+      responses:
+        200:
+          description: The topconcepts in this conceptscheme were found.
+        404:
+          description: The conceptscheme was not found.
 
   /conceptschemes/{scheme_id}/displaytop:
     get:
@@ -639,7 +743,7 @@ paths:
         this will be a list of Concepts and Collections.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &scheme_language_params2
         - name: scheme_id
           in: path
           description: The identifier for a certain conceptscheme.
@@ -666,6 +770,16 @@ paths:
                   $ref: "#/components/schemas/ThingReduced"
         404:
           description: The conceptscheme was not found.
+    head:
+      summary: Check if display top exists.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *scheme_language_params2
+      responses:
+        200:
+          description: The concepts and collections were found.
+        404:
+          description: The conceptscheme was not found.
 
   /conceptschemes/{scheme_id}/c/{c_id}/displaychildren:
     get:
@@ -674,7 +788,7 @@ paths:
         children of this Concept or Collection.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &scheme_c_language_params
         - name: scheme_id
           in: path
           description: The identifier for a certain conceptscheme.
@@ -708,6 +822,17 @@ paths:
         404:
           description: The concept was not found in the conceptscheme or the
             conceptscheme was not found.
+    head:
+      summary: Check if display children exist.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *scheme_c_language_params
+      responses:
+        200:
+          description: The concept was found in the conceptscheme.
+        404:
+          description: The concept was not found in the conceptscheme or the
+            conceptscheme was not found.
 
   /conceptschemes/{scheme_id}/c/{c_id}/expand:
     get:
@@ -730,7 +855,7 @@ paths:
         exist.
       tags:
         - Pyramid_skosprovider
-      parameters:
+      parameters: &scheme_c_params
         - name: scheme_id
           in: path
           description: The identifier for a certain conceptscheme.
@@ -755,11 +880,22 @@ paths:
         404:
           description: The concept/collection was not found in the conceptscheme or the
             conceptscheme was not found.
+    head:
+      summary: Check if a concept or collection can be expanded.
+      tags:
+        - Pyramid_skosprovider
+      parameters: *scheme_c_params
+      responses:
+        200:
+          description: The concept/collection was found in the conceptscheme.
+        404:
+          description: The concept/collection was not found in the conceptscheme or the
+            conceptscheme was not found.
 
   /providers:
     get:
       summary: Get all registered providers.
-      parameters:
+      parameters: &providers_get_params
         - name: subject
           in: query
           description: A value to filter providers on their subject
@@ -780,6 +916,14 @@ paths:
           description: Bad request.
         5XX:
           description: Unexpected error.
+    head:
+      summary: Check providers availability.
+      parameters: *providers_get_params
+      tags:
+        - Atramhasis
+      responses:
+        200:
+          description: Providers exist.
     post:
       summary: Create a provider.
       description: Create a provider with a conceptscheme.
@@ -827,6 +971,15 @@ paths:
           description: Bad request.
         5XX:
           description: Unexpected error.
+    head:
+      summary: Check if a provider exists.
+      tags:
+        - Atramhasis
+      responses:
+        200:
+          description: Provider exists.
+        4XX:
+          description: Bad request.
     put:
       summary: Update a provider or create a new one if it does not exist.
       description: Update a provider or create a new one if it does not exist.
