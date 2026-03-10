@@ -1,18 +1,30 @@
+from unittest.mock import patch
+
+import pytest
 from sqlalchemy import select
 
-import tests
 from atramhasis.data.models import ExpandStrategy
 from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
 from atramhasis.scripts import initializedb as script
+from tests import DbTest
+
+pytestmark = pytest.mark.empty_db
 
 
-def setUpModule():
-    tests.setup_db(guarantee_empty=True)
+def _fast_import_provider(provider, session, conceptscheme):
+    """Skip the heavy concept import, just persist the ConceptScheme."""
+    session.add(conceptscheme)
+    session.flush()
+    return conceptscheme
 
 
-class TestMigrateTests(tests.DbTest):
-    def test_initialize_providers(self):
+class TestMigrateTests(DbTest):
+    @patch(
+        'atramhasis.scripts.initializedb.skosprovider_utils.import_provider',
+        side_effect=_fast_import_provider,
+    )
+    def test_initialize_providers(self, mock_import):
         script.initialize_providers(self.session)
 
         expected_ids = [

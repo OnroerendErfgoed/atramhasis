@@ -27,12 +27,12 @@ from fixtures import materials as material_data
 
 TEST_DIR = os.path.dirname(__file__)
 SETTINGS = get_appsettings(os.path.join(TEST_DIR, '..', 'tests', 'conf_test.ini'))
-db_setup = False
-db_filled = False
 
 # No test should want caching
 tree_region.configure('dogpile.cache.null', replace_existing_backend=True)
 list_region.configure('dogpile.cache.null', replace_existing_backend=True)
+
+_db_state = 'unknown'  # 'unknown' | 'empty' | 'filled'
 
 
 def get_alembic_config():
@@ -51,16 +51,8 @@ def get_alembic_config():
 ALEMBIC_CONFIG = get_alembic_config()
 
 
-def setup_db(guarantee_empty=False):
-    global db_setup, db_filled
-    if not db_setup or (guarantee_empty and db_filled):
-        _reset_db()
-        command.upgrade(ALEMBIC_CONFIG, 'head')
-        db_setup = True
-        db_filled = False
-
-
-def _reset_db():
+def _reset_and_migrate():
+    """Drop all data, downgrade to base and re-apply all migrations."""
     engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
     session = sessionmaker(bind=engine)()
     try:
@@ -74,66 +66,84 @@ def _reset_db():
     session.close()
     command.downgrade(ALEMBIC_CONFIG, 'base')
     engine.dispose()
+    command.upgrade(ALEMBIC_CONFIG, 'head')
+
+
+def reset_db():
+    """Reset the database to an empty state (schema present, no data)."""
+    global _db_state
+    _reset_and_migrate()
+    _db_state = 'empty'
+
+
+def setup_db():
+    """Ensure the database schema exists. No-op if already set up this session."""
+    global _db_state
+    if _db_state == 'unknown':
+        _reset_and_migrate()
+        _db_state = 'empty'
 
 
 def fill_db():
-    global db_filled
-    if not db_filled:
-        from fixtures.data import trees
-        from skosprovider_sqlalchemy.models import ConceptScheme
-        with db_session() as session:
-            import_provider(trees,
-                            session,
-                            ConceptScheme(id=1, uri='urn:x-skosprovider:trees'))
-            import_provider(material_data.materials,
-                            session,
-                            ConceptScheme(id=4, uri='urn:x-vioe:materials'))
-            import_provider(data.geo,
-                            session,
-                            ConceptScheme(id=2, uri='urn:x-vioe:geography'))
-            import_provider(
-                DictionaryProvider(
-                    {'id': 'MISSING_LABEL', 'default_language': 'nl'},
-                    [{'id': '1', 'uri': 'urn:x-skosprovider:test/1'},
-                     {
-                         'id': '2',
-                         'uri': 'urn:x-skosprovider:test/2',
-                         'labels': [
-                             {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
-                         ],
-                     }]
-                ),
-                session,
-                ConceptScheme(id=9, uri='urn:x-vioe:test')
+    """Fill the database with standard test fixtures. No-op if already filled."""
+    global _db_state
+    if _db_state == 'filled':
+        return
+    from fixtures.data import trees
+    from skosprovider_sqlalchemy.models import ConceptScheme
+    with db_session() as session:
+        import_provider(trees,
+                        session,
+                        ConceptScheme(id=1, uri='urn:x-skosprovider:trees'))
+        import_provider(material_data.materials,
+                        session,
+                        ConceptScheme(id=4, uri='urn:x-vioe:materials'))
+        import_provider(data.geo,
+                        session,
+                        ConceptScheme(id=2, uri='urn:x-vioe:geography'))
+        import_provider(
+            DictionaryProvider(
+                {'id': 'MISSING_LABEL', 'default_language': 'nl'},
+                [{'id': '1', 'uri': 'urn:x-skosprovider:test/1'},
+                 {
+                     'id': '2',
+                     'uri': 'urn:x-skosprovider:test/2',
+                     'labels': [
+                         {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
+                     ],
+                 }]
+            ),
+            session,
+            ConceptScheme(id=9, uri='urn:x-vioe:test')
+        )
+        import_provider(
+            DictionaryProvider(
+                {'id': 'manual-ids', 'default_language': 'nl'},
+                [{'id': 'manual-1', 'uri': 'urn:x-skosprovider:manual/manual-1'},
+                 {
+                     'id': 'manual-2',
+                     'uri': 'urn:x-skosprovider:manual/manual-2',
+                     'labels': [
+                         {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
+                     ],
+                 },
+                 {
+                     'id': 'https://id.manual.org/manual/68',
+                     'uri': 'https://id.manual.org/manual/68',
+                     'labels': [
+                         {'type': 'prefLabel', 'language': 'nl', 'label': 'handmatig'}
+                     ],
+                 }]
+            ),
+            session,
+            ConceptScheme(id=10, uri='urn:x-vioe:manual'),
+        )
+        session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
+        for scheme_id in (5, 6, 7, 8):
+            session.add(
+                ConceptScheme(id=scheme_id, uri=f'urn:dummy-{scheme_id}')
             )
-            import_provider(
-                DictionaryProvider(
-                    {'id': 'manual-ids', 'default_language': 'nl'},
-                    [{'id': 'manual-1', 'uri': 'urn:x-skosprovider:manual/manual-1'},
-                     {
-                         'id': 'manual-2',
-                         'uri': 'urn:x-skosprovider:manual/manual-2',
-                         'labels': [
-                             {'type': 'prefLabel', 'language': 'nl', 'label': 'label'}
-                         ],
-                     },
-                     {
-                         'id': 'https://id.manual.org/manual/68',
-                         'uri': 'https://id.manual.org/manual/68',
-                         'labels': [
-                             {'type': 'prefLabel', 'language': 'nl', 'label': 'handmatig'}
-                         ],
-                     }]
-                ),
-                session,
-                ConceptScheme(id=10, uri='urn:x-vioe:manual'),
-            )
-            session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
-            for scheme_id in (5, 6, 7, 8):
-                session.add(
-                    ConceptScheme(id=scheme_id, uri=f'urn:dummy-{scheme_id}')
-                )
-        db_filled = True
+    _db_state = 'filled'
 
 
 class DbTest(unittest.TestCase):

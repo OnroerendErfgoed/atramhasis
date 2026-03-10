@@ -22,13 +22,6 @@ from atramhasis.data.models import ConceptschemeCounts
 from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
 from tests import DbTest
-from tests import fill_db
-from tests import setup_db
-
-
-def setUpModule():
-    setup_db()
-    fill_db()
 
 
 class ConceptSchemeManagerTest(DbTest):

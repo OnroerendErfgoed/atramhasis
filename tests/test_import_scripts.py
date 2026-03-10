@@ -11,14 +11,13 @@ from skosprovider.utils import dict_dumper
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy import select
 
-import tests
+import pytest
+
 from atramhasis.data.models import Provider
 from atramhasis.scripts import import_file
 from tests import DbTest
 from tests import SETTINGS
 from tests import TEST_DIR
-from tests import setup_db
-
 
 test_data_rdf = os.path.join(TEST_DIR, 'data', 'trees.rdf')
 test_data_ttl = os.path.join(TEST_DIR, 'data', 'trees.ttl')
@@ -26,9 +25,7 @@ test_data_ttl_string_id = os.path.join(TEST_DIR, 'data', 'bluebirds.ttl')
 test_data_json = os.path.join(TEST_DIR, 'data', 'trees.json')
 test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 
-
-def setUpModule():
-    setup_db(guarantee_empty=True)
+pytestmark = pytest.mark.empty_db
 
 
 class ImportTests(DbTest):
@@ -141,7 +138,6 @@ class ImportTests(DbTest):
             SETTINGS['sqlalchemy.url'],
         ]
         import_file.main(sys.argv)
-        tests.db_filled = True
         self._check_trees('Verschillende soorten bomen')
 
     def test_import_ttl(self):
@@ -154,7 +150,6 @@ class ImportTests(DbTest):
             SETTINGS['sqlalchemy.url'],
         ]
         import_file.main(sys.argv)
-        tests.db_filled = True
         self._check_trees('Different types of trees')
 
     def test_import_ttl_string_id(self):
@@ -167,7 +162,6 @@ class ImportTests(DbTest):
             SETTINGS['sqlalchemy.url'],
         ]
         import_file.main(sys.argv)
-        tests.db_filled = True
 
     def test_import_json(self):
         sys.argv = [
@@ -183,7 +177,6 @@ class ImportTests(DbTest):
             'http://id.trees.org',
         ]
         import_file.main(sys.argv)
-        tests.db_filled = True
         self._check_trees('Trees Conceptscheme')
 
     def test_import_csv(self):
@@ -196,7 +189,6 @@ class ImportTests(DbTest):
             SETTINGS['sqlalchemy.url'],
         ]
         import_file.main(sys.argv)
-        tests.db_filled = True
         self._check_menu()
 
     def test_import_csv_uri_generator(self):
@@ -213,7 +205,6 @@ class ImportTests(DbTest):
             'https://id.menu.org',
         ]
         import_file.main(sys.argv)
-        tests.db_filled = True
         self._check_menu('https://id.menu.org/%s')
 
     def test_import_csv_with_provider_all_args(self):
@@ -231,7 +222,6 @@ class ImportTests(DbTest):
             'guid',
         ]
         import_file.main(sys.argv)
-        tests.db_filled = True
         provider = self.session.execute(select(Provider)).scalar_one()
         self.assertEqual(provider.meta['atramhasis.id_generation_strategy'], 'GUID')
         self.assertEqual(provider.uri_pattern, 'urn:x-skosprovider:test:%s')

@@ -8,13 +8,8 @@ from rdflib import RDF
 from rdflib import SKOS
 from rdflib.term import URIRef
 
-import tests
 from atramhasis.scripts import dump_rdf
-
-
-def setUpModule():
-    tests.setup_db(guarantee_empty=True)
-    tests.fill_db()
+from tests import DbTest
 
 
 def _create_mock_provider(pid, subject=None, uri='urn:x-test:scheme'):
@@ -43,7 +38,7 @@ def _create_simple_graph(scheme_uri='urn:x-test:scheme'):
     return graph
 
 
-class TestDumpRdfMain(tests.DbTest):
+class TestDumpRdfMain(DbTest):
     @patch('atramhasis.scripts.dump_rdf.utils.rdf_dumper')
     @patch('atramhasis.scripts.dump_rdf.setup_logging')
     @patch('atramhasis.scripts.dump_rdf.bootstrap')

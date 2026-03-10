@@ -8,14 +8,14 @@ from skosprovider_rdf.providers import RDFProvider
 from skosprovider_sqlalchemy.models import ConceptScheme
 from sqlalchemy import select
 
+import pytest
+
 import tests
 from atramhasis.data.models import ExpandStrategy
 from atramhasis.data.models import Provider
 from atramhasis.scripts import import_file
 
-
-def setUpModule():
-    tests.setup_db(guarantee_empty=True)
+pytestmark = pytest.mark.empty_db
 
 
 class TestValidateFile(tests.DbTest):

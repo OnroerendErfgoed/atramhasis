@@ -1,3 +1,4 @@
+import copy
 import logging
 import os
 import sys
@@ -26,14 +27,6 @@ from fixtures.data import larch
 from fixtures.data import species
 from tests import DbTest
 from tests import SETTINGS
-from tests import fill_db
-from tests import setup_db
-
-
-def setUpModule():
-    setup_db()
-    fill_db()
-
 
 logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 
@@ -92,6 +85,9 @@ json_collection_value = {
     'infer_concept_relations': True,
 }
 
+_json_value_orig = copy.deepcopy(json_value)
+_json_collection_value_orig = copy.deepcopy(json_collection_value)
+
 TEST = DictionaryProvider(
     {'id': 'TEST', 'default_language': 'nl', 'subject': ['biology']},
     [larch, chestnut, species],
@@ -126,6 +122,10 @@ class FunctionalTests(DbTest):
     def setUp(self):
         super().setUp()
         self.testapp.reset()
+        # Reset shared test data so mutations in one test don't leak into others.
+        global json_value, json_collection_value
+        json_value = copy.deepcopy(_json_value_orig)
+        json_collection_value = copy.deepcopy(_json_collection_value_orig)
 
     @staticmethod
     def mock_event_handler(event):

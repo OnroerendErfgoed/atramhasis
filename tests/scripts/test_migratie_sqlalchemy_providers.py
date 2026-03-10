@@ -3,17 +3,11 @@ from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy import select
 
-import tests
 from atramhasis.data.models import ExpandStrategy
 from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
 from atramhasis.scripts import migrate_sqlalchemy_providers
 from tests import DbTest
-
-
-def setUpModule():
-    tests.setup_db(guarantee_empty=True)
-    tests.fill_db()
 
 
 class TestMigrateTests(DbTest):
