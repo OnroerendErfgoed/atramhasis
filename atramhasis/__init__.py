@@ -21,6 +21,7 @@ DEFAULT_SETTINGS = {
     'cache.list.expiration_time': '7000',
     'jinja2.extensions': 'jinja2.ext.do',
     'jinja2.filters': 'label_sort = atramhasis.utils.label_sort',
+    'jinja2.globals': 'safe_get_by_uri = atramhasis.utils.safe_get_by_uri',
     'dojo.mode': 'dist',
     'layout.focus_conceptschemes': [],
     'skosprovider.skosregistry_factory': 'atramhasis.skos.create_registry',
