@@ -18,6 +18,7 @@ from tests import SETTINGS
 # Database bootstrap helpers
 # ---------------------------------------------------------------------------
 
+
 def reset_and_migrate(engine):
     """Drop all tables and re-apply all alembic migrations from scratch."""
     meta = MetaData()
@@ -31,15 +32,18 @@ def fill_db(engine):
     """Fill the database with standard test fixtures."""
     with Session(engine) as session:
         import_provider(
-            trees, session,
+            trees,
+            session,
             ConceptScheme(id=1, uri='urn:x-skosprovider:trees'),
         )
         import_provider(
-            material_data.materials, session,
+            material_data.materials,
+            session,
             ConceptScheme(id=4, uri='urn:x-vioe:materials'),
         )
         import_provider(
-            data.geo, session,
+            data.geo,
+            session,
             ConceptScheme(id=2, uri='urn:x-vioe:geography'),
         )
         import_provider(
@@ -75,7 +79,11 @@ def fill_db(engine):
                         'id': 'https://id.manual.org/manual/68',
                         'uri': 'https://id.manual.org/manual/68',
                         'labels': [
-                            {'type': 'prefLabel', 'language': 'nl', 'label': 'handmatig'}
+                            {
+                                'type': 'prefLabel',
+                                'language': 'nl',
+                                'label': 'handmatig',
+                            }
                         ],
                     },
                 ],
@@ -85,9 +93,7 @@ def fill_db(engine):
         )
         session.add(ConceptScheme(id=3, uri='urn:x-vioe:styles'))
         for scheme_id in (5, 6, 7, 8):
-            session.add(
-                ConceptScheme(id=scheme_id, uri=f'urn:dummy-{scheme_id}')
-            )
+            session.add(ConceptScheme(id=scheme_id, uri=f'urn:dummy-{scheme_id}'))
         session.commit()
 
 
@@ -95,7 +101,8 @@ def fill_db(engine):
 # Fixtures
 # ---------------------------------------------------------------------------
 
-@pytest.fixture(scope="session")
+
+@pytest.fixture(scope='session')
 def db_engine():
     """Single engine for the entire test session."""
     engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
@@ -119,17 +126,25 @@ def module_db_setup(db_engine):
     fill_db(db_engine)
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope='session')
 def db_connection(db_engine):
-    """Class-scoped database connection."""
+    """Session-scoped database connection, reused across all tests."""
     connection = db_engine.connect()
     yield connection
     connection.close()
 
 
 @pytest.fixture()
-def db_session(db_connection):
-    """Per-test database session wrapped in a transaction that is rolled back.
+def db_transaction(db_connection):
+    """Per-test outer transaction that is always rolled back."""
+    transaction = db_connection.begin()
+    yield transaction
+    transaction.rollback()
+
+
+@pytest.fixture()
+def db_session(db_connection, db_transaction):
+    """Per-test database session wrapped in a rollback-only transaction.
 
     Uses ``join_transaction_mode="rollback_only"`` so that any
     ``session.commit()`` executed by code under test flushes to the connection
@@ -137,8 +152,5 @@ def db_session(db_connection):
     the end therefore undoes everything, guaranteeing identical DB state
     between tests.
     """
-    transaction = db_connection.begin()
-    session = Session(bind=db_connection, join_transaction_mode="rollback_only")
-    yield session
-    session.close()
-    transaction.rollback()
+    with Session(bind=db_connection, join_transaction_mode='rollback_only') as session:
+        yield session

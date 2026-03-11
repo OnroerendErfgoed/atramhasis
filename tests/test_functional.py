@@ -106,8 +106,9 @@ def mock_event_handler_provider_unavailable(event):
         raise ProviderUnavailableException('test msg')
 
 
-@pytest.fixture(scope="class")
-def testapp(db_connection):
+@pytest.fixture(scope='session')
+def testapp():
+    """Session-scoped Pyramid/WebTest app (created once, reused across tests)."""
     app = main({}, **SETTINGS)
     test_app = TestApp(app)
 
@@ -117,16 +118,15 @@ def testapp(db_connection):
             self.add_finished_callback(lambda req: req.db.commit())
 
     test_app.app.request_factory = CommittingRequest
-    registry = test_app.app.registry
-    registry.dbmaker = sessionmaker(
-        bind=db_connection, join_transaction_mode="rollback_only",
-    )
     return test_app
 
 
 @pytest.fixture(autouse=True)
-def reset_testapp(testapp, db_session):
-    """Reset app state and wrap each test in a transaction that rolls back."""
+def reset_testapp(testapp, db_connection, db_transaction):
+    """Bind a fresh per-test connection and transaction, then reset app state."""
+    testapp.app.registry.dbmaker = sessionmaker(
+        bind=db_connection, join_transaction_mode='rollback_only',
+    )
     testapp.reset()
 
 
@@ -138,6 +138,34 @@ def json_value():
 @pytest.fixture
 def json_collection_value():
     return copy.deepcopy(_JSON_COLLECTION_VALUE)
+
+
+class TestTransactionIsolation:
+    """Verify that test-level transaction rollback actually works.
+
+    Each test independently proves isolation: it inserts a row with a unique
+    id, commits, verifies it exists, and then a *second* test checks the same
+    id is absent.  Because both tests use the same id, whichever runs first
+    proves that its committed row was rolled back before the other ran.
+    """
+
+    _ISOLATION_ID = 999
+    _ISOLATION_URI = 'urn:x-test:isolation'
+
+    def _insert_and_verify(self, db_session):
+        db_session.add(
+            ConceptScheme(id=self._ISOLATION_ID, uri=self._ISOLATION_URI)
+        )
+        db_session.commit()
+        assert db_session.get(ConceptScheme, self._ISOLATION_ID) is not None
+
+    def test_isolation_a(self, db_session):
+        assert db_session.get(ConceptScheme, self._ISOLATION_ID) is None
+        self._insert_and_verify(db_session)
+
+    def test_isolation_b(self, db_session):
+        assert db_session.get(ConceptScheme, self._ISOLATION_ID) is None
+        self._insert_and_verify(db_session)
 
 
 class TestHtmlFunctional:
