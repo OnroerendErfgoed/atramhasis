@@ -35,14 +35,12 @@ def db_session_ctx():
         session.close()
 
 
-def reset_and_migrate():
+def reset_and_migrate(engine):
     """Drop all tables and re-apply all alembic migrations from scratch."""
-    engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
     meta = MetaData()
     meta.reflect(bind=engine)
     meta.drop_all(bind=engine)
     command.stamp(ALEMBIC_CONFIG, 'base')
-    engine.dispose()
     command.upgrade(ALEMBIC_CONFIG, 'head')
 
 
@@ -122,18 +120,18 @@ def db_engine():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def db_setup():
+def db_setup(db_engine):
     """Run once at session start: fresh schema + test data."""
-    reset_and_migrate()
+    reset_and_migrate(db_engine)
     fill_db()
 
 
 @pytest.fixture(scope="module")
-def module_db_setup():
+def module_db_setup(db_engine):
     """Provide a temporary empty database for the duration of the module."""
-    reset_and_migrate()
+    reset_and_migrate(db_engine)
     yield
-    reset_and_migrate()
+    reset_and_migrate(db_engine)
     fill_db()
 
 
