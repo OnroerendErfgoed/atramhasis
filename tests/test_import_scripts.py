@@ -22,7 +22,7 @@ test_data_ttl_string_id = os.path.join(TEST_DIR, 'data', 'bluebirds.ttl')
 test_data_json = os.path.join(TEST_DIR, 'data', 'trees.json')
 test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 
-pytestmark = pytest.mark.empty_db
+pytestmark = pytest.mark.usefixtures("module_db_setup")
 
 
 def check_trees(session, conceptscheme_label):

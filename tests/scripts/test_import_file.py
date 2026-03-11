@@ -14,7 +14,7 @@ from atramhasis.data.models import ExpandStrategy
 from atramhasis.data.models import Provider
 from atramhasis.scripts import import_file
 
-pytestmark = pytest.mark.empty_db
+pytestmark = pytest.mark.usefixtures("module_db_setup")
 
 
 class TestValidateFile:

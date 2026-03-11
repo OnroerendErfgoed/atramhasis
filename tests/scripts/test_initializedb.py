@@ -8,7 +8,7 @@ from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
 from atramhasis.scripts import initializedb as script
 
-pytestmark = pytest.mark.empty_db
+pytestmark = pytest.mark.usefixtures("module_db_setup")
 
 
 def _fast_import_provider(provider, session, conceptscheme):

@@ -16,10 +16,6 @@ from tests import ALEMBIC_CONFIG
 from tests import SETTINGS
 
 
-def pytest_configure(config):
-    config.addinivalue_line("markers", "empty_db: reset the database to an empty state")
-
-
 # ---------------------------------------------------------------------------
 # Database bootstrap helpers
 # ---------------------------------------------------------------------------
@@ -132,16 +128,13 @@ def db_setup():
     fill_db()
 
 
-@pytest.fixture(scope="module", autouse=True)
-def module_db_setup(request):
-    """Modules marked with ``empty_db`` get a temporary empty database."""
-    if request.node.get_closest_marker("empty_db"):
-        reset_and_migrate()
-        yield
-        reset_and_migrate()
-        fill_db()
-    else:
-        yield
+@pytest.fixture(scope="module")
+def module_db_setup():
+    """Provide a temporary empty database for the duration of the module."""
+    reset_and_migrate()
+    yield
+    reset_and_migrate()
+    fill_db()
 
 
 @pytest.fixture(scope="class")
