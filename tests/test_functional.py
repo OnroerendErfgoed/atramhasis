@@ -118,7 +118,9 @@ def testapp(db_connection):
 
     test_app.app.request_factory = CommittingRequest
     registry = test_app.app.registry
-    registry.dbmaker = sessionmaker(bind=db_connection)
+    registry.dbmaker = sessionmaker(
+        bind=db_connection, join_transaction_mode="rollback_only",
+    )
     return test_app
 
 

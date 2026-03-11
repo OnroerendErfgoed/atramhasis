@@ -296,7 +296,8 @@ class TestGetHierarchyIdsQueryCount:
         return len(self.query_log)
 
     def _log_query(self, conn, cursor, statement, parameters, context, executemany):
-        self.query_log.append(statement)
+        if not statement.startswith(("SAVEPOINT", "RELEASE SAVEPOINT", "ROLLBACK TO SAVEPOINT")):
+            self.query_log.append(statement)
 
     def test_narrower_concepts_query_count(self, query_counter):
         """

@@ -1,12 +1,10 @@
-import contextlib
-
 import pytest
 from alembic import command
 from skosprovider.providers import DictionaryProvider
 from skosprovider_sqlalchemy.models import ConceptScheme
 from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy import engine_from_config
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 from sqlalchemy.schema import MetaData
 
 from fixtures import data
@@ -20,21 +18,6 @@ from tests import SETTINGS
 # Database bootstrap helpers
 # ---------------------------------------------------------------------------
 
-@contextlib.contextmanager
-def db_session_ctx():
-    engine = engine_from_config(SETTINGS, prefix='sqlalchemy.')
-    session_maker = sessionmaker(bind=engine)
-    session = session_maker()
-    try:
-        yield session
-        session.commit()
-    except Exception:
-        session.rollback()
-        raise
-    finally:
-        session.close()
-
-
 def reset_and_migrate(engine):
     """Drop all tables and re-apply all alembic migrations from scratch."""
     meta = MetaData()
@@ -44,9 +27,9 @@ def reset_and_migrate(engine):
     command.upgrade(ALEMBIC_CONFIG, 'head')
 
 
-def fill_db():
+def fill_db(engine):
     """Fill the database with standard test fixtures."""
-    with db_session_ctx() as session:
+    with Session(engine) as session:
         import_provider(
             trees, session,
             ConceptScheme(id=1, uri='urn:x-skosprovider:trees'),
@@ -105,6 +88,7 @@ def fill_db():
             session.add(
                 ConceptScheme(id=scheme_id, uri=f'urn:dummy-{scheme_id}')
             )
+        session.commit()
 
 
 # ---------------------------------------------------------------------------
@@ -123,7 +107,7 @@ def db_engine():
 def db_setup(db_engine):
     """Run once at session start: fresh schema + test data."""
     reset_and_migrate(db_engine)
-    fill_db()
+    fill_db(db_engine)
 
 
 @pytest.fixture(scope="module")
@@ -132,7 +116,7 @@ def module_db_setup(db_engine):
     reset_and_migrate(db_engine)
     yield
     reset_and_migrate(db_engine)
-    fill_db()
+    fill_db(db_engine)
 
 
 @pytest.fixture(scope="class")
@@ -145,9 +129,16 @@ def db_connection(db_engine):
 
 @pytest.fixture()
 def db_session(db_connection):
-    """Per-test database session wrapped in a transaction that is rolled back."""
+    """Per-test database session wrapped in a transaction that is rolled back.
+
+    Uses ``join_transaction_mode="rollback_only"`` so that any
+    ``session.commit()`` executed by code under test flushes to the connection
+    but does **not** commit the outer connection transaction.  The rollback at
+    the end therefore undoes everything, guaranteeing identical DB state
+    between tests.
+    """
     transaction = db_connection.begin()
-    session = sessionmaker(bind=db_connection)()
+    session = Session(bind=db_connection, join_transaction_mode="rollback_only")
     yield session
     session.close()
     transaction.rollback()
