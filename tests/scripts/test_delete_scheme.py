@@ -1,3 +1,4 @@
+import pytest
 from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import ConceptScheme
@@ -11,10 +12,12 @@ from skosprovider_sqlalchemy.models import Visitation
 from sqlalchemy import select
 
 from atramhasis.scripts import delete_scheme
-from tests import DbTest
 
 
-class DeleteSchemeTest(DbTest):
+class TestDeleteScheme:
+    @pytest.fixture(autouse=True)
+    def setup(self, db_session):
+        self.session = db_session
 
     def test_delete(self):
         query = select(ConceptScheme.id)

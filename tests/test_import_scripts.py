@@ -1,21 +1,18 @@
 import os
 import sys
 import tempfile
-import unittest
-from unittest.mock import patch
 from unittest.mock import MagicMock
+from unittest.mock import patch
 
+import pytest
 from skosprovider.skos import Concept
 from skosprovider.skos import Note
 from skosprovider.utils import dict_dumper
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy import select
 
-import pytest
-
 from atramhasis.data.models import Provider
 from atramhasis.scripts import import_file
-from tests import DbTest
 from tests import SETTINGS
 from tests import TEST_DIR
 
@@ -28,9 +25,10 @@ test_data_csv = os.path.join(TEST_DIR, 'data', 'menu.csv')
 pytestmark = pytest.mark.empty_db
 
 
-class ImportTests(DbTest):
-    def setUp(self):
-        super().setUp()
+class TestImport:
+    @pytest.fixture(autouse=True)
+    def setup(self, db_session):
+        self.session = db_session
         # Patch the session that scripts will use to the session of the tests.
         # This makes everything rollback after every test.
         db_session_context_manager = MagicMock()
@@ -39,10 +37,8 @@ class ImportTests(DbTest):
             import_file, 'db_session', db_session_context_manager
         )
         self.patcher.start()
-
-    def tearDown(self):
+        yield
         self.patcher.stop()
-        super().tearDown()
 
     def _check_trees(self, conceptscheme_label):
         sql_prov = SQLAlchemyProvider(
@@ -50,34 +46,28 @@ class ImportTests(DbTest):
         )
         dump = dict_dumper(sql_prov)
 
-        self.assertEqual(conceptscheme_label, sql_prov.concept_scheme.label('en').label)
+        assert sql_prov.concept_scheme.label('en').label == conceptscheme_label
         obj_1 = [item for item in dump if item['uri'] == 'http://id.trees.org/2'][0]
-        self.assertEqual(obj_1['broader'], [])
-        self.assertEqual(obj_1['id'], '2')
-        self.assertEqual(obj_1['member_of'], ['3'])
-        self.assertEqual(obj_1['narrower'], [])
+        assert obj_1['broader'] == []
+        assert obj_1['id'] == '2'
+        assert obj_1['member_of'] == ['3']
+        assert obj_1['narrower'] == []
         label_en = [label for label in obj_1['labels'] if label['language'] == 'en'][0]
-        self.assertDictEqual(
-            label_en, {'label': 'The Chestnut', 'language': 'en', 'type': 'prefLabel'}
-        )
+        assert label_en == {'label': 'The Chestnut', 'language': 'en', 'type': 'prefLabel'}
         label_nl = [label for label in obj_1['labels'] if label['language'] == 'nl'][0]
-        self.assertDictEqual(
-            label_nl,
-            {'label': 'De Paardekastanje', 'language': 'nl', 'type': 'altLabel'},
-        )
+        assert label_nl == {
+            'label': 'De Paardekastanje', 'language': 'nl', 'type': 'altLabel'
+        }
         label_fr = [label for label in obj_1['labels'] if label['language'] == 'fr'][0]
-        self.assertDictEqual(
-            label_fr, {'label': 'la châtaigne', 'language': 'fr', 'type': 'altLabel'}
-        )
-        self.assertDictEqual(
-            obj_1['notes'][0],
-            {
-                'language': 'en',
-                'note': 'A different type of tree.',
-                'type': 'definition',
-                'markup': None,
-            },
-        )
+        assert label_fr == {
+            'label': 'la châtaigne', 'language': 'fr', 'type': 'altLabel'
+        }
+        assert obj_1['notes'][0] == {
+            'language': 'en',
+            'note': 'A different type of tree.',
+            'type': 'definition',
+            'markup': None,
+        }
 
     def _check_menu(self, uri_pattern=None):
         if not uri_pattern:
@@ -85,32 +75,32 @@ class ImportTests(DbTest):
         sql_prov = SQLAlchemyProvider(
             {'id': 'MENU', 'conceptscheme_id': 1}, self.session
         )
-        self.assertEqual(11, len(sql_prov.get_all()))
+        assert len(sql_prov.get_all()) == 11
         eb = sql_prov.get_by_id(1)
-        self.assertIsInstance(eb, Concept)
-        self.assertEqual('1', eb.id)
-        self.assertEqual(uri_pattern % '1', eb.uri)
-        self.assertEqual('Egg and Bacon', eb.label().label)
-        self.assertEqual('prefLabel', eb.label().type)
-        self.assertEqual([], eb.notes)
+        assert isinstance(eb, Concept)
+        assert eb.id == '1'
+        assert eb.uri == uri_pattern % '1'
+        assert eb.label().label == 'Egg and Bacon'
+        assert eb.label().type == 'prefLabel'
+        assert eb.notes == []
         eb = sql_prov.get_by_uri(uri_pattern % '3')
-        self.assertIsInstance(eb, Concept)
-        self.assertEqual('3', eb.id)
-        self.assertEqual(uri_pattern % '3', eb.uri)
+        assert isinstance(eb, Concept)
+        assert eb.id == '3'
+        assert eb.uri == uri_pattern % '3'
         spam = sql_prov.find({'label': 'Spam'})
-        self.assertEqual(8, len(spam))
+        assert len(spam) == 8
         eb = sql_prov.get_by_id(11)
-        self.assertIsInstance(eb, Concept)
-        self.assertEqual('11', eb.id)
-        self.assertEqual('Lobster Thermidor', eb.label().label)
-        self.assertIsInstance(eb.notes[0], Note)
-        self.assertIn('Mornay', eb.notes[0].note)
-        self.assertEqual('note', eb.notes[0].type)
+        assert isinstance(eb, Concept)
+        assert eb.id == '11'
+        assert eb.label().label == 'Lobster Thermidor'
+        assert isinstance(eb.notes[0], Note)
+        assert 'Mornay' in eb.notes[0].note
+        assert eb.notes[0].type == 'note'
         provider = self.session.execute(select(Provider)).scalar_one()
-        self.assertEqual(provider.meta['atramhasis.id_generation_strategy'], 'NUMERIC')
-        self.assertEqual(provider.uri_pattern, uri_pattern)
-        self.assertEqual(provider.expand_strategy.value, 'recurse')
-        self.assertEqual(provider.id, str(provider.conceptscheme_id))
+        assert provider.meta['atramhasis.id_generation_strategy'] == 'NUMERIC'
+        assert provider.uri_pattern == uri_pattern
+        assert provider.expand_strategy.value == 'recurse'
+        assert provider.id == str(provider.conceptscheme_id)
 
     def _check_parrots(self):
         sql_prov = SQLAlchemyProvider(
@@ -223,13 +213,13 @@ class ImportTests(DbTest):
         ]
         import_file.main(sys.argv)
         provider = self.session.execute(select(Provider)).scalar_one()
-        self.assertEqual(provider.meta['atramhasis.id_generation_strategy'], 'GUID')
-        self.assertEqual(provider.uri_pattern, 'urn:x-skosprovider:test:%s')
-        self.assertEqual(provider.expand_strategy.value, 'recurse')
-        self.assertEqual(provider.id, 'MENU')
+        assert provider.meta['atramhasis.id_generation_strategy'] == 'GUID'
+        assert provider.uri_pattern == 'urn:x-skosprovider:test:%s'
+        assert provider.expand_strategy.value == 'recurse'
+        assert provider.id == 'MENU'
 
 
-class ValidateUriPatternTests(unittest.TestCase):
+class TestValidateUriPattern:
     """Test cases for the validate_uri_pattern function"""
 
     def test_validate_uri_pattern_valid(self):
@@ -238,40 +228,40 @@ class ValidateUriPatternTests(unittest.TestCase):
         try:
             import_file.validate_uri_pattern('https://example.org/%s')
         except SystemExit:
-            self.fail(
+            pytest.fail(
                 'validate_uri_pattern() raised SystemExit unexpectedly for valid pattern'
             )
 
     def test_validate_uri_pattern_none(self):
         """Test that None URI pattern raises SystemExit"""
-        with self.assertRaises(SystemExit) as cm:
+        with pytest.raises(SystemExit) as cm:
             import_file.validate_uri_pattern(None)  # type: ignore
-        self.assertEqual(cm.exception.code, 1)
+        assert cm.value.code == 1
 
     def test_validate_uri_pattern_empty_string(self):
         """Test that empty string URI pattern raises SystemExit"""
-        with self.assertRaises(SystemExit) as cm:
+        with pytest.raises(SystemExit) as cm:
             import_file.validate_uri_pattern('')
-        self.assertEqual(cm.exception.code, 1)
+        assert cm.value.code == 1
 
     def test_validate_uri_pattern_no_placeholder(self):
         """Test that URI pattern without %s placeholder raises SystemExit"""
-        with self.assertRaises(SystemExit) as cm:
+        with pytest.raises(SystemExit) as cm:
             import_file.validate_uri_pattern('https://example.org/concept')
-        self.assertEqual(cm.exception.code, 1)
+        assert cm.value.code == 1
 
     def test_validate_uri_pattern_multiple_placeholders(self):
         """Test that URI pattern with multiple %s placeholders raises SystemExit"""
-        with self.assertRaises(SystemExit) as cm:
+        with pytest.raises(SystemExit) as cm:
             import_file.validate_uri_pattern('https://example.org/%s/concept/%s')
-        self.assertEqual(cm.exception.code, 1)
+        assert cm.value.code == 1
 
     def test_validate_uri_pattern_valid_complex(self):
         """Test that a more complex valid URI pattern passes validation"""
         try:
             import_file.validate_uri_pattern('urn:x-skosprovider:trees:%s')
         except SystemExit:
-            self.fail(
+            pytest.fail(
                 'validate_uri_pattern() raised SystemExit unexpectedly for valid complex pattern'
             )
 
@@ -280,12 +270,12 @@ class ValidateUriPatternTests(unittest.TestCase):
         try:
             import_file.validate_uri_pattern('https://example.org/v1/concepts/%s')
         except SystemExit:
-            self.fail(
+            pytest.fail(
                 'validate_uri_pattern() raised SystemExit unexpectedly for valid pattern with numbers'
             )
 
 
-class ValidateConnectionStringTests(unittest.TestCase):
+class TestValidateConnectionString:
     """Test cases for the validate_connection_string function"""
 
     def test_validate_connection_string_sqlite_exists(self):
@@ -296,7 +286,7 @@ class ValidateConnectionStringTests(unittest.TestCase):
         try:
             connection_string = f'sqlite:///{temp_path}'
             result = import_file.validate_connection_string(connection_string)
-            self.assertTrue(result)
+            assert result
         finally:
             os.unlink(temp_path)
 
@@ -306,39 +296,40 @@ class ValidateConnectionStringTests(unittest.TestCase):
         connection_string = f'sqlite:///{non_existent_path}'
 
         result = import_file.validate_connection_string(connection_string)
-        self.assertFalse(result)
+        assert not result
 
     def test_validate_connection_string_postgresql_valid(self):
         """Test that valid PostgreSQL connection string returns True"""
         connection_string = 'postgresql://user:pass@localhost:5432/testdb'
         result = import_file.validate_connection_string(connection_string)
-        self.assertTrue(result)
+        assert result
 
     def test_validate_connection_string_postgresql_invalid(self):
         """Test that invalid PostgreSQL connection string returns False"""
         connection_string = 'postgresql://incomplete'
         result = import_file.validate_connection_string(connection_string)
-        self.assertFalse(result)
+        assert not result
 
     def test_validate_connection_string_unsupported_driver(self):
         """Test that unsupported database driver returns False"""
         connection_string = 'mysql://user:pass@localhost:3306/testdb'
         result = import_file.validate_connection_string(connection_string)
-        self.assertFalse(result)
+        assert not result
 
     def test_validate_connection_string_invalid_format(self):
         """Test that completely invalid connection string raises ArgumentError"""
         connection_string = 'not-a-valid-connection-string'
-        with self.assertRaises(
+        with pytest.raises(
             Exception
         ):  # SQLAlchemy raises ArgumentError which inherits from Exception
             import_file.validate_connection_string(connection_string)
 
 
-class ParseArgvForImportTests(unittest.TestCase):
+class TestParseArgvForImport:
     """Test cases for the parse_argv_for_import function"""
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def setup(self):
         # Create a temporary file for testing
         with tempfile.NamedTemporaryFile(suffix='.csv', delete=False) as temp_file:
             temp_file.write(b'id,label\n1,test\n')
@@ -348,7 +339,8 @@ class ParseArgvForImportTests(unittest.TestCase):
         with tempfile.NamedTemporaryFile(suffix='.sqlite', delete=False) as temp_db:
             self.temp_db_file = temp_db.name
 
-    def tearDown(self):
+        yield
+
         # Clean up temporary files
         if os.path.exists(self.temp_input_file):
             os.unlink(self.temp_input_file)
@@ -370,7 +362,7 @@ class ParseArgvForImportTests(unittest.TestCase):
         # Mock sys.argv to control argparse
         with patch('sys.argv', argv):
             with (
-                self.assertRaises(SystemExit) as cm,
+                pytest.raises(SystemExit) as cm,
                 patch('builtins.print') as mock_print,
             ):
                 import_file.parse_argv_for_import(argv)
@@ -381,4 +373,4 @@ class ParseArgvForImportTests(unittest.TestCase):
                 'used when --create-provider is set to True'
             )
             # The exit code should be 1 (our custom error)
-            self.assertEqual(cm.exception.code, 1)
+            assert cm.value.code == 1

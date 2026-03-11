@@ -1,6 +1,6 @@
-import unittest
-import unittest.mock
+from unittest.mock import MagicMock
 
+import pytest
 from pyramid import testing
 from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider.exceptions import ProviderUnavailableException
@@ -44,8 +44,9 @@ species = {
 }
 
 
-class TestFromThing(unittest.TestCase):
-    def setUp(self):
+class TestFromThing:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         conceptscheme = ConceptScheme()
         conceptscheme.uri = 'urn:x-atramhasis-demo'
         conceptscheme.id = 1
@@ -101,18 +102,18 @@ class TestFromThing(unittest.TestCase):
 
     def test_thing_to_concept(self):
         skosconcept = from_thing(self.concept)
-        self.assertTrue(isinstance(skosconcept, SkosConcept))
-        self.assertEqual(skosconcept.id, 101)
-        self.assertEqual(len(skosconcept.labels), 3)
-        self.assertEqual(len(skosconcept.notes), 2)
-        self.assertEqual(len(skosconcept.sources), 1)
-        self.assertEqual(skosconcept.uri, 'urn:x-atramhasis-demo:TREES:101')
+        assert isinstance(skosconcept, SkosConcept)
+        assert skosconcept.id == 101
+        assert len(skosconcept.labels) == 3
+        assert len(skosconcept.notes) == 2
+        assert len(skosconcept.sources) == 1
+        assert skosconcept.uri == 'urn:x-atramhasis-demo:TREES:101'
 
     def test_thing_to_collection(self):
         skoscollection = from_thing(self.collection)
-        self.assertTrue(isinstance(skoscollection, SkosCollection))
-        self.assertEqual(skoscollection.id, 102)
-        self.assertEqual(skoscollection.uri, 'urn:x-atramhasis-demo:TREES:102')
+        assert isinstance(skoscollection, SkosCollection)
+        assert skoscollection.id == 102
+        assert skoscollection.uri == 'urn:x-atramhasis-demo:TREES:102'
 
 
 class DummyViewClassForTest:
@@ -128,8 +129,9 @@ class DummyViewClassForTest:
         self.dummy = dummy
 
 
-class TestInternalProviderOnly(unittest.TestCase):
-    def setUp(self):
+class TestInternalProviderOnly:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.dummy = DummyViewClassForTest()
 
     def test_all_providers(self):
@@ -137,38 +139,40 @@ class TestInternalProviderOnly(unittest.TestCase):
             list=[species], metadata={'id': 'Test'}
         )
         self.dummy.all_providers('ok')
-        self.assertEqual(self.dummy.dummy, 'ok')
+        assert self.dummy.dummy == 'ok'
 
     def test_internal_providers(self):
         self.dummy.provider = SQLAlchemyProvider(
             metadata={'id': 'Test', 'conceptscheme_id': 1}, session=None
         )
         self.dummy.internal_providers('ok')
-        self.assertEqual(self.dummy.dummy, 'ok')
+        assert self.dummy.dummy == 'ok'
 
     def test_external_providers(self):
         self.dummy.provider = SQLAlchemyProvider(
             metadata={'id': 'Test', 'conceptscheme_id': 1, 'subject': ['external']},
             session=None,
         )
-        self.assertRaises(HTTPMethodNotAllowed, self.dummy.internal_providers, 'ok')
-        self.assertIsNone(self.dummy.dummy)
+        with pytest.raises(HTTPMethodNotAllowed):
+            self.dummy.internal_providers('ok')
+        assert self.dummy.dummy is None
 
     def test_no_sqlalchemyprovider(self):
         self.dummy.provider = DictionaryProvider(
             list=[species], metadata={'id': 'Test'}
         )
-        self.assertRaises(HTTPMethodNotAllowed, self.dummy.internal_providers, 'ok')
-        self.assertIsNone(self.dummy.dummy)
+        with pytest.raises(HTTPMethodNotAllowed):
+            self.dummy.internal_providers('ok')
+        assert self.dummy.dummy is None
 
 
-class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
-    def setUp(self):
+class TestUpdateLastVisitedConceptsProviderOnly:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
         self.request.session = {}
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_update_last_visited_concepts(self):
@@ -184,7 +188,7 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
         update_last_visited_concepts(
             self.request, {'label': c.label(), 'url': f'https://test.test/{2}'}
         )
-        self.assertEqual(2, len(self.request.session['last_visited']))
+        assert 2 == len(self.request.session['last_visited'])
 
     def test_update_last_visited_concepts_max(self):
         for concept_id in range(50):
@@ -195,9 +199,9 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
                 self.request,
                 {'label': c.label(), 'url': f'https://test.test/{concept_id}'},
             )
-        self.assertEqual(4, len(self.request.session['last_visited']))
+        assert 4 == len(self.request.session['last_visited'])
         last = self.request.session['last_visited'].pop()
-        self.assertEqual('https://test.test/49', last['url'])
+        assert 'https://test.test/49' == last['url']
 
     def test_no_double_last_visited_concepts(self):
         c = Concept()
@@ -215,7 +219,7 @@ class TestUpdateLastVisitedConceptsProviderOnly(unittest.TestCase):
         update_last_visited_concepts(
             self.request, {'label': c.label(), 'url': f'https://test.test/{2}'}
         )
-        self.assertEqual(2, len(self.request.session['last_visited']))
+        assert 2 == len(self.request.session['last_visited'])
 
 
 class DummyConcept:
@@ -293,7 +297,7 @@ def test_label_sort_with_language():
     ]
 
 
-class TestProviderIsExternal(unittest.TestCase):
+class TestProviderIsExternal:
     def test_provider_is_external_with_external_subject(self):
         provider = MockProvider({'subject': ['external', 'other']})
         assert provider_is_external(provider) is True
@@ -318,19 +322,19 @@ class TestProviderIsExternal(unittest.TestCase):
         assert provider_is_external(provider) is False
 
 
-class TestSafeGetByUri(unittest.TestCase):
+class TestSafeGetByUri:
     def test_returns_result_on_success(self):
-        mock_registry = unittest.mock.MagicMock()
+        mock_registry = MagicMock()
         mock_registry.get_by_uri.return_value = 'concept'
         result = safe_get_by_uri(mock_registry, 'urn:test')
-        self.assertEqual(result, 'concept')
+        assert result == 'concept'
         mock_registry.get_by_uri.assert_called_once_with('urn:test')
 
     def test_returns_none_on_provider_unavailable(self):
-        mock_registry = unittest.mock.MagicMock()
+        mock_registry = MagicMock()
         mock_registry.get_by_uri.side_effect = ProviderUnavailableException('down')
         result = safe_get_by_uri(mock_registry, 'urn:test')
-        self.assertIsNone(result)
+        assert result is None
 
 
 class MockProvider:

@@ -1,8 +1,8 @@
 import logging
-import unittest
 from unittest.mock import MagicMock
 from unittest.mock import Mock
 
+import pytest
 from pyramid.response import Response
 from testfixtures import LogCapture
 
@@ -37,22 +37,20 @@ class DummyParent:
         return Response(content_type='application/rdf+xml')
 
 
-class AuditTests(unittest.TestCase):
-    def setUp(self):
+class TestAudit:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.audit_manager = RecordingManager()
         self.dummy_parent = DummyParent()
         self.dummy_parent.request.data_managers = {
             'audit_manager': self.audit_manager
         }
 
-    def tearDown(self):
-        pass
-
     def _check(self, nr, origin, type_id_list):
-        self.assertEqual(nr, len(self.audit_manager.saved_objects))
-        self.assertEqual(origin, self.audit_manager.saved_objects[nr - 1].origin)
+        assert nr == len(self.audit_manager.saved_objects)
+        assert origin == self.audit_manager.saved_objects[nr - 1].origin
         for type_id in type_id_list:
-            self.assertEqual('1', getattr(self.audit_manager.saved_objects[nr - 1], type_id))
+            assert '1' == getattr(self.audit_manager.saved_objects[nr - 1], type_id)
 
     def test_audit_rest(self):
         self.dummy_parent.request.url = "https://host/conceptschemes/STYLES"
@@ -108,10 +106,10 @@ class AuditTests(unittest.TestCase):
         self.dummy_parent.request.matchdict = {'scheme_id': '1'}
         self.dummy_parent.request.skos_registry.get_provider = Mock(return_value=cs_mock)
         self.dummy_parent.dummy()
-        self.assertEqual(0, len(self.audit_manager.saved_objects))
+        assert 0 == len(self.audit_manager.saved_objects)
         self.dummy_parent.request.matchdict = {'scheme_id': '1', 'c_id': '1'}
         self.dummy_parent.dummy()
-        self.assertEqual(0, len(self.audit_manager.saved_objects))
+        assert 0 == len(self.audit_manager.saved_objects)
 
     def test_invalid_use(self):
         with LogCapture() as logs:
@@ -119,8 +117,8 @@ class AuditTests(unittest.TestCase):
             self.dummy_parent.request.accept = ['application/json']
             self.dummy_parent.request.matchdict = {'invalid_parameter_id': '1'}
             self.dummy_parent.dummy()
-        self.assertIn('Misuse of the audit decorator. The url must at least contain a {scheme_id} parameter', str(logs))
+        assert 'Misuse of the audit decorator. The url must at least contain a {scheme_id} parameter' in str(logs)
 
     def test_origin_from_response_None(self):
         res = Response(content_type='application/octet-stream')
-        self.assertIsNone(_origin_from_response(res))
+        assert _origin_from_response(res) is None

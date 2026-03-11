@@ -1,15 +1,16 @@
 import os
+import sys
 import tempfile
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
+import pytest
 from rdflib import Graph
 from rdflib import RDF
 from rdflib import SKOS
 from rdflib.term import URIRef
 
 from atramhasis.scripts import dump_rdf
-from tests import DbTest
 
 
 def _create_mock_provider(pid, subject=None, uri='urn:x-test:scheme'):
@@ -38,7 +39,11 @@ def _create_simple_graph(scheme_uri='urn:x-test:scheme'):
     return graph
 
 
-class TestDumpRdfMain(DbTest):
+class TestDumpRdfMain:
+    @pytest.fixture(autouse=True)
+    def setup(self, db_session):
+        self.session = db_session
+
     @patch('atramhasis.scripts.dump_rdf.utils.rdf_dumper')
     @patch('atramhasis.scripts.dump_rdf.setup_logging')
     @patch('atramhasis.scripts.dump_rdf.bootstrap')
@@ -63,7 +68,6 @@ class TestDumpRdfMain(DbTest):
             }
             mock_dumper.return_value = _create_simple_graph('urn:x-test:trees')
 
-            import sys
             with patch.object(sys, 'argv', ['dump_rdf', 'test.ini']):
                 dump_rdf.main()
 
@@ -99,7 +103,6 @@ class TestDumpRdfMain(DbTest):
                 'closer': MagicMock(),
             }
 
-            import sys
             with patch.object(sys, 'argv', ['dump_rdf', 'test.ini']):
                 dump_rdf.main()
 
@@ -108,7 +111,6 @@ class TestDumpRdfMain(DbTest):
             assert len(files) == 0
 
     def test_no_args_returns_2(self):
-        import sys
         with patch.object(sys, 'argv', ['dump_rdf']):
             result = dump_rdf.main()
         assert result == 2
@@ -126,7 +128,6 @@ class TestDumpRdfMain(DbTest):
             'closer': MagicMock(),
         }
 
-        import sys
         with patch.object(sys, 'argv', ['dump_rdf', 'test.ini']):
             result = dump_rdf.main()
         assert result == 2

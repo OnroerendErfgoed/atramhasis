@@ -1,5 +1,4 @@
 import os
-import unittest
 from unittest import mock
 from unittest.mock import Mock
 
@@ -127,8 +126,9 @@ class DummyAuditManager:
         return audit
 
 
-class TestAtramhasisView(unittest.TestCase):
-    def setUp(self):
+class TestAtramhasisView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
         self.request.data_managers = {
@@ -136,17 +136,17 @@ class TestAtramhasisView(unittest.TestCase):
             'conceptscheme_manager': None,
             'audit_manager': None,
         }
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_no_registry(self):
-        with self.assertRaises(SkosRegistryNotFoundException):
+        with pytest.raises(SkosRegistryNotFoundException):
             AtramhasisView(self.request)
 
 
-class TestHomeView(unittest.TestCase):
-    def setUp(self):
+class TestHomeView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
@@ -157,21 +157,21 @@ class TestHomeView(unittest.TestCase):
             'conceptscheme_manager': None,
             'audit_manager': None,
         }
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_passing_view(self):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.home_view()
-        self.assertIsNotNone(info['conceptschemes'][0])
-        self.assertEqual(info['conceptschemes'][0]['id'], 'TREES')
-        self.assertEqual(1, len(info['conceptschemes']))
+        assert info['conceptschemes'][0] is not None
+        assert info['conceptschemes'][0]['id'] == 'TREES'
+        assert 1 == len(info['conceptschemes'])
 
 
-class TestFavicoView(unittest.TestCase):
-    def setUp(self):
+class TestFavicoView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
@@ -181,21 +181,21 @@ class TestFavicoView(unittest.TestCase):
             'conceptscheme_manager': None,
             'audit_manager': None,
         }
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_passing_view(self):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         response = atramhasisview.favicon_view()
-        self.assertEqual(response.status_int, 200)
-        self.assertIn('image/x-icon', response.headers['Content-Type'])
-        self.assertIsNotNone(response.body)
+        assert response.status_int == 200
+        assert 'image/x-icon' in response.headers['Content-Type']
+        assert response.body is not None
 
 
-class TestConceptSchemeView(unittest.TestCase):
-    def setUp(self):
+class TestConceptSchemeView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
@@ -207,31 +207,30 @@ class TestConceptSchemeView(unittest.TestCase):
             'audit_manager': DummyAuditManager(),
         }
         self.request.skos_registry = self.regis
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_conceptschemes_view(self):
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.conceptschemes_view()
-        self.assertIn('conceptschemes', res)
-        self.assertEqual(len(res['conceptschemes']), 1)
+        assert 'conceptschemes' in res
+        assert len(res['conceptschemes']) == 1
         cs = res['conceptschemes'][0]
-        self.assertIn('id', cs)
-        self.assertIn('conceptscheme', cs)
+        assert 'id' in cs
+        assert 'conceptscheme' in cs
 
     def test_conceptscheme_view(self):
         self.request.matchdict['scheme_id'] = 'TREES'
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.conceptscheme_view()
-        self.assertIsNotNone(res)
-        self.assertIsNotNone(res['conceptscheme'])
-        self.assertEqual(res['conceptscheme']['title'], 'TREES')
-        self.assertEqual(res['conceptscheme']['scheme_id'], 'TREES')
-        self.assertEqual(res['conceptscheme']['uri'], 'urn:x-skosprovider:trees')
-        self.assertIsNotNone(res['conceptscheme']['labels'])
-        self.assertIsNotNone(res['conceptscheme']['notes'])
-        self.assertIsNotNone(res['conceptscheme']['top_concepts'])
+        assert res is not None
+        assert res['conceptscheme'] is not None
+        assert res['conceptscheme']['title'] == 'TREES'
+        assert res['conceptscheme']['scheme_id'] == 'TREES'
+        assert res['conceptscheme']['uri'] == 'urn:x-skosprovider:trees'
+        assert res['conceptscheme']['labels'] is not None
+        assert res['conceptscheme']['notes'] is not None
+        assert res['conceptscheme']['top_concepts'] is not None
 
     def test_conceptscheme_view_language(self):
         self.request.matchdict['scheme_id'] = 'TREES'
@@ -241,12 +240,13 @@ class TestConceptSchemeView(unittest.TestCase):
 
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.conceptscheme_view()
-        self.assertIsNotNone(res)
-        self.assertEqual(res['locale'], 'nl')
+        assert res is not None
+        assert res['locale'] == 'nl'
 
 
-class TestConceptView(unittest.TestCase):
-    def setUp(self):
+class TestConceptView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.config.add_route(
             'skosprovider.c',
@@ -263,8 +263,7 @@ class TestConceptView(unittest.TestCase):
             'conceptscheme_manager': DummyConceptschemeManager(),
             'audit_manager': DummyAuditManager(),
         }
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_passing_view(self):
@@ -274,9 +273,9 @@ class TestConceptView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
-        self.assertIsNotNone(info['concept'])
-        self.assertEqual(info['conceptType'], 'Concept')
-        self.assertEqual(info['scheme_id'], 'TREES')
+        assert info['concept'] is not None
+        assert info['conceptType'] == 'Concept'
+        assert info['scheme_id'] == 'TREES'
 
     def test_passing_view_with_languague(self):
         request = self.request
@@ -288,8 +287,8 @@ class TestConceptView(unittest.TestCase):
         }
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
-        self.assertIsNotNone(info['concept'])
-        self.assertEqual(info['locale'], 'nl')
+        assert info['concept'] is not None
+        assert info['locale'] == 'nl'
 
     def test_passing_collection_view(self):
         request = self.request
@@ -298,9 +297,9 @@ class TestConceptView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
-        self.assertIsNotNone(info['concept'])
-        self.assertEqual(info['conceptType'], 'Collection')
-        self.assertEqual(info['scheme_id'], 'TREES')
+        assert info['concept'] is not None
+        assert info['conceptType'] == 'Collection'
+        assert info['scheme_id'] == 'TREES'
 
     def test_provider_not_found(self):
         request = self.request
@@ -308,7 +307,7 @@ class TestConceptView(unittest.TestCase):
         request.matchdict['c_id'] = '1'
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
-        with self.assertRaises(ConceptSchemeNotFoundException):
+        with pytest.raises(ConceptSchemeNotFoundException):
             atramhasisview.concept_view()
 
     def test_not_found(self):
@@ -317,7 +316,7 @@ class TestConceptView(unittest.TestCase):
         request.matchdict['c_id'] = '666'
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
-        with self.assertRaises(ConceptNotFoundException):
+        with pytest.raises(ConceptNotFoundException):
             atramhasisview.concept_view()
 
     def test_no_type(self):
@@ -327,11 +326,12 @@ class TestConceptView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasisview = AtramhasisView(request)
         info = atramhasisview.concept_view()
-        self.assertEqual(info.status_int, 500)
+        assert info.status_int == 500
 
 
-class TestSearchResultView(unittest.TestCase):
-    def setUp(self):
+class TestSearchResultView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
@@ -341,8 +341,7 @@ class TestSearchResultView(unittest.TestCase):
             'conceptscheme_manager': None,
             'audit_manager': None,
         }
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_find_by_label(self):
@@ -353,11 +352,11 @@ class TestSearchResultView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.search_result()
-        self.assertIsNotNone(info['concepts'])
+        assert info['concepts'] is not None
         concept = info['concepts'][0]
-        self.assertIsNotNone(concept)
-        self.assertEqual(concept['label'], 'De Paardekastanje')
-        self.assertEqual(info['scheme_id'], 'TREES')
+        assert concept is not None
+        assert concept['label'] == 'De Paardekastanje'
+        assert info['scheme_id'] == 'TREES'
 
     def test_find_by_concept(self):
         self.request.matchdict['scheme_id'] = 'TREES'
@@ -367,10 +366,10 @@ class TestSearchResultView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.search_result()
-        self.assertIsNotNone(info['concepts'])
+        assert info['concepts'] is not None
         concept = info['concepts'][0]
-        self.assertIsNotNone(concept)
-        self.assertEqual(info['scheme_id'], 'TREES')
+        assert concept is not None
+        assert info['scheme_id'] == 'TREES'
 
     def test_no_querystring(self):
         self.request.matchdict['scheme_id'] = 'TREES'
@@ -378,8 +377,8 @@ class TestSearchResultView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.search_result()
-        self.assertIsNotNone(info['concepts'])
-        self.assertEqual(len(info['concepts']), 3)
+        assert info['concepts'] is not None
+        assert len(info['concepts']) == 3
 
     def test_no_schema(self):
         self.request.matchdict['scheme_id'] = 'GG'
@@ -387,11 +386,12 @@ class TestSearchResultView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         info = atramhasisview.search_result()
-        self.assertEqual(info.status_int, 404)
+        assert info.status_int == 404
 
 
-class TestCsvView(unittest.TestCase):
-    def setUp(self):
+class TestCsvView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
         self.request.accept = '*/*'
@@ -403,8 +403,7 @@ class TestCsvView(unittest.TestCase):
             'conceptscheme_manager': DummyConceptschemeManager(),
             'audit_manager': DummyAuditManager(),
         }
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_csv(self):
@@ -412,10 +411,10 @@ class TestCsvView(unittest.TestCase):
         self.request.params = MultiDict()
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.results_csv()
-        self.assertEqual(res['filename'], 'atramhasis_export')
-        self.assertIsInstance(res['header'], list)
-        self.assertIsInstance(res['rows'], list)
-        self.assertEqual(2, len(res['rows']))
+        assert res['filename'] == 'atramhasis_export'
+        assert isinstance(res['header'], list)
+        assert isinstance(res['rows'], list)
+        assert 2 == len(res['rows'])
 
     def test_csv_label(self):
         self.request.matchdict['scheme_id'] = 'TREES'
@@ -423,10 +422,10 @@ class TestCsvView(unittest.TestCase):
         self.request.params.add('label', 'De Paardekastanje')
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.results_csv()
-        self.assertEqual(res['filename'], 'atramhasis_export')
-        self.assertIsInstance(res['header'], list)
-        self.assertIsInstance(res['rows'], list)
-        self.assertEqual(2, len(res['rows']))
+        assert res['filename'] == 'atramhasis_export'
+        assert isinstance(res['header'], list)
+        assert isinstance(res['rows'], list)
+        assert 2 == len(res['rows'])
 
     def test_csv_type(self):
         self.request.matchdict['scheme_id'] = 'TREES'
@@ -434,14 +433,15 @@ class TestCsvView(unittest.TestCase):
         self.request.params.add('type', 'concept')
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.results_csv()
-        self.assertEqual(res['filename'], 'atramhasis_export')
-        self.assertIsInstance(res['header'], list)
-        self.assertIsInstance(res['rows'], list)
-        self.assertEqual(2, len(res['rows']))
+        assert res['filename'] == 'atramhasis_export'
+        assert isinstance(res['header'], list)
+        assert isinstance(res['rows'], list)
+        assert 2 == len(res['rows'])
 
 
-class TestLocaleView(unittest.TestCase):
-    def setUp(self):
+class TestLocaleView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
@@ -454,8 +454,7 @@ class TestLocaleView(unittest.TestCase):
             'conceptscheme_manager': None,
             'audit_manager': None,
         }
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_default_locale(self):
@@ -464,10 +463,8 @@ class TestLocaleView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
-        self.assertTrue(
-            (res.headers.get('Set-Cookie')).startswith(
-                '_LOCALE_=' + config_default_lang
-            )
+        assert (res.headers.get('Set-Cookie')).startswith(
+            '_LOCALE_=' + config_default_lang
         )
 
     def test_unsupported_lang(self):
@@ -477,10 +474,8 @@ class TestLocaleView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
-        self.assertTrue(
-            (res.headers.get('Set-Cookie')).startswith(
-                '_LOCALE_=' + config_default_lang
-            )
+        assert (res.headers.get('Set-Cookie')).startswith(
+            '_LOCALE_=' + config_default_lang
         )
 
     def test_locale(self):
@@ -490,9 +485,7 @@ class TestLocaleView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
-        self.assertTrue(
-            (res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + testlang)
-        )
+        assert (res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + testlang)
 
     def test_locale_uppercase(self):
         testlang = 'it'
@@ -501,9 +494,7 @@ class TestLocaleView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
-        self.assertTrue(
-            (res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + testlang)
-        )
+        assert (res.headers.get('Set-Cookie')).startswith('_LOCALE_=' + testlang)
 
     def test_referer(self):
         testlang = 'it'
@@ -513,12 +504,13 @@ class TestLocaleView(unittest.TestCase):
         self.request.skos_registry = self.regis
         atramhasisview = AtramhasisView(self.request)
         res = atramhasisview.set_locale_cookie()
-        self.assertEqual(res.status, '302 Found')
-        self.assertEqual(res.location, testurl)
+        assert res.status == '302 Found'
+        assert res.location == testurl
 
 
-class TestHtmlTreeView(unittest.TestCase):
-    def setUp(self):
+class TestHtmlTreeView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
@@ -528,23 +520,22 @@ class TestHtmlTreeView(unittest.TestCase):
             'conceptscheme_manager': None,
             'audit_manager': None,
         }
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
 
-class TestAdminView(unittest.TestCase):
-    def setUp(self):
+class TestAdminView:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.regis = Registry()
         self.regis.register_provider(trees)
-
-    def tearDown(self):
+        yield
         testing.tearDown()
 
     def test_no_registry(self):
         request = testing.DummyRequest()
-        with self.assertRaises(SkosRegistryNotFoundException):
+        with pytest.raises(SkosRegistryNotFoundException):
             AtramhasisAdminView(request)
 
     def test_passing_view(self):
@@ -552,8 +543,8 @@ class TestAdminView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasis_admin_view = AtramhasisAdminView(request)
         info = atramhasis_admin_view.admin_view()
-        self.assertIsNotNone(info)
-        self.assertTrue('admin' in info)
+        assert info is not None
+        assert 'admin' in info
 
     def test_invalidate_scheme_tree(self):
         request = testing.DummyRequest()
@@ -561,17 +552,17 @@ class TestAdminView(unittest.TestCase):
         request.skos_registry = self.regis
         atramhasis_admin_view = AtramhasisAdminView(request)
         info = atramhasis_admin_view.invalidate_scheme_tree()
-        self.assertIsNotNone(info)
+        assert info is not None
 
 
-class TestViewFunctions(unittest.TestCase):
+class TestViewFunctions:
     def test_labels_to_string(self):
         labels = [
             Label(label='De Paardekastanje', language_id='nl'),
             Label(label='la châtaigne', language_id='fr'),
         ]
         s = labels_to_string(labels, 'prefLabel')
-        self.assertEqual('De Paardekastanje (nl), la châtaigne (fr)', s)
+        assert 'De Paardekastanje (nl), la châtaigne (fr)' == s
 
     def test_get_definition(self):
         notes = [
@@ -579,7 +570,7 @@ class TestViewFunctions(unittest.TestCase):
             Note(note='test2', language_id='nl', notetype_id='definition'),
         ]
         s = get_definition(notes)
-        self.assertEqual('test2', s)
+        assert 'test2' == s
 
     def test_get_public_conceptschemes(self):
         regis = Registry()
@@ -587,11 +578,12 @@ class TestViewFunctions(unittest.TestCase):
         regis.register_provider(hidden_provider(2))
         regis.register_provider(external_provider(3))
         conceptschemes = get_public_conceptschemes(regis)
-        self.assertEqual(1, len(conceptschemes))
+        assert 1 == len(conceptschemes)
 
 
-class TestListViews(unittest.TestCase):
-    def setUp(self):
+class TestListViews:
+    @pytest.fixture(autouse=True)
+    def setup(self):
         self.config = testing.setUp()
         self.request = testing.DummyRequest()
         self.request.data_managers = {
@@ -602,18 +594,18 @@ class TestListViews(unittest.TestCase):
         request = self.request
         atramhasis_list_view = AtramhasisListView(request)
         labellist = atramhasis_list_view.get_list(LabelType)
-        self.assertIsNotNone(labellist)
-        self.assertIsNotNone(labellist[0])
+        assert labellist is not None
+        assert labellist[0] is not None
 
     def test_labeltype_list_view(self):
         request = self.request
         atramhasis_list_view = AtramhasisListView(request)
         labellist = atramhasis_list_view.labeltype_list_view()
-        self.assertIsNotNone(labellist)
-        self.assertIn({'key': 'prefLabel', 'label': 'prefLabel'}, labellist)
+        assert labellist is not None
+        assert {'key': 'prefLabel', 'label': 'prefLabel'} in labellist
 
 
-class TestAtramhasisCrudView(unittest.TestCase):
+class TestAtramhasisCrudView:
     class SKOSRegistry:
         pass
 
@@ -641,14 +633,14 @@ class TestAtramhasisCrudView(unittest.TestCase):
             return 1
 
     class Provider(SQLAlchemyProvider):
-        metadata = {'subject': 'stub'}
         conceptscheme_id = 'cs_id'
         uri_generator = DefaultUrnGenerator('voc-id')
 
         def __init__(self):
-            pass
+            self.metadata = {'subject': 'stub'}
 
-    def setUp(self):
+    @pytest.fixture(autouse=True)
+    def setup(self):
         pyramid_settings = Settings(settings)
         config = testing.setUp(settings=pyramid_settings)
         atramhasis.load_app(config)
@@ -683,9 +675,9 @@ class TestAtramhasisCrudView(unittest.TestCase):
     def test_add_concept(self):
         self.request.json_body = self.get_concept_json()
         concept = self.view.add_concept()
-        self.assertIsInstance(concept, SkosConcept)
-        self.assertEqual('next_cid', concept.id)
-        self.assertEqual('urn:x-skosprovider:voc-id:next_cid', concept.uri)
+        assert isinstance(concept, SkosConcept)
+        assert 'next_cid' == concept.id
+        assert 'urn:x-skosprovider:voc-id:next_cid' == concept.uri
 
     def test_add_concept_manual_id_strategy(self):
         strategy = IDGenerationStrategy.MANUAL
@@ -694,8 +686,8 @@ class TestAtramhasisCrudView(unittest.TestCase):
         self.request.json_body['id'] = 'manual'
 
         concept = self.view.add_concept()
-        self.assertIsInstance(concept, SkosConcept)
-        self.assertEqual('manual', concept.id)
+        assert isinstance(concept, SkosConcept)
+        assert 'manual' == concept.id
 
         del self.request.json_body['id']
         with pytest.raises(ValidationError):
@@ -721,10 +713,10 @@ class TestAtramhasisCrudView(unittest.TestCase):
             ) as renderer,
         ):
             response = self.view.add_provider()
-            self.assertEqual(201, self.request.response.status_code)
+            assert 201 == self.request.response.status_code
             processor.assert_called()
             renderer.assert_called()
-            self.assertEqual(response, renderer.return_value)
+            assert response == renderer.return_value
 
     def test_update_provider(self):
         self.request.openapi_validated = Mock()
@@ -740,7 +732,7 @@ class TestAtramhasisCrudView(unittest.TestCase):
             response = self.view.update_provider()
             processor.assert_called()
             renderer.assert_called()
-            self.assertEqual(response, renderer.return_value)
+            assert response == renderer.return_value
 
     def test_delete_provider(self):
         self.request.matchdict = {'id': 1}
@@ -749,4 +741,4 @@ class TestAtramhasisCrudView(unittest.TestCase):
         with mock.patch(f'{view}.provider.delete_provider', autospec=True) as processor:
             response = self.view.delete_provider()
             processor.assert_called()
-            self.assertIsInstance(response, HTTPNoContent)
+            assert isinstance(response, HTTPNoContent)
