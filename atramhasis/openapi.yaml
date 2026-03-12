@@ -14,60 +14,14 @@ paths:
       description: Search for concepts or collections in a scheme.
       tags:
         - Pyramid_skosprovider
-      parameters: &conceptscheme_cs_get_params
-        - name: scheme_id
-          in: path
-          description: The identifier for a certain concept scheme.
-          required: true
-          schema:
-            type: string
-        - name: type
-          in: query
-          description: Define if you want to show concepts or collections. Leave
-            blank to show both.
-          required: false
-          schema:
-            type: string
-        - name: mode
-          in: query
-          description: Allows for special processing mode for dijitFilteringSelect.
-            Makes it possible to use wildcards in the label parameter.
-          required: false
-          schema:
-            type: string
-        - name: label
-          in: query
-          description: Shows all concepts and collections that have this search
-            string in one of their labels.
-          required: false
-          schema:
-            type: string
-        - name: collection
-          in: query
-          description: Get information about the content of a collection.
-            Expects to be passed an id of a collection in this scheme. Will restrict
-            the search to concepts or collections that are a member of this collection
-            or a narrower concept of a member.
-          required: false
-          schema:
-            type: string
-        - name: sort
-          in: query
-          description: Define if you want to sort the results by a given field. Otherwise items are returned
-            in an indeterminate order. Prefix with '+' to sort ascending, '-' to sort descending.
-            eg. ``?sort=-label`` to sort all results descending by label.
-          required: false
-          schema:
-            type: string
-        - name: language
-          in: query
-          description: Returns the label with the corresponding language-tag if present.
-            If the language is not present for this concept/collection, it falls back to
-            1) the default language of the provider. 2) 'en' 3) any label.
-            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
-          required: false
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/ConceptType'
+        - $ref: '#/components/parameters/SearchMode'
+        - $ref: '#/components/parameters/LabelFilter'
+        - $ref: '#/components/parameters/CollectionFilter'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Language'
       responses:
         200:
           description: The concepts in this conceptscheme were found.
@@ -83,7 +37,14 @@ paths:
       summary: Check if concepts or collections exist in a scheme.
       tags:
         - Pyramid_skosprovider
-      parameters: *conceptscheme_cs_get_params
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/ConceptType'
+        - $ref: '#/components/parameters/SearchMode'
+        - $ref: '#/components/parameters/LabelFilter'
+        - $ref: '#/components/parameters/CollectionFilter'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Language'
       responses:
         200:
           description: The concepts in this conceptscheme were found.
@@ -278,13 +239,8 @@ paths:
       summary: Display a tree of a conceptscheme's children
       tags:
         - Pyramid_skosprovider
-      parameters: &scheme_id_param
-        - name: scheme_id
-          in: path
-          description: The identifier for a certain concept scheme.
-          required: true
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
       responses:
         200:
           description: A tree view of the conceptscheme was returned.
@@ -298,7 +254,8 @@ paths:
       summary: Check if a conceptscheme tree exists.
       tags:
         - Pyramid_skosprovider
-      parameters: *scheme_id_param
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
       responses:
         200:
           description: A tree view of the conceptscheme was returned.
@@ -1027,6 +984,67 @@ paths:
           description: Unexpected error.
 
 components:
+  parameters:
+    SchemeId:
+      name: scheme_id
+      in: path
+      description: The identifier for a certain concept scheme.
+      required: true
+      schema:
+        type: string
+    ConceptType:
+      name: type
+      in: query
+      description: Define if you want to show concepts or collections. Leave
+        blank to show both.
+      required: false
+      schema:
+        type: string
+    SearchMode:
+      name: mode
+      in: query
+      description: Allows for special processing mode for dijitFilteringSelect.
+        Makes it possible to use wildcards in the label parameter.
+      required: false
+      schema:
+        type: string
+    LabelFilter:
+      name: label
+      in: query
+      description: Shows all concepts and collections that have this search
+        string in one of their labels.
+      required: false
+      schema:
+        type: string
+    CollectionFilter:
+      name: collection
+      in: query
+      description: Get information about the content of a collection.
+        Expects to be passed an id of a collection in this scheme. Will restrict
+        the search to concepts or collections that are a member of this collection
+        or a narrower concept of a member.
+      required: false
+      schema:
+        type: string
+    Sort:
+      name: sort
+      in: query
+      description: Define if you want to sort the results by a given field. Otherwise items are returned
+        in an indeterminate order. Prefix with '+' to sort ascending, '-' to sort descending.
+        eg. ``?sort=-label`` to sort all results descending by label.
+      required: false
+      schema:
+        type: string
+    Language:
+      name: language
+      in: query
+      description: Returns the label with the corresponding language-tag if present.
+        If the language is not present for this concept/collection, it falls back to
+        1) the default language of the provider. 2) 'en' 3) any label.
+        Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
+      required: false
+      schema:
+        type: string
   schemas:
     Language:
       type: object
