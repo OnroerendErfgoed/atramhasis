@@ -2,86 +2,77 @@ import json
 import os
 import tempfile
 
+import pytest
 from skosprovider.providers import DictionaryProvider
 from skosprovider.providers import SimpleCsvProvider
+from skosprovider.uri import UriPatternGenerator
 from skosprovider_rdf.providers import RDFProvider
 from skosprovider_sqlalchemy.models import ConceptScheme
 from sqlalchemy import select
 
-import tests
 from atramhasis.data.models import ExpandStrategy
 from atramhasis.data.models import Provider
 from atramhasis.scripts import import_file
 
-
-def setUpModule():
-    tests.setup_db(guarantee_empty=True)
+pytestmark = pytest.mark.usefixtures("module_db_setup")
 
 
-class TestValidateFile(tests.DbTest):
+class TestValidateFile:
     def test_valid_json_file(self):
         with tempfile.NamedTemporaryFile(suffix='.json', delete=False) as f:
             f.write(b'[]')
             f.flush()
-            self.assertTrue(import_file.validate_file(f.name))
+            assert import_file.validate_file(f.name)
         os.unlink(f.name)
 
     def test_valid_csv_file(self):
         with tempfile.NamedTemporaryFile(suffix='.csv', delete=False) as f:
             f.write(b'id,label\n1,test')
             f.flush()
-            self.assertTrue(import_file.validate_file(f.name))
+            assert import_file.validate_file(f.name)
         os.unlink(f.name)
 
     def test_file_does_not_exist(self):
-        self.assertFalse(import_file.validate_file('/nonexistent/file.json'))
+        assert not import_file.validate_file('/nonexistent/file.json')
 
     def test_unsupported_extension(self):
         with tempfile.NamedTemporaryFile(suffix='.docx', delete=False) as f:
             f.write(b'test')
             f.flush()
-            self.assertFalse(import_file.validate_file(f.name))
+            assert not import_file.validate_file(f.name)
         os.unlink(f.name)
 
 
-class TestValidateConnectionString(tests.DbTest):
+class TestValidateConnectionString:
     def test_valid_sqlite(self):
         with tempfile.NamedTemporaryFile(suffix='.sqlite', delete=False) as f:
             pass
-        self.assertTrue(import_file.validate_connection_string(f'sqlite:///{f.name}'))
+        assert import_file.validate_connection_string(f'sqlite:///{f.name}')
         os.unlink(f.name)
 
     def test_sqlite_not_exists(self):
-        self.assertFalse(
-            import_file.validate_connection_string('sqlite:///nonexistent.sqlite')
-        )
+        assert not import_file.validate_connection_string('sqlite:///nonexistent.sqlite')
 
     def test_valid_postgresql(self):
-        self.assertTrue(
-            import_file.validate_connection_string(
-                'postgresql://user:pass@localhost:5432/mydb'
-            )
+        assert import_file.validate_connection_string(
+            'postgresql://user:pass@localhost:5432/mydb'
         )
 
     def test_invalid_postgresql(self):
-        self.assertFalse(
-            import_file.validate_connection_string('postgresql://user@localhost/mydb')
-        )
+        assert not import_file.validate_connection_string('postgresql://user@localhost/mydb')
 
     def test_unsupported_driver(self):
-        self.assertFalse(
-            import_file.validate_connection_string('mysql://user:pass@localhost/mydb')
-        )
+        assert not import_file.validate_connection_string('mysql://user:pass@localhost/mydb')
 
 
-class TestCreateConceptscheme(tests.DbTest):
+class TestCreateConceptscheme:
     def test_create_conceptscheme(self):
         cs = import_file.create_conceptscheme('urn:test', 'Test Label')
-        self.assertEqual(cs.uri, 'urn:test')
-        self.assertEqual(cs.labels[0].label, 'Test Label')
+        assert cs.uri == 'urn:test'
+        assert cs.labels[0].label == 'Test Label'
 
 
-class TestFileToJsonProvider(tests.DbTest):
+class TestFileToJsonProvider:
     def test_file_to_json_provider(self):
         data = [
             {
@@ -100,13 +91,13 @@ class TestFileToJsonProvider(tests.DbTest):
             provider = import_file.file_to_json_provider(
                 input_file=f.name, provider_id='TEST'
             )
-        self.assertIsInstance(provider, DictionaryProvider)
-        self.assertEqual(provider.get_vocabulary_id(), 'TEST')
-        self.assertEqual(len(provider.get_all()), 1)
+        assert isinstance(provider, DictionaryProvider)
+        assert provider.get_vocabulary_id() == 'TEST'
+        assert len(provider.get_all()) == 1
         os.unlink(f.name)
 
 
-class TestFileToCsvProvider(tests.DbTest):
+class TestFileToCsvProvider:
     def test_file_to_csv_provider(self):
         with tempfile.NamedTemporaryFile(
                 suffix='.csv', mode='w', delete=False
@@ -117,12 +108,12 @@ class TestFileToCsvProvider(tests.DbTest):
             provider = import_file.file_to_csv_provider(
                 input_file=f.name, provider_id='CSVTEST'
             )
-        self.assertIsInstance(provider, SimpleCsvProvider)
-        self.assertEqual(provider.get_vocabulary_id(), 'CSVTEST')
+        assert isinstance(provider, SimpleCsvProvider)
+        assert provider.get_vocabulary_id() == 'CSVTEST'
         os.unlink(f.name)
 
 
-class TestFileToRdfProvider(tests.DbTest):
+class TestFileToRdfProvider:
     def test_file_to_rdf_provider(self):
         rdf_content = """<?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -143,18 +134,16 @@ class TestFileToRdfProvider(tests.DbTest):
             provider = import_file.file_to_rdf_provider(
                 input_file=f.name, provider_id='RDFTEST'
             )
-        self.assertIsInstance(provider, RDFProvider)
-        self.assertEqual(provider.get_vocabulary_id(), 'RDFTEST')
+        assert isinstance(provider, RDFProvider)
+        assert provider.get_vocabulary_id() == 'RDFTEST'
         os.unlink(f.name)
 
 
-class TestCreateProvider(tests.DbTest):
-    def test_create_provider(self):
-        from skosprovider.uri import UriPatternGenerator
-
+class TestCreateProvider:
+    def test_create_provider(self, db_session):
         cs = ConceptScheme(uri='urn:x-test:create-provider')
-        self.session.add(cs)
-        self.session.flush()
+        db_session.add(cs)
+        db_session.flush()
 
         provider = DictionaryProvider(
             {'id': 'CREATETEST', 'subject': []},
@@ -164,32 +153,32 @@ class TestCreateProvider(tests.DbTest):
         import_file.create_provider(
             id_generation_strategy='NUMERIC',
             provider=provider,
-            session=self.session,
+            session=db_session,
             conceptscheme=cs,
         )
-        self.session.flush()
+        db_session.flush()
 
-        db_provider = self.session.execute(
+        db_provider = db_session.execute(
             select(Provider).filter(Provider.id == 'CREATETEST')
         ).scalar_one()
-        self.assertEqual(db_provider.conceptscheme_id, cs.id)
-        self.assertEqual(db_provider.expand_strategy, ExpandStrategy.RECURSE)
-        self.assertEqual(db_provider.uri_pattern, 'urn:x-test:%s')
+        assert db_provider.conceptscheme_id == cs.id
+        assert db_provider.expand_strategy == ExpandStrategy.RECURSE
+        assert db_provider.uri_pattern == 'urn:x-test:%s'
 
 
-class TestValidateUriPattern(tests.DbTest):
+class TestValidateUriPattern:
     def test_valid_pattern(self):
         # Should not exit
         import_file.validate_uri_pattern('urn:x-test:%s')
 
     def test_no_pattern(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             import_file.validate_uri_pattern(None)
 
     def test_no_placeholder(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             import_file.validate_uri_pattern('urn:x-test:nope')
 
     def test_multiple_placeholders(self):
-        with self.assertRaises(SystemExit):
+        with pytest.raises(SystemExit):
             import_file.validate_uri_pattern('urn:x-test:%s/%s')

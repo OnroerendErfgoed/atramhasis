@@ -1,4 +1,3 @@
-import unittest
 from datetime import date
 from unittest.mock import Mock
 
@@ -16,13 +15,7 @@ from atramhasis.rdf import _add_metadataset
 from atramhasis.rdf import _add_provider
 
 
-class AddProviderTests(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+class TestAddProvider:
 
     def _get_duri(self):
         return URIRef('https://test.atramhasis.org/void.ttl#bigdataset')
@@ -32,7 +25,9 @@ class AddProviderTests(unittest.TestCase):
         g.add((duri, RDF.type, VOID.Dataset))
         return g
 
-    def _get_provider(self, dataset={}):
+    def _get_provider(self, dataset=None):
+        if dataset is None:
+            dataset = {}
         provider_mock = Mock()
         provider_mock.get_vocabulary_id = Mock(return_value='TREES')
         provider_mock.get_metadata = Mock(return_value={'id': 'TREES', 'subject': [], 'dataset': dataset})
@@ -42,7 +37,7 @@ class AddProviderTests(unittest.TestCase):
         provider_mock.concept_scheme = cs
         return provider_mock
 
-    def testEmptyProvider(self):
+    def test_empty_provider(self):
         duri = self._get_duri()
         g = self._get_graph(duri)
         sduri = 'https://test.atramhasis.org/void.ttl#smalldataset'
@@ -64,23 +59,18 @@ class AddProviderTests(unittest.TestCase):
         }
         g = _add_provider(g, p, duri, req)
         sd = URIRef(sduri)
-        self.assertIn((duri, RDF.type, VOID.Dataset), g)
-        self.assertIn((sd, RDF.type, VOID.Dataset), g)
-        self.assertIn((duri, VOID.subset, sd), g)
-        self.assertIn((sd, DCTERMS.identifier, Literal('TREES')), g)
-        self.assertIn((sd, VOID.rootResource, URIRef(p.concept_scheme.uri)), g)
-        self.assertIn((sd, FOAF.homepage, URIRef(homepage)), g)
-        self.assertIn((sd, VOID.dataDump, URIRef(rdfdump)), g)
-        self.assertIn((sd, VOID.dataDump, URIRef(ttldump)), g)
-        self.assertIn((sd, HYDRA.search, None), g)
+        assert (duri, RDF.type, VOID.Dataset) in g
+        assert (sd, RDF.type, VOID.Dataset) in g
+        assert (duri, VOID.subset, sd) in g
+        assert (sd, DCTERMS.identifier, Literal('TREES')) in g
+        assert (sd, VOID.rootResource, URIRef(p.concept_scheme.uri)) in g
+        assert (sd, FOAF.homepage, URIRef(homepage)) in g
+        assert (sd, VOID.dataDump, URIRef(rdfdump)) in g
+        assert (sd, VOID.dataDump, URIRef(ttldump)) in g
+        assert (sd, HYDRA.search, None) in g
 
 
-class MetadatasetTests(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+class TestMetadataset:
 
     def _get_graph(self):
         return Graph()
@@ -108,21 +98,16 @@ class MetadatasetTests(unittest.TestCase):
         g.add((uri, RDF.type, VOID.Dataset))
         g = _add_metadataset(g, uri, metadataset)
         assert len(g) == 8
-        self.assertIn((uri, DCTERMS.language, Literal('nl')), g)
-        self.assertIn((uri, DCTERMS.language, Literal('fr')), g)
-        self.assertIn((uri, DCTERMS.language, Literal('en')), g)
-        self.assertIn((uri, DCTERMS.publisher, URIRef('https://id.erfgoed.net/actoren/501')), g)
-        self.assertIn((uri, DCTERMS.license, URIRef('https://creativecommons.org/licenses/by/4.0/')), g)
-        self.assertIn((uri, DCTERMS.license, URIRef('https://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0')), g)
-        self.assertIn((uri, DCTERMS.created, Literal(date(year=2016, month=9, day=14))), g)
+        assert (uri, DCTERMS.language, Literal('nl')) in g
+        assert (uri, DCTERMS.language, Literal('fr')) in g
+        assert (uri, DCTERMS.language, Literal('en')) in g
+        assert (uri, DCTERMS.publisher, URIRef('https://id.erfgoed.net/actoren/501')) in g
+        assert (uri, DCTERMS.license, URIRef('https://creativecommons.org/licenses/by/4.0/')) in g
+        assert (uri, DCTERMS.license, URIRef('https://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0')) in g
+        assert (uri, DCTERMS.created, Literal(date(year=2016, month=9, day=14))) in g
 
 
-class LdfServerTests(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
+class TestLdfServer:
 
     def _get_graph(self):
         return Graph()
@@ -133,6 +118,6 @@ class LdfServerTests(unittest.TestCase):
         uri = URIRef('https://test.atramhasis.org/void.ttl#emptyset')
         g.add((uri, RDF.type, VOID.Dataset))
         g = _add_ldf_server(g, uri, url)
-        self.assertIn((uri, HYDRA.search, None), g)
-        self.assertIn((None, HYDRA.template, url), g)
-        self.assertIn((None, HYDRA.mapping, None), g)
+        assert (uri, HYDRA.search, None) in g
+        assert (None, HYDRA.template, url) in g
+        assert (None, HYDRA.mapping, None) in g

@@ -1,8 +1,9 @@
+import copy
 import time
-import unittest
 from unittest.mock import Mock
 
 import colander
+import pytest
 from pyramid import testing
 from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
@@ -10,8 +11,8 @@ from skosprovider_sqlalchemy.models import LabelType
 from sqlalchemy.exc import NoResultFound
 
 from atramhasis import validators
-from atramhasis.errors import ValidationError
 from atramhasis.data.models import IDGenerationStrategy
+from atramhasis.errors import ValidationError
 from atramhasis.validators import Concept as ConceptSchema
 from atramhasis.validators import ConceptScheme as ConceptSchemeSchema
 from atramhasis.validators import LanguageTag
@@ -72,473 +73,462 @@ class DummyLanguagesManager:
         return language
 
 
-class TestValidation(unittest.TestCase):
-    def setUp(self):
-        self.config = testing.setUp()
-        self.request = testing.DummyRequest()
-        self.request.data_managers = {
-            'skos_manager': DummySkosManager(),
-            'languages_manager': DummyLanguagesManager()
-        }
-        self.provider = Mock(conceptscheme_id=1, metadata={})
-        self.concept_schema = ConceptSchema(
-            validator=concept_schema_validator
-        ).bind(
-            request=self.request,
-            provider=self.provider,
-            validate_id_generation=True,
-        )
-        self.language = LanguageTag(
-            validator=languagetag_validator
-        ).bind(
-            request=self.request,
-            new=True
-        )
-        self.conceptscheme_schema = ConceptSchemeSchema(
-            validator=conceptscheme_schema_validator
-        ).bind(
-            request=self.request
-        )
-        self.json_concept = {
-            "narrower": [{"id": "8"}, {"id": "7"}, {"id": "9"}],
-            "label": "Belgium",
-            "type": "concept",
-            "id": "4",
-            "broader": [{"id": "2"}],
-            "related": [{"id": "5"}],
-            "labels": [{
-                "label": "Belgium",
-                "type": "prefLabel",
-                "language": "en"
-            }],
-            "notes": [{
-                "note": "een notitie",
-                "type": "note",
-                "language": "nl"
-            }],
-            "sources": [{
-                "citation": "Van Daele K. 2014"
-            }],
-            "member_of": [{"id": "666"}]
-        }
-        self.json_collection = {
-            "id": "0",
-            "labels": [{
-                "language": "nl-BE",
-                "label": "Stijlen en culturen",
-                "type": "prefLabel"
-            }],
-            "type": "collection",
-            "label": "Stijlen en culturen",
-            "members": [{"id": "61"}, {"id": "60"}],
-            "notes": [{
-                "note": "een notitie",
-                "type": "note",
-                "language": "nl"
-            }],
-            "member_of": [{"id": "666"}]
-        }
-        self.json_conceptscheme = {
-            "labels": [{
-                "language": "nl-BE",
-                "label": "Stijlen en culturen",
-                "type": "prefLabel"
-            }],
-            "label": "Stijlen en culturen",
-            "notes": [{
-                "note": "een notitie",
-                "type": "note",
-                "language": "nl"
-            }],
-            "sources": [{
-                "citation": "Van Daele K. 2014"
-            }]
-        }
+_JSON_CONCEPT = {
+    "narrower": [{"id": "8"}, {"id": "7"}, {"id": "9"}],
+    "label": "Belgium",
+    "type": "concept",
+    "id": "4",
+    "broader": [{"id": "2"}],
+    "related": [{"id": "5"}],
+    "labels": [{
+        "label": "Belgium",
+        "type": "prefLabel",
+        "language": "en"
+    }],
+    "notes": [{
+        "note": "een notitie",
+        "type": "note",
+        "language": "nl"
+    }],
+    "sources": [{
+        "citation": "Van Daele K. 2014"
+    }],
+    "member_of": [{"id": "666"}]
+}
 
-    def tearDown(self):
-        testing.tearDown()
+_JSON_COLLECTION = {
+    "id": "0",
+    "labels": [{
+        "language": "nl-BE",
+        "label": "Stijlen en culturen",
+        "type": "prefLabel"
+    }],
+    "type": "collection",
+    "label": "Stijlen en culturen",
+    "members": [{"id": "61"}, {"id": "60"}],
+    "notes": [{
+        "note": "een notitie",
+        "type": "note",
+        "language": "nl"
+    }],
+    "member_of": [{"id": "666"}]
+}
 
-    def test_validation_conceptscheme(self):
-        validated_conceptscheme = self.conceptscheme_schema.deserialize(self.json_conceptscheme)
-        self.assertIsNotNone(validated_conceptscheme)
-        self.assertEqual(1, len(validated_conceptscheme['labels']))
-        self.assertEqual(1, len(validated_conceptscheme['notes']))
-        self.assertEqual(1, len(validated_conceptscheme['sources']))
+_JSON_CONCEPTSCHEME = {
+    "labels": [{
+        "language": "nl-BE",
+        "label": "Stijlen en culturen",
+        "type": "prefLabel"
+    }],
+    "label": "Stijlen en culturen",
+    "notes": [{
+        "note": "een notitie",
+        "type": "note",
+        "language": "nl"
+    }],
+    "sources": [{
+        "citation": "Van Daele K. 2014"
+    }]
+}
 
-    def test_invalid_conceptscheme(self):
-        self.json_conceptscheme.pop('labels')
-        self.assertRaises(
-            ValidationError, self.conceptscheme_schema.deserialize, self.json_conceptscheme
-        )
 
-    def test_validation_concept(self):
-        validated_concept = self.concept_schema.deserialize(self.json_concept)
-        self.assertIsNotNone(validated_concept)
-        self.assertEqual(1, len(validated_concept['labels']))
-        self.assertEqual(1, len(validated_concept['notes']))
-        self.assertEqual(1, len(validated_concept['sources']))
-        self.assertEqual(3, len(validated_concept['narrower']))
-        self.assertEqual(1, len(validated_concept['broader']))
-        self.assertEqual(1, len(validated_concept['related']))
-        self.assertEqual(1, len(validated_concept['member_of']))
+@pytest.fixture(autouse=True)
+def pyramid_config():
+    config = testing.setUp()
+    yield config
+    testing.tearDown()
 
-    def test_max_preflabels_2_en(self):
-        self.json_concept['labels'].append({
+
+@pytest.fixture
+def dummy_request():
+    request = testing.DummyRequest()
+    request.data_managers = {
+        'skos_manager': DummySkosManager(),
+        'languages_manager': DummyLanguagesManager()
+    }
+    return request
+
+
+@pytest.fixture
+def provider():
+    return Mock(conceptscheme_id=1, metadata={})
+
+
+@pytest.fixture
+def concept_schema(dummy_request, provider):
+    return ConceptSchema(
+        validator=concept_schema_validator
+    ).bind(
+        request=dummy_request,
+        provider=provider,
+        validate_id_generation=True,
+    )
+
+
+@pytest.fixture
+def language_schema(dummy_request):
+    return LanguageTag(
+        validator=languagetag_validator
+    ).bind(
+        request=dummy_request,
+        new=True
+    )
+
+
+@pytest.fixture
+def conceptscheme_schema(dummy_request):
+    return ConceptSchemeSchema(
+        validator=conceptscheme_schema_validator
+    ).bind(
+        request=dummy_request
+    )
+
+
+@pytest.fixture
+def json_concept():
+    return copy.deepcopy(_JSON_CONCEPT)
+
+
+@pytest.fixture
+def json_collection():
+    return copy.deepcopy(_JSON_COLLECTION)
+
+
+@pytest.fixture
+def json_conceptscheme():
+    return copy.deepcopy(_JSON_CONCEPTSCHEME)
+
+
+class TestValidation:
+
+    def test_validation_conceptscheme(self, conceptscheme_schema, json_conceptscheme):
+        validated_conceptscheme = conceptscheme_schema.deserialize(json_conceptscheme)
+        assert validated_conceptscheme is not None
+        assert 1 == len(validated_conceptscheme['labels'])
+        assert 1 == len(validated_conceptscheme['notes'])
+        assert 1 == len(validated_conceptscheme['sources'])
+
+    def test_invalid_conceptscheme(self, conceptscheme_schema, json_conceptscheme):
+        json_conceptscheme.pop('labels')
+        with pytest.raises(ValidationError):
+            conceptscheme_schema.deserialize(json_conceptscheme)
+
+    def test_validation_concept(self, concept_schema, json_concept):
+        validated_concept = concept_schema.deserialize(json_concept)
+        assert validated_concept is not None
+        assert 1 == len(validated_concept['labels'])
+        assert 1 == len(validated_concept['notes'])
+        assert 1 == len(validated_concept['sources'])
+        assert 3 == len(validated_concept['narrower'])
+        assert 1 == len(validated_concept['broader'])
+        assert 1 == len(validated_concept['related'])
+        assert 1 == len(validated_concept['member_of'])
+
+    def test_max_preflabels_2_en(self, concept_schema, json_concept):
+        json_concept['labels'].append({
             "label": "B",
             "type": "prefLabel",
             "language": "en"
         })
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
 
-        self.assertIn(
-            {'labels': 'Only one prefLabel per language allowed.'}, e.exception.errors
-        )
+        assert {'labels': 'Only one prefLabel per language allowed.'} in exc_info.value.errors
 
-    def test_max_preflabels_1_en_1_nl(self):
-        self.json_concept['labels'].append({
+    def test_max_preflabels_1_en_1_nl(self, concept_schema, json_concept):
+        json_concept['labels'].append({
             "label": "B",
             "type": "prefLabel",
             "language": "nl"
         })
-        validated_concept = self.concept_schema.deserialize(self.json_concept)
-        self.assertIsNotNone(validated_concept)
+        validated_concept = concept_schema.deserialize(json_concept)
+        assert validated_concept is not None
 
-    def test_related_concept_type_collection(self):
-        self.json_concept['related'].append({"id": 666})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'related': 'A narrower, broader or related concept should '
-                           'always be a concept, not a collection'
-            },
-            e.exception.errors
-        )
+    def test_related_concept_type_collection(self, concept_schema, json_concept):
+        json_concept['related'].append({"id": 666})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'related': 'A narrower, broader or related concept should '
+                       'always be a concept, not a collection'
+        } in exc_info.value.errors
 
-    def test_collection_with_related(self):
+    def test_collection_with_related(self, concept_schema, json_collection):
         # Collections can not have related relations
-        self.json_collection['related'] = []
-        self.json_collection['related'].append({"id": 2})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {'related': 'Only concepts can have narrower/broader/related relations'},
-            e.exception.errors
-        )
+        json_collection['related'] = []
+        json_collection['related'].append({"id": 2})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'related': 'Only concepts can have narrower/broader/related relations'
+        } in exc_info.value.errors
 
-    def test_narrower_concept_type_collection(self):
-        self.json_concept['narrower'].append({"id": 666})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'narrower': 'A narrower, broader or related concept should '
-                            'always be a concept, not a collection'
-            },
-            e.exception.errors
-        )
-    
-    def test_infer_concept_relations(self):
-        self.json_concept['infer_concept_relations'] = True
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'infer_concept_relations': "'infer_concept_relations' can only "
-                                           "be set for collections."
-            },
-            e.exception.errors
-        )
-        self.json_collection['infer_concept_relations'] = True
-        self.concept_schema.deserialize(self.json_collection)
+    def test_narrower_concept_type_collection(self, concept_schema, json_concept):
+        json_concept['narrower'].append({"id": 666})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'narrower': 'A narrower, broader or related concept should '
+                        'always be a concept, not a collection'
+        } in exc_info.value.errors
 
-    def test_collection_with_narrower(self):
+    def test_infer_concept_relations(self, concept_schema, json_concept, json_collection):
+        json_concept['infer_concept_relations'] = True
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'infer_concept_relations': "'infer_concept_relations' can only "
+                                       "be set for collections."
+        } in exc_info.value.errors
+        json_collection['infer_concept_relations'] = True
+        concept_schema.deserialize(json_collection)
+
+    def test_collection_with_narrower(self, concept_schema, json_collection):
         # Collections can not have narrower relations
-        self.json_collection['narrower'] = []
-        self.json_collection['narrower'].append({"id": 2})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {'narrower': 'Only concepts can have narrower/broader/related relations'},
-            e.exception.errors
-        )
+        json_collection['narrower'] = []
+        json_collection['narrower'].append({"id": 2})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'narrower': 'Only concepts can have narrower/broader/related relations'
+        } in exc_info.value.errors
 
-    def test_broader_concept_type_collection(self):
-        self.json_concept['broader'].append({"id": 666})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'broader': 'A narrower, broader or related concept should '
-                           'always be a concept, not a collection'
-            },
-            e.exception.errors
-        )
+    def test_broader_concept_type_collection(self, concept_schema, json_concept):
+        json_concept['broader'].append({"id": 666})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'broader': 'A narrower, broader or related concept should '
+                       'always be a concept, not a collection'
+        } in exc_info.value.errors
 
-    def test_collection_with_broader(self):
+    def test_collection_with_broader(self, concept_schema, json_collection):
         # Collections can not have broader relations
-        self.json_collection['broader'] = []
-        self.json_collection['broader'].append({"id": 2})
-        with self.assertRaises(ValidationError):
-            self.concept_schema.deserialize(self.json_collection)
+        json_collection['broader'] = []
+        json_collection['broader'].append({"id": 2})
+        with pytest.raises(ValidationError):
+            concept_schema.deserialize(json_collection)
 
-    def test_related_concept_different_conceptscheme(self):
-        self.json_concept['related'].append({"id": 777})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'related': 'Concept not found, check concept_id. Please be aware '
-                           'members should be within one scheme'
-            },
-            e.exception.errors
-        )
+    def test_related_concept_different_conceptscheme(self, concept_schema, json_concept):
+        json_concept['related'].append({"id": 777})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'related': 'Concept not found, check concept_id. Please be aware '
+                       'members should be within one scheme'
+        } in exc_info.value.errors
 
-    def test_narrower_concept_different_conceptscheme(self):
-        self.json_concept['narrower'].append({"id": 777})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'narrower': 'Concept not found, check concept_id. Please be aware '
-                            'members should be within one scheme'
-            },
-            e.exception.errors
-        )
+    def test_narrower_concept_different_conceptscheme(self, concept_schema, json_concept):
+        json_concept['narrower'].append({"id": 777})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'narrower': 'Concept not found, check concept_id. Please be aware '
+                        'members should be within one scheme'
+        } in exc_info.value.errors
 
-    def test_narrower_concept_to_self(self):
-        self.json_concept['narrower'].append({"id": 4})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {'narrower': 'A concept or collection cannot be related to itself'},
-            e.exception.errors
-        )
+    def test_narrower_concept_to_self(self, concept_schema, json_concept):
+        json_concept['narrower'].append({"id": 4})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'narrower': 'A concept or collection cannot be related to itself'
+        } in exc_info.value.errors
 
-    def test_broader_concept_different_conceptscheme(self):
-        self.json_concept['broader'].append({"id": 777})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'broader': 'Concept not found, check concept_id. Please be aware '
-                           'members should be within one scheme'
-             },
-            e.exception.errors
-        )
+    def test_broader_concept_different_conceptscheme(self, concept_schema, json_concept):
+        json_concept['broader'].append({"id": 777})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'broader': 'Concept not found, check concept_id. Please be aware '
+                       'members should be within one scheme'
+        } in exc_info.value.errors
 
-    def test_broader_concept_hierarchy(self):
-        self.json_concept['broader'].append({"id": 14})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'broader': 'The broader concept of a concept must not itself '
-                           'be a narrower concept of the concept being edited.'
-            },
-            e.exception.errors
-        )
+    def test_broader_concept_hierarchy(self, concept_schema, json_concept):
+        json_concept['broader'].append({"id": 14})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'broader': 'The broader concept of a concept must not itself '
+                       'be a narrower concept of the concept being edited.'
+        } in exc_info.value.errors
 
-    def test_broader_concept_hierarchy_no_narrower(self):
-        self.json_concept['broader'].append({"id": 8})
-        self.json_concept['narrower'] = []
-        validated_concept = self.concept_schema.deserialize(self.json_concept)
-        self.assertIsNotNone(validated_concept)
+    def test_broader_concept_hierarchy_no_narrower(self, concept_schema, json_concept):
+        json_concept['broader'].append({"id": 8})
+        json_concept['narrower'] = []
+        validated_concept = concept_schema.deserialize(json_concept)
+        assert validated_concept is not None
 
-    def test_narrower_concept_hierarchy(self):
-        self.json_concept['narrower'].append({"id": 1})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'narrower': 'The narrower concept of a concept must not itself '
-                            'be a broader concept of the concept being edited.'
-            },
-            e.exception.errors
-        )
+    def test_narrower_concept_hierarchy(self, concept_schema, json_concept):
+        json_concept['narrower'].append({"id": 1})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'narrower': 'The narrower concept of a concept must not itself '
+                        'be a broader concept of the concept being edited.'
+        } in exc_info.value.errors
 
-    def test_narrower_concept_hierarchy_no_broader(self):
-        self.json_concept['narrower'].append({"id": 1})
-        self.json_concept['broader'] = []
-        validated_concept = self.concept_schema.deserialize(self.json_concept)
-        self.assertIsNotNone(validated_concept)
+    def test_narrower_concept_hierarchy_no_broader(self, concept_schema, json_concept):
+        json_concept['narrower'].append({"id": 1})
+        json_concept['broader'] = []
+        validated_concept = concept_schema.deserialize(json_concept)
+        assert validated_concept is not None
 
-    def test_validation_collection(self):
-        validated_collection = self.concept_schema.deserialize(self.json_collection)
-        self.assertIsNotNone(validated_collection)
-        self.assertEqual(2, len(validated_collection['members']))
-        self.assertEqual(1, len(validated_collection['labels']))
-        self.assertEqual(1, len(validated_collection['notes']))
+    def test_validation_collection(self, concept_schema, json_collection):
+        validated_collection = concept_schema.deserialize(json_collection)
+        assert validated_collection is not None
+        assert 2 == len(validated_collection['members'])
+        assert 1 == len(validated_collection['labels'])
+        assert 1 == len(validated_collection['notes'])
 
-    def test_member_concept_different_conceptscheme(self):
-        self.json_collection['members'].append({"id": 777})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {
-                'members': 'Concept not found, check concept_id. Please be aware '
-                           'members should be within one scheme'
-            },
-            e.exception.errors
-        )
+    def test_member_concept_different_conceptscheme(self, concept_schema, json_collection):
+        json_collection['members'].append({"id": 777})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'members': 'Concept not found, check concept_id. Please be aware '
+                       'members should be within one scheme'
+        } in exc_info.value.errors
 
-    def test_label_type(self):
-        self.json_concept['labels'].append({
+    def test_label_type(self, concept_schema, json_concept):
+        json_concept['labels'].append({
             "label": "Belgium",
             "type": "altLabel",
             "language": "en"
         })
-        validated_concept = self.concept_schema.deserialize(self.json_concept)
-        self.assertIsNotNone(validated_concept)
+        validated_concept = concept_schema.deserialize(json_concept)
+        assert validated_concept is not None
 
-    def test_label_type_invalid(self):
-        self.json_concept['labels'].append({
+    def test_label_type_invalid(self, concept_schema, json_concept):
+        json_concept['labels'].append({
             "label": "Belgium",
             "type": "testLabelInvalid",
             "language": "en"
         })
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn({'labels': 'Invalid labeltype.'}, e.exception.errors)
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {'labels': 'Invalid labeltype.'} in exc_info.value.errors
 
-    def test_label_language_invalid(self):
-        self.json_concept['labels'].append({
+    def test_label_language_invalid(self, concept_schema, json_concept):
+        json_concept['labels'].append({
             "label": "Belgium",
             "type": "altLabel",
             "language": "eng"
         })
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'labels': "Invalid language tag: Unknown code 'eng', "
-                          "Missing language tag in 'eng'."
-            },
-            e.exception.errors
-        )
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'labels': "Invalid language tag: Unknown code 'eng', "
+                      "Missing language tag in 'eng'."
+        } in exc_info.value.errors
 
-    def test_label_language_missing(self):
-        self.json_concept['labels'].append({
+    def test_label_language_missing(self, concept_schema, json_concept):
+        json_concept['labels'].append({
             "label": "Belgium",
             "type": "altLabel",
             "language": "af"
         })
-        validated_concept = self.concept_schema.deserialize(self.json_concept)
-        self.assertIsNotNone(validated_concept)
+        validated_concept = concept_schema.deserialize(json_concept)
+        assert validated_concept is not None
 
-    def test_label_invalid(self):
-        self.json_concept['labels'].append({
+    def test_label_invalid(self, concept_schema, json_concept):
+        json_concept['labels'].append({
             "note": "Belgium",
             "type": "altLabel",
             "language": "en"
         })
-        with self.assertRaises(colander.Invalid):
-            self.concept_schema.deserialize(self.json_concept)
+        with pytest.raises(colander.Invalid):
+            concept_schema.deserialize(json_concept)
 
-    def test_note_invalid(self):
-        self.json_concept['notes'].append({
+    def test_note_invalid(self, concept_schema, json_concept):
+        json_concept['notes'].append({
             "label": "een notitie",
             "type": 5,
             "language": "nl"
         })
-        with self.assertRaises(colander.Invalid):
-            self.concept_schema.deserialize(self.json_concept)
+        with pytest.raises(colander.Invalid):
+            concept_schema.deserialize(json_concept)
 
-    def test_memberof_concept_type_collection(self):
+    def test_memberof_concept_type_collection(self, concept_schema, json_concept):
         # A Collection/Concept can be a member_of a Collection
-        validated_concept = self.concept_schema.deserialize(self.json_concept)
-        self.assertIsNotNone(validated_concept)
+        validated_concept = concept_schema.deserialize(json_concept)
+        assert validated_concept is not None
 
-    def test_memberof_concept_type_concept(self):
+    def test_memberof_concept_type_concept(self, concept_schema, json_concept):
         # Nothing can be a member_of a Concept
-        self.json_concept['member_of'].append({"id": 2})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {'member_of': 'A member_of parent should always be a collection'},
-            e.exception.errors
-        )
+        json_concept['member_of'].append({"id": 2})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'member_of': 'A member_of parent should always be a collection'
+        } in exc_info.value.errors
 
-    def test_members_collection_unique(self):
+    def test_members_collection_unique(self, concept_schema, json_collection):
         # A Collection is a Set (every element of the Collection should be unique).
-        self.json_collection['members'].append({"id": 61})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {'members': 'All members of a collection should be unique.'},
-            e.exception.errors
-        )
+        json_collection['members'].append({"id": 61})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'members': 'All members of a collection should be unique.'
+        } in exc_info.value.errors
 
-    def test_concept_members(self):
+    def test_concept_members(self, concept_schema, json_concept):
         # A Concept does not have members.
-        self.json_concept['members'] = []
-        self.json_concept['members'].append({"id": 2})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {'members': 'Only collections can have members.'}, e.exception.errors
-        )
+        json_concept['members'] = []
+        json_concept['members'].append({"id": 2})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'members': 'Only collections can have members.'
+        } in exc_info.value.errors
 
-    def test_memberof_concept_hierarchy_simple(self):
+    def test_memberof_concept_hierarchy_simple(self, concept_schema, json_collection):
         # The hierarchy should not contain loops
-        self.json_collection['members'].append({"id": 666})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {
-                'member_of': 'The parent member_of collection of a concept must not '
-                             'itself be a member of the concept being edited.'
-            },
-            e.exception.errors
-        )
+        json_collection['members'].append({"id": 666})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'member_of': 'The parent member_of collection of a concept must not '
+                         'itself be a member of the concept being edited.'
+        } in exc_info.value.errors
 
-    def test_memberof_concept_hierarchy_deep(self):
+    def test_memberof_concept_hierarchy_deep(self, concept_schema, json_collection):
         # The hierarchy should not contain loops
-        self.json_collection['members'].append({"id": 62})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {
-                'member_of': 'The parent member_of collection of a concept must not '
-                             'itself be a member of the concept being edited.'
-            },
-            e.exception.errors
-        )
+        json_collection['members'].append({"id": 62})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'member_of': 'The parent member_of collection of a concept must not '
+                         'itself be a member of the concept being edited.'
+        } in exc_info.value.errors
 
-    def test_members_concept_hierarchy_simple(self):
+    def test_members_concept_hierarchy_simple(self, concept_schema, json_collection):
         # The hierarchy should not contain loops
-        self.json_collection['member_of'].append({"id": 61})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {
-                'members': 'The item of a members collection must not itself be a '
-                           'parent of the concept/collection being edited.'
-            },
-            e.exception.errors
-        )
+        json_collection['member_of'].append({"id": 61})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'members': 'The item of a members collection must not itself be a '
+                       'parent of the concept/collection being edited.'
+        } in exc_info.value.errors
 
-    def test_members_concept_hierarchy_deep(self):
+    def test_members_concept_hierarchy_deep(self, concept_schema, json_collection):
         # The hierarchy should not contain loops
-        self.json_collection['member_of'].append({"id": 667})
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {
-                'members': 'The item of a members collection must not itself be a '
-                           'parent of the concept/collection being edited.'
-            },
-            e.exception.errors
-        )
+        json_collection['member_of'].append({"id": 667})
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'members': 'The item of a members collection must not itself be a '
+                       'parent of the concept/collection being edited.'
+        } in exc_info.value.errors
 
-    def test_min_labels_rule_empty_labels(self):
-        self.json_concept['labels'] = []
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn({'labels': 'At least one label is necessary'}, e.exception.errors)
+    def test_min_labels_rule_empty_labels(self, concept_schema, json_concept):
+        json_concept['labels'] = []
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {'labels': 'At least one label is necessary'} in exc_info.value.errors
 
-    def test_min_labels_rule_no_labels(self):
+    def test_min_labels_rule_no_labels(self, concept_schema):
         json_concept = {
             "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
             "type": "concept",
@@ -552,11 +542,11 @@ class TestValidation(unittest.TestCase):
             }],
             "member_of": [{"id": 666}]
         }
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(json_concept)
-        self.assertIn({'labels': 'At least one label is necessary'}, e.exception.errors)
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {'labels': 'At least one label is necessary'} in exc_info.value.errors
 
-    def test_concept_matches_rule(self):
+    def test_concept_matches_rule(self, concept_schema):
         json_concept = {
             "type": "collection",
             "labels": [{
@@ -568,11 +558,11 @@ class TestValidation(unittest.TestCase):
             "members": [{"id": 666}],
             "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:somewhere:93"]}
         }
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(json_concept)
-        self.assertIn({'matches': 'Only concepts can have matches'}, e.exception.errors)
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {'matches': 'Only concepts can have matches'} in exc_info.value.errors
 
-    def test_concept_matches_unique_rule(self):
+    def test_concept_matches_unique_rule(self, concept_schema):
         json_concept = {
             "type": "concept",
             "labels": [{
@@ -584,14 +574,14 @@ class TestValidation(unittest.TestCase):
             "member_of": [{"id": 666}],
             "matches": {"exact": ["urn:sample:666"], "broad": ["urn:sample:666"]}
         }
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(json_concept)
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
 
-        self.assertIn(
-            {'matches': 'All matches of a concept should be unique.'}, e.exception.errors
-        )
+        assert {
+            'matches': 'All matches of a concept should be unique.'
+        } in exc_info.value.errors
 
-    def test_concept_matches_unique_rule_pass(self):
+    def test_concept_matches_unique_rule_pass(self, concept_schema):
         json_concept = {
             "type": "concept",
             "labels": [{
@@ -603,27 +593,27 @@ class TestValidation(unittest.TestCase):
             "member_of": [{"id": 666}],
             "matches": {"exactMatch": ["urn:sample:666"], "broadMatch": ["urn:sample:93"]}
         }
-        validated_concept = self.concept_schema.deserialize(json_concept)
-        self.assertIsNotNone(validated_concept)
+        validated_concept = concept_schema.deserialize(json_concept)
+        assert validated_concept is not None
 
-    def test_languages_pass(self):
+    def test_languages_pass(self, language_schema):
         json_language = {
             "id": "af",
             "name": "Afrikaans"
         }
-        validated_language = self.language.deserialize(json_language)
-        self.assertIsNotNone(validated_language)
+        validated_language = language_schema.deserialize(json_language)
+        assert validated_language is not None
 
-    def test_languages_duplicate(self):
+    def test_languages_duplicate(self, language_schema):
         json_language = {
             "id": "en",
             "name": "English"
         }
-        with self.assertRaises(ValidationError) as e:
-            self.language.deserialize(json_language)
-        self.assertIn({'id': 'Duplicate language tag: en'}, e.exception.errors)
+        with pytest.raises(ValidationError) as exc_info:
+            language_schema.deserialize(json_language)
+        assert {'id': 'Duplicate language tag: en'} in exc_info.value.errors
 
-    def test_languages_edit_not_raise_duplicate(self):
+    def test_languages_edit_not_raise_duplicate(self, dummy_request):
         json_language = {
             "id": "en",
             "name": "English"
@@ -631,98 +621,85 @@ class TestValidation(unittest.TestCase):
         language = LanguageTag(
             validator=languagetag_validator
         ).bind(
-            request=self.request,
+            request=dummy_request,
             new=False
         )
         validated_language = language.deserialize(json_language)
-        self.assertIsNotNone(validated_language)
+        assert validated_language is not None
 
-    def test_languages_invalid(self):
+    def test_languages_invalid(self, language_schema):
         json_language = {
             "id": "flup",
             "name": "test"
         }
-        with self.assertRaises(ValidationError) as e:
-            self.language.deserialize(json_language)
-        self.assertIn(
-            {
-                "id": "Invalid language tag: Unknown code 'flup', Missing "
-                      "language tag in 'flup'."
-            },
-            e.exception.errors
-        )
+        with pytest.raises(ValidationError) as exc_info:
+            language_schema.deserialize(json_language)
+        assert {
+            "id": "Invalid language tag: Unknown code 'flup', Missing "
+                  "language tag in 'flup'."
+        } in exc_info.value.errors
 
-    def test_subordinate_arrays(self):
-        self.json_concept['subordinate_arrays'] = [{"id": 667}]
-        validated_json = self.concept_schema.deserialize(self.json_concept)
-        self.assertIsNotNone(validated_json)
+    def test_subordinate_arrays(self, concept_schema, json_concept):
+        json_concept['subordinate_arrays'] = [{"id": 667}]
+        validated_json = concept_schema.deserialize(json_concept)
+        assert validated_json is not None
 
-    def test_subordinate_arrays_no_concept(self):
-        self.json_collection['subordinate_arrays'] = [{"id": 666}]
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {'subordinate_arrays': 'Only concept can have subordinate arrays.'},
-            e.exception.errors
-        )
+    def test_subordinate_arrays_no_concept(self, concept_schema, json_collection):
+        json_collection['subordinate_arrays'] = [{"id": 666}]
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'subordinate_arrays': 'Only concept can have subordinate arrays.'
+        } in exc_info.value.errors
 
-    def test_subordinate_arrays_no_collection(self):
-        self.json_concept['subordinate_arrays'] = [{"id": 7}]
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {'subordinate_arrays': 'A subordinate array should always be a collection'},
-            e.exception.errors
-        )
+    def test_subordinate_arrays_no_collection(self, concept_schema, json_concept):
+        json_concept['subordinate_arrays'] = [{"id": 7}]
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'subordinate_arrays': 'A subordinate array should always be a collection'
+        } in exc_info.value.errors
 
-    def test_subordinate_arrays_hierarchy(self):
-        self.json_concept['subordinate_arrays'] = [{"id": 666}]
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {
-                'subordinate_arrays': 'The subordinate_array collection of a concept must '
-                                      'not itself be a parent of the concept being edited.'
-            },
-            e.exception.errors
-        )
+    def test_subordinate_arrays_hierarchy(self, concept_schema, json_concept):
+        json_concept['subordinate_arrays'] = [{"id": 666}]
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'subordinate_arrays': 'The subordinate_array collection of a concept must '
+                                  'not itself be a parent of the concept being edited.'
+        } in exc_info.value.errors
 
-    def test_superordinates(self):
-        self.json_collection['superordinates'] = [{"id": 7}]
-        validated_json = self.concept_schema.deserialize(self.json_collection)
-        self.assertIsNotNone(validated_json)
+    def test_superordinates(self, concept_schema, json_collection):
+        json_collection['superordinates'] = [{"id": 7}]
+        validated_json = concept_schema.deserialize(json_collection)
+        assert validated_json is not None
 
-    def test_superordinates_no_concept(self):
-        self.json_collection['superordinates'] = [{"id": 666}]
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {'superordinates': 'A superordinate should always be a concept'},
-            e.exception.errors
-        )
+    def test_superordinates_no_concept(self, concept_schema, json_collection):
+        json_collection['superordinates'] = [{"id": 666}]
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'superordinates': 'A superordinate should always be a concept'
+        } in exc_info.value.errors
 
-    def test_superordinates_no_collection(self):
-        self.json_concept['superordinates'] = [{"id": 7}]
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_concept)
-        self.assertIn(
-            {'superordinates': 'Only collection can have superordinates.'},
-            e.exception.errors
-        )
+    def test_superordinates_no_collection(self, concept_schema, json_concept):
+        json_concept['superordinates'] = [{"id": 7}]
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {
+            'superordinates': 'Only collection can have superordinates.'
+        } in exc_info.value.errors
 
-    def test_superordinates_hierarchy(self):
-        self.json_collection['superordinates'] = [{"id": 61}]
-        with self.assertRaises(ValidationError) as e:
-            self.concept_schema.deserialize(self.json_collection)
-        self.assertIn(
-            {
-                'superordinates': 'The superordinates of a collection must not itself '
-                                  'be a member of the collection being edited.'
-            },
-            e.exception.errors
-        )
+    def test_superordinates_hierarchy(self, concept_schema, json_collection):
+        json_collection['superordinates'] = [{"id": 61}]
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_collection)
+        assert {
+            'superordinates': 'The superordinates of a collection must not itself '
+                              'be a member of the collection being edited.'
+        } in exc_info.value.errors
 
-    def test_html_in_notes(self):
+    def test_html_in_notes(self, concept_schema):
         json_concept = {
             "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
             "label": "Belgium",
@@ -745,11 +722,11 @@ class TestValidation(unittest.TestCase):
             }],
             "member_of": [{"id": 666}]
         }
-        validated_json = self.concept_schema.deserialize(json_concept)
+        validated_json = concept_schema.deserialize(json_concept)
         note = validated_json['notes'][0]
-        self.assertEqual("een <strong>\nnotitie</strong>", note['note'])
+        assert "een <strong>\nnotitie</strong>" == note['note']
 
-    def test_html_in_sources(self):
+    def test_html_in_sources(self, concept_schema):
         json_concept = {
             "narrower": [{"id": 8}, {"id": 7}, {"id": 9}],
             "label": "Belgium",
@@ -772,49 +749,57 @@ class TestValidation(unittest.TestCase):
             }],
             "member_of": [{"id": 666}]
         }
-        validated_json = self.concept_schema.deserialize(json_concept)
+        validated_json = concept_schema.deserialize(json_concept)
         source = validated_json['sources'][0]
-        self.assertEqual("Van Daele K. <strong>\n2014</strong>", source['citation'])
+        assert "Van Daele K. <strong>\n2014</strong>" == source['citation']
 
-    def test_id_generation_manual_no_id(self):
-        concept_schema = self.concept_schema.bind(
-            request=self.request,
-            provider=self.provider,
+    def test_id_generation_manual_no_id(self, dummy_request, provider, json_concept):
+        concept_schema = ConceptSchema(
+            validator=concept_schema_validator
+        ).bind(
+            request=dummy_request,
+            provider=provider,
             validate_id_generation=True,
         )
-        self.provider.metadata["atramhasis.id_generation_strategy"] = (
+        provider.metadata["atramhasis.id_generation_strategy"] = (
             IDGenerationStrategy.MANUAL
         )
-        del self.json_concept["id"]
-        with self.assertRaises(ValidationError) as e:
-            concept_schema.deserialize(self.json_concept)
-        self.assertIn({'id': 'Required for this provider.'}, e.exception.errors)
-        concept_schema = self.concept_schema.bind(
-            request=self.request,
-            provider=self.provider,
+        del json_concept["id"]
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {'id': 'Required for this provider.'} in exc_info.value.errors
+        concept_schema = ConceptSchema(
+            validator=concept_schema_validator
+        ).bind(
+            request=dummy_request,
+            provider=provider,
             validate_id_generation=False,
         )
-        concept_schema.deserialize(self.json_concept)
+        concept_schema.deserialize(json_concept)
 
-    def test_id_generation_manual_not_unique(self):
-        concept_schema = self.concept_schema.bind(
-            request=self.request,
-            provider=self.provider,
+    def test_id_generation_manual_not_unique(self, dummy_request, provider, json_concept):
+        concept_schema = ConceptSchema(
+            validator=concept_schema_validator
+        ).bind(
+            request=dummy_request,
+            provider=provider,
             validate_id_generation=True,
         )
-        self.provider.metadata["atramhasis.id_generation_strategy"] = (
+        provider.metadata["atramhasis.id_generation_strategy"] = (
             IDGenerationStrategy.MANUAL
         )
-        self.json_concept["id"] = "1"
-        with self.assertRaises(ValidationError) as e:
-            concept_schema.deserialize(self.json_concept)
-        self.assertIn({'id': '1 already exists.'}, e.exception.errors)
-        concept_schema = self.concept_schema.bind(
-            request=self.request,
-            provider=self.provider,
+        json_concept["id"] = "1"
+        with pytest.raises(ValidationError) as exc_info:
+            concept_schema.deserialize(json_concept)
+        assert {'id': '1 already exists.'} in exc_info.value.errors
+        concept_schema = ConceptSchema(
+            validator=concept_schema_validator
+        ).bind(
+            request=dummy_request,
+            provider=provider,
             validate_id_generation=False,
         )
-        concept_schema.deserialize(self.json_concept)
+        concept_schema.deserialize(json_concept)
 
     def test_validate_provider(self):
         """
@@ -836,24 +821,24 @@ class TestValidation(unittest.TestCase):
         )
         for bad_key in forbidden_metadata_keys:
             json_data = {'metadata': {bad_key: 'value'}}
-            with self.assertRaises(ValidationError):
+            with pytest.raises(ValidationError):
                 validators.validate_provider_json(json_data)
 
     def test_validate_provider_bad_language(self):
         json_data = {'default_language': 'notalanguage'}
-        with self.assertRaises(ValidationError):
+        with pytest.raises(ValidationError):
             validators.validate_provider_json(json_data)
         json_data = {'force_display_language': 'notalanguage'}
-        with self.assertRaises(ValidationError):
+        with pytest.raises(ValidationError):
             validators.validate_provider_json(json_data)
 
     def test_validate_provider_update_with_wrong_id(self):
         json_data = {'id': 'notanid'}
-        with self.assertRaises(ValidationError):
+        with pytest.raises(ValidationError):
             validators.validate_provider_json(json_data, "test")
 
 
-class TestHierarchyBuildPerformance(unittest.TestCase):
+class TestHierarchyBuildPerformance:
     """
     Benchmark tests proving the BFS hierarchy_build completes in linear time.
 
@@ -919,12 +904,10 @@ class TestHierarchyBuildPerformance(unittest.TestCase):
         elapsed = time.perf_counter() - start
 
         # Should complete nearly instantly (well under 1 second).
-        self.assertLess(
-            elapsed, 1.0, f'hierarchy_build took {elapsed:.2f}s, expected < 1s'
-        )
+        assert elapsed < 1.0, f'hierarchy_build took {elapsed:.2f}s, expected < 1s'
         # Verify correctness: all non-root nodes should be in the result.
         # Total nodes = (3^8 - 1) / (3 - 1) = 3280, minus 1 root = 3279 descendants.
-        self.assertEqual(3279, len(result))
+        assert 3279 == len(result)
 
     def test_deep_chain_completes_fast(self):
         """
@@ -942,10 +925,8 @@ class TestHierarchyBuildPerformance(unittest.TestCase):
         )
         elapsed = time.perf_counter() - start
 
-        self.assertLess(
-            elapsed, 1.0, f'hierarchy_build took {elapsed:.2f}s, expected < 1s'
-        )
-        self.assertEqual(len(result), 500)
+        assert elapsed < 1.0, f'hierarchy_build took {elapsed:.2f}s, expected < 1s'
+        assert len(result) == 500
 
     def test_cycle_does_not_loop_forever(self):
         """
@@ -974,6 +955,6 @@ class TestHierarchyBuildPerformance(unittest.TestCase):
         )
         elapsed = time.perf_counter() - start
 
-        self.assertLess(elapsed, 1.0)
+        assert elapsed < 1.0
         # All three nodes should appear in the result (B, C, A as descendants).
-        self.assertEqual(set(result), {'A', 'B', 'C'})
+        assert set(result) == {'A', 'B', 'C'}
