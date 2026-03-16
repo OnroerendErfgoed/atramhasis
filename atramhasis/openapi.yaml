@@ -101,19 +101,9 @@ paths:
       description: Get information about a concept or collection.
       tags:
         - Pyramid_skosprovider
-      parameters: &conceptscheme_c_params
-        - name: scheme_id
-          in: path
-          description: The identifier for a certain concept scheme.
-          required: true
-          schema:
-            type: string
-        - name: c_id
-          in: path
-          description: The identifier for a certain concept or collection.
-          required: true
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/ConceptId'
       responses:
         200:
           description: The concept was found in the conceptscheme.
@@ -128,7 +118,9 @@ paths:
       summary: Check if a concept or collection exists.
       tags:
         - Pyramid_skosprovider
-      parameters: *conceptscheme_c_params
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/ConceptId'
       responses:
         200:
           description: The concept was found in the conceptscheme.
@@ -265,13 +257,8 @@ paths:
       summary: Get information about a concept scheme.
       tags:
         - Pyramid_skosprovider
-      parameters: &conceptscheme_params
-        - name: scheme_id
-          in: path
-          description: The identifier for a certain concept scheme.
-          required: true
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
       responses:
         200:
           description: The conceptscheme was not found.
@@ -283,7 +270,8 @@ paths:
       summary: Check if a concept scheme exists.
       tags:
         - Pyramid_skosprovider
-      parameters: *conceptscheme_params
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
       responses:
         200:
           description: The conceptscheme exists.
@@ -353,15 +341,8 @@ paths:
       summary: List all languages known to this Atramhasis instance.
       tags:
         - Atramhasis
-      parameters: &languages_get_params
-        - name: sort
-          in: query
-          description: Which field to sort on. Use `-` and `+` to indicate sort order.
-            Eg. `id` or `+id` sort ascending on `id`, `-name` sort descending on
-            `name`.
-          required: false
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/LanguageSort'
       responses:
         200:
           description: The list of languages was returned.
@@ -375,7 +356,8 @@ paths:
       summary: Check languages availability.
       tags:
         - Atramhasis
-      parameters: *languages_get_params
+      parameters:
+        - $ref: '#/components/parameters/LanguageSort'
       responses:
         200:
           description: The list of languages was returned.
@@ -386,13 +368,8 @@ paths:
       description: Get information on a certain language.
       tags:
         - Atramhasis
-      parameters: &language_id_param
-        - name: l_id
-          in: path
-          description: The identifier for a certain language.
-          required: true
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/LanguageId'
       responses:
         200:
           description: The language was found.
@@ -406,7 +383,8 @@ paths:
       summary: Check if a language exists.
       tags:
         - Atramhasis
-      parameters: *language_id_param
+      parameters:
+        - $ref: '#/components/parameters/LanguageId'
       responses:
         200:
           description: The language was found.
@@ -523,13 +501,8 @@ paths:
         registry.
       tags:
         - Pyramid_skosprovider
-      parameters: &uris_params
-        - name: uri
-          in: query
-          description: The URI to search for.
-          required: true
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/Uri'
       responses:
         200:
           description: The URI maps to something known by pyramid_skosprovider,
@@ -561,7 +534,8 @@ paths:
       summary: Check if a URI can be found.
       tags:
         - Pyramid_skosprovider
-      parameters: *uris_params
+      parameters:
+        - $ref: '#/components/parameters/Uri'
       responses:
         200:
           description: The URI maps to something known by pyramid_skosprovider.
@@ -573,63 +547,14 @@ paths:
       description: Search for concepts or collections, no matter what scheme they're a part of.
       tags:
         - Pyramid_skosprovider
-      parameters: &c_get_params
-        - name: type
-          in: query
-          description: Define if you want to show concepts or collections. Leave
-            blank to show both.
-          required: false
-          schema:
-            type: string
-        - name: mode
-          in: query
-          description: Allows for special processing mode for dijitFilteringSelect.
-            Makes it possible to use wildcards in the label parameter.
-          required: false
-          schema:
-            type: string
-        - name: label
-          in: query
-          description: Shows all concepts and collections that have this search
-            string in one of their labels.
-          required: false
-          schema:
-            type: string
-        - name: language
-          in: query
-          description: Returns the label with the corresponding language-tag if present.
-            If the language is not present for this concept/collection, it falls back to
-            1) the default language of the provider. 2) 'en' 3) any label.
-            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
-          required: false
-          schema:
-            type: string
-        - name: sort
-          in: query
-          description: Define if you want to sort the results by a given field. Otherwise items are returned
-            in an indeterminate order. Prefix with '+' to sort ascending, '-' to sort descending.
-            eg. ``?sort=-label`` to sort all results descending by label.
-          required: false
-          schema:
-            type: string
-        - name: providers.ids
-          in: query
-          description: A comma separated list of concept scheme id's. The query
-            will only be passed to the providers with these id's. eg.
-            ``?providers.ids=TREES, PARROTS`` will only list concepts from these two providers.
-          required: false
-          schema:
-            type: string
-        - name: providers.subject
-          in: query
-          description: A subject can be registered with a skosprovider in
-            the registry. Adding this search parameter means that the query will only
-            be passed on to providers that have been tagged with this subject. Eg.
-            ``?providers.subject=external`` to only query the providers that have been marked
-            with the subject `external`.
-          required: false
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/ConceptType'
+        - $ref: '#/components/parameters/SearchMode'
+        - $ref: '#/components/parameters/LabelFilter'
+        - $ref: '#/components/parameters/Language'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/ProvidersIds'
+        - $ref: '#/components/parameters/ProvidersSubject'
       responses:
         200:
           description: The concepts in this conceptscheme were found.
@@ -643,7 +568,14 @@ paths:
       summary: Check concepts or collections availability.
       tags:
         - Pyramid_skosprovider
-      parameters: *c_get_params
+      parameters:
+        - $ref: '#/components/parameters/ConceptType'
+        - $ref: '#/components/parameters/SearchMode'
+        - $ref: '#/components/parameters/LabelFilter'
+        - $ref: '#/components/parameters/Language'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/ProvidersIds'
+        - $ref: '#/components/parameters/ProvidersSubject'
       responses:
         200:
           description: The concepts were found.
@@ -655,22 +587,9 @@ paths:
         in the conceptscheme that have no broader concept.
       tags:
         - Pyramid_skosprovider
-      parameters: &scheme_language_params
-        - name: scheme_id
-          in: path
-          description: The identifier for a certain conceptscheme.
-          required: true
-          schema:
-            type: string
-        - name: language
-          in: query
-          description: Returns the label with the corresponding language-tag if present.
-            If the language is not present for this concept/collection, it falls back to
-            1) the default language of the provider. 2) 'en' 3) any label.
-            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
-          required: false
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/Language'
       responses:
         200:
           description: The topconcepts in this conceptscheme were found.
@@ -686,7 +605,9 @@ paths:
       summary: Check if top concepts exist in a scheme.
       tags:
         - Pyramid_skosprovider
-      parameters: *scheme_language_params
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/Language'
       responses:
         200:
           description: The topconcepts in this conceptscheme were found.
@@ -700,22 +621,9 @@ paths:
         this will be a list of Concepts and Collections.
       tags:
         - Pyramid_skosprovider
-      parameters: &scheme_language_params2
-        - name: scheme_id
-          in: path
-          description: The identifier for a certain conceptscheme.
-          required: true
-          schema:
-            type: string
-        - name: language
-          in: query
-          description: Returns the label with the corresponding language-tag if present.
-            If the language is not present for this concept/collection, it falls back to
-            1) the default language of the provider. 2) 'en' 3) any label.
-            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
-          required: false
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/Language'
       responses:
         200:
           description: The concepts and collections were found.
@@ -731,7 +639,9 @@ paths:
       summary: Check if display top exists.
       tags:
         - Pyramid_skosprovider
-      parameters: *scheme_language_params2
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/Language'
       responses:
         200:
           description: The concepts and collections were found.
@@ -745,28 +655,10 @@ paths:
         children of this Concept or Collection.
       tags:
         - Pyramid_skosprovider
-      parameters: &scheme_c_language_params
-        - name: scheme_id
-          in: path
-          description: The identifier for a certain conceptscheme.
-          required: true
-          schema:
-            type: string
-        - name: c_id
-          in: path
-          description: The identifier for a certain concept or collection.
-          required: true
-          schema:
-            type: string
-        - name: language
-          in: query
-          description: Returns the label with the corresponding language-tag if present.
-            If the language is not present for this concept/collection, it falls back to
-            1) the default language of the provider. 2) 'en' 3) any label.
-            Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
-          required: false
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/ConceptId'
+        - $ref: '#/components/parameters/Language'
       responses:
         200:
           description: The concept was found in the conceptscheme.
@@ -783,7 +675,10 @@ paths:
       summary: Check if display children exist.
       tags:
         - Pyramid_skosprovider
-      parameters: *scheme_c_language_params
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/ConceptId'
+        - $ref: '#/components/parameters/Language'
       responses:
         200:
           description: The concept was found in the conceptscheme.
@@ -812,19 +707,9 @@ paths:
         exist.
       tags:
         - Pyramid_skosprovider
-      parameters: &scheme_c_params
-        - name: scheme_id
-          in: path
-          description: The identifier for a certain conceptscheme.
-          required: true
-          schema:
-            type: string
-        - name: c_id
-          in: path
-          description: The identifier for a certain concept or collection.
-          required: true
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/ConceptId'
       responses:
         200:
           description: The concept/collection was found in the conceptscheme.
@@ -841,7 +726,9 @@ paths:
       summary: Check if a concept or collection can be expanded.
       tags:
         - Pyramid_skosprovider
-      parameters: *scheme_c_params
+      parameters:
+        - $ref: '#/components/parameters/SchemeId'
+        - $ref: '#/components/parameters/ConceptId'
       responses:
         200:
           description: The concept/collection was found in the conceptscheme.
@@ -852,12 +739,8 @@ paths:
   /providers:
     get:
       summary: Get all registered providers.
-      parameters: &providers_get_params
-        - name: subject
-          in: query
-          description: A value to filter providers on their subject
-          schema:
-            type: string
+      parameters:
+        - $ref: '#/components/parameters/Subject'
       tags:
         - Atramhasis
       responses:
@@ -875,7 +758,8 @@ paths:
           description: Unexpected error.
     head:
       summary: Check providers availability.
-      parameters: *providers_get_params
+      parameters:
+        - $ref: '#/components/parameters/Subject'
       tags:
         - Atramhasis
       responses:
@@ -1042,6 +926,62 @@ components:
         If the language is not present for this concept/collection, it falls back to
         1) the default language of the provider. 2) 'en' 3) any label.
         Eg. ``?language=nl`` to show the dutch labels of the concepts/collections.
+      required: false
+      schema:
+        type: string
+    ConceptId:
+      name: c_id
+      in: path
+      description: The identifier for a certain concept or collection.
+      required: true
+      schema:
+        type: string
+    LanguageId:
+      name: l_id
+      in: path
+      description: The identifier for a certain language.
+      required: true
+      schema:
+        type: string
+    Uri:
+      name: uri
+      in: query
+      description: The URI to search for.
+      required: true
+      schema:
+        type: string
+    ProvidersIds:
+      name: providers.ids
+      in: query
+      description: A comma separated list of concept scheme id's. The query
+        will only be passed to the providers with these id's. eg.
+        ``?providers.ids=TREES, PARROTS`` will only list concepts from these two providers.
+      required: false
+      schema:
+        type: string
+    ProvidersSubject:
+      name: providers.subject
+      in: query
+      description: A subject can be registered with a skosprovider in
+        the registry. Adding this search parameter means that the query will only
+        be passed on to providers that have been tagged with this subject. Eg.
+        ``?providers.subject=external`` to only query the providers that have been marked
+        with the subject `external`.
+      required: false
+      schema:
+        type: string
+    Subject:
+      name: subject
+      in: query
+      description: A value to filter providers on their subject
+      schema:
+        type: string
+    LanguageSort:
+      name: sort
+      in: query
+      description: Which field to sort on. Use `-` and `+` to indicate sort order.
+        Eg. `id` or `+id` sort ascending on `id`, `-name` sort descending on
+        `name`.
       required: false
       schema:
         type: string

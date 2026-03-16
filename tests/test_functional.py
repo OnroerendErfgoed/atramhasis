@@ -682,9 +682,12 @@ class TestRestFunctional:
             expect_errors=True,
         )
         assert {
-            'errors': ['None: Failed to cast value to array type: wrong'],
-            'message': 'Request was not valid for schema.',
-        } == response.json
+           'errors': [
+               "subject: 'wrong' is not of type 'array'",
+               "subject: 'conceptscheme_uri' is a required property"
+           ],
+           'message': 'Request was not valid for schema.'
+       } == response.json
         response = testapp.post_json(
             url='/providers',
             params={'uri_pattern': 'invalid', 'subject': ['right']},
