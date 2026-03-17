@@ -134,7 +134,7 @@ define([
       }
 
       return array.some(["broad", "close", "exact", "narrow", "related"], function (type) {
-        return !!matches[type]?.length;
+        return !!(matches[type] && matches[type].length);
       });
     },
 
