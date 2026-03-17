@@ -39,6 +39,21 @@ def get_definition(notes):
             return note.note
 
 
+NOTE_TYPE_ORDER = {
+    'definition': 0,
+    'scopeNote': 1,
+    'note': 2,
+    'example': 3,
+    'historyNote': 4,
+    'changeNote': 5,
+    'editorialNote': 6,
+}
+
+
+def sort_by_notetypes(notes):
+    return sorted(notes, key=lambda n: NOTE_TYPE_ORDER.get(n.notetype_id, 99))
+
+
 def sort_by_labels(concepts, locale, reverse=False):
     return sorted((x for x in concepts if x.label(locale)),
                   reverse=reverse,
@@ -183,6 +198,7 @@ class AtramhasisView:
                 concept_type = "Collection"
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
+            c.notes = sort_by_notetypes(c.notes)
             url = self.request.route_url('skosprovider.c', scheme_id=scheme_id, c_id=c_id)
             update_last_visited_concepts(self.request, {'label': c.label(locale).label, 'url': url})
             return {

@@ -37,6 +37,7 @@ from atramhasis.views.views import AtramhasisView
 from atramhasis.views.views import get_definition
 from atramhasis.views.views import get_public_conceptschemes
 from atramhasis.views.views import labels_to_string
+from atramhasis.views.views import sort_by_notetypes
 from fixtures.data import trees
 
 TEST_DIR = os.path.dirname(__file__)
@@ -568,6 +569,41 @@ class TestViewFunctions:
         ]
         s = get_definition(notes)
         assert 'test2' == s
+
+    def test_sort_by_notetypes(self):
+        notes = [
+            Note(note='editorial', language_id='nl', notetype_id='editorialNote'),
+            Note(note='scope', language_id='nl', notetype_id='scopeNote'),
+            Note(note='definition', language_id='nl', notetype_id='definition'),
+            Note(note='change', language_id='nl', notetype_id='changeNote'),
+            Note(note='example', language_id='nl', notetype_id='example'),
+            Note(note='history', language_id='nl', notetype_id='historyNote'),
+            Note(note='note', language_id='nl', notetype_id='note'),
+        ]
+        sorted_notes = sort_by_notetypes(notes)
+        assert [n.notetype_id for n in sorted_notes] == [
+            'definition',
+            'scopeNote',
+            'note',
+            'example',
+            'historyNote',
+            'changeNote',
+            'editorialNote',
+        ]
+
+    def test_sort_by_notetypes_unknown_type_last(self):
+        notes = [
+            Note(note='unknown', language_id='nl', notetype_id='unknownType'),
+            Note(note='definition', language_id='nl', notetype_id='definition'),
+        ]
+        sorted_notes = sort_by_notetypes(notes)
+        assert [n.notetype_id for n in sorted_notes] == [
+            'definition',
+            'unknownType',
+        ]
+
+    def test_sort_by_notetypes_empty(self):
+        assert sort_by_notetypes([]) == []
 
     def test_get_public_conceptschemes(self):
         regis = Registry()
