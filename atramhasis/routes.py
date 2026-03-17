@@ -44,9 +44,9 @@ def includeme(config):
 
     # language
     config.add_route('atramhasis.list_languages', pattern='/languages', accept='application/json',
-                     request_method="GET")
+                     request_method=("GET", "HEAD"))
     config.add_route('atramhasis.get_language', pattern='/languages/{l_id}', accept='application/json',
-                     request_method="GET")
+                     request_method=("GET", "HEAD"))
     config.add_route('atramhasis.edit_language', pattern='/languages/{l_id}', accept='application/json',
                      request_method="PUT")
     config.add_route('atramhasis.delete_language', pattern='/languages/{l_id}', accept='application/json',
@@ -62,6 +62,11 @@ def includeme(config):
     config.add_route('atramhasis.providers', pattern='/providers')
     config.add_route('atramhasis.provider', pattern='/providers/{id}')
 
+    # health
+    config.add_route('atramhasis.live', '/live')
+    config.add_route('atramhasis.ready', '/ready')
+    config.add_route('atramhasis.health', '/health')
+
     # other
-    config.add_route('labeltypes', '/labeltypes', accept='application/json', request_method="GET")
-    config.add_route('notetypes', '/notetypes', accept='application/json', request_method="GET")
+    config.add_route('labeltypes', '/labeltypes', accept='application/json', request_method=("GET", "HEAD"))
+    config.add_route('notetypes', '/notetypes', accept='application/json', request_method=("GET", "HEAD"))

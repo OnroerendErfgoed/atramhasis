@@ -1,7 +1,6 @@
 [run]
 source = atramhasis
-omit = 
-    atramhasis/scripts/*
+omit =
     atramhasis/alembic/env.py
 
 [report]

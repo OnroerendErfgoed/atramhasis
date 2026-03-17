@@ -4,9 +4,11 @@ Module containing utility functions used by Atramhasis.
 
 import contextlib
 import copy
+import logging
 from collections import deque
 
 from pyramid.httpexceptions import HTTPMethodNotAllowed
+from skosprovider.exceptions import ProviderUnavailableException
 from skosprovider.skos import Collection
 from skosprovider.skos import Concept
 from skosprovider.skos import ConceptScheme
@@ -20,6 +22,8 @@ from sqlalchemy import orm
 from sqlalchemy.orm import sessionmaker
 
 from atramhasis.data.models import Provider
+
+log = logging.getLogger(__name__)
 
 
 def from_thing(thing):
@@ -114,6 +118,15 @@ def update_last_visited_concepts(request, concept_data):
     # Add concept to the queue
     deque_last_visited.append(concept_data)
     request.session['last_visited'] = list(deque_last_visited)
+
+
+def safe_get_by_uri(registry, uri):
+    """Wrap registry.get_by_uri to handle unavailable providers gracefully."""
+    try:
+        return registry.get_by_uri(uri)
+    except ProviderUnavailableException:
+        log.warning("Provider unavailable for URI %s", uri)
+        return None
 
 
 def label_sort(concepts, language='any'):
