@@ -51,6 +51,7 @@ dependencies = [
     "rdflib",
     "bleach",
     "pyramid_openapi3==0.19",
+    "openapi-core<0.23",
     "setuptools<82",
 ]
 
