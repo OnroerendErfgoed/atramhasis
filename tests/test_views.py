@@ -580,7 +580,7 @@ class TestViewFunctions:
             Note(note='history', language_id='nl', notetype_id='historyNote'),
             Note(note='note', language_id='nl', notetype_id='note'),
         ]
-        sorted_notes = sort_by_notetypes(notes)
+        sorted_notes = sort_by_notetypes(notes, {})
         assert [n.notetype_id for n in sorted_notes] == [
             'definition',
             'scopeNote',
@@ -596,14 +596,14 @@ class TestViewFunctions:
             Note(note='unknown', language_id='nl', notetype_id='unknownType'),
             Note(note='definition', language_id='nl', notetype_id='definition'),
         ]
-        sorted_notes = sort_by_notetypes(notes)
+        sorted_notes = sort_by_notetypes(notes, {})
         assert [n.notetype_id for n in sorted_notes] == [
             'definition',
             'unknownType',
         ]
 
     def test_sort_by_notetypes_empty(self):
-        assert sort_by_notetypes([]) == []
+        assert sort_by_notetypes([], {}) == []
 
     def test_get_public_conceptschemes(self):
         regis = Registry()
