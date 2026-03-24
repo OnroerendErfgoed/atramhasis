@@ -275,7 +275,7 @@ def create_conceptscheme(
     return ConceptScheme(uri=conceptscheme_uri, labels=[{"label": conceptscheme_label}])
 
 
-def main(argv=sys.argv):
+def main(argv=sys.argv):  # pragma: no cover
     """
     Documentation: import -h
     Run: import

@@ -20,7 +20,7 @@ from atramhasis.errors import SkosRegistryNotFoundException
 log = logging.getLogger(__name__)
 
 
-def main():
+def main():  # pragma: no cover
     description = """\
     Dump all conceptschemes to files. Will serialise as Turtle and RDF/XML format.
     """

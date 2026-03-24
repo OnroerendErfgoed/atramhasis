@@ -181,7 +181,7 @@ def import_provider(
     session.add(db_provider)
 
 
-def main(argv=sys.argv):
+def main(argv=sys.argv):  # pragma: no cover
     if len(argv) < 2:
         usage(argv)
 

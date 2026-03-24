@@ -200,7 +200,7 @@ def migrate(skos_registry: Registry, session: Session):
     print("Migration finished.")
 
 
-def main():
+def main():  # pragma: no cover
     parser = argparse.ArgumentParser(
         description="Migrate SQLAlchemyProviders from a skosregistry to the database.",
     )

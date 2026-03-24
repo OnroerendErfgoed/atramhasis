@@ -14,7 +14,7 @@ from atramhasis.errors import SkosRegistryNotFoundException
 log = logging.getLogger(__name__)
 
 
-def main():
+def main():  # pragma: no cover
     description = """\
     Generate a config file for a LDF server.
     """

@@ -84,7 +84,7 @@ def delete_child_concepts(concept_id, session):
         delete_concept(child_id, session)
 
 
-def main():
+def main():  # pragma: no cover
     parser = argparse.ArgumentParser(
         description="Delete a conceptscheme. ",
         usage="remove_schema development.ini --id=1",

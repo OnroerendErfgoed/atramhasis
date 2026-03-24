@@ -110,7 +110,7 @@ def create_index_sitemap(base_url, directory):
     log.info("Sitemap index created.")
 
 
-def main():
+def main():  # pragma: no cover
     parser = argparse.ArgumentParser(
         description="Process some command line arguments. ",
         usage="sitemap_generator development.ini#atramhasis --limit=1000",
