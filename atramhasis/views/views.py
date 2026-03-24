@@ -1,4 +1,5 @@
 import os
+import sys
 import urllib
 
 from pyramid.httpexceptions import HTTPFound
@@ -39,7 +40,7 @@ def get_definition(notes):
             return note.note
 
 
-NOTE_TYPE_ORDER = {
+DEFAULT_NOTE_TYPE_ORDER = {
     'definition': 0,
     'scopeNote': 1,
     'note': 2,
@@ -50,8 +51,11 @@ NOTE_TYPE_ORDER = {
 }
 
 
-def sort_by_notetypes(notes):
-    return sorted(notes, key=lambda n: NOTE_TYPE_ORDER.get(n.notetype_id, 99))
+def sort_by_notetypes(notes, settings):
+    note_type_order = settings.get(
+        'atramhasis.note_type_order', DEFAULT_NOTE_TYPE_ORDER
+    )
+    return sorted(notes, key=lambda n: note_type_order.get(n.notetype_id, sys.maxsize))
 
 
 def sort_by_labels(concepts, locale, reverse=False):
@@ -198,7 +202,7 @@ class AtramhasisView:
                 concept_type = "Collection"
             else:
                 return Response('Thing without type: ' + str(c_id), status_int=500)
-            c.notes = sort_by_notetypes(c.notes)
+            c.notes = sort_by_notetypes(c.notes, self.request.registry.settings)
             url = self.request.route_url('skosprovider.c', scheme_id=scheme_id, c_id=c_id)
             update_last_visited_concepts(self.request, {'label': c.label(locale).label, 'url': url})
             return {
