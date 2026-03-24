@@ -5,6 +5,7 @@ Revises: cb568ec81000
 Create Date: 2020-08-12 14:48:35.592316
 
 """
+
 from alembic import op
 
 # revision identifiers, used by Alembic.
@@ -22,7 +23,6 @@ def _get_convention():
 
 
 def upgrade():
-
     args = [
         ("conceptscheme_source", "conceptscheme", "conceptscheme_id", "id"),
         ("conceptscheme_source", "source", "source_id", "id"),

@@ -27,7 +27,7 @@ def mock_manager(monkeypatch, mock_session):
         return [provider]
 
     monkeypatch.setattr(
-        'atramhasis.data.datamanagers.ProviderDataManager.get_all_providers',
+        "atramhasis.data.datamanagers.ProviderDataManager.get_all_providers",
         mock_get_all_providers,
     )
 
@@ -43,7 +43,7 @@ def test_register_providers_from_db_adds_providers(
     mock_session, mock_manager, monkeypatch
 ):
     monkeypatch.setattr(
-        'atramhasis.utils.db_provider_to_skosprovider',
+        "atramhasis.utils.db_provider_to_skosprovider",
         Mock(return_value=MagicMock(allowed_instance_scopes=False)),
     )
     registry = Registry()
@@ -60,10 +60,10 @@ def test_register_providers_from_db_empty(monkeypatch, mock_session):
             return []
 
     monkeypatch.setattr(
-        'atramhasis.data.datamanagers.ProviderDataManager', DummyManager
+        "atramhasis.data.datamanagers.ProviderDataManager", DummyManager
     )
     monkeypatch.setattr(
-        'atramhasis.utils.db_provider_to_skosprovider',
+        "atramhasis.utils.db_provider_to_skosprovider",
         lambda db_provider: db_provider,
     )
     registry = Registry()

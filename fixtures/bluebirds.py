@@ -9,7 +9,7 @@ from skosprovider.uri import UriPatternGenerator
 from .bluebirds_data import BLUEBIRDSDATA
 
 bluebirds = DictionaryProvider(
-    {'id': 'BLUEBIRDS'},
+    {"id": "BLUEBIRDS"},
     BLUEBIRDSDATA,
-    uri_generator=UriPatternGenerator(pattern='http://id.bluebirds.org/%s'),
+    uri_generator=UriPatternGenerator(pattern="http://id.bluebirds.org/%s"),
 )

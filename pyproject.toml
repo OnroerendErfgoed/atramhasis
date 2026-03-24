@@ -73,7 +73,7 @@ dev = [
     "sphinxcontrib-httpdomain>=1.8.1",
     "pygments>=2.15.1",
     "waitress>=2.1.2",
-    "flake8>=4.0.1",
+    "pre-commit",
 ]
 
 [project.entry-points."paste.app_factory"]
@@ -121,5 +121,10 @@ fragments = [{ path = "README.rst" }, { path = "CHANGES.rst" }]
 [tool.uv]
 managed = false # Because we do not use the uv lockfile (yet)
 
+[tool.ruff.lint.isort]
+force-single-line = true
+force-sort-within-sections = true
+known-first-party = ["atramhasis"]
+
 [tool.ruff.format]
-quote-style = "single"
+quote-style = "double"

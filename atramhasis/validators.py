@@ -45,7 +45,7 @@ def html_preparer(value):
     :rtype: str
     """
     try:
-        return bleach.clean(value, tags=['strong', 'em', 'a'], strip=True)
+        return bleach.clean(value, tags=["strong", "em", "a"], strip=True)
     except TypeError:
         # Trying to clean a non-string
         # Ignore for now so it can be caught later on
@@ -96,7 +96,7 @@ class Matches(colander.MappingSchema):
 
 class Concept(colander.MappingSchema):
     id = colander.SchemaNode(ForcedString(), missing=None)
-    type = colander.SchemaNode(colander.String(), missing='concept')
+    type = colander.SchemaNode(colander.String(), missing="concept")
     labels = Labels(missing=[])
     notes = Notes(missing=[])
     sources = Sources(missing=[])
@@ -137,14 +137,14 @@ def concept_schema_validator(node, cstruct):
     :param colander.SchemaNode node: The schema that's being used while validating.
     :param cstruct: The concept or collection being validated.
     """
-    request = node.bindings['request']
-    validate_id_generation = node.bindings['validate_id_generation']
-    skos_manager = request.data_managers['skos_manager']
-    languages_manager = request.data_managers['languages_manager']
-    provider = node.bindings['provider']
+    request = node.bindings["request"]
+    validate_id_generation = node.bindings["validate_id_generation"]
+    skos_manager = request.data_managers["skos_manager"]
+    languages_manager = request.data_managers["languages_manager"]
+    provider = node.bindings["provider"]
     conceptscheme_id = provider.conceptscheme_id
-    concept_type = cstruct['type']
-    collection_id = cstruct['id']
+    concept_type = cstruct["type"]
+    collection_id = cstruct["id"]
     narrower = None
     broader = None
     related = None
@@ -157,64 +157,64 @@ def concept_schema_validator(node, cstruct):
     o_validated = False
     errors = []
     min_labels_rule(errors, node, cstruct)
-    if 'labels' in cstruct:
-        labels = copy.deepcopy(cstruct['labels'])
+    if "labels" in cstruct:
+        labels = copy.deepcopy(cstruct["labels"])
         label_type_rule(errors, node, skos_manager, labels)
         label_lang_rule(errors, node, languages_manager, labels)
         max_preflabels_rule(errors, node, labels)
-    if 'related' in cstruct:
-        related = copy.deepcopy(cstruct['related'])
-        related = [m['id'] for m in related]
+    if "related" in cstruct:
+        related = copy.deepcopy(cstruct["related"])
+        related = [m["id"] for m in related]
         r_validated = semantic_relations_rule(
             errors,
-            node['related'],
+            node["related"],
             skos_manager,
             conceptscheme_id,
             related,
             collection_id,
         )
-        concept_relations_rule(errors, node['related'], related, concept_type)
-    if 'narrower' in cstruct:
-        narrower = copy.deepcopy(cstruct['narrower'])
-        narrower = [m['id'] for m in narrower]
+        concept_relations_rule(errors, node["related"], related, concept_type)
+    if "narrower" in cstruct:
+        narrower = copy.deepcopy(cstruct["narrower"])
+        narrower = [m["id"] for m in narrower]
         n_validated = semantic_relations_rule(
             errors,
-            node['narrower'],
+            node["narrower"],
             skos_manager,
             conceptscheme_id,
             narrower,
             collection_id,
         )
-        concept_relations_rule(errors, node['narrower'], narrower, concept_type)
-    if 'broader' in cstruct:
-        broader = copy.deepcopy(cstruct['broader'])
-        broader = [m['id'] for m in broader]
+        concept_relations_rule(errors, node["narrower"], narrower, concept_type)
+    if "broader" in cstruct:
+        broader = copy.deepcopy(cstruct["broader"])
+        broader = [m["id"] for m in broader]
         b_validated = semantic_relations_rule(
             errors,
-            node['broader'],
+            node["broader"],
             skos_manager,
             conceptscheme_id,
             broader,
             collection_id,
         )
-        concept_relations_rule(errors, node['broader'], broader, concept_type)
-    if 'members' in cstruct:
-        members = copy.deepcopy(cstruct['members'])
-        members = [m['id'] for m in members]
+        concept_relations_rule(errors, node["broader"], broader, concept_type)
+    if "members" in cstruct:
+        members = copy.deepcopy(cstruct["members"])
+        members = [m["id"] for m in members]
         m_validated = semantic_relations_rule(
             errors,
-            node['members'],
+            node["members"],
             skos_manager,
             conceptscheme_id,
             members,
             collection_id,
         )
-    if 'member_of' in cstruct:
-        member_of = copy.deepcopy(cstruct['member_of'])
-        member_of = [m['id'] for m in member_of]
+    if "member_of" in cstruct:
+        member_of = copy.deepcopy(cstruct["member_of"])
+        member_of = [m["id"] for m in member_of]
         o_validated = semantic_relations_rule(
             errors,
-            node['member_of'],
+            node["member_of"],
             skos_manager,
             conceptscheme_id,
             member_of,
@@ -222,98 +222,98 @@ def concept_schema_validator(node, cstruct):
         )
     if r_validated and n_validated and b_validated:
         concept_type_rule(
-            errors, node['narrower'], skos_manager, conceptscheme_id, narrower
+            errors, node["narrower"], skos_manager, conceptscheme_id, narrower
         )
         narrower_hierarchy_rule(
-            errors, node['narrower'], skos_manager, conceptscheme_id, cstruct
+            errors, node["narrower"], skos_manager, conceptscheme_id, cstruct
         )
         concept_type_rule(
-            errors, node['broader'], skos_manager, conceptscheme_id, broader
+            errors, node["broader"], skos_manager, conceptscheme_id, broader
         )
         broader_hierarchy_rule(
-            errors, node['broader'], skos_manager, conceptscheme_id, cstruct
+            errors, node["broader"], skos_manager, conceptscheme_id, cstruct
         )
         concept_type_rule(
-            errors, node['related'], skos_manager, conceptscheme_id, related
+            errors, node["related"], skos_manager, conceptscheme_id, related
         )
 
     if m_validated and o_validated:
-        members_only_in_collection_rule(errors, node['members'], concept_type, members)
-        collection_members_unique_rule(errors, node['members'], members)
+        members_only_in_collection_rule(errors, node["members"], concept_type, members)
+        collection_members_unique_rule(errors, node["members"], members)
         collection_type_rule(
-            errors, node['member_of'], skos_manager, conceptscheme_id, member_of
+            errors, node["member_of"], skos_manager, conceptscheme_id, member_of
         )
         memberof_hierarchy_rule(
-            errors, node['member_of'], skos_manager, conceptscheme_id, cstruct
+            errors, node["member_of"], skos_manager, conceptscheme_id, cstruct
         )
         members_hierarchy_rule(
-            errors, node['members'], skos_manager, conceptscheme_id, cstruct
+            errors, node["members"], skos_manager, conceptscheme_id, cstruct
         )
 
-    if 'matches' in cstruct:
-        matches = copy.deepcopy(cstruct['matches'])
-        concept_matches_rule(errors, node['matches'], matches, concept_type)
-        concept_matches_unique_rule(errors, node['matches'], matches)
+    if "matches" in cstruct:
+        matches = copy.deepcopy(cstruct["matches"])
+        concept_matches_rule(errors, node["matches"], matches, concept_type)
+        concept_matches_unique_rule(errors, node["matches"], matches)
 
-    if 'subordinate_arrays' in cstruct:
-        subordinate_arrays = copy.deepcopy(cstruct['subordinate_arrays'])
-        subordinate_arrays = [m['id'] for m in subordinate_arrays]
+    if "subordinate_arrays" in cstruct:
+        subordinate_arrays = copy.deepcopy(cstruct["subordinate_arrays"])
+        subordinate_arrays = [m["id"] for m in subordinate_arrays]
         subordinate_arrays_only_in_concept_rule(
-            errors, node['subordinate_arrays'], concept_type, subordinate_arrays
+            errors, node["subordinate_arrays"], concept_type, subordinate_arrays
         )
         subordinate_arrays_type_rule(
             errors,
-            node['subordinate_arrays'],
+            node["subordinate_arrays"],
             skos_manager,
             conceptscheme_id,
             subordinate_arrays,
         )
         subordinate_arrays_hierarchy_rule(
-            errors, node['subordinate_arrays'], skos_manager, conceptscheme_id, cstruct
+            errors, node["subordinate_arrays"], skos_manager, conceptscheme_id, cstruct
         )
 
-    if 'superordinates' in cstruct:
-        superordinates = copy.deepcopy(cstruct['superordinates'])
-        superordinates = [m['id'] for m in superordinates]
+    if "superordinates" in cstruct:
+        superordinates = copy.deepcopy(cstruct["superordinates"])
+        superordinates = [m["id"] for m in superordinates]
         superordinates_only_in_concept_rule(
-            errors, node['superordinates'], concept_type, superordinates
+            errors, node["superordinates"], concept_type, superordinates
         )
         superordinates_type_rule(
             errors,
-            node['superordinates'],
+            node["superordinates"],
             skos_manager,
             conceptscheme_id,
             superordinates,
         )
         superordinates_hierarchy_rule(
-            errors, node['superordinates'], skos_manager, conceptscheme_id, cstruct
+            errors, node["superordinates"], skos_manager, conceptscheme_id, cstruct
         )
 
-    if cstruct['type'] == 'concept' and 'infer_concept_relations' in cstruct:
+    if cstruct["type"] == "concept" and "infer_concept_relations" in cstruct:
         msg = "'infer_concept_relations' can only be set for collections."
-        errors.append(colander.Invalid(node['infer_concept_relations'], msg=msg))
+        errors.append(colander.Invalid(node["infer_concept_relations"], msg=msg))
 
     if validate_id_generation:
         id_generation_strategy = provider.metadata.get(
-            'atramhasis.id_generation_strategy', IDGenerationStrategy.NUMERIC
+            "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
         )
         if id_generation_strategy == IDGenerationStrategy.MANUAL:
-            if not cstruct.get('id'):
-                msg = 'Required for this provider.'
-                errors.append(colander.Invalid(node['id'], msg=msg))
+            if not cstruct.get("id"):
+                msg = "Required for this provider."
+                errors.append(colander.Invalid(node["id"], msg=msg))
             else:
                 try:
-                    skos_manager.get_thing(cstruct['id'], conceptscheme_id)
+                    skos_manager.get_thing(cstruct["id"], conceptscheme_id)
                 except NoResultFound:
                     # this is desired
                     pass
                 else:
-                    msg = f'{cstruct["id"]} already exists.'
-                    errors.append(colander.Invalid(node['id'], msg=msg))
+                    msg = f"{cstruct['id']} already exists."
+                    errors.append(colander.Invalid(node["id"], msg=msg))
 
     if len(errors) > 0:
         raise ValidationError(
-            'Concept could not be validated', [e.asdict() for e in errors]
+            "Concept could not be validated", [e.asdict() for e in errors]
         )
 
 
@@ -324,19 +324,19 @@ def conceptscheme_schema_validator(node, cstruct):
     :param colander.SchemaNode node: The schema that's being used while validating.
     :param cstruct: The conceptscheme being validated.
     """
-    request = node.bindings['request']
-    skos_manager = request.data_managers['skos_manager']
-    languages_manager = request.data_managers['languages_manager']
+    request = node.bindings["request"]
+    skos_manager = request.data_managers["skos_manager"]
+    languages_manager = request.data_managers["languages_manager"]
     errors = []
     min_labels_rule(errors, node, cstruct)
-    if 'labels' in cstruct:
-        labels = copy.deepcopy(cstruct['labels'])
+    if "labels" in cstruct:
+        labels = copy.deepcopy(cstruct["labels"])
         label_type_rule(errors, node, skos_manager, labels)
         label_lang_rule(errors, node, languages_manager, labels)
         max_preflabels_rule(errors, node, labels)
     if len(errors) > 0:
         raise ValidationError(
-            'ConceptScheme could not be validated', [e.asdict() for e in errors]
+            "ConceptScheme could not be validated", [e.asdict() for e in errors]
         )
 
 
@@ -344,11 +344,11 @@ def concept_relations_rule(errors, node_location, relations, concept_type):
     """
     Checks that only concepts have narrower, broader and related relations.
     """
-    if relations is not None and len(relations) > 0 and concept_type != 'concept':
+    if relations is not None and len(relations) > 0 and concept_type != "concept":
         errors.append(
             colander.Invalid(
                 node_location,
-                'Only concepts can have narrower/broader/related relations',
+                "Only concepts can have narrower/broader/related relations",
             )
         )
 
@@ -359,26 +359,26 @@ def max_preflabels_rule(errors, node, labels):
     """
     preflabel_found = []
     for label in labels:
-        if label['type'] == 'prefLabel':
-            if label['language'] in preflabel_found:
+        if label["type"] == "prefLabel":
+            if label["language"] in preflabel_found:
                 errors.append(
                     colander.Invalid(
-                        node['labels'], 'Only one prefLabel per language allowed.'
+                        node["labels"], "Only one prefLabel per language allowed."
                     )
                 )
             else:
-                preflabel_found.append(label['language'])
+                preflabel_found.append(label["language"])
 
 
 def min_labels_rule(errors, node, cstruct):
     """
     Checks that a label or collection always has a least one label.
     """
-    if 'labels' in cstruct:
-        labels = copy.deepcopy(cstruct['labels'])
+    if "labels" in cstruct:
+        labels = copy.deepcopy(cstruct["labels"])
         if len(labels) == 0:
             errors.append(
-                colander.Invalid(node['labels'], 'At least one label is necessary')
+                colander.Invalid(node["labels"], "At least one label is necessary")
             )
 
 
@@ -389,8 +389,8 @@ def label_type_rule(errors, node, skos_manager, labels):
     label_types = skos_manager.get_all_label_types()
     label_types = [label_type.name for label_type in label_types]
     for label in labels:
-        if label['type'] not in label_types:
-            errors.append(colander.Invalid(node['labels'], 'Invalid labeltype.'))
+        if label["type"] not in label_types:
+            errors.append(colander.Invalid(node["labels"], "Invalid labeltype."))
 
 
 def label_lang_rule(errors, node, languages_manager, labels):
@@ -401,19 +401,19 @@ def label_lang_rule(errors, node, languages_manager, labels):
     already present in the database, it adds them.
     """
     for label in labels:
-        language_tag = label['language']
+        language_tag = label["language"]
         if not tags.check(language_tag):
             errors.append(
                 colander.Invalid(
-                    node['labels'],
-                    'Invalid language tag: %s'
-                    % ', '.join([err.message for err in tags.tag(language_tag).errors]),
+                    node["labels"],
+                    "Invalid language tag: %s"
+                    % ", ".join([err.message for err in tags.tag(language_tag).errors]),
                 )
             )
         else:
             languages_present = languages_manager.count_languages(language_tag)
             if not languages_present:
-                descriptions = ', '.join(tags.description(language_tag))
+                descriptions = ", ".join(tags.description(language_tag))
                 language_item = Language(id=language_tag, name=descriptions)
                 languages_manager.save(language_item)
 
@@ -425,11 +425,11 @@ def concept_type_rule(errors, node_location, skos_manager, conceptscheme_id, ite
     """
     for item_concept_id in items:
         item_concept = skos_manager.get_thing(item_concept_id, conceptscheme_id)
-        if item_concept.type != 'concept':
+        if item_concept.type != "concept":
             errors.append(
                 colander.Invalid(
                     node_location,
-                    'A narrower, broader or related concept should always be a concept, not a collection',
+                    "A narrower, broader or related concept should always be a concept, not a collection",
                 )
             )
 
@@ -444,10 +444,10 @@ def collection_type_rule(
         member_collection = skos_manager.get_thing(
             member_collection_id, conceptscheme_id
         )
-        if member_collection.type != 'collection':
+        if member_collection.type != "collection":
             errors.append(
                 colander.Invalid(
-                    node_location, 'A member_of parent should always be a collection'
+                    node_location, "A member_of parent should always be a collection"
                 )
             )
 
@@ -464,7 +464,7 @@ def semantic_relations_rule(
         if member_concept_id == collection_id:
             errors.append(
                 colander.Invalid(
-                    node_location, 'A concept or collection cannot be related to itself'
+                    node_location, "A concept or collection cannot be related to itself"
                 )
             )
             return False
@@ -474,7 +474,7 @@ def semantic_relations_rule(
             errors.append(
                 colander.Invalid(
                     node_location,
-                    'Concept not found, check concept_id. Please be aware members should be within one scheme',
+                    "Concept not found, check concept_id. Please be aware members should be within one scheme",
                 )
             )
             return False
@@ -557,13 +557,13 @@ def hierarchy_rule(
     property1_list = []
     if property1 in cstruct:
         property1_value = copy.deepcopy(cstruct[property1])
-        property1_list = [m['id'] for m in property1_value]
+        property1_list = [m["id"] for m in property1_value]
     property2_hierarchy = set()
     if property2 in cstruct:
         property2_value = copy.deepcopy(cstruct[property2])
-        property2_list = [m['id'] for m in property2_value]
+        property2_list = [m["id"] for m in property2_value]
         property2_hierarchy = set(property2_list)
-        if hasattr(skos_manager, 'get_hierarchy_ids'):
+        if hasattr(skos_manager, "get_hierarchy_ids"):
             property2_hierarchy |= skos_manager.get_hierarchy_ids(
                 conceptscheme_id,
                 property2_list,
@@ -599,11 +599,11 @@ def broader_hierarchy_rule(
         skos_manager,
         conceptscheme_id,
         cstruct,
-        'broader',
-        'narrower',
-        'narrower_concepts',
-        'concept',
-        'The broader concept of a concept must not itself be a narrower concept of the concept being edited.',
+        "broader",
+        "narrower",
+        "narrower_concepts",
+        "concept",
+        "The broader concept of a concept must not itself be a narrower concept of the concept being edited.",
     )
 
 
@@ -620,11 +620,11 @@ def narrower_hierarchy_rule(
         skos_manager,
         conceptscheme_id,
         cstruct,
-        'narrower',
-        'broader',
-        'broader_concepts',
-        'concept',
-        'The narrower concept of a concept must not itself be a broader concept of the concept being edited.',
+        "narrower",
+        "broader",
+        "broader_concepts",
+        "concept",
+        "The narrower concept of a concept must not itself be a broader concept of the concept being edited.",
     )
 
 
@@ -635,7 +635,7 @@ def collection_members_unique_rule(errors, node_location, members):
     if len(members) > len(set(members)):
         errors.append(
             colander.Invalid(
-                node_location, 'All members of a collection should be unique.'
+                node_location, "All members of a collection should be unique."
             )
         )
 
@@ -644,8 +644,8 @@ def members_only_in_collection_rule(errors, node, concept_type, members):
     """
     Checks that only collections have members.
     """
-    if concept_type != 'collection' and len(members) > 0:
-        errors.append(colander.Invalid(node, 'Only collections can have members.'))
+    if concept_type != "collection" and len(members) > 0:
+        errors.append(colander.Invalid(node, "Only collections can have members."))
 
 
 def memberof_hierarchy_rule(
@@ -657,11 +657,11 @@ def memberof_hierarchy_rule(
         skos_manager,
         conceptscheme_id,
         cstruct,
-        'member_of',
-        'members',
-        'members',
-        'collection',
-        'The parent member_of collection of a concept must not itself be a member of the concept being edited.',
+        "member_of",
+        "members",
+        "members",
+        "collection",
+        "The parent member_of collection of a concept must not itself be a member of the concept being edited.",
     )
 
 
@@ -678,11 +678,11 @@ def members_hierarchy_rule(
         skos_manager,
         conceptscheme_id,
         cstruct,
-        'members',
-        'member_of',
-        'member_of',
-        'collection',
-        'The item of a members collection must not itself be a parent of the concept/collection being edited.',
+        "members",
+        "member_of",
+        "member_of",
+        "collection",
+        "The item of a members collection must not itself be a parent of the concept/collection being edited.",
     )
 
 
@@ -690,8 +690,8 @@ def concept_matches_rule(errors, node_location, matches, concept_type):
     """
     Checks that only concepts have matches.
     """
-    if matches is not None and len(matches) > 0 and concept_type != 'concept':
-        errors.append(colander.Invalid(node_location, 'Only concepts can have matches'))
+    if matches is not None and len(matches) > 0 and concept_type != "concept":
+        errors.append(colander.Invalid(node_location, "Only concepts can have matches"))
 
 
 def concept_matches_unique_rule(errors, node_location, matches):
@@ -709,7 +709,7 @@ def concept_matches_unique_rule(errors, node_location, matches):
         if len(uri_list) > len(set(uri_list)):
             errors.append(
                 colander.Invalid(
-                    node_location, 'All matches of a concept should be unique.'
+                    node_location, "All matches of a concept should be unique."
                 )
             )
 
@@ -725,19 +725,19 @@ def languagetag_validator(node, cstruct):
     :param colander.SchemaNode node: The schema that's being used while validating.
     :param cstruct: The value being validated.
     """
-    request = node.bindings['request']
-    languages_manager = request.data_managers['languages_manager']
-    new = node.bindings['new']
+    request = node.bindings["request"]
+    languages_manager = request.data_managers["languages_manager"]
+    new = node.bindings["new"]
     errors = []
-    language_tag = cstruct['id']
+    language_tag = cstruct["id"]
 
     if new:
-        languagetag_checkduplicate(node['id'], language_tag, languages_manager, errors)
-    languagetag_isvalid_rule(node['id'], language_tag, errors)
+        languagetag_checkduplicate(node["id"], language_tag, languages_manager, errors)
+    languagetag_isvalid_rule(node["id"], language_tag, errors)
 
     if len(errors) > 0:
         raise ValidationError(
-            'Language could not be validated', [e.asdict() for e in errors]
+            "Language could not be validated", [e.asdict() for e in errors]
         )
 
 
@@ -749,8 +749,8 @@ def languagetag_isvalid_rule(node, language_tag, errors):
         errors.append(
             colander.Invalid(
                 node,
-                'Invalid language tag: %s'
-                % ', '.join([err.message for err in tags.tag(language_tag).errors]),
+                "Invalid language tag: %s"
+                % ", ".join([err.message for err in tags.tag(language_tag).errors]),
             )
         )
 
@@ -762,7 +762,7 @@ def languagetag_checkduplicate(node, language_tag, languages_manager, errors):
     language_present = languages_manager.count_languages(language_tag)
     if language_present:
         errors.append(
-            colander.Invalid(node, 'Duplicate language tag: %s' % language_tag)
+            colander.Invalid(node, "Duplicate language tag: %s" % language_tag)
         )
 
 
@@ -772,9 +772,9 @@ def subordinate_arrays_only_in_concept_rule(
     """
     Checks that only a concept has subordinate arrays.
     """
-    if concept_type != 'concept' and len(subordinate_arrays) > 0:
+    if concept_type != "concept" and len(subordinate_arrays) > 0:
         errors.append(
-            colander.Invalid(node, 'Only concept can have subordinate arrays.')
+            colander.Invalid(node, "Only concept can have subordinate arrays.")
         )
 
 
@@ -786,10 +786,10 @@ def subordinate_arrays_type_rule(
     """
     for subordinate_id in subordinate_arrays:
         subordinate = skos_manager.get_thing(subordinate_id, conceptscheme_id)
-        if subordinate.type != 'collection':
+        if subordinate.type != "collection":
             errors.append(
                 colander.Invalid(
-                    node_location, 'A subordinate array should always be a collection'
+                    node_location, "A subordinate array should always be a collection"
                 )
             )
 
@@ -807,11 +807,11 @@ def subordinate_arrays_hierarchy_rule(
         skos_manager,
         conceptscheme_id,
         cstruct,
-        'subordinate_arrays',
-        'member_of',
-        'members',
-        'collection',
-        'The subordinate_array collection of a concept must not itself be a parent of the concept being edited.',
+        "subordinate_arrays",
+        "member_of",
+        "members",
+        "collection",
+        "The subordinate_array collection of a concept must not itself be a parent of the concept being edited.",
     )
 
 
@@ -819,9 +819,9 @@ def superordinates_only_in_concept_rule(errors, node, concept_type, superordinat
     """
     Checks that only collections have superordinates.
     """
-    if concept_type != 'collection' and len(superordinates) > 0:
+    if concept_type != "collection" and len(superordinates) > 0:
         errors.append(
-            colander.Invalid(node, 'Only collection can have superordinates.')
+            colander.Invalid(node, "Only collection can have superordinates.")
         )
 
 
@@ -833,10 +833,10 @@ def superordinates_type_rule(
     """
     for superordinate_id in superordinates:
         superordinate = skos_manager.get_thing(superordinate_id, conceptscheme_id)
-        if superordinate.type != 'concept':
+        if superordinate.type != "concept":
             errors.append(
                 colander.Invalid(
-                    node_location, 'A superordinate should always be a concept'
+                    node_location, "A superordinate should always be a concept"
                 )
             )
 
@@ -854,11 +854,11 @@ def superordinates_hierarchy_rule(
         skos_manager,
         conceptscheme_id,
         cstruct,
-        'superordinates',
-        'members',
-        'members',
-        'collection',
-        'The superordinates of a collection must not itself be a member of the collection being edited.',
+        "superordinates",
+        "members",
+        "members",
+        "collection",
+        "The superordinates of a collection must not itself be a member of the collection being edited.",
     )
 
 
@@ -866,36 +866,36 @@ def validate_provider_json(json_data, provider_id=None):
     errors = []
 
     if provider_id:
-        if provider_id != json_data.get('id'):
+        if provider_id != json_data.get("id"):
             errors.append(
-                {'id': 'Id does not match with id parameter in url.'},
+                {"id": "Id does not match with id parameter in url."},
             )
     # Do not allow keys in the metadata which exist in the root of the json.
     forbidden_metadata_keys = (
-        'default_language',
-        'subject',
-        'force_display_language',  # while not the same, this would just be confusing
-        'atramhasis.force_display_language',
-        'id_generation_strategy',  # while not the same, this would just be confusing
-        'atramhasis.id_generation_strategy',
+        "default_language",
+        "subject",
+        "force_display_language",  # while not the same, this would just be confusing
+        "atramhasis.force_display_language",
+        "id_generation_strategy",  # while not the same, this would just be confusing
+        "atramhasis.id_generation_strategy",
     )
-    metadata = json_data.get('metadata', {})
+    metadata = json_data.get("metadata", {})
     if wrong_keys := [k for k in forbidden_metadata_keys if k in metadata]:
         errors.append(
-            {'metadata': f'Found disallowed key(s): {", ".join(wrong_keys)}.'}
+            {"metadata": f"Found disallowed key(s): {', '.join(wrong_keys)}."}
         )
 
-    if json_data.get('default_language'):
-        if not tags.check(json_data['default_language']):
-            errors.append({'default_language': 'Invalid language.'})
+    if json_data.get("default_language"):
+        if not tags.check(json_data["default_language"]):
+            errors.append({"default_language": "Invalid language."})
 
-    if json_data.get('force_display_language'):
-        if not tags.check(json_data['force_display_language']):
-            errors.append({'force_display_language': 'Invalid language.'})
+    if json_data.get("force_display_language"):
+        if not tags.check(json_data["force_display_language"]):
+            errors.append({"force_display_language": "Invalid language."})
 
-    if json_data.get('subject'):
-        if json_data['subject'] != ['hidden']:
-            errors.append({'subject': 'Subject must be one of: "hidden"'})
+    if json_data.get("subject"):
+        if json_data["subject"] != ["hidden"]:
+            errors.append({"subject": 'Subject must be one of: "hidden"'})
 
     if errors:
-        raise ValidationError('Provider could not be validated.', errors)
+        raise ValidationError("Provider could not be validated.", errors)

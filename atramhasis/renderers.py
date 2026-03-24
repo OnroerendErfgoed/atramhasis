@@ -32,14 +32,14 @@ class CSVRenderer:
 
     def __call__(self, value, system):
         f_out = StringIO()
-        writer = csv.writer(f_out, delimiter=',', quoting=csv.QUOTE_ALL)
+        writer = csv.writer(f_out, delimiter=",", quoting=csv.QUOTE_ALL)
 
-        writer.writerow(value['header'])
-        writer.writerows(value['rows'])
+        writer.writerow(value["header"])
+        writer.writerows(value["rows"])
 
-        resp = system['request'].response
-        resp.content_type = 'text/csv'
-        resp.content_disposition = 'attachment;filename="' + value['filename'] + '.csv"'
+        resp = system["request"].response
+        resp.content_type = "text/csv"
+        resp.content_disposition = 'attachment;filename="' + value["filename"] + '.csv"'
         return f_out.getvalue()
 
 
@@ -54,19 +54,19 @@ def conceptscheme_adapter(obj, request):
     :param request: the current request
     :rtype: :class:`dict`
     """
-    scheme_id = request.matchdict['scheme_id']
+    scheme_id = request.matchdict["scheme_id"]
     provider = request.skos_registry.get_provider(scheme_id)
-    language = request.params.get('language', request.locale_name)
+    language = request.params.get("language", request.locale_name)
     label = obj.label(language)
     return {
-        'id': obj.id,
-        'uri': obj.uri,
-        'label': label.label if label else None,
-        'subject': provider.metadata['subject'] if provider.metadata['subject'] else [],
-        'labels': obj.labels,
-        'notes': obj.notes,
-        'languages': obj.languages,
-        'sources': obj.sources
+        "id": obj.id,
+        "uri": obj.uri,
+        "label": label.label if label else None,
+        "subject": provider.metadata["subject"] if provider.metadata["subject"] else [],
+        "labels": obj.labels,
+        "notes": obj.notes,
+        "languages": obj.languages,
+        "sources": obj.sources,
     }
 
 
@@ -80,26 +80,28 @@ def concept_adapter(obj, request):
     """
     matches = {}
     for m in obj.matches:
-        key = m.matchtype.name[:m.matchtype.name.find('Match')]
+        key = m.matchtype.name[: m.matchtype.name.find("Match")]
         if key not in matches:
             matches[key] = []
         matches[key].append(m.uri)
-    language = request.params.get('language', request.locale_name)
+    language = request.params.get("language", request.locale_name)
     label = obj.label(language)
     return {
-        'id': obj.concept_id,
-        'type': obj.type,
-        'uri': obj.uri,
-        'label': label.label if label else None,
-        'labels': obj.labels,
-        'notes': obj.notes,
-        'sources': obj.sources,
-        'broader': [map_relation(c, language) for c in obj.broader_concepts],
-        'narrower': [map_relation(c, language) for c in obj.narrower_concepts],
-        'related': [map_relation(c, language) for c in obj.related_concepts],
-        'member_of': [map_relation(c, language) for c in obj.member_of],
-        'subordinate_arrays': [map_relation(c, language) for c in obj.narrower_collections],
-        'matches': matches
+        "id": obj.concept_id,
+        "type": obj.type,
+        "uri": obj.uri,
+        "label": label.label if label else None,
+        "labels": obj.labels,
+        "notes": obj.notes,
+        "sources": obj.sources,
+        "broader": [map_relation(c, language) for c in obj.broader_concepts],
+        "narrower": [map_relation(c, language) for c in obj.narrower_concepts],
+        "related": [map_relation(c, language) for c in obj.related_concepts],
+        "member_of": [map_relation(c, language) for c in obj.member_of],
+        "subordinate_arrays": [
+            map_relation(c, language) for c in obj.narrower_collections
+        ],
+        "matches": matches,
     }
 
 
@@ -111,24 +113,24 @@ def collection_adapter(obj, request):
     :param request: the current request
     :rtype: :class:`dict`
     """
-    language = request.params.get('language', request.locale_name)
+    language = request.params.get("language", request.locale_name)
     label = obj.label(language)
     return {
-        'id': obj.concept_id,
-        'type': obj.type,
-        'uri': obj.uri,
-        'label': label.label if label else None,
-        'notes': obj.notes,
-        'labels': obj.labels,
-        'sources': obj.sources,
-        'members': [map_relation(c, language) for c in obj.members],
-        'member_of': [map_relation(c, language) for c in obj.member_of],
-        'superordinates': [map_relation(c, language) for c in obj.broader_concepts],
-        'infer_concept_relations': obj.infer_concept_relations
+        "id": obj.concept_id,
+        "type": obj.type,
+        "uri": obj.uri,
+        "label": label.label if label else None,
+        "notes": obj.notes,
+        "labels": obj.labels,
+        "sources": obj.sources,
+        "members": [map_relation(c, language) for c in obj.members],
+        "member_of": [map_relation(c, language) for c in obj.member_of],
+        "superordinates": [map_relation(c, language) for c in obj.broader_concepts],
+        "infer_concept_relations": obj.infer_concept_relations,
     }
 
 
-def map_relation(thing, language='any'):
+def map_relation(thing, language="any"):
     """
     Map thing in a relation, leaving out the relations (to avoid circular dependencies)
     :param thing: the thing to map
@@ -137,10 +139,10 @@ def map_relation(thing, language='any'):
     """
     label = thing.label(language)
     return {
-        'id': thing.concept_id,
-        'type': thing.type,
-        'uri': thing.uri,
-        'label': label.label if label else None
+        "id": thing.concept_id,
+        "type": thing.type,
+        "uri": thing.uri,
+        "label": label.label if label else None,
     }
 
 
@@ -152,11 +154,7 @@ def label_adapter(obj, request):
     :param request: the current request
     :rtype: :class:`dict`
     """
-    return {
-        'label': obj.label,
-        'type': obj.labeltype_id,
-        'language': obj.language_id
-    }
+    return {"label": obj.label, "type": obj.labeltype_id, "language": obj.language_id}
 
 
 def note_adapter(obj, request):
@@ -167,11 +165,7 @@ def note_adapter(obj, request):
     :param request: the current request
     :rtype: :class:`dict`
     """
-    return {
-        'note': obj.note,
-        'type': obj.notetype_id,
-        'language': obj.language_id
-    }
+    return {"note": obj.note, "type": obj.notetype_id, "language": obj.language_id}
 
 
 def source_adapter(obj, request):
@@ -182,9 +176,7 @@ def source_adapter(obj, request):
     :param request: the current request
     :rtype: :class:`dict`
     """
-    return {
-        'citation': obj.citation
-    }
+    return {"citation": obj.citation}
 
 
 def language_adaptor(obj, request):
@@ -195,10 +187,7 @@ def language_adaptor(obj, request):
     :param request: the current request
     :rtype: :class:`dict`
     """
-    return {
-        'id': obj.id,
-        'name': obj.name
-    }
+    return {"id": obj.id, "name": obj.name}
 
 
 def provider_adapter(provider: VocabularyProvider, *_):
@@ -208,17 +197,19 @@ def provider_adapter(provider: VocabularyProvider, *_):
         uri_pattern = None
 
     metadata = copy.deepcopy(provider.metadata)
-    metadata.pop('id', None)
-    metadata.pop('conceptscheme_id', None)
+    metadata.pop("id", None)
+    metadata.pop("conceptscheme_id", None)
     data = {
-        'id': provider.metadata['id'],
-        'type': provider.__class__.__name__,
-        'conceptscheme_uri': provider.concept_scheme.uri,
-        'uri_pattern': uri_pattern,
-        'default_language': metadata.pop("default_language", None),
-        'subject': metadata.pop("subject", None),
-        'force_display_language': metadata.pop("atramhasis.force_display_language", None),
-        'metadata': metadata,
+        "id": provider.metadata["id"],
+        "type": provider.__class__.__name__,
+        "conceptscheme_uri": provider.concept_scheme.uri,
+        "uri_pattern": uri_pattern,
+        "default_language": metadata.pop("default_language", None),
+        "subject": metadata.pop("subject", None),
+        "force_display_language": metadata.pop(
+            "atramhasis.force_display_language", None
+        ),
+        "metadata": metadata,
     }
     return data
 
@@ -226,10 +217,10 @@ def provider_adapter(provider: VocabularyProvider, *_):
 def sa_provider_adapter(provider: SQLAlchemyProvider, *args):
     data = provider_adapter(provider, *args)
     strategy = data["metadata"].pop(
-       "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
+        "atramhasis.id_generation_strategy", IDGenerationStrategy.NUMERIC
     )
-    data['id_generation_strategy'] = strategy.name
-    data['expand_strategy'] = provider.expand_strategy
+    data["id_generation_strategy"] = strategy.name
+    data["expand_strategy"] = provider.expand_strategy
     return data
 
 

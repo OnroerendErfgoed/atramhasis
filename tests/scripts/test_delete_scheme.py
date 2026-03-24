@@ -1,4 +1,3 @@
-import pytest
 from skosprovider_sqlalchemy.models import Collection
 from skosprovider_sqlalchemy.models import Concept
 from skosprovider_sqlalchemy.models import ConceptScheme

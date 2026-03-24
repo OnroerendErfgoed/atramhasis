@@ -59,10 +59,10 @@ def provider_data_manager(db_session):
 class TestConceptSchemeManager:
     def test_get(self, conceptscheme_manager):
         res = conceptscheme_manager.get(1)
-        assert res.uri == 'urn:x-skosprovider:trees'
+        assert res.uri == "urn:x-skosprovider:trees"
 
     def test_find(self, conceptscheme_manager):
-        query = {'type': 'concept', 'label': 'es'}
+        query = {"type": "concept", "label": "es"}
         res = conceptscheme_manager.find(1, query)
         assert len(res) == 1
 
@@ -79,9 +79,11 @@ class TestConceptSchemeManager:
         assert len(res) == 10
 
     def test_save(self, db_session, conceptscheme_manager):
-        conceptscheme = db_session.execute(
-            select(ConceptScheme).filter(Concept.id == 1)
-        ).scalars().first()
+        conceptscheme = (
+            db_session.execute(select(ConceptScheme).filter(Concept.id == 1))
+            .scalars()
+            .first()
+        )
         conceptscheme = conceptscheme_manager.save(conceptscheme)
         assert conceptscheme.id is not None
 
@@ -89,7 +91,7 @@ class TestConceptSchemeManager:
 class TestSkosManager:
     def test_get_thing(self, skos_manager):
         res = skos_manager.get_thing(1, 1)
-        assert res.uri == 'urn:x-skosprovider:trees/1'
+        assert res.uri == "urn:x-skosprovider:trees/1"
 
     def test_save(self, skos_manager):
         thing = Concept()
@@ -109,17 +111,17 @@ class TestSkosManager:
         assert len(res) == 4
 
     def test_get_match_type(self, skos_manager):
-        match_type = skos_manager.get_match_type('narrowMatch')
-        assert match_type.name == 'narrowMatch'
+        match_type = skos_manager.get_match_type("narrowMatch")
+        assert match_type.name == "narrowMatch"
 
     def test_get_match(self, db_session, skos_manager):
         match = Match()
-        match.matchtype_id = 'narrowMatch'
-        match.uri = 'urn:test'
+        match.matchtype_id = "narrowMatch"
+        match.uri = "urn:test"
         match.concept_id = 1
         db_session.add(match)
-        match = skos_manager.get_match('urn:test', 'narrowMatch', 1)
-        assert match.uri == 'urn:test'
+        match = skos_manager.get_match("urn:test", "narrowMatch", 1)
+        assert match.uri == "urn:test"
 
     def test_get_all_label_types(self, skos_manager):
         res = skos_manager.get_all_label_types()
@@ -134,7 +136,7 @@ class TestSkosManager:
         assert isinstance(res, str)
         char = "[0-9a-fA-F]"
         assert re.search(
-            fr"^{char}{{8}}\b-{char}{{4}}\b-{char}{{4}}\b-{char}{{4}}\b-{char}{{12}}$",
+            rf"^{char}{{8}}\b-{char}{{4}}\b-{char}{{4}}\b-{char}{{4}}\b-{char}{{12}}$",
             res,
         )
 
@@ -145,89 +147,122 @@ class TestSkosManager:
 
 class TestLanguagesManager:
     def test_get(self, language_manager):
-        res = language_manager.get('nl')
-        assert res.name == 'Dutch'
+        res = language_manager.get("nl")
+        assert res.name == "Dutch"
 
     def test_save(self, language_manager):
-        language = Language('au', 'Austrian')
+        language = Language("au", "Austrian")
         language = language_manager.save(language)
-        assert language.name == 'Austrian'
+        assert language.name == "Austrian"
 
     def test_delete(self, language_manager):
-        language = language_manager.get('en')
+        language = language_manager.get("en")
         language_manager.delete(language)
         with pytest.raises(NoResultFound):
-            language_manager.get('en')
+            language_manager.get("en")
 
     def test_get_all(self, language_manager):
         res = language_manager.get_all()
         assert len(res) >= 3
 
     def test_get_all_sorted(self, language_manager):
-        result = language_manager.get_all_sorted('id', False)
+        result = language_manager.get_all_sorted("id", False)
         result_ids = [lang.id for lang in result]
         assert list(sorted(result_ids)) == result_ids
 
     def test_get_all_sorted_desc(self, language_manager):
-        result = language_manager.get_all_sorted('id', True)
+        result = language_manager.get_all_sorted("id", True)
         result_ids = [lang.id for lang in result]
         assert list(sorted(result_ids, reverse=True)) == result_ids
 
     def test_count_languages(self, language_manager):
-        res = language_manager.count_languages('nl')
+        res = language_manager.count_languages("nl")
         assert res == 1
 
 
 class TestAuditManager:
-    @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 8, 1))))
+    @patch(
+        "atramhasis.data.datamanagers.date",
+        Mock(today=Mock(return_value=date(2015, 8, 1))),
+    )
     def test_get_first_day(self, audit_manager):
-        assert audit_manager._get_first_day('last_day') == '2015-07-31'
-        assert audit_manager._get_first_day('last_week') == '2015-07-25'
-        assert audit_manager._get_first_day('last_month') == '2015-07-01'
-        assert audit_manager._get_first_day('last_year') == '2014-08-01'
+        assert audit_manager._get_first_day("last_day") == "2015-07-31"
+        assert audit_manager._get_first_day("last_week") == "2015-07-25"
+        assert audit_manager._get_first_day("last_month") == "2015-07-01"
+        assert audit_manager._get_first_day("last_year") == "2014-08-01"
 
-    @patch('atramhasis.data.datamanagers.date', Mock(today=Mock(return_value=date(2015, 9, 15))))
-    def test_get_most_popular_concepts_for_conceptscheme(self, db_session, audit_manager):
+    @patch(
+        "atramhasis.data.datamanagers.date",
+        Mock(today=Mock(return_value=date(2015, 9, 15))),
+    )
+    def test_get_most_popular_concepts_for_conceptscheme(
+        self, db_session, audit_manager
+    ):
         db_session.add(
-            ConceptVisitLog(concept_id='1', conceptscheme_id='1', origin='REST',
-                            visited_at=datetime(2015, 8, 27, 10, 58, 3))
+            ConceptVisitLog(
+                concept_id="1",
+                conceptscheme_id="1",
+                origin="REST",
+                visited_at=datetime(2015, 8, 27, 10, 58, 3),
+            )
         )
         db_session.add(
-            ConceptVisitLog(concept_id='1', conceptscheme_id='1', origin='REST',
-                            visited_at=datetime(2015, 8, 27, 11, 58, 3))
+            ConceptVisitLog(
+                concept_id="1",
+                conceptscheme_id="1",
+                origin="REST",
+                visited_at=datetime(2015, 8, 27, 11, 58, 3),
+            )
         )
         db_session.add(
-            ConceptVisitLog(concept_id='2', conceptscheme_id='1', origin='REST',
-                            visited_at=datetime(2015, 8, 27, 10, 58, 3))
+            ConceptVisitLog(
+                concept_id="2",
+                conceptscheme_id="1",
+                origin="REST",
+                visited_at=datetime(2015, 8, 27, 10, 58, 3),
+            )
         )
         db_session.add(
-            ConceptVisitLog(concept_id='2', conceptscheme_id='2', origin='REST',
-                            visited_at=datetime(2015, 8, 27, 10, 58, 3))
+            ConceptVisitLog(
+                concept_id="2",
+                conceptscheme_id="2",
+                origin="REST",
+                visited_at=datetime(2015, 8, 27, 10, 58, 3),
+            )
         )
 
-        result = audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_month')
+        result = audit_manager.get_most_popular_concepts_for_conceptscheme(
+            1, 5, "last_month"
+        )
         expected = [
-            {'concept_id': '1', 'scheme_id': 1}, {'concept_id': '2', 'scheme_id': 1}
+            {"concept_id": "1", "scheme_id": 1},
+            {"concept_id": "2", "scheme_id": 1},
         ]
         assert expected == result
-        result = audit_manager.get_most_popular_concepts_for_conceptscheme(2, 5, 'last_month')
-        assert [{'concept_id': '2', 'scheme_id': 2}] == result
-        result = audit_manager.get_most_popular_concepts_for_conceptscheme(1, 1, 'last_month')
-        assert [{'concept_id': '1', 'scheme_id': 1}] == result
-        result = audit_manager.get_most_popular_concepts_for_conceptscheme(1, 5, 'last_day')
+        result = audit_manager.get_most_popular_concepts_for_conceptscheme(
+            2, 5, "last_month"
+        )
+        assert [{"concept_id": "2", "scheme_id": 2}] == result
+        result = audit_manager.get_most_popular_concepts_for_conceptscheme(
+            1, 1, "last_month"
+        )
+        assert [{"concept_id": "1", "scheme_id": 1}] == result
+        result = audit_manager.get_most_popular_concepts_for_conceptscheme(
+            1, 5, "last_day"
+        )
         assert [] == result
 
 
 class TestCountsManager:
     def test_count_for_scheme(self, counts_manager):
         counts = ConceptschemeCounts()
-        counts.conceptscheme_id = 'TREES'
+        counts.conceptscheme_id = "TREES"
         counts.counted_at = datetime.now()
         counts.triples = 3
         counts.conceptscheme_triples = 2
         counts.avg_concept_triples = 1
         counts_manager.save(counts)
-        res = counts_manager.get_most_recent_count_for_scheme('TREES')
+        res = counts_manager.get_most_recent_count_for_scheme("TREES")
         assert res is not None
         assert res.triples == 3
 
@@ -235,7 +270,7 @@ class TestCountsManager:
 class TestProviderDataManager:
     def test_get_provider_by_id(self, db_session, provider_data_manager):
         provider = Provider(
-            id='a', conceptscheme=ConceptScheme(), uri_pattern='u-p', meta={}
+            id="a", conceptscheme=ConceptScheme(), uri_pattern="u-p", meta={}
         )
         db_session.add(provider)
         db_session.flush()
@@ -245,11 +280,11 @@ class TestProviderDataManager:
 
     def test_get_provider_by_id_no_result(self, provider_data_manager):
         with pytest.raises(NoResultFound):
-            provider_data_manager.get_provider_by_id('...')
+            provider_data_manager.get_provider_by_id("...")
 
     def test_get_all_providers(self, db_session, provider_data_manager):
         provider = Provider(
-            id='a', conceptscheme=ConceptScheme(), uri_pattern='u-p', meta={}
+            id="a", conceptscheme=ConceptScheme(), uri_pattern="u-p", meta={}
         )
         db_session.add(provider)
         db_session.flush()
@@ -288,15 +323,17 @@ class TestGetHierarchyIdsQueryCount:
     def _start_counting(self):
         """Start recording SQL statements executed on the connection."""
         self.query_log.clear()
-        event.listen(self.connection, 'before_cursor_execute', self._log_query)
+        event.listen(self.connection, "before_cursor_execute", self._log_query)
 
     def _stop_counting(self):
         """Stop recording and return the count."""
-        event.remove(self.connection, 'before_cursor_execute', self._log_query)
+        event.remove(self.connection, "before_cursor_execute", self._log_query)
         return len(self.query_log)
 
     def _log_query(self, conn, cursor, statement, parameters, context, executemany):
-        if not statement.startswith(("SAVEPOINT", "RELEASE SAVEPOINT", "ROLLBACK TO SAVEPOINT")):
+        if not statement.startswith(
+            ("SAVEPOINT", "RELEASE SAVEPOINT", "ROLLBACK TO SAVEPOINT")
+        ):
             self.query_log.append(statement)
 
     def test_narrower_concepts_query_count(self, query_counter):
@@ -310,21 +347,21 @@ class TestGetHierarchyIdsQueryCount:
         self._start_counting()
         result = self.skos_manager.get_hierarchy_ids(
             conceptscheme_id=2,
-            start_ids=['1'],
-            concept_type='concept',
-            property_list_name='narrower_concepts',
+            start_ids=["1"],
+            concept_type="concept",
+            property_list_name="narrower_concepts",
         )
         count = self._stop_counting()
 
         # Should find all descendants of World.
-        expected_descendants = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+        expected_descendants = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}
         assert result == expected_descendants
 
         # CTE approach: expect a small constant number of queries (typically
         # 2-3: one to resolve start_ids, one for the CTE, one to map back).
         # The old N+1 approach would issue 9+ queries (one per node).
         assert count <= 5, (
-            f'Expected <= 5 queries but got {count}. Queries: {self.query_log}'
+            f"Expected <= 5 queries but got {count}. Queries: {self.query_log}"
         )
 
     def test_broader_concepts_query_count(self, query_counter):
@@ -337,19 +374,19 @@ class TestGetHierarchyIdsQueryCount:
         self._start_counting()
         result = self.skos_manager.get_hierarchy_ids(
             conceptscheme_id=2,
-            start_ids=['7'],
-            concept_type='concept',
-            property_list_name='broader_concepts',
+            start_ids=["7"],
+            concept_type="concept",
+            property_list_name="broader_concepts",
         )
         count = self._stop_counting()
 
         # Flanders -> Belgium -> Europe -> World.
-        assert '4' in result
-        assert '2' in result
-        assert '1' in result
+        assert "4" in result
+        assert "2" in result
+        assert "1" in result
 
         assert count <= 5, (
-            f'Expected <= 5 queries but got {count}. Queries: {self.query_log}'
+            f"Expected <= 5 queries but got {count}. Queries: {self.query_log}"
         )
 
     def test_members_query_count(self, query_counter):
@@ -362,19 +399,19 @@ class TestGetHierarchyIdsQueryCount:
         self._start_counting()
         result = self.skos_manager.get_hierarchy_ids(
             conceptscheme_id=2,
-            start_ids=['333'],
+            start_ids=["333"],
             concept_type=None,
-            property_list_name='members',
+            property_list_name="members",
         )
         count = self._stop_counting()
 
         # Collection 333 has members: Belgium (4), Flanders (7), Brussels (8).
-        assert '4' in result
-        assert '7' in result
-        assert '8' in result
+        assert "4" in result
+        assert "7" in result
+        assert "8" in result
 
         assert count <= 5, (
-            f'Expected <= 5 queries but got {count}. Queries: {self.query_log}'
+            f"Expected <= 5 queries but got {count}. Queries: {self.query_log}"
         )
 
     def test_empty_start_ids_no_queries(self, query_counter):
@@ -387,15 +424,13 @@ class TestGetHierarchyIdsQueryCount:
         result = self.skos_manager.get_hierarchy_ids(
             conceptscheme_id=2,
             start_ids=[],
-            concept_type='concept',
-            property_list_name='narrower_concepts',
+            concept_type="concept",
+            property_list_name="narrower_concepts",
         )
         count = self._stop_counting()
 
         assert result == set()
-        assert count == 0, (
-            f'Expected 0 queries for empty start_ids but got {count}'
-        )
+        assert count == 0, f"Expected 0 queries for empty start_ids but got {count}"
 
     def test_nonexistent_start_ids_minimal_queries(self, query_counter):
         """
@@ -407,13 +442,11 @@ class TestGetHierarchyIdsQueryCount:
         self._start_counting()
         result = self.skos_manager.get_hierarchy_ids(
             conceptscheme_id=2,
-            start_ids=['99999'],
-            concept_type='concept',
-            property_list_name='narrower_concepts',
+            start_ids=["99999"],
+            concept_type="concept",
+            property_list_name="narrower_concepts",
         )
         count = self._stop_counting()
 
         assert result == set()
-        assert count <= 1, (
-            f'Expected <= 1 query for nonexistent IDs but got {count}'
-        )
+        assert count <= 1, f"Expected <= 1 query for nonexistent IDs but got {count}"

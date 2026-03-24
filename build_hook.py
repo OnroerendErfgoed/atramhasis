@@ -16,12 +16,12 @@ class BuildHook(BuildHookInterface):
         root_dir = Path(__file__).parent
         subprocess.run(
             [
-                'pybabel',
-                'compile',
-                '--directory',
-                'atramhasis/locale',
-                '--domain',
-                'atramhasis',
+                "pybabel",
+                "compile",
+                "--directory",
+                "atramhasis/locale",
+                "--domain",
+                "atramhasis",
             ],
             cwd=root_dir,
             check=True,
@@ -29,8 +29,8 @@ class BuildHook(BuildHookInterface):
 
     def build_frontend(self):
         root_dir = Path(__file__).parent
-        static = root_dir / 'atramhasis' / 'static'
-        static_admin = static / 'admin'
-        subprocess.run(['npm', 'install'], cwd=static, check=True)
-        subprocess.run(['npm', 'install'], cwd=static_admin, check=True)
-        subprocess.run(['grunt', '-v', 'build'], cwd=static_admin, check=True)
+        static = root_dir / "atramhasis" / "static"
+        static_admin = static / "admin"
+        subprocess.run(["npm", "install"], cwd=static, check=True)
+        subprocess.run(["npm", "install"], cwd=static_admin, check=True)
+        subprocess.run(["grunt", "-v", "build"], cwd=static_admin, check=True)
