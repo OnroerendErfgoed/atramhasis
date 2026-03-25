@@ -5,6 +5,7 @@ Revises: 6dfc3e2324aa
 Create Date: 2017-07-25 16:38:39.439673
 
 """
+
 import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.orm import Session
@@ -20,7 +21,6 @@ language_table = table("language", column("id", sa.String), column("name", sa.St
 
 
 def upgrade():
-
     op.bulk_insert(language_table, [{"id": "und", "name": "Undetermined"}])
 
 

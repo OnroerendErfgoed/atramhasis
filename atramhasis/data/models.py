@@ -24,12 +24,12 @@ class IDGenerationStrategy(enum.Enum):
 
 
 class ExpandStrategy(enum.Enum):
-    RECURSE = 'recurse'
-    VISIT = 'visit'
+    RECURSE = "recurse"
+    VISIT = "visit"
 
 
 class ConceptschemeVisitLog(Base):
-    __tablename__ = 'conceptscheme_visit_log'
+    __tablename__ = "conceptscheme_visit_log"
     id = Column(Integer, primary_key=True, autoincrement=True)
     conceptscheme_id = Column(String(25), nullable=False)
     visited_at = Column(DateTime, default=func.now(), nullable=False)
@@ -37,7 +37,7 @@ class ConceptschemeVisitLog(Base):
 
 
 class ConceptVisitLog(Base):
-    __tablename__ = 'concept_visit_log'
+    __tablename__ = "concept_visit_log"
     id = Column(Integer, primary_key=True, autoincrement=True)
     concept_id = Column(String, nullable=False)
     conceptscheme_id = Column(String(25), nullable=False)
@@ -46,7 +46,7 @@ class ConceptVisitLog(Base):
 
 
 class ConceptschemeCounts(Base):
-    __tablename__ = 'conceptscheme_counts'
+    __tablename__ = "conceptscheme_counts"
     id = Column(Integer, primary_key=True, autoincrement=True)
     conceptscheme_id = Column(String(25), nullable=False)
     counted_at = Column(DateTime, default=func.now(), nullable=False)
@@ -56,7 +56,7 @@ class ConceptschemeCounts(Base):
 
 
 class Provider(Base):
-    __tablename__ = 'provider'
+    __tablename__ = "provider"
 
     id = Column(String, primary_key=True)
     conceptscheme_id = Column(
@@ -65,41 +65,46 @@ class Provider(Base):
         nullable=False,
     )
     uri_pattern = Column(Text, nullable=False)
-    meta = Column('metadata', JSON, nullable=False)  # metadata is reserved in sqlalchemy
+    meta = Column(
+        "metadata", JSON, nullable=False
+    )  # metadata is reserved in sqlalchemy
     expand_strategy = Column(Enum(ExpandStrategy))
 
     conceptscheme = relationship(
-        ConceptScheme, uselist=False, single_parent=True, cascade='all, delete-orphan',
+        ConceptScheme,
+        uselist=False,
+        single_parent=True,
+        cascade="all, delete-orphan",
     )
 
     @hybrid_property
     def default_language(self):
-        return self.meta.get('default_language')
+        return self.meta.get("default_language")
 
     @default_language.setter
     def default_language(self, value):
-        self.meta['default_language'] = value
+        self.meta["default_language"] = value
 
     @hybrid_property
     def force_display_language(self):
-        return self.meta.get('atramhasis.force_display_language')
+        return self.meta.get("atramhasis.force_display_language")
 
     @force_display_language.setter
     def force_display_language(self, value):
-        self.meta['atramhasis.force_display_language'] = value
+        self.meta["atramhasis.force_display_language"] = value
 
     @hybrid_property
     def id_generation_strategy(self):
-        return IDGenerationStrategy[self.meta.get('atramhasis.id_generation_strategy')]
+        return IDGenerationStrategy[self.meta.get("atramhasis.id_generation_strategy")]
 
     @id_generation_strategy.setter
     def id_generation_strategy(self, value):
-        self.meta['atramhasis.id_generation_strategy'] = value.name
+        self.meta["atramhasis.id_generation_strategy"] = value.name
 
     @hybrid_property
     def subject(self):
-        return self.meta.get('subject')
+        return self.meta.get("subject")
 
     @subject.setter
     def subject(self, value):
-        self.meta['subject'] = value
+        self.meta["subject"] = value

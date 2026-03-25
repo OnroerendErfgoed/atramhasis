@@ -14,12 +14,14 @@ from atramhasis.errors import SkosRegistryNotFoundException
 log = logging.getLogger(__name__)
 
 
-def main():
+def main():  # pragma: no cover
     description = """\
     Generate a config file for a LDF server.
     """
     usage = "usage: %prog config_uri"
-    parser = optparse.OptionParser(usage=usage, description=textwrap.dedent(description))
+    parser = optparse.OptionParser(
+        usage=usage, description=textwrap.dedent(description)
+    )
     parser.add_option(
         "-l",
         "--location",
@@ -45,7 +47,8 @@ def main():
     config_location = options.config_location
     if config_location is None:
         config_location = env["registry"].settings.get(
-            "atramhasis.ldf.config_location", os.path.abspath(os.path.dirname(config_uri))
+            "atramhasis.ldf.config_location",
+            os.path.abspath(os.path.dirname(config_uri)),
         )
 
     dump_location = env["registry"].settings.get(
@@ -90,7 +93,9 @@ def main():
 
     pids = []
     for p in skos_registry.get_providers():
-        if any([not_shown in p.get_metadata()['subject'] for not_shown in ['external']]):
+        if any(
+            [not_shown in p.get_metadata()["subject"] for not_shown in ["external"]]
+        ):
             continue
         pid = p.get_metadata()["id"]
         title = p.concept_scheme.label().label if p.concept_scheme.label() else pid
@@ -140,8 +145,8 @@ def main():
     with open(config_filename, "w") as fp:
         json.dump(ldfconfig, fp, indent=4)
 
-    log.info(f'Config written to {config_filename}.')
+    log.info(f"Config written to {config_filename}.")
 
-    log.info(f'--- {(time.time() - start_time)} seconds ---;')
+    log.info(f"--- {(time.time() - start_time)} seconds ---;")
 
     env["closer"]()

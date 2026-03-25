@@ -36,7 +36,7 @@ def from_thing(thing):
     :rtype: :class:`~skosprovider.skos.Concept` or
         :class:`~skosprovider.skos.Collection`.
     """
-    if thing.type and thing.type == 'collection':
+    if thing.type and thing.type == "collection":
         return Collection(
             id=thing.concept_id,
             uri=thing.uri,
@@ -48,7 +48,7 @@ def from_thing(thing):
             notes=[Note(n.note, n.notetype_id, n.language_id) for n in thing.notes],
             sources=[Source(s.citation) for s in thing.sources],
             members=[member.concept_id for member in thing.members]
-            if hasattr(thing, 'members')
+            if hasattr(thing, "members")
             else [],
             member_of=[c.concept_id for c in thing.member_of],
             superordinates=[
@@ -59,7 +59,7 @@ def from_thing(thing):
     else:
         matches = {}
         for m in thing.matches:
-            key = m.matchtype.name[: m.matchtype.name.find('Match')]
+            key = m.matchtype.name[: m.matchtype.name.find("Match")]
             if key not in matches:
                 matches[key] = []
             matches[key].append(m.uri)
@@ -97,7 +97,7 @@ def internal_providers_only(fn):
     def advice(parent_object, *args, **kw):
         if (
             isinstance(parent_object.provider, SQLAlchemyProvider)
-            and 'external' not in parent_object.provider.get_metadata()['subject']
+            and "external" not in parent_object.provider.get_metadata()["subject"]
         ):
             return fn(parent_object, *args, **kw)
         else:
@@ -108,7 +108,7 @@ def internal_providers_only(fn):
 
 def update_last_visited_concepts(request, concept_data):
     deque_last_visited = deque(maxlen=4)
-    deque_last_visited.extend(request.session.get('last_visited', []))
+    deque_last_visited.extend(request.session.get("last_visited", []))
     try:
         # Try to remove concept from the queue to prevent double entries
         deque_last_visited.remove(concept_data)
@@ -117,7 +117,7 @@ def update_last_visited_concepts(request, concept_data):
         pass
     # Add concept to the queue
     deque_last_visited.append(concept_data)
-    request.session['last_visited'] = list(deque_last_visited)
+    request.session["last_visited"] = list(deque_last_visited)
 
 
 def safe_get_by_uri(registry, uri):
@@ -129,12 +129,12 @@ def safe_get_by_uri(registry, uri):
         return None
 
 
-def label_sort(concepts, language='any'):
+def label_sort(concepts, language="any"):
     if not concepts:
         return []
     return sorted(
         concepts,
-        key=lambda concept: concept._sortkey(key='sortlabel', language=language),
+        key=lambda concept: concept._sortkey(key="sortlabel", language=language),
     )
 
 
@@ -145,9 +145,9 @@ def db_provider_to_skosprovider(db_provider: Provider) -> SQLAlchemyProvider:
     :return: An SQLAlchemyProvider with the data from the `db_provider`
     """
     metadata = copy.deepcopy(db_provider.meta)
-    metadata['conceptscheme_id'] = db_provider.conceptscheme_id
-    metadata['atramhasis.id_generation_strategy'] = db_provider.id_generation_strategy
-    metadata['id'] = db_provider.id
+    metadata["conceptscheme_id"] = db_provider.conceptscheme_id
+    metadata["atramhasis.id_generation_strategy"] = db_provider.id_generation_strategy
+    metadata["id"] = db_provider.id
     return SQLAlchemyProvider(
         metadata=metadata,
         session=orm.object_session(db_provider),
@@ -158,13 +158,13 @@ def db_provider_to_skosprovider(db_provider: Provider) -> SQLAlchemyProvider:
 
 def provider_is_external(provider):
     """Check if a provider is marked as external via its metadata."""
-    subjects = provider.get_metadata().get('subject') or []
-    return any(str(subject).lower() == 'external' for subject in subjects)
+    subjects = provider.get_metadata().get("subject") or []
+    return any(str(subject).lower() == "external" for subject in subjects)
 
 
 @contextlib.contextmanager
 def db_session(settings):  # pragma: no cover
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    engine = engine_from_config(settings, "sqlalchemy.")
     session_maker = sessionmaker(bind=engine)
     session = session_maker()
     try:

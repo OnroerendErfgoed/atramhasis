@@ -104,17 +104,17 @@ class TestCreateSitemaps:
     def test_create_sitemaps_with_providers(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             mock_provider = _MockProvider(
-                metadata={'id': 'TREES', 'subject': []},
-                concepts=[{'id': '1'}, {'id': '2'}],
+                metadata={"id": "TREES", "subject": []},
+                concepts=[{"id": "1"}, {"id": "2"}],
             )
             mock_external = _MockProvider(
-                metadata={'id': 'EXT', 'subject': ['external']},
-                concepts=[{'id': '99'}],
+                metadata={"id": "EXT", "subject": ["external"]},
+                concepts=[{"id": "99"}],
             )
             mock_registry = _MockRegistry([mock_provider, mock_external])
-            mock_request = type('Request', (), {'skos_registry': mock_registry})()
-            env = {'request': mock_request}
-            settings = {'atramhasis.url': 'http://example.com'}
+            mock_request = type("Request", (), {"skos_registry": mock_registry})()
+            env = {"request": mock_request}
+            settings = {"atramhasis.url": "http://example.com"}
 
             sitemap_generator.create_sitemaps(settings, 50000, tmpdir, env)
 
@@ -126,13 +126,13 @@ class TestCreateSitemaps:
     def test_external_providers_excluded(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             mock_external = _MockProvider(
-                metadata={'id': 'EXT', 'subject': ['external']},
-                concepts=[{'id': '1'}],
+                metadata={"id": "EXT", "subject": ["external"]},
+                concepts=[{"id": "1"}],
             )
             mock_registry = _MockRegistry([mock_external])
-            mock_request = type('Request', (), {'skos_registry': mock_registry})()
-            env = {'request': mock_request}
-            settings = {'atramhasis.url': 'http://example.com'}
+            mock_request = type("Request", (), {"skos_registry": mock_registry})()
+            env = {"request": mock_request}
+            settings = {"atramhasis.url": "http://example.com"}
 
             sitemap_generator.create_sitemaps(settings, 50000, tmpdir, env)
 
@@ -143,13 +143,13 @@ class TestCreateSitemaps:
     def test_hidden_providers_excluded(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             mock_hidden = _MockProvider(
-                metadata={'id': 'HID', 'subject': ['hidden']},
-                concepts=[{'id': '1'}],
+                metadata={"id": "HID", "subject": ["hidden"]},
+                concepts=[{"id": "1"}],
             )
             mock_registry = _MockRegistry([mock_hidden])
-            mock_request = type('Request', (), {'skos_registry': mock_registry})()
-            env = {'request': mock_request}
-            settings = {'atramhasis.url': 'http://example.com'}
+            mock_request = type("Request", (), {"skos_registry": mock_registry})()
+            env = {"request": mock_request}
+            settings = {"atramhasis.url": "http://example.com"}
 
             sitemap_generator.create_sitemaps(settings, 50000, tmpdir, env)
 

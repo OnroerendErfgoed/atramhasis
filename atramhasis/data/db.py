@@ -1,6 +1,7 @@
 """
 Module that sets up the datamanagers and the database connections.
 """
+
 from skosprovider_sqlalchemy.models import Base as SkosBase
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
@@ -28,8 +29,12 @@ def data_managers(request):
     languages_manager = LanguagesManager(session)
     audit_manager = AuditManager(session)
 
-    return {'skos_manager': skos_manager, 'conceptscheme_manager': conceptscheme_manager,
-            'languages_manager': languages_manager, 'audit_manager': audit_manager}
+    return {
+        "skos_manager": skos_manager,
+        "conceptscheme_manager": conceptscheme_manager,
+        "languages_manager": languages_manager,
+        "audit_manager": audit_manager,
+    }
 
 
 def db(request):
@@ -37,6 +42,7 @@ def db(request):
 
     def cleanup(_):
         session.close()
+
     request.add_finished_callback(cleanup)
     return session
 
@@ -49,7 +55,7 @@ def includeme(config):
     """
 
     # Setting up SQLAlchemy
-    engine = engine_from_config(config.get_settings(), 'sqlalchemy.')
+    engine = engine_from_config(config.get_settings(), "sqlalchemy.")
     Base.metadata.bind = engine
     SkosBase.metadata.bind = engine
     config.registry.dbmaker = sessionmaker(bind=engine)

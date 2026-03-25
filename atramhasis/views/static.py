@@ -13,12 +13,9 @@ class StaticView:
         self.request = request
         self.here = os.path.dirname(__file__)
 
-    @view_config(route_name='sitemap')
+    @view_config(route_name="sitemap")
     def sitemaps(self):
         sitemaps = os.path.join(
-            self.here, '..', 'static', '_sitemaps', 'sitemap_index.xml'
+            self.here, "..", "static", "_sitemaps", "sitemap_index.xml"
         )
-        return FileResponse(
-            sitemaps,
-            request=self.request
-        )
+        return FileResponse(sitemaps, request=self.request)

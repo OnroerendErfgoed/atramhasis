@@ -2,9 +2,8 @@ import json
 import os
 
 from pyramid.config import Configurator
-from sqlalchemy import engine_from_config
 
-from atramhasis.data.models import Base
+from atramhasis.data.models import Base as Base
 
 
 def main(global_config, **settings):

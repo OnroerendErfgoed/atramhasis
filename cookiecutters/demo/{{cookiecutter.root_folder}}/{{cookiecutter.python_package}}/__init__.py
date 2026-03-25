@@ -1,11 +1,10 @@
 import json
 import os
 
-from atramhasis.data.models import Base
+from atramhasis.data.models import Base as Base
 from pyramid.config import Configurator
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.settings import aslist
-from sqlalchemy import engine_from_config
 
 
 def main(global_config, **settings):

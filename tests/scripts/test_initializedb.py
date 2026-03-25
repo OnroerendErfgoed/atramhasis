@@ -20,22 +20,22 @@ def _fast_import_provider(provider, session, conceptscheme):
 
 class TestMigrateTests:
     @patch(
-        'atramhasis.scripts.initializedb.skosprovider_utils.import_provider',
+        "atramhasis.scripts.initializedb.skosprovider_utils.import_provider",
         side_effect=_fast_import_provider,
     )
     def test_initialize_providers(self, mock_import, db_session):
         script.initialize_providers(db_session)
 
         expected_ids = [
-            'TREES',
-            'GEOGRAPHY',
-            'STYLE',
-            'MATERIAL',
-            'EVENTTYPE',
-            'HERITAGETYPE',
-            'PERIOD',
-            'SPECIES',
-            'BLUEBIRDS',
+            "TREES",
+            "GEOGRAPHY",
+            "STYLE",
+            "MATERIAL",
+            "EVENTTYPE",
+            "HERITAGETYPE",
+            "PERIOD",
+            "SPECIES",
+            "BLUEBIRDS",
         ]
         expected_concept_scheme_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         for db_provider in db_session.execute(select(Provider)).scalars():  # type: Provider
