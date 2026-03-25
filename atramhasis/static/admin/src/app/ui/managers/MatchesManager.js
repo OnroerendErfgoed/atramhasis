@@ -96,8 +96,10 @@ define([
         collection: this._closeStore
       }, this.closeGridNode);
 
-      if (this.concept && this.concept.matches) {
+      if (this._hasExistingMatches(this.concept && this.concept.matches)) {
         this._loadMatches(this.concept.matches);
+      } else {
+        this._loaded = true;
       }
 
       // load add dialog
@@ -126,6 +128,16 @@ define([
       this._closeGrid.startup();
     },
 
+    _hasExistingMatches: function (matches) {
+      if (!matches) {
+        return false;
+      }
+
+      return array.some(["broad", "close", "exact", "narrow", "related"], function (type) {
+        return !!(matches[type] && matches[type].length);
+      });
+    },
+
     reset: function() {
       var TrackableMemory = declare([Memory, Trackable]);
       this._broadStore = new TrackableMemory({ data: [] });
@@ -138,6 +150,7 @@ define([
       this._exactGrid.set('collection', this._exactStore);
       this._closeStore = new TrackableMemory({ data: [] });
       this._closeGrid.set('collection', this._closeStore);
+      this._loaded = true;
 
       if (this._matchesDialog) { this._matchesDialog.reset(); }
     },
@@ -201,7 +214,7 @@ define([
       if (concept) {
         this.concept = concept;
         this.reset();
-        if (this.concept.matches) {
+        if (this._hasExistingMatches(this.concept.matches)) {
           this._loadMatches(this.concept.matches);
         }
       }
@@ -209,6 +222,7 @@ define([
 
     _loadMatches: function(matches) {
       if (matches) {
+        this._loaded = false;
         var promises = [];
         this.loadingMatchesNode.style.display = 'inline-block';
         if (matches.broad) {
@@ -245,6 +259,12 @@ define([
               this._addMatch(matched, this._relatedStore);
             })));
           }, this);
+        }
+
+        if (promises.length === 0) {
+          this.loadingMatchesNode.style.display = 'none';
+          this._loaded = true;
+          return;
         }
 
         all(promises).then(lang.hitch(this, function(res) {
@@ -303,6 +323,7 @@ define([
       }
 
       if (match && store) {
+        this._loaded = true;
         var formatMatch = {
           data: {
             id: match.id,

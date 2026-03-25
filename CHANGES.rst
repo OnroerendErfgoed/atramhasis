@@ -1,4 +1,22 @@
-3.2.0 (12-02-2026)
+3.2.0 (25-03-2026)
+-------------------
+Features:
+- Add a healthcheck route #930
+- Apply Sorting to Concept Notes to Improve Readability in HTML View #981
+
+Bugfixes:
+- HTML detailpage is broken when an external provider is not available and the concept of the detailpage is linked to a concept in the external provider. #851
+- Improve Open Graph & Twitter Meta Tag Handling #989
+- Review HEAD requests #992
+- It's not possible to add matches when creating a new concept #975
+
+Other:
+- Add Test Coverage for Untested Scripts #969
+- Make tests not interdependant #959
+- Upgrade Backend requirements #996
+- Use proper linting tools #998
+
+3.1.1 (12-02-2026)
 ------------------
 Bugfixes:
 - Inefficient recursive logic in hierarchy_build causing exponential duplication #983

@@ -34,7 +34,6 @@ from atramhasis.data.models import ConceptVisitLog
 from atramhasis.data.models import ConceptschemeCounts
 from atramhasis.data.models import IDGenerationStrategy
 from atramhasis.data.models import Provider
-from atramhasis.scripts import delete_scheme
 
 
 class DataManager:
@@ -79,11 +78,11 @@ class ConceptSchemeManager(DataManager):
             .options(joinedload(Thing.labels))
             .filter(Thing.conceptscheme_id == conceptscheme_id)
         )
-        if 'type' in query and query['type'] in ['concept', 'collection']:
-            db_query = db_query.filter(Thing.type == query['type'])
-        if 'label' in query:
+        if "type" in query and query["type"] in ["concept", "collection"]:
+            db_query = db_query.filter(Thing.type == query["type"])
+        if "label" in query:
             db_query = db_query.filter(
-                Thing.labels.any(Label.label.ilike('%' + query['label'].lower() + '%'))
+                Thing.labels.any(Label.label.ilike("%" + query["label"].lower() + "%"))
             )
         return self.session.execute(db_query).unique().scalars().all()
 
@@ -194,7 +193,7 @@ class SkosManager(DataManager):
     def change_type(self, thing, concept_id, conceptscheme_id, new_type, uri):
         self.delete_thing(thing)
         self.session.flush()
-        thing = Concept() if new_type == 'concept' else Collection()
+        thing = Concept() if new_type == "concept" else Collection()
         thing.type = new_type
         thing.concept_id = concept_id
         thing.conceptscheme_id = conceptscheme_id
@@ -245,7 +244,7 @@ class SkosManager(DataManager):
         elif id_generation_strategy == IDGenerationStrategy.GUID:
             return str(uuid.uuid4())
         else:
-            raise ValueError('unsupported id_generation_strategy')
+            raise ValueError("unsupported id_generation_strategy")
 
     def get_hierarchy_ids(
         self, conceptscheme_id, start_ids, concept_type, property_list_name
@@ -311,28 +310,28 @@ class SkosManager(DataManager):
         """
         # Determine the association table and join columns based on the
         # relationship being traversed.
-        if property_list_name == 'narrower_concepts':
+        if property_list_name == "narrower_concepts":
             assoc_table = concept_hierarchy_concept
             from_col = assoc_table.c.concept_id_broader
             to_col = assoc_table.c.concept_id_narrower
-        elif property_list_name == 'broader_concepts':
+        elif property_list_name == "broader_concepts":
             assoc_table = concept_hierarchy_concept
             from_col = assoc_table.c.concept_id_narrower
             to_col = assoc_table.c.concept_id_broader
-        elif property_list_name == 'members':
+        elif property_list_name == "members":
             assoc_table = collection_concept
             from_col = assoc_table.c.collection_id
             to_col = assoc_table.c.concept_id
-        elif property_list_name == 'member_of':
+        elif property_list_name == "member_of":
             assoc_table = collection_concept
             from_col = assoc_table.c.concept_id
             to_col = assoc_table.c.collection_id
         else:
-            raise ValueError(f'Unsupported property_list_name: {property_list_name}')
+            raise ValueError(f"Unsupported property_list_name: {property_list_name}")
 
         # Base case: direct children of the starting nodes.
         base = select(
-            to_col.label('id'),
+            to_col.label("id"),
         ).where(
             from_col.in_(start_internal_ids),
         )
@@ -343,11 +342,11 @@ class SkosManager(DataManager):
                 Thing.type == concept_type,
             )
 
-        hierarchy = base.cte(name='hierarchy', recursive=True)
+        hierarchy = base.cte(name="hierarchy", recursive=True)
 
         # Recursive case: follow the relationship from results found so far.
         recursive = select(
-            to_col.label('id'),
+            to_col.label("id"),
         ).where(
             from_col == hierarchy.c.id,
         )
@@ -442,7 +441,7 @@ class AuditManager(DataManager):
 
     @popular_concepts.cache_on_arguments(expiration_time=86400)
     def get_most_popular_concepts_for_conceptscheme(
-        self, conceptscheme_id, max_results=5, period='last_month'
+        self, conceptscheme_id, max_results=5, period="last_month"
     ):
         """
         get the most popular concepts for a conceptscheme
@@ -456,20 +455,20 @@ class AuditManager(DataManager):
         rows = self.session.execute(
             select(
                 ConceptVisitLog.concept_id,
-                func.count(ConceptVisitLog.concept_id).label('count'),
+                func.count(ConceptVisitLog.concept_id).label("count"),
             )
             .filter(
                 ConceptVisitLog.conceptscheme_id == str(conceptscheme_id),
                 ConceptVisitLog.visited_at >= start_date,
             )
             .group_by(ConceptVisitLog.concept_id)
-            .order_by(desc('count'))
+            .order_by(desc("count"))
             .limit(max_results)
         ).all()
         results = []
         for row in rows:
             results.append(
-                {'concept_id': row.concept_id, 'scheme_id': conceptscheme_id}
+                {"concept_id": row.concept_id, "scheme_id": conceptscheme_id}
             )
         return results
 
@@ -483,12 +482,12 @@ class AuditManager(DataManager):
         d = date.today()
         datetime.combine(d, datetime.min.time())
         start_date = d - dateutil.relativedelta.relativedelta(
-            days=1 if period == 'last_day' else 0,
-            weeks=1 if period == 'last_week' else 0,
-            months=1 if period == 'last_month' else 0,
-            years=1 if period == 'last_year' else 0,
+            days=1 if period == "last_day" else 0,
+            weeks=1 if period == "last_week" else 0,
+            months=1 if period == "last_month" else 0,
+            years=1 if period == "last_year" else 0,
         )
-        return start_date.strftime('%Y-%m-%d')
+        return start_date.strftime("%Y-%m-%d")
 
 
 class CountsManager(DataManager):
@@ -512,7 +511,7 @@ class CountsManager(DataManager):
         recent = self.session.execute(
             select(ConceptschemeCounts)
             .filter(ConceptschemeCounts.conceptscheme_id == conceptscheme_id)
-            .order_by(desc('counted_at'))
+            .order_by(desc("counted_at"))
         ).scalar_one()
         return recent
 

@@ -5,6 +5,7 @@ Revises: 3ac8aca026fd
 Create Date: 2015-11-19 15:03:45.587093
 
 """
+
 import sqlalchemy as sa
 from alembic import op
 
@@ -14,7 +15,6 @@ down_revision = "3ac8aca026fd"
 
 
 def upgrade():
-
     op.create_table(
         "conceptscheme_language",
         sa.Column("conceptscheme_id", sa.Integer(), nullable=False),
@@ -32,5 +32,4 @@ def upgrade():
 
 
 def downgrade():
-
     op.drop_table("conceptscheme_language")

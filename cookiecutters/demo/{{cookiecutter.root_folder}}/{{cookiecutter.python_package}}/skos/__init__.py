@@ -10,26 +10,22 @@ from skosprovider_getty.providers import TGNProvider
 
 log = logging.getLogger(__name__)
 LICENSES = [
-    'https://creativecommons.org/licenses/by/4.0/',
-    'https://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0'
+    "https://creativecommons.org/licenses/by/4.0/",
+    "https://data.vlaanderen.be/doc/licentie/modellicentie-gratis-hergebruik/v1.0",
 ]
 
 
 def create_registry(request):
     try:
-        registry = Registry(instance_scope='threaded_thread')
+        registry = Registry(instance_scope="threaded_thread")
 
-        getty_session = CacheControl(requests.Session(), heuristic=ExpiresAfter(weeks=1))
-
-        aat = AATProvider(
-            {'id': 'AAT', 'subject': ['external']},
-            session=getty_session
+        getty_session = CacheControl(
+            requests.Session(), heuristic=ExpiresAfter(weeks=1)
         )
 
-        tgn = TGNProvider(
-            {'id': 'TGN', 'subject': ['external']},
-            session=getty_session
-        )
+        aat = AATProvider({"id": "AAT", "subject": ["external"]}, session=getty_session)
+
+        tgn = TGNProvider({"id": "TGN", "subject": ["external"]}, session=getty_session)
 
         registry.register_provider(aat)
         registry.register_provider(tgn)

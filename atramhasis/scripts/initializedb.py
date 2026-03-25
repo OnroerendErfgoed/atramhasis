@@ -21,8 +21,10 @@ from atramhasis.data.models import Provider
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
-    print('usage: %s <config_uri> [var=value]\n'
-          '(example: "%s development.ini")' % (cmd, cmd))
+    print(
+        "usage: %s <config_uri> [var=value]\n"
+        '(example: "%s development.ini")' % (cmd, cmd)
+    )
     sys.exit(1)
 
 
@@ -47,11 +49,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=1,
-            uri='urn:x-skosprovider:trees',
+            uri="urn:x-skosprovider:trees",
             labels=[
-                Label('Verschillende soorten bomen', 'prefLabel', 'nl'),
-                Label('Different types of trees', 'prefLabel', 'en')
-            ]
+                Label("Verschillende soorten bomen", "prefLabel", "nl"),
+                Label("Different types of trees", "prefLabel", "en"),
+            ],
         ),
     )
     import_provider(
@@ -59,11 +61,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=2,
-            uri='urn:x-skosprovider:geo',
+            uri="urn:x-skosprovider:geo",
             labels=[
-                Label('Geografie', 'prefLabel', 'nl'),
-                Label('Geography', 'prefLabel', 'en')
-            ]
+                Label("Geografie", "prefLabel", "nl"),
+                Label("Geography", "prefLabel", "en"),
+            ],
         ),
     )
     import_provider(
@@ -71,11 +73,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=3,
-            uri='https://id.erfgoed.net/thesauri/stijlen_en_culturen',
+            uri="https://id.erfgoed.net/thesauri/stijlen_en_culturen",
             labels=[
-                Label('Stijlen en Culturen', 'prefLabel', 'nl'),
-                Label('Styles and Cultures', 'prefLabel', 'en')
-            ]
+                Label("Stijlen en Culturen", "prefLabel", "nl"),
+                Label("Styles and Cultures", "prefLabel", "en"),
+            ],
         ),
     )
     import_provider(
@@ -83,11 +85,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=4,
-            uri='https://id.erfgoed.net/thesauri/materialen',
+            uri="https://id.erfgoed.net/thesauri/materialen",
             labels=[
-                Label('Materialen', 'prefLabel', 'nl'),
-                Label('Materials', 'prefLabel', 'en')
-            ]
+                Label("Materialen", "prefLabel", "nl"),
+                Label("Materials", "prefLabel", "en"),
+            ],
         ),
     )
     import_provider(
@@ -95,11 +97,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=5,
-            uri='https://id.erfgoed.net/thesauri/gebeurtenistypes',
+            uri="https://id.erfgoed.net/thesauri/gebeurtenistypes",
             labels=[
-                Label('Gebeurtenistypes', 'prefLabel', 'nl'),
-                Label('Event types', 'prefLabel', 'en')
-            ]
+                Label("Gebeurtenistypes", "prefLabel", "nl"),
+                Label("Event types", "prefLabel", "en"),
+            ],
         ),
     )
     import_provider(
@@ -107,11 +109,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=6,
-            uri='https://id.erfgoed.net/thesauri/erfgoedtypes',
+            uri="https://id.erfgoed.net/thesauri/erfgoedtypes",
             labels=[
-                Label('Erfgoedtypes', 'prefLabel', 'nl'),
-                Label('Heritage types', 'prefLabel', 'en')
-            ]
+                Label("Erfgoedtypes", "prefLabel", "nl"),
+                Label("Heritage types", "prefLabel", "en"),
+            ],
         ),
     )
     import_provider(
@@ -119,11 +121,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=7,
-            uri='https://id.erfgoed.net/thesauri/dateringen',
+            uri="https://id.erfgoed.net/thesauri/dateringen",
             labels=[
-                Label('Dateringen', 'prefLabel', 'nl'),
-                Label('Periods', 'prefLabel', 'en')
-            ]
+                Label("Dateringen", "prefLabel", "nl"),
+                Label("Periods", "prefLabel", "en"),
+            ],
         ),
     )
     import_provider(
@@ -131,11 +133,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=8,
-            uri='https://id.erfgoed.net/thesauri/soorten',
+            uri="https://id.erfgoed.net/thesauri/soorten",
             labels=[
-                Label('Soorten', 'prefLabel', 'nl'),
-                Label('Species', 'prefLabel', 'en')
-            ]
+                Label("Soorten", "prefLabel", "nl"),
+                Label("Species", "prefLabel", "en"),
+            ],
         ),
     )
     import_provider(
@@ -143,11 +145,11 @@ def initialize_providers(session):
         session,
         ConceptScheme(
             id=9,
-            uri='https://id.bluebirds.org',
+            uri="https://id.bluebirds.org",
             labels=[
-                Label('Blauwe vogels', 'prefLabel', 'nl'),
-                Label('Blue birds', 'prefLabel', 'en')
-            ]
+                Label("Blauwe vogels", "prefLabel", "nl"),
+                Label("Blue birds", "prefLabel", "en"),
+            ],
         ),
     )
 
@@ -156,11 +158,13 @@ def import_provider(
     provider: VocabularyProvider, session: Session, conceptscheme: ConceptScheme
 ):
     concept_scheme = skosprovider_utils.import_provider(
-        provider, session, conceptscheme=conceptscheme,
+        provider,
+        session,
+        conceptscheme=conceptscheme,
     )
 
     if provider.uri_generator:
-        uri_pattern = getattr(provider.uri_generator, 'pattern', None)
+        uri_pattern = getattr(provider.uri_generator, "pattern", None)
     else:
         uri_pattern = None
 
@@ -171,13 +175,13 @@ def import_provider(
     db_provider.conceptscheme = concept_scheme
     db_provider.id = provider.get_vocabulary_id()
     db_provider.uri_pattern = uri_pattern
-    if 'conceptscheme_id' in db_provider.meta:
-        del db_provider.meta['conceptscheme_id']
+    if "conceptscheme_id" in db_provider.meta:
+        del db_provider.meta["conceptscheme_id"]
 
     session.add(db_provider)
 
 
-def main(argv=sys.argv):
+def main(argv=sys.argv):  # pragma: no cover
     if len(argv) < 2:
         usage(argv)
 
@@ -186,12 +190,12 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
 
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    engine = engine_from_config(settings, "sqlalchemy.")
     with Session(engine) as session:
         initialize_providers(session)
         session.commit()
-    print('--atramhasis-db-initialized--')
+    print("--atramhasis-db-initialized--")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -13,7 +13,9 @@ from atramhasis.scripts.delete_scheme import delete_scheme
 from atramhasis.validators import validate_provider_json
 
 
-def create_provider(json_data: Mapping, session: Session, skos_registry: Registry) -> Provider:
+def create_provider(
+    json_data: Mapping, session: Session, skos_registry: Registry
+) -> Provider:
     """Process a provider JSON into a newly stored Provider."""
     for provider in skos_registry.get_providers():
         if provider.get_vocabulary_uri() == json_data["conceptscheme_uri"]:

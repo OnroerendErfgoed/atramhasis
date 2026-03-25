@@ -29,7 +29,7 @@ def protected_operation(fn):
     def advice(parent_object, *args, **kw):
         request = parent_object.request
         url = request.path
-        match = re.compile(r'/conceptschemes/(\w+)/c/(\w+)').match(url)
+        match = re.compile(r"/conceptschemes/(\w+)/c/(\w+)").match(url)
         scheme_id = match.group(1)
         c_id = match.group(2)
         provider = request.skos_registry.get_provider(scheme_id)
