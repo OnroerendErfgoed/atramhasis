@@ -1,3 +1,4 @@
+import json
 import os
 
 from pyramid.config import Configurator
@@ -13,6 +14,11 @@ def main(global_config, **settings):
     dump_location = settings["atramhasis.dump_location"]
     if not os.path.exists(dump_location):
         os.makedirs(dump_location)
+
+    if "atramhasis.note_type_order" in settings:
+        settings["atramhasis.note_type_order"] = json.loads(
+            settings["atramhasis.note_type_order"]
+        )
 
     with Configurator(settings=settings) as config:
         # Set up atramhasis
