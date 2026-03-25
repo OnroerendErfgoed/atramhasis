@@ -867,6 +867,66 @@ paths:
         5XX:
           description: Unexpected error.
 
+  /live:
+    get:
+      summary: Liveness probe.
+      description: Very cheap check that only indicates the process is alive.
+      tags:
+        - Health
+      responses:
+        200:
+          description: The process is alive.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: alive
+
+  /ready:
+    get:
+      summary: Readiness probe.
+      description: Checks dependencies required to serve traffic such as
+        database connectivity and maintenance mode.
+      tags:
+        - Health
+      responses:
+        200:
+          description: The application is ready to serve traffic.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+        503:
+          description: The application is not ready (database down or maintenance mode).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+
+  /health:
+    get:
+      summary: Aggregate health check.
+      description: Health endpoint for humans and dashboards. Includes version
+        info and deeper checks.
+      tags:
+        - Health
+      responses:
+        200:
+          description: The application is healthy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        503:
+          description: The application is unhealthy or in maintenance mode.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
 components:
   parameters:
     SchemeId:
@@ -1431,6 +1491,35 @@ components:
       required:
         - conceptscheme_uri
         - uri_pattern
+    HealthChecks:
+      type: object
+      properties:
+        database:
+          type: boolean
+    ReadyResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ready
+            - unready
+            - maintenance
+        checks:
+          $ref: '#/components/schemas/HealthChecks'
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+            - unhealthy
+            - maintenance
+        version:
+          type: string
+        checks:
+          $ref: '#/components/schemas/HealthChecks'
     Error:
       type: object
       required:
