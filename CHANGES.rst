@@ -14,6 +14,7 @@ Other:
 - Add Test Coverage for Untested Scripts #969
 - Make tests not interdependant #959
 - Upgrade Backend requirements #996
+- Use proper linting tools #998
 
 3.1.1 (12-02-2026)
 ------------------
