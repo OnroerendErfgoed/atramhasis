@@ -47,6 +47,7 @@ Bugfixes:
 - openapi could be better #909
 - conceptschemes/unknown should not cause a 500 server error #910
 - sqlite3.OperationalError: no such table: conceptscheme #890
+- Fix wrong uri pattern when importing a file #960
 - Wrong years in changelog #916
 - Wrong link to discussion forum #935
 
