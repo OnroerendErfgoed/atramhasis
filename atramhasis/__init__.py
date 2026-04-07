@@ -93,14 +93,18 @@ def configure_session(config):
 
 
 def parse_json_setting(settings, key):
-    """Parse a JSON setting, removing it if empty or invalid."""
+    """Parse a JSON setting, removing it if empty or invalid.
+
+    The key is popped first; it is only re-added when parsing succeeds.
+    On empty/invalid input the key will be absent from settings.
+    """
     raw = settings.pop(key, "").strip()
     if not raw:
         return
     try:
         settings[key] = json.loads(raw)
     except json.JSONDecodeError:
-        LOG.warning("Invalid JSON for '%s', using default.", key)
+        LOG.warning("Invalid JSON for '%s': %r, using default.", key, raw)
 
 
 def main(global_config, **settings):
