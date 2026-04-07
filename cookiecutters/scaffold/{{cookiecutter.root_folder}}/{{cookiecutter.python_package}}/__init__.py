@@ -1,9 +1,9 @@
-import json
 import os
 
 from pyramid.config import Configurator
 
 from atramhasis.data.models import Base as Base
+from atramhasis.utils import parse_json_setting
 
 
 def main(global_config, **settings):
@@ -14,10 +14,7 @@ def main(global_config, **settings):
     if not os.path.exists(dump_location):
         os.makedirs(dump_location)
 
-    if "atramhasis.note_type_order" in settings:
-        settings["atramhasis.note_type_order"] = json.loads(
-            settings["atramhasis.note_type_order"]
-        )
+    parse_json_setting(settings, "atramhasis.note_type_order")
 
     with Configurator(settings=settings) as config:
         # Set up atramhasis

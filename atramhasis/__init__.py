@@ -1,4 +1,3 @@
-import json
 import logging
 import os
 
@@ -9,6 +8,7 @@ from pyramid.session import SignedCookieSessionFactory
 from pyramid.settings import aslist
 
 from atramhasis.renderers import json_renderer_verbose
+from atramhasis.utils import parse_json_setting
 
 LOG = logging.getLogger(__name__)
 
@@ -90,21 +90,6 @@ def configure_session(config):
     config.action(
         "check_session_factory_set", check_session_factory_set, order=PHASE3_CONFIG + 1
     )
-
-
-def parse_json_setting(settings, key):
-    """Parse a JSON setting, removing it if empty or invalid.
-
-    The key is popped first; it is only re-added when parsing succeeds.
-    On empty/invalid input the key will be absent from settings.
-    """
-    raw = settings.pop(key, "").strip()
-    if not raw:
-        return
-    try:
-        settings[key] = json.loads(raw)
-    except json.JSONDecodeError:
-        LOG.warning("Invalid JSON for '%s': %r, using default.", key, raw)
 
 
 def main(global_config, **settings):

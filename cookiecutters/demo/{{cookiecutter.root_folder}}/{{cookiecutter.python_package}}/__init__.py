@@ -1,7 +1,7 @@
-import json
 import os
 
 from atramhasis.data.models import Base as Base
+from atramhasis.utils import parse_json_setting
 from pyramid.config import Configurator
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.settings import aslist
@@ -15,10 +15,7 @@ def main(global_config, **settings):
         settings["layout.focus_conceptschemes"], flatten=False
     )
 
-    if "atramhasis.note_type_order" in settings:
-        settings["atramhasis.note_type_order"] = json.loads(
-            settings["atramhasis.note_type_order"]
-        )
+    parse_json_setting(settings, "atramhasis.note_type_order")
 
     # set up dump location
     dump_location = settings["atramhasis.dump_location"]

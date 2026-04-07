@@ -1,11 +1,11 @@
-import logging
 import os
 import tempfile
 
+import pytest
 from pyramid.paster import get_appsettings
 
 from atramhasis import main
-from atramhasis import parse_json_setting
+from atramhasis.utils import parse_json_setting
 
 here = os.path.dirname(__file__)
 settings = get_appsettings(os.path.join(here, "../", "tests/conf_test.ini"))
@@ -44,9 +44,7 @@ class TestParseJsonSetting:
         parse_json_setting(s, "my.key")
         assert "my.key" not in s
 
-    def test_invalid_json_removes_key_and_warns(self, caplog):
+    def test_invalid_json_raises(self):
         s = {"my.key": "{bad json}"}
-        with caplog.at_level(logging.WARNING):
+        with pytest.raises(ValueError, match="Invalid JSON for setting 'my.key'"):
             parse_json_setting(s, "my.key")
-        assert "my.key" not in s
-        assert "Invalid JSON for 'my.key'" in caplog.text
