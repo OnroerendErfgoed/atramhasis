@@ -92,16 +92,24 @@ def configure_session(config):
     )
 
 
+def parse_json_setting(settings, key):
+    """Parse a JSON setting, removing it if empty or invalid."""
+    raw = settings.pop(key, "").strip()
+    if not raw:
+        return
+    try:
+        settings[key] = json.loads(raw)
+    except json.JSONDecodeError:
+        LOG.warning("Invalid JSON for '%s', using default.", key)
+
+
 def main(global_config, **settings):
     """This function returns a Pyramid WSGI application."""
     settings["layout.focus_conceptschemes"] = aslist(
         settings["layout.focus_conceptschemes"], flatten=False
     )
 
-    if "atramhasis.note_type_order" in settings:
-        settings["atramhasis.note_type_order"] = json.loads(
-            settings["atramhasis.note_type_order"]
-        )
+    parse_json_setting(settings, "atramhasis.note_type_order")
 
     dump_location = settings["atramhasis.dump_location"]
     if not os.path.exists(dump_location):
