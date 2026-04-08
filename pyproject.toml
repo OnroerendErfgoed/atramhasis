@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-fancy-pypi-readme", "babel"]
 build-backend = "hatchling.build"
 
 [project]
-version = "3.2.0"
+version = "3.2.1"
 name = "atramhasis"
 dynamic = ["readme"]
 authors = [
