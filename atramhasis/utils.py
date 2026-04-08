@@ -4,6 +4,7 @@ Module containing utility functions used by Atramhasis.
 
 import contextlib
 import copy
+import json
 import logging
 from collections import deque
 
@@ -24,6 +25,22 @@ from sqlalchemy.orm import sessionmaker
 from atramhasis.data.models import Provider
 
 log = logging.getLogger(__name__)
+
+
+def parse_json_setting(settings, key):
+    """Parse a JSON setting if present.
+
+    The key is popped first and, when non-empty, replaced with the parsed
+    value. An empty or missing value is silently accepted (key removed).
+    Invalid JSON raises immediately so config errors are caught at startup.
+    """
+    raw = settings.pop(key, "").strip()
+    if not raw:
+        return
+    try:
+        settings[key] = json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON for setting '{key}': {raw!r}") from e
 
 
 def from_thing(thing):
