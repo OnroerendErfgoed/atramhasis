@@ -3,6 +3,7 @@
 Bugfixes:
 - Improve json setting handling #1035
 - Clean truncate #1033
+- Fix building docs #1037
 
 3.2.0 (25-03-2026)
 -------------------
