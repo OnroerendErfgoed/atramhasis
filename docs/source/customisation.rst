@@ -1290,8 +1290,8 @@ functionality might fail to run properly.
       GEOGRAPHY
       MATERIALS
 
-    # DEFAULT - Run dojo from source (src) or distribution (dist)
-    dojo.mode = dist
+    # DEFAULT - Run vue from source (src) or distribution (dist)
+    vue.mode = dist
 
     # DEFAULT json mapping of note type to sort order (keys: note type ids, values: integer sort position).
     # If unspecified, a built-in default order is used.
