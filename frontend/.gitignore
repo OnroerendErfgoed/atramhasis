@@ -14,9 +14,6 @@ dist-ssr
 coverage
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
 .idea
 *.suo
 *.ntvs*
@@ -37,3 +34,8 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Auto-generated type declarations
+auto-imports.d.ts
+components.d.ts
+
