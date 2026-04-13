@@ -497,8 +497,13 @@ class AtramhasisAdminView:
         renderer="atramhasis:templates/admin.jinja2",
         permission="edit",
     )
+    @view_config(
+        route_name="catchall_admin",
+        renderer="atramhasis:templates/admin.jinja2",
+        permission="edit",
+    )
     def admin_view(self):
-        return {"admin": None}
+        return {"admin": None, "local": True}
 
     @view_config(
         route_name="scheme_tree_invalidate",

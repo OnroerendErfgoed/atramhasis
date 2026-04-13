@@ -15,7 +15,7 @@
     >
       <template #header="{ state }">
         <RouterLink to="/" class="flex items-center gap-3 overflow-hidden">
-          <img src="/atramlogo.png" alt="Atramhasis" class="h-10 w-auto shrink-0" />
+          <img src="/img/atramlogo.png" alt="Atramhasis" class="h-10 w-auto shrink-0" />
 
           <div v-if="state === 'expanded'" class="min-w-0">
             <p class="truncate text-[11px] font-semibold uppercase tracking-[0.28em] text-white/50">Admin</p>
@@ -105,13 +105,22 @@
           />
 
           <div class="min-w-0">
-            <h1 class="truncate text-lg font-semibold text-highlighted">{{ currentSectionTitle }}</h1>
+            <h1 class="truncate text-lg font-semibold text-highlighted">
+              {{ currentSectionTitle }}
+            </h1>
           </div>
         </header>
 
         <main class="min-h-0 flex-1 overflow-auto p-6">
           <div class="mx-auto w-full max-w-7xl">
-            <RouterView />
+            <Suspense>
+              <template #fallback>
+                <div class="flex items-center justify-center py-20">
+                  <UIcon name="i-lucide-loader-circle" class="size-8 animate-spin text-primary" />
+                </div>
+              </template>
+              <RouterView />
+            </Suspense>
           </div>
         </main>
       </div>

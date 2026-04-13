@@ -96,6 +96,7 @@ def includeme(config):
 
     # admin
     config.add_route("admin", "/admin")
+    config.add_route("catchall_admin", "/admin/{path:.*}")
     config.add_route(
         "scheme_tree_invalidate",
         pattern="/admin/tree/invalidate/{scheme_id}",

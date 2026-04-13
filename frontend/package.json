@@ -15,13 +15,13 @@
   "dependencies": {
     "@nuxt/ui": "^4.6.1",
     "@vueuse/core": "^14.2.1",
+    "axios": "^1.15.0",
     "pinia": "^3.0.4",
     "tailwindcss": "^4.2.2",
     "vue": "^3.5.31",
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.12.0",
     "@vitejs/plugin-vue": "^6.0.5",
