@@ -3,25 +3,35 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { URL, fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+
 import vueDevTools from 'vite-plugin-vue-devtools';
 
 const outDir = resolve(__dirname, '../atramhasis/static');
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueDevTools(), ui()],
+  base: './',
+  plugins: [
+    vue(),
+    vueDevTools(),
+    ui(),
+    viteStaticCopy({
+      targets: [{ src: 'static/**/*', dest: '.', rename: { stripBase: 1 } }],
+    }),
+  ],
   build: {
-    manifest: true,
+    outDir,
+    manifest: 'dist/.vite/manifest.json',
     emptyOutDir: true,
     rollupOptions: {
       input: {
         main: resolve(__dirname, './src/main.ts'),
       },
       output: {
-        dir: `${outDir}/dist`,
-        entryFileNames: '[name].[hash].js',
-        chunkFileNames: '[name].[hash].js',
-        assetFileNames: '[name].[hash].[ext]',
+        entryFileNames: 'dist/[name].[hash].js',
+        chunkFileNames: 'dist/[name].[hash].js',
+        assetFileNames: 'dist/[name].[hash].[ext]',
         sourcemap: false,
       },
     },
@@ -37,6 +47,6 @@ export default defineConfig({
   },
   server: {
     cors: true,
-    origin: 'http://local.onroerenderfgoed.be:6543/static',
+    origin: 'http://local.onroerenderfgoed.be:6543',
   },
 });

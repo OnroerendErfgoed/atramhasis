@@ -37,6 +37,7 @@
     "prettier": "3.8.1",
     "typescript": "~6.0.0",
     "vite": "^8.0.3",
+    "vite-plugin-static-copy": "^4.0.1",
     "vite-plugin-vue-devtools": "^8.1.1",
     "vue-tsc": "^3.2.6"
   },

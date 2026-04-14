@@ -15,7 +15,7 @@
     >
       <template #header="{ state }">
         <RouterLink to="/" class="flex items-center gap-3 overflow-hidden">
-          <img src="/img/atramlogo.png" alt="Atramhasis" class="h-10 w-auto shrink-0" />
+          <img src="/static/img/atramlogo.png" alt="Atramhasis" class="h-10 w-auto shrink-0" />
 
           <div v-if="state === 'expanded'" class="min-w-0">
             <p class="truncate text-[11px] font-semibold uppercase tracking-[0.28em] text-white/50">Admin</p>

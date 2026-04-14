@@ -47,11 +47,11 @@ class BuildHook(BuildHookInterface):
         vue_config = f"""
             <link
                 rel="stylesheet"
-                href="/static/dist/{manifest["src/main.ts"]["css"][0]}"
+                href="/static/{manifest["src/main.ts"]["css"][0]}"
                 />
             <script
                 type="module"
-                src="/static/dist/{manifest["src/main.ts"]["file"]}">
+                src="/static/{manifest["src/main.ts"]["file"]}">
             </script>
         """
 
