@@ -1,5 +1,5 @@
 <template>
-  <pre>{{ conceptschemes }}</pre>
+  <pre class="conceptschemes-dump">{{ conceptschemes }}</pre>
 </template>
 
 <script setup lang="ts">
@@ -23,3 +23,25 @@ try {
   });
 }
 </script>
+
+<style scoped>
+.conceptschemes-dump {
+  min-height: 24rem;
+  margin: 0;
+  overflow: auto;
+  border: 1px solid var(--ui-border);
+  border-radius: 0.875rem;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  padding: 1.5rem;
+  color: var(--ui-text);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.conceptschemes-dump::selection {
+  background: color-mix(in srgb, var(--ui-primary) 18%, white);
+}
+</style>

@@ -4,10 +4,22 @@
       v-model:open="open"
       collapsible="icon"
       rail
+      :menu="{
+        ui: {
+          overlay: 'bg-neutral-950/55 backdrop-blur-[2px]',
+          content: 'bg-inverted text-inverted divide-y divide-white/10',
+          header: 'px-4 py-5',
+          body: 'px-3 py-2',
+          footer: 'px-3 py-4',
+          title: 'text-inverted',
+          description: 'text-white/70',
+          close: 'text-white/70 hover:text-white hover:bg-white/6',
+        },
+      }"
       :ui="{
         root: 'border-r border-default',
         container: 'h-screen',
-        inner: 'bg-neutral-950 text-white divide-white/10',
+        inner: 'bg-inverted text-inverted divide-y divide-white/10',
         header: 'px-4 py-5',
         body: 'px-3 py-2',
         footer: 'px-3 py-4',
@@ -19,7 +31,7 @@
 
           <div v-if="state === 'expanded'" class="min-w-0">
             <p class="truncate text-[11px] font-semibold uppercase tracking-[0.28em] text-white/50">Admin</p>
-            <p class="truncate text-sm font-semibold text-white">Atramhasis</p>
+            <p class="truncate text-sm font-semibold text-inverted">Atramhasis</p>
           </div>
         </RouterLink>
       </template>
@@ -28,22 +40,22 @@
         <div class="space-y-4">
           <div class="border-b border-white/10 pb-4">
             <div
-              class="flex rounded-2xl border border-white/15 bg-linear-to-br from-white/10 to-white/5 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+              class="flex rounded-2xl border border-white/12 bg-white/4 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xs"
               :class="state === 'expanded' ? 'items-center gap-3' : 'justify-center'"
             >
               <div
-                class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-emerald-200 text-xl font-semibold tracking-[-0.02em] text-slate-900"
+                class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/22 text-xl font-semibold tracking-[-0.02em] text-primary"
               >
                 JD
               </div>
 
               <div v-if="state === 'expanded'" class="min-w-0 text-left">
-                <p class="truncate text-xl leading-tight font-medium text-white">John Doe</p>
+                <p class="truncate text-xl leading-tight font-medium text-inverted">John Doe</p>
                 <UBadge
                   color="neutral"
                   variant="outline"
                   size="sm"
-                  class="mt-1 border-white/25 bg-slate-700/30 text-sm font-medium text-white/90"
+                  class="mt-1 border-white/24 bg-white/8 text-sm font-medium text-white/92"
                 >
                   Admin
                 </UBadge>
@@ -59,9 +71,9 @@
             highlight
             class="w-full"
             :ui="{
-              link: 'min-h-11 rounded-lg px-3 text-sm text-white/80 hover:bg-white/5 hover:text-white data-[active=true]:bg-white/10 data-[active=true]:text-white',
+              link: 'min-h-11 rounded-lg px-3 text-sm text-white/78 hover:bg-white/6 hover:text-white data-[active=true]:bg-white/8 data-[active=true]:text-white',
               label: 'px-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/35',
-              content: 'border border-white/10 bg-neutral-900',
+              content: 'border border-white/10 bg-[#161d32]',
               childLink: 'text-white/70 hover:text-white',
             }"
           />
@@ -74,7 +86,7 @@
             color="neutral"
             variant="ghost"
             icon="i-lucide-house"
-            class="w-full justify-start text-white/70 hover:bg-white/5 hover:text-white"
+            class="w-full justify-start text-white/72 hover:bg-white/6 hover:text-white"
             :label="state === 'expanded' ? 'Back to homepage' : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click="navigateToHomepage"
@@ -84,7 +96,7 @@
             color="neutral"
             variant="ghost"
             icon="i-lucide-log-out"
-            class="w-full justify-start text-white/70 hover:bg-white/5 hover:text-white"
+            class="w-full justify-start text-white/72 hover:bg-white/6 hover:text-white"
             :label="state === 'expanded' ? 'Log out' : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click.prevent
