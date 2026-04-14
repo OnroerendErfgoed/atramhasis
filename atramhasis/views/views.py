@@ -503,9 +503,16 @@ class AtramhasisAdminView:
         permission="edit",
     )
     def admin_view(self):
+        theme_stylesheet = self.request.registry.settings.get(
+            "atramhasis.admin_theme_stylesheet"
+        )
+        if theme_stylesheet:
+            theme_stylesheet = self.request.static_path(theme_stylesheet)
+
         return {
             "admin": None,
             "local": self.request.registry.settings["vue.mode"] == "src",
+            "theme_stylesheet": theme_stylesheet,
         }
 
     @view_config(

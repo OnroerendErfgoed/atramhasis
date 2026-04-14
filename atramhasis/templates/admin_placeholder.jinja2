@@ -6,6 +6,9 @@
     {% if not local %}
       <!-- if production -->
     {% endif %}
+    {% if theme_stylesheet %}
+      <link rel="stylesheet" href="{{ theme_stylesheet }}">
+    {% endif %}
   </head>
 
   <body>

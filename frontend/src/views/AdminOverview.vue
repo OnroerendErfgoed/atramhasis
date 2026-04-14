@@ -6,20 +6,21 @@
       rail
       :menu="{
         ui: {
-          overlay: 'bg-neutral-950/55 backdrop-blur-[2px]',
-          content: 'bg-inverted text-inverted divide-y divide-white/10',
+          overlay: 'bg-primary-100 backdrop-blur-[2px]',
+          content: 'bg-primary-950 text-white divide-y divide-primary-700/30',
           header: 'px-4 py-5',
           body: 'px-3 py-2',
           footer: 'px-3 py-4',
-          title: 'text-inverted',
-          description: 'text-white/70',
-          close: 'text-white/70 hover:text-white hover:bg-white/6',
+          title: 'text-white',
+          description: 'text-primary-100/70',
+          close:
+            'text-primary-100/70 hover:text-white hover:bg-primary-200/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70',
         },
       }"
       :ui="{
         root: 'border-r border-default',
         container: 'h-screen',
-        inner: 'bg-inverted text-inverted divide-y divide-white/10',
+        inner: 'bg-primary-950 text-white divide-y divide-primary-700/30',
         header: 'px-4 py-5',
         body: 'px-3 py-2',
         footer: 'px-3 py-4',
@@ -30,32 +31,32 @@
           <img src="/static/img/atramlogo.png" alt="Atramhasis" class="h-10 w-auto shrink-0" />
 
           <div v-if="state === 'expanded'" class="min-w-0">
-            <p class="truncate text-[11px] font-semibold uppercase tracking-[0.28em] text-white/50">Admin</p>
-            <p class="truncate text-sm font-semibold text-inverted">Atramhasis</p>
+            <p class="truncate text-[11px] font-semibold uppercase tracking-[0.28em] text-primary-100/55">Admin</p>
+            <p class="truncate text-sm font-semibold text-white">Atramhasis</p>
           </div>
         </RouterLink>
       </template>
 
       <template #default="{ state }">
         <div class="space-y-4">
-          <div class="border-b border-white/10 pb-4">
+          <div class="border-b border-primary-700/30 pb-4">
             <div
-              class="flex rounded-2xl border border-white/12 bg-white/4 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xs"
+              class="flex rounded-2xl border border-primary-100/18 bg-primary-50/7 p-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--ui-color-primary-50)_10%,transparent)] backdrop-blur-xs"
               :class="state === 'expanded' ? 'items-center gap-3' : 'justify-center'"
             >
               <div
-                class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/22 text-xl font-semibold tracking-[-0.02em] text-primary"
+                class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-300/34 text-xl font-semibold tracking-[-0.02em] text-primary-100"
               >
                 JD
               </div>
 
               <div v-if="state === 'expanded'" class="min-w-0 text-left">
-                <p class="truncate text-xl leading-tight font-medium text-inverted">John Doe</p>
+                <p class="truncate text-xl leading-tight font-medium text-white">John Doe</p>
                 <UBadge
                   color="neutral"
                   variant="outline"
                   size="sm"
-                  class="mt-1 border-white/24 bg-white/8 text-sm font-medium text-white/92"
+                  class="mt-1 border-primary-100/28 bg-primary-50/10 text-sm font-medium text-primary-50"
                 >
                   Admin
                 </UBadge>
@@ -71,10 +72,11 @@
             highlight
             class="w-full"
             :ui="{
-              link: 'min-h-11 rounded-lg px-3 text-sm text-white/78 hover:bg-white/6 hover:text-white data-[active=true]:bg-white/8 data-[active=true]:text-white',
-              label: 'px-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/35',
-              content: 'border border-white/10 bg-[#161d32]',
-              childLink: 'text-white/70 hover:text-white',
+              link: 'min-h-11 rounded-lg px-3 text-sm text-primary-50/82 hover:bg-primary-200/10 hover:text-white focus-visible:bg-primary-200/10 focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70 data-[active=true]:bg-primary-200/22 data-[active=true]:text-white data-[disabled=true]:cursor-not-allowed data-[disabled=true]:bg-transparent data-[disabled=true]:text-primary-100/38 [&_svg]:text-current [&_.iconify]:text-current [&_svg]:opacity-90 [&_.iconify]:opacity-90 data-[active=true]:[&_svg]:opacity-100 data-[active=true]:[&_.iconify]:opacity-100 data-[disabled=true]:[&_svg]:opacity-55 data-[disabled=true]:[&_.iconify]:opacity-55',
+              label: 'px-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-primary-100/42',
+              content: 'border border-primary-100/14 bg-primary-950/75',
+              childLink:
+                'text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:bg-primary-200/10 focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70',
             }"
           />
         </div>
@@ -86,7 +88,7 @@
             color="neutral"
             variant="ghost"
             icon="i-lucide-house"
-            class="w-full justify-start text-white/72 hover:bg-white/6 hover:text-white"
+            class="w-full justify-start text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
             :label="state === 'expanded' ? 'Back to homepage' : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click="navigateToHomepage"
@@ -96,7 +98,7 @@
             color="neutral"
             variant="ghost"
             icon="i-lucide-log-out"
-            class="w-full justify-start text-white/72 hover:bg-white/6 hover:text-white"
+            class="w-full justify-start text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
             :label="state === 'expanded' ? 'Log out' : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click.prevent
@@ -112,12 +114,13 @@
             icon="i-lucide-panel-left"
             color="neutral"
             variant="ghost"
+            class="text-neutral-700 hover:bg-primary-50 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
             aria-label="Toggle sidebar"
             @click="open = !open"
           />
 
           <div class="min-w-0">
-            <h1 class="truncate text-lg font-semibold text-highlighted">
+            <h1 class="truncate text-lg font-semibold text-neutral-900">
               {{ currentSectionTitle }}
             </h1>
           </div>
