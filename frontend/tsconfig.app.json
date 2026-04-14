@@ -18,6 +18,10 @@
     // Path mapping for cleaner imports.
     "paths": {
       "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"],
+      "@components/*": ["./src/components/*"],
+      "@services/*": ["./src/services/*"],
+      "@models/*": ["./src/models/*"],
+      "@views/*": ["./src/views/*"],
       "@/*": ["./src/*"]
     },
 

@@ -82,3 +82,4 @@ test.db
 
 # compiled locale files
 atramhasis/locale/*/LC_MESSAGES/*.mo
+atramhasis/templates/admin.jinja2

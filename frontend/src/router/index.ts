@@ -6,13 +6,13 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'AdminOverview',
-      component: () => import('../views/AdminOverview.vue'),
+      component: () => import('@views/AdminOverview.vue'),
       redirect: { name: 'AdminConceptschemes' },
       children: [
         {
           path: 'conceptschemes',
           name: 'AdminConceptschemes',
-          component: () => import('../views/AdminConceptschemes.vue'),
+          component: () => import('@views/AdminConceptschemes.vue'),
         },
       ],
     },

@@ -503,7 +503,10 @@ class AtramhasisAdminView:
         permission="edit",
     )
     def admin_view(self):
-        return {"admin": None, "local": True}
+        return {
+            "admin": None,
+            "local": self.request.registry.settings["vue.mode"] == "src",
+        }
 
     @view_config(
         route_name="scheme_tree_invalidate",

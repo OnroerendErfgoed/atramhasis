@@ -71,13 +71,13 @@
       <template #footer="{ state }">
         <div class="space-y-2">
           <UButton
-            to="/"
             color="neutral"
             variant="ghost"
             icon="i-lucide-house"
             class="w-full justify-start text-white/70 hover:bg-white/5 hover:text-white"
             :label="state === 'expanded' ? 'Back to homepage' : undefined"
             :ui="{ leadingIcon: 'size-4' }"
+            @click="navigateToHomepage"
           />
 
           <UButton
@@ -169,4 +169,8 @@ const currentSectionTitle = computed(() => {
   const routeName = typeof route.name === 'string' ? route.name : '';
   return sectionTitles[routeName] ?? 'Atramhasis administration';
 });
+
+const navigateToHomepage = () => {
+  window.location.assign('/');
+};
 </script>

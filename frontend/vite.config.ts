@@ -28,6 +28,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
+      '@services': fileURLToPath(new URL('./src/services', import.meta.url)),
+      '@models': fileURLToPath(new URL('./src/models', import.meta.url)),
+      '@views': fileURLToPath(new URL('./src/views', import.meta.url)),
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },

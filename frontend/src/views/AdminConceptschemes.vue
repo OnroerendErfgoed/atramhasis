@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import type { ConceptScheme } from '@/models/conceptscheme';
-import { ApiService } from '@/services/api.service';
+import type { ConceptScheme } from '@models/conceptscheme';
+import { ApiService } from '@services/api.service';
 import { ref } from 'vue';
 
 const toast = useToast();

@@ -1,4 +1,4 @@
-import type { ConceptScheme } from '@/models/conceptscheme';
+import type { ConceptScheme } from '@models/conceptscheme';
 import { HttpService } from './http.service';
 
 export class ApiService extends HttpService {
