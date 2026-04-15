@@ -11,7 +11,7 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
-    "compile-static-css": "sass src/scss/public/app.scss static/css/app.css -I node_modules && sass src/scss/public/print.scss static/css/print.css -I node_modules"
+    "compile-static-css": "sass src/scss/public/app.scss static/css/app.css -I node_modules --quiet-deps && sass src/scss/public/print.scss static/css/print.css -I node_modules --quiet-deps"
   },
   "dependencies": {
     "@nuxt/ui": "^4.6.1",
@@ -38,6 +38,7 @@
     "npm-run-all2": "^8.0.4",
     "oxlint": "~1.57.0",
     "prettier": "3.8.1",
+    "sass": "^1.84.0",
     "typescript": "~6.0.0",
     "vite": "^8.0.3",
     "vite-plugin-static-copy": "^4.0.1",
