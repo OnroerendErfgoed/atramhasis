@@ -511,7 +511,7 @@ class AtramhasisAdminView:
 
         return {
             "admin": None,
-            "local": self.request.registry.settings["vue.mode"] == "src",
+            "local": self.request.registry.settings.get("vue.mode", "dist") == "src",
             "theme_stylesheet": theme_stylesheet,
         }
 
