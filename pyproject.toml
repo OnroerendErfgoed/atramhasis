@@ -100,7 +100,8 @@ exclude = ["/atramhasis/static/admin"]
 # these folders are (partially) in gitignore and would otherwise not be part of the builds
 artifacts = [
     "/atramhasis/locale/*/LC_MESSAGES/*.mo",
-    "/atramhasis/static/admin/dist",
+    "/atramhasis/templates/admin.jinja2",
+    "/atramhasis/static/dist",
     # including node_modules bloats the build but we need refactoring
     "/atramhasis/static/admin/node_modules",
     "/atramhasis/static/node_modules",
