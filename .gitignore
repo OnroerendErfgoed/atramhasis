@@ -72,10 +72,12 @@ vagrant_provision/
 #compass
 .sass-cache
 
-# dojo/js stuff
+# js stuff
+frontend/static/css/
 atramhasis/static/node_modules
-atramhasis/static/admin/dist
-atramhasis/static/admin/node_modules
+atramhasis/static/css/
+atramhasis/static/js/
+atramhasis/static/img/
 
 # sqlite database created for tests.
 test.db

@@ -17,7 +17,17 @@ export default defineConfig({
     vueDevTools(),
     ui(),
     viteStaticCopy({
-      targets: [{ src: 'static/**/*', dest: '.', rename: { stripBase: 1 } }],
+      targets: [
+        { src: 'static/**/*', dest: '.', rename: { stripBase: 1 } },
+        {
+          src: 'node_modules/foundation-sites/js/**/*',
+          dest: '.',
+        },
+        {
+          src: 'node_modules/d3/d3.min.js',
+          dest: '.',
+        },
+      ],
     }),
   ],
   build: {

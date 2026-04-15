@@ -5,17 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "run-p type-check compile-static-css \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
-    "format": "prettier --write --experimental-cli src/"
+    "format": "prettier --write --experimental-cli src/",
+    "compile-static-css": "sass src/scss/public/app.scss static/css/app.css -I node_modules && sass src/scss/public/print.scss static/css/print.css -I node_modules"
   },
   "dependencies": {
     "@nuxt/ui": "^4.6.1",
     "@vueuse/core": "^14.2.1",
     "axios": "^1.15.0",
+    "d3": "~3.5.17",
+    "foundation-sites": "~5.5.3",
     "pinia": "^3.0.4",
     "tailwindcss": "^4.2.2",
     "vue": "^3.5.31",
