@@ -27,8 +27,17 @@
       }"
     >
       <template #header="{ state }">
-        <RouterLink to="/" class="flex items-center gap-3 overflow-hidden">
-          <img src="/static/img/atramlogo.png" alt="Atramhasis" class="h-10 w-auto shrink-0" />
+        <RouterLink
+          to="/"
+          class="flex overflow-hidden"
+          :class="state === 'expanded' ? 'items-center gap-3' : 'items-center justify-center'"
+        >
+          <img
+            src="/static/img/atramlogo.png"
+            alt="Atramhasis"
+            class="shrink-0 object-contain"
+            :class="state === 'expanded' ? 'h-10 w-auto' : 'h-10 w-10'"
+          />
 
           <div v-if="state === 'expanded'" class="min-w-0">
             <p class="truncate text-[11px] font-semibold uppercase tracking-[0.28em] text-primary-100/55">Admin</p>
@@ -41,11 +50,16 @@
         <div class="space-y-4">
           <div class="border-b border-primary-700/30 pb-4">
             <div
-              class="flex rounded-2xl border border-primary-100/18 bg-primary-50/7 p-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--ui-color-primary-50)_10%,transparent)] backdrop-blur-xs"
-              :class="state === 'expanded' ? 'items-center gap-3' : 'justify-center'"
+              class="flex"
+              :class="
+                state === 'expanded'
+                  ? 'items-center gap-3 rounded-2xl border border-primary-100/18 bg-primary-50/7 p-3 shadow-[inset_0_1px_0_color-mix(in_srgb,var(--ui-color-primary-50)_10%,transparent)] backdrop-blur-xs'
+                  : 'justify-center py-1'
+              "
             >
               <div
-                class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-300/34 text-xl font-semibold tracking-[-0.02em] text-primary-100"
+                class="flex shrink-0 items-center justify-center rounded-full bg-primary-300/34 font-semibold tracking-[-0.02em] text-primary-100"
+                :class="state === 'expanded' ? 'h-14 w-14 text-xl' : 'h-12 w-12 text-lg'"
               >
                 JD
               </div>
@@ -88,7 +102,8 @@
             color="neutral"
             variant="ghost"
             icon="i-lucide-house"
-            class="w-full justify-start text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
+            class="w-full text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
+            :class="state === 'expanded' ? 'justify-start' : 'justify-center px-0'"
             :label="state === 'expanded' ? 'Back to homepage' : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click="navigateToHomepage"
@@ -98,7 +113,8 @@
             color="neutral"
             variant="ghost"
             icon="i-lucide-log-out"
-            class="w-full justify-start text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
+            class="w-full text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
+            :class="state === 'expanded' ? 'justify-start' : 'justify-center px-0'"
             :label="state === 'expanded' ? 'Log out' : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click.prevent
