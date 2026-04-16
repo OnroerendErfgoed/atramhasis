@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen w-full bg-muted/30">
+  <div class="flex h-screen w-full bg-muted/30">
     <USidebar
       v-model:open="open"
       collapsible="icon"
@@ -124,7 +124,7 @@
     </USidebar>
 
     <UMain class="min-w-0 flex-1">
-      <div class="flex min-h-screen flex-col">
+      <div class="flex h-full flex-col">
         <header class="flex h-16 items-center gap-3 border-b border-default bg-default/95 px-4 backdrop-blur">
           <UButton
             icon="i-lucide-panel-left"
@@ -142,8 +142,8 @@
           </div>
         </header>
 
-        <main class="min-h-0 flex-1 overflow-auto p-6">
-          <div class="mx-auto w-full max-w-7xl">
+        <main class="min-h-0 flex-1 overflow-hidden p-6">
+          <div class="mx-auto flex h-full w-full max-w-7xl flex-col">
             <Suspense>
               <template #fallback>
                 <div class="flex items-center justify-center py-20">
