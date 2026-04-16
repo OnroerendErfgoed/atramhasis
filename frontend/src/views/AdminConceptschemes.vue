@@ -1,7 +1,7 @@
 <template>
-  <div class="flex w-full flex-col h-full min-h-0">
+  <div class="flex w-full flex-1 flex-col divide-y divide-accented min-h-0 rounded-lg border border-default">
     <!-- Toolbar -->
-    <div class="flex items-center justify-between py-3.5">
+    <div class="flex items-center justify-between px-4 py-3.5">
       <div class="flex items-center gap-2">
         <USelect v-model="bulkAction" :items="bulkActionItems" placeholder="Bulk actie" class="w-44" />
         <UButton label="Toepassen" color="primary" variant="outline" />
@@ -16,10 +16,8 @@
       v-model:row-selection="rowSelection"
       v-model:pagination="pagination"
       v-model:global-filter="globalFilter"
-      class="flex-1 min-h-0 overflow-auto"
-      :ui="{
-        thead: 'sticky top-0 z-10 bg-default',
-      }"
+      sticky
+      class="flex-1 min-h-0"
       :data="tableData"
       :columns="columns"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
@@ -46,7 +44,7 @@
     </UTable>
 
     <!-- Footer -->
-    <div class="flex items-center justify-between border-t border-default pt-4 mt-4">
+    <div class="flex items-center justify-between px-4 py-3.5">
       <p class="text-sm text-muted">{{ selectedCount }} of {{ totalCount }} row(s) selected.</p>
 
       <UPagination
@@ -70,7 +68,6 @@ import type { ConceptScheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 
 const UCheckbox = resolveComponent('UCheckbox');
-const UBadge = resolveComponent('UBadge');
 const UButton = resolveComponent('UButton');
 const USelect = resolveComponent('USelect');
 const UInput = resolveComponent('UInput');
@@ -134,12 +131,6 @@ const pagination = ref({
   pageSize: 15,
 });
 
-const publicationStatusConfig: Record<PublicationStatus, { label: string; color: 'info' | 'neutral' | 'warning' }> = {
-  published: { label: 'Published', color: 'info' },
-  hidden: { label: 'Hidden', color: 'neutral' },
-  draft: { label: 'Draft', color: 'neutral' },
-};
-
 const columns: TableColumn<ConceptSchemeRow>[] = [
   {
     id: 'select',
@@ -164,15 +155,6 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
         th: 'w-full',
         td: 'w-full',
       },
-    },
-  },
-  {
-    accessorKey: 'publicationStatus',
-    header: 'Publicatie',
-    cell: ({ row }) => {
-      const status = row.getValue('publicationStatus') as PublicationStatus;
-      const config = publicationStatusConfig[status];
-      return h(UBadge, { variant: 'subtle', color: config.color }, () => config.label);
     },
   },
   {
