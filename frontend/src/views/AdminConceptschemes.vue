@@ -12,9 +12,12 @@
     >
       <template #label-cell="{ row }">
         <div>
-          <a href="#" class="font-medium text-primary hover:underline">
+          <ULink
+            :to="{ name: 'AdminConceptScheme', params: { id: row.original.id } }"
+            class="font-medium text-primary hover:underline"
+          >
             {{ row.original.label }}
-          </a>
+          </ULink>
           <div class="mt-0.5 flex items-center gap-1 text-xs text-muted">
             <span>{{ row.original.uri }}</span>
             <ClipboardCopy
@@ -58,6 +61,7 @@ import type { ConceptScheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 
+const ULink = resolveComponent('ULink');
 const UButton = resolveComponent('UButton');
 
 const { t } = useI18n();
@@ -110,11 +114,11 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
   {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
-    cell: () =>
+    cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-1' }, [
         h(UButton, {
           as: 'a',
-          href: '#',
+          to: { name: 'AdminConceptScheme', params: { id: row.original.id } },
           label: t('grid.columns.actions.view'),
           icon: 'i-lucide-eye',
           color: 'primary',
