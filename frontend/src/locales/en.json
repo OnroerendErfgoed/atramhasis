@@ -20,13 +20,17 @@
     "columns": {
       "labels": {
         "label": "Label",
+        "id": "ID",
+        "type": "Type",
         "actions": "Actions"
       },
       "actions": {
         "view": "View",
         "edit": "Edit",
         "access": "Access",
-        "publish": "Publish"
+        "publish": "Publish",
+        "merge": "Merge",
+        "delete": "Delete"
       }
     }
   },
@@ -40,6 +44,13 @@
     "fetch": {
       "title": "Failed to fetch data.",
       "description": "An error occurred while fetching data. Please try again later."
+    }
+  },
+  "placeholders": {
+    "conceptScheme": {
+      "label": "Filter by label",
+      "match": "Filter by match e.g. http://vocab.getty.edu/aat/300005241",
+      "type": "Filter by type"
     }
   }
 }

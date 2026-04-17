@@ -22,7 +22,7 @@ const props = defineProps<{
 }>();
 
 const toast = useToast();
-const { copy } = useClipboard();
+const { copy } = useClipboard({ legacy: true });
 
 const handleCopy = () => {
   copy(props.text);
