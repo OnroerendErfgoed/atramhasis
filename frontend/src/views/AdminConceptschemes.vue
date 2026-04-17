@@ -1,23 +1,11 @@
 <template>
   <div class="flex w-full flex-1 flex-col divide-y divide-accented min-h-0 rounded-lg border border-default">
-    <!-- Toolbar -->
-    <div class="flex items-center justify-between px-4 py-3.5">
-      <div class="flex items-center gap-2">
-        <USelect v-model="bulkAction" :items="bulkActionItems" placeholder="Bulk actie" class="w-44" />
-        <UButton label="Toepassen" color="primary" variant="outline" />
-      </div>
-
-      <UInput v-model="globalFilter" placeholder="Zoek conceptschema" icon="i-lucide-search" class="w-64" />
-    </div>
-
     <!-- Table -->
     <UTable
       ref="tableRef"
-      v-model:row-selection="rowSelection"
       v-model:pagination="pagination"
-      v-model:global-filter="globalFilter"
       sticky
-      class="flex-1 min-h-0"
+      class="flex-1 min-h-0 rounded-t-lg"
       :data="tableData"
       :columns="columns"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
@@ -29,14 +17,9 @@
           </a>
           <div class="mt-0.5 flex items-center gap-1 text-xs text-muted">
             <span>{{ row.original.uri }}</span>
-            <UButton
-              icon="i-lucide-copy"
-              color="neutral"
-              variant="ghost"
-              size="xs"
-              class="p-0.5"
-              aria-label="Kopieer URI"
-              @click="copyUri(row.original.uri)"
+            <ClipboardCopy
+              :text="row.original.uri"
+              :aria-label="t('components.clipboardCopy.copy', { item: 'URI' }, 2)"
             />
           </div>
         </div>
@@ -45,7 +28,7 @@
 
     <!-- Footer -->
     <div class="flex items-center justify-between px-4 py-3.5">
-      <p class="text-sm text-muted">{{ selectedCount }} of {{ totalCount }} row(s) selected.</p>
+      <p class="text-sm text-muted">{{ t('grid.rowsTotal', { n: totalCount }) }}</p>
 
       <UPagination
         :page="currentPage"
@@ -62,29 +45,23 @@
 <script setup lang="ts">
 import { h, ref, computed, resolveComponent, useTemplateRef } from 'vue';
 import { getPaginationRowModel } from '@tanstack/vue-table';
-import { useClipboard } from '@vueuse/core';
 import type { TableColumn } from '@nuxt/ui';
 import type { ConceptScheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
+import { useI18n } from 'vue-i18n';
 
-const UCheckbox = resolveComponent('UCheckbox');
 const UButton = resolveComponent('UButton');
-const USelect = resolveComponent('USelect');
-const UInput = resolveComponent('UInput');
 const UTable = resolveComponent('UTable');
 const UPagination = resolveComponent('UPagination');
 
+const { t } = useI18n();
 const toast = useToast();
-const { copy } = useClipboard();
 const apiService = new ApiService();
-
-type PublicationStatus = 'published' | 'hidden' | 'draft';
 
 interface ConceptSchemeRow {
   id: string;
   uri: string;
   label: string;
-  publicationStatus: PublicationStatus;
 }
 
 const conceptschemes = ref<ConceptScheme[]>([]);
@@ -92,10 +69,10 @@ const conceptschemes = ref<ConceptScheme[]>([]);
 try {
   conceptschemes.value = await apiService.getConceptschemes();
 } catch (error) {
-  console.error('Error fetching conceptschemes:', error);
+  console.error(t('errors.fetch.title'), error);
   toast.add({
-    title: 'Failed to fetch conceptschemes.',
-    description: 'Please try again later.',
+    title: t('errors.fetch.title'),
+    description: t('errors.fetch.description'),
     icon: 'i-lucide-alert-triangle',
     color: 'error',
   });
@@ -106,22 +83,10 @@ const tableData = computed<ConceptSchemeRow[]>(() =>
     id: cs.id,
     uri: cs.uri,
     label: cs.label,
-    publicationStatus: 'draft' as PublicationStatus,
   }))
 );
 
-const bulkAction = ref('');
-const bulkActionItems = [
-  { label: 'Publiceren', value: 'publish' },
-  { label: 'Verbergen', value: 'hide' },
-  { label: 'Verwijderen', value: 'delete' },
-];
-
-const globalFilter = ref('');
-
 const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<ConceptSchemeRow> }>('tableRef');
-const rowSelection = ref<Record<string, boolean>>({});
-const selectedCount = computed(() => tableRef.value?.tableApi?.getFilteredSelectedRowModel().rows.length ?? 0);
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const totalFiltered = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const currentPage = computed(() => (tableRef.value?.tableApi?.getState().pagination.pageIndex ?? 0) + 1);
@@ -133,23 +98,8 @@ const pagination = ref({
 
 const columns: TableColumn<ConceptSchemeRow>[] = [
   {
-    id: 'select',
-    header: ({ table }) =>
-      h(UCheckbox, {
-        modelValue: table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllPageRowsSelected(),
-        'onUpdate:modelValue': (value: boolean | 'indeterminate') => table.toggleAllPageRowsSelected(!!value),
-        'aria-label': 'Select all',
-      }),
-    cell: ({ row }) =>
-      h(UCheckbox, {
-        modelValue: row.getIsSelected(),
-        'onUpdate:modelValue': (value: boolean | 'indeterminate') => row.toggleSelected(!!value),
-        'aria-label': 'Select row',
-      }),
-  },
-  {
     accessorKey: 'label',
-    header: 'Label',
+    header: t('grid.columns.labels.label'),
     meta: {
       class: {
         th: 'w-full',
@@ -159,13 +109,13 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
   },
   {
     id: 'actions',
-    header: 'Acties',
+    header: t('grid.columns.labels.actions'),
     cell: () =>
       h('div', { class: 'flex items-center gap-1' }, [
         h(UButton, {
           as: 'a',
           href: '#',
-          label: 'Bekijken',
+          label: t('grid.columns.actions.view'),
           icon: 'i-lucide-eye',
           color: 'primary',
           variant: 'outline',
@@ -174,7 +124,7 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
         h(UButton, {
           as: 'a',
           href: '#',
-          label: 'Bewerken',
+          label: t('grid.columns.actions.edit'),
           icon: 'i-lucide-pencil',
           color: 'primary',
           variant: 'outline',
@@ -183,7 +133,7 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
         h(UButton, {
           as: 'a',
           href: '#',
-          label: 'Toegang',
+          label: t('grid.columns.actions.access'),
           icon: 'i-lucide-users',
           color: 'primary',
           variant: 'outline',
@@ -192,7 +142,7 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
         h(UButton, {
           as: 'a',
           href: '#',
-          label: 'Publicatie',
+          label: t('grid.columns.actions.publish'),
           icon: 'i-lucide-upload',
           color: 'primary',
           variant: 'outline',
@@ -201,13 +151,4 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
       ]),
   },
 ];
-
-const copyUri = (uri: string) => {
-  copy(uri);
-  toast.add({
-    title: 'URI gekopieerd naar klembord.',
-    icon: 'i-lucide-check',
-    color: 'success',
-  });
-};
 </script>
