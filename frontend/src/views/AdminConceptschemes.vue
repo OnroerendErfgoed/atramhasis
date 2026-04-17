@@ -1,23 +1,11 @@
 <template>
   <div class="flex w-full flex-1 flex-col divide-y divide-accented min-h-0 rounded-lg border border-default">
-    <!-- Toolbar -->
-    <div class="flex items-center justify-between px-4 py-3.5">
-      <div class="flex items-center gap-2">
-        <USelect v-model="bulkAction" :items="bulkActionItems" placeholder="Bulk actie" class="w-44" />
-        <UButton label="Toepassen" color="primary" variant="outline" />
-      </div>
-
-      <UInput v-model="globalFilter" placeholder="Zoek conceptschema" icon="i-lucide-search" class="w-64" />
-    </div>
-
     <!-- Table -->
     <UTable
       ref="tableRef"
-      v-model:row-selection="rowSelection"
       v-model:pagination="pagination"
-      v-model:global-filter="globalFilter"
       sticky
-      class="flex-1 min-h-0"
+      class="flex-1 min-h-0 rounded-t-lg"
       :data="tableData"
       :columns="columns"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
@@ -67,10 +55,7 @@ import type { TableColumn } from '@nuxt/ui';
 import type { ConceptScheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 
-const UCheckbox = resolveComponent('UCheckbox');
 const UButton = resolveComponent('UButton');
-const USelect = resolveComponent('USelect');
-const UInput = resolveComponent('UInput');
 const UTable = resolveComponent('UTable');
 const UPagination = resolveComponent('UPagination');
 
@@ -78,13 +63,10 @@ const toast = useToast();
 const { copy } = useClipboard();
 const apiService = new ApiService();
 
-type PublicationStatus = 'published' | 'hidden' | 'draft';
-
 interface ConceptSchemeRow {
   id: string;
   uri: string;
   label: string;
-  publicationStatus: PublicationStatus;
 }
 
 const conceptschemes = ref<ConceptScheme[]>([]);
@@ -106,21 +88,10 @@ const tableData = computed<ConceptSchemeRow[]>(() =>
     id: cs.id,
     uri: cs.uri,
     label: cs.label,
-    publicationStatus: 'draft' as PublicationStatus,
   }))
 );
 
-const bulkAction = ref('');
-const bulkActionItems = [
-  { label: 'Publiceren', value: 'publish' },
-  { label: 'Verbergen', value: 'hide' },
-  { label: 'Verwijderen', value: 'delete' },
-];
-
-const globalFilter = ref('');
-
 const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<ConceptSchemeRow> }>('tableRef');
-const rowSelection = ref<Record<string, boolean>>({});
 const selectedCount = computed(() => tableRef.value?.tableApi?.getFilteredSelectedRowModel().rows.length ?? 0);
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const totalFiltered = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
@@ -132,21 +103,6 @@ const pagination = ref({
 });
 
 const columns: TableColumn<ConceptSchemeRow>[] = [
-  {
-    id: 'select',
-    header: ({ table }) =>
-      h(UCheckbox, {
-        modelValue: table.getIsSomePageRowsSelected() ? 'indeterminate' : table.getIsAllPageRowsSelected(),
-        'onUpdate:modelValue': (value: boolean | 'indeterminate') => table.toggleAllPageRowsSelected(!!value),
-        'aria-label': 'Select all',
-      }),
-    cell: ({ row }) =>
-      h(UCheckbox, {
-        modelValue: row.getIsSelected(),
-        'onUpdate:modelValue': (value: boolean | 'indeterminate') => row.toggleSelected(!!value),
-        'aria-label': 'Select row',
-      }),
-  },
   {
     accessorKey: 'label',
     header: 'Label',
