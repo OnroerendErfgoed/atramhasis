@@ -42,6 +42,14 @@
   </div>
 </template>
 
+<script lang="ts">
+export interface ConceptSchemeRow {
+  id: string;
+  uri: string;
+  label: string;
+}
+</script>
+
 <script setup lang="ts">
 import { h, ref, computed, resolveComponent, useTemplateRef } from 'vue';
 import { getPaginationRowModel } from '@tanstack/vue-table';
@@ -51,18 +59,10 @@ import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 
 const UButton = resolveComponent('UButton');
-const UTable = resolveComponent('UTable');
-const UPagination = resolveComponent('UPagination');
 
 const { t } = useI18n();
 const toast = useToast();
 const apiService = new ApiService();
-
-interface ConceptSchemeRow {
-  id: string;
-  uri: string;
-  label: string;
-}
 
 const conceptschemes = ref<ConceptScheme[]>([]);
 
@@ -126,24 +126,6 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
           href: '#',
           label: t('grid.columns.actions.edit'),
           icon: 'i-lucide-pencil',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-        }),
-        h(UButton, {
-          as: 'a',
-          href: '#',
-          label: t('grid.columns.actions.access'),
-          icon: 'i-lucide-users',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-        }),
-        h(UButton, {
-          as: 'a',
-          href: '#',
-          label: t('grid.columns.actions.publish'),
-          icon: 'i-lucide-upload',
           color: 'primary',
           variant: 'outline',
           size: 'xs',
