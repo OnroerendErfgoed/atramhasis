@@ -14,6 +14,21 @@ const router = createRouter({
           name: 'AdminConceptschemes',
           component: () => import('@views/AdminConceptschemes.vue'),
         },
+        {
+          path: 'providers',
+          name: 'AdminProviders',
+          component: () => import('@views/AdminProviders.vue'),
+          meta: {
+            breadcrumb: () => 'PROVIDERS',
+          },
+          children: [
+            {
+              path: ':id',
+              name: 'AdminProvider',
+              component: () => import('@views/AdminProvider.vue'),
+            },
+          ],
+        },
       ],
     },
     {

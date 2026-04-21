@@ -12,7 +12,8 @@
   },
   "header": {
     "titles": {
-      "conceptschemes": "Manage concept schemes"
+      "conceptschemes": "Manage concept schemes",
+      "providers": "Manage providers"
     }
   },
   "grid": {
@@ -20,6 +21,14 @@
     "columns": {
       "labels": {
         "label": "Label",
+        "id": "ID",
+        "conceptschemeUri": "Conceptscheme URI",
+        "uriPattern": "URI pattern",
+        "type": "Type",
+        "defaultLanguage": "Def. lang.",
+        "idGenerationStrategy": "ID gen. strat.",
+        "subject": "Subject",
+        "expandStrategy": "Expand strategy",
         "actions": "Actions"
       },
       "actions": {
