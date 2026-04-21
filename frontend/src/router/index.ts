@@ -1,3 +1,4 @@
+import type { UrlParams } from '@vueuse/core';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -13,11 +14,17 @@ const router = createRouter({
           path: 'conceptschemes',
           name: 'AdminConceptschemes',
           component: () => import('@views/AdminConceptschemes.vue'),
+          meta: {
+            breadcrumb: () => 'CONCEPT SCHEMES',
+          },
         },
         {
           path: 'conceptschemes/:id',
           name: 'AdminConceptScheme',
           component: () => import('@views/AdminConceptScheme.vue'),
+          meta: {
+            breadcrumb: (params: UrlParams) => `CONCEPT SCHEME ${params.id}`,
+          },
         },
       ],
     },

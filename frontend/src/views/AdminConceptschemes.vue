@@ -55,8 +55,6 @@ import { useI18n } from 'vue-i18n';
 
 const ULink = resolveComponent('ULink');
 const UButton = resolveComponent('UButton');
-const UTable = resolveComponent('UTable');
-const UPagination = resolveComponent('UPagination');
 
 const { t } = useI18n();
 const toast = useToast();

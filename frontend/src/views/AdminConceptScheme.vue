@@ -81,10 +81,6 @@ import type { ListType } from '@models/util';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
-const USelectMenu = resolveComponent('USelectMenu');
-const UInput = resolveComponent('UInput');
-const UTable = resolveComponent('UTable');
-const UPagination = resolveComponent('UPagination');
 
 const { t } = useI18n();
 const toast = useToast();
