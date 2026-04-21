@@ -125,6 +125,7 @@
 
     <UMain class="min-w-0 flex-1">
       <div class="flex h-full flex-col">
+        <OEBreadcrumb />
         <header class="flex h-16 items-center gap-3 border-b border-default bg-default/95 px-4 backdrop-blur">
           <UButton
             icon="i-lucide-panel-left"
@@ -164,6 +165,7 @@ import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { NavigationMenuItem } from '@nuxt/ui';
 import { useI18n } from 'vue-i18n';
+import OEBreadcrumb from '@components/OEBreadcrumb.vue';
 
 const { t } = useI18n();
 
