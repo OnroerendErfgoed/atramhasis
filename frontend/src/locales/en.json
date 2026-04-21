@@ -1,0 +1,45 @@
+{
+  "overview": {
+    "nav": {
+      "conceptschemes": "Concept schemes",
+      "providers": "Providers",
+      "languages": "Languages",
+      "users": "Users"
+    },
+    "backToOverview": "Back to overview",
+    "logout": "Log out",
+    "toggleSidebar": "Toggle sidebar"
+  },
+  "header": {
+    "titles": {
+      "conceptschemes": "Manage concept schemes"
+    }
+  },
+  "grid": {
+    "rowsTotal": "{n} row total. | {n} rows total.",
+    "columns": {
+      "labels": {
+        "label": "Label",
+        "actions": "Actions"
+      },
+      "actions": {
+        "view": "View",
+        "edit": "Edit",
+        "access": "Access",
+        "publish": "Publish"
+      }
+    }
+  },
+  "components": {
+    "clipboardCopy": {
+      "copy": "Copy to clipboard | Copy {item} to clipboard",
+      "copied": "Copied to clipboard."
+    }
+  },
+  "errors": {
+    "fetch": {
+      "title": "Failed to fetch data.",
+      "description": "An error occurred while fetching data. Please try again later."
+    }
+  }
+}

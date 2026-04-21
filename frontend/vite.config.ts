@@ -4,6 +4,7 @@ import { resolve } from 'path';
 import { URL, fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 
 import vueDevTools from 'vite-plugin-vue-devtools';
 
@@ -16,6 +17,9 @@ export default defineConfig({
     vue(),
     vueDevTools(),
     ui(),
+    VueI18nPlugin({
+      include: resolve(__dirname, './src/locales/**'),
+    }),
     viteStaticCopy({
       targets: [
         { src: 'static/**/*', dest: '.', rename: { stripBase: 1 } },
