@@ -35,7 +35,8 @@
         "view": "View",
         "edit": "Edit",
         "access": "Access",
-        "publish": "Publish"
+        "publish": "Publish",
+        "delete": "Delete"
       }
     }
   },

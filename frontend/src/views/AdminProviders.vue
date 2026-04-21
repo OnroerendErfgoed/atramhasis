@@ -68,20 +68,14 @@ const columns: TableColumn<Provider>[] = [
   {
     accessorKey: 'id',
     header: t('grid.columns.labels.id'),
-    meta: {
-      class: {
-        th: 'w-full',
-        td: 'w-full',
-      },
-    },
   },
   {
     accessorKey: 'conceptscheme_uri',
     header: t('grid.columns.labels.conceptschemeUri'),
     meta: {
       class: {
-        th: 'w-full',
-        td: 'w-full',
+        th: 'max-w-3xs truncate',
+        td: 'max-w-3xs truncate',
       },
     },
   },
@@ -90,75 +84,36 @@ const columns: TableColumn<Provider>[] = [
     header: t('grid.columns.labels.uriPattern'),
     meta: {
       class: {
-        th: 'w-full',
-        td: 'w-full',
+        th: 'max-w-3xs truncate',
+        td: 'max-w-3xs truncate',
       },
     },
   },
   {
     accessorKey: 'type',
     header: t('grid.columns.labels.type'),
-    meta: {
-      class: {
-        th: 'w-full',
-        td: 'w-full',
-      },
-    },
   },
   {
     accessorKey: 'default_language',
     header: t('grid.columns.labels.defaultLanguage'),
-    meta: {
-      class: {
-        th: 'w-full',
-        td: 'w-full',
-      },
-    },
   },
   {
     accessorKey: 'id_generation_strategy',
     header: t('grid.columns.labels.idGenerationStrategy'),
-    meta: {
-      class: {
-        th: 'w-full',
-        td: 'w-full',
-      },
-    },
   },
   {
     accessorKey: 'subject',
     header: t('grid.columns.labels.subject'),
-    meta: {
-      class: {
-        th: 'w-full',
-        td: 'w-full',
-      },
-    },
   },
   {
     accessorKey: 'expand_strategy',
     header: t('grid.columns.labels.expandStrategy'),
-    meta: {
-      class: {
-        th: 'w-full',
-        td: 'w-full',
-      },
-    },
   },
   {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
-    cell: ({ row }) =>
+    cell: () =>
       h('div', { class: 'flex items-center gap-1' }, [
-        h(UButton, {
-          as: 'a',
-          to: { name: 'AdminProvider', params: { id: row.original.id } },
-          label: t('grid.columns.actions.view'),
-          icon: 'i-lucide-eye',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-        }),
         h(UButton, {
           as: 'a',
           href: '#',
@@ -167,6 +122,15 @@ const columns: TableColumn<Provider>[] = [
           color: 'primary',
           variant: 'outline',
           size: 'xs',
+          title: t('grid.columns.actions.edit'),
+        }),
+        h(UButton, {
+          icon: 'i-lucide-trash-2',
+          color: 'error',
+          variant: 'outline',
+          size: 'xs',
+          class: 'cursor-pointer',
+          title: t('grid.columns.actions.delete'),
         }),
       ]),
   },
