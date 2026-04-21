@@ -1,47 +1,136 @@
 <template>
-  <pre class="conceptschemes-dump">{{ conceptschemes }}</pre>
+  <div class="flex w-full flex-1 flex-col divide-y divide-accented min-h-0 rounded-lg border border-default">
+    <!-- Table -->
+    <UTable
+      ref="tableRef"
+      v-model:pagination="pagination"
+      sticky
+      class="flex-1 min-h-0 rounded-t-lg"
+      :data="tableData"
+      :columns="columns"
+      :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
+    >
+      <template #label-cell="{ row }">
+        <div>
+          <a href="#" class="font-medium text-primary hover:underline">
+            {{ row.original.label }}
+          </a>
+          <div class="mt-0.5 flex items-center gap-1 text-xs text-muted">
+            <span>{{ row.original.uri }}</span>
+            <ClipboardCopy
+              :text="row.original.uri"
+              :aria-label="t('components.clipboardCopy.copy', { item: 'URI' }, 2)"
+            />
+          </div>
+        </div>
+      </template>
+    </UTable>
+
+    <!-- Footer -->
+    <div class="flex items-center justify-between px-4 py-3.5">
+      <p class="text-sm text-muted">{{ t('grid.rowsTotal', { n: totalCount }) }}</p>
+
+      <UPagination
+        :page="currentPage"
+        :items-per-page="pagination.pageSize"
+        :total="totalFiltered"
+        show-edges
+        :sibling-count="1"
+        @update:page="(p: number) => tableRef?.tableApi?.setPageIndex(p - 1)"
+      />
+    </div>
+  </div>
 </template>
 
+<script lang="ts">
+export interface ConceptSchemeRow {
+  id: string;
+  uri: string;
+  label: string;
+}
+</script>
+
 <script setup lang="ts">
+import { h, ref, computed, resolveComponent, useTemplateRef } from 'vue';
+import { getPaginationRowModel } from '@tanstack/vue-table';
+import type { TableColumn } from '@nuxt/ui';
 import type { ConceptScheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
-import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
+const UButton = resolveComponent('UButton');
+
+const { t } = useI18n();
 const toast = useToast();
 const apiService = new ApiService();
-const conceptschemes = ref<ConceptScheme[]>();
+
+const conceptschemes = ref<ConceptScheme[]>([]);
 
 try {
   conceptschemes.value = await apiService.getConceptschemes();
 } catch (error) {
-  console.error('Error fetching conceptschemes:', error);
+  console.error(t('errors.fetch.title'), error);
   toast.add({
-    title: 'Failed to fetch conceptschemes.',
-    description: 'Please try again later.',
+    title: t('errors.fetch.title'),
+    description: t('errors.fetch.description'),
     icon: 'i-lucide-alert-triangle',
     color: 'error',
   });
 }
+
+const tableData = computed<ConceptSchemeRow[]>(() =>
+  conceptschemes.value.map((cs) => ({
+    id: cs.id,
+    uri: cs.uri,
+    label: cs.label,
+  }))
+);
+
+const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<ConceptSchemeRow> }>('tableRef');
+const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
+const totalFiltered = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
+const currentPage = computed(() => (tableRef.value?.tableApi?.getState().pagination.pageIndex ?? 0) + 1);
+
+const pagination = ref({
+  pageIndex: 0,
+  pageSize: 15,
+});
+
+const columns: TableColumn<ConceptSchemeRow>[] = [
+  {
+    accessorKey: 'label',
+    header: t('grid.columns.labels.label'),
+    meta: {
+      class: {
+        th: 'w-full',
+        td: 'w-full',
+      },
+    },
+  },
+  {
+    id: 'actions',
+    header: t('grid.columns.labels.actions'),
+    cell: () =>
+      h('div', { class: 'flex items-center gap-1' }, [
+        h(UButton, {
+          as: 'a',
+          href: '#',
+          label: t('grid.columns.actions.view'),
+          icon: 'i-lucide-eye',
+          color: 'primary',
+          variant: 'outline',
+          size: 'xs',
+        }),
+        h(UButton, {
+          as: 'a',
+          href: '#',
+          label: t('grid.columns.actions.edit'),
+          icon: 'i-lucide-pencil',
+          color: 'primary',
+          variant: 'outline',
+          size: 'xs',
+        }),
+      ]),
+  },
+];
 </script>
-
-<style scoped>
-.conceptschemes-dump {
-  min-height: 24rem;
-  margin: 0;
-  overflow: auto;
-  border: 1px solid var(--ui-border);
-  border-radius: 0.875rem;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-  padding: 1.5rem;
-  color: var(--ui-text);
-  font-size: 0.95rem;
-  line-height: 1.7;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.conceptschemes-dump::selection {
-  background: color-mix(in srgb, var(--ui-primary) 18%, white);
-}
-</style>

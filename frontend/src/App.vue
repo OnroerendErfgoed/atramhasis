@@ -1,5 +1,5 @@
 <template>
-  <UApp>
+  <UApp :toaster="{ position: 'top-right' }">
     <RouterView />
   </UApp>
 </template>

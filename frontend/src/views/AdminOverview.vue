@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen w-full bg-muted/30">
+  <div class="flex h-screen w-full bg-muted/30">
     <USidebar
       v-model:open="open"
       collapsible="icon"
@@ -104,7 +104,7 @@
             icon="i-lucide-house"
             class="w-full text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
             :class="state === 'expanded' ? 'justify-start' : 'justify-center px-0'"
-            :label="state === 'expanded' ? 'Back to homepage' : undefined"
+            :label="state === 'expanded' ? t('overview.backToOverview') : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click="navigateToHomepage"
           />
@@ -115,7 +115,7 @@
             icon="i-lucide-log-out"
             class="w-full text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
             :class="state === 'expanded' ? 'justify-start' : 'justify-center px-0'"
-            :label="state === 'expanded' ? 'Log out' : undefined"
+            :label="state === 'expanded' ? t('overview.logout') : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click.prevent
           />
@@ -124,14 +124,14 @@
     </USidebar>
 
     <UMain class="min-w-0 flex-1">
-      <div class="flex min-h-screen flex-col">
+      <div class="flex h-full flex-col">
         <header class="flex h-16 items-center gap-3 border-b border-default bg-default/95 px-4 backdrop-blur">
           <UButton
             icon="i-lucide-panel-left"
             color="neutral"
             variant="ghost"
             class="text-neutral-700 hover:bg-primary-50 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
-            aria-label="Toggle sidebar"
+            :aria-label="t('overview.toggleSidebar')"
             @click="open = !open"
           />
 
@@ -142,8 +142,8 @@
           </div>
         </header>
 
-        <main class="min-h-0 flex-1 overflow-auto p-6">
-          <div class="mx-auto w-full max-w-7xl">
+        <main class="min-h-0 flex-1 overflow-hidden p-6">
+          <div class="mx-auto flex h-full w-full max-w-7xl flex-col">
             <Suspense>
               <template #fallback>
                 <div class="flex items-center justify-center py-20">
@@ -163,6 +163,9 @@
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { NavigationMenuItem } from '@nuxt/ui';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const open = ref(true);
 const route = useRoute();
@@ -170,22 +173,22 @@ const route = useRoute();
 const navigationItems = computed<NavigationMenuItem[][]>(() => [
   [
     {
-      label: 'Concept schemes',
+      label: t('overview.nav.conceptschemes'),
       icon: 'i-lucide-book-marked',
       to: { name: 'AdminConceptschemes' },
     },
     {
-      label: 'Providers',
+      label: t('overview.nav.providers'),
       icon: 'i-lucide-database',
       disabled: true,
     },
     {
-      label: 'Languages',
+      label: t('overview.nav.languages'),
       icon: 'i-lucide-languages',
       disabled: true,
     },
     {
-      label: 'Users',
+      label: t('overview.nav.users'),
       icon: 'i-lucide-users',
       disabled: true,
     },
@@ -193,7 +196,7 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
 ]);
 
 const sectionTitles: Record<string, string> = {
-  AdminConceptschemes: 'Manage concept schemes',
+  AdminConceptschemes: t('header.titles.conceptschemes'),
 };
 
 const currentSectionTitle = computed(() => {
