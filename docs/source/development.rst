@@ -87,10 +87,8 @@ to the admin module documentation.
 
 .. code-block:: bash
 
-    # Install dependencies
-    $ pip-sync requirements-dev.txt
     # Install packages in dev mode. During a pip install, the JS files will also be built.
-    $ pip install -e .
+    $ pip install -e ."[dev]"
     # create or update database
     $ alembic upgrade head
     # insert sample data
@@ -99,19 +97,6 @@ to the admin module documentation.
     $ dump_rdf development.ini
     # compile the Message Catalog Files
     $ pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
-
-Alternatively to pip-sync, you can also use pip to install the requirements.
-
-.. code-block:: bash
-
-    # Install dependencies
-    $ pip install -r requirements-dev.txt
-    # Install packages in dev mode
-    ...
-
-Note that pip-sync will uninstall all packages that are not listed in the requirements.
-If you have packages in your virtualenv that you want to keep or need, you should
-either reinstall them afterwards or use the pip install command instead of pip-sync.
 
 Once you've executed these steps, you can run a development server. This uses
 the standard pyramid server (`Waitress`_) and should not be used as-is in a
@@ -125,6 +110,7 @@ production environment.
 
 Update requirements files
 =========================
+This project does not offer requirements files that are manually maintained.
 The dependencies are defined within pyproject.toml. There, you can add, modify, or remove libraries.
 Afterward, run pip-compile to generate the requirements files.
 

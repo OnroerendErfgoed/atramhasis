@@ -44,7 +44,7 @@ project (default: atramhasis_demo). Now enter this directory to start updating y
 
     $ cd <root of newly from scaffold created project>
     # Install the new project in editable mode via argument -e
-    $ pip install -e .[dev]
+    $ pip install -e ."[dev]"
 
 
 4.  Setup database

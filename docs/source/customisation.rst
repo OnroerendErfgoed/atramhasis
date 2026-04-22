@@ -64,7 +64,7 @@ or you can install them directly from the pyproject.toml file.
         # Install dependencies
         $ pip-sync requirements-dev.txt
         # Install the new project in editable mode
-        $ pip install -e .
+        $ pip install -e ."[dev]"
 
     Note that pip-sync will uninstall all packages that are not listed in the requirements. The package cookiecutter
     is no longer needed and will be uninstalled when executing pip-sync.
@@ -76,7 +76,7 @@ or you can install them directly from the pyproject.toml file.
         $ cd <root of newly from scaffold created project>
         # Install the new project in editable mode via argument -e
         # Optional: Include [dev] to install the development dependencies
-        $ pip install -e .[dev]
+        $ pip install -e ."[dev]"
 
 4.  Setup database
 
