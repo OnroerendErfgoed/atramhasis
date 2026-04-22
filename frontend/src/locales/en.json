@@ -1,7 +1,7 @@
 {
   "overview": {
     "nav": {
-      "conceptschemes": "Concept schemes",
+      "conceptschemes": "Conceptschemes",
       "providers": "Providers",
       "languages": "Languages",
       "users": "Users"
@@ -15,7 +15,7 @@
   },
   "header": {
     "titles": {
-      "conceptschemes": "Manage concept schemes",
+      "conceptschemes": "Manage conceptschemes",
       "providers": "Manage providers"
     }
   },
@@ -96,30 +96,47 @@
             "VISIT": "Visit"
           }
         }
-      },
-      "validation": {
-        "error": "Save failed",
-        "description": "Fill in all required fields and try again."
-      },
-      "success": {
-        "title": "Provider created",
-        "description": "The provider was successfully created."
       }
     }
   },
-  "errors": {
-    "fetch": {
-      "title": "Failed to fetch {item} data.",
-      "description": "An error occurred while fetching {item} data. Please try again later."
+  "api": {
+    "success": {
+      "fetch": {
+        "title": "Data fetched",
+        "description": "The {item} data was fetched successfully."
+      },
+      "save": {
+        "title": "{item} created",
+        "description": "The {item} data was saved successfully."
+      },
+      "generic": {
+        "title": "Success",
+        "description": "The operation was completed successfully."
+      }
     },
-    "generic": {
-      "title": "An error occurred.",
-      "description": "An unexpected error occurred. Please try again later."
+    "errors": {
+      "fetch": {
+        "title": "Failed to fetch {item} data",
+        "description": "An error occurred while fetching {item} data. Please try again later."
+      },
+      "save": {
+        "title": "Failed to create {item}",
+        "description": "An error occurred while saving the {item} data. Please check your input and try again."
+      },
+      "generic": {
+        "title": "An error occurred",
+        "description": "An unexpected error occurred. Please try again later."
+      }
     }
   },
   "validation": {
-    "required": "This field is required.",
-    "uri": "This field must be a valid URI."
+    "field": {
+      "required": "This field is required.",
+      "uri": "This field must be a valid URI."
+    },
+    "form": {
+      "invalid": "Please correct the errors in the form before submitting."
+    }
   },
   "actions": {
     "save": "Save",

@@ -165,8 +165,7 @@ const save = async () => {
   const valid = await v$.value.$validate();
   if (!valid) {
     toast.add({
-      title: t('components.modalProvider.validation.error'),
-      description: t('components.modalProvider.validation.description'),
+      title: t('validation.form.invalid'),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
@@ -176,8 +175,8 @@ const save = async () => {
   try {
     await apiService.createProvider(form.value);
     toast.add({
-      title: t('components.modalProvider.success.title'),
-      description: t('components.modalProvider.success.description'),
+      title: t('api.success.save.title', { item: 'Provider' }),
+      description: t('api.success.save.description', { item: 'provider' }),
       icon: 'i-lucide-check-circle',
       color: 'success',
     });
@@ -190,8 +189,8 @@ const save = async () => {
 // Validation
 const rules = computed(() => ({
   conceptscheme_uri: {
-    required: helpers.withMessage(t('validation.required'), required),
-    uri: helpers.withMessage(t('validation.uri'), (value: string) => {
+    required: helpers.withMessage(t('validation.field.required'), required),
+    uri: helpers.withMessage(t('validation.field.uri'), (value: string) => {
       try {
         new URL(value);
         return true;
@@ -201,7 +200,7 @@ const rules = computed(() => ({
     }),
   },
   uri_pattern: {
-    required: helpers.withMessage(t('validation.required'), required),
+    required: helpers.withMessage(t('validation.field.required'), required),
   },
 }));
 const v$ = useVuelidate(rules, form, { $lazy: true });

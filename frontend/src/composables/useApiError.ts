@@ -20,14 +20,14 @@ export function useApiError() {
     const validationErrors = axiosError.response?.data?.errors;
 
     toast.add({
-      title: errorMessage || t('errors.generic.title'),
+      title: errorMessage || t('api.errors.generic.title'),
       description: validationErrors
         ? validationErrors
             .flatMap((validationError) =>
               Object.entries(validationError).map(([field, message]) => `${field}: ${String(message)}`)
             )
             .join('\n')
-        : t('errors.generic.description'),
+        : t('api.errors.generic.description'),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
       class: 'whitespace-pre-line',

@@ -51,10 +51,10 @@ const fetchProviders = async () => {
   try {
     providers.value = await apiService.getProviders();
   } catch (error) {
-    console.error(t('errors.fetch.title', { item: 'providers' }), error);
+    console.error(t('api.errors.fetch.title', { item: 'providers' }), error);
     toast.add({
-      title: t('errors.fetch.title', { item: 'providers' }),
-      description: t('errors.fetch.description', { item: 'providers' }),
+      title: t('api.errors.fetch.title', { item: 'providers' }),
+      description: t('api.errors.fetch.description', { item: 'providers' }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });

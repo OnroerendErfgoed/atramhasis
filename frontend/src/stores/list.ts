@@ -16,10 +16,10 @@ export const useListStore = defineStore('list', () => {
       const data = await apiService.getLanguages();
       languages.value = data.sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
-      console.error(t('errors.fetch.title', { item: 'languages' }), error);
+      console.error(t('api.errors.fetch.title', { item: 'languages' }), error);
       toast.add({
-        title: t('errors.fetch.title', { item: 'languages' }),
-        description: t('errors.fetch.description', { item: 'languages' }),
+        title: t('api.errors.fetch.title', { item: 'languages' }),
+        description: t('api.errors.fetch.description', { item: 'languages' }),
         icon: 'i-lucide-alert-triangle',
         color: 'error',
       });

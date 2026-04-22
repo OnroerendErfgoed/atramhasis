@@ -69,10 +69,10 @@ const conceptschemes = ref<ConceptScheme[]>([]);
 try {
   conceptschemes.value = await apiService.getConceptschemes();
 } catch (error) {
-  console.error(t('errors.fetch.title', { item: 'conceptschemes' }), error);
+  console.error(t('api.errors.fetch.title', { item: 'conceptschemes' }), error);
   toast.add({
-    title: t('errors.fetch.title', { item: 'conceptschemes' }),
-    description: t('errors.fetch.description', { item: 'conceptschemes' }),
+    title: t('api.errors.fetch.title', { item: 'conceptschemes' }),
+    description: t('api.errors.fetch.description', { item: 'conceptschemes' }),
     icon: 'i-lucide-alert-triangle',
     color: 'error',
   });
