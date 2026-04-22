@@ -20,7 +20,9 @@
       "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"],
       "@components/*": ["./src/components/*"],
       "@services/*": ["./src/services/*"],
+      "@stores/*": ["./src/stores/*"],
       "@models/*": ["./src/models/*"],
+      "@enums/*": ["./src/enums/*"],
       "@views/*": ["./src/views/*"],
       "@/*": ["./src/*"]
     },

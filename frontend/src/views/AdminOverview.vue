@@ -166,7 +166,7 @@ import { useRoute } from 'vue-router';
 import type { NavigationMenuItem } from '@nuxt/ui';
 import { useI18n } from 'vue-i18n';
 import OEBreadcrumb from '@components/OEBreadcrumb.vue';
-import { useBreadcrumbStore } from '@/stores/breadcrumb';
+import { useBreadcrumbStore } from '@stores/breadcrumb';
 
 const { t } = useI18n();
 const breadcrumbStore = useBreadcrumbStore();

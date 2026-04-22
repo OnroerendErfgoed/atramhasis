@@ -32,6 +32,7 @@
       v-model:pagination="pagination"
       sticky
       class="flex-1 min-h-0"
+      :ui="{ tr: 'data-[expanded=true]:bg-elevated/50' }"
       :data="tableData"
       :columns="columns"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
@@ -49,6 +50,9 @@
             />
           </div>
         </div>
+      </template>
+      <template #expanded="{ row }">
+        <ConceptExpanded :scheme-id="schemeId" :concept-id="+row.original.id" />
       </template>
     </UTable>
 
@@ -73,12 +77,12 @@ import { h, ref, computed, resolveComponent, useTemplateRef, capitalize, watch, 
 import { useRoute } from 'vue-router';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
-import type { Concept } from '@models/concept';
+import type { OverviewConcept } from '@models/concept';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import ClipboardCopy from '@components/ClipboardCopy.vue';
 import type { ListType } from '@models/util';
-import { useBreadcrumbStore } from '@/stores/breadcrumb';
+import { useBreadcrumbStore } from '@stores/breadcrumb';
 import type { ConceptScheme } from '@models/conceptscheme';
 
 const UButton = resolveComponent('UButton');
@@ -94,7 +98,7 @@ const apiService = new ApiService();
 const schemeId = route.params.id as string;
 
 const concept = ref<ConceptScheme>();
-const concepts = ref<Concept[]>([]);
+const concepts = ref<OverviewConcept[]>([]);
 const typeFilter = ref<ListType>();
 const labelFilter = ref('');
 const matchFilter = ref('');
@@ -106,7 +110,7 @@ onBeforeMount(async () => {
 
 const fetchConcepts = async () => {
   try {
-    concepts.value = await apiService.getConceptsInConceptscheme(schemeId, {
+    concepts.value = await apiService.getConceptsByConceptscheme(schemeId, {
       label: labelFilter.value || undefined,
       match: matchFilter.value || undefined,
     });
@@ -123,7 +127,7 @@ const fetchConcepts = async () => {
 
 await fetchConcepts();
 
-const tableData = computed<Concept[]>(() => {
+const tableData = computed<OverviewConcept[]>(() => {
   let rows = concepts.value.map((c) => ({
     id: c.id,
     uri: c.uri,
@@ -141,12 +145,7 @@ const typeFilterItems: ListType[] = [
   { label: 'Collection', value: 'collection' },
 ];
 
-const expandedRows = ref<Record<string, boolean>>({});
-const toggleExpand = (id: string) => {
-  expandedRows.value[id] = !expandedRows.value[id];
-};
-
-const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<Concept> }>('tableRef');
+const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<OverviewConcept> }>('tableRef');
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const totalFiltered = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const currentPage = computed(() => (tableRef.value?.tableApi?.getState().pagination.pageIndex ?? 0) + 1);
@@ -156,16 +155,19 @@ const pagination = ref({
   pageSize: 15,
 });
 
-const columns: TableColumn<Concept>[] = [
+const columns: TableColumn<OverviewConcept>[] = [
   {
     id: 'expand',
     cell: ({ row }) =>
       h(UButton, {
-        icon: expandedRows.value[row.original.id] ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down',
+        icon: 'i-lucide-chevron-down',
         color: 'neutral',
         variant: 'ghost',
         size: 'xs',
-        onClick: () => toggleExpand(row.original.id),
+        ui: {
+          leadingIcon: ['transition-transform', row.getIsExpanded() ? 'duration-200 rotate-180' : ''],
+        },
+        onClick: async () => row.toggleExpanded(),
       }),
   },
   {

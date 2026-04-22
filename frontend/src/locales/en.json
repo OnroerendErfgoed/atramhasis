@@ -46,6 +46,14 @@
     "clipboardCopy": {
       "copy": "Copy to clipboard | Copy {item} to clipboard",
       "copied": "Copied to clipboard."
+    },
+    "conceptExpanded": {
+      "labels": "Labels",
+      "prefLabel": "Preferred labels",
+      "altLabels": "Alternative labels",
+      "hiddenLabels": "Hidden labels",
+      "sortLabels": "Sort labels",
+      "notes": "Notes"
     }
   },
   "errors": {

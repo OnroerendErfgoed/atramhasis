@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { t } from '@/i18n';
-import { useBreadcrumbStore } from '@/stores/breadcrumb';
+import { useBreadcrumbStore } from '@stores/breadcrumb';
 import type { UrlParams } from '@vueuse/core';
 
 const router = createRouter({
