@@ -180,7 +180,7 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
     {
       label: t('overview.nav.providers'),
       icon: 'i-lucide-database',
-      disabled: true,
+      to: { name: 'AdminProviders' },
     },
     {
       label: t('overview.nav.languages'),
@@ -197,6 +197,7 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
 
 const sectionTitles: Record<string, string> = {
   AdminConceptschemes: t('header.titles.conceptschemes'),
+  AdminProviders: t('header.titles.providers'),
 };
 
 const currentSectionTitle = computed(() => {
