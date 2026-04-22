@@ -97,8 +97,6 @@
           }
         }
       },
-      "cancel": "Cancel",
-      "save": "Save",
       "validation": {
         "error": "Save failed",
         "description": "Fill in all required fields and try again."
@@ -122,5 +120,9 @@
   "validation": {
     "required": "This field is required.",
     "uri": "This field must be a valid URI."
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }
