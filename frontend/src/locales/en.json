@@ -12,7 +12,8 @@
   },
   "header": {
     "titles": {
-      "conceptschemes": "Manage concept schemes"
+      "conceptschemes": "Manage concept schemes",
+      "conceptscheme": "{item} collections and concepts"
     }
   },
   "grid": {

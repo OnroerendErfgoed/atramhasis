@@ -11,7 +11,11 @@ export class ApiService extends HttpService {
     return (await this.get<ConceptScheme[]>('/conceptschemes')).data;
   }
 
-  async getConceptscheme(schemeId: string, options?: { label?: string; match?: string }): Promise<Concept[]> {
+  async getConceptscheme(schemeId: string): Promise<ConceptScheme> {
+    return (await this.get<ConceptScheme>(`/conceptschemes/${schemeId}`)).data;
+  }
+
+  async getConceptsInConceptscheme(schemeId: string, options?: { label?: string; match?: string }): Promise<Concept[]> {
     return (await this.get<Concept[]>(`/conceptschemes/${schemeId}/c`, { params: options })).data;
   }
 }

@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { h, ref, computed, resolveComponent, useTemplateRef, capitalize, watch } from 'vue';
+import { h, ref, computed, resolveComponent, useTemplateRef, capitalize, watch, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
@@ -78,6 +78,8 @@ import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import ClipboardCopy from '@components/ClipboardCopy.vue';
 import type { ListType } from '@models/util';
+import { useBreadcrumbStore } from '@/stores/breadcrumb';
+import type { ConceptScheme } from '@models/conceptscheme';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
@@ -85,18 +87,26 @@ const UBadge = resolveComponent('UBadge');
 const { t } = useI18n();
 const toast = useToast();
 const route = useRoute();
+
+const breadcrumbStore = useBreadcrumbStore();
 const apiService = new ApiService();
 
 const schemeId = route.params.id as string;
 
+const concept = ref<ConceptScheme>();
 const concepts = ref<Concept[]>([]);
 const typeFilter = ref<ListType>();
 const labelFilter = ref('');
 const matchFilter = ref('');
 
+onBeforeMount(async () => {
+  concept.value = await apiService.getConceptscheme(schemeId);
+  breadcrumbStore.setLabel(schemeId, concept.value.label);
+});
+
 const fetchConcepts = async () => {
   try {
-    concepts.value = await apiService.getConceptscheme(schemeId, {
+    concepts.value = await apiService.getConceptsInConceptscheme(schemeId, {
       label: labelFilter.value || undefined,
       match: matchFilter.value || undefined,
     });

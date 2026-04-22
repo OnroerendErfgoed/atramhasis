@@ -125,7 +125,7 @@
 
     <UMain class="min-w-0 flex-1">
       <div class="flex h-full flex-col">
-        <OEBreadcrumb />
+        <OEBreadcrumb v-if="showBreadcrumb" />
         <header class="flex h-16 items-center gap-3 border-b border-default bg-default/95 px-4 backdrop-blur">
           <UButton
             icon="i-lucide-panel-left"
@@ -166,11 +166,16 @@ import { useRoute } from 'vue-router';
 import type { NavigationMenuItem } from '@nuxt/ui';
 import { useI18n } from 'vue-i18n';
 import OEBreadcrumb from '@components/OEBreadcrumb.vue';
+import { useBreadcrumbStore } from '@/stores/breadcrumb';
 
 const { t } = useI18n();
+const breadcrumbStore = useBreadcrumbStore();
 
 const open = ref(true);
 const route = useRoute();
+
+const routesWithBreadcrumb = ['AdminConceptScheme'];
+const showBreadcrumb = computed(() => routesWithBreadcrumb.includes(route.name as string));
 
 const navigationItems = computed<NavigationMenuItem[][]>(() => [
   [
@@ -197,13 +202,16 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
   ],
 ]);
 
-const sectionTitles: Record<string, string> = {
+const sectionTitles = computed<Record<string, string>>(() => ({
   AdminConceptschemes: t('header.titles.conceptschemes'),
-};
+  AdminConceptScheme: t('header.titles.conceptscheme', {
+    item: breadcrumbStore.labels[route.params.id as string] || '',
+  }),
+}));
 
 const currentSectionTitle = computed(() => {
   const routeName = typeof route.name === 'string' ? route.name : '';
-  return sectionTitles[routeName] ?? 'Atramhasis administration';
+  return sectionTitles.value[routeName] ?? 'Atramhasis administration';
 });
 
 const navigateToHomepage = () => {

@@ -1,5 +1,7 @@
-import type { UrlParams } from '@vueuse/core';
 import { createRouter, createWebHistory } from 'vue-router';
+import { t } from '@/i18n';
+import { useBreadcrumbStore } from '@/stores/breadcrumb';
+import type { UrlParams } from '@vueuse/core';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +17,7 @@ const router = createRouter({
           name: 'AdminConceptschemes',
           component: () => import('@views/AdminConceptschemes.vue'),
           meta: {
-            breadcrumb: () => 'CONCEPT SCHEMES',
+            breadcrumb: () => t('header.titles.conceptschemes'),
           },
         },
         {
@@ -23,7 +25,10 @@ const router = createRouter({
           name: 'AdminConceptScheme',
           component: () => import('@views/AdminConceptScheme.vue'),
           meta: {
-            breadcrumb: (params: UrlParams) => `CONCEPT SCHEME ${params.id}`,
+            breadcrumb: (params?: UrlParams) => {
+              const breadcrumbStore = useBreadcrumbStore();
+              return breadcrumbStore.labels[params?.id as string] ?? '';
+            },
           },
         },
       ],
