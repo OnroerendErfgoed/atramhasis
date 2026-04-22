@@ -104,8 +104,18 @@ const labelFilter = ref('');
 const matchFilter = ref('');
 
 onBeforeMount(async () => {
-  concept.value = await apiService.getConceptscheme(schemeId);
-  breadcrumbStore.setLabel(schemeId, concept.value.label);
+  try {
+    concept.value = await apiService.getConceptscheme(schemeId);
+    breadcrumbStore.setLabel(schemeId, concept.value.label);
+  } catch (error) {
+    console.error(t('errors.fetch.title'), error);
+    toast.add({
+      title: t('errors.fetch.title'),
+      description: t('errors.fetch.description'),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  }
 });
 
 const fetchConcepts = async () => {

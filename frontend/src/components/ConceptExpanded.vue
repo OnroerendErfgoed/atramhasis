@@ -1,5 +1,6 @@
 <template>
-  <div class="px-4 text-neutral-900">
+  <USkeleton v-if="!concept" class="w-full h-48 flex items-center justify-center"> {{ t('loading') }} </USkeleton>
+  <div v-else class="px-4 text-neutral-900">
     <!-- Labels -->
     <div>
       <h3 class="font-semibold mb-2 text-lg">
@@ -55,6 +56,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const toast = useToast();
 const conceptStore = useConceptStore();
 const concept = ref<Concept>();
 
@@ -66,6 +68,16 @@ const hiddenLabels = computed(
 const sortLabels = computed(() => concept.value?.labels.filter((label) => label.type === ConceptLabelEnum.SORT) || []);
 
 onMounted(async () => {
-  concept.value = await conceptStore.getConcept(props.schemeId, props.conceptId);
+  try {
+    concept.value = await conceptStore.getConcept(props.schemeId, props.conceptId);
+  } catch (error) {
+    console.error(t('errors.fetch.title'), error);
+    toast.add({
+      title: t('errors.fetch.title'),
+      description: t('errors.fetch.description'),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  }
 });
 </script>
