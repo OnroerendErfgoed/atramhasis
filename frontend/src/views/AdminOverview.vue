@@ -187,7 +187,7 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
     {
       label: t('overview.nav.providers'),
       icon: 'i-lucide-database',
-      disabled: true,
+      to: { name: 'AdminProviders' },
     },
     {
       label: t('overview.nav.languages'),
@@ -207,6 +207,7 @@ const sectionTitles = computed<Record<string, string>>(() => ({
   AdminConceptScheme: t('header.titles.conceptscheme', {
     item: breadcrumbStore.labels[route.params.id as string] || '',
   }),
+  AdminProviders: t('header.titles.providers'),
 }));
 
 const currentSectionTitle = computed(() => {

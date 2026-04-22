@@ -31,6 +31,14 @@ const router = createRouter({
             },
           },
         },
+        {
+          path: 'providers',
+          name: 'AdminProviders',
+          component: () => import('@views/AdminProviders.vue'),
+          meta: {
+            breadcrumb: () => 'PROVIDERS',
+          },
+        },
       ],
     },
     {

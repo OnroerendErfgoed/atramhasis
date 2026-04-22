@@ -1,12 +1,14 @@
 import type { ConceptScheme } from '@models/conceptscheme';
 import type { Concept } from '@models/concept';
 import { HttpService } from './http.service';
+import type { Provider } from '@models/provider';
 
 export class ApiService extends HttpService {
   constructor() {
     super();
   }
 
+  /* Conceptschemes */
   async getConceptschemes(): Promise<ConceptScheme[]> {
     return (await this.get<ConceptScheme[]>('/conceptschemes')).data;
   }
@@ -17,5 +19,10 @@ export class ApiService extends HttpService {
 
   async getConceptsInConceptscheme(schemeId: string, options?: { label?: string; match?: string }): Promise<Concept[]> {
     return (await this.get<Concept[]>(`/conceptschemes/${schemeId}/c`, { params: options })).data;
+  }
+
+  /* Providers */
+  async getProviders(): Promise<Provider[]> {
+    return (await this.get<Provider[]>('/providers')).data;
   }
 }
