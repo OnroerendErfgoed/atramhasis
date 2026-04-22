@@ -9,7 +9,6 @@
     "actions": {
       "addProvider": "Add a provider"
     },
-
     "backToOverview": "Back to overview",
     "logout": "Log out",
     "toggleSidebar": "Toggle sidebar"
@@ -48,6 +47,66 @@
     "clipboardCopy": {
       "copy": "Copy to clipboard | Copy {item} to clipboard",
       "copied": "Copied to clipboard."
+    },
+    "modalProvider": {
+      "title": "Manage providers",
+      "description": "Add a provider",
+      "form": {
+        "id": {
+          "label": "ID",
+          "description": "Leave blank to use the conceptscheme id",
+          "placeholder": "ID"
+        },
+        "conceptschemeUri": {
+          "label": "Conceptscheme URI",
+          "placeholder": "e.g. https://id.test.net/thesauri/example",
+          "hint": "Required"
+        },
+        "uriPattern": {
+          "label": "URI pattern",
+          "placeholder": "e.g. https://id.test.net/thesauri/example/%s",
+          "hint": "Required"
+        },
+        "subject": {
+          "label": "Subject",
+          "placeholder": "e.g. hidden"
+        },
+        "defaultLanguage": {
+          "label": "Default language",
+          "placeholder": "Choose a language"
+        },
+        "displayLanguage": {
+          "label": "Display language",
+          "placeholder": "Choose a language"
+        },
+        "idGenerationStrategy": {
+          "label": "ID generation strategy",
+          "placeholder": "Choose a strategy",
+          "options": {
+            "GUID": "GUID",
+            "NUMERIC": "NUMERIC",
+            "MANUAL": "MANUAL"
+          }
+        },
+        "expandStrategy": {
+          "label": "Expand strategy",
+          "placeholder": "Choose a strategy",
+          "options": {
+            "RECURSE": "Recurse",
+            "VISIT": "Visit"
+          }
+        }
+      },
+      "cancel": "Cancel",
+      "save": "Save",
+      "validation": {
+        "error": "Save failed",
+        "description": "Fill in all required fields and try again."
+      },
+      "success": {
+        "title": "Provider created",
+        "description": "The provider was successfully created."
+      }
     }
   },
   "errors": {
@@ -58,66 +117,6 @@
     "generic": {
       "title": "An error occurred.",
       "description": "An unexpected error occurred. Please try again later."
-    }
-  },
-  "modalProvider": {
-    "title": "Manage providers",
-    "description": "Add a provider",
-    "form": {
-      "id": {
-        "label": "ID",
-        "description": "Leave blank to use the conceptscheme id",
-        "placeholder": "ID"
-      },
-      "conceptschemeUri": {
-        "label": "Conceptscheme URI",
-        "placeholder": "e.g. https://id.test.net/thesauri/example",
-        "hint": "Required"
-      },
-      "uriPattern": {
-        "label": "URI pattern",
-        "placeholder": "e.g. https://id.test.net/thesauri/example/%s",
-        "hint": "Required"
-      },
-      "subject": {
-        "label": "Subject",
-        "placeholder": "e.g. hidden"
-      },
-      "defaultLanguage": {
-        "label": "Default language",
-        "placeholder": "Choose a language"
-      },
-      "displayLanguage": {
-        "label": "Display language",
-        "placeholder": "Choose a language"
-      },
-      "idGenerationStrategy": {
-        "label": "ID generation strategy",
-        "placeholder": "Choose a strategy",
-        "options": {
-          "GUID": "GUID",
-          "NUMERIC": "NUMERIC",
-          "MANUAL": "MANUAL"
-        }
-      },
-      "expandStrategy": {
-        "label": "Expand strategy",
-        "placeholder": "Choose a strategy",
-        "options": {
-          "RECURSE": "Recurse",
-          "VISIT": "Visit"
-        }
-      }
-    },
-    "cancel": "Cancel",
-    "save": "Save",
-    "validation": {
-      "error": "Save failed",
-      "description": "Fill in all required fields and try again."
-    },
-    "success": {
-      "title": "Provider created",
-      "description": "The provider was successfully created."
     }
   },
   "validation": {
