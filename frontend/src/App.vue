@@ -5,12 +5,12 @@
 </template>
 
 <script setup lang="ts">
-import { useLanguageStore } from '@stores/language';
+import { useListStore } from '@stores/list';
 import { onBeforeMount } from 'vue';
 
-const languageStore = useLanguageStore();
+const listStore = useListStore();
 
 onBeforeMount(async () => {
-  await languageStore.fetchLanguages();
+  await listStore.getAll();
 });
 </script>

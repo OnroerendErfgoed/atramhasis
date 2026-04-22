@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-export const useLanguageStore = defineStore('language', () => {
+export const useListStore = defineStore('list', () => {
   const { t } = useI18n();
   const toast = useToast();
   const apiService = new ApiService();
@@ -26,5 +26,9 @@ export const useLanguageStore = defineStore('language', () => {
     }
   };
 
-  return { languages, fetchLanguages };
+  const getAll = async () => {
+    await fetchLanguages();
+  };
+
+  return { languages, fetchLanguages, getAll };
 });
