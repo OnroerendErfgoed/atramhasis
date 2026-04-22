@@ -22,6 +22,7 @@
       "@services/*": ["./src/services/*"],
       "@models/*": ["./src/models/*"],
       "@views/*": ["./src/views/*"],
+      "@stores/*": ["./src/stores/*"],
       "@/*": ["./src/*"]
     },
 

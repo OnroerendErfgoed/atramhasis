@@ -6,6 +6,10 @@
       "languages": "Languages",
       "users": "Users"
     },
+    "actions": {
+      "addProvider": "Add a provider"
+    },
+
     "backToOverview": "Back to overview",
     "logout": "Log out",
     "toggleSidebar": "Toggle sidebar"
@@ -48,8 +52,39 @@
   },
   "errors": {
     "fetch": {
-      "title": "Failed to fetch data.",
-      "description": "An error occurred while fetching data. Please try again later."
+      "title": "Failed to fetch {item} data.",
+      "description": "An error occurred while fetching {item} data. Please try again later."
     }
+  },
+  "modalProvider": {
+    "title": "Manage providers",
+    "description": "Add a provider",
+    "form": {
+      "id": {
+        "label": "ID",
+        "description": "Leave blank to use the conceptscheme id",
+        "placeholder": "ID"
+      },
+      "conceptschemeUri": {
+        "label": "Conceptscheme URI",
+        "placeholder": "e.g. https://id.test.net/thesauri/example",
+        "hint": "Required"
+      },
+      "uriPattern": {
+        "label": "URI pattern",
+        "placeholder": "e.g. https://id.test.net/thesauri/example/%s",
+        "hint": "Required"
+      },
+      "subject": {
+        "label": "Subject",
+        "placeholder": "e.g. hidden"
+      },
+      "defaultLanguage": {
+        "label": "Default language",
+        "placeholder": "Choose a default language"
+      }
+    },
+    "cancel": "Cancel",
+    "save": "Save"
   }
 }
