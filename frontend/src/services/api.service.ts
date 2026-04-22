@@ -1,6 +1,6 @@
 import type { ConceptScheme } from '@models/conceptscheme';
 import { HttpService } from './http.service';
-import type { Provider } from '@models/provider';
+import type { Provider, ProviderForm } from '@models/provider';
 import type { Language } from '@models/language';
 
 export class ApiService extends HttpService {
@@ -8,6 +8,7 @@ export class ApiService extends HttpService {
     super();
   }
 
+  // Getters
   async getConceptschemes(): Promise<ConceptScheme[]> {
     return (await this.get<ConceptScheme[]>('/conceptschemes')).data;
   }
@@ -18,5 +19,10 @@ export class ApiService extends HttpService {
 
   async getLanguages(): Promise<Language[]> {
     return (await this.get<Language[]>('/languages')).data;
+  }
+
+  // Creators
+  async createProvider(provider: ProviderForm): Promise<Provider> {
+    return (await this.post<Provider, ProviderForm>('/providers', provider)).data;
   }
 }

@@ -19,6 +19,7 @@
     "paths": {
       "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"],
       "@components/*": ["./src/components/*"],
+      "@composables/*": ["./src/composables/*"],
       "@services/*": ["./src/services/*"],
       "@models/*": ["./src/models/*"],
       "@views/*": ["./src/views/*"],

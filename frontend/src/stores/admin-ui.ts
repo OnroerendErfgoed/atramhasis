@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useAdminUiStore = defineStore('admin-ui', () => {
-  const addProviderModalIsOpen = ref(true);
+  const addProviderModalIsOpen = ref(false);
 
   const openAddProviderModal = () => {
     addProviderModalIsOpen.value = true;

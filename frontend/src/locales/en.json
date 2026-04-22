@@ -54,6 +54,10 @@
     "fetch": {
       "title": "Failed to fetch {item} data.",
       "description": "An error occurred while fetching {item} data. Please try again later."
+    },
+    "generic": {
+      "title": "An error occurred.",
+      "description": "An unexpected error occurred. Please try again later."
     }
   },
   "modalProvider": {
@@ -81,10 +85,43 @@
       },
       "defaultLanguage": {
         "label": "Default language",
-        "placeholder": "Choose a default language"
+        "placeholder": "Choose a language"
+      },
+      "displayLanguage": {
+        "label": "Display language",
+        "placeholder": "Choose a language"
+      },
+      "idGenerationStrategy": {
+        "label": "ID generation strategy",
+        "placeholder": "Choose a strategy",
+        "options": {
+          "GUID": "GUID",
+          "NUMERIC": "NUMERIC",
+          "MANUAL": "MANUAL"
+        }
+      },
+      "expandStrategy": {
+        "label": "Expand strategy",
+        "placeholder": "Choose a strategy",
+        "options": {
+          "RECURSE": "Recurse",
+          "VISIT": "Visit"
+        }
       }
     },
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "validation": {
+      "error": "Save failed",
+      "description": "Fill in all required fields and try again."
+    },
+    "success": {
+      "title": "Provider created",
+      "description": "The provider was successfully created."
+    }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "uri": "This field must be a valid URI."
   }
 }

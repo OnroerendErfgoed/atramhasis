@@ -47,17 +47,29 @@ const adminUiStore = useAdminUiStore();
 
 const providers = ref<Provider[]>([]);
 
-try {
-  providers.value = await apiService.getProviders();
-} catch (error) {
-  console.error(t('errors.fetch.title', { item: 'providers' }), error);
-  toast.add({
-    title: t('errors.fetch.title', { item: 'providers' }),
-    description: t('errors.fetch.description', { item: 'providers' }),
-    icon: 'i-lucide-alert-triangle',
-    color: 'error',
-  });
-}
+const fetchProviders = async () => {
+  try {
+    providers.value = await apiService.getProviders();
+  } catch (error) {
+    console.error(t('errors.fetch.title', { item: 'providers' }), error);
+    toast.add({
+      title: t('errors.fetch.title', { item: 'providers' }),
+      description: t('errors.fetch.description', { item: 'providers' }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  }
+};
+
+// Initial fetch
+await fetchProviders();
+
+adminUiStore.$onAction(({ name }) => {
+  // Refresh providers list after closing the add provider modal
+  if (name === 'closeAddProviderModal') {
+    fetchProviders();
+  }
+});
 
 const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<Provider> }>('tableRef');
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
