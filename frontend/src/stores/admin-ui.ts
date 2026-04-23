@@ -3,6 +3,16 @@ import { ref } from 'vue';
 
 export const useAdminUiStore = defineStore('admin-ui', () => {
   /* Modals */
+  const addConceptModalIsOpen = ref(false);
+
+  const openAddConceptModal = () => {
+    addConceptModalIsOpen.value = true;
+  };
+
+  const closeAddConceptModal = () => {
+    addConceptModalIsOpen.value = false;
+  };
+
   const addProviderModalIsOpen = ref(false);
 
   const openAddProviderModal = () => {
@@ -21,6 +31,9 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
 
   return {
+    addConceptModalIsOpen,
+    openAddConceptModal,
+    closeAddConceptModal,
     addProviderModalIsOpen,
     openAddProviderModal,
     closeAddProviderModal,

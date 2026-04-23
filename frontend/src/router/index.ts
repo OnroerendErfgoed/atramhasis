@@ -22,8 +22,8 @@ const router = createRouter({
         },
         {
           path: 'conceptschemes/:id',
-          name: 'AdminConceptScheme',
-          component: () => import('@views/AdminConceptScheme.vue'),
+          name: 'AdminConceptscheme',
+          component: () => import('@views/AdminConceptscheme.vue'),
           meta: {
             breadcrumb: (params?: UrlParams) => {
               const adminUiStore = useAdminUiStore();

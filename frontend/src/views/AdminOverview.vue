@@ -187,7 +187,7 @@ const adminUiStore = useAdminUiStore();
 const open = ref(true);
 const route = useRoute();
 
-const routesWithBreadcrumb = ['AdminConceptScheme'];
+const routesWithBreadcrumb = ['AdminConceptscheme'];
 const showBreadcrumb = computed(() => routesWithBreadcrumb.includes(route.name as string));
 
 const navigationItems = computed<NavigationMenuItem[][]>(() => [
@@ -217,7 +217,7 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
 
 const sectionTitles = computed<Record<string, string>>(() => ({
   AdminConceptschemes: t('header.titles.conceptschemes'),
-  AdminConceptScheme: t('header.titles.conceptscheme', {
+  AdminConceptscheme: t('header.titles.conceptscheme', {
     item: adminUiStore.breadcrumbLabels[route.params.id as string] || '',
   }),
   AdminProviders: t('header.titles.providers'),
@@ -237,6 +237,14 @@ const currentSectionActions = computed(() => {
           label: t('overview.actions.addProvider'),
           icon: 'i-lucide-plus',
           onClick: () => adminUiStore.openAddProviderModal(),
+        },
+      ];
+    case 'AdminConceptscheme':
+      return [
+        {
+          label: t('overview.actions.addConcept'),
+          icon: 'i-lucide-plus',
+          onClick: () => adminUiStore.openAddConceptModal(),
         },
       ];
     default:

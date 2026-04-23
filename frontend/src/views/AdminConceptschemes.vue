@@ -13,7 +13,7 @@
       <template #label-cell="{ row }">
         <div>
           <ULink
-            :to="{ name: 'AdminConceptScheme', params: { id: row.original.id } }"
+            :to="{ name: 'AdminConceptscheme', params: { id: row.original.id } }"
             class="font-medium text-primary hover:underline"
           >
             {{ row.original.label }}
@@ -118,7 +118,7 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
       h('div', { class: 'flex items-center gap-1' }, [
         h(UButton, {
           as: 'a',
-          to: { name: 'AdminConceptScheme', params: { id: row.original.id } },
+          to: { name: 'AdminConceptscheme', params: { id: row.original.id } },
           label: t('grid.columns.actions.view'),
           icon: 'i-lucide-eye',
           color: 'primary',
