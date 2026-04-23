@@ -1,6 +1,3 @@
-import { ConceptLabelEnum } from '@enums/concept-label.enum';
-import { ConceptNoteEnum } from '@enums/concept-note.enum';
-
 export interface OverviewConcept {
   id: string;
   uri: string;
@@ -24,4 +21,21 @@ interface ConceptNote {
   note: string;
   language: string;
   type: ConceptNoteEnum;
+}
+
+export enum ConceptLabelEnum {
+  PREF = 'prefLabel',
+  ALT = 'altLabel',
+  HIDDEN = 'hiddenLabel',
+  SORT = 'sortLabel',
+}
+
+export enum ConceptNoteEnum {
+  CHANGE = 'changeNote',
+  DEFINITION = 'definition',
+  EDITORIAL = 'editorialNote',
+  EXAMPLE = 'example',
+  HISTORY = 'historyNote',
+  SCOPE = 'scopeNote',
+  NOTE = 'note',
 }

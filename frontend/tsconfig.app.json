@@ -25,7 +25,6 @@
       "@models/*": ["./src/models/*"],
       "@enums/*": ["./src/enums/*"],
       "@views/*": ["./src/views/*"],
-      "@stores/*": ["./src/stores/*"],
       "@/*": ["./src/*"]
     },
 

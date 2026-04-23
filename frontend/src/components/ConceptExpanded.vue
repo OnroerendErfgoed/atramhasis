@@ -44,10 +44,9 @@
 </template>
 
 <script setup lang="ts">
-import { ConceptLabelEnum } from '@enums/concept-label.enum';
-import type { Concept } from '@models/concept';
+import { type Concept, ConceptLabelEnum } from '@models/concept';
 import { useConceptStore } from '@stores/concept';
-import { capitalize, computed, onMounted, ref } from 'vue';
+import { capitalize, computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
@@ -67,17 +66,19 @@ const hiddenLabels = computed(
 );
 const sortLabels = computed(() => concept.value?.labels.filter((label) => label.type === ConceptLabelEnum.SORT) || []);
 
-onMounted(async () => {
+const fetchConcept = async () => {
   try {
     concept.value = await conceptStore.getConcept(props.schemeId, props.conceptId);
   } catch (error) {
-    console.error(t('errors.fetch.title'), error);
+    console.error(t('api.errors.fetch.title', { item: 'concept' }), error);
     toast.add({
-      title: t('errors.fetch.title'),
-      description: t('errors.fetch.description'),
+      title: t('api.errors.fetch.title', { item: 'concept' }),
+      description: t('api.errors.fetch.description', { item: 'concept' }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
   }
-});
+};
+
+fetchConcept();
 </script>

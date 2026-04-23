@@ -73,14 +73,13 @@
 </template>
 
 <script setup lang="ts">
-import { h, ref, computed, resolveComponent, useTemplateRef, capitalize, watch, onBeforeMount } from 'vue';
+import { h, ref, computed, resolveComponent, useTemplateRef, capitalize, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
 import type { OverviewConcept } from '@models/concept';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
-import ClipboardCopy from '@components/ClipboardCopy.vue';
 import type { ListType } from '@models/util';
 import { useAdminUiStore } from '@stores/admin-ui';
 import type { ConceptScheme } from '@models/conceptscheme';
@@ -103,20 +102,20 @@ const typeFilter = ref<ListType>();
 const labelFilter = ref('');
 const matchFilter = ref('');
 
-onBeforeMount(async () => {
+const fetchConceptscheme = async () => {
   try {
     concept.value = await apiService.getConceptscheme(schemeId);
     adminUiStore.setBreadcrumbLabel(schemeId, concept.value.label);
   } catch (error) {
-    console.error(t('errors.fetch.title'), error);
+    console.error(t('api.errors.fetch.title', { item: 'conceptscheme' }), error);
     toast.add({
-      title: t('errors.fetch.title'),
-      description: t('errors.fetch.description'),
+      title: t('api.errors.fetch.title', { item: 'conceptscheme' }),
+      description: t('api.errors.fetch.description', { item: 'conceptscheme' }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
   }
-});
+};
 
 const fetchConcepts = async () => {
   try {
@@ -125,16 +124,18 @@ const fetchConcepts = async () => {
       match: matchFilter.value || undefined,
     });
   } catch (error) {
-    console.error(t('errors.fetch.title'), error);
+    console.error(t('api.errors.fetch.title', { item: 'concepts' }), error);
     toast.add({
-      title: t('errors.fetch.title'),
-      description: t('errors.fetch.description'),
+      title: t('api.errors.fetch.title', { item: 'concepts' }),
+      description: t('api.errors.fetch.description', { item: 'concepts' }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
   }
 };
 
+// Initial fetch
+await fetchConceptscheme();
 await fetchConcepts();
 
 const tableData = computed<OverviewConcept[]>(() => {

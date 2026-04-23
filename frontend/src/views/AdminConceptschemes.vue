@@ -61,7 +61,6 @@ import type { ConceptScheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 
-const ULink = resolveComponent('ULink');
 const UButton = resolveComponent('UButton');
 
 const { t } = useI18n();
@@ -70,17 +69,22 @@ const apiService = new ApiService();
 
 const conceptschemes = ref<ConceptScheme[]>([]);
 
-try {
-  conceptschemes.value = await apiService.getConceptschemes();
-} catch (error) {
-  console.error(t('api.errors.fetch.title', { item: 'conceptschemes' }), error);
-  toast.add({
-    title: t('api.errors.fetch.title', { item: 'conceptschemes' }),
-    description: t('api.errors.fetch.description', { item: 'conceptschemes' }),
-    icon: 'i-lucide-alert-triangle',
-    color: 'error',
-  });
-}
+const fetchConceptschemes = async () => {
+  try {
+    conceptschemes.value = await apiService.getConceptschemes();
+  } catch (error) {
+    console.error(t('api.errors.fetch.title', { item: 'conceptschemes' }), error);
+    toast.add({
+      title: t('api.errors.fetch.title', { item: 'conceptschemes' }),
+      description: t('api.errors.fetch.description', { item: 'conceptschemes' }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  }
+};
+
+// Initial fetch
+await fetchConceptschemes();
 
 const tableData = computed<ConceptSchemeRow[]>(() =>
   conceptschemes.value.map((cs) => ({
