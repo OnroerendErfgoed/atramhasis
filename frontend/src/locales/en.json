@@ -1,10 +1,13 @@
 {
   "overview": {
     "nav": {
-      "conceptschemes": "Concept schemes",
+      "conceptschemes": "Conceptschemes",
       "providers": "Providers",
       "languages": "Languages",
       "users": "Users"
+    },
+    "actions": {
+      "addProvider": "Add a provider"
     },
     "backToOverview": "Back to overview",
     "logout": "Log out",
@@ -12,7 +15,7 @@
   },
   "header": {
     "titles": {
-      "conceptschemes": "Manage concept schemes",
+      "conceptschemes": "Manage conceptschemes",
       "providers": "Manage providers"
     }
   },
@@ -44,12 +47,99 @@
     "clipboardCopy": {
       "copy": "Copy to clipboard | Copy {item} to clipboard",
       "copied": "Copied to clipboard."
+    },
+    "modalProvider": {
+      "title": "Manage providers",
+      "description": "Add a provider",
+      "form": {
+        "id": {
+          "label": "ID",
+          "description": "Leave blank to use the conceptscheme id",
+          "placeholder": "ID"
+        },
+        "conceptschemeUri": {
+          "label": "Conceptscheme URI",
+          "placeholder": "e.g. https://id.test.net/thesauri/example",
+          "hint": "Required"
+        },
+        "uriPattern": {
+          "label": "URI pattern",
+          "placeholder": "e.g. https://id.test.net/thesauri/example/%s",
+          "hint": "Required"
+        },
+        "subject": {
+          "label": "Subject",
+          "placeholder": "e.g. hidden"
+        },
+        "defaultLanguage": {
+          "label": "Default language",
+          "placeholder": "Choose a language"
+        },
+        "displayLanguage": {
+          "label": "Display language",
+          "placeholder": "Choose a language"
+        },
+        "idGenerationStrategy": {
+          "label": "ID generation strategy",
+          "placeholder": "Choose a strategy",
+          "options": {
+            "GUID": "GUID",
+            "NUMERIC": "NUMERIC",
+            "MANUAL": "MANUAL"
+          }
+        },
+        "expandStrategy": {
+          "label": "Expand strategy",
+          "placeholder": "Choose a strategy",
+          "options": {
+            "RECURSE": "Recurse",
+            "VISIT": "Visit"
+          }
+        }
+      }
     }
   },
-  "errors": {
-    "fetch": {
-      "title": "Failed to fetch data.",
-      "description": "An error occurred while fetching data. Please try again later."
+  "api": {
+    "success": {
+      "fetch": {
+        "title": "Data fetched",
+        "description": "The {item} data was fetched successfully."
+      },
+      "save": {
+        "title": "{item} created",
+        "description": "The {item} data was saved successfully."
+      },
+      "generic": {
+        "title": "Success",
+        "description": "The operation was completed successfully."
+      }
+    },
+    "errors": {
+      "fetch": {
+        "title": "Failed to fetch {item} data",
+        "description": "An error occurred while fetching {item} data. Please try again later."
+      },
+      "save": {
+        "title": "Failed to create {item}",
+        "description": "An error occurred while saving the {item} data. Please check your input and try again."
+      },
+      "generic": {
+        "title": "An error occurred",
+        "description": "An unexpected error occurred. Please try again later."
+      }
     }
+  },
+  "validation": {
+    "field": {
+      "required": "This field is required.",
+      "uri": "This field must be a valid URI."
+    },
+    "form": {
+      "invalid": "Please correct the errors in the form before submitting."
+    }
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }
