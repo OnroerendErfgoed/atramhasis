@@ -82,7 +82,7 @@ import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import ClipboardCopy from '@components/ClipboardCopy.vue';
 import type { ListType } from '@models/util';
-import { useBreadcrumbStore } from '@stores/breadcrumb';
+import { useAdminUiStore } from '@stores/admin-ui';
 import type { ConceptScheme } from '@models/conceptscheme';
 
 const UButton = resolveComponent('UButton');
@@ -92,7 +92,7 @@ const { t } = useI18n();
 const toast = useToast();
 const route = useRoute();
 
-const breadcrumbStore = useBreadcrumbStore();
+const adminUiStore = useAdminUiStore();
 const apiService = new ApiService();
 
 const schemeId = route.params.id as string;
@@ -106,7 +106,7 @@ const matchFilter = ref('');
 onBeforeMount(async () => {
   try {
     concept.value = await apiService.getConceptscheme(schemeId);
-    breadcrumbStore.setLabel(schemeId, concept.value.label);
+    adminUiStore.setBreadcrumbLabel(schemeId, concept.value.label);
   } catch (error) {
     console.error(t('errors.fetch.title'), error);
     toast.add({

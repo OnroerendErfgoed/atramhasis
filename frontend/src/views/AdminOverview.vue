@@ -141,6 +141,19 @@
               {{ currentSectionTitle }}
             </h1>
           </div>
+
+          <div v-if="currentSectionActions?.length > 0" class="ml-auto flex items-center gap-2">
+            <UButton
+              v-for="(action, index) in currentSectionActions"
+              :key="index"
+              :label="action.label"
+              :icon="action.icon"
+              color="primary"
+              size="sm"
+              class="cursor-pointer"
+              @click="action.onClick"
+            />
+          </div>
         </header>
 
         <main class="min-h-0 flex-1 overflow-hidden p-6">
@@ -164,12 +177,12 @@
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { NavigationMenuItem } from '@nuxt/ui';
+import { useAdminUiStore } from '@/stores/admin-ui';
 import { useI18n } from 'vue-i18n';
 import OEBreadcrumb from '@components/OEBreadcrumb.vue';
-import { useBreadcrumbStore } from '@stores/breadcrumb';
 
 const { t } = useI18n();
-const breadcrumbStore = useBreadcrumbStore();
+const adminUiStore = useAdminUiStore();
 
 const open = ref(true);
 const route = useRoute();
@@ -205,7 +218,7 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
 const sectionTitles = computed<Record<string, string>>(() => ({
   AdminConceptschemes: t('header.titles.conceptschemes'),
   AdminConceptScheme: t('header.titles.conceptscheme', {
-    item: breadcrumbStore.labels[route.params.id as string] || '',
+    item: adminUiStore.breadcrumbLabels[route.params.id as string] || '',
   }),
   AdminProviders: t('header.titles.providers'),
 }));
@@ -213,6 +226,22 @@ const sectionTitles = computed<Record<string, string>>(() => ({
 const currentSectionTitle = computed(() => {
   const routeName = typeof route.name === 'string' ? route.name : '';
   return sectionTitles.value[routeName] ?? 'Atramhasis administration';
+});
+
+const currentSectionActions = computed(() => {
+  const routeName = typeof route.name === 'string' ? route.name : '';
+  switch (routeName) {
+    case 'AdminProviders':
+      return [
+        {
+          label: t('overview.actions.addProvider'),
+          icon: 'i-lucide-plus',
+          onClick: () => adminUiStore.openAddProviderModal(),
+        },
+      ];
+    default:
+      return [];
+  }
 });
 
 const navigateToHomepage = () => {

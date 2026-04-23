@@ -24,6 +24,8 @@
         @update:page="(p: number) => tableRef?.tableApi?.setPageIndex(p - 1)"
       />
     </div>
+
+    <ModalProvider v-model:open="adminUiStore.addProviderModalIsOpen" />
   </div>
 </template>
 
@@ -31,27 +33,43 @@
 import type { Provider } from '@models/provider';
 import type { TableColumn } from '@nuxt/ui';
 import { ApiService } from '@services/api.service';
+import { useAdminUiStore } from '@/stores/admin-ui';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import { h, computed, ref, useTemplateRef, resolveComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+const UButton = resolveComponent('UButton');
+
 const { t } = useI18n();
 const toast = useToast();
 const apiService = new ApiService();
+const adminUiStore = useAdminUiStore();
 
 const providers = ref<Provider[]>([]);
 
-try {
-  providers.value = await apiService.getProviders();
-} catch (error) {
-  console.error(t('errors.fetch.title'), error);
-  toast.add({
-    title: t('errors.fetch.title'),
-    description: t('errors.fetch.description'),
-    icon: 'i-lucide-alert-triangle',
-    color: 'error',
-  });
-}
+const fetchProviders = async () => {
+  try {
+    providers.value = await apiService.getProviders();
+  } catch (error) {
+    console.error(t('api.errors.fetch.title', { item: 'providers' }), error);
+    toast.add({
+      title: t('api.errors.fetch.title', { item: 'providers' }),
+      description: t('api.errors.fetch.description', { item: 'providers' }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  }
+};
+
+// Initial fetch
+await fetchProviders();
+
+adminUiStore.$onAction(({ name }) => {
+  // Refresh providers list after closing the add provider modal
+  if (name === 'closeAddProviderModal') {
+    fetchProviders();
+  }
+});
 
 const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<Provider> }>('tableRef');
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
@@ -63,7 +81,6 @@ const pagination = ref({
   pageSize: 15,
 });
 
-const UButton = resolveComponent('UButton');
 const columns: TableColumn<Provider>[] = [
   {
     accessorKey: 'id',

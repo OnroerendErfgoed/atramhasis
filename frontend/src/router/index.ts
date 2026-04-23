@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { t } from '@/i18n';
-import { useBreadcrumbStore } from '@stores/breadcrumb';
+import { useAdminUiStore } from '@stores/admin-ui';
 import type { UrlParams } from '@vueuse/core';
 
 const router = createRouter({
@@ -26,8 +26,8 @@ const router = createRouter({
           component: () => import('@views/AdminConceptScheme.vue'),
           meta: {
             breadcrumb: (params?: UrlParams) => {
-              const breadcrumbStore = useBreadcrumbStore();
-              return breadcrumbStore.labels[params?.id as string] ?? '';
+              const adminUiStore = useAdminUiStore();
+              return adminUiStore.breadcrumbLabels[params?.id as string] ?? '';
             },
           },
         },
