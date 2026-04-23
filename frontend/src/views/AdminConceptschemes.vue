@@ -12,9 +12,12 @@
     >
       <template #label-cell="{ row }">
         <div>
-          <a href="#" class="font-medium text-primary hover:underline">
+          <ULink
+            :to="{ name: 'AdminConceptscheme', params: { id: row.original.id } }"
+            class="font-medium text-primary hover:underline"
+          >
             {{ row.original.label }}
-          </a>
+          </ULink>
           <div class="mt-0.5 flex items-center gap-1 text-xs text-muted">
             <span>{{ row.original.uri }}</span>
             <ClipboardCopy
@@ -66,17 +69,22 @@ const apiService = new ApiService();
 
 const conceptschemes = ref<ConceptScheme[]>([]);
 
-try {
-  conceptschemes.value = await apiService.getConceptschemes();
-} catch (error) {
-  console.error(t('api.errors.fetch.title', { item: 'conceptschemes' }), error);
-  toast.add({
-    title: t('api.errors.fetch.title', { item: 'conceptschemes' }),
-    description: t('api.errors.fetch.description', { item: 'conceptschemes' }),
-    icon: 'i-lucide-alert-triangle',
-    color: 'error',
-  });
-}
+const fetchConceptschemes = async () => {
+  try {
+    conceptschemes.value = await apiService.getConceptschemes();
+  } catch (error) {
+    console.error(t('api.errors.fetch.title', { item: 'conceptschemes' }), error);
+    toast.add({
+      title: t('api.errors.fetch.title', { item: 'conceptschemes' }),
+      description: t('api.errors.fetch.description', { item: 'conceptschemes' }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  }
+};
+
+// Initial fetch
+await fetchConceptschemes();
 
 const tableData = computed<ConceptSchemeRow[]>(() =>
   conceptschemes.value.map((cs) => ({
@@ -110,11 +118,11 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
   {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
-    cell: () =>
+    cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-1' }, [
         h(UButton, {
           as: 'a',
-          href: '#',
+          to: { name: 'AdminConceptscheme', params: { id: row.original.id } },
           label: t('grid.columns.actions.view'),
           icon: 'i-lucide-eye',
           color: 'primary',
