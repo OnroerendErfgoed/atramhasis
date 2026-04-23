@@ -125,6 +125,7 @@
 
     <UMain class="min-w-0 flex-1">
       <div class="flex h-full flex-col">
+        <ABreadcrumb v-if="showBreadcrumb" />
         <header class="flex h-16 items-center gap-3 border-b border-default bg-default/95 px-4 backdrop-blur">
           <UButton
             icon="i-lucide-panel-left"
@@ -157,14 +158,16 @@
 
         <main class="min-h-0 flex-1 overflow-hidden p-6">
           <div class="mx-auto flex h-full w-full max-w-7xl flex-col">
-            <Suspense>
-              <template #fallback>
-                <div class="flex items-center justify-center py-20">
-                  <UIcon name="i-lucide-loader-circle" class="size-8 animate-spin text-primary" />
-                </div>
-              </template>
-              <RouterView />
-            </Suspense>
+            <RouterView v-slot="{ Component, route: currentRoute }">
+              <Suspense timeout="0">
+                <component :is="Component" :key="currentRoute.fullPath" />
+                <template #fallback>
+                  <div class="flex items-center justify-center py-20">
+                    <UIcon name="i-lucide-loader-circle" class="size-8 animate-spin text-primary" />
+                  </div>
+                </template>
+              </Suspense>
+            </RouterView>
           </div>
         </main>
       </div>
@@ -184,6 +187,9 @@ const adminUiStore = useAdminUiStore();
 
 const open = ref(true);
 const route = useRoute();
+
+const routesWithBreadcrumb = ['AdminConceptscheme'];
+const showBreadcrumb = computed(() => routesWithBreadcrumb.includes(route.name as string));
 
 const navigationItems = computed<NavigationMenuItem[][]>(() => [
   [
@@ -210,14 +216,17 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
   ],
 ]);
 
-const sectionTitles: Record<string, string> = {
+const sectionTitles = computed<Record<string, string>>(() => ({
   AdminConceptschemes: t('header.titles.conceptschemes'),
+  AdminConceptscheme: t('header.titles.conceptscheme', {
+    item: adminUiStore.breadcrumbLabels[route.params.id as string] || '',
+  }),
   AdminProviders: t('header.titles.providers'),
-};
+}));
 
 const currentSectionTitle = computed(() => {
   const routeName = typeof route.name === 'string' ? route.name : '';
-  return sectionTitles[routeName] ?? 'Atramhasis administration';
+  return sectionTitles.value[routeName] ?? 'Atramhasis administration';
 });
 
 const currentSectionActions = computed(() => {
@@ -229,6 +238,14 @@ const currentSectionActions = computed(() => {
           label: t('overview.actions.addProvider'),
           icon: 'i-lucide-plus',
           onClick: () => adminUiStore.openAddProviderModal(),
+        },
+      ];
+    case 'AdminConceptscheme':
+      return [
+        {
+          label: t('overview.actions.addConcept'),
+          icon: 'i-lucide-plus',
+          onClick: () => adminUiStore.openAddConceptModal(),
         },
       ];
     default:

@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { t } from '@/i18n';
+import { useAdminUiStore } from '@stores/admin-ui';
+import type { UrlParams } from '@vueuse/core';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,6 +16,20 @@ const router = createRouter({
           path: 'conceptschemes',
           name: 'AdminConceptschemes',
           component: () => import('@views/AdminConceptschemes.vue'),
+          meta: {
+            breadcrumb: () => t('header.titles.conceptschemes'),
+          },
+        },
+        {
+          path: 'conceptschemes/:id',
+          name: 'AdminConceptscheme',
+          component: () => import('@views/AdminConceptscheme.vue'),
+          meta: {
+            breadcrumb: (params?: UrlParams) => {
+              const adminUiStore = useAdminUiStore();
+              return adminUiStore.breadcrumbLabels[params?.id as string] ?? '';
+            },
+          },
         },
         {
           path: 'providers',

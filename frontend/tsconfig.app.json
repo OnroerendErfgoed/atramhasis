@@ -21,9 +21,10 @@
       "@components/*": ["./src/components/*"],
       "@composables/*": ["./src/composables/*"],
       "@services/*": ["./src/services/*"],
-      "@models/*": ["./src/models/*"],
-      "@views/*": ["./src/views/*"],
       "@stores/*": ["./src/stores/*"],
+      "@models/*": ["./src/models/*"],
+      "@enums/*": ["./src/enums/*"],
+      "@views/*": ["./src/views/*"],
       "@/*": ["./src/*"]
     },
 

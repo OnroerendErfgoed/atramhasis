@@ -1,4 +1,5 @@
 {
+  "loading": "Loading...",
   "overview": {
     "nav": {
       "conceptschemes": "Conceptschemes",
@@ -7,6 +8,7 @@
       "users": "Users"
     },
     "actions": {
+      "addConcept": "Add a concept",
       "addProvider": "Add a provider"
     },
     "backToOverview": "Back to overview",
@@ -16,6 +18,7 @@
   "header": {
     "titles": {
       "conceptschemes": "Manage conceptschemes",
+      "conceptscheme": "{item} collections and concepts",
       "providers": "Manage providers"
     }
   },
@@ -39,6 +42,7 @@
         "edit": "Edit",
         "access": "Access",
         "publish": "Publish",
+        "merge": "Merge",
         "delete": "Delete"
       }
     }
@@ -47,6 +51,14 @@
     "clipboardCopy": {
       "copy": "Copy to clipboard | Copy {item} to clipboard",
       "copied": "Copied to clipboard."
+    },
+    "conceptExpanded": {
+      "labels": "Labels",
+      "prefLabel": "Preferred labels",
+      "altLabels": "Alternative labels",
+      "hiddenLabels": "Hidden labels",
+      "sortLabels": "Sort labels",
+      "notes": "Notes"
     },
     "modalProvider": {
       "title": "Manage providers",
@@ -127,6 +139,13 @@
         "title": "An error occurred",
         "description": "An unexpected error occurred. Please try again later."
       }
+    }
+  },
+  "placeholders": {
+    "conceptScheme": {
+      "label": "Filter by label",
+      "match": "Filter by match e.g. http://vocab.getty.edu/aat/300005241",
+      "type": "Filter by type"
     }
   },
   "validation": {
