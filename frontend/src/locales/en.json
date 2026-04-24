@@ -66,7 +66,7 @@
     },
     "modalProvider": {
       "title": "Manage providers",
-      "description": "Add a provider",
+      "description": "{mode} a provider",
       "form": {
         "id": {
           "label": "ID",
@@ -125,6 +125,10 @@
         "title": "{item} created",
         "description": "The {item} data was saved successfully."
       },
+      "update": {
+        "title": "{item} updated",
+        "description": "The {item} data was updated successfully."
+      },
       "generic": {
         "title": "Success",
         "description": "The operation was completed successfully."
@@ -138,6 +142,10 @@
       "save": {
         "title": "Failed to create {item}",
         "description": "An error occurred while saving the {item} data. Please check your input and try again."
+      },
+      "update": {
+        "title": "Failed to update {item}",
+        "description": "An error occurred while updating the {item} data. Please check your input and try again."
       },
       "generic": {
         "title": "An error occurred",
@@ -163,6 +171,8 @@
   },
   "actions": {
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit"
   }
 }

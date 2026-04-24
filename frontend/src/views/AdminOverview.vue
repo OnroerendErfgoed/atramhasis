@@ -181,6 +181,7 @@ import { useRoute } from 'vue-router';
 import type { NavigationMenuItem } from '@nuxt/ui';
 import { useAdminUiStore } from '@/stores/admin-ui';
 import { useI18n } from 'vue-i18n';
+import { ModalMode } from '@models/util';
 
 const { t } = useI18n();
 const adminUiStore = useAdminUiStore();
@@ -237,7 +238,7 @@ const currentSectionActions = computed(() => {
         {
           label: t('overview.actions.addProvider'),
           icon: 'i-lucide-plus',
-          onClick: () => adminUiStore.openAddProviderModal(),
+          onClick: () => adminUiStore.openProviderModal(ModalMode.ADD),
         },
       ];
     case 'AdminConceptscheme':
