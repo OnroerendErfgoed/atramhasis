@@ -1,9 +1,9 @@
-import type { Provider, ProviderForm } from '@models/provider';
+import type { Provider } from '@models/provider';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useProviderStore = defineStore('provider', () => {
-  const selectedProvider = ref<ProviderForm>();
+  const selectedProvider = ref<Provider>();
 
   const setSelectedProvider = (provider: Provider) => {
     selectedProvider.value = provider;
