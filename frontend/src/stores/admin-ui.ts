@@ -3,25 +3,17 @@ import { ref } from 'vue';
 
 export const useAdminUiStore = defineStore('admin-ui', () => {
   /* Modals */
+  const editConceptschemeModal = ref(false);
+  const openEditConceptschemeModal = () => (editConceptschemeModal.value = true);
+  const closeEditConceptschemeModal = () => (editConceptschemeModal.value = false);
+
   const addConceptModalIsOpen = ref(false);
-
-  const openAddConceptModal = () => {
-    addConceptModalIsOpen.value = true;
-  };
-
-  const closeAddConceptModal = () => {
-    addConceptModalIsOpen.value = false;
-  };
+  const openAddConceptModal = () => (addConceptModalIsOpen.value = true);
+  const closeAddConceptModal = () => (addConceptModalIsOpen.value = false);
 
   const addProviderModalIsOpen = ref(false);
-
-  const openAddProviderModal = () => {
-    addProviderModalIsOpen.value = true;
-  };
-
-  const closeAddProviderModal = () => {
-    addProviderModalIsOpen.value = false;
-  };
+  const openAddProviderModal = () => (addProviderModalIsOpen.value = true);
+  const closeAddProviderModal = () => (addProviderModalIsOpen.value = false);
 
   /* Breadcrumbs */
   const breadcrumbLabels = ref<Record<string, string>>({});
@@ -31,6 +23,9 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
 
   return {
+    editConceptschemeModal,
+    openEditConceptschemeModal,
+    closeEditConceptschemeModal,
     addConceptModalIsOpen,
     openAddConceptModal,
     closeAddConceptModal,

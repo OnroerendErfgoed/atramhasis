@@ -82,7 +82,7 @@ import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import type { ListType } from '@models/util';
 import { useAdminUiStore } from '@stores/admin-ui';
-import type { ConceptScheme } from '@models/conceptscheme';
+import type { Conceptscheme } from '@models/conceptscheme';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
@@ -96,7 +96,7 @@ const apiService = new ApiService();
 
 const schemeId = route.params.id as string;
 
-const concept = ref<ConceptScheme>();
+const conceptscheme = ref<Conceptscheme>();
 const concepts = ref<OverviewConcept[]>([]);
 const typeFilter = ref<ListType>();
 const labelFilter = ref('');
@@ -104,8 +104,8 @@ const matchFilter = ref('');
 
 const fetchConceptscheme = async () => {
   try {
-    concept.value = await apiService.getConceptscheme(schemeId);
-    adminUiStore.setBreadcrumbLabel(schemeId, concept.value.label);
+    conceptscheme.value = await apiService.getConceptscheme(schemeId);
+    adminUiStore.setBreadcrumbLabel(schemeId, conceptscheme.value.label);
   } catch (error) {
     console.error(t('api.errors.fetch.title', { item: 'conceptscheme' }), error);
     toast.add({

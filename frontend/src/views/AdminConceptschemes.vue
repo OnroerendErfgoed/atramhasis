@@ -42,11 +42,13 @@
         @update:page="(p: number) => tableRef?.tableApi?.setPageIndex(p - 1)"
       />
     </div>
+
+    <ModalConceptschemes v-model:open="adminUiStore.editConceptschemeModal" />
   </div>
 </template>
 
 <script lang="ts">
-export interface ConceptSchemeRow {
+export interface ConceptschemeRow {
   id: string;
   uri: string;
   label: string;
@@ -58,17 +60,19 @@ export interface ConceptSchemeRow {
 import { h, ref, computed, resolveComponent, useTemplateRef } from 'vue';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
-import type { ConceptScheme } from '@models/conceptscheme';
+import type { Conceptscheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
+import { useAdminUiStore } from '@stores/admin-ui';
 
 const UButton = resolveComponent('UButton');
 
 const { t } = useI18n();
 const toast = useToast();
+const adminUiStore = useAdminUiStore();
 const apiService = new ApiService();
 
-const conceptschemes = ref<ConceptScheme[]>([]);
+const conceptschemes = ref<Conceptscheme[]>([]);
 
 const fetchConceptschemes = async () => {
   try {
@@ -87,7 +91,7 @@ const fetchConceptschemes = async () => {
 // Initial fetch
 await fetchConceptschemes();
 
-const tableData = computed<ConceptSchemeRow[]>(() =>
+const tableData = computed<ConceptschemeRow[]>(() =>
   conceptschemes.value.map((cs) => ({
     id: cs.id,
     uri: cs.uri,
@@ -96,7 +100,7 @@ const tableData = computed<ConceptSchemeRow[]>(() =>
   }))
 );
 
-const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<ConceptSchemeRow> }>('tableRef');
+const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<ConceptschemeRow> }>('tableRef');
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const totalFiltered = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const currentPage = computed(() => (tableRef.value?.tableApi?.getState().pagination.pageIndex ?? 0) + 1);
@@ -106,7 +110,7 @@ const pagination = ref({
   pageSize: 15,
 });
 
-const columns: TableColumn<ConceptSchemeRow>[] = [
+const columns: TableColumn<ConceptschemeRow>[] = [
   {
     accessorKey: 'label',
     header: t('grid.columns.labels.label'),
@@ -136,13 +140,15 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
       if (!row.original.subject.includes('external')) {
         actions.push(
           h(UButton, {
-            as: 'a',
-            href: '#',
+            class: 'cursor-pointer',
             label: t('grid.columns.actions.edit'),
             icon: 'i-lucide-pencil',
             color: 'primary',
             variant: 'outline',
             size: 'xs',
+            onClick: () => {
+              adminUiStore.openEditConceptschemeModal();
+            },
           })
         );
       }

@@ -1,4 +1,4 @@
-export interface ConceptSchemeContext {
+export interface ConceptschemeContext {
   '@version': 1.1;
   dct: string;
   skos: string;
@@ -22,8 +22,8 @@ export interface ConceptSchemeContext {
   };
 }
 
-export interface ConceptScheme {
-  '@context': ConceptSchemeContext;
+export interface Conceptscheme {
+  '@context': ConceptschemeContext;
   type: 'skos:ConceptScheme';
   id: string;
   uri: string;
