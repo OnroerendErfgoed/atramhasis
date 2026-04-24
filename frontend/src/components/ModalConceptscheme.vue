@@ -16,11 +16,19 @@
         </template>
 
         <template #notes>
-          <pre>{{ selectedConceptscheme }}</pre>
+          <UTable
+            class="flex-1 min-h-0 rounded-lg border border-default"
+            :data="notesWithAddRow"
+            :columns="noteColumns"
+          />
         </template>
 
         <template #sources>
-          <pre>{{ selectedConceptscheme }}</pre>
+          <UTable
+            class="flex-1 min-h-0 rounded-lg border border-default"
+            :data="sourcesWithAddRow"
+            :columns="sourceColumns"
+          />
         </template>
       </UTabs>
     </template>
@@ -40,7 +48,8 @@ import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import type { TableColumn, TabsItem } from '@nuxt/ui';
 import { computed, h, ref, resolveComponent } from 'vue';
-import { LabelEnum, type Label } from '@models/util';
+import { type Label, type Note, type Source } from '@models/util';
+import DOMPurify from 'dompurify';
 
 const UButton = resolveComponent('UButton');
 
@@ -75,21 +84,27 @@ const addLabel = () => {
   console.log('Add label clicked');
 };
 
-type LabelTableRow = Label & {
+const addNote = () => {
+  console.log('Add note clicked');
+};
+
+const addSource = () => {
+  console.log('Add source clicked');
+};
+
+/* Tables */
+type TableRow<T> = T & {
   isAddRow?: boolean;
 };
 
-const labelsWithAddRow = computed<LabelTableRow[]>(() => [
-  ...((selectedConceptscheme.value?.labels ?? []) as LabelTableRow[]),
+const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
+  ...((selectedConceptscheme.value?.labels ?? []) as TableRow<Label>[]),
   {
-    label: '',
-    language: '',
-    type: LabelEnum.PREF,
     isAddRow: true,
-  },
+  } as TableRow<Label>,
 ]);
 
-const labelColumns: TableColumn<LabelTableRow>[] = [
+const labelColumns: TableColumn<TableRow<Label>>[] = [
   {
     accessorKey: 'label',
     header: t('grid.columns.labels.label'),
@@ -124,6 +139,145 @@ const labelColumns: TableColumn<LabelTableRow>[] = [
     accessorKey: 'type',
     header: t('grid.columns.labels.type'),
     cell: ({ row }) => (row.original.isAddRow ? '' : t('labelTypes.' + row.original.type)),
+  },
+  {
+    id: 'actions',
+    header: t('grid.columns.labels.actions'),
+    cell: ({ row }) => {
+      if (row.original.isAddRow) {
+        return '';
+      }
+
+      return h('div', { class: 'flex items-center gap-1' }, [
+        h(UButton, {
+          as: 'a',
+          href: '#',
+          label: t('grid.columns.actions.edit'),
+          icon: 'i-lucide-pencil',
+          color: 'primary',
+          variant: 'outline',
+          size: 'xs',
+        }),
+        h(UButton, {
+          icon: 'i-lucide-trash-2',
+          color: 'error',
+          variant: 'ghost',
+          size: 'xs',
+          'aria-label': t('grid.columns.actions.delete'),
+        }),
+      ]);
+    },
+  },
+];
+
+const notesWithAddRow = computed<TableRow<Note>[]>(() => [
+  ...((selectedConceptscheme.value?.notes ?? []) as TableRow<Note>[]),
+  {
+    isAddRow: true,
+  } as TableRow<Note>,
+]);
+
+const noteColumns: TableColumn<TableRow<Note>>[] = [
+  {
+    accessorKey: 'note',
+    header: t('grid.columns.labels.note'),
+    cell: ({ row }) => {
+      if (row.original.isAddRow) {
+        return h(UButton, {
+          label: t('actions.add'),
+          icon: 'i-lucide-plus',
+          color: 'primary',
+          variant: 'outline',
+          size: 'xs',
+          class: 'cursor-pointer',
+          onClick: addNote,
+        });
+      }
+
+      return h('div', {
+        innerHTML: DOMPurify.sanitize(row.original.note, { USE_PROFILES: { html: true } }),
+      });
+    },
+    meta: {
+      class: {
+        th: 'w-full',
+        td: 'w-full',
+      },
+    },
+  },
+  {
+    accessorKey: 'language',
+    header: t('grid.columns.labels.language'),
+    cell: ({ row }) => (row.original.isAddRow ? '' : t('languages.' + row.original.language)),
+  },
+  {
+    accessorKey: 'type',
+    header: t('grid.columns.labels.type'),
+    cell: ({ row }) => (row.original.isAddRow ? '' : t('noteTypes.' + row.original.type)),
+  },
+  {
+    id: 'actions',
+    header: t('grid.columns.labels.actions'),
+    cell: ({ row }) => {
+      if (row.original.isAddRow) {
+        return '';
+      }
+
+      return h('div', { class: 'flex items-center gap-1' }, [
+        h(UButton, {
+          as: 'a',
+          href: '#',
+          label: t('grid.columns.actions.edit'),
+          icon: 'i-lucide-pencil',
+          color: 'primary',
+          variant: 'outline',
+          size: 'xs',
+        }),
+        h(UButton, {
+          icon: 'i-lucide-trash-2',
+          color: 'error',
+          variant: 'ghost',
+          size: 'xs',
+          'aria-label': t('grid.columns.actions.delete'),
+        }),
+      ]);
+    },
+  },
+];
+
+const sourcesWithAddRow = computed<TableRow<Source>[]>(() => [
+  ...((selectedConceptscheme.value?.sources ?? []) as TableRow<Source>[]),
+  {
+    isAddRow: true,
+  } as TableRow<Source>,
+]);
+
+const sourceColumns: TableColumn<TableRow<Source>>[] = [
+  {
+    accessorKey: 'citation',
+    header: t('grid.columns.labels.source'),
+    cell: ({ row }) => {
+      if (row.original.isAddRow) {
+        return h(UButton, {
+          label: t('actions.add'),
+          icon: 'i-lucide-plus',
+          color: 'primary',
+          variant: 'outline',
+          size: 'xs',
+          class: 'cursor-pointer',
+          onClick: addSource,
+        });
+      }
+      return h('div', {
+        innerHTML: DOMPurify.sanitize(row.original.citation, { USE_PROFILES: { html: true } }),
+      });
+    },
+    meta: {
+      class: {
+        th: 'w-full',
+        td: 'w-full',
+      },
+    },
   },
   {
     id: 'actions',

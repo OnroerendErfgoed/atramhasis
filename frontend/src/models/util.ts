@@ -20,6 +20,10 @@ export interface Note {
   type: NoteEnum;
 }
 
+export interface Source {
+  citation: string;
+}
+
 export enum LabelEnum {
   PREF = 'prefLabel',
   ALT = 'altLabel',

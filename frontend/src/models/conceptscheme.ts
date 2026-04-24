@@ -1,4 +1,4 @@
-import type { Label, Note } from '@models/util';
+import type { Label, Note, Source } from '@models/util';
 
 export interface ConceptschemeContext {
   '@version': 1.1;
@@ -36,4 +36,5 @@ export interface OverviewConceptscheme {
 export interface Conceptscheme extends OverviewConceptscheme {
   labels: Label[];
   notes: Note[];
+  sources: Source[];
 }

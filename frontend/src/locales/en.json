@@ -36,6 +36,8 @@
         "subject": "Subject",
         "expandStrategy": "Expand strategy",
         "language": "Language",
+        "note": "Note",
+        "source": "Source",
         "actions": "Actions"
       },
       "actions": {
@@ -186,12 +188,21 @@
     "nl": "Dutch",
     "fr": "French",
     "de": "German",
-    "es": "Spanish"
+    "la": "Latin"
   },
   "labelTypes": {
     "prefLabel": "Preferred label",
     "altLabel": "Alternative label",
     "hiddenLabel": "Hidden label",
     "sortLabel": "Sort label"
+  },
+  "noteTypes": {
+    "definition": "Definition",
+    "scopeNote": "Scope note",
+    "example": "Example",
+    "historyNote": "History note",
+    "editorialNote": "Editorial note",
+    "changeNote": "Change note",
+    "note": "Note"
   }
 }
