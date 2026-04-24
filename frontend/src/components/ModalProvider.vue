@@ -1,5 +1,11 @@
 <template>
-  <UModal :title="t('components.modalProvider.title')" :description="t('components.modalProvider.description')">
+  <UModal
+    v-model:open="providerModalIsOpen"
+    :title="t('components.modalProvider.title')"
+    :description="
+      t('components.modalProvider.description', { mode: isEditMode ? t('actions.edit') : t('actions.add') })
+    "
+  >
     <template #body>
       <UForm class="space-y-4">
         <UFormField
@@ -101,19 +107,27 @@
 <script setup lang="ts">
 import { useApiError } from '@composables/useApiError';
 import { ExpandStrategy, GenerationStarategyId, type ProviderForm } from '@models/provider';
+import { ModalMode } from '@models/util';
 import { ApiService } from '@services/api.service';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useListStore } from '@stores/list';
+import { useProviderStore } from '@stores/provider';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const toast = useToast();
 
+const providerStore = useProviderStore();
+const { selectedProvider } = storeToRefs(providerStore);
+
 const adminUiStore = useAdminUiStore();
+const { providerModalIsOpen, providerModalMode } = storeToRefs(adminUiStore);
+const isEditMode = computed(() => providerModalMode.value === ModalMode.EDIT);
+
 const languageStore = useListStore();
 const { languages } = storeToRefs(languageStore);
 
@@ -160,6 +174,22 @@ const form = ref<ProviderForm>({
   expand_strategy: ExpandStrategy.RECURSE,
 });
 
+// Initial population of form when editing
+onBeforeMount(() => {
+  if (isEditMode.value && selectedProvider.value) {
+    form.value = {
+      id: selectedProvider.value.id,
+      conceptscheme_uri: selectedProvider.value.conceptscheme_uri,
+      uri_pattern: selectedProvider.value.uri_pattern,
+      subject: selectedProvider.value.subject,
+      default_language: selectedProvider.value.default_language,
+      force_display_language: selectedProvider.value.force_display_language,
+      id_generation_strategy: selectedProvider.value.id_generation_strategy,
+      expand_strategy: selectedProvider.value.expand_strategy,
+    };
+  }
+});
+
 // Save handler
 const save = async () => {
   const valid = await v$.value.$validate();
@@ -173,14 +203,26 @@ const save = async () => {
   }
 
   try {
-    await apiService.createProvider(form.value);
-    toast.add({
-      title: t('api.success.save.title', { item: 'Provider' }),
-      description: t('api.success.save.description', { item: 'provider' }),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    });
-    adminUiStore.closeAddProviderModal();
+    if (!isEditMode.value) {
+      // Create new provider
+      await apiService.createProvider(form.value);
+      toast.add({
+        title: t('api.success.save.title', { item: 'Provider' }),
+        description: t('api.success.save.description', { item: 'provider' }),
+        icon: 'i-lucide-check-circle',
+        color: 'success',
+      });
+    } else {
+      // Update existing provider
+      await apiService.updateProvider(form.value);
+      toast.add({
+        title: t('api.success.update.title', { item: 'Provider' }),
+        description: t('api.success.update.description', { item: 'provider' }),
+        icon: 'i-lucide-check-circle',
+        color: 'success',
+      });
+    }
+    adminUiStore.closeProviderModal();
   } catch (error) {
     handleApiError(error);
   }

@@ -41,4 +41,9 @@ export class ApiService extends HttpService {
   async createProvider(provider: ProviderForm): Promise<Provider> {
     return (await this.post<Provider, ProviderForm>('/providers', provider)).data;
   }
+
+  // Updaters
+  async updateProvider(provider: ProviderForm): Promise<Provider> {
+    return (await this.put<Provider, ProviderForm>(`/providers/${provider.id}`, provider)).data;
+  }
 }
