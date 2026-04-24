@@ -60,7 +60,7 @@ export interface ConceptschemeRow {
 import { h, ref, computed, resolveComponent, useTemplateRef } from 'vue';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
-import type { Conceptscheme } from '@models/conceptscheme';
+import type { OverviewConceptscheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import { useAdminUiStore } from '@stores/admin-ui';
@@ -76,7 +76,7 @@ const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const apiService = new ApiService();
 
-const conceptschemes = ref<Conceptscheme[]>([]);
+const conceptschemes = ref<OverviewConceptscheme[]>([]);
 
 const fetchConceptschemes = async () => {
   try {

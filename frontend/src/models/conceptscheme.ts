@@ -1,3 +1,5 @@
+import type { Label, Note } from '@models/util';
+
 export interface ConceptschemeContext {
   '@version': 1.1;
   dct: string;
@@ -22,11 +24,16 @@ export interface ConceptschemeContext {
   };
 }
 
-export interface Conceptscheme {
+export interface OverviewConceptscheme {
   '@context': ConceptschemeContext;
   type: 'skos:ConceptScheme';
   id: string;
   uri: string;
   label: string;
   subject: string[];
+}
+
+export interface Conceptscheme extends OverviewConceptscheme {
+  labels: Label[];
+  notes: Note[];
 }

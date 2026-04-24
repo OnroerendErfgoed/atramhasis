@@ -35,6 +35,7 @@
         "idGenerationStrategy": "ID gen. strat.",
         "subject": "Subject",
         "expandStrategy": "Expand strategy",
+        "language": "Language",
         "actions": "Actions"
       },
       "actions": {
@@ -62,7 +63,12 @@
     },
     "modalConceptscheme": {
       "title": "{conceptscheme}",
-      "description": "{tab}"
+      "description": "{tab}",
+      "tabs": {
+        "labels": "Labels",
+        "notes": "Notes",
+        "sources": "Sources"
+      }
     },
     "modalProvider": {
       "title": "Manage providers",
@@ -174,5 +180,18 @@
     "cancel": "Cancel",
     "add": "Add",
     "edit": "Edit"
+  },
+  "languages": {
+    "en": "English",
+    "nl": "Dutch",
+    "fr": "French",
+    "de": "German",
+    "es": "Spanish"
+  },
+  "labelTypes": {
+    "prefLabel": "Preferred label",
+    "altLabel": "Alternative label",
+    "hiddenLabel": "Hidden label",
+    "sortLabel": "Sort label"
   }
 }
