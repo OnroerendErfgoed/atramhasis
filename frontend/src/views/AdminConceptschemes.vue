@@ -50,6 +50,7 @@ export interface ConceptSchemeRow {
   id: string;
   uri: string;
   label: string;
+  subject: string[];
 }
 </script>
 
@@ -91,6 +92,7 @@ const tableData = computed<ConceptSchemeRow[]>(() =>
     id: cs.id,
     uri: cs.uri,
     label: cs.label,
+    subject: cs.subject,
   }))
 );
 
@@ -118,8 +120,8 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
   {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
-    cell: ({ row }) =>
-      h('div', { class: 'flex items-center gap-1' }, [
+    cell: ({ row }) => {
+      const actions = [
         h(UButton, {
           as: 'a',
           to: { name: 'AdminConceptscheme', params: { id: row.original.id } },
@@ -129,16 +131,24 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
           variant: 'outline',
           size: 'xs',
         }),
-        h(UButton, {
-          as: 'a',
-          href: '#',
-          label: t('grid.columns.actions.edit'),
-          icon: 'i-lucide-pencil',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-        }),
-      ]),
+      ];
+
+      if (!row.original.subject.includes('external')) {
+        actions.push(
+          h(UButton, {
+            as: 'a',
+            href: '#',
+            label: t('grid.columns.actions.edit'),
+            icon: 'i-lucide-pencil',
+            color: 'primary',
+            variant: 'outline',
+            size: 'xs',
+          })
+        );
+      }
+
+      return h('div', { class: 'flex items-center gap-1' }, actions);
+    },
   },
 ];
 </script>
