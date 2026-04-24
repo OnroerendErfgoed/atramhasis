@@ -1,8 +1,8 @@
 <template>
   <UModal
     v-model:open="conceptschemeModalIsOpen"
-    :title="t('components.modalProvider.title')"
-    :description="t('components.modalProvider.description')"
+    :title="t('components.modalConceptscheme.title', { conceptscheme: selectedConceptscheme?.label })"
+    :description="t('components.modalConceptscheme.description', { tab: 'Details' })"
   >
     <template #body>
       <UForm class="space-y-4">

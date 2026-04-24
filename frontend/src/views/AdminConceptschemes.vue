@@ -43,7 +43,7 @@
       />
     </div>
 
-    <ModalConceptschemes />
+    <ModalConceptscheme />
   </div>
 </template>
 
@@ -151,7 +151,7 @@ const columns: TableColumn<ConceptschemeRow>[] = [
             variant: 'outline',
             size: 'xs',
             onClick: async () => {
-              selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(row.original.id);
+              selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(row.original.id, true);
               adminUiStore.openConceptschemeModal();
             },
           })

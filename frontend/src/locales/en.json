@@ -60,6 +60,10 @@
       "sortLabels": "Sort labels",
       "notes": "Notes"
     },
+    "modalConceptscheme": {
+      "title": "{conceptscheme}",
+      "description": "{tab}"
+    },
     "modalProvider": {
       "title": "Manage providers",
       "description": "Add a provider",
