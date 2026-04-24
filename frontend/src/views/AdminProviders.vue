@@ -26,6 +26,12 @@
     </div>
 
     <ModalProvider :key="providerModalKey" />
+    <ModalDelete
+      v-model:open="modalDeleteIsOpen"
+      entity="provider"
+      :item="`${selectedProvider?.id} (${selectedProvider?.conceptscheme_uri})`"
+      @confirm="deleteProvider"
+    />
   </div>
 </template>
 
@@ -50,6 +56,7 @@ const adminUiStore = useAdminUiStore();
 const { providerModalKey } = storeToRefs(adminUiStore);
 
 const providerStore = useProviderStore();
+const { selectedProvider } = storeToRefs(providerStore);
 const providers = ref<Provider[]>([]);
 
 const fetchProviders = async () => {
@@ -63,6 +70,35 @@ const fetchProviders = async () => {
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
+  }
+};
+
+const modalDeleteIsOpen = ref(false);
+const deleteProvider = async () => {
+  if (!selectedProvider.value?.id) return;
+
+  try {
+    adminUiStore.startLoading('deleteProvider');
+    await apiService.deleteProvider(selectedProvider.value.id);
+    toast.add({
+      title: t('api.success.delete.title', { item: 'Provider' }),
+      description: t('api.success.delete.description', { item: 'provider' }),
+      icon: 'i-lucide-check',
+      color: 'success',
+    });
+    providerStore.resetSelectedProvider();
+    fetchProviders();
+  } catch (error) {
+    console.error(t('api.errors.delete.title', { item: 'Provider' }), error);
+    toast.add({
+      title: t('api.errors.delete.title', { item: 'provider' }),
+      description: t('api.errors.delete.description', { item: 'provider' }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  } finally {
+    modalDeleteIsOpen.value = false;
+    adminUiStore.stopLoading('deleteProvider');
   }
 };
 
@@ -153,8 +189,11 @@ const columns: TableColumn<Provider>[] = [
           color: 'error',
           variant: 'outline',
           size: 'xs',
-          class: 'cursor-pointer',
           title: t('grid.columns.actions.delete'),
+          onClick: () => {
+            providerStore.setSelectedProvider(row.original);
+            modalDeleteIsOpen.value = true;
+          },
         }),
       ]),
   },
