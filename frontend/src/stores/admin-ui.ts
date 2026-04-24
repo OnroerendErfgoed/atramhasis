@@ -12,9 +12,11 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     addConceptModalIsOpen.value = false;
   };
 
+  const providerModalKey = ref(0);
   const providerModalIsOpen = ref(false);
   const providerModalMode = ref<ModalMode>(ModalMode.ADD);
   const openProviderModal = (modalMode: ModalMode) => {
+    providerModalKey.value++;
     providerModalIsOpen.value = true;
     providerModalMode.value = modalMode;
   };
@@ -33,6 +35,7 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     addConceptModalIsOpen,
     openAddConceptModal,
     closeAddConceptModal,
+    providerModalKey,
     providerModalIsOpen,
     providerModalMode,
     openProviderModal,

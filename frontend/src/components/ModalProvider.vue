@@ -115,7 +115,7 @@ import { useProviderStore } from '@stores/provider';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -163,7 +163,7 @@ const expandStrategyOptions = computed(() => [
 ]);
 
 // Form state
-const initialFormState: ProviderForm = {
+const form = ref<ProviderForm>({
   id: '',
   conceptscheme_uri: '',
   uri_pattern: '',
@@ -172,36 +172,23 @@ const initialFormState: ProviderForm = {
   force_display_language: '',
   id_generation_strategy: GenerationStarategyId.NUMERIC,
   expand_strategy: ExpandStrategy.RECURSE,
-};
-const form = ref<ProviderForm>({ ...initialFormState });
+});
 
-watch(
-  () => [providerModalMode.value, providerModalIsOpen.value],
-  ([mode, isOpen]) => {
-    if (mode === ModalMode.EDIT) {
-      // Populate form with selected provider data
-      if (selectedProvider.value) {
-        form.value = {
-          id: selectedProvider.value.id,
-          conceptscheme_uri: selectedProvider.value.conceptscheme_uri,
-          uri_pattern: selectedProvider.value.uri_pattern,
-          subject: selectedProvider.value.subject,
-          default_language: selectedProvider.value.default_language,
-          force_display_language: selectedProvider.value.force_display_language,
-          id_generation_strategy: selectedProvider.value.id_generation_strategy,
-          expand_strategy: selectedProvider.value.expand_strategy,
-        };
-      }
-    } else {
-      // Reset form for add mode
-      form.value = { ...initialFormState };
-    }
-    if (!isOpen) {
-      v$.value.$reset();
-      providerStore.resetSelectedProvider();
-    }
+// Initial population of form when editing
+onBeforeMount(() => {
+  if (isEditMode.value && selectedProvider.value) {
+    form.value = {
+      id: selectedProvider.value.id,
+      conceptscheme_uri: selectedProvider.value.conceptscheme_uri,
+      uri_pattern: selectedProvider.value.uri_pattern,
+      subject: selectedProvider.value.subject,
+      default_language: selectedProvider.value.default_language,
+      force_display_language: selectedProvider.value.force_display_language,
+      id_generation_strategy: selectedProvider.value.id_generation_strategy,
+      expand_strategy: selectedProvider.value.expand_strategy,
+    };
   }
-);
+});
 
 // Save handler
 const save = async () => {

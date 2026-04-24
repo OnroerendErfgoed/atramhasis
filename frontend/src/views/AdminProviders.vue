@@ -25,7 +25,7 @@
       />
     </div>
 
-    <ModalProvider />
+    <ModalProvider :key="providerModalKey" />
   </div>
 </template>
 
@@ -39,6 +39,7 @@ import { h, computed, ref, useTemplateRef, resolveComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { ModalMode } from '@models/util';
 import { useProviderStore } from '@stores/provider';
+import { storeToRefs } from 'pinia';
 
 const UButton = resolveComponent('UButton');
 
@@ -46,6 +47,7 @@ const { t } = useI18n();
 const toast = useToast();
 const apiService = new ApiService();
 const adminUiStore = useAdminUiStore();
+const { providerModalKey } = storeToRefs(adminUiStore);
 
 const providerStore = useProviderStore();
 const providers = ref<Provider[]>([]);
