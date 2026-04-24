@@ -25,7 +25,7 @@
       />
     </div>
 
-    <ModalProvider v-model:open="adminUiStore.addProviderModalIsOpen" />
+    <ModalProvider />
   </div>
 </template>
 
@@ -37,6 +37,8 @@ import { useAdminUiStore } from '@/stores/admin-ui';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import { h, computed, ref, useTemplateRef, resolveComponent } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { ModalMode } from '@models/util';
+import { useProviderStore } from '@stores/provider';
 
 const UButton = resolveComponent('UButton');
 
@@ -45,6 +47,7 @@ const toast = useToast();
 const apiService = new ApiService();
 const adminUiStore = useAdminUiStore();
 
+const providerStore = useProviderStore();
 const providers = ref<Provider[]>([]);
 
 const fetchProviders = async () => {
@@ -65,8 +68,8 @@ const fetchProviders = async () => {
 await fetchProviders();
 
 adminUiStore.$onAction(({ name }) => {
-  // Refresh providers list after closing the add provider modal
-  if (name === 'closeAddProviderModal') {
+  // Refresh providers list after closing the provider modal
+  if (name === 'closeProviderModal') {
     fetchProviders();
   }
 });
@@ -129,17 +132,19 @@ const columns: TableColumn<Provider>[] = [
   {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
-    cell: () =>
+    cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-1' }, [
         h(UButton, {
-          as: 'a',
-          href: '#',
           label: t('grid.columns.actions.edit'),
           icon: 'i-lucide-pencil',
           color: 'primary',
           variant: 'outline',
           size: 'xs',
           title: t('grid.columns.actions.edit'),
+          onClick: () => {
+            adminUiStore.openProviderModal(ModalMode.EDIT);
+            providerStore.setSelectedProvider(row.original);
+          },
         }),
         h(UButton, {
           icon: 'i-lucide-trash-2',

@@ -1,26 +1,25 @@
+import { ModalMode } from '@models/util';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useAdminUiStore = defineStore('admin-ui', () => {
   /* Modals */
   const addConceptModalIsOpen = ref(false);
-
   const openAddConceptModal = () => {
     addConceptModalIsOpen.value = true;
   };
-
   const closeAddConceptModal = () => {
     addConceptModalIsOpen.value = false;
   };
 
-  const addProviderModalIsOpen = ref(false);
-
-  const openAddProviderModal = () => {
-    addProviderModalIsOpen.value = true;
+  const providerModalIsOpen = ref(false);
+  const providerModalMode = ref<ModalMode>(ModalMode.ADD);
+  const openProviderModal = (modalMode: ModalMode) => {
+    providerModalIsOpen.value = true;
+    providerModalMode.value = modalMode;
   };
-
-  const closeAddProviderModal = () => {
-    addProviderModalIsOpen.value = false;
+  const closeProviderModal = () => {
+    providerModalIsOpen.value = false;
   };
 
   /* Breadcrumbs */
@@ -34,9 +33,10 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     addConceptModalIsOpen,
     openAddConceptModal,
     closeAddConceptModal,
-    addProviderModalIsOpen,
-    openAddProviderModal,
-    closeAddProviderModal,
+    providerModalIsOpen,
+    providerModalMode,
+    openProviderModal,
+    closeProviderModal,
     breadcrumbLabels,
     setBreadcrumbLabel,
   };
