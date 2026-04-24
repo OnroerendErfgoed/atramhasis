@@ -6,6 +6,7 @@ import { ref } from 'vue';
 export const useConceptschemeStore = defineStore('conceptscheme', () => {
   const apiService = new ApiService();
   const conceptschemes = ref<Record<string, Conceptscheme>>({});
+  const selectedConceptscheme = ref<Conceptscheme>();
 
   const getConceptscheme = async (schemeId: string, refresh = false): Promise<Conceptscheme | undefined> => {
     if (refresh || !conceptschemes.value[schemeId]) {
@@ -19,5 +20,7 @@ export const useConceptschemeStore = defineStore('conceptscheme', () => {
     conceptschemes.value[schemeId] = conceptscheme;
   };
 
-  return { conceptschemes, getConceptscheme, setConceptscheme };
+  const resetSelectedConceptscheme = () => (selectedConceptscheme.value = undefined);
+
+  return { conceptschemes, selectedConceptscheme, getConceptscheme, setConceptscheme, resetSelectedConceptscheme };
 });

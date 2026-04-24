@@ -43,7 +43,7 @@
       />
     </div>
 
-    <ModalConceptschemes v-model:open="adminUiStore.editConceptschemeModal" />
+    <ModalConceptschemes />
   </div>
 </template>
 
@@ -64,11 +64,15 @@ import type { Conceptscheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import { useAdminUiStore } from '@stores/admin-ui';
+import { useConceptschemeStore } from '@stores/conceptscheme';
+import { storeToRefs } from 'pinia';
 
 const UButton = resolveComponent('UButton');
 
 const { t } = useI18n();
 const toast = useToast();
+const conceptschemeStore = useConceptschemeStore();
+const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const apiService = new ApiService();
 
@@ -146,8 +150,9 @@ const columns: TableColumn<ConceptschemeRow>[] = [
             color: 'primary',
             variant: 'outline',
             size: 'xs',
-            onClick: () => {
-              adminUiStore.openEditConceptschemeModal();
+            onClick: async () => {
+              selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(row.original.id);
+              adminUiStore.openConceptschemeModal();
             },
           })
         );

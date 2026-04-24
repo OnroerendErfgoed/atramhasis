@@ -3,9 +3,9 @@ import { ref } from 'vue';
 
 export const useAdminUiStore = defineStore('admin-ui', () => {
   /* Modals */
-  const editConceptschemeModal = ref(false);
-  const openEditConceptschemeModal = () => (editConceptschemeModal.value = true);
-  const closeEditConceptschemeModal = () => (editConceptschemeModal.value = false);
+  const conceptschemeModalIsOpen = ref(false);
+  const openConceptschemeModal = () => (conceptschemeModalIsOpen.value = true);
+  const closeConceptschemeModal = () => (conceptschemeModalIsOpen.value = false);
 
   const addConceptModalIsOpen = ref(false);
   const openAddConceptModal = () => (addConceptModalIsOpen.value = true);
@@ -23,9 +23,9 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
 
   return {
-    editConceptschemeModal,
-    openEditConceptschemeModal,
-    closeEditConceptschemeModal,
+    conceptschemeModalIsOpen,
+    openConceptschemeModal,
+    closeConceptschemeModal,
     addConceptModalIsOpen,
     openAddConceptModal,
     closeAddConceptModal,
