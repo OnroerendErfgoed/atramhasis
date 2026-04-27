@@ -122,3 +122,14 @@
     radial-gradient(circle at top left, rgba(47, 137, 245, 0.06), transparent 30%),
     linear-gradient(180deg, #fbfcfe 0%, #f5f7fb 100%);
 }
+
+/* Set the default cursor for buttons. */
+button,
+[role='button'] {
+  cursor: pointer;
+}
+
+/* Make sure disabled buttons don't get the pointer cursor. */
+:disabled {
+  cursor: default;
+}
