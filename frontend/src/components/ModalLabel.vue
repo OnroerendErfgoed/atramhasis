@@ -11,6 +11,7 @@
           name="label-type"
           size="lg"
           :label="t('components.modalLabel.form.type.label')"
+          :hint="t('components.modalLabel.form.type.hint')"
           :error="(v$.type.$errors[0]?.$message as string) || false"
         >
           <USelect
@@ -25,6 +26,7 @@
           name="label-language"
           size="lg"
           :label="t('components.modalLabel.form.language.label')"
+          :hint="t('components.modalLabel.form.language.hint')"
           :error="(v$.language.$errors[0]?.$message as string) || false"
         >
           <USelect
@@ -39,6 +41,7 @@
           name="label-label"
           size="lg"
           :label="t('components.modalLabel.form.label.label')"
+          :hint="t('components.modalLabel.form.label.hint')"
           :error="(v$.label.$errors[0]?.$message as string) || false"
         >
           <UInput

@@ -128,15 +128,18 @@
       "form": {
         "label": {
           "label": "Label",
-          "placeholder": "Enter the label"
+          "placeholder": "Enter the label",
+          "hint": "Required"
         },
         "language": {
           "label": "Language",
-          "placeholder": "Choose a language"
+          "placeholder": "Choose a language",
+          "hint": "Required"
         },
         "type": {
           "label": "Type",
-          "placeholder": "Choose a type"
+          "placeholder": "Choose a type",
+          "hint": "Required"
         }
       }
     },
@@ -146,17 +149,31 @@
       "form": {
         "language": {
           "label": "Language",
-          "placeholder": "Choose a language"
+          "placeholder": "Choose a language",
+          "hint": "Required"
         },
         "type": {
           "label": "Type",
-          "placeholder": "Choose a type"
+          "placeholder": "Choose a type",
+          "hint": "Required"
+        },
+        "note": {
+          "label": "Note",
+          "placeholder": "Enter the note",
+          "hint": "Required"
         }
       }
     },
     "modalSource": {
       "title": "{item}",
-      "description": "{mode} a source"
+      "description": "{mode} a source",
+      "form": {
+        "citation": {
+          "label": "Citation",
+          "placeholder": "Enter the source citation",
+          "hint": "Required"
+        }
+      }
     },
     "modalDelete": {
       "title": "Delete {entity}",

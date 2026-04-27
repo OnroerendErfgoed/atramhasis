@@ -7,9 +7,19 @@
   >
     <template #body>
       <UForm class="space-y-4">
-        <UFormField name="source-citation" size="lg" :error="(v$.citation.$errors[0]?.$message as string) || false">
+        <UFormField
+          name="source-citation"
+          size="lg"
+          :label="t('components.modalSource.form.citation.label')"
+          :hint="t('components.modalSource.form.citation.hint')"
+          :error="(v$.citation.$errors[0]?.$message as string) || false"
+        >
           <div class="rounded-md border border-gray-300 dark:border-gray-700 min-h-32">
-            <UEditor v-slot="{ editor }" v-model="form.citation">
+            <UEditor
+              v-slot="{ editor }"
+              v-model="form.citation"
+              :placeholder="t('components.modalSource.form.citation.placeholder')"
+            >
               <div class="border-b border-gray-300 px-2 py-1 dark:border-gray-700">
                 <UEditorToolbar :editor="editor" :items="items" />
               </div>

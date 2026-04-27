@@ -12,6 +12,7 @@
             name="note-type"
             size="lg"
             :label="t('components.modalNote.form.type.label')"
+            :hint="t('components.modalNote.form.type.hint')"
             :error="(v$.type.$errors[0]?.$message as string) || false"
           >
             <USelect
@@ -26,6 +27,7 @@
             name="note-language"
             size="lg"
             :label="t('components.modalNote.form.language.label')"
+            :hint="t('components.modalNote.form.language.hint')"
             :error="(v$.language.$errors[0]?.$message as string) || false"
           >
             <USelect
@@ -37,9 +39,19 @@
           </UFormField>
         </div>
 
-        <UFormField name="note-note" size="lg" :error="(v$.note.$errors[0]?.$message as string) || false">
+        <UFormField
+          name="note-note"
+          size="lg"
+          :label="t('components.modalNote.form.note.label')"
+          :hint="t('components.modalNote.form.note.hint')"
+          :error="(v$.note.$errors[0]?.$message as string) || false"
+        >
           <div class="rounded-md border border-gray-300 dark:border-gray-700 min-h-32">
-            <UEditor v-slot="{ editor }" v-model="form.note">
+            <UEditor
+              v-slot="{ editor }"
+              v-model="form.note"
+              :placeholder="t('components.modalNote.form.note.placeholder')"
+            >
               <div class="border-b border-gray-300 px-2 py-1 dark:border-gray-700">
                 <UEditorToolbar :editor="editor" :items="items" />
               </div>
