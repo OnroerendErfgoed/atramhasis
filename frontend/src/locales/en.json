@@ -153,6 +153,10 @@
           "placeholder": "Choose a type"
         }
       }
+    },
+    "modalSource": {
+      "title": "{item}",
+      "description": "{mode} a source"
     }
   },
   "api": {
