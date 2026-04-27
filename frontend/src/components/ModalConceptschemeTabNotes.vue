@@ -1,18 +1,27 @@
 <template>
-  <UTable class="flex-1 min-h-0 rounded-lg border border-default" :data="data" :columns="columns" />
-  <ModalNote
-    :key="noteModalKey"
-    :title="t('components.modalNote.title', { item: selectedConceptscheme?.label })"
-    @add="emit('add', $event)"
-    @edit="emit('edit', $event)"
-  />
+  <ModalConceptschemeTab
+    :data="data"
+    :main-column="mainColumn"
+    :extra-columns="extraColumns"
+    :on-add="() => adminUiStore.openNoteModal(ModalMode.ADD)"
+    :on-edit="onEdit"
+    :on-delete="onDelete"
+  >
+    <template #modal>
+      <ModalNote
+        :key="noteModalKey"
+        :title="t('components.modalNote.title', { item: selectedConceptscheme?.label })"
+        @add="emit('add', $event)"
+        @edit="emit('edit', $event)"
+      />
+    </template>
+  </ModalConceptschemeTab>
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import type { TableColumn } from '@nuxt/ui';
-import { h, resolveComponent } from 'vue';
-import { ModalMode, type Note } from '@models/util';
+import { h } from 'vue';
 import type { TableRow } from '@components/ModalConceptscheme.vue';
+import { ModalMode, type Note } from '@models/util';
 import DOMPurify from 'dompurify';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
@@ -29,8 +38,6 @@ const emit = defineEmits<{
   delete: [Note];
 }>();
 
-const UButton = resolveComponent('UButton');
-
 const { t } = useI18n();
 
 const conceptschemeStore = useConceptschemeStore();
@@ -39,76 +46,39 @@ const adminUiStore = useAdminUiStore();
 const { noteModalKey } = storeToRefs(adminUiStore);
 const noteStore = useNoteStore();
 
-const columns: TableColumn<TableRow<Note>>[] = [
-  {
-    accessorKey: 'note',
-    header: t('grid.columns.labels.note'),
-    cell: ({ row }) => {
-      if (row.original.isAddRow) {
-        return h(UButton, {
-          label: t('actions.add'),
-          icon: 'i-lucide-plus',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-          class: 'cursor-pointer',
-          onClick: () => adminUiStore.openNoteModal(ModalMode.ADD),
-        });
-      }
+type GenericRow = {
+  isAddRow?: boolean;
+};
 
-      return h('div', {
-        innerHTML: DOMPurify.sanitize(row.original.note, { USE_PROFILES: { html: true } }),
-      });
-    },
-    meta: {
-      class: {
-        th: 'w-full',
-        td: 'w-full',
-      },
-    },
-  },
+const mainColumn = {
+  accessorKey: 'note',
+  header: t('grid.columns.labels.note'),
+  cell: (row: GenericRow) =>
+    h('div', {
+      innerHTML: DOMPurify.sanitize((row as TableRow<Note>).note, { USE_PROFILES: { html: true } }),
+    }),
+};
+
+const extraColumns = [
   {
     accessorKey: 'language',
     header: t('grid.columns.labels.language'),
-    cell: ({ row }) => (row.original.isAddRow ? '' : t('lists.languages.' + row.original.language)),
+    cell: (row: GenericRow) => t('lists.languages.' + (row as TableRow<Note>).language),
   },
   {
     accessorKey: 'type',
     header: t('grid.columns.labels.type'),
-    cell: ({ row }) => (row.original.isAddRow ? '' : t('lists.noteTypes.' + row.original.type)),
-  },
-  {
-    id: 'actions',
-    header: t('grid.columns.labels.actions'),
-    cell: ({ row }) => {
-      if (row.original.isAddRow) {
-        return '';
-      }
-
-      return h('div', { class: 'flex items-center gap-1' }, [
-        h(UButton, {
-          label: t('grid.columns.actions.edit'),
-          icon: 'i-lucide-pencil',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-          onClick: () => {
-            adminUiStore.openNoteModal(ModalMode.EDIT);
-            noteStore.setSelectedNote(row.original);
-          },
-        }),
-        h(UButton, {
-          icon: 'i-lucide-trash-2',
-          color: 'error',
-          variant: 'ghost',
-          size: 'xs',
-          'aria-label': t('grid.columns.actions.delete'),
-          onClick: () => {
-            emit('delete', row.original);
-          },
-        }),
-      ]);
-    },
+    cell: (row: GenericRow) => t('lists.noteTypes.' + (row as TableRow<Note>).type),
   },
 ];
+
+const onEdit = (row: GenericRow) => {
+  const selected = row as TableRow<Note>;
+  adminUiStore.openNoteModal(ModalMode.EDIT);
+  noteStore.setSelectedNote(selected as Note);
+};
+
+const onDelete = (row: GenericRow) => {
+  emit('delete', row as Note);
+};
 </script>
