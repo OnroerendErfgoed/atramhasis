@@ -13,12 +13,7 @@
     @add="emit('add', $event)"
     @edit="emit('edit', $event)"
   />
-  <ModalDelete
-    v-model:open="modalDeleteIsOpen"
-    entity="label"
-    :item="`${selectedLabel?.label}`"
-    @confirm="confirmDelete"
-  />
+  <ModalDelete v-model:open="modalDeleteIsOpen" :entity="t('entities.label')" @confirm="confirmDelete" />
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';

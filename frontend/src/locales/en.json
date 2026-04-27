@@ -160,7 +160,8 @@
     },
     "modalDelete": {
       "title": "Delete {entity}",
-      "message": "Are you sure you want to remove {entity} {item}?"
+      "message": "Are you sure you want to remove {entity} {item}?",
+      "messageGeneric": "Are you sure you want to remove this {entity}?"
     }
   },
   "api": {
@@ -231,6 +232,13 @@
     "add": "Add",
     "edit": "Edit",
     "ok": "OK"
+  },
+  "entities": {
+    "conceptScheme": "conceptscheme",
+    "provider": "provider",
+    "label": "label",
+    "note": "note",
+    "source": "source"
   },
   "lists": {
     "languages": {

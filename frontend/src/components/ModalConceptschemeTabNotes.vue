@@ -13,12 +13,7 @@
     @add="emit('add', $event)"
     @edit="emit('edit', $event)"
   />
-  <ModalDelete
-    v-model:open="modalDeleteIsOpen"
-    entity="note"
-    :item="`${selectedNote?.note}`"
-    @confirm="confirmDelete"
-  />
+  <ModalDelete v-model:open="modalDeleteIsOpen" :entity="t('entities.note')" @confirm="confirmDelete" />
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
@@ -89,7 +84,7 @@ const onDelete = (row: GenericRow) => {
   modalDeleteIsOpen.value = true;
 };
 const confirmDelete = () => {
-  emit('delete', noteStore.selectedNote as Note);
+  emit('delete', selectedNote.value as Note);
   modalDeleteIsOpen.value = false;
 };
 </script>

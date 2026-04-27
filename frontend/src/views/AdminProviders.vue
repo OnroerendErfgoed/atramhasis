@@ -28,7 +28,7 @@
     <ModalProvider :key="providerModalKey" />
     <ModalDelete
       v-model:open="modalDeleteIsOpen"
-      entity="provider"
+      :entity="t('entities.provider')"
       :item="`${selectedProvider?.id} (${selectedProvider?.conceptscheme_uri})`"
       @confirm="deleteProvider"
     />
