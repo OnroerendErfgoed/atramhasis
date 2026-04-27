@@ -4,7 +4,7 @@
     color="neutral"
     variant="ghost"
     size="xs"
-    class="p-0.5 cursor-pointer"
+    class="p-0.5"
     :aria-label="ariaLabel ?? t('components.clipboardCopy.copy')"
     @click="handleCopy"
   />

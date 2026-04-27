@@ -48,7 +48,6 @@ const columns = computed<TableColumn<GenericRow>[]>(() => {
           color: 'primary',
           variant: 'outline',
           size: 'xs',
-          class: 'cursor-pointer',
           onClick: props.onAdd,
         });
       }

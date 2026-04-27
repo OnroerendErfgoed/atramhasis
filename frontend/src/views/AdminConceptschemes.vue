@@ -153,7 +153,6 @@ const columns: TableColumn<ConceptschemeRow>[] = [
       if (!row.original.subject.includes('external')) {
         actions.push(
           h(UButton, {
-            class: 'cursor-pointer',
             label: t('grid.columns.actions.edit'),
             icon: 'i-lucide-pencil',
             color: 'primary',
