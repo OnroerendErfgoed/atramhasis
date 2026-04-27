@@ -76,6 +76,8 @@ const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const apiService = new ApiService();
 
+const CONCEPTSCHEME_LOADING_KEY = 'conceptscheme-fetch';
+
 const conceptschemes = ref<OverviewConceptscheme[]>([]);
 
 const fetchConceptschemes = async () => {
@@ -158,8 +160,15 @@ const columns: TableColumn<ConceptschemeRow>[] = [
             variant: 'outline',
             size: 'xs',
             onClick: async () => {
-              selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(row.original.id, true);
-              adminUiStore.openConceptschemeModal();
+              try {
+                adminUiStore.startLoading(CONCEPTSCHEME_LOADING_KEY);
+                selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(row.original.id, true);
+                adminUiStore.openConceptschemeModal();
+              } catch (error) {
+                console.error(t('api.errors.fetch.title', { item: 'languages' }), error);
+              } finally {
+                adminUiStore.stopLoading(CONCEPTSCHEME_LOADING_KEY);
+              }
             },
           })
         );

@@ -101,7 +101,7 @@ const schemeId = route.params.id as string;
 
 const conceptscheme = ref<Conceptscheme>();
 const concepts = ref<OverviewConcept[]>([]);
-const typeFilter = ref();
+const typeFilter = ref<(typeof conceptTypes.value)[number]>();
 const labelFilter = ref('');
 const matchFilter = ref('');
 

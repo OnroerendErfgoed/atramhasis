@@ -86,10 +86,11 @@ const tabs = ref<TabsItem[]>([
 
 // Save handler
 const save = async () => {
+  if (!selectedConceptscheme.value) return;
   try {
     adminUiStore.startLoading(CONCEPTSCHEME_MODAL_LOADING_KEY);
 
-    await apiService.updateConceptscheme(selectedConceptscheme.value!);
+    await apiService.updateConceptscheme(selectedConceptscheme.value);
     toast.add({
       title: t('api.success.update.title', { item: 'Conceptscheme' }),
       description: t('api.success.update.description', { item: 'conceptscheme' }),
