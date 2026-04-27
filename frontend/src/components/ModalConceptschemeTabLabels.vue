@@ -6,16 +6,19 @@
     :on-add="() => adminUiStore.openLabelModal(ModalMode.ADD)"
     :on-edit="onEdit"
     :on-delete="onDelete"
-  >
-    <template #modal>
-      <ModalLabel
-        :key="labelModalKey"
-        :title="t('components.modalLabel.title', { item: selectedConceptscheme?.label })"
-        @add="emit('add', $event)"
-        @edit="emit('edit', $event)"
-      />
-    </template>
-  </ModalConceptschemeTab>
+  />
+  <ModalLabel
+    :key="labelModalKey"
+    :title="t('components.modalLabel.title', { item: selectedConceptscheme?.label })"
+    @add="emit('add', $event)"
+    @edit="emit('edit', $event)"
+  />
+  <ModalDelete
+    v-model:open="modalDeleteIsOpen"
+    entity="label"
+    :item="`${selectedLabel?.label}`"
+    @confirm="confirmDelete"
+  />
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
@@ -25,6 +28,7 @@ import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useLabelStore } from '@stores/label';
+import { ref } from 'vue';
 
 defineProps<{
   data: TableRow<Label>[];
@@ -43,6 +47,9 @@ const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const { labelModalKey } = storeToRefs(adminUiStore);
 const labelStore = useLabelStore();
+const { selectedLabel } = storeToRefs(labelStore);
+
+const modalDeleteIsOpen = ref(false);
 
 type GenericRow = {
   isAddRow?: boolean;
@@ -74,6 +81,11 @@ const onEdit = (row: GenericRow) => {
 };
 
 const onDelete = (row: GenericRow) => {
-  emit('delete', row as Label);
+  labelStore.setSelectedLabel(row as Label);
+  modalDeleteIsOpen.value = true;
+};
+const confirmDelete = () => {
+  emit('delete', selectedLabel.value as Label);
+  modalDeleteIsOpen.value = false;
 };
 </script>

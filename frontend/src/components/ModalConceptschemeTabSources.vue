@@ -5,20 +5,23 @@
     :on-add="() => adminUiStore.openSourceModal(ModalMode.ADD)"
     :on-edit="onEdit"
     :on-delete="onDelete"
-  >
-    <template #modal>
-      <ModalSource
-        :key="sourceModalKey"
-        :title="t('components.modalSource.title', { item: selectedConceptscheme?.label })"
-        @add="emit('add', $event)"
-        @edit="emit('edit', $event)"
-      />
-    </template>
-  </ModalConceptschemeTab>
+  />
+  <ModalSource
+    :key="sourceModalKey"
+    :title="t('components.modalSource.title', { item: selectedConceptscheme?.label })"
+    @add="emit('add', $event)"
+    @edit="emit('edit', $event)"
+  />
+  <ModalDelete
+    v-model:open="modalDeleteIsOpen"
+    entity="source"
+    :item="`${selectedSource?.citation}`"
+    @confirm="confirmDelete"
+  />
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { h } from 'vue';
+import { h, ref } from 'vue';
 import type { TableRow } from '@components/ModalConceptscheme.vue';
 import { ModalMode, type Source } from '@models/util';
 import DOMPurify from 'dompurify';
@@ -44,6 +47,9 @@ const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const { sourceModalKey } = storeToRefs(adminUiStore);
 const sourceStore = useSourceStore();
+const { selectedSource } = storeToRefs(sourceStore);
+
+const modalDeleteIsOpen = ref(false);
 
 type GenericRow = {
   isAddRow?: boolean;
@@ -65,6 +71,11 @@ const onEdit = (row: GenericRow) => {
 };
 
 const onDelete = (row: GenericRow) => {
-  emit('delete', row as Source);
+  sourceStore.setSelectedSource(row as Source);
+  modalDeleteIsOpen.value = true;
+};
+const confirmDelete = () => {
+  emit('delete', sourceStore.selectedSource as Source);
+  modalDeleteIsOpen.value = false;
 };
 </script>

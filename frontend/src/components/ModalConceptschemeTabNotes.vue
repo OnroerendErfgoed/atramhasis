@@ -6,20 +6,23 @@
     :on-add="() => adminUiStore.openNoteModal(ModalMode.ADD)"
     :on-edit="onEdit"
     :on-delete="onDelete"
-  >
-    <template #modal>
-      <ModalNote
-        :key="noteModalKey"
-        :title="t('components.modalNote.title', { item: selectedConceptscheme?.label })"
-        @add="emit('add', $event)"
-        @edit="emit('edit', $event)"
-      />
-    </template>
-  </ModalConceptschemeTab>
+  />
+  <ModalNote
+    :key="noteModalKey"
+    :title="t('components.modalNote.title', { item: selectedConceptscheme?.label })"
+    @add="emit('add', $event)"
+    @edit="emit('edit', $event)"
+  />
+  <ModalDelete
+    v-model:open="modalDeleteIsOpen"
+    entity="note"
+    :item="`${selectedNote?.note}`"
+    @confirm="confirmDelete"
+  />
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { h } from 'vue';
+import { h, ref } from 'vue';
 import type { TableRow } from '@components/ModalConceptscheme.vue';
 import { ModalMode, type Note } from '@models/util';
 import DOMPurify from 'dompurify';
@@ -45,6 +48,9 @@ const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const { noteModalKey } = storeToRefs(adminUiStore);
 const noteStore = useNoteStore();
+const { selectedNote } = storeToRefs(noteStore);
+
+const modalDeleteIsOpen = ref(false);
 
 type GenericRow = {
   isAddRow?: boolean;
@@ -79,6 +85,11 @@ const onEdit = (row: GenericRow) => {
 };
 
 const onDelete = (row: GenericRow) => {
-  emit('delete', row as Note);
+  noteStore.setSelectedNote(row as Note);
+  modalDeleteIsOpen.value = true;
+};
+const confirmDelete = () => {
+  emit('delete', noteStore.selectedNote as Note);
+  modalDeleteIsOpen.value = false;
 };
 </script>

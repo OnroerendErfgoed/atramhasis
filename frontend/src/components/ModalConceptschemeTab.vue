@@ -1,6 +1,5 @@
 <template>
   <UTable class="flex-1 min-h-0 rounded-lg border border-default" :data="data" :columns="columns" />
-  <slot name="modal" />
 </template>
 
 <script setup lang="ts">
