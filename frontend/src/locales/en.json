@@ -157,6 +157,10 @@
     "modalSource": {
       "title": "{item}",
       "description": "{mode} a source"
+    },
+    "modalDelete": {
+      "title": "Delete {entity}",
+      "message": "Are you sure you want to remove {entity} {item}?"
     }
   },
   "api": {
@@ -172,6 +176,10 @@
       "update": {
         "title": "{item} updated",
         "description": "The {item} data was updated successfully."
+      },
+      "delete": {
+        "title": "{item} deleted",
+        "description": "The {item} was deleted successfully."
       },
       "generic": {
         "title": "Success",
@@ -190,6 +198,10 @@
       "update": {
         "title": "Failed to update {item}",
         "description": "An error occurred while updating the {item} data. Please check your input and try again."
+      },
+      "delete": {
+        "title": "Failed to delete {item}",
+        "description": "An error occurred while deleting the {item}. Please try again later."
       },
       "generic": {
         "title": "An error occurred",
@@ -217,7 +229,8 @@
     "save": "Save",
     "cancel": "Cancel",
     "add": "Add",
-    "edit": "Edit"
+    "edit": "Edit",
+    "ok": "OK"
   },
   "lists": {
     "languages": {

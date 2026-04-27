@@ -97,8 +97,8 @@
     </template>
     <template #footer="{ close }">
       <div class="flex w-full justify-end gap-2">
-        <UButton :label="t('actions.cancel')" color="neutral" variant="outline" class="cursor-pointer" @click="close" />
-        <UButton :label="t('actions.save')" class="cursor-pointer" @click="save" />
+        <UButton :label="t('actions.cancel')" color="neutral" variant="outline" @click="close" />
+        <UButton :label="t('actions.save')" @click="save" />
       </div>
     </template>
   </UModal>
