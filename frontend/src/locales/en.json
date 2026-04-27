@@ -121,6 +121,24 @@
           }
         }
       }
+    },
+    "modalLabel": {
+      "title": "{item}",
+      "description": "{mode} a label",
+      "form": {
+        "label": {
+          "label": "Label",
+          "placeholder": "Enter the label"
+        },
+        "language": {
+          "label": "Language",
+          "placeholder": "Choose a language"
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Choose a type"
+        }
+      }
     }
   },
   "api": {
@@ -187,6 +205,10 @@
     "languages": {
       "en": "English",
       "nl": "Dutch",
+      "vls": "Flemish",
+      "und": "Undetermined",
+      "nl-BE": "Dutch, Flemish, Belgium",
+      "en-GB": "English, United Kingdom",
       "fr": "French",
       "de": "German",
       "la": "Latin"

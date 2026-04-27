@@ -14,7 +14,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  add: [void];
+  add: [Note];
   edit: [Note];
   delete: [Note];
 }>();
@@ -36,7 +36,7 @@ const columns: TableColumn<TableRow<Note>>[] = [
           variant: 'outline',
           size: 'xs',
           class: 'cursor-pointer',
-          onClick: () => emit('add'),
+          onClick: () => emit('add', {} as Note),
         });
       }
 

@@ -8,15 +8,15 @@
     <template #body>
       <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
         <template #labels>
-          <ModalConceptschemeTabLabels :data="labelsWithAddRow" @add="addLabel" />
+          <ModalConceptschemeTabLabels :data="labelsWithAddRow" @add="addLabel" @edit="editLabel" />
         </template>
 
         <template #notes>
-          <ModalConceptschemeTabNotes :data="notesWithAddRow" @add="addNote" />
+          <ModalConceptschemeTabNotes :data="notesWithAddRow" @add="addNote" @edit="editNote" />
         </template>
 
         <template #sources>
-          <ModalConceptschemeTabSources :data="sourcesWithAddRow" @add="addSource" />
+          <ModalConceptschemeTabSources :data="sourcesWithAddRow" @add="addSource" @edit="editSource" />
         </template>
       </UTabs>
     </template>
@@ -71,35 +71,65 @@ const save = () => {
   console.log('Save button clicked');
 };
 
-const addLabel = () => {
-  console.log('Add label clicked');
+const addLabel = (label: Label) => {
+  selectedConceptscheme.value?.labels.push(label);
+};
+const editLabel = (label: Label) => {
+  const index = labelsWithAddRow.value.findIndex((l) => l.id === label.id);
+  if (index !== undefined && index >= 0) {
+    delete label.id;
+    selectedConceptscheme.value!.labels[index] = label;
+  }
 };
 
-const addNote = () => {
-  console.log('Add note clicked');
+const addNote = (note: Note) => {
+  selectedConceptscheme.value?.notes.push(note);
+};
+const editNote = (note: Note) => {
+  const index = notesWithAddRow.value.findIndex((n) => n.id === note.id);
+  if (index !== undefined && index >= 0) {
+    delete note.id;
+    selectedConceptscheme.value!.notes[index] = note;
+  }
 };
 
-const addSource = () => {
-  console.log('Add source clicked');
+const addSource = (source: Source) => {
+  selectedConceptscheme.value?.sources.push(source);
+};
+const editSource = (source: Source) => {
+  const index = sourcesWithAddRow.value.findIndex((s) => s.id === source.id);
+  if (index !== undefined && index >= 0) {
+    delete source.id;
+    selectedConceptscheme.value!.sources[index] = source;
+  }
 };
 
 /* Table data */
 const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
-  ...((selectedConceptscheme.value?.labels ?? []) as TableRow<Label>[]),
+  ...((selectedConceptscheme.value?.labels?.map((label, i) => ({
+    ...label,
+    id: i + 1,
+  })) ?? []) as TableRow<Label>[]),
   {
     isAddRow: true,
   } as TableRow<Label>,
 ]);
 
 const notesWithAddRow = computed<TableRow<Note>[]>(() => [
-  ...((selectedConceptscheme.value?.notes ?? []) as TableRow<Note>[]),
+  ...((selectedConceptscheme.value?.notes?.map((note, i) => ({
+    ...note,
+    id: i + 1,
+  })) ?? []) as TableRow<Note>[]),
   {
     isAddRow: true,
   } as TableRow<Note>,
 ]);
 
 const sourcesWithAddRow = computed<TableRow<Source>[]>(() => [
-  ...((selectedConceptscheme.value?.sources ?? []) as TableRow<Source>[]),
+  ...((selectedConceptscheme.value?.sources?.map((source, i) => ({
+    ...source,
+    id: i + 1,
+  })) ?? []) as TableRow<Source>[]),
   {
     isAddRow: true,
   } as TableRow<Source>,

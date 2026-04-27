@@ -14,7 +14,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  add: [void];
+  add: [Source];
   edit: [Source];
   delete: [Source];
 }>();
@@ -36,7 +36,7 @@ const columns: TableColumn<TableRow<Source>>[] = [
           variant: 'outline',
           size: 'xs',
           class: 'cursor-pointer',
-          onClick: () => emit('add'),
+          onClick: () => emit('add', {} as Source),
         });
       }
       return h('div', {
