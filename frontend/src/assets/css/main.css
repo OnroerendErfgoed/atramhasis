@@ -105,7 +105,7 @@
 
   --ui-bg: #fbfcfe;
   --ui-bg-muted: var(--ui-color-neutral-50);
-  --ui-bg-elevated: #ffffff;
+  --ui-bg-elevated: var(--ui-color-neutral-200);
   --ui-bg-accented: #eef3f8;
   --ui-bg-inverted: var(--ui-color-neutral-950);
 
@@ -121,4 +121,15 @@
   background:
     radial-gradient(circle at top left, rgba(47, 137, 245, 0.06), transparent 30%),
     linear-gradient(180deg, #fbfcfe 0%, #f5f7fb 100%);
+}
+
+/* Set the default cursor for buttons. */
+button,
+[role='button'] {
+  cursor: pointer;
+}
+
+/* Make sure disabled buttons don't get the pointer cursor. */
+:disabled {
+  cursor: default;
 }

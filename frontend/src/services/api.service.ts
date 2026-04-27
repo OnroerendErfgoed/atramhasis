@@ -46,4 +46,9 @@ export class ApiService extends HttpService {
   async updateProvider(provider: ProviderForm): Promise<Provider> {
     return (await this.put<Provider, ProviderForm>(`/providers/${provider.id}`, provider)).data;
   }
+
+  // Deleters
+  async deleteProvider(providerId: string): Promise<void> {
+    await this.delete(`/providers/${providerId}`);
+  }
 }
