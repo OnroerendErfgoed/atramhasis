@@ -163,7 +163,7 @@
                 <component :is="Component" :key="currentRoute.fullPath" />
                 <template #fallback>
                   <div class="flex items-center justify-center py-20">
-                    <UIcon name="i-lucide-loader-circle" class="size-8 animate-spin text-primary" />
+                    <ALoader mode="inline" />
                   </div>
                 </template>
               </Suspense>

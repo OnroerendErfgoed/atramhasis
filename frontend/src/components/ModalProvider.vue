@@ -133,6 +133,7 @@ const { languages } = storeToRefs(languageStore);
 
 const apiService = new ApiService();
 const { handleApiError } = useApiError();
+const PROVIDER_MODAL_LOADING_KEY = 'provider-modal-submit';
 
 // Options for select inputs
 const languageOptions = computed(() =>
@@ -203,6 +204,8 @@ const save = async () => {
   }
 
   try {
+    adminUiStore.startLoading(PROVIDER_MODAL_LOADING_KEY);
+
     if (!isEditMode.value) {
       // Create new provider
       await apiService.createProvider(form.value);
@@ -225,6 +228,8 @@ const save = async () => {
     adminUiStore.closeProviderModal();
   } catch (error) {
     handleApiError(error);
+  } finally {
+    adminUiStore.stopLoading(PROVIDER_MODAL_LOADING_KEY);
   }
 };
 
