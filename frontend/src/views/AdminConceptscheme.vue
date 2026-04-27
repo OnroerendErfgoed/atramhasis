@@ -18,7 +18,7 @@
       />
       <USelectMenu
         v-model="typeFilter"
-        :items="typeFilterItems"
+        :items="conceptTypes"
         :placeholder="t('placeholders.conceptScheme.type')"
         class="w-36"
         :search-input="false"
@@ -80,9 +80,10 @@ import type { TableColumn } from '@nuxt/ui';
 import type { OverviewConcept } from '@models/concept';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
-import type { ListType } from '@models/util';
 import { useAdminUiStore } from '@stores/admin-ui';
 import type { Conceptscheme } from '@models/conceptscheme';
+import { useListStore } from '@stores/list';
+import { storeToRefs } from 'pinia';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
@@ -92,13 +93,15 @@ const toast = useToast();
 const route = useRoute();
 
 const adminUiStore = useAdminUiStore();
+const listStore = useListStore();
+const { conceptTypes } = storeToRefs(listStore);
 const apiService = new ApiService();
 
 const schemeId = route.params.id as string;
 
 const conceptscheme = ref<Conceptscheme>();
 const concepts = ref<OverviewConcept[]>([]);
-const typeFilter = ref<ListType>();
+const typeFilter = ref();
 const labelFilter = ref('');
 const matchFilter = ref('');
 
@@ -150,11 +153,6 @@ const tableData = computed<OverviewConcept[]>(() => {
   }
   return rows;
 });
-
-const typeFilterItems: ListType[] = [
-  { label: 'Concept', value: 'concept' },
-  { label: 'Collection', value: 'collection' },
-];
 
 const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<OverviewConcept> }>('tableRef');
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);

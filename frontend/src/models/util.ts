@@ -11,27 +11,27 @@ export enum ModalMode {
 export interface Label {
   label: string;
   language: string;
-  type: LabelEnum;
+  type: LabelTypeEnum;
 }
 
 export interface Note {
   note: string;
   language: string;
-  type: NoteEnum;
+  type: NoteTypeEnum;
 }
 
 export interface Source {
   citation: string;
 }
 
-export enum LabelEnum {
+export enum LabelTypeEnum {
   PREF = 'prefLabel',
   ALT = 'altLabel',
   HIDDEN = 'hiddenLabel',
   SORT = 'sortLabel',
 }
 
-export enum NoteEnum {
+export enum NoteTypeEnum {
   CHANGE = 'changeNote',
   DEFINITION = 'definition',
   EDITORIAL = 'editorialNote',
@@ -39,4 +39,17 @@ export enum NoteEnum {
   HISTORY = 'historyNote',
   SCOPE = 'scopeNote',
   NOTE = 'note',
+}
+
+export enum MatchTypeEnum {
+  BROAD = 'broad',
+  CLOSE = 'close',
+  EXACT = 'exact',
+  NARROW = 'narrow',
+  RELATED = 'related',
+}
+
+export enum ConceptTypeEnum {
+  CONCEPT = 'concept',
+  COLLECTION = 'collection',
 }

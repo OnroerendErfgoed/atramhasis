@@ -191,10 +191,10 @@
     "la": "Latin"
   },
   "labelTypes": {
-    "prefLabel": "Preferred label",
-    "altLabel": "Alternative label",
-    "hiddenLabel": "Hidden label",
-    "sortLabel": "Sort label"
+    "prefLabel": "Preferred",
+    "altLabel": "Alternative",
+    "hiddenLabel": "Hidden",
+    "sortLabel": "Sort"
   },
   "noteTypes": {
     "definition": "Definition",
@@ -204,5 +204,16 @@
     "editorialNote": "Editorial note",
     "changeNote": "Change note",
     "note": "Note"
+  },
+  "matchTypes": {
+    "exact": "Exact",
+    "close": "Close",
+    "broad": "Broad",
+    "narrow": "Narrow",
+    "related": "Related"
+  },
+  "conceptTypes": {
+    "concept": "Concept",
+    "collection": "Collection"
   }
 }
