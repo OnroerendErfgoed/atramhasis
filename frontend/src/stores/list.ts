@@ -37,6 +37,12 @@ export const useListStore = defineStore('list', () => {
     { label: t('lists.conceptTypes.collection'), value: ConceptTypeEnum.COLLECTION },
   ]);
   const languages = ref<Language[]>([]);
+  const languageOptions = computed(() =>
+    languages.value.map((lang) => ({
+      label: lang.name,
+      value: lang.id,
+    }))
+  );
 
   const fetchLanguages = async () => {
     try {
@@ -57,5 +63,5 @@ export const useListStore = defineStore('list', () => {
     await fetchLanguages();
   };
 
-  return { labelTypes, noteTypes, matchTypes, conceptTypes, languages, fetchLanguages, getAll };
+  return { labelTypes, noteTypes, matchTypes, conceptTypes, languages, languageOptions, fetchLanguages, getAll };
 });

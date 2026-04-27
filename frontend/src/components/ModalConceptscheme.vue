@@ -8,15 +8,25 @@
     <template #body>
       <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
         <template #labels>
-          <ModalConceptschemeTabLabels :data="labelsWithAddRow" @add="addLabel" @edit="editLabel" />
+          <ModalConceptschemeTabLabels
+            :data="labelsWithAddRow"
+            @add="addLabel"
+            @edit="editLabel"
+            @delete="deleteLabel"
+          />
         </template>
 
         <template #notes>
-          <ModalConceptschemeTabNotes :data="notesWithAddRow" @add="addNote" @edit="editNote" />
+          <ModalConceptschemeTabNotes :data="notesWithAddRow" @add="addNote" @edit="editNote" @delete="deleteNote" />
         </template>
 
         <template #sources>
-          <ModalConceptschemeTabSources :data="sourcesWithAddRow" @add="addSource" @edit="editSource" />
+          <ModalConceptschemeTabSources
+            :data="sourcesWithAddRow"
+            @add="addSource"
+            @edit="editSource"
+            @delete="deleteSource"
+          />
         </template>
       </UTabs>
     </template>
@@ -81,6 +91,12 @@ const editLabel = (label: Label) => {
     selectedConceptscheme.value!.labels[index] = label;
   }
 };
+const deleteLabel = (label: Label) => {
+  const index = labelsWithAddRow.value.findIndex((l) => l.id === label.id);
+  if (index !== undefined && index >= 0) {
+    selectedConceptscheme.value!.labels.splice(index, 1);
+  }
+};
 
 const addNote = (note: Note) => {
   selectedConceptscheme.value?.notes.push(note);
@@ -92,6 +108,12 @@ const editNote = (note: Note) => {
     selectedConceptscheme.value!.notes[index] = note;
   }
 };
+const deleteNote = (note: Note) => {
+  const index = notesWithAddRow.value.findIndex((n) => n.id === note.id);
+  if (index !== undefined && index >= 0) {
+    selectedConceptscheme.value!.notes.splice(index, 1);
+  }
+};
 
 const addSource = (source: Source) => {
   selectedConceptscheme.value?.sources.push(source);
@@ -101,6 +123,12 @@ const editSource = (source: Source) => {
   if (index !== undefined && index >= 0) {
     delete source.id;
     selectedConceptscheme.value!.sources[index] = source;
+  }
+};
+const deleteSource = (source: Source) => {
+  const index = sourcesWithAddRow.value.findIndex((s) => s.id === source.id);
+  if (index !== undefined && index >= 0) {
+    selectedConceptscheme.value!.sources.splice(index, 1);
   }
 };
 

@@ -139,6 +139,20 @@
           "placeholder": "Choose a type"
         }
       }
+    },
+    "modalNote": {
+      "title": "{item}",
+      "description": "{mode} a note",
+      "form": {
+        "language": {
+          "label": "Language",
+          "placeholder": "Choose a language"
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Choose a type"
+        }
+      }
     }
   },
   "api": {

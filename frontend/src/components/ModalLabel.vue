@@ -6,7 +6,6 @@
   >
     <template #body>
       <UForm class="space-y-4">
-        <pre>{{ form }}</pre>
         <UFormField
           name="label-type"
           size="lg"
@@ -88,15 +87,7 @@ const labelStore = useLabelStore();
 const { selectedLabel } = storeToRefs(labelStore);
 
 const listStore = useListStore();
-const { languages, labelTypes } = storeToRefs(listStore);
-
-// Options for select inputs
-const languageOptions = computed(() =>
-  languages.value.map((lang) => ({
-    label: lang.name,
-    value: lang.id,
-  }))
-);
+const { languageOptions, labelTypes } = storeToRefs(listStore);
 
 const save = async () => {
   const valid = await v$.value.$validate();

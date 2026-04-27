@@ -100,6 +100,9 @@ const columns: TableColumn<TableRow<Label>>[] = [
           variant: 'ghost',
           size: 'xs',
           'aria-label': t('grid.columns.actions.delete'),
+          onClick: () => {
+            emit('delete', row.original);
+          },
         }),
       ]);
     },

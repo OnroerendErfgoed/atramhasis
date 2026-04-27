@@ -1,13 +1,23 @@
 <template>
   <UTable class="flex-1 min-h-0 rounded-lg border border-default" :data="data" :columns="columns" />
+  <ModalNote
+    :key="noteModalKey"
+    :title="t('components.modalNote.title', { item: selectedConceptscheme?.label })"
+    @add="emit('add', $event)"
+    @edit="emit('edit', $event)"
+  />
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import type { TableColumn } from '@nuxt/ui';
 import { h, resolveComponent } from 'vue';
-import { type Note } from '@models/util';
+import { ModalMode, type Note } from '@models/util';
 import type { TableRow } from '@components/ModalConceptscheme.vue';
 import DOMPurify from 'dompurify';
+import { useConceptschemeStore } from '@stores/conceptscheme';
+import { storeToRefs } from 'pinia';
+import { useAdminUiStore } from '@stores/admin-ui';
+import { useNoteStore } from '@stores/note';
 
 defineProps<{
   data: TableRow<Note>[];
@@ -23,6 +33,12 @@ const UButton = resolveComponent('UButton');
 
 const { t } = useI18n();
 
+const conceptschemeStore = useConceptschemeStore();
+const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
+const adminUiStore = useAdminUiStore();
+const { noteModalKey } = storeToRefs(adminUiStore);
+const noteStore = useNoteStore();
+
 const columns: TableColumn<TableRow<Note>>[] = [
   {
     accessorKey: 'note',
@@ -36,7 +52,7 @@ const columns: TableColumn<TableRow<Note>>[] = [
           variant: 'outline',
           size: 'xs',
           class: 'cursor-pointer',
-          onClick: () => emit('add', {} as Note),
+          onClick: () => adminUiStore.openNoteModal(ModalMode.ADD),
         });
       }
 
@@ -71,13 +87,15 @@ const columns: TableColumn<TableRow<Note>>[] = [
 
       return h('div', { class: 'flex items-center gap-1' }, [
         h(UButton, {
-          as: 'a',
-          href: '#',
           label: t('grid.columns.actions.edit'),
           icon: 'i-lucide-pencil',
           color: 'primary',
           variant: 'outline',
           size: 'xs',
+          onClick: () => {
+            adminUiStore.openNoteModal(ModalMode.EDIT);
+            noteStore.setSelectedNote(row.original);
+          },
         }),
         h(UButton, {
           icon: 'i-lucide-trash-2',
@@ -85,6 +103,9 @@ const columns: TableColumn<TableRow<Note>>[] = [
           variant: 'ghost',
           size: 'xs',
           'aria-label': t('grid.columns.actions.delete'),
+          onClick: () => {
+            emit('delete', row.original);
+          },
         }),
       ]);
     },
