@@ -1,6 +1,7 @@
 <template>
   <UModal
     v-model:open="providerModalIsOpen"
+    :dismissible="false"
     :title="t('components.modalProvider.title')"
     :description="
       t('components.modalProvider.description', { mode: isEditMode ? t('actions.edit') : t('actions.add') })

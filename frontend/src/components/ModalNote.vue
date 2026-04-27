@@ -1,6 +1,7 @@
 <template>
   <UModal
     v-model:open="noteModalIsOpen"
+    :dismissible="false"
     :title="title"
     :description="capitalize(t('components.modalNote.description', { mode: noteModalMode }))"
   >

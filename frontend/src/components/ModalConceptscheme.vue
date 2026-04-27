@@ -1,6 +1,7 @@
 <template>
   <UModal
     v-model:open="conceptschemeModalIsOpen"
+    :dismissible="false"
     :title="t('components.modalConceptscheme.title', { conceptscheme: selectedConceptscheme?.label })"
     :description="t('components.modalConceptscheme.description', { tab: tabs[+activeTab]?.label })"
     class="max-w-4xl"

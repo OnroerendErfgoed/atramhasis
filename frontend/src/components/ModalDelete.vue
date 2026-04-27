@@ -1,5 +1,5 @@
 <template>
-  <UModal :title="t('components.modalDelete.title', { entity: props.entity })">
+  <UModal :dismissible="false" :title="t('components.modalDelete.title', { entity: props.entity })">
     <template #body>
       <p>{{ t('components.modalDelete.message', { entity: props.entity, item: props.item }) }}</p>
     </template>
