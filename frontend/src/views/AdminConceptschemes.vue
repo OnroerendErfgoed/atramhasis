@@ -95,6 +95,13 @@ const fetchConceptschemes = async () => {
 // Initial fetch
 await fetchConceptschemes();
 
+adminUiStore.$onAction(({ name }) => {
+  // Refresh conceptschemes list after closing the conceptscheme modal
+  if (name === 'closeConceptschemeModal') {
+    fetchConceptschemes();
+  }
+});
+
 const tableData = computed<ConceptschemeRow[]>(() =>
   conceptschemes.value.map((cs) => ({
     id: cs.id,

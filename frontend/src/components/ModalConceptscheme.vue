@@ -53,13 +53,20 @@ import { useI18n } from 'vue-i18n';
 import type { TabsItem } from '@nuxt/ui';
 import { computed, ref } from 'vue';
 import { type Label, type Note, type Source } from '@models/util';
+import { ApiService } from '@services/api.service';
+import { useApiError } from '@composables/useApiError';
 
+const toast = useToast();
 const { t } = useI18n();
 
 const adminUiStore = useAdminUiStore();
 const { conceptschemeModalIsOpen } = storeToRefs(adminUiStore);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
+
+const apiService = new ApiService();
+const { handleApiError } = useApiError();
+const CONCEPTSCHEME_MODAL_LOADING_KEY = 'conceptscheme-modal-submit';
 
 const activeTab = ref('0');
 const tabs = ref<TabsItem[]>([
@@ -77,8 +84,24 @@ const tabs = ref<TabsItem[]>([
   },
 ]);
 
-const save = () => {
-  console.log('Save button clicked');
+// Save handler
+const save = async () => {
+  try {
+    adminUiStore.startLoading(CONCEPTSCHEME_MODAL_LOADING_KEY);
+
+    await apiService.updateConceptscheme(selectedConceptscheme.value!);
+    toast.add({
+      title: t('api.success.update.title', { item: 'Conceptscheme' }),
+      description: t('api.success.update.description', { item: 'conceptscheme' }),
+      icon: 'i-lucide-check-circle',
+      color: 'success',
+    });
+    adminUiStore.closeConceptschemeModal();
+  } catch (error) {
+    handleApiError(error);
+  } finally {
+    adminUiStore.stopLoading(CONCEPTSCHEME_MODAL_LOADING_KEY);
+  }
 };
 
 const addLabel = (label: Label) => {

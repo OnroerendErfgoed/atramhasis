@@ -43,6 +43,10 @@ export class ApiService extends HttpService {
   }
 
   // Updaters
+  async updateConceptscheme(conceptscheme: Conceptscheme): Promise<Conceptscheme> {
+    return (await this.put<Conceptscheme, Conceptscheme>(`/conceptschemes/${conceptscheme.id}`, conceptscheme)).data;
+  }
+
   async updateProvider(provider: ProviderForm): Promise<Provider> {
     return (await this.put<Provider, ProviderForm>(`/providers/${provider.id}`, provider)).data;
   }
