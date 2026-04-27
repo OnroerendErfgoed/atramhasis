@@ -150,7 +150,6 @@
               :icon="action.icon"
               color="primary"
               size="sm"
-              class="cursor-pointer"
               @click="action.onClick"
             />
           </div>
