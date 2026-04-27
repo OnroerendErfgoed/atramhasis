@@ -183,37 +183,39 @@
     "add": "Add",
     "edit": "Edit"
   },
-  "languages": {
-    "en": "English",
-    "nl": "Dutch",
-    "fr": "French",
-    "de": "German",
-    "la": "Latin"
-  },
-  "labelTypes": {
-    "prefLabel": "Preferred",
-    "altLabel": "Alternative",
-    "hiddenLabel": "Hidden",
-    "sortLabel": "Sort"
-  },
-  "noteTypes": {
-    "definition": "Definition",
-    "scopeNote": "Scope note",
-    "example": "Example",
-    "historyNote": "History note",
-    "editorialNote": "Editorial note",
-    "changeNote": "Change note",
-    "note": "Note"
-  },
-  "matchTypes": {
-    "exact": "Exact",
-    "close": "Close",
-    "broad": "Broad",
-    "narrow": "Narrow",
-    "related": "Related"
-  },
-  "conceptTypes": {
-    "concept": "Concept",
-    "collection": "Collection"
+  "lists": {
+    "languages": {
+      "en": "English",
+      "nl": "Dutch",
+      "fr": "French",
+      "de": "German",
+      "la": "Latin"
+    },
+    "labelTypes": {
+      "prefLabel": "Preferred",
+      "altLabel": "Alternative",
+      "hiddenLabel": "Hidden",
+      "sortLabel": "Sort"
+    },
+    "noteTypes": {
+      "definition": "Definition",
+      "scopeNote": "Scope note",
+      "example": "Example",
+      "historyNote": "History note",
+      "editorialNote": "Editorial note",
+      "changeNote": "Change note",
+      "note": "Note"
+    },
+    "matchTypes": {
+      "exact": "Exact",
+      "close": "Close",
+      "broad": "Broad",
+      "narrow": "Narrow",
+      "related": "Related"
+    },
+    "conceptTypes": {
+      "concept": "Concept",
+      "collection": "Collection"
+    }
   }
 }

@@ -54,12 +54,12 @@ const columns: TableColumn<TableRow<Note>>[] = [
   {
     accessorKey: 'language',
     header: t('grid.columns.labels.language'),
-    cell: ({ row }) => (row.original.isAddRow ? '' : t('languages.' + row.original.language)),
+    cell: ({ row }) => (row.original.isAddRow ? '' : t('lists.languages.' + row.original.language)),
   },
   {
     accessorKey: 'type',
     header: t('grid.columns.labels.type'),
-    cell: ({ row }) => (row.original.isAddRow ? '' : t('noteTypes.' + row.original.type)),
+    cell: ({ row }) => (row.original.isAddRow ? '' : t('lists.noteTypes.' + row.original.type)),
   },
   {
     id: 'actions',

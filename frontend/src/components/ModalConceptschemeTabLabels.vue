@@ -51,12 +51,12 @@ const columns: TableColumn<TableRow<Label>>[] = [
   {
     accessorKey: 'language',
     header: t('grid.columns.labels.language'),
-    cell: ({ row }) => (row.original.isAddRow ? '' : t('languages.' + row.original.language)),
+    cell: ({ row }) => (row.original.isAddRow ? '' : t('lists.languages.' + row.original.language)),
   },
   {
     accessorKey: 'type',
     header: t('grid.columns.labels.type'),
-    cell: ({ row }) => (row.original.isAddRow ? '' : t('labelTypes.' + row.original.type)),
+    cell: ({ row }) => (row.original.isAddRow ? '' : t('lists.labelTypes.' + row.original.type)),
   },
   {
     id: 'actions',

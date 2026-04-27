@@ -11,30 +11,30 @@ export const useListStore = defineStore('list', () => {
   const apiService = new ApiService();
 
   const labelTypes = computed(() => [
-    { label: t('labelTypes.prefLabel'), value: LabelTypeEnum.PREF },
-    { label: t('labelTypes.altLabel'), value: LabelTypeEnum.ALT },
-    { label: t('labelTypes.hiddenLabel'), value: LabelTypeEnum.HIDDEN },
-    { label: t('labelTypes.sortLabel'), value: LabelTypeEnum.SORT },
+    { label: t('lists.labelTypes.prefLabel'), value: LabelTypeEnum.PREF },
+    { label: t('lists.labelTypes.altLabel'), value: LabelTypeEnum.ALT },
+    { label: t('lists.labelTypes.hiddenLabel'), value: LabelTypeEnum.HIDDEN },
+    { label: t('lists.labelTypes.sortLabel'), value: LabelTypeEnum.SORT },
   ]);
   const noteTypes = computed(() => [
-    { label: t('noteTypes.changeNote'), value: NoteTypeEnum.CHANGE },
-    { label: t('noteTypes.definition'), value: NoteTypeEnum.DEFINITION },
-    { label: t('noteTypes.editorialNote'), value: NoteTypeEnum.EDITORIAL },
-    { label: t('noteTypes.example'), value: NoteTypeEnum.EXAMPLE },
-    { label: t('noteTypes.historyNote'), value: NoteTypeEnum.HISTORY },
-    { label: t('noteTypes.note'), value: NoteTypeEnum.NOTE },
-    { label: t('noteTypes.scopeNote'), value: NoteTypeEnum.SCOPE },
+    { label: t('lists.noteTypes.changeNote'), value: NoteTypeEnum.CHANGE },
+    { label: t('lists.noteTypes.definition'), value: NoteTypeEnum.DEFINITION },
+    { label: t('lists.noteTypes.editorialNote'), value: NoteTypeEnum.EDITORIAL },
+    { label: t('lists.noteTypes.example'), value: NoteTypeEnum.EXAMPLE },
+    { label: t('lists.noteTypes.historyNote'), value: NoteTypeEnum.HISTORY },
+    { label: t('lists.noteTypes.note'), value: NoteTypeEnum.NOTE },
+    { label: t('lists.noteTypes.scopeNote'), value: NoteTypeEnum.SCOPE },
   ]);
   const matchTypes = computed(() => [
-    { label: t('matchTypes.broad'), value: MatchTypeEnum.BROAD },
-    { label: t('matchTypes.close'), value: MatchTypeEnum.CLOSE },
-    { label: t('matchTypes.exact'), value: MatchTypeEnum.EXACT },
-    { label: t('matchTypes.narrow'), value: MatchTypeEnum.NARROW },
-    { label: t('matchTypes.related'), value: MatchTypeEnum.RELATED },
+    { label: t('lists.matchTypes.broad'), value: MatchTypeEnum.BROAD },
+    { label: t('lists.matchTypes.close'), value: MatchTypeEnum.CLOSE },
+    { label: t('lists.matchTypes.exact'), value: MatchTypeEnum.EXACT },
+    { label: t('lists.matchTypes.narrow'), value: MatchTypeEnum.NARROW },
+    { label: t('lists.matchTypes.related'), value: MatchTypeEnum.RELATED },
   ]);
   const conceptTypes = computed(() => [
-    { label: t('conceptTypes.concept'), value: ConceptTypeEnum.CONCEPT },
-    { label: t('conceptTypes.collection'), value: ConceptTypeEnum.COLLECTION },
+    { label: t('lists.conceptTypes.concept'), value: ConceptTypeEnum.CONCEPT },
+    { label: t('lists.conceptTypes.collection'), value: ConceptTypeEnum.COLLECTION },
   ]);
   const languages = ref<Language[]>([]);
 
