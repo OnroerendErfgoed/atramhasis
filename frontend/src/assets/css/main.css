@@ -133,3 +133,7 @@ button,
 :disabled {
   cursor: default;
 }
+
+.tiptap.ProseMirror {
+  padding: 0 0.5rem;
+}
