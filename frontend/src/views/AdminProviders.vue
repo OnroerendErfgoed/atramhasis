@@ -59,6 +59,8 @@ const providerStore = useProviderStore();
 const { selectedProvider } = storeToRefs(providerStore);
 const providers = ref<Provider[]>([]);
 
+const PROVIDER_LOADING_KEY = 'provider-fetch';
+
 const fetchProviders = async () => {
   try {
     providers.value = await apiService.getProviders();
@@ -172,29 +174,41 @@ const columns: TableColumn<Provider>[] = [
     header: t('grid.columns.labels.actions'),
     cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-1' }, [
-        h(UButton, {
-          label: t('grid.columns.actions.edit'),
-          icon: 'i-lucide-pencil',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-          title: t('grid.columns.actions.edit'),
-          onClick: () => {
-            adminUiStore.openProviderModal(ModalMode.EDIT);
-            providerStore.setSelectedProvider(row.original);
-          },
-        }),
-        h(UButton, {
-          icon: 'i-lucide-trash-2',
-          color: 'error',
-          variant: 'outline',
-          size: 'xs',
-          title: t('grid.columns.actions.delete'),
-          onClick: () => {
-            providerStore.setSelectedProvider(row.original);
-            modalDeleteIsOpen.value = true;
-          },
-        }),
+        ...(!row.original.subject?.includes('external')
+          ? [
+              h(UButton, {
+                label: t('grid.columns.actions.edit'),
+                icon: 'i-lucide-pencil',
+                color: 'primary',
+                variant: 'outline',
+                size: 'xs',
+                title: t('grid.columns.actions.edit'),
+                onClick: async () => {
+                  try {
+                    adminUiStore.startLoading(PROVIDER_LOADING_KEY);
+                    const provider = await providerStore.getProvider(row.original.id!, true);
+                    providerStore.setSelectedProvider(provider);
+                    adminUiStore.openProviderModal(ModalMode.EDIT);
+                  } catch (error) {
+                    console.error(t('api.errors.fetch.title', { item: 'provider' }), error);
+                  } finally {
+                    adminUiStore.stopLoading(PROVIDER_LOADING_KEY);
+                  }
+                },
+              }),
+              h(UButton, {
+                icon: 'i-lucide-trash-2',
+                color: 'error',
+                variant: 'outline',
+                size: 'xs',
+                title: t('grid.columns.actions.delete'),
+                onClick: () => {
+                  providerStore.setSelectedProvider(row.original);
+                  modalDeleteIsOpen.value = true;
+                },
+              }),
+            ]
+          : []),
       ]),
   },
 ];

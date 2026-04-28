@@ -29,6 +29,10 @@ export class ApiService extends HttpService {
     return (await this.get<Concept>(`/conceptschemes/${schemeId}/c/${conceptId}`)).data;
   }
 
+  async getProvider(providerId: string): Promise<Provider> {
+    return (await this.get<Provider>(`/providers/${providerId}`)).data;
+  }
+
   async getProviders(): Promise<Provider[]> {
     return (await this.get<Provider[]>('/providers')).data;
   }
@@ -47,8 +51,8 @@ export class ApiService extends HttpService {
     return (await this.put<Conceptscheme, Conceptscheme>(`/conceptschemes/${conceptscheme.id}`, conceptscheme)).data;
   }
 
-  async updateProvider(provider: ProviderForm): Promise<Provider> {
-    return (await this.put<Provider, ProviderForm>(`/providers/${provider.id}`, provider)).data;
+  async updateProvider(provider: Provider): Promise<Provider> {
+    return (await this.put<Provider, Provider>(`/providers/${provider.id}`, provider)).data;
   }
 
   // Deleters
