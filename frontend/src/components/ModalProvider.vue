@@ -107,7 +107,7 @@
 
 <script setup lang="ts">
 import { useApiError } from '@composables/useApiError';
-import { ExpandStrategy, GenerationStarategyId, type ProviderForm } from '@models/provider';
+import { ExpandStrategy, GenerationStarategyId, type Provider, type ProviderForm } from '@models/provider';
 import { ModalMode } from '@models/util';
 import { ApiService } from '@services/api.service';
 import { useAdminUiStore } from '@stores/admin-ui';
@@ -210,7 +210,7 @@ const save = async () => {
       });
     } else {
       // Update existing provider
-      await apiService.updateProvider(form.value);
+      await apiService.updateProvider({ ...selectedProvider.value, ...form.value } as Provider);
       toast.add({
         title: t('api.success.update.title', { item: 'Provider' }),
         description: t('api.success.update.description', { item: 'provider' }),
