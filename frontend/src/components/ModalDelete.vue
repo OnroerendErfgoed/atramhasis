@@ -1,7 +1,8 @@
 <template>
-  <UModal :title="t('components.modalDelete.title', { entity: props.entity })">
+  <UModal :dismissible="false" :title="t('components.modalDelete.title', { entity: props.entity })">
     <template #body>
-      <p>{{ t('components.modalDelete.message', { entity: props.entity, item: props.item }) }}</p>
+      <p v-if="props.item">{{ t('components.modalDelete.message', { entity: props.entity, item: props.item }) }}</p>
+      <p v-else>{{ t('components.modalDelete.messageGeneric', { entity: props.entity }) }}</p>
     </template>
     <template #footer="{ close }">
       <div class="flex w-full justify-end gap-2">
@@ -16,6 +17,6 @@
 import { useI18n } from 'vue-i18n';
 
 const emit = defineEmits(['confirm']);
-const props = defineProps<{ entity: string; item: string }>();
+const props = defineProps<{ entity: string; item?: string }>();
 const { t } = useI18n();
 </script>

@@ -1,4 +1,4 @@
-import type { ConceptScheme } from '@models/conceptscheme';
+import type { Conceptscheme, OverviewConceptscheme } from '@models/conceptscheme';
 import type { Concept, OverviewConcept } from '@models/concept';
 import { HttpService } from './http.service';
 import type { Provider, ProviderForm } from '@models/provider';
@@ -10,12 +10,12 @@ export class ApiService extends HttpService {
   }
 
   // Getters
-  async getConceptschemes(): Promise<ConceptScheme[]> {
-    return (await this.get<ConceptScheme[]>('/conceptschemes')).data;
+  async getConceptschemes(): Promise<OverviewConceptscheme[]> {
+    return (await this.get<OverviewConceptscheme[]>('/conceptschemes')).data;
   }
 
-  async getConceptscheme(schemeId: string): Promise<ConceptScheme> {
-    return (await this.get<ConceptScheme>(`/conceptschemes/${schemeId}`)).data;
+  async getConceptscheme(schemeId: string): Promise<Conceptscheme> {
+    return (await this.get<Conceptscheme>(`/conceptschemes/${schemeId}`)).data;
   }
 
   async getConceptsByConceptscheme(
@@ -43,6 +43,10 @@ export class ApiService extends HttpService {
   }
 
   // Updaters
+  async updateConceptscheme(conceptscheme: Conceptscheme): Promise<Conceptscheme> {
+    return (await this.put<Conceptscheme, Conceptscheme>(`/conceptschemes/${conceptscheme.id}`, conceptscheme)).data;
+  }
+
   async updateProvider(provider: ProviderForm): Promise<Provider> {
     return (await this.put<Provider, ProviderForm>(`/providers/${provider.id}`, provider)).data;
   }

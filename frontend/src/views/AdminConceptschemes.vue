@@ -42,14 +42,17 @@
         @update:page="(p: number) => tableRef?.tableApi?.setPageIndex(p - 1)"
       />
     </div>
+
+    <ModalConceptscheme />
   </div>
 </template>
 
 <script lang="ts">
-export interface ConceptSchemeRow {
+export interface ConceptschemeRow {
   id: string;
   uri: string;
   label: string;
+  subject: string[];
 }
 </script>
 
@@ -57,17 +60,25 @@ export interface ConceptSchemeRow {
 import { h, ref, computed, resolveComponent, useTemplateRef } from 'vue';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
-import type { ConceptScheme } from '@models/conceptscheme';
+import type { OverviewConceptscheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
+import { useAdminUiStore } from '@stores/admin-ui';
+import { useConceptschemeStore } from '@stores/conceptscheme';
+import { storeToRefs } from 'pinia';
 
 const UButton = resolveComponent('UButton');
 
 const { t } = useI18n();
 const toast = useToast();
+const conceptschemeStore = useConceptschemeStore();
+const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
+const adminUiStore = useAdminUiStore();
 const apiService = new ApiService();
 
-const conceptschemes = ref<ConceptScheme[]>([]);
+const CONCEPTSCHEME_LOADING_KEY = 'conceptscheme-fetch';
+
+const conceptschemes = ref<OverviewConceptscheme[]>([]);
 
 const fetchConceptschemes = async () => {
   try {
@@ -86,15 +97,23 @@ const fetchConceptschemes = async () => {
 // Initial fetch
 await fetchConceptschemes();
 
-const tableData = computed<ConceptSchemeRow[]>(() =>
+adminUiStore.$onAction(({ name }) => {
+  // Refresh conceptschemes list after closing the conceptscheme modal
+  if (name === 'closeConceptschemeModal') {
+    fetchConceptschemes();
+  }
+});
+
+const tableData = computed<ConceptschemeRow[]>(() =>
   conceptschemes.value.map((cs) => ({
     id: cs.id,
     uri: cs.uri,
     label: cs.label,
+    subject: cs.subject,
   }))
 );
 
-const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<ConceptSchemeRow> }>('tableRef');
+const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<ConceptschemeRow> }>('tableRef');
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const totalFiltered = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const currentPage = computed(() => (tableRef.value?.tableApi?.getState().pagination.pageIndex ?? 0) + 1);
@@ -104,7 +123,7 @@ const pagination = ref({
   pageSize: 15,
 });
 
-const columns: TableColumn<ConceptSchemeRow>[] = [
+const columns: TableColumn<ConceptschemeRow>[] = [
   {
     accessorKey: 'label',
     header: t('grid.columns.labels.label'),
@@ -118,8 +137,8 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
   {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
-    cell: ({ row }) =>
-      h('div', { class: 'flex items-center gap-1' }, [
+    cell: ({ row }) => {
+      const actions = [
         h(UButton, {
           as: 'a',
           to: { name: 'AdminConceptscheme', params: { id: row.original.id } },
@@ -129,16 +148,33 @@ const columns: TableColumn<ConceptSchemeRow>[] = [
           variant: 'outline',
           size: 'xs',
         }),
-        h(UButton, {
-          as: 'a',
-          href: '#',
-          label: t('grid.columns.actions.edit'),
-          icon: 'i-lucide-pencil',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-        }),
-      ]),
+      ];
+
+      if (!row.original.subject.includes('external')) {
+        actions.push(
+          h(UButton, {
+            label: t('grid.columns.actions.edit'),
+            icon: 'i-lucide-pencil',
+            color: 'primary',
+            variant: 'outline',
+            size: 'xs',
+            onClick: async () => {
+              try {
+                adminUiStore.startLoading(CONCEPTSCHEME_LOADING_KEY);
+                selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(row.original.id, true);
+                adminUiStore.openConceptschemeModal();
+              } catch (error) {
+                console.error(t('api.errors.fetch.title', { item: 'languages' }), error);
+              } finally {
+                adminUiStore.stopLoading(CONCEPTSCHEME_LOADING_KEY);
+              }
+            },
+          })
+        );
+      }
+
+      return h('div', { class: 'flex items-center gap-1' }, actions);
+    },
   },
 ];
 </script>

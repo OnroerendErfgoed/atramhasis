@@ -20,6 +20,7 @@
     "@vueuse/core": "^14.2.1",
     "axios": "^1.15.0",
     "d3": "~3.5.17",
+    "dompurify": "^3.4.1",
     "foundation-sites": "~5.5.3",
     "pinia": "^3.0.4",
     "tailwindcss": "^4.2.2",

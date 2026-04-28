@@ -1,7 +1,8 @@
 import type { Language } from '@models/language';
+import { ConceptTypeEnum, LabelTypeEnum, MatchTypeEnum, NoteTypeEnum } from '@models/util';
 import { ApiService } from '@services/api.service';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export const useListStore = defineStore('list', () => {
@@ -9,7 +10,39 @@ export const useListStore = defineStore('list', () => {
   const toast = useToast();
   const apiService = new ApiService();
 
+  const labelTypes = computed(() => [
+    { label: t('lists.labelTypes.prefLabel'), value: LabelTypeEnum.PREF },
+    { label: t('lists.labelTypes.altLabel'), value: LabelTypeEnum.ALT },
+    { label: t('lists.labelTypes.hiddenLabel'), value: LabelTypeEnum.HIDDEN },
+    { label: t('lists.labelTypes.sortLabel'), value: LabelTypeEnum.SORT },
+  ]);
+  const noteTypes = computed(() => [
+    { label: t('lists.noteTypes.changeNote'), value: NoteTypeEnum.CHANGE },
+    { label: t('lists.noteTypes.definition'), value: NoteTypeEnum.DEFINITION },
+    { label: t('lists.noteTypes.editorialNote'), value: NoteTypeEnum.EDITORIAL },
+    { label: t('lists.noteTypes.example'), value: NoteTypeEnum.EXAMPLE },
+    { label: t('lists.noteTypes.historyNote'), value: NoteTypeEnum.HISTORY },
+    { label: t('lists.noteTypes.note'), value: NoteTypeEnum.NOTE },
+    { label: t('lists.noteTypes.scopeNote'), value: NoteTypeEnum.SCOPE },
+  ]);
+  const matchTypes = computed(() => [
+    { label: t('lists.matchTypes.broad'), value: MatchTypeEnum.BROAD },
+    { label: t('lists.matchTypes.close'), value: MatchTypeEnum.CLOSE },
+    { label: t('lists.matchTypes.exact'), value: MatchTypeEnum.EXACT },
+    { label: t('lists.matchTypes.narrow'), value: MatchTypeEnum.NARROW },
+    { label: t('lists.matchTypes.related'), value: MatchTypeEnum.RELATED },
+  ]);
+  const conceptTypes = computed(() => [
+    { label: t('lists.conceptTypes.concept'), value: ConceptTypeEnum.CONCEPT },
+    { label: t('lists.conceptTypes.collection'), value: ConceptTypeEnum.COLLECTION },
+  ]);
   const languages = ref<Language[]>([]);
+  const languageOptions = computed(() =>
+    languages.value.map((lang) => ({
+      label: lang.name,
+      value: lang.id,
+    }))
+  );
 
   const fetchLanguages = async () => {
     try {
@@ -30,5 +63,5 @@ export const useListStore = defineStore('list', () => {
     await fetchLanguages();
   };
 
-  return { languages, fetchLanguages, getAll };
+  return { labelTypes, noteTypes, matchTypes, conceptTypes, languages, languageOptions, fetchLanguages, getAll };
 });

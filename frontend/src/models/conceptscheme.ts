@@ -1,4 +1,6 @@
-export interface ConceptSchemeContext {
+import type { Label, Note, Source } from '@models/util';
+
+export interface ConceptschemeContext {
   '@version': 1.1;
   dct: string;
   skos: string;
@@ -22,11 +24,17 @@ export interface ConceptSchemeContext {
   };
 }
 
-export interface ConceptScheme {
-  '@context': ConceptSchemeContext;
+export interface OverviewConceptscheme {
+  '@context': ConceptschemeContext;
   type: 'skos:ConceptScheme';
   id: string;
   uri: string;
   label: string;
   subject: string[];
+}
+
+export interface Conceptscheme extends OverviewConceptscheme {
+  labels: Label[];
+  notes: Note[];
+  sources: Source[];
 }
