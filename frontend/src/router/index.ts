@@ -39,6 +39,14 @@ const router = createRouter({
             breadcrumb: () => 'PROVIDERS',
           },
         },
+        {
+          path: 'languages',
+          name: 'AdminLanguages',
+          component: () => import('@views/AdminLanguages.vue'),
+          meta: {
+            breadcrumb: () => 'LANGUAGES',
+          },
+        },
       ],
     },
     {

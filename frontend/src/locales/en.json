@@ -9,7 +9,8 @@
     },
     "actions": {
       "addConcept": "Add a concept",
-      "addProvider": "Add a provider"
+      "addProvider": "Add a provider",
+      "addLanguage": "Add a language"
     },
     "backToOverview": "Back to overview",
     "logout": "Log out",
@@ -19,7 +20,8 @@
     "titles": {
       "conceptschemes": "Manage conceptschemes",
       "conceptscheme": "{item} collections and concepts",
-      "providers": "Manage providers"
+      "providers": "Manage providers",
+      "languages": "Manage languages"
     }
   },
   "grid": {
@@ -28,6 +30,7 @@
       "labels": {
         "label": "Label",
         "id": "ID",
+        "name": "Name",
         "conceptschemeUri": "Conceptscheme URI",
         "uriPattern": "URI pattern",
         "type": "Type",
