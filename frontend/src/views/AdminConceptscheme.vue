@@ -81,7 +81,6 @@ import type { OverviewConcept } from '@models/concept';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import { useAdminUiStore } from '@stores/admin-ui';
-import type { Conceptscheme } from '@models/conceptscheme';
 import { useListStore } from '@stores/list';
 import { storeToRefs } from 'pinia';
 
@@ -99,7 +98,6 @@ const apiService = new ApiService();
 
 const schemeId = route.params.id as string;
 
-const conceptscheme = ref<Conceptscheme>();
 const concepts = ref<OverviewConcept[]>([]);
 const typeFilter = ref<(typeof conceptTypes.value)[number]>();
 const labelFilter = ref('');
@@ -107,8 +105,8 @@ const matchFilter = ref('');
 
 const fetchConceptscheme = async () => {
   try {
-    conceptscheme.value = await apiService.getConceptscheme(schemeId);
-    adminUiStore.setBreadcrumbLabel(schemeId, conceptscheme.value.label);
+    const conceptscheme = await apiService.getConceptscheme(schemeId);
+    adminUiStore.setBreadcrumbLabel(schemeId, conceptscheme.label);
   } catch (error) {
     console.error(t('api.errors.fetch.title', { item: 'conceptscheme' }), error);
     toast.add({

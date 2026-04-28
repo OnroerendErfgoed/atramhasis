@@ -1,11 +1,15 @@
 import { useApiError } from '@composables/useApiError';
 import type { Conceptscheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { defineStore, storeToRefs } from 'pinia';
+import { ref, watch } from 'vue';
+import { useAdminUiStore } from '@stores/admin-ui';
 
 export const useConceptschemeStore = defineStore('conceptscheme', () => {
   const apiService = new ApiService();
+  const adminUiStore = useAdminUiStore();
+  const { conceptschemeModalIsOpen } = storeToRefs(adminUiStore);
+
   const conceptschemes = ref<Record<string, Conceptscheme>>({});
   const selectedConceptscheme = ref<Conceptscheme>();
   const { handleApiError } = useApiError();
@@ -28,6 +32,12 @@ export const useConceptschemeStore = defineStore('conceptscheme', () => {
   };
 
   const resetSelectedConceptscheme = () => (selectedConceptscheme.value = undefined);
+
+  watch(conceptschemeModalIsOpen, (open) => {
+    if (!open && conceptschemeModalIsOpen.value) {
+      resetSelectedConceptscheme();
+    }
+  });
 
   return { conceptschemes, selectedConceptscheme, getConceptscheme, setConceptscheme, resetSelectedConceptscheme };
 });
