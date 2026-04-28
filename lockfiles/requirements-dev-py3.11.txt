@@ -166,7 +166,7 @@ pyramid-skosprovider==1.3.0
     # via atramhasis (pyproject.toml)
 pyramid-tm==2.6
     # via atramhasis (pyproject.toml)
-pytest==9.0.2
+pytest==9.0.3
     # via
     #   atramhasis (pyproject.toml)
     #   pytest-cov
