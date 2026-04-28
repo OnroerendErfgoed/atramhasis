@@ -25,13 +25,43 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   const isLoading = (key: string) => (loadingByKey.value[key] ?? 0) > 0;
 
   /* Modals */
-  const addConceptModalIsOpen = ref(false);
-  const openAddConceptModal = () => {
-    addConceptModalIsOpen.value = true;
+  const conceptschemeModalIsOpen = ref(false);
+  const openConceptschemeModal = () => (conceptschemeModalIsOpen.value = true);
+  const closeConceptschemeModal = () => (conceptschemeModalIsOpen.value = false);
+
+  const labelModalKey = ref(0);
+  const labelModalIsOpen = ref(false);
+  const labelModalMode = ref<ModalMode>(ModalMode.ADD);
+  const openLabelModal = (modalMode: ModalMode) => {
+    labelModalKey.value++;
+    labelModalIsOpen.value = true;
+    labelModalMode.value = modalMode;
   };
-  const closeAddConceptModal = () => {
-    addConceptModalIsOpen.value = false;
+  const closeLabelModal = () => (labelModalIsOpen.value = false);
+
+  const noteModalKey = ref(0);
+  const noteModalIsOpen = ref(false);
+  const noteModalMode = ref<ModalMode>(ModalMode.ADD);
+  const openNoteModal = (modalMode: ModalMode) => {
+    noteModalKey.value++;
+    noteModalIsOpen.value = true;
+    noteModalMode.value = modalMode;
   };
+  const closeNoteModal = () => (noteModalIsOpen.value = false);
+
+  const sourceModalKey = ref(0);
+  const sourceModalIsOpen = ref(false);
+  const sourceModalMode = ref<ModalMode>(ModalMode.ADD);
+  const openSourceModal = (modalMode: ModalMode) => {
+    sourceModalKey.value++;
+    sourceModalIsOpen.value = true;
+    sourceModalMode.value = modalMode;
+  };
+  const closeSourceModal = () => (sourceModalIsOpen.value = false);
+
+  const conceptModalIsOpen = ref(false);
+  const openConceptModal = () => (conceptModalIsOpen.value = true);
+  const closeConceptModal = () => (conceptModalIsOpen.value = false);
 
   const providerModalKey = ref(0);
   const providerModalIsOpen = ref(false);
@@ -41,9 +71,7 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     providerModalIsOpen.value = true;
     providerModalMode.value = modalMode;
   };
-  const closeProviderModal = () => {
-    providerModalIsOpen.value = false;
-  };
+  const closeProviderModal = () => (providerModalIsOpen.value = false);
 
   /* Breadcrumbs */
   const breadcrumbLabels = ref<Record<string, string>>({});
@@ -59,9 +87,27 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     activeLoadingCount,
     isFullscreenLoading,
     isLoading,
-    addConceptModalIsOpen,
-    openAddConceptModal,
-    closeAddConceptModal,
+    conceptschemeModalIsOpen,
+    openConceptschemeModal,
+    closeConceptschemeModal,
+    conceptModalIsOpen,
+    openConceptModal,
+    closeConceptModal,
+    labelModalKey,
+    labelModalIsOpen,
+    labelModalMode,
+    openLabelModal,
+    closeLabelModal,
+    noteModalKey,
+    noteModalIsOpen,
+    noteModalMode,
+    openNoteModal,
+    closeNoteModal,
+    sourceModalKey,
+    sourceModalIsOpen,
+    sourceModalMode,
+    openSourceModal,
+    closeSourceModal,
     providerModalKey,
     providerModalIsOpen,
     providerModalMode,

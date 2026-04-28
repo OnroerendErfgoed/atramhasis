@@ -1,6 +1,7 @@
 <template>
   <UModal
     v-model:open="providerModalIsOpen"
+    :dismissible="false"
     :title="t('components.modalProvider.title')"
     :description="
       t('components.modalProvider.description', { mode: isEditMode ? t('actions.edit') : t('actions.add') })
@@ -128,20 +129,12 @@ const adminUiStore = useAdminUiStore();
 const { providerModalIsOpen, providerModalMode } = storeToRefs(adminUiStore);
 const isEditMode = computed(() => providerModalMode.value === ModalMode.EDIT);
 
-const languageStore = useListStore();
-const { languages } = storeToRefs(languageStore);
+const listStore = useListStore();
+const { languageOptions } = storeToRefs(listStore);
 
 const apiService = new ApiService();
 const { handleApiError } = useApiError();
 const PROVIDER_MODAL_LOADING_KEY = 'provider-modal-submit';
-
-// Options for select inputs
-const languageOptions = computed(() =>
-  languages.value.map((lang) => ({
-    label: lang.name,
-    value: lang.id,
-  }))
-);
 
 const generationStrategyOptions = computed(() => [
   {

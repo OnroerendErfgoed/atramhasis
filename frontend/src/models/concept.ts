@@ -1,3 +1,5 @@
+import type { Label, Note } from '@models/util';
+
 export interface OverviewConcept {
   id: string;
   uri: string;
@@ -6,36 +8,7 @@ export interface OverviewConcept {
 }
 
 export interface Concept extends OverviewConcept {
-  labels: ConceptLabel[];
-  notes: ConceptNote[];
+  labels: Label[];
+  notes: Note[];
   member_of: Concept[];
-}
-
-interface ConceptLabel {
-  label: string;
-  language: string;
-  type: ConceptLabelEnum;
-}
-
-interface ConceptNote {
-  note: string;
-  language: string;
-  type: ConceptNoteEnum;
-}
-
-export enum ConceptLabelEnum {
-  PREF = 'prefLabel',
-  ALT = 'altLabel',
-  HIDDEN = 'hiddenLabel',
-  SORT = 'sortLabel',
-}
-
-export enum ConceptNoteEnum {
-  CHANGE = 'changeNote',
-  DEFINITION = 'definition',
-  EDITORIAL = 'editorialNote',
-  EXAMPLE = 'example',
-  HISTORY = 'historyNote',
-  SCOPE = 'scopeNote',
-  NOTE = 'note',
 }

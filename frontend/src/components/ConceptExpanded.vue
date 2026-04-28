@@ -44,7 +44,8 @@
 </template>
 
 <script setup lang="ts">
-import { type Concept, ConceptLabelEnum } from '@models/concept';
+import { type Concept } from '@models/concept';
+import { LabelTypeEnum } from '@models/util';
 import { useConceptStore } from '@stores/concept';
 import { capitalize, computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -59,12 +60,10 @@ const toast = useToast();
 const conceptStore = useConceptStore();
 const concept = ref<Concept>();
 
-const prefLabels = computed(() => concept.value?.labels.filter((label) => label.type === ConceptLabelEnum.PREF) || []);
-const altLabels = computed(() => concept.value?.labels.filter((label) => label.type === ConceptLabelEnum.ALT) || []);
-const hiddenLabels = computed(
-  () => concept.value?.labels.filter((label) => label.type === ConceptLabelEnum.HIDDEN) || []
-);
-const sortLabels = computed(() => concept.value?.labels.filter((label) => label.type === ConceptLabelEnum.SORT) || []);
+const prefLabels = computed(() => concept.value?.labels.filter((label) => label.type === LabelTypeEnum.PREF) || []);
+const altLabels = computed(() => concept.value?.labels.filter((label) => label.type === LabelTypeEnum.ALT) || []);
+const hiddenLabels = computed(() => concept.value?.labels.filter((label) => label.type === LabelTypeEnum.HIDDEN) || []);
+const sortLabels = computed(() => concept.value?.labels.filter((label) => label.type === LabelTypeEnum.SORT) || []);
 
 const fetchConcept = async () => {
   try {

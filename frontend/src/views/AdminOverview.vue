@@ -156,7 +156,7 @@
         </header>
 
         <main class="min-h-0 flex-1 overflow-hidden p-6">
-          <div class="mx-auto flex h-full w-full max-w-7xl flex-col">
+          <div class="mx-auto flex h-full w-full flex-col">
             <RouterView v-slot="{ Component, route: currentRoute }">
               <Suspense timeout="0">
                 <component :is="Component" :key="currentRoute.fullPath" />
@@ -245,7 +245,7 @@ const currentSectionActions = computed(() => {
         {
           label: t('overview.actions.addConcept'),
           icon: 'i-lucide-plus',
-          onClick: () => adminUiStore.openAddConceptModal(),
+          onClick: () => adminUiStore.openConceptModal(),
         },
       ];
     default:

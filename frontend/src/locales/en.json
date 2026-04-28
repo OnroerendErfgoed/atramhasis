@@ -35,6 +35,9 @@
         "idGenerationStrategy": "ID gen. strat.",
         "subject": "Subject",
         "expandStrategy": "Expand strategy",
+        "language": "Language",
+        "note": "Note",
+        "source": "Source",
         "actions": "Actions"
       },
       "actions": {
@@ -59,6 +62,15 @@
       "hiddenLabels": "Hidden labels",
       "sortLabels": "Sort labels",
       "notes": "Notes"
+    },
+    "modalConceptscheme": {
+      "title": "{conceptscheme}",
+      "description": "{tab}",
+      "tabs": {
+        "labels": "Labels",
+        "notes": "Notes",
+        "sources": "Sources"
+      }
     },
     "modalProvider": {
       "title": "Manage providers",
@@ -110,9 +122,63 @@
         }
       }
     },
+    "modalLabel": {
+      "title": "{item}",
+      "description": "{mode} a label",
+      "form": {
+        "label": {
+          "label": "Label",
+          "placeholder": "Enter the label",
+          "hint": "Required"
+        },
+        "language": {
+          "label": "Language",
+          "placeholder": "Choose a language",
+          "hint": "Required"
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Choose a type",
+          "hint": "Required"
+        }
+      }
+    },
+    "modalNote": {
+      "title": "{item}",
+      "description": "{mode} a note",
+      "form": {
+        "language": {
+          "label": "Language",
+          "placeholder": "Choose a language",
+          "hint": "Required"
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Choose a type",
+          "hint": "Required"
+        },
+        "note": {
+          "label": "Note",
+          "placeholder": "Enter the note",
+          "hint": "Required"
+        }
+      }
+    },
+    "modalSource": {
+      "title": "{item}",
+      "description": "{mode} a source",
+      "form": {
+        "citation": {
+          "label": "Citation",
+          "placeholder": "Enter the source citation",
+          "hint": "Required"
+        }
+      }
+    },
     "modalDelete": {
       "title": "Delete {entity}",
-      "message": "Are you sure you want to remove {entity} {item}?"
+      "message": "Are you sure you want to remove {entity} {item}?",
+      "messageGeneric": "Are you sure you want to remove this {entity}?"
     }
   },
   "api": {
@@ -183,5 +249,51 @@
     "add": "Add",
     "edit": "Edit",
     "ok": "OK"
+  },
+  "entities": {
+    "conceptScheme": "conceptscheme",
+    "provider": "provider",
+    "label": "label",
+    "note": "note",
+    "source": "source"
+  },
+  "lists": {
+    "languages": {
+      "en": "English",
+      "nl": "Dutch",
+      "vls": "Flemish",
+      "und": "Undetermined",
+      "nl-BE": "Dutch, Flemish, Belgium",
+      "en-GB": "English, United Kingdom",
+      "fr": "French",
+      "de": "German",
+      "la": "Latin"
+    },
+    "labelTypes": {
+      "prefLabel": "Preferred",
+      "altLabel": "Alternative",
+      "hiddenLabel": "Hidden",
+      "sortLabel": "Sort"
+    },
+    "noteTypes": {
+      "definition": "Definition",
+      "scopeNote": "Scope note",
+      "example": "Example",
+      "historyNote": "History note",
+      "editorialNote": "Editorial note",
+      "changeNote": "Change note",
+      "note": "Note"
+    },
+    "matchTypes": {
+      "exact": "Exact",
+      "close": "Close",
+      "broad": "Broad",
+      "narrow": "Narrow",
+      "related": "Related"
+    },
+    "conceptTypes": {
+      "concept": "Concept",
+      "collection": "Collection"
+    }
   }
 }
