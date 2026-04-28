@@ -84,7 +84,7 @@ legacy-cgi==2.6.4
     # via webob
 lxml==6.0.2
     # via pyld
-mako==1.3.10
+mako==1.3.11
     # via
     #   alembic
     #   pyramid-mako
