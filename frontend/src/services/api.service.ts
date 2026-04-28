@@ -29,6 +29,10 @@ export class ApiService extends HttpService {
     return (await this.get<Concept>(`/conceptschemes/${schemeId}/c/${conceptId}`)).data;
   }
 
+  async getProvider(providerId: string): Promise<Provider> {
+    return (await this.get<Provider>(`/providers/${providerId}`)).data;
+  }
+
   async getProviders(): Promise<Provider[]> {
     return (await this.get<Provider[]>('/providers')).data;
   }

@@ -59,6 +59,8 @@ const providerStore = useProviderStore();
 const { selectedProvider } = storeToRefs(providerStore);
 const providers = ref<Provider[]>([]);
 
+const PROVIDER_LOADING_KEY = 'provider-fetch';
+
 const fetchProviders = async () => {
   try {
     providers.value = await apiService.getProviders();
@@ -179,9 +181,17 @@ const columns: TableColumn<Provider>[] = [
           variant: 'outline',
           size: 'xs',
           title: t('grid.columns.actions.edit'),
-          onClick: () => {
-            adminUiStore.openProviderModal(ModalMode.EDIT);
-            providerStore.setSelectedProvider(row.original);
+          onClick: async () => {
+            try {
+              adminUiStore.startLoading(PROVIDER_LOADING_KEY);
+              const provider = await providerStore.getProvider(row.original.id!, true);
+              providerStore.setSelectedProvider(provider);
+              adminUiStore.openProviderModal(ModalMode.EDIT);
+            } catch (error) {
+              console.error(t('api.errors.fetch.title', { item: 'provider' }), error);
+            } finally {
+              adminUiStore.stopLoading(PROVIDER_LOADING_KEY);
+            }
           },
         }),
         h(UButton, {
