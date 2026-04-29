@@ -12,7 +12,7 @@
       "addProvider": "Add a provider",
       "addLanguage": "Add a language"
     },
-    "backToOverview": "Back to overview",
+    "goToHomepage": "Go to homepage",
     "logout": "Log out",
     "toggleSidebar": "Toggle sidebar"
   },

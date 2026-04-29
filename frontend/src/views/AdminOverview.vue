@@ -104,20 +104,9 @@
             icon="i-lucide-house"
             class="w-full text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
             :class="state === 'expanded' ? 'justify-start' : 'justify-center px-0'"
-            :label="state === 'expanded' ? t('overview.backToOverview') : undefined"
+            :label="state === 'expanded' ? t('overview.goToHomepage') : undefined"
             :ui="{ leadingIcon: 'size-4' }"
             @click="navigateToHomepage"
-          />
-
-          <UButton
-            color="neutral"
-            variant="ghost"
-            icon="i-lucide-log-out"
-            class="w-full text-primary-50/72 hover:bg-primary-200/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200/70"
-            :class="state === 'expanded' ? 'justify-start' : 'justify-center px-0'"
-            :label="state === 'expanded' ? t('overview.logout') : undefined"
-            :ui="{ leadingIcon: 'size-4' }"
-            @click.prevent
           />
         </div>
       </template>
