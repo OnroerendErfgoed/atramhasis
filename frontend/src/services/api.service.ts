@@ -37,6 +37,10 @@ export class ApiService extends HttpService {
     return (await this.get<Provider[]>('/providers')).data;
   }
 
+  async getLanguage(languageId: string): Promise<Language> {
+    return (await this.get<Language>(`/languages/${languageId}`)).data;
+  }
+
   async getLanguages(): Promise<Language[]> {
     return (await this.get<Language[]>('/languages')).data;
   }
@@ -46,9 +50,17 @@ export class ApiService extends HttpService {
     return (await this.post<Provider, ProviderForm>('/providers', provider)).data;
   }
 
+  async createLanguage(language: Language): Promise<Language> {
+    return this.updateLanguage(language);
+  }
+
   // Updaters
   async updateConceptscheme(conceptscheme: Conceptscheme): Promise<Conceptscheme> {
     return (await this.put<Conceptscheme, Conceptscheme>(`/conceptschemes/${conceptscheme.id}`, conceptscheme)).data;
+  }
+
+  async updateLanguage(language: Language): Promise<Language> {
+    return (await this.put<Language, Language>(`/languages/${language.id}`, language)).data;
   }
 
   async updateProvider(provider: Provider): Promise<Provider> {

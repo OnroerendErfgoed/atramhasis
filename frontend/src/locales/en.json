@@ -125,6 +125,27 @@
         }
       }
     },
+    "modalLanguage": {
+      "title": "Manage languages",
+      "description": "{mode} a language",
+      "form": {
+        "id": {
+          "label": "Code",
+          "placeholder": "Enter the language code",
+          "hint": "Required"
+        },
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter the language name",
+          "hint": "Required"
+        }
+      },
+      "reference": {
+        "beforeLink": "You can use",
+        "linkText": "this",
+        "afterLink": "list as a reference."
+      }
+    },
     "modalLabel": {
       "title": "{item}",
       "description": "{mode} a label",
