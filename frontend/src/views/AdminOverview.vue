@@ -254,7 +254,7 @@ const currentSectionActions = computed(() => {
         {
           label: t('overview.actions.addLanguage'),
           icon: 'i-lucide-plus',
-          onClick: () => {},
+          onClick: () => adminUiStore.openLanguageModal(ModalMode.ADD),
         },
       ];
     default:

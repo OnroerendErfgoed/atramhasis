@@ -73,6 +73,16 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
   const closeProviderModal = () => (providerModalIsOpen.value = false);
 
+  const languageModalKey = ref(0);
+  const languageModalIsOpen = ref(false);
+  const languageModalMode = ref<ModalMode>(ModalMode.ADD);
+  const openLanguageModal = (modalMode: ModalMode) => {
+    languageModalKey.value++;
+    languageModalIsOpen.value = true;
+    languageModalMode.value = modalMode;
+  };
+  const closeLanguageModal = () => (languageModalIsOpen.value = false);
+
   /* Breadcrumbs */
   const breadcrumbLabels = ref<Record<string, string>>({});
 
@@ -113,6 +123,11 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     providerModalMode,
     openProviderModal,
     closeProviderModal,
+    languageModalKey,
+    languageModalIsOpen,
+    languageModalMode,
+    openLanguageModal,
+    closeLanguageModal,
     breadcrumbLabels,
     setBreadcrumbLabel,
   };
