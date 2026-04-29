@@ -79,7 +79,7 @@ import { h, ref, computed, resolveComponent, useTemplateRef, capitalize, watch }
 import { useRoute } from 'vue-router';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
-import type { OverviewConcept } from '@models/concept';
+import type { Concept, OverviewConcept } from '@models/concept';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import { useAdminUiStore } from '@stores/admin-ui';
@@ -104,7 +104,6 @@ const { conceptModalKey } = storeToRefs(adminUiStore);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
-const { selectedConcept } = storeToRefs(conceptStore);
 const listStore = useListStore();
 const { conceptTypes } = storeToRefs(listStore);
 const apiService = new ApiService();
@@ -118,8 +117,9 @@ const matchFilter = ref('');
 
 const fetchConceptscheme = async () => {
   try {
-    selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(schemeId);
-    adminUiStore.setBreadcrumbLabel(schemeId, (selectedConceptscheme.value as Conceptscheme).label);
+    const conceptscheme = (await conceptschemeStore.getConceptscheme(schemeId)) as Conceptscheme;
+    conceptschemeStore.setSelectedConceptscheme(conceptscheme);
+    adminUiStore.setBreadcrumbLabel(schemeId, conceptscheme.label);
   } catch (error) {
     console.error(t('api.errors.fetch.title', { item: 'conceptscheme' }), error);
     toast.add({
@@ -246,11 +246,12 @@ const columns: TableColumn<OverviewConcept>[] = [
           onClick: async () => {
             try {
               adminUiStore.startLoading(CONCEPT_LOADING_KEY);
-              selectedConcept.value = await conceptStore.getConcept(
+              const concept = await conceptStore.getConcept(
                 selectedConceptscheme.value?.id as string,
                 row.original.id,
                 true
               );
+              conceptStore.setSelectedConcept(concept as Concept);
               adminUiStore.openConceptModal(ModalMode.EDIT);
             } catch (error) {
               console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);

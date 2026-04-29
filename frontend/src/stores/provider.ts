@@ -28,10 +28,6 @@ export const useProviderStore = defineStore('provider', () => {
     }
   };
 
-  const setProvider = (providerId: string, provider: Provider) => {
-    providers.value[providerId] = provider;
-  };
-
   const setSelectedProvider = (provider: Provider) => {
     selectedProvider.value = provider;
   };
@@ -46,5 +42,5 @@ export const useProviderStore = defineStore('provider', () => {
     }
   });
 
-  return { providers, selectedProvider, setSelectedProvider, resetSelectedProvider, getProvider, setProvider };
+  return { providers, selectedProvider, setSelectedProvider, resetSelectedProvider, getProvider };
 });
