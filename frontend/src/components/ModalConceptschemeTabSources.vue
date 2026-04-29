@@ -1,5 +1,5 @@
 <template>
-  <ModalConceptschemeTab
+  <ModalTabTable
     :data="data"
     :main-column="mainColumn"
     :on-add="() => adminUiStore.openSourceModal(ModalMode.ADD)"
@@ -8,7 +8,7 @@
   />
   <ModalSource
     :key="sourceModalKey"
-    :title="t('components.modalSource.title', { item: selectedConceptscheme?.label })"
+    :title="t('components.modalSource.title', { item: tabTitle })"
     @add="emit('add', $event)"
     @edit="emit('edit', $event)"
   />
@@ -17,16 +17,16 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { h, ref } from 'vue';
-import type { TableRow } from '@components/ModalConceptscheme.vue';
+import type { TableRow } from '@components/ModalTabTable.vue';
 import { ModalMode, type Source } from '@models/util';
 import DOMPurify from 'dompurify';
-import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useSourceStore } from '@stores/source';
 
 defineProps<{
   data: TableRow<Source>[];
+  tabTitle: string;
 }>();
 
 const emit = defineEmits<{
@@ -37,8 +37,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const conceptschemeStore = useConceptschemeStore();
-const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const { sourceModalKey } = storeToRefs(adminUiStore);
 const sourceStore = useSourceStore();
@@ -46,27 +44,22 @@ const { selectedSource } = storeToRefs(sourceStore);
 
 const modalDeleteIsOpen = ref(false);
 
-type GenericRow = {
-  isAddRow?: boolean;
-};
-
 const mainColumn = {
   accessorKey: 'citation',
   header: t('grid.columns.labels.source'),
-  cell: (row: GenericRow) =>
+  cell: (row: TableRow<Source>) =>
     h('div', {
-      innerHTML: DOMPurify.sanitize((row as TableRow<Source>).citation, { USE_PROFILES: { html: true } }),
+      innerHTML: DOMPurify.sanitize(row.citation, { USE_PROFILES: { html: true } }),
     }),
 };
 
-const onEdit = (row: GenericRow) => {
-  const selected = row as TableRow<Source>;
+const onEdit = (row: TableRow<Source>) => {
   adminUiStore.openSourceModal(ModalMode.EDIT);
-  sourceStore.setSelectedSource(selected as Source);
+  sourceStore.setSelectedSource(row);
 };
 
-const onDelete = (row: GenericRow) => {
-  sourceStore.setSelectedSource(row as Source);
+const onDelete = (row: TableRow<Source>) => {
+  sourceStore.setSelectedSource(row);
   modalDeleteIsOpen.value = true;
 };
 const confirmDelete = () => {

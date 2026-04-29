@@ -1,5 +1,5 @@
 <template>
-  <ModalConceptschemeTab
+  <ModalTabTable
     :data="data"
     :main-column="mainColumn"
     :extra-columns="extraColumns"
@@ -9,7 +9,7 @@
   />
   <ModalLabel
     :key="labelModalKey"
-    :title="t('components.modalLabel.title', { item: selectedConceptscheme?.label })"
+    :title="t('components.modalLabel.title', { item: tabTitle })"
     @add="emit('add', $event)"
     @edit="emit('edit', $event)"
   />
@@ -17,9 +17,8 @@
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import type { TableRow } from '@components/ModalConceptscheme.vue';
+import type { TableRow } from '@components/ModalTabTable.vue';
 import { ModalMode, type Label } from '@models/util';
-import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useLabelStore } from '@stores/label';
@@ -27,6 +26,7 @@ import { ref } from 'vue';
 
 defineProps<{
   data: TableRow<Label>[];
+  tabTitle: string;
 }>();
 
 const emit = defineEmits<{
@@ -37,8 +37,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const conceptschemeStore = useConceptschemeStore();
-const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const { labelModalKey } = storeToRefs(adminUiStore);
 const labelStore = useLabelStore();
@@ -46,37 +44,32 @@ const { selectedLabel } = storeToRefs(labelStore);
 
 const modalDeleteIsOpen = ref(false);
 
-type GenericRow = {
-  isAddRow?: boolean;
-};
-
 const mainColumn = {
   accessorKey: 'label',
   header: t('grid.columns.labels.label'),
-  cell: (row: GenericRow) => (row as TableRow<Label>).label,
+  cell: (row: TableRow<Label>) => row.label,
 };
 
 const extraColumns = [
   {
     accessorKey: 'language',
     header: t('grid.columns.labels.language'),
-    cell: (row: GenericRow) => t('lists.languages.' + (row as TableRow<Label>).language),
+    cell: (row: TableRow<Label>) => t('lists.languages.' + row.language),
   },
   {
     accessorKey: 'type',
     header: t('grid.columns.labels.type'),
-    cell: (row: GenericRow) => t('lists.labelTypes.' + (row as TableRow<Label>).type),
+    cell: (row: TableRow<Label>) => t('lists.labelTypes.' + row.type),
   },
 ];
 
-const onEdit = (row: GenericRow) => {
-  const selected = row as TableRow<Label>;
+const onEdit = (row: TableRow<Label>) => {
   adminUiStore.openLabelModal(ModalMode.EDIT);
-  labelStore.setSelectedLabel(selected as Label);
+  labelStore.setSelectedLabel(row);
 };
 
-const onDelete = (row: GenericRow) => {
-  labelStore.setSelectedLabel(row as Label);
+const onDelete = (row: TableRow<Label>) => {
+  labelStore.setSelectedLabel(row);
   modalDeleteIsOpen.value = true;
 };
 const confirmDelete = () => {

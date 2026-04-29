@@ -1,5 +1,5 @@
 <template>
-  <ModalConceptschemeTab
+  <ModalTabTable
     :data="data"
     :main-column="mainColumn"
     :extra-columns="extraColumns"
@@ -9,7 +9,7 @@
   />
   <ModalNote
     :key="noteModalKey"
-    :title="t('components.modalNote.title', { item: selectedConceptscheme?.label })"
+    :title="t('components.modalNote.title', { item: tabTitle })"
     @add="emit('add', $event)"
     @edit="emit('edit', $event)"
   />
@@ -18,16 +18,16 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { h, ref } from 'vue';
-import type { TableRow } from '@components/ModalConceptscheme.vue';
+import type { TableRow } from '@components/ModalTabTable.vue';
 import { ModalMode, type Note } from '@models/util';
 import DOMPurify from 'dompurify';
-import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useNoteStore } from '@stores/note';
 
 defineProps<{
   data: TableRow<Note>[];
+  tabTitle: string;
 }>();
 
 const emit = defineEmits<{
@@ -38,8 +38,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const conceptschemeStore = useConceptschemeStore();
-const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
 const { noteModalKey } = storeToRefs(adminUiStore);
 const noteStore = useNoteStore();
@@ -47,16 +45,12 @@ const { selectedNote } = storeToRefs(noteStore);
 
 const modalDeleteIsOpen = ref(false);
 
-type GenericRow = {
-  isAddRow?: boolean;
-};
-
 const mainColumn = {
   accessorKey: 'note',
   header: t('grid.columns.labels.note'),
-  cell: (row: GenericRow) =>
+  cell: (row: TableRow<Note>) =>
     h('div', {
-      innerHTML: DOMPurify.sanitize((row as TableRow<Note>).note, { USE_PROFILES: { html: true } }),
+      innerHTML: DOMPurify.sanitize(row.note, { USE_PROFILES: { html: true } }),
     }),
 };
 
@@ -64,23 +58,22 @@ const extraColumns = [
   {
     accessorKey: 'language',
     header: t('grid.columns.labels.language'),
-    cell: (row: GenericRow) => t('lists.languages.' + (row as TableRow<Note>).language),
+    cell: (row: TableRow<Note>) => t('lists.languages.' + row.language),
   },
   {
     accessorKey: 'type',
     header: t('grid.columns.labels.type'),
-    cell: (row: GenericRow) => t('lists.noteTypes.' + (row as TableRow<Note>).type),
+    cell: (row: TableRow<Note>) => t('lists.noteTypes.' + row.type),
   },
 ];
 
-const onEdit = (row: GenericRow) => {
-  const selected = row as TableRow<Note>;
+const onEdit = (row: TableRow<Note>) => {
   adminUiStore.openNoteModal(ModalMode.EDIT);
-  noteStore.setSelectedNote(selected as Note);
+  noteStore.setSelectedNote(row);
 };
 
-const onDelete = (row: GenericRow) => {
-  noteStore.setSelectedNote(row as Note);
+const onDelete = (row: TableRow<Note>) => {
+  noteStore.setSelectedNote(row);
   modalDeleteIsOpen.value = true;
 };
 const confirmDelete = () => {

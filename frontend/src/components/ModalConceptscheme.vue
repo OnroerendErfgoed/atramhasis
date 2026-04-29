@@ -11,6 +11,7 @@
         <template #labels>
           <ModalConceptschemeTabLabels
             :data="labelsWithAddRow"
+            :tab-title="selectedConceptscheme?.label ?? ''"
             @add="addLabel"
             @edit="editLabel"
             @delete="deleteLabel"
@@ -18,12 +19,19 @@
         </template>
 
         <template #notes>
-          <ModalConceptschemeTabNotes :data="notesWithAddRow" @add="addNote" @edit="editNote" @delete="deleteNote" />
+          <ModalConceptschemeTabNotes
+            :data="notesWithAddRow"
+            :tab-title="selectedConceptscheme?.label ?? ''"
+            @add="addNote"
+            @edit="editNote"
+            @delete="deleteNote"
+          />
         </template>
 
         <template #sources>
           <ModalConceptschemeTabSources
             :data="sourcesWithAddRow"
+            :tab-title="selectedConceptscheme?.label ?? ''"
             @add="addSource"
             @edit="editSource"
             @delete="deleteSource"
@@ -40,12 +48,6 @@
   </UModal>
 </template>
 
-<script lang="ts">
-export type TableRow<T> = T & {
-  isAddRow?: boolean;
-};
-</script>
-
 <script setup lang="ts">
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useConceptschemeStore } from '@stores/conceptscheme';
@@ -56,6 +58,7 @@ import { capitalize, computed, ref } from 'vue';
 import { type Label, type Note, type Source } from '@models/util';
 import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
+import type { TableRow } from '@components/ModalTabTable.vue';
 
 const toast = useToast();
 const { t } = useI18n();
