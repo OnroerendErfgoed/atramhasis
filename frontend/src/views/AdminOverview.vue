@@ -197,11 +197,6 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
       icon: 'i-lucide-languages',
       to: { name: 'AdminLanguages' },
     },
-    {
-      label: t('overview.nav.users'),
-      icon: 'i-lucide-users',
-      disabled: true,
-    },
   ],
 ]);
 
