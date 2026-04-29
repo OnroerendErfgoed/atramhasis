@@ -47,7 +47,7 @@ import { useLanguageStore } from '@stores/language';
 import { useListStore } from '@stores/list';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import { storeToRefs } from 'pinia';
-import { computed, h, ref, resolveComponent, useTemplateRef } from 'vue';
+import { capitalize, computed, h, ref, resolveComponent, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const UButton = resolveComponent('UButton');
@@ -73,18 +73,18 @@ const deleteLanguage = async () => {
     adminUiStore.startLoading('deleteLanguage');
     await apiService.deleteLanguage(selectedLanguage.value.id);
     toast.add({
-      title: t('api.success.delete.title', { item: 'Language' }),
-      description: t('api.success.delete.description', { item: 'language' }),
+      title: t('api.success.delete.title', { item: capitalize(t('entities.language', 1)) }),
+      description: t('api.success.delete.description', { item: t('entities.language', 1) }),
       icon: 'i-lucide-check',
       color: 'success',
     });
     languageStore.resetSelectedLanguage();
     listStore.fetchLanguages();
   } catch (error) {
-    console.error(t('api.errors.delete.title', { item: 'Language' }), error);
+    console.error(t('api.errors.delete.title', { item: capitalize(t('entities.language', 1)) }), error);
     toast.add({
-      title: t('api.errors.delete.title', { item: 'language' }),
-      description: t('api.errors.delete.description', { item: 'language' }),
+      title: t('api.errors.delete.title', { item: capitalize(t('entities.language', 1)) }),
+      description: t('api.errors.delete.description', { item: t('entities.language', 1) }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
@@ -148,7 +148,7 @@ const columns: TableColumn<Language>[] = [
               languageStore.setSelectedLanguage(language);
               adminUiStore.openLanguageModal(ModalMode.EDIT);
             } catch (error) {
-              console.error(t('api.errors.fetch.title', { item: 'language' }), error);
+              console.error(t('api.errors.fetch.title', { item: t('entities.language', 1) }), error);
             } finally {
               adminUiStore.stopLoading(LANGUAGE_LOADING_KEY);
             }

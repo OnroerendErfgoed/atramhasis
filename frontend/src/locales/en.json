@@ -297,9 +297,10 @@
     "ok": "OK"
   },
   "entities": {
-    "conceptScheme": "conceptscheme | conceptschemes",
+    "conceptscheme": "conceptscheme | conceptschemes",
     "concept": "concept | concepts",
     "provider": "provider | providers",
+    "language": "language | languages",
     "label": "label | labels",
     "note": "note | notes",
     "source": "source | sources"
