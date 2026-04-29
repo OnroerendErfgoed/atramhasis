@@ -71,4 +71,8 @@ export class ApiService extends HttpService {
   async deleteProvider(providerId: string): Promise<void> {
     await this.delete(`/providers/${providerId}`);
   }
+
+  async deleteLanguage(languageId: string): Promise<void> {
+    await this.delete(`/languages/${languageId}`);
+  }
 }

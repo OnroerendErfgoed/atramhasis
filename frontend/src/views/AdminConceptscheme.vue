@@ -121,10 +121,10 @@ const fetchConceptscheme = async () => {
     conceptschemeStore.setSelectedConceptscheme(conceptscheme);
     adminUiStore.setBreadcrumbLabel(schemeId, conceptscheme.label);
   } catch (error) {
-    console.error(t('api.errors.fetch.title', { item: 'conceptscheme' }), error);
+    console.error(t('api.errors.fetch.title', { item: t('entities.conceptscheme', 1) }), error);
     toast.add({
-      title: t('api.errors.fetch.title', { item: 'conceptscheme' }),
-      description: t('api.errors.fetch.description', { item: 'conceptscheme' }),
+      title: t('api.errors.fetch.title', { item: t('entities.conceptscheme', 1) }),
+      description: t('api.errors.fetch.description', { item: t('entities.conceptscheme', 1) }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
@@ -138,10 +138,10 @@ const fetchConcepts = async () => {
       match: matchFilter.value || undefined,
     });
   } catch (error) {
-    console.error(t('api.errors.fetch.title', { item: 'concepts' }), error);
+    console.error(t('api.errors.fetch.title', { item: t('entities.concept', 2) }), error);
     toast.add({
-      title: t('api.errors.fetch.title', { item: 'concepts' }),
-      description: t('api.errors.fetch.description', { item: 'concepts' }),
+      title: t('api.errors.fetch.title', { item: t('entities.concept', 2) }),
+      description: t('api.errors.fetch.description', { item: t('entities.concept', 2) }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });

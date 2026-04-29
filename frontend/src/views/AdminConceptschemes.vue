@@ -84,10 +84,10 @@ const fetchConceptschemes = async () => {
   try {
     conceptschemes.value = await apiService.getConceptschemes();
   } catch (error) {
-    console.error(t('api.errors.fetch.title', { item: 'conceptschemes' }), error);
+    console.error(t('api.errors.fetch.title', { item: t('entities.conceptscheme', 2) }), error);
     toast.add({
-      title: t('api.errors.fetch.title', { item: 'conceptschemes' }),
-      description: t('api.errors.fetch.description', { item: 'conceptschemes' }),
+      title: t('api.errors.fetch.title', { item: t('entities.conceptscheme', 2) }),
+      description: t('api.errors.fetch.description', { item: t('entities.conceptscheme', 2) }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
@@ -165,7 +165,7 @@ const columns: TableColumn<ConceptschemeRow>[] = [
                 conceptschemeStore.setSelectedConceptscheme(conceptscheme as Conceptscheme);
                 adminUiStore.openConceptschemeModal();
               } catch (error) {
-                console.error(t('api.errors.fetch.title', { item: 'languages' }), error);
+                console.error(t('api.errors.fetch.title', { item: t('entities.conceptscheme') }), error);
               } finally {
                 adminUiStore.stopLoading(CONCEPTSCHEME_LOADING_KEY);
               }
