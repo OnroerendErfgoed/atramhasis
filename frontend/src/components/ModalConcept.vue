@@ -7,6 +7,24 @@
     class="max-w-4xl"
   >
     <template #body>
+      <UForm class="space-y-4 rounded-md bg-muted p-4">
+        <div class="grid grid-cols-3 gap-4">
+          <UFormField
+            name="concept-conceptscheme"
+            size="lg"
+            :label="t('components.modalConcept.form.conceptscheme.label')"
+          >
+            <USelect v-model="form.conceptscheme" :items="conceptschemeOptions" class="w-full" :disabled="isEditMode" />
+          </UFormField>
+
+          <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
+            <USelect v-model="form.type" :items="conceptTypes" class="w-full" />
+          </UFormField>
+          <UFormField v-if="isEditMode" name="concept-id" size="lg" :label="t('components.modalConcept.form.id.label')">
+            <UInput :model-value="form.id" class="w-full" disabled />
+          </UFormField>
+        </div>
+      </UForm>
       <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
         <template #labels> labels </template>
 
@@ -33,12 +51,14 @@ import { useAdminUiStore } from '@stores/admin-ui';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import type { TabsItem } from '@nuxt/ui';
-import { capitalize, computed, ref } from 'vue';
+import { capitalize, computed, onBeforeMount, ref } from 'vue';
 // import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
 import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
-import { ModalMode } from '@models/util';
+import { ConceptTypeEnum, ModalMode } from '@models/util';
+import { useListStore } from '@stores/list';
+import type { ConceptForm } from '@models/concept';
 
 const toast = useToast();
 const { t } = useI18n();
@@ -50,6 +70,8 @@ const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
 const { selectedConcept } = storeToRefs(conceptStore);
+const listStore = useListStore();
+const { conceptTypes, conceptschemeOptions } = storeToRefs(listStore);
 
 // const apiService = new ApiService();
 const { handleApiError } = useApiError();
@@ -99,4 +121,22 @@ const save = async () => {
     adminUiStore.stopLoading(CONCEPT_MODAL_LOADING_KEY);
   }
 };
+
+// Form state
+const form = ref<ConceptForm>({
+  conceptscheme: selectedConceptscheme.value?.id as string,
+  type: ConceptTypeEnum.CONCEPT,
+  id: undefined,
+});
+
+// Initial population of form when editing
+onBeforeMount(() => {
+  if (isEditMode.value && selectedConcept.value) {
+    form.value = {
+      conceptscheme: selectedConceptscheme.value?.id as string,
+      type: selectedConcept.value.type,
+      id: selectedConcept.value.id,
+    };
+  }
+});
 </script>

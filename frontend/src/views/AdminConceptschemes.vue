@@ -43,7 +43,7 @@
       />
     </div>
 
-    <ModalConceptscheme />
+    <ModalConceptscheme :key="conceptschemeModalKey" />
   </div>
 </template>
 
@@ -74,6 +74,7 @@ const toast = useToast();
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
+const { conceptschemeModalKey } = storeToRefs(adminUiStore);
 const apiService = new ApiService();
 
 const CONCEPTSCHEME_LOADING_KEY = 'conceptscheme-fetch';

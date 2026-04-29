@@ -84,6 +84,17 @@
         "sources": "Sources",
         "relations": "Relations",
         "matches": "Matches"
+      },
+      "form": {
+        "conceptscheme": {
+          "label": "Scheme"
+        },
+        "type": {
+          "label": "Type"
+        },
+        "id": {
+          "label": "ID"
+        }
       }
     },
     "modalProvider": {

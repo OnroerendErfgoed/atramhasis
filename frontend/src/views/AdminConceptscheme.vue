@@ -70,7 +70,7 @@
       />
     </div>
 
-    <ModalConcept />
+    <ModalConcept :key="conceptModalKey" />
   </div>
 </template>
 
@@ -87,7 +87,7 @@ import { useListStore } from '@stores/list';
 import { storeToRefs } from 'pinia';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import type { Conceptscheme } from '@models/conceptscheme';
-import { ModalMode } from '@models/util';
+import { ConceptTypeEnum, ModalMode } from '@models/util';
 import { useConceptStore } from '@stores/concept';
 
 const UButton = resolveComponent('UButton');
@@ -100,6 +100,7 @@ const route = useRoute();
 const CONCEPT_LOADING_KEY = 'concept-fetch';
 
 const adminUiStore = useAdminUiStore();
+const { conceptModalKey } = storeToRefs(adminUiStore);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
@@ -225,7 +226,7 @@ const columns: TableColumn<OverviewConcept>[] = [
           color: 'primary',
           variant: 'outline',
           size: 'xs',
-          disabled: row.original.type !== 'concept',
+          disabled: row.original.type !== ConceptTypeEnum.CONCEPT,
         }),
         h(UButton, {
           as: 'a',
@@ -247,7 +248,7 @@ const columns: TableColumn<OverviewConcept>[] = [
               adminUiStore.startLoading(CONCEPT_LOADING_KEY);
               selectedConcept.value = await conceptStore.getConcept(
                 selectedConceptscheme.value?.id as string,
-                +row.original.id,
+                row.original.id,
                 true
               );
               adminUiStore.openConceptModal(ModalMode.EDIT);
