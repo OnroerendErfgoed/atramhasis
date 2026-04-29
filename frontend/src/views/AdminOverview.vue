@@ -206,7 +206,7 @@ const navigationItems = computed<NavigationMenuItem[][]>(() => [
     {
       label: t('overview.nav.languages'),
       icon: 'i-lucide-languages',
-      disabled: true,
+      to: { name: 'AdminLanguages' },
     },
     {
       label: t('overview.nav.users'),
@@ -222,6 +222,7 @@ const sectionTitles = computed<Record<string, string>>(() => ({
     item: adminUiStore.breadcrumbLabels[route.params.id as string] || '',
   }),
   AdminProviders: t('header.titles.providers'),
+  AdminLanguages: t('header.titles.languages'),
 }));
 
 const currentSectionTitle = computed(() => {
@@ -246,6 +247,14 @@ const currentSectionActions = computed(() => {
           label: t('overview.actions.addConcept'),
           icon: 'i-lucide-plus',
           onClick: () => adminUiStore.openConceptModal(),
+        },
+      ];
+    case 'AdminLanguages':
+      return [
+        {
+          label: t('overview.actions.addLanguage'),
+          icon: 'i-lucide-plus',
+          onClick: () => {},
         },
       ];
     default:
