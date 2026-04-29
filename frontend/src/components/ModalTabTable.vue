@@ -58,7 +58,7 @@ const columns = computed<TableColumn<TableRow<T>>[]>(() => {
     meta: {
       class: {
         th: 'w-full',
-        td: 'w-full',
+        td: 'w-full whitespace-normal break-words [word-break:break-word]',
       },
     },
   };
