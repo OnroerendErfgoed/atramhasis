@@ -61,19 +61,11 @@
                 class="flex shrink-0 items-center justify-center rounded-full bg-primary-300/34 font-semibold tracking-[-0.02em] text-primary-100"
                 :class="state === 'expanded' ? 'h-14 w-14 text-xl' : 'h-12 w-12 text-lg'"
               >
-                JD
+                {{ userInitials }}
               </div>
 
               <div v-if="state === 'expanded'" class="min-w-0 text-left">
-                <p class="truncate text-xl leading-tight font-medium text-white">John Doe</p>
-                <UBadge
-                  color="neutral"
-                  variant="outline"
-                  size="sm"
-                  class="mt-1 border-primary-100/28 bg-primary-50/10 text-sm font-medium text-primary-50"
-                >
-                  Admin
-                </UBadge>
+                <p class="text-xl leading-tight font-medium text-white wrap-break-word">{{ userDisplayName }}</p>
               </div>
             </div>
           </div>
@@ -170,6 +162,8 @@ import type { NavigationMenuItem } from '@nuxt/ui';
 import { useAdminUiStore } from '@/stores/admin-ui';
 import { useI18n } from 'vue-i18n';
 import { ModalMode } from '@models/util';
+import { useAuthStore } from '@stores/auth';
+import { storeToRefs } from 'pinia';
 
 const { t } = useI18n();
 const adminUiStore = useAdminUiStore();
@@ -179,6 +173,20 @@ const route = useRoute();
 
 const routesWithBreadcrumb = ['AdminConceptscheme'];
 const showBreadcrumb = computed(() => routesWithBreadcrumb.includes(route.name as string));
+
+const authStore = useAuthStore();
+const { userInfo } = storeToRefs(authStore);
+const userDisplayName = computed(() => {
+  const username = userInfo.value?.username || 'Admin';
+  return username.replaceAll(',', '').trim();
+});
+const userInitials = computed(() => {
+  const parts = userDisplayName.value.split(' ').filter(Boolean).slice(0, 2);
+  if (!parts.length) {
+    return 'A';
+  }
+  return parts.map((part) => part[0]?.toUpperCase() || '').join('');
+});
 
 const navigationItems = computed<NavigationMenuItem[][]>(() => [
   [

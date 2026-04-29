@@ -343,5 +343,8 @@
       "concept": "Concept",
       "collection": "Collection"
     }
+  },
+  "auth": {
+    "error": "Failed to fetch user information. Please try again later."
   }
 }
