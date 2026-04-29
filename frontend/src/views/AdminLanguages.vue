@@ -33,8 +33,10 @@
 
 <script setup lang="ts">
 import type { Language } from '@models/language';
+import { ModalMode } from '@models/util';
 import type { TableColumn } from '@nuxt/ui';
 import { useAdminUiStore } from '@stores/admin-ui';
+import { useLanguageStore } from '@stores/language';
 import { useListStore } from '@stores/list';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import { storeToRefs } from 'pinia';
@@ -49,6 +51,10 @@ const { languageModalKey } = storeToRefs(adminUiStore);
 const { t } = useI18n();
 const listStore = useListStore();
 const { languages } = storeToRefs(listStore);
+
+const languageStore = useLanguageStore();
+
+const LANGUAGE_LOADING_KEY = 'language-fetch';
 
 // Initial fetch
 await listStore.fetchLanguages();
@@ -88,7 +94,7 @@ const columns: TableColumn<Language>[] = [
   {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
-    cell: () =>
+    cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-1' }, [
         h(UButton, {
           label: t('grid.columns.actions.edit'),
@@ -97,6 +103,18 @@ const columns: TableColumn<Language>[] = [
           variant: 'outline',
           size: 'xs',
           title: t('grid.columns.actions.edit'),
+          onClick: async () => {
+            try {
+              adminUiStore.startLoading(LANGUAGE_LOADING_KEY);
+              const language = await languageStore.getLanguage(row.original.id!, true);
+              languageStore.setSelectedLanguage(language);
+              adminUiStore.openLanguageModal(ModalMode.EDIT);
+            } catch (error) {
+              console.error(t('api.errors.fetch.title', { item: 'language' }), error);
+            } finally {
+              adminUiStore.stopLoading(LANGUAGE_LOADING_KEY);
+            }
+          },
         }),
         h(UButton, {
           icon: 'i-lucide-trash-2',

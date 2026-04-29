@@ -64,14 +64,18 @@ import type { Language } from '@models/language';
 import { ModalMode } from '@models/util';
 import { ApiService } from '@services/api.service';
 import { useAdminUiStore } from '@stores/admin-ui';
+import { useLanguageStore } from '@stores/language';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const toast = useToast();
+
+const languageStore = useLanguageStore();
+const { selectedLanguage } = storeToRefs(languageStore);
 
 const adminUiStore = useAdminUiStore();
 const { languageModalIsOpen, languageModalMode } = storeToRefs(adminUiStore);
@@ -85,6 +89,16 @@ const LANGUAGE_MODAL_LOADING_KEY = 'language-modal-submit';
 const form = ref<Language>({
   id: '',
   name: '',
+});
+
+// Initial population of form when editing
+onBeforeMount(() => {
+  if (isEditMode.value && selectedLanguage.value) {
+    form.value = {
+      id: selectedLanguage.value.id,
+      name: selectedLanguage.value.name,
+    };
+  }
 });
 
 // Save handler
