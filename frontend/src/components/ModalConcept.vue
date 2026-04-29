@@ -7,59 +7,71 @@
     class="max-w-4xl"
   >
     <template #body>
-      <UForm class="space-y-4 rounded-md bg-muted p-4">
-        <div class="grid grid-cols-3 gap-4">
-          <UFormField
-            name="concept-conceptscheme"
-            size="lg"
-            :label="t('components.modalConcept.form.conceptscheme.label')"
-          >
-            <USelect v-model="form.conceptscheme" :items="conceptschemeOptions" class="w-full" :disabled="isEditMode" />
-          </UFormField>
+      <div class="flex h-[34rem] w-full flex-col">
+        <UForm class="space-y-4 rounded-md bg-muted p-4">
+          <div class="grid grid-cols-3 gap-4">
+            <UFormField
+              name="concept-conceptscheme"
+              size="lg"
+              :label="t('components.modalConcept.form.conceptscheme.label')"
+            >
+              <USelect
+                v-model="form.conceptscheme"
+                :items="conceptschemeOptions"
+                class="w-full"
+                :disabled="isEditMode"
+              />
+            </UFormField>
 
-          <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
-            <USelect v-model="form.type" :items="conceptTypes" class="w-full" />
-          </UFormField>
-          <UFormField v-if="isEditMode" name="concept-id" size="lg" :label="t('components.modalConcept.form.id.label')">
-            <UInput :model-value="form.id" class="w-full" disabled />
-          </UFormField>
-        </div>
-      </UForm>
-      <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
-        <template #labels>
-          <ModalTabLabels
-            :data="labelsWithAddRow"
-            :tab-title="selectedConcept?.label ?? ''"
-            @add="addLabel"
-            @edit="editLabel"
-            @delete="deleteLabel"
-          />
-        </template>
+            <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
+              <USelect v-model="form.type" :items="conceptTypes" class="w-full" />
+            </UFormField>
+            <UFormField
+              v-if="isEditMode"
+              name="concept-id"
+              size="lg"
+              :label="t('components.modalConcept.form.id.label')"
+            >
+              <UInput :model-value="form.id" class="w-full" disabled />
+            </UFormField>
+          </div>
+        </UForm>
+        <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs">
+          <template #labels>
+            <ModalTabLabels
+              :data="labelsWithAddRow"
+              :tab-title="selectedConcept?.label ?? ''"
+              @add="addLabel"
+              @edit="editLabel"
+              @delete="deleteLabel"
+            />
+          </template>
 
-        <template #notes>
-          <ModalTabNotes
-            :data="notesWithAddRow"
-            :tab-title="selectedConcept?.label ?? ''"
-            @add="addNote"
-            @edit="editNote"
-            @delete="deleteNote"
-          />
-        </template>
+          <template #notes>
+            <ModalTabNotes
+              :data="notesWithAddRow"
+              :tab-title="selectedConcept?.label ?? ''"
+              @add="addNote"
+              @edit="editNote"
+              @delete="deleteNote"
+            />
+          </template>
 
-        <template #sources>
-          <ModalTabSources
-            :data="sourcesWithAddRow"
-            :tab-title="selectedConcept?.label ?? ''"
-            @add="addSource"
-            @edit="editSource"
-            @delete="deleteSource"
-          />
-        </template>
+          <template #sources>
+            <ModalTabSources
+              :data="sourcesWithAddRow"
+              :tab-title="selectedConcept?.label ?? ''"
+              @add="addSource"
+              @edit="editSource"
+              @delete="deleteSource"
+            />
+          </template>
 
-        <template #relations> relations </template>
+          <template #relations> relations </template>
 
-        <template #matches> matches </template>
-      </UTabs>
+          <template #matches> matches </template>
+        </UTabs>
+      </div>
     </template>
     <template #footer="{ close }">
       <div class="flex w-full justify-end gap-2">

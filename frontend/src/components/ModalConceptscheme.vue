@@ -7,7 +7,7 @@
     class="max-w-4xl"
   >
     <template #body>
-      <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
+      <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="flex h-[34rem] w-full flex-col">
         <template #labels>
           <ModalTabLabels
             :data="labelsWithAddRow"
