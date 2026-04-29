@@ -26,13 +26,15 @@
         @update:page="(p: number) => tableRef?.tableApi?.setPageIndex(p - 1)"
       />
     </div>
+
+    <ModalLanguage :key="languageModalKey" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Language } from '@models/language';
-import type { Provider } from '@models/provider';
 import type { TableColumn } from '@nuxt/ui';
+import { useAdminUiStore } from '@stores/admin-ui';
 import { useListStore } from '@stores/list';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import { storeToRefs } from 'pinia';
@@ -41,6 +43,9 @@ import { useI18n } from 'vue-i18n';
 
 const UButton = resolveComponent('UButton');
 
+const adminUiStore = useAdminUiStore();
+const { languageModalKey } = storeToRefs(adminUiStore);
+
 const { t } = useI18n();
 const listStore = useListStore();
 const { languages } = storeToRefs(listStore);
@@ -48,7 +53,14 @@ const { languages } = storeToRefs(listStore);
 // Initial fetch
 await listStore.fetchLanguages();
 
-const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<Provider> }>('tableRef');
+adminUiStore.$onAction(({ name }) => {
+  // Refresh languages list after closing the language modal
+  if (name === 'closeLanguageModal') {
+    listStore.fetchLanguages();
+  }
+});
+
+const tableRef = useTemplateRef<{ tableApi: import('@tanstack/vue-table').Table<Language> }>('tableRef');
 const totalCount = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const totalFiltered = computed(() => tableRef.value?.tableApi?.getFilteredRowModel().rows.length ?? 0);
 const currentPage = computed(() => (tableRef.value?.tableApi?.getState().pagination.pageIndex ?? 0) + 1);
