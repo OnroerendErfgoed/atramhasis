@@ -25,8 +25,12 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   const isLoading = (key: string) => (loadingByKey.value[key] ?? 0) > 0;
 
   /* Modals */
+  const conceptschemeModalKey = ref(0);
   const conceptschemeModalIsOpen = ref(false);
-  const openConceptschemeModal = () => (conceptschemeModalIsOpen.value = true);
+  const openConceptschemeModal = () => {
+    conceptschemeModalKey.value++;
+    conceptschemeModalIsOpen.value = true;
+  };
   const closeConceptschemeModal = () => (conceptschemeModalIsOpen.value = false);
 
   const labelModalKey = ref(0);
@@ -59,8 +63,14 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
   const closeSourceModal = () => (sourceModalIsOpen.value = false);
 
+  const conceptModalKey = ref(0);
   const conceptModalIsOpen = ref(false);
-  const openConceptModal = () => (conceptModalIsOpen.value = true);
+  const conceptModalMode = ref<ModalMode>(ModalMode.ADD);
+  const openConceptModal = (modalMode: ModalMode) => {
+    conceptModalKey.value++;
+    conceptModalIsOpen.value = true;
+    conceptModalMode.value = modalMode;
+  };
   const closeConceptModal = () => (conceptModalIsOpen.value = false);
 
   const providerModalKey = ref(0);
@@ -97,10 +107,13 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     activeLoadingCount,
     isFullscreenLoading,
     isLoading,
+    conceptschemeModalKey,
     conceptschemeModalIsOpen,
     openConceptschemeModal,
     closeConceptschemeModal,
+    conceptModalKey,
     conceptModalIsOpen,
+    conceptModalMode,
     openConceptModal,
     closeConceptModal,
     labelModalKey,

@@ -75,6 +75,28 @@
         "sources": "Sources"
       }
     },
+    "modalConcept": {
+      "title": "{conceptscheme}",
+      "description": "{mode} concept or collection",
+      "tabs": {
+        "labels": "Labels",
+        "notes": "Notes",
+        "sources": "Sources",
+        "relations": "Relations",
+        "matches": "Matches"
+      },
+      "form": {
+        "conceptscheme": {
+          "label": "Scheme"
+        },
+        "type": {
+          "label": "Type"
+        },
+        "id": {
+          "label": "ID"
+        }
+      }
+    },
     "modalProvider": {
       "title": "Manage providers",
       "description": "{mode} a provider",
@@ -275,11 +297,12 @@
     "ok": "OK"
   },
   "entities": {
-    "conceptScheme": "conceptscheme",
-    "provider": "provider",
-    "label": "label",
-    "note": "note",
-    "source": "source"
+    "conceptScheme": "conceptscheme | conceptschemes",
+    "concept": "concept | concepts",
+    "provider": "provider | providers",
+    "label": "label | labels",
+    "note": "note | notes",
+    "source": "source | sources"
   },
   "lists": {
     "languages": {

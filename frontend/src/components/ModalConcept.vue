@@ -1,0 +1,142 @@
+<template>
+  <UModal
+    v-model:open="conceptModalIsOpen"
+    :dismissible="false"
+    :title="t('components.modalConcept.title', { conceptscheme: selectedConceptscheme?.label })"
+    :description="t('components.modalConcept.description', { mode: isEditMode ? t('actions.edit') : t('actions.add') })"
+    class="max-w-4xl"
+  >
+    <template #body>
+      <UForm class="space-y-4 rounded-md bg-muted p-4">
+        <div class="grid grid-cols-3 gap-4">
+          <UFormField
+            name="concept-conceptscheme"
+            size="lg"
+            :label="t('components.modalConcept.form.conceptscheme.label')"
+          >
+            <USelect v-model="form.conceptscheme" :items="conceptschemeOptions" class="w-full" :disabled="isEditMode" />
+          </UFormField>
+
+          <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
+            <USelect v-model="form.type" :items="conceptTypes" class="w-full" />
+          </UFormField>
+          <UFormField v-if="isEditMode" name="concept-id" size="lg" :label="t('components.modalConcept.form.id.label')">
+            <UInput :model-value="form.id" class="w-full" disabled />
+          </UFormField>
+        </div>
+      </UForm>
+      <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
+        <template #labels> labels </template>
+
+        <template #notes> notes </template>
+
+        <template #sources> sources </template>
+
+        <template #relations> relations </template>
+
+        <template #matches> matches </template>
+      </UTabs>
+    </template>
+    <template #footer="{ close }">
+      <div class="flex w-full justify-end gap-2">
+        <UButton :label="t('actions.cancel')" color="neutral" variant="outline" @click="close" />
+        <UButton :label="t('actions.save')" @click="save" />
+      </div>
+    </template>
+  </UModal>
+</template>
+
+<script setup lang="ts">
+import { useAdminUiStore } from '@stores/admin-ui';
+import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
+import type { TabsItem } from '@nuxt/ui';
+import { capitalize, computed, onBeforeMount, ref } from 'vue';
+// import { ApiService } from '@services/api.service';
+import { useApiError } from '@composables/useApiError';
+import { useConceptStore } from '@stores/concept';
+import { useConceptschemeStore } from '@stores/conceptscheme';
+import { ConceptTypeEnum, ModalMode } from '@models/util';
+import { useListStore } from '@stores/list';
+import type { ConceptForm } from '@models/concept';
+
+const toast = useToast();
+const { t } = useI18n();
+
+const adminUiStore = useAdminUiStore();
+const { conceptModalIsOpen, conceptModalMode } = storeToRefs(adminUiStore);
+const isEditMode = computed(() => conceptModalMode.value === ModalMode.EDIT);
+const conceptschemeStore = useConceptschemeStore();
+const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
+const conceptStore = useConceptStore();
+const { selectedConcept } = storeToRefs(conceptStore);
+const listStore = useListStore();
+const { conceptTypes, conceptschemeOptions } = storeToRefs(listStore);
+
+// const apiService = new ApiService();
+const { handleApiError } = useApiError();
+const CONCEPT_MODAL_LOADING_KEY = 'concept-modal-submit';
+
+const activeTab = ref('0');
+const tabs = ref<TabsItem[]>([
+  {
+    label: t('components.modalConcept.tabs.labels'),
+    slot: 'labels',
+  },
+  {
+    label: t('components.modalConcept.tabs.notes'),
+    slot: 'notes',
+  },
+  {
+    label: t('components.modalConcept.tabs.sources'),
+    slot: 'sources',
+  },
+  {
+    label: t('components.modalConcept.tabs.relations'),
+    slot: 'relations',
+  },
+  {
+    label: t('components.modalConcept.tabs.matches'),
+    slot: 'matches',
+  },
+]);
+
+// Save handler
+const save = async () => {
+  if (!selectedConcept.value) return;
+  try {
+    adminUiStore.startLoading(CONCEPT_MODAL_LOADING_KEY);
+
+    // await apiService.updateConcept(selectedConcept.value);
+    toast.add({
+      title: t('api.success.update.title', { item: capitalize(t('entities.concept')) }),
+      description: t('api.success.update.description', { item: t('entities.concept') }),
+      icon: 'i-lucide-check-circle',
+      color: 'success',
+    });
+    adminUiStore.closeConceptModal();
+  } catch (error) {
+    handleApiError(error);
+  } finally {
+    adminUiStore.stopLoading(CONCEPT_MODAL_LOADING_KEY);
+  }
+};
+
+// Form state
+const form = ref<ConceptForm>({
+  conceptscheme: selectedConceptscheme.value?.id as string,
+  type: ConceptTypeEnum.CONCEPT,
+  id: undefined,
+});
+
+// Initial population of form when editing
+onBeforeMount(() => {
+  if (isEditMode.value && selectedConcept.value) {
+    form.value = {
+      conceptscheme: selectedConceptscheme.value?.id as string,
+      type: selectedConcept.value.type,
+      id: selectedConcept.value.id,
+    };
+  }
+});
+</script>

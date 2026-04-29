@@ -20,8 +20,12 @@ export const useConceptStore = defineStore('concept', () => {
     return concepts.value[`${schemeId}-${id}`];
   };
 
-  const setConcept = async (schemeId: string, id: number, concept: Concept) => {
-    concepts.value[`${schemeId}-${id}`] = concept;
+  const setConcept = async (schemeId: string, concept: Concept) => {
+    concepts.value[`${schemeId}-${concept.id}`] = concept;
+  };
+
+  const setSelectedConcept = (concept: Concept) => {
+    selectedConcept.value = concept;
   };
 
   const resetSelectedConcept = () => (selectedConcept.value = undefined);
@@ -32,5 +36,5 @@ export const useConceptStore = defineStore('concept', () => {
     }
   });
 
-  return { concepts, selectedConcept, getConcept, setConcept, resetSelectedConcept };
+  return { concepts, selectedConcept, getConcept, setConcept, setSelectedConcept, resetSelectedConcept };
 });

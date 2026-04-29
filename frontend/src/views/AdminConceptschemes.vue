@@ -43,7 +43,7 @@
       />
     </div>
 
-    <ModalConceptscheme />
+    <ModalConceptscheme :key="conceptschemeModalKey" />
   </div>
 </template>
 
@@ -60,7 +60,7 @@ export interface ConceptschemeRow {
 import { h, ref, computed, resolveComponent, useTemplateRef } from 'vue';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
-import type { OverviewConceptscheme } from '@models/conceptscheme';
+import type { Conceptscheme, OverviewConceptscheme } from '@models/conceptscheme';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import { useAdminUiStore } from '@stores/admin-ui';
@@ -72,8 +72,8 @@ const UButton = resolveComponent('UButton');
 const { t } = useI18n();
 const toast = useToast();
 const conceptschemeStore = useConceptschemeStore();
-const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const adminUiStore = useAdminUiStore();
+const { conceptschemeModalKey } = storeToRefs(adminUiStore);
 const apiService = new ApiService();
 
 const CONCEPTSCHEME_LOADING_KEY = 'conceptscheme-fetch';
@@ -161,7 +161,8 @@ const columns: TableColumn<ConceptschemeRow>[] = [
             onClick: async () => {
               try {
                 adminUiStore.startLoading(CONCEPTSCHEME_LOADING_KEY);
-                selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(row.original.id, true);
+                const conceptscheme = await conceptschemeStore.getConceptscheme(row.original.id, true);
+                conceptschemeStore.setSelectedConceptscheme(conceptscheme as Conceptscheme);
                 adminUiStore.openConceptschemeModal();
               } catch (error) {
                 console.error(t('api.errors.fetch.title', { item: 'languages' }), error);

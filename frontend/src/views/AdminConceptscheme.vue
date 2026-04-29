@@ -69,6 +69,8 @@
         @update:page="(p: number) => tableRef?.tableApi?.setPageIndex(p - 1)"
       />
     </div>
+
+    <ModalConcept :key="conceptModalKey" />
   </div>
 </template>
 
@@ -77,12 +79,16 @@ import { h, ref, computed, resolveComponent, useTemplateRef, capitalize, watch }
 import { useRoute } from 'vue-router';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
-import type { OverviewConcept } from '@models/concept';
+import type { Concept, OverviewConcept } from '@models/concept';
 import { ApiService } from '@services/api.service';
 import { useI18n } from 'vue-i18n';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useListStore } from '@stores/list';
 import { storeToRefs } from 'pinia';
+import { useConceptschemeStore } from '@stores/conceptscheme';
+import type { Conceptscheme } from '@models/conceptscheme';
+import { ConceptTypeEnum, ModalMode } from '@models/util';
+import { useConceptStore } from '@stores/concept';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
@@ -91,7 +97,13 @@ const { t } = useI18n();
 const toast = useToast();
 const route = useRoute();
 
+const CONCEPT_LOADING_KEY = 'concept-fetch';
+
 const adminUiStore = useAdminUiStore();
+const { conceptModalKey } = storeToRefs(adminUiStore);
+const conceptschemeStore = useConceptschemeStore();
+const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
+const conceptStore = useConceptStore();
 const listStore = useListStore();
 const { conceptTypes } = storeToRefs(listStore);
 const apiService = new ApiService();
@@ -105,7 +117,8 @@ const matchFilter = ref('');
 
 const fetchConceptscheme = async () => {
   try {
-    const conceptscheme = await apiService.getConceptscheme(schemeId);
+    const conceptscheme = (await conceptschemeStore.getConceptscheme(schemeId)) as Conceptscheme;
+    conceptschemeStore.setSelectedConceptscheme(conceptscheme);
     adminUiStore.setBreadcrumbLabel(schemeId, conceptscheme.label);
   } catch (error) {
     console.error(t('api.errors.fetch.title', { item: 'conceptscheme' }), error);
@@ -213,7 +226,7 @@ const columns: TableColumn<OverviewConcept>[] = [
           color: 'primary',
           variant: 'outline',
           size: 'xs',
-          disabled: row.original.type !== 'concept',
+          disabled: row.original.type !== ConceptTypeEnum.CONCEPT,
         }),
         h(UButton, {
           as: 'a',
@@ -225,13 +238,27 @@ const columns: TableColumn<OverviewConcept>[] = [
           size: 'xs',
         }),
         h(UButton, {
-          as: 'a',
-          href: '#',
           label: t('grid.columns.actions.edit'),
           icon: 'i-lucide-pencil',
           color: 'primary',
           variant: 'outline',
           size: 'xs',
+          onClick: async () => {
+            try {
+              adminUiStore.startLoading(CONCEPT_LOADING_KEY);
+              const concept = await conceptStore.getConcept(
+                selectedConceptscheme.value?.id as string,
+                row.original.id,
+                true
+              );
+              conceptStore.setSelectedConcept(concept as Concept);
+              adminUiStore.openConceptModal(ModalMode.EDIT);
+            } catch (error) {
+              console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);
+            } finally {
+              adminUiStore.stopLoading(CONCEPT_LOADING_KEY);
+            }
+          },
         }),
         h(UButton, {
           icon: 'i-lucide-trash-2',

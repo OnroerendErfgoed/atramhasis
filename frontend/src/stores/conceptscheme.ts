@@ -27,8 +27,12 @@ export const useConceptschemeStore = defineStore('conceptscheme', () => {
     }
   };
 
-  const setConceptscheme = (schemeId: string, conceptscheme: Conceptscheme) => {
-    conceptschemes.value[schemeId] = conceptscheme;
+  const setConceptscheme = (conceptscheme: Conceptscheme) => {
+    conceptschemes.value[conceptscheme.id] = conceptscheme;
+  };
+
+  const setSelectedConceptscheme = (conceptscheme: Conceptscheme) => {
+    selectedConceptscheme.value = conceptscheme;
   };
 
   const resetSelectedConceptscheme = () => (selectedConceptscheme.value = undefined);
@@ -39,5 +43,12 @@ export const useConceptschemeStore = defineStore('conceptscheme', () => {
     }
   });
 
-  return { conceptschemes, selectedConceptscheme, getConceptscheme, setConceptscheme, resetSelectedConceptscheme };
+  return {
+    conceptschemes,
+    selectedConceptscheme,
+    getConceptscheme,
+    setConceptscheme,
+    setSelectedConceptscheme,
+    resetSelectedConceptscheme,
+  };
 });

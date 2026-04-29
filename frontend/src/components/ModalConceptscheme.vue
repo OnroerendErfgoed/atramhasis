@@ -52,7 +52,7 @@ import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import type { TabsItem } from '@nuxt/ui';
-import { computed, ref } from 'vue';
+import { capitalize, computed, ref } from 'vue';
 import { type Label, type Note, type Source } from '@models/util';
 import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
@@ -93,8 +93,8 @@ const save = async () => {
 
     await apiService.updateConceptscheme(selectedConceptscheme.value);
     toast.add({
-      title: t('api.success.update.title', { item: 'Conceptscheme' }),
-      description: t('api.success.update.description', { item: 'conceptscheme' }),
+      title: t('api.success.update.title', { item: capitalize(t('entities.conceptscheme')) }),
+      description: t('api.success.update.description', { item: t('entities.conceptscheme') }),
       icon: 'i-lucide-check-circle',
       color: 'success',
     });
