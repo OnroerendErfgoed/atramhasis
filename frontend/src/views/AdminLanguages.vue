@@ -28,6 +28,12 @@
     </div>
 
     <ModalLanguage :key="languageModalKey" />
+    <ModalDelete
+      v-model:open="modalDeleteIsOpen"
+      :entity="t('entities.language')"
+      :item="`${selectedLanguage?.id} (${selectedLanguage?.name})`"
+      @confirm="deleteLanguage"
+    />
   </div>
 </template>
 
@@ -35,26 +41,58 @@
 import type { Language } from '@models/language';
 import { ModalMode } from '@models/util';
 import type { TableColumn } from '@nuxt/ui';
+import { ApiService } from '@services/api.service';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useLanguageStore } from '@stores/language';
 import { useListStore } from '@stores/list';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import { storeToRefs } from 'pinia';
-import { computed, h, ref, resolveComponent, useTemplateRef } from 'vue';
+import { capitalize, computed, h, ref, resolveComponent, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const UButton = resolveComponent('UButton');
 
+const { t } = useI18n();
+const toast = useToast();
+const apiService = new ApiService();
+
 const adminUiStore = useAdminUiStore();
 const { languageModalKey } = storeToRefs(adminUiStore);
-
-const { t } = useI18n();
 const listStore = useListStore();
 const { languages } = storeToRefs(listStore);
-
 const languageStore = useLanguageStore();
+const { selectedLanguage } = storeToRefs(languageStore);
 
 const LANGUAGE_LOADING_KEY = 'language-fetch';
+
+const modalDeleteIsOpen = ref(false);
+const deleteLanguage = async () => {
+  if (!selectedLanguage.value?.id) return;
+
+  try {
+    adminUiStore.startLoading('deleteLanguage');
+    await apiService.deleteLanguage(selectedLanguage.value.id);
+    toast.add({
+      title: t('api.success.delete.title', { item: capitalize(t('entities.language', 1)) }),
+      description: t('api.success.delete.description', { item: t('entities.language', 1) }),
+      icon: 'i-lucide-check',
+      color: 'success',
+    });
+    languageStore.resetSelectedLanguage();
+    listStore.fetchLanguages();
+  } catch (error) {
+    console.error(t('api.errors.delete.title', { item: capitalize(t('entities.language', 1)) }), error);
+    toast.add({
+      title: t('api.errors.delete.title', { item: capitalize(t('entities.language', 1)) }),
+      description: t('api.errors.delete.description', { item: t('entities.language', 1) }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  } finally {
+    modalDeleteIsOpen.value = false;
+    adminUiStore.stopLoading('deleteLanguage');
+  }
+};
 
 // Initial fetch
 await listStore.fetchLanguages();
@@ -110,7 +148,7 @@ const columns: TableColumn<Language>[] = [
               languageStore.setSelectedLanguage(language);
               adminUiStore.openLanguageModal(ModalMode.EDIT);
             } catch (error) {
-              console.error(t('api.errors.fetch.title', { item: 'language' }), error);
+              console.error(t('api.errors.fetch.title', { item: t('entities.language', 1) }), error);
             } finally {
               adminUiStore.stopLoading(LANGUAGE_LOADING_KEY);
             }
@@ -122,6 +160,10 @@ const columns: TableColumn<Language>[] = [
           variant: 'outline',
           size: 'xs',
           title: t('grid.columns.actions.delete'),
+          onClick: () => {
+            languageStore.setSelectedLanguage(row.original);
+            modalDeleteIsOpen.value = true;
+          },
         }),
       ]),
   },

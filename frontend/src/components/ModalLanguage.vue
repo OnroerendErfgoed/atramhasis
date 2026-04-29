@@ -68,7 +68,7 @@ import { useLanguageStore } from '@stores/language';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 import { storeToRefs } from 'pinia';
-import { computed, onBeforeMount, ref } from 'vue';
+import { capitalize, computed, onBeforeMount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -120,8 +120,8 @@ const save = async () => {
       // Create new language
       await apiService.createLanguage(form.value);
       toast.add({
-        title: t('api.success.save.title', { item: 'Language' }),
-        description: t('api.success.save.description', { item: 'language' }),
+        title: t('api.success.save.title', { item: capitalize(t('entities.language', 1)) }),
+        description: t('api.success.save.description', { item: t('entities.language', 1) }),
         icon: 'i-lucide-check-circle',
         color: 'success',
       });
@@ -129,8 +129,8 @@ const save = async () => {
       // Update existing language
       await apiService.updateLanguage(form.value);
       toast.add({
-        title: t('api.success.update.title', { item: 'Language' }),
-        description: t('api.success.update.description', { item: 'language' }),
+        title: t('api.success.update.title', { item: capitalize(t('entities.language', 1)) }),
+        description: t('api.success.update.description', { item: t('entities.language', 1) }),
         icon: 'i-lucide-check-circle',
         color: 'success',
       });

@@ -69,10 +69,10 @@ const fetchConcept = async () => {
   try {
     concept.value = await conceptStore.getConcept(props.schemeId, props.conceptId);
   } catch (error) {
-    console.error(t('api.errors.fetch.title', { item: 'concept' }), error);
+    console.error(t('api.errors.fetch.title', { item: t('entities.concept', 1) }), error);
     toast.add({
-      title: t('api.errors.fetch.title', { item: 'concept' }),
-      description: t('api.errors.fetch.description', { item: 'concept' }),
+      title: t('api.errors.fetch.title', { item: t('entities.concept', 1) }),
+      description: t('api.errors.fetch.description', { item: t('entities.concept', 1) }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });

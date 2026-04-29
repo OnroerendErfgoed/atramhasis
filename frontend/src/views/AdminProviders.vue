@@ -41,7 +41,7 @@ import type { TableColumn } from '@nuxt/ui';
 import { ApiService } from '@services/api.service';
 import { useAdminUiStore } from '@/stores/admin-ui';
 import { getPaginationRowModel } from '@tanstack/vue-table';
-import { h, computed, ref, useTemplateRef, resolveComponent } from 'vue';
+import { h, computed, ref, useTemplateRef, resolveComponent, capitalize } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { ModalMode } from '@models/util';
 import { useProviderStore } from '@stores/provider';
@@ -65,10 +65,10 @@ const fetchProviders = async () => {
   try {
     providers.value = (await apiService.getProviders()).sort((a, b) => a.id!.localeCompare(b.id!));
   } catch (error) {
-    console.error(t('api.errors.fetch.title', { item: 'providers' }), error);
+    console.error(t('api.errors.fetch.title', { item: t('entities.provider', 2) }), error);
     toast.add({
-      title: t('api.errors.fetch.title', { item: 'providers' }),
-      description: t('api.errors.fetch.description', { item: 'providers' }),
+      title: t('api.errors.fetch.title', { item: t('entities.provider', 2) }),
+      description: t('api.errors.fetch.description', { item: t('entities.provider', 2) }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
@@ -83,18 +83,18 @@ const deleteProvider = async () => {
     adminUiStore.startLoading('deleteProvider');
     await apiService.deleteProvider(selectedProvider.value.id);
     toast.add({
-      title: t('api.success.delete.title', { item: 'Provider' }),
-      description: t('api.success.delete.description', { item: 'provider' }),
+      title: t('api.success.delete.title', { item: capitalize(t('entities.provider', 1)) }),
+      description: t('api.success.delete.description', { item: t('entities.provider', 1) }),
       icon: 'i-lucide-check',
       color: 'success',
     });
     providerStore.resetSelectedProvider();
     fetchProviders();
   } catch (error) {
-    console.error(t('api.errors.delete.title', { item: 'Provider' }), error);
+    console.error(t('api.errors.delete.title', { item: capitalize(t('entities.provider', 1)) }), error);
     toast.add({
-      title: t('api.errors.delete.title', { item: 'provider' }),
-      description: t('api.errors.delete.description', { item: 'provider' }),
+      title: t('api.errors.delete.title', { item: capitalize(t('entities.provider', 1)) }),
+      description: t('api.errors.delete.description', { item: t('entities.provider', 1) }),
       icon: 'i-lucide-alert-triangle',
       color: 'error',
     });
@@ -190,7 +190,7 @@ const columns: TableColumn<Provider>[] = [
                     providerStore.setSelectedProvider(provider);
                     adminUiStore.openProviderModal(ModalMode.EDIT);
                   } catch (error) {
-                    console.error(t('api.errors.fetch.title', { item: 'provider' }), error);
+                    console.error(t('api.errors.fetch.title', { item: t('entities.provider', 1) }), error);
                   } finally {
                     adminUiStore.stopLoading(PROVIDER_LOADING_KEY);
                   }
