@@ -9,7 +9,7 @@
     <template #body>
       <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
         <template #labels>
-          <ModalConceptschemeTabLabels
+          <ModalTabLabels
             :data="labelsWithAddRow"
             :tab-title="selectedConceptscheme?.label ?? ''"
             @add="addLabel"
@@ -19,7 +19,7 @@
         </template>
 
         <template #notes>
-          <ModalConceptschemeTabNotes
+          <ModalTabNotes
             :data="notesWithAddRow"
             :tab-title="selectedConceptscheme?.label ?? ''"
             @add="addNote"
@@ -29,7 +29,7 @@
         </template>
 
         <template #sources>
-          <ModalConceptschemeTabSources
+          <ModalTabSources
             :data="sourcesWithAddRow"
             :tab-title="selectedConceptscheme?.label ?? ''"
             @add="addSource"
@@ -109,6 +109,7 @@ const save = async () => {
   }
 };
 
+/* Grid actions */
 const addLabel = (label: Label) => {
   selectedConceptscheme.value?.labels.push(label);
 };

@@ -26,11 +26,35 @@
         </div>
       </UForm>
       <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
-        <template #labels> labels </template>
+        <template #labels>
+          <ModalTabLabels
+            :data="labelsWithAddRow"
+            :tab-title="selectedConcept?.label ?? ''"
+            @add="addLabel"
+            @edit="editLabel"
+            @delete="deleteLabel"
+          />
+        </template>
 
-        <template #notes> notes </template>
+        <template #notes>
+          <ModalTabNotes
+            :data="notesWithAddRow"
+            :tab-title="selectedConcept?.label ?? ''"
+            @add="addNote"
+            @edit="editNote"
+            @delete="deleteNote"
+          />
+        </template>
 
-        <template #sources> sources </template>
+        <template #sources>
+          <ModalTabSources
+            :data="sourcesWithAddRow"
+            :tab-title="selectedConcept?.label ?? ''"
+            @add="addSource"
+            @edit="editSource"
+            @delete="deleteSource"
+          />
+        </template>
 
         <template #relations> relations </template>
 
@@ -56,9 +80,10 @@ import { capitalize, computed, onBeforeMount, ref } from 'vue';
 import { useApiError } from '@composables/useApiError';
 import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
-import { ConceptTypeEnum, ModalMode } from '@models/util';
+import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useListStore } from '@stores/list';
 import type { ConceptForm } from '@models/concept';
+import type { TableRow } from './ModalTabTable.vue';
 
 const toast = useToast();
 const { t } = useI18n();
@@ -139,4 +164,87 @@ onBeforeMount(() => {
     };
   }
 });
+
+/* Grid actions */
+const addLabel = (label: Label) => {
+  selectedConcept.value?.labels.push(label);
+};
+const editLabel = (label: Label) => {
+  const index = labelsWithAddRow.value.findIndex((l) => l.id === label.id);
+  if (index !== undefined && index >= 0) {
+    delete label.id;
+    selectedConcept.value!.labels[index] = label;
+  }
+};
+const deleteLabel = (label: Label) => {
+  const index = labelsWithAddRow.value.findIndex((l) => l.id === label.id);
+  if (index !== undefined && index >= 0) {
+    selectedConcept.value!.labels.splice(index, 1);
+  }
+};
+
+const addNote = (note: Note) => {
+  selectedConcept.value?.notes.push(note);
+};
+const editNote = (note: Note) => {
+  const index = notesWithAddRow.value.findIndex((n) => n.id === note.id);
+  if (index !== undefined && index >= 0) {
+    delete note.id;
+    selectedConcept.value!.notes[index] = note;
+  }
+};
+const deleteNote = (note: Note) => {
+  const index = notesWithAddRow.value.findIndex((n) => n.id === note.id);
+  if (index !== undefined && index >= 0) {
+    selectedConcept.value!.notes.splice(index, 1);
+  }
+};
+
+const addSource = (source: Source) => {
+  selectedConcept.value?.sources.push(source);
+};
+const editSource = (source: Source) => {
+  const index = sourcesWithAddRow.value.findIndex((s) => s.id === source.id);
+  if (index !== undefined && index >= 0) {
+    delete source.id;
+    selectedConcept.value!.sources[index] = source;
+  }
+};
+const deleteSource = (source: Source) => {
+  const index = sourcesWithAddRow.value.findIndex((s) => s.id === source.id);
+  if (index !== undefined && index >= 0) {
+    selectedConcept.value!.sources.splice(index, 1);
+  }
+};
+
+/* Table data */
+const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
+  ...((selectedConcept.value?.labels?.map((label, i) => ({
+    ...label,
+    id: i + 1,
+  })) ?? []) as TableRow<Label>[]),
+  {
+    isAddRow: true,
+  } as TableRow<Label>,
+]);
+
+const notesWithAddRow = computed<TableRow<Note>[]>(() => [
+  ...((selectedConcept.value?.notes?.map((note, i) => ({
+    ...note,
+    id: i + 1,
+  })) ?? []) as TableRow<Note>[]),
+  {
+    isAddRow: true,
+  } as TableRow<Note>,
+]);
+
+const sourcesWithAddRow = computed<TableRow<Source>[]>(() => [
+  ...((selectedConcept.value?.sources?.map((source, i) => ({
+    ...source,
+    id: i + 1,
+  })) ?? []) as TableRow<Source>[]),
+  {
+    isAddRow: true,
+  } as TableRow<Source>,
+]);
 </script>

@@ -1,4 +1,4 @@
-import type { ConceptTypeEnum, Label, Note } from '@models/util';
+import type { ConceptTypeEnum, Label, Note, Source } from '@models/util';
 
 export interface OverviewConcept {
   id: number;
@@ -10,6 +10,7 @@ export interface OverviewConcept {
 export interface Concept extends OverviewConcept {
   labels: Label[];
   notes: Note[];
+  sources: Source[];
   member_of: Concept[];
 }
 
