@@ -69,6 +69,8 @@
         @update:page="(p: number) => tableRef?.tableApi?.setPageIndex(p - 1)"
       />
     </div>
+
+    <ModalConcept />
   </div>
 </template>
 
@@ -83,6 +85,10 @@ import { useI18n } from 'vue-i18n';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useListStore } from '@stores/list';
 import { storeToRefs } from 'pinia';
+import { useConceptschemeStore } from '@stores/conceptscheme';
+import type { Conceptscheme } from '@models/conceptscheme';
+import { ModalMode } from '@models/util';
+import { useConceptStore } from '@stores/concept';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
@@ -91,7 +97,13 @@ const { t } = useI18n();
 const toast = useToast();
 const route = useRoute();
 
+const CONCEPT_LOADING_KEY = 'concept-fetch';
+
 const adminUiStore = useAdminUiStore();
+const conceptschemeStore = useConceptschemeStore();
+const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
+const conceptStore = useConceptStore();
+const { selectedConcept } = storeToRefs(conceptStore);
 const listStore = useListStore();
 const { conceptTypes } = storeToRefs(listStore);
 const apiService = new ApiService();
@@ -105,8 +117,8 @@ const matchFilter = ref('');
 
 const fetchConceptscheme = async () => {
   try {
-    const conceptscheme = await apiService.getConceptscheme(schemeId);
-    adminUiStore.setBreadcrumbLabel(schemeId, conceptscheme.label);
+    selectedConceptscheme.value = await conceptschemeStore.getConceptscheme(schemeId);
+    adminUiStore.setBreadcrumbLabel(schemeId, (selectedConceptscheme.value as Conceptscheme).label);
   } catch (error) {
     console.error(t('api.errors.fetch.title', { item: 'conceptscheme' }), error);
     toast.add({
@@ -225,13 +237,26 @@ const columns: TableColumn<OverviewConcept>[] = [
           size: 'xs',
         }),
         h(UButton, {
-          as: 'a',
-          href: '#',
           label: t('grid.columns.actions.edit'),
           icon: 'i-lucide-pencil',
           color: 'primary',
           variant: 'outline',
           size: 'xs',
+          onClick: async () => {
+            try {
+              adminUiStore.startLoading(CONCEPT_LOADING_KEY);
+              selectedConcept.value = await conceptStore.getConcept(
+                selectedConceptscheme.value?.id as string,
+                +row.original.id,
+                true
+              );
+              adminUiStore.openConceptModal(ModalMode.EDIT);
+            } catch (error) {
+              console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);
+            } finally {
+              adminUiStore.stopLoading(CONCEPT_LOADING_KEY);
+            }
+          },
         }),
         h(UButton, {
           icon: 'i-lucide-trash-2',

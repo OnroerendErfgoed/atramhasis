@@ -246,7 +246,7 @@ const currentSectionActions = computed(() => {
         {
           label: t('overview.actions.addConcept'),
           icon: 'i-lucide-plus',
-          onClick: () => adminUiStore.openConceptModal(),
+          onClick: () => adminUiStore.openConceptModal(ModalMode.ADD),
         },
       ];
     case 'AdminLanguages':
