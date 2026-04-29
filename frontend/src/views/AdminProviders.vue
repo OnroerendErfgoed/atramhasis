@@ -63,7 +63,7 @@ const PROVIDER_LOADING_KEY = 'provider-fetch';
 
 const fetchProviders = async () => {
   try {
-    providers.value = await apiService.getProviders();
+    providers.value = (await apiService.getProviders()).sort((a, b) => a.id!.localeCompare(b.id!));
   } catch (error) {
     console.error(t('api.errors.fetch.title', { item: 'providers' }), error);
     toast.add({

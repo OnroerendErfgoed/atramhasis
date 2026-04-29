@@ -96,10 +96,10 @@
   --ui-error: var(--ui-color-error-600);
   --ui-neutral: var(--ui-color-neutral-950);
 
-  --ui-text-dimmed: var(--ui-color-neutral-400);
-  --ui-text-muted: var(--ui-color-neutral-500);
-  --ui-text-toned: var(--ui-color-neutral-600);
-  --ui-text: var(--ui-color-neutral-700);
+  --ui-text-dimmed: var(--ui-color-neutral-500);
+  --ui-text-muted: var(--ui-color-neutral-600);
+  --ui-text-toned: var(--ui-color-neutral-700);
+  --ui-text: var(--ui-color-neutral-800);
   --ui-text-highlighted: var(--ui-color-neutral-900);
   --ui-text-inverted: #ffffff;
 
