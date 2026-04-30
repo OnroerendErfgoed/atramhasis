@@ -3,6 +3,7 @@ import type { Concept, OverviewConcept } from '@models/concept';
 import { HttpService } from './http.service';
 import type { Provider, ProviderForm } from '@models/provider';
 import type { Language } from '@models/language';
+import type { Tree } from '@models/tree';
 
 export class ApiService extends HttpService {
   constructor() {
@@ -27,6 +28,10 @@ export class ApiService extends HttpService {
 
   async getConceptByConceptschemeAndId(schemeId: string, conceptId: number): Promise<Concept> {
     return (await this.get<Concept>(`/conceptschemes/${schemeId}/c/${conceptId}`)).data;
+  }
+
+  async getTreeByConceptscheme(schemeId: string): Promise<Tree[]> {
+    return (await this.get<Tree[]>(`/conceptschemes/${schemeId}/tree`)).data;
   }
 
   async getProvider(providerId: string): Promise<Provider> {

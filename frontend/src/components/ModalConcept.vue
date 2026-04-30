@@ -67,7 +67,7 @@
             />
           </template>
 
-          <template #relations> relations </template>
+          <template #relations> <ModalTabRelations :scheme="form.conceptscheme" /> </template>
 
           <template #matches> matches </template>
         </UTabs>
@@ -168,6 +168,13 @@ const form = ref<ConceptForm>({
   labels: [],
   notes: [],
   sources: [],
+  members: [],
+  members_of: [],
+  broader: [],
+  narrower: [],
+  related: [],
+  subordinate_arrays: [],
+  superordinates: [],
 });
 
 // Initial population of form when editing
@@ -181,6 +188,13 @@ onBeforeMount(() => {
       labels: conceptClone.labels,
       notes: conceptClone.notes,
       sources: conceptClone.sources,
+      members: conceptClone.members,
+      members_of: conceptClone.members_of,
+      broader: conceptClone.broader,
+      narrower: conceptClone.narrower,
+      related: conceptClone.related,
+      subordinate_arrays: conceptClone.subordinate_arrays,
+      superordinates: conceptClone.superordinates,
     };
   }
 });

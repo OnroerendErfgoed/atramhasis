@@ -11,7 +11,13 @@ export interface Concept extends OverviewConcept {
   labels: Label[];
   notes: Note[];
   sources: Source[];
-  member_of: Concept[];
+  members: Relation[];
+  members_of: Relation[];
+  broader?: Relation[];
+  narrower?: Relation[];
+  related?: Relation[];
+  subordinate_arrays?: Relation[];
+  superordinates?: Relation[];
 }
 
 export interface ConceptForm {
@@ -21,4 +27,18 @@ export interface ConceptForm {
   labels: Label[];
   notes: Note[];
   sources: Source[];
+  members: Relation[];
+  members_of: Relation[];
+  broader?: Relation[];
+  narrower?: Relation[];
+  related?: Relation[];
+  subordinate_arrays?: Relation[];
+  superordinates?: Relation[];
+}
+
+export interface Relation {
+  id: string;
+  uri: string;
+  label: string;
+  type: ConceptTypeEnum;
 }
