@@ -38,3 +38,9 @@ export interface Conceptscheme extends OverviewConceptscheme {
   notes: Note[];
   sources: Source[];
 }
+
+export interface ConceptschemeForm {
+  labels: Label[];
+  notes: Note[];
+  sources: Source[];
+}

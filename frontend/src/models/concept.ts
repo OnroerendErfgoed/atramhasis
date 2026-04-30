@@ -18,4 +18,7 @@ export interface ConceptForm {
   conceptscheme: string;
   type: ConceptTypeEnum;
   id?: number;
+  labels: Label[];
+  notes: Note[];
+  sources: Source[];
 }

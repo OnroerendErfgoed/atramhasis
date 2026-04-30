@@ -67,6 +67,7 @@ import { useAdminUiStore } from '@stores/admin-ui';
 import { useLanguageStore } from '@stores/language';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
+import { cloneDeep } from 'lodash-es';
 import { storeToRefs } from 'pinia';
 import { capitalize, computed, onBeforeMount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -94,9 +95,10 @@ const form = ref<Language>({
 // Initial population of form when editing
 onBeforeMount(() => {
   if (isEditMode.value && selectedLanguage.value) {
+    const languageClone = cloneDeep(selectedLanguage.value);
     form.value = {
-      id: selectedLanguage.value.id,
-      name: selectedLanguage.value.name,
+      id: languageClone.id,
+      name: languageClone.name,
     };
   }
 });
