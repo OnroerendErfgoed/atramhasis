@@ -94,7 +94,7 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   const closeLanguageModal = () => (languageModalIsOpen.value = false);
 
   const relationModalKey = ref(0);
-  const relationModalIsOpen = ref(true);
+  const relationModalIsOpen = ref(false);
   const openRelationModal = () => {
     relationModalKey.value++;
     relationModalIsOpen.value = true;

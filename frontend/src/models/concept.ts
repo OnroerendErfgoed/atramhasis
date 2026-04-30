@@ -27,8 +27,8 @@ export interface ConceptForm {
   labels: Label[];
   notes: Note[];
   sources: Source[];
-  members: Relation[];
   members_of: Relation[];
+  members?: Relation[];
   broader?: Relation[];
   narrower?: Relation[];
   related?: Relation[];

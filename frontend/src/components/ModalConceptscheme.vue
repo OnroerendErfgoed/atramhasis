@@ -186,7 +186,7 @@ const deleteSource = (source: Source) => {
 const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
   ...((form.value.labels.map((label, i) => ({
     ...label,
-    id: i + 1,
+    id: `${i + 1}`,
   })) ?? []) as TableRow<Label>[]),
   {
     isAddRow: true,
@@ -196,7 +196,7 @@ const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
 const notesWithAddRow = computed<TableRow<Note>[]>(() => [
   ...((form.value.notes.map((note, i) => ({
     ...note,
-    id: i + 1,
+    id: `${i + 1}`,
   })) ?? []) as TableRow<Note>[]),
   {
     isAddRow: true,
@@ -206,7 +206,7 @@ const notesWithAddRow = computed<TableRow<Note>[]>(() => [
 const sourcesWithAddRow = computed<TableRow<Source>[]>(() => [
   ...((form.value.sources.map((source, i) => ({
     ...source,
-    id: i + 1,
+    id: `${i + 1}`,
   })) ?? []) as TableRow<Source>[]),
   {
     isAddRow: true,

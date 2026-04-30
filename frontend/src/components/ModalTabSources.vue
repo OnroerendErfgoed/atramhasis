@@ -2,9 +2,9 @@
   <ModalTabTable
     :data="data"
     :main-column="mainColumn"
-    :on-add="() => adminUiStore.openSourceModal(ModalMode.ADD)"
-    :on-edit="onEdit"
-    :on-delete="onDelete"
+    @add="() => adminUiStore.openSourceModal(ModalMode.ADD)"
+    @edit="onEdit"
+    @delete="onDelete"
   />
   <ModalSource
     :key="sourceModalKey"

@@ -67,7 +67,18 @@
             />
           </template>
 
-          <template #relations> <ModalTabRelations :scheme="form.conceptscheme" /> </template>
+          <template #relations>
+            <ModalTabRelations
+              :scheme="form.conceptscheme"
+              :members-data="membersWithAddRow"
+              :members-of-data="membersOfWithAddRow"
+              :broader-data="broaderWithAddRow"
+              :narrower-data="narrowerWithAddRow"
+              :related-data="relatedWithAddRow"
+              :subordinate-arrays-data="subordinateArraysWithAddRow"
+              :superordinates-data="superordinatesWithAddRow"
+            />
+          </template>
 
           <template #matches> matches </template>
         </UTabs>
@@ -95,7 +106,7 @@ import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useListStore } from '@stores/list';
-import type { ConceptForm } from '@models/concept';
+import type { ConceptForm, Relation } from '@models/concept';
 import type { TableRow } from './ModalTabTable.vue';
 
 const toast = useToast();
@@ -252,33 +263,27 @@ const deleteSource = (source: Source) => {
 };
 
 /* Table data */
-const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
-  ...((form.value.labels.map((label, i) => ({
-    ...label,
-    id: i + 1,
-  })) ?? []) as TableRow<Label>[]),
+const withAddRow = <T extends { id?: string }>(items: T[]): TableRow<T>[] => [
+  ...items.map((item, i) => ({
+    ...item,
+    id: item.id ?? `${i + 1}`,
+  })),
   {
     isAddRow: true,
-  } as TableRow<Label>,
-]);
+  } as TableRow<T>,
+];
 
-const notesWithAddRow = computed<TableRow<Note>[]>(() => [
-  ...((form.value.notes.map((note, i) => ({
-    ...note,
-    id: i + 1,
-  })) ?? []) as TableRow<Note>[]),
-  {
-    isAddRow: true,
-  } as TableRow<Note>,
-]);
+const labelsWithAddRow = computed<TableRow<Label>[]>(() => withAddRow(form.value.labels));
+const notesWithAddRow = computed<TableRow<Note>[]>(() => withAddRow(form.value.notes));
+const sourcesWithAddRow = computed<TableRow<Source>[]>(() => withAddRow(form.value.sources));
 
-const sourcesWithAddRow = computed<TableRow<Source>[]>(() => [
-  ...((form.value.sources.map((source, i) => ({
-    ...source,
-    id: i + 1,
-  })) ?? []) as TableRow<Source>[]),
-  {
-    isAddRow: true,
-  } as TableRow<Source>,
-]);
+const membersWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.members || []));
+const membersOfWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.members_of || []));
+const broaderWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.broader || []));
+const narrowerWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.narrower || []));
+const relatedWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.related || []));
+const subordinateArraysWithAddRow = computed<TableRow<Relation>[]>(() =>
+  withAddRow(form.value.subordinate_arrays || [])
+);
+const superordinatesWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.superordinates || []));
 </script>

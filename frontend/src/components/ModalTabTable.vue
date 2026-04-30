@@ -30,6 +30,7 @@ const props = defineProps<{
   data: TableRow<T>[];
   mainColumn: MainColumn;
   extraColumns?: BaseColumn[];
+  hideEdit?: boolean;
   onAdd: () => void;
   onEdit: (row: TableRow<T>) => void;
   onDelete: (row: TableRow<T>) => void;
@@ -78,15 +79,17 @@ const columns = computed<TableColumn<TableRow<T>>[]>(() => {
         return '';
       }
 
-      return h('div', { class: 'flex items-center gap-1' }, [
-        h(UButton, {
-          label: t('grid.columns.actions.edit'),
-          icon: 'i-lucide-pencil',
-          color: 'primary',
-          variant: 'outline',
-          size: 'xs',
-          onClick: () => props.onEdit(row.original),
-        }),
+      const actionButtons = [
+        !props.hideEdit
+          ? h(UButton, {
+              label: t('grid.columns.actions.edit'),
+              icon: 'i-lucide-pencil',
+              color: 'primary',
+              variant: 'outline',
+              size: 'xs',
+              onClick: () => props.onEdit(row.original),
+            })
+          : null,
         h(UButton, {
           icon: 'i-lucide-trash-2',
           color: 'error',
@@ -95,7 +98,9 @@ const columns = computed<TableColumn<TableRow<T>>[]>(() => {
           'aria-label': t('grid.columns.actions.delete'),
           onClick: () => props.onDelete(row.original),
         }),
-      ]);
+      ];
+
+      return h('div', { class: 'flex items-center gap-1' }, actionButtons);
     },
   };
 
