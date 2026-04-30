@@ -86,7 +86,9 @@
             </UFormField>
           </template>
 
-          <template #matches> matches </template>
+          <template #matches>
+            <ModalTabMatches :matches="form.matches" />
+          </template>
         </UTabs>
       </div>
     </template>
@@ -117,19 +119,19 @@ export type RelationData = {
 </script>
 
 <script setup lang="ts">
-import { useAdminUiStore } from '@stores/admin-ui';
-import { storeToRefs } from 'pinia';
-import { useI18n } from 'vue-i18n';
 import type { TabsItem } from '@nuxt/ui';
-import { capitalize, computed, onBeforeMount, ref } from 'vue';
+import { useAdminUiStore } from '@stores/admin-ui';
 import { cloneDeep } from 'lodash-es';
+import { storeToRefs } from 'pinia';
+import { capitalize, computed, onBeforeMount, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 // import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
+import type { ConceptForm, Relation } from '@models/concept';
+import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
-import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useListStore } from '@stores/list';
-import type { ConceptForm, Relation } from '@models/concept';
 import type { TableRow } from './ModalTabTable.vue';
 
 const toast = useToast();
@@ -210,6 +212,13 @@ const form = ref<ConceptForm>({
   subordinate_arrays: [],
   superordinates: [],
   infer_concept_relations: undefined,
+  matches: {
+    narrow: [],
+    broad: [],
+    related: [],
+    close: [],
+    exact: [],
+  },
 });
 
 // Initial population of form when editing
@@ -231,6 +240,7 @@ onBeforeMount(() => {
       subordinate_arrays: conceptClone.subordinate_arrays ?? [],
       superordinates: conceptClone.superordinates ?? [],
       infer_concept_relations: conceptClone.infer_concept_relations,
+      matches: conceptClone.matches,
     };
   }
 });

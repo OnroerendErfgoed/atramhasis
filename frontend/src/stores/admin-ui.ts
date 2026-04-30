@@ -1,5 +1,5 @@
 import type { RelationKey } from '@components/ModalConcept.vue';
-import { ModalMode } from '@models/util';
+import { MatchTypeEnum, ModalMode } from '@models/util';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
@@ -63,6 +63,18 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     sourceModalMode.value = modalMode;
   };
   const closeSourceModal = () => (sourceModalIsOpen.value = false);
+
+  const matchModalKey = ref(0);
+  const matchModalIsOpen = ref(false);
+  const matchModalMode = ref<ModalMode>(ModalMode.ADD);
+  const matchModalType = ref<MatchTypeEnum>();
+  const openMatchModal = (modalMode: ModalMode, matchType: MatchTypeEnum) => {
+    matchModalKey.value++;
+    matchModalIsOpen.value = true;
+    matchModalMode.value = modalMode;
+    matchModalType.value = matchType;
+  };
+  const closeMatchModal = () => (matchModalIsOpen.value = false);
 
   const conceptModalKey = ref(0);
   const conceptModalIsOpen = ref(false);
@@ -142,6 +154,12 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     sourceModalMode,
     openSourceModal,
     closeSourceModal,
+    matchModalKey,
+    matchModalType,
+    matchModalIsOpen,
+    matchModalMode,
+    openMatchModal,
+    closeMatchModal,
     providerModalKey,
     providerModalIsOpen,
     providerModalMode,
