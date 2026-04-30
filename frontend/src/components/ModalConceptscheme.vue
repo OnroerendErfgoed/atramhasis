@@ -7,10 +7,11 @@
     class="max-w-4xl"
   >
     <template #body>
-      <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
+      <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="flex h-[34rem] w-full flex-col">
         <template #labels>
-          <ModalConceptschemeTabLabels
+          <ModalTabLabels
             :data="labelsWithAddRow"
+            :tab-title="selectedConceptscheme?.label ?? ''"
             @add="addLabel"
             @edit="editLabel"
             @delete="deleteLabel"
@@ -18,12 +19,19 @@
         </template>
 
         <template #notes>
-          <ModalConceptschemeTabNotes :data="notesWithAddRow" @add="addNote" @edit="editNote" @delete="deleteNote" />
+          <ModalTabNotes
+            :data="notesWithAddRow"
+            :tab-title="selectedConceptscheme?.label ?? ''"
+            @add="addNote"
+            @edit="editNote"
+            @delete="deleteNote"
+          />
         </template>
 
         <template #sources>
-          <ModalConceptschemeTabSources
+          <ModalTabSources
             :data="sourcesWithAddRow"
+            :tab-title="selectedConceptscheme?.label ?? ''"
             @add="addSource"
             @edit="editSource"
             @delete="deleteSource"
@@ -40,22 +48,19 @@
   </UModal>
 </template>
 
-<script lang="ts">
-export type TableRow<T> = T & {
-  isAddRow?: boolean;
-};
-</script>
-
 <script setup lang="ts">
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import type { TabsItem } from '@nuxt/ui';
-import { capitalize, computed, ref } from 'vue';
+import { capitalize, computed, onBeforeMount, ref } from 'vue';
 import { type Label, type Note, type Source } from '@models/util';
 import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
+import type { TableRow } from '@components/ModalTabTable.vue';
+import type { ConceptschemeForm } from '@models/conceptscheme';
+import { cloneDeep } from 'lodash-es';
 
 const toast = useToast();
 const { t } = useI18n();
@@ -91,7 +96,7 @@ const save = async () => {
   try {
     adminUiStore.startLoading(CONCEPTSCHEME_MODAL_LOADING_KEY);
 
-    await apiService.updateConceptscheme(selectedConceptscheme.value);
+    await apiService.updateConceptscheme({ ...selectedConceptscheme.value, ...form.value });
     toast.add({
       title: t('api.success.update.title', { item: capitalize(t('entities.conceptscheme')) }),
       description: t('api.success.update.description', { item: t('entities.conceptscheme') }),
@@ -106,60 +111,80 @@ const save = async () => {
   }
 };
 
+// Form state
+const form = ref<ConceptschemeForm>({
+  labels: [],
+  notes: [],
+  sources: [],
+});
+
+// Initial population of form when editing
+onBeforeMount(() => {
+  if (selectedConceptscheme.value) {
+    const conceptschemeClone = cloneDeep(selectedConceptscheme.value);
+    form.value = {
+      labels: conceptschemeClone.labels ?? [],
+      notes: conceptschemeClone.notes ?? [],
+      sources: conceptschemeClone.sources ?? [],
+    };
+  }
+});
+
+/* Grid actions */
 const addLabel = (label: Label) => {
-  selectedConceptscheme.value?.labels.push(label);
+  form.value.labels.push(label);
 };
 const editLabel = (label: Label) => {
   const index = labelsWithAddRow.value.findIndex((l) => l.id === label.id);
   if (index !== undefined && index >= 0) {
     delete label.id;
-    selectedConceptscheme.value!.labels[index] = label;
+    form.value.labels[index] = label;
   }
 };
 const deleteLabel = (label: Label) => {
   const index = labelsWithAddRow.value.findIndex((l) => l.id === label.id);
   if (index !== undefined && index >= 0) {
-    selectedConceptscheme.value!.labels.splice(index, 1);
+    form.value.labels.splice(index, 1);
   }
 };
 
 const addNote = (note: Note) => {
-  selectedConceptscheme.value?.notes.push(note);
+  form.value.notes.push(note);
 };
 const editNote = (note: Note) => {
   const index = notesWithAddRow.value.findIndex((n) => n.id === note.id);
   if (index !== undefined && index >= 0) {
     delete note.id;
-    selectedConceptscheme.value!.notes[index] = note;
+    form.value.notes[index] = note;
   }
 };
 const deleteNote = (note: Note) => {
   const index = notesWithAddRow.value.findIndex((n) => n.id === note.id);
   if (index !== undefined && index >= 0) {
-    selectedConceptscheme.value!.notes.splice(index, 1);
+    form.value.notes.splice(index, 1);
   }
 };
 
 const addSource = (source: Source) => {
-  selectedConceptscheme.value?.sources.push(source);
+  form.value.sources.push(source);
 };
 const editSource = (source: Source) => {
   const index = sourcesWithAddRow.value.findIndex((s) => s.id === source.id);
   if (index !== undefined && index >= 0) {
     delete source.id;
-    selectedConceptscheme.value!.sources[index] = source;
+    form.value.sources[index] = source;
   }
 };
 const deleteSource = (source: Source) => {
   const index = sourcesWithAddRow.value.findIndex((s) => s.id === source.id);
   if (index !== undefined && index >= 0) {
-    selectedConceptscheme.value!.sources.splice(index, 1);
+    form.value.sources.splice(index, 1);
   }
 };
 
 /* Table data */
 const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
-  ...((selectedConceptscheme.value?.labels?.map((label, i) => ({
+  ...((form.value.labels.map((label, i) => ({
     ...label,
     id: i + 1,
   })) ?? []) as TableRow<Label>[]),
@@ -169,7 +194,7 @@ const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
 ]);
 
 const notesWithAddRow = computed<TableRow<Note>[]>(() => [
-  ...((selectedConceptscheme.value?.notes?.map((note, i) => ({
+  ...((form.value.notes.map((note, i) => ({
     ...note,
     id: i + 1,
   })) ?? []) as TableRow<Note>[]),
@@ -179,7 +204,7 @@ const notesWithAddRow = computed<TableRow<Note>[]>(() => [
 ]);
 
 const sourcesWithAddRow = computed<TableRow<Source>[]>(() => [
-  ...((selectedConceptscheme.value?.sources?.map((source, i) => ({
+  ...((form.value.sources.map((source, i) => ({
     ...source,
     id: i + 1,
   })) ?? []) as TableRow<Source>[]),

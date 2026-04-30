@@ -2,22 +2,24 @@
   <UTable class="flex-1 min-h-0 rounded-lg border border-default" :data="data" :columns="columns" />
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+export type TableRow<T> = T & {
+  isAddRow?: boolean;
+};
+</script>
+
+<script setup lang="ts" generic="T">
 import type { TableColumn } from '@nuxt/ui';
 import { computed, h, resolveComponent, type VNode } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
-type GenericRow = {
-  isAddRow?: boolean;
-};
-
 type BaseColumn = {
   accessorKey?: string;
   id?: string;
   header: string;
-  cell: (row: GenericRow) => string | VNode;
+  cell: (row: TableRow<T>) => string | VNode;
 };
 
 type MainColumn = BaseColumn & {
@@ -25,18 +27,18 @@ type MainColumn = BaseColumn & {
 };
 
 const props = defineProps<{
-  data: GenericRow[];
+  data: TableRow<T>[];
   mainColumn: MainColumn;
   extraColumns?: BaseColumn[];
   onAdd: () => void;
-  onEdit: (row: GenericRow) => void;
-  onDelete: (row: GenericRow) => void;
+  onEdit: (row: TableRow<T>) => void;
+  onDelete: (row: TableRow<T>) => void;
 }>();
 
 const UButton = resolveComponent('UButton');
 
-const columns = computed<TableColumn<GenericRow>[]>(() => {
-  const mainColumn: TableColumn<GenericRow> = {
+const columns = computed<TableColumn<TableRow<T>>[]>(() => {
+  const mainColumn: TableColumn<TableRow<T>> = {
     accessorKey: props.mainColumn.accessorKey,
     header: props.mainColumn.header,
     cell: ({ row }) => {
@@ -56,19 +58,19 @@ const columns = computed<TableColumn<GenericRow>[]>(() => {
     meta: {
       class: {
         th: 'w-full',
-        td: 'w-full',
+        td: 'w-full whitespace-normal break-words [word-break:break-word]',
       },
     },
   };
 
-  const extraColumns: TableColumn<GenericRow>[] = (props.extraColumns ?? []).map((column) => ({
+  const extraColumns: TableColumn<TableRow<T>>[] = (props.extraColumns ?? []).map((column) => ({
     accessorKey: column.accessorKey,
     id: column.id,
     header: column.header,
     cell: ({ row }) => (row.original.isAddRow ? '' : column.cell(row.original)),
   }));
 
-  const actionsColumn: TableColumn<GenericRow> = {
+  const actionsColumn: TableColumn<TableRow<T>> = {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
     cell: ({ row }) => {

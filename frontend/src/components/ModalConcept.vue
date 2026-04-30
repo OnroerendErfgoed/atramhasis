@@ -7,35 +7,71 @@
     class="max-w-4xl"
   >
     <template #body>
-      <UForm class="space-y-4 rounded-md bg-muted p-4">
-        <div class="grid grid-cols-3 gap-4">
-          <UFormField
-            name="concept-conceptscheme"
-            size="lg"
-            :label="t('components.modalConcept.form.conceptscheme.label')"
-          >
-            <USelect v-model="form.conceptscheme" :items="conceptschemeOptions" class="w-full" :disabled="isEditMode" />
-          </UFormField>
+      <div class="flex h-[34rem] w-full flex-col">
+        <UForm class="space-y-4 rounded-md bg-muted p-4">
+          <div class="grid grid-cols-3 gap-4">
+            <UFormField
+              name="concept-conceptscheme"
+              size="lg"
+              :label="t('components.modalConcept.form.conceptscheme.label')"
+            >
+              <USelect
+                v-model="form.conceptscheme"
+                :items="conceptschemeOptions"
+                class="w-full"
+                :disabled="isEditMode"
+              />
+            </UFormField>
 
-          <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
-            <USelect v-model="form.type" :items="conceptTypes" class="w-full" />
-          </UFormField>
-          <UFormField v-if="isEditMode" name="concept-id" size="lg" :label="t('components.modalConcept.form.id.label')">
-            <UInput :model-value="form.id" class="w-full" disabled />
-          </UFormField>
-        </div>
-      </UForm>
-      <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs" class="w-full">
-        <template #labels> labels </template>
+            <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
+              <USelect v-model="form.type" :items="conceptTypes" class="w-full" />
+            </UFormField>
+            <UFormField
+              v-if="isEditMode"
+              name="concept-id"
+              size="lg"
+              :label="t('components.modalConcept.form.id.label')"
+            >
+              <UInput :model-value="form.id" class="w-full" disabled />
+            </UFormField>
+          </div>
+        </UForm>
+        <UTabs v-model="activeTab" color="neutral" variant="link" :items="tabs">
+          <template #labels>
+            <ModalTabLabels
+              :data="labelsWithAddRow"
+              :tab-title="selectedConcept?.label ?? ''"
+              @add="addLabel"
+              @edit="editLabel"
+              @delete="deleteLabel"
+            />
+          </template>
 
-        <template #notes> notes </template>
+          <template #notes>
+            <ModalTabNotes
+              :data="notesWithAddRow"
+              :tab-title="selectedConcept?.label ?? ''"
+              @add="addNote"
+              @edit="editNote"
+              @delete="deleteNote"
+            />
+          </template>
 
-        <template #sources> sources </template>
+          <template #sources>
+            <ModalTabSources
+              :data="sourcesWithAddRow"
+              :tab-title="selectedConcept?.label ?? ''"
+              @add="addSource"
+              @edit="editSource"
+              @delete="deleteSource"
+            />
+          </template>
 
-        <template #relations> relations </template>
+          <template #relations> relations </template>
 
-        <template #matches> matches </template>
-      </UTabs>
+          <template #matches> matches </template>
+        </UTabs>
+      </div>
     </template>
     <template #footer="{ close }">
       <div class="flex w-full justify-end gap-2">
@@ -52,13 +88,15 @@ import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import type { TabsItem } from '@nuxt/ui';
 import { capitalize, computed, onBeforeMount, ref } from 'vue';
+import { cloneDeep } from 'lodash-es';
 // import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
 import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
-import { ConceptTypeEnum, ModalMode } from '@models/util';
+import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useListStore } from '@stores/list';
 import type { ConceptForm } from '@models/concept';
+import type { TableRow } from './ModalTabTable.vue';
 
 const toast = useToast();
 const { t } = useI18n();
@@ -124,19 +162,109 @@ const save = async () => {
 
 // Form state
 const form = ref<ConceptForm>({
-  conceptscheme: selectedConceptscheme.value?.id as string,
+  conceptscheme: `${selectedConceptscheme.value?.id}`,
   type: ConceptTypeEnum.CONCEPT,
   id: undefined,
+  labels: [],
+  notes: [],
+  sources: [],
 });
 
 // Initial population of form when editing
 onBeforeMount(() => {
   if (isEditMode.value && selectedConcept.value) {
+    const conceptClone = cloneDeep(selectedConcept.value);
     form.value = {
-      conceptscheme: selectedConceptscheme.value?.id as string,
-      type: selectedConcept.value.type,
-      id: selectedConcept.value.id,
+      conceptscheme: `${selectedConceptscheme.value?.id}`,
+      type: conceptClone.type,
+      id: conceptClone.id,
+      labels: conceptClone.labels,
+      notes: conceptClone.notes,
+      sources: conceptClone.sources,
     };
   }
 });
+
+/* Grid actions */
+const addLabel = (label: Label) => {
+  form.value.labels.push(label);
+};
+const editLabel = (label: Label) => {
+  const index = labelsWithAddRow.value.findIndex((l) => l.id === label.id);
+  if (index !== undefined && index >= 0) {
+    delete label.id;
+    form.value.labels[index] = label;
+  }
+};
+const deleteLabel = (label: Label) => {
+  const index = labelsWithAddRow.value.findIndex((l) => l.id === label.id);
+  if (index !== undefined && index >= 0) {
+    form.value.labels.splice(index, 1);
+  }
+};
+
+const addNote = (note: Note) => {
+  form.value.notes.push(note);
+};
+const editNote = (note: Note) => {
+  const index = notesWithAddRow.value.findIndex((n) => n.id === note.id);
+  if (index !== undefined && index >= 0) {
+    delete note.id;
+    form.value.notes[index] = note;
+  }
+};
+const deleteNote = (note: Note) => {
+  const index = notesWithAddRow.value.findIndex((n) => n.id === note.id);
+  if (index !== undefined && index >= 0) {
+    form.value.notes.splice(index, 1);
+  }
+};
+
+const addSource = (source: Source) => {
+  form.value.sources.push(source);
+};
+const editSource = (source: Source) => {
+  const index = sourcesWithAddRow.value.findIndex((s) => s.id === source.id);
+  if (index !== undefined && index >= 0) {
+    delete source.id;
+    form.value.sources[index] = source;
+  }
+};
+const deleteSource = (source: Source) => {
+  const index = sourcesWithAddRow.value.findIndex((s) => s.id === source.id);
+  if (index !== undefined && index >= 0) {
+    form.value.sources.splice(index, 1);
+  }
+};
+
+/* Table data */
+const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
+  ...((form.value.labels.map((label, i) => ({
+    ...label,
+    id: i + 1,
+  })) ?? []) as TableRow<Label>[]),
+  {
+    isAddRow: true,
+  } as TableRow<Label>,
+]);
+
+const notesWithAddRow = computed<TableRow<Note>[]>(() => [
+  ...((form.value.notes.map((note, i) => ({
+    ...note,
+    id: i + 1,
+  })) ?? []) as TableRow<Note>[]),
+  {
+    isAddRow: true,
+  } as TableRow<Note>,
+]);
+
+const sourcesWithAddRow = computed<TableRow<Source>[]>(() => [
+  ...((form.value.sources.map((source, i) => ({
+    ...source,
+    id: i + 1,
+  })) ?? []) as TableRow<Source>[]),
+  {
+    isAddRow: true,
+  } as TableRow<Source>,
+]);
 </script>

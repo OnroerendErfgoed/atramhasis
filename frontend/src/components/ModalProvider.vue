@@ -115,6 +115,7 @@ import { useListStore } from '@stores/list';
 import { useProviderStore } from '@stores/provider';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
+import { cloneDeep } from 'lodash-es';
 import { storeToRefs } from 'pinia';
 import { capitalize, computed, onBeforeMount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -171,15 +172,16 @@ const form = ref<ProviderForm>({
 // Initial population of form when editing
 onBeforeMount(() => {
   if (isEditMode.value && selectedProvider.value) {
+    const providerClone = cloneDeep(selectedProvider.value);
     form.value = {
-      id: selectedProvider.value.id,
-      conceptscheme_uri: selectedProvider.value.conceptscheme_uri,
-      uri_pattern: selectedProvider.value.uri_pattern,
-      subject: selectedProvider.value.subject,
-      default_language: selectedProvider.value.default_language,
-      force_display_language: selectedProvider.value.force_display_language,
-      id_generation_strategy: selectedProvider.value.id_generation_strategy,
-      expand_strategy: selectedProvider.value.expand_strategy,
+      id: providerClone.id,
+      conceptscheme_uri: providerClone.conceptscheme_uri,
+      uri_pattern: providerClone.uri_pattern,
+      subject: providerClone.subject,
+      default_language: providerClone.default_language,
+      force_display_language: providerClone.force_display_language,
+      id_generation_strategy: providerClone.id_generation_strategy,
+      expand_strategy: providerClone.expand_strategy,
     };
   }
 });
