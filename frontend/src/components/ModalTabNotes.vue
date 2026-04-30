@@ -3,9 +3,9 @@
     :data="data"
     :main-column="mainColumn"
     :extra-columns="extraColumns"
-    @add="() => adminUiStore.openNoteModal(ModalMode.ADD)"
-    @edit="onEdit"
-    @delete="onDelete"
+    :on-add="() => adminUiStore.openNoteModal(ModalMode.ADD)"
+    :on-edit="onEdit"
+    :on-delete="onDelete"
   />
   <ModalNote
     :key="noteModalKey"

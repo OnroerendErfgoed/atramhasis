@@ -1,11 +1,59 @@
 <template>
   <ModalTabTable
+    :data="broaderData"
+    :main-column="mainColumn"
+    :hide-edit="true"
+    :on-add="() => adminUiStore.openRelationModal()"
+    :on-edit="console.log"
+    :on-delete="console.log"
+  />
+  <ModalTabTable
+    :data="narrowerData"
+    :main-column="mainColumn"
+    :hide-edit="true"
+    :on-add="() => adminUiStore.openRelationModal()"
+    :on-edit="console.log"
+    :on-delete="console.log"
+  />
+  <ModalTabTable
+    :data="relatedData"
+    :main-column="mainColumn"
+    :hide-edit="true"
+    :on-add="() => adminUiStore.openRelationModal()"
+    :on-edit="console.log"
+    :on-delete="console.log"
+  />
+  <ModalTabTable
+    :data="memberOfData"
+    :main-column="mainColumn"
+    :hide-edit="true"
+    :on-add="() => adminUiStore.openRelationModal()"
+    :on-edit="console.log"
+    :on-delete="console.log"
+  />
+  <ModalTabTable
     :data="membersData"
     :main-column="mainColumn"
     :hide-edit="true"
-    @add="() => adminUiStore.openRelationModal()"
-    @edit="console.log"
-    @delete="console.log"
+    :on-add="() => adminUiStore.openRelationModal()"
+    :on-edit="console.log"
+    :on-delete="console.log"
+  />
+  <ModalTabTable
+    :data="subordinateArraysData"
+    :main-column="mainColumn"
+    :hide-edit="true"
+    :on-add="() => adminUiStore.openRelationModal()"
+    :on-edit="console.log"
+    :on-delete="console.log"
+  />
+  <ModalTabTable
+    :data="superordinatesData"
+    :main-column="mainColumn"
+    :hide-edit="true"
+    :on-add="() => adminUiStore.openRelationModal()"
+    :on-edit="console.log"
+    :on-delete="console.log"
   />
   <ModalRelation :key="relationModalKey" :title="t('components.modalRelation.title', { item: '' })" :scheme="scheme" />
 </template>
@@ -20,7 +68,7 @@ import type { Relation } from '@models/concept';
 defineProps<{
   scheme: string;
   membersData: TableRow<Relation>[];
-  membersOfData: TableRow<Relation>[];
+  memberOfData: TableRow<Relation>[];
   broaderData: TableRow<Relation>[];
   narrowerData: TableRow<Relation>[];
   relatedData: TableRow<Relation>[];

@@ -71,7 +71,7 @@
             <ModalTabRelations
               :scheme="form.conceptscheme"
               :members-data="membersWithAddRow"
-              :members-of-data="membersOfWithAddRow"
+              :member-of-data="memberOfWithAddRow"
               :broader-data="broaderWithAddRow"
               :narrower-data="narrowerWithAddRow"
               :related-data="relatedWithAddRow"
@@ -180,7 +180,7 @@ const form = ref<ConceptForm>({
   notes: [],
   sources: [],
   members: [],
-  members_of: [],
+  member_of: [],
   broader: [],
   narrower: [],
   related: [],
@@ -200,7 +200,7 @@ onBeforeMount(() => {
       notes: conceptClone.notes,
       sources: conceptClone.sources,
       members: conceptClone.members,
-      members_of: conceptClone.members_of,
+      member_of: conceptClone.member_of,
       broader: conceptClone.broader,
       narrower: conceptClone.narrower,
       related: conceptClone.related,
@@ -278,7 +278,7 @@ const notesWithAddRow = computed<TableRow<Note>[]>(() => withAddRow(form.value.n
 const sourcesWithAddRow = computed<TableRow<Source>[]>(() => withAddRow(form.value.sources));
 
 const membersWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.members || []));
-const membersOfWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.members_of || []));
+const memberOfWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.member_of || []));
 const broaderWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.broader || []));
 const narrowerWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.narrower || []));
 const relatedWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.related || []));

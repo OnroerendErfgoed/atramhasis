@@ -3,9 +3,9 @@
     :data="data"
     :main-column="mainColumn"
     :extra-columns="extraColumns"
-    @add="() => adminUiStore.openLabelModal(ModalMode.ADD)"
-    @edit="onEdit"
-    @delete="onDelete"
+    :on-add="() => adminUiStore.openLabelModal(ModalMode.ADD)"
+    :on-edit="onEdit"
+    :on-delete="onDelete"
   />
   <ModalLabel
     :key="labelModalKey"

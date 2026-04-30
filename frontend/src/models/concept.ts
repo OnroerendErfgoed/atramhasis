@@ -12,7 +12,7 @@ export interface Concept extends OverviewConcept {
   notes: Note[];
   sources: Source[];
   members: Relation[];
-  members_of: Relation[];
+  member_of: Relation[];
   broader?: Relation[];
   narrower?: Relation[];
   related?: Relation[];
@@ -27,7 +27,7 @@ export interface ConceptForm {
   labels: Label[];
   notes: Note[];
   sources: Source[];
-  members_of: Relation[];
+  member_of: Relation[];
   members?: Relation[];
   broader?: Relation[];
   narrower?: Relation[];
