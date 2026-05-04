@@ -293,7 +293,6 @@ const deleteSource = (source: Source) => {
 };
 
 const addRelation = (relation: Relation) => {
-  console.log('Adding relation:', relation);
   if (form.value[relationModalType.value]?.find((r) => r.id === relation.id)) {
     return;
   }
