@@ -123,7 +123,7 @@ import type { TabsItem } from '@nuxt/ui';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { cloneDeep } from 'lodash-es';
 import { storeToRefs } from 'pinia';
-import { capitalize, computed, onBeforeMount, ref } from 'vue';
+import { capitalize, computed, onBeforeMount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 // import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
@@ -150,51 +150,6 @@ const { conceptTypes, conceptschemeOptions, yesNoOptions } = storeToRefs(listSto
 // const apiService = new ApiService();
 const { handleApiError } = useApiError();
 const CONCEPT_MODAL_LOADING_KEY = 'concept-modal-submit';
-
-const activeTab = ref('0');
-const tabs = ref<TabsItem[]>([
-  {
-    label: t('components.modalConcept.tabs.labels'),
-    slot: 'labels',
-  },
-  {
-    label: t('components.modalConcept.tabs.notes'),
-    slot: 'notes',
-  },
-  {
-    label: t('components.modalConcept.tabs.sources'),
-    slot: 'sources',
-  },
-  {
-    label: t('components.modalConcept.tabs.relations'),
-    slot: 'relations',
-  },
-  {
-    label: t('components.modalConcept.tabs.matches'),
-    slot: 'matches',
-  },
-]);
-
-// Save handler
-const save = async () => {
-  if (!selectedConcept.value) return;
-  try {
-    adminUiStore.startLoading(CONCEPT_MODAL_LOADING_KEY);
-
-    // await apiService.updateConcept(selectedConcept.value);
-    toast.add({
-      title: t('api.success.update.title', { item: capitalize(t('entities.concept')) }),
-      description: t('api.success.update.description', { item: t('entities.concept') }),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    });
-    adminUiStore.closeConceptModal();
-  } catch (error) {
-    handleApiError(error);
-  } finally {
-    adminUiStore.stopLoading(CONCEPT_MODAL_LOADING_KEY);
-  }
-};
 
 // Form state
 const form = ref<ConceptForm>({
@@ -249,6 +204,72 @@ const formConceptschemeUri = computed(() => {
   const scheme = conceptschemeOptions.value.find((cs) => cs.value === form.value.conceptscheme);
   return scheme ? scheme.uri : '';
 });
+
+const activeTab = ref('0');
+const tabs = computed<TabsItem[]>(() => [
+  {
+    label: t('components.modalConcept.tabs.labels'),
+    slot: 'labels',
+  },
+  {
+    label: t('components.modalConcept.tabs.notes'),
+    slot: 'notes',
+  },
+  {
+    label: t('components.modalConcept.tabs.sources'),
+    slot: 'sources',
+  },
+  {
+    label: t('components.modalConcept.tabs.relations'),
+    slot: 'relations',
+  },
+  {
+    label: t('components.modalConcept.tabs.matches'),
+    slot: 'matches',
+    disabled: form.value.type === ConceptTypeEnum.COLLECTION,
+  },
+]);
+
+// Reset matches when switching to collection type, as collections cannot have matches
+watch(
+  () => form.value.type,
+  (newValue) => {
+    if (
+      activeTab.value === tabs.value.findIndex((t) => t.slot === 'matches').toString() &&
+      newValue === ConceptTypeEnum.COLLECTION
+    ) {
+      activeTab.value = '0';
+      form.value.matches = {
+        narrow: [],
+        broad: [],
+        related: [],
+        close: [],
+        exact: [],
+      };
+    }
+  }
+);
+
+// Save handler
+const save = async () => {
+  if (!selectedConcept.value) return;
+  try {
+    adminUiStore.startLoading(CONCEPT_MODAL_LOADING_KEY);
+
+    // await apiService.updateConcept(selectedConcept.value);
+    toast.add({
+      title: t('api.success.update.title', { item: capitalize(t('entities.concept')) }),
+      description: t('api.success.update.description', { item: t('entities.concept') }),
+      icon: 'i-lucide-check-circle',
+      color: 'success',
+    });
+    adminUiStore.closeConceptModal();
+  } catch (error) {
+    handleApiError(error);
+  } finally {
+    adminUiStore.stopLoading(CONCEPT_MODAL_LOADING_KEY);
+  }
+};
 
 /* Grid actions */
 const addLabel = (label: Label) => {
