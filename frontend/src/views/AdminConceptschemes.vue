@@ -142,7 +142,7 @@ const columns: TableColumn<ConceptschemeRow>[] = [
         h(UButton, {
           as: 'a',
           to: { name: 'AdminConceptscheme', params: { id: row.original.id } },
-          label: t('grid.columns.actions.view'),
+          label: t('grid.columns.actions.items'),
           icon: 'i-lucide-eye',
           color: 'primary',
           variant: 'outline',

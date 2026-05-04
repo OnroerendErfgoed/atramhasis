@@ -49,7 +49,8 @@
         "access": "Access",
         "publish": "Publish",
         "merge": "Merge",
-        "delete": "Delete"
+        "delete": "Delete",
+        "items": "Items"
       }
     }
   },
