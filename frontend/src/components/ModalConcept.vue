@@ -76,16 +76,12 @@
               @delete="deleteRelation"
             />
             <UFormField
+              v-if="form.type === ConceptTypeEnum.COLLECTION"
               name="concept-infer-relations"
               size="lg"
               :label="t('components.modalConcept.form.inferConceptRelations.label')"
             >
-              <URadioGroup
-                v-if="form.type === ConceptTypeEnum.COLLECTION"
-                v-model="form.infer_concept_relations"
-                orientation="horizontal"
-                :items="yesNoOptions"
-              />
+              <URadioGroup v-model="form.infer_concept_relations" orientation="horizontal" :items="yesNoOptions" />
             </UFormField>
           </template>
 
