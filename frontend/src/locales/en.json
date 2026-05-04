@@ -315,7 +315,8 @@
     "language": "language | languages",
     "label": "label | labels",
     "note": "note | notes",
-    "source": "source | sources"
+    "source": "source | sources",
+    "relation": "relation | relations"
   },
   "lists": {
     "languages": {

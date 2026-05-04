@@ -73,6 +73,7 @@
               :scheme-uri="formConceptschemeUri"
               :data="form.type === ConceptTypeEnum.CONCEPT ? conceptRelations : collectionRelations"
               @add="addRelation"
+              @delete="deleteRelation"
             />
           </template>
 
@@ -285,6 +286,12 @@ const addRelation = (relation: Relation) => {
     return;
   }
   form.value[relationModalType.value]?.push(relation);
+};
+const deleteRelation = (relation: Relation) => {
+  const index = form.value[relationModalType.value]?.findIndex((r) => r.id === relation.id);
+  if (index !== undefined && index >= 0) {
+    form.value[relationModalType.value]?.splice(index, 1);
+  }
 };
 
 /* Table data */
