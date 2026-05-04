@@ -1,53 +1,14 @@
 <template>
   <ModalTabTable
-    class="mb-5"
-    :data="matchesBroadWithAddRow"
-    :main-column="mainColumn"
+    v-for="config in matchTableConfigs"
+    :key="config.type"
+    :data="config.data"
+    :main-column="config.mainColumn"
     :extra-columns="extraColumns"
     :hide-edit="true"
-    :on-add="() => adminUiStore.openMatchModal(ModalMode.ADD, MatchTypeEnum.BROAD)"
-    :on-edit="console.log"
+    :on-add="config.onAdd"
     :on-delete="console.log"
-  />
-  <ModalTabTable
-    class="mb-5"
-    :data="matchesCloseWithAddRow"
-    :main-column="mainColumn"
-    :extra-columns="extraColumns"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openMatchModal(ModalMode.ADD, MatchTypeEnum.CLOSE)"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalTabTable
-    class="mb-5"
-    :data="matchesExactWithAddRow"
-    :main-column="mainColumn"
-    :extra-columns="extraColumns"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openMatchModal(ModalMode.ADD, MatchTypeEnum.EXACT)"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalTabTable
-    class="mb-5"
-    :data="matchesNarrowWithAddRow"
-    :main-column="mainColumn"
-    :extra-columns="extraColumns"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openMatchModal(ModalMode.ADD, MatchTypeEnum.NARROW)"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalTabTable
-    class="mb-5"
-    :data="matchesRelatedWithAddRow"
-    :main-column="mainColumn"
-    :extra-columns="extraColumns"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openMatchModal(ModalMode.ADD, MatchTypeEnum.RELATED)"
-    :on-edit="console.log"
-    :on-delete="console.log"
+    class="mb-3"
   />
   <ModalMatch
     :key="matchModalKey"
@@ -55,15 +16,15 @@
     :type="adminUiStore.matchModalType"
   />
 </template>
+
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-
 import type { TableRow } from '@components/ModalTabTable.vue';
 import type { Match, Matches } from '@models/concept';
+import { MatchTypeEnum } from '@models/util';
 import { useAdminUiStore } from '@stores/admin-ui';
-import { computed } from 'vue';
-import { MatchTypeEnum, ModalMode } from '@models/util';
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
 const props = defineProps<{
   matches: Matches;
@@ -74,11 +35,11 @@ const { t } = useI18n();
 const adminUiStore = useAdminUiStore();
 const { matchModalKey } = storeToRefs(adminUiStore);
 
-const mainColumn = {
+const getMainColumn = (typeLabelKey: string) => ({
   accessorKey: 'label',
-  header: t('grid.columns.labels.match', { type: t('grid.columns.labels.matchTypes.broad') }),
+  header: t('grid.columns.labels.match', { type: t(typeLabelKey) }),
   cell: (row: TableRow<Match>) => row.label,
-};
+});
 
 const extraColumns = [
   {
@@ -101,9 +62,20 @@ const toMatchRows = (items: string[] = []): Match[] =>
     uri,
   }));
 
-const matchesBroadWithAddRow = computed<TableRow<Match>[]>(() => withAddRow(toMatchRows(props.matches.broad)));
-const matchesCloseWithAddRow = computed<TableRow<Match>[]>(() => withAddRow(toMatchRows(props.matches.close)));
-const matchesExactWithAddRow = computed<TableRow<Match>[]>(() => withAddRow(toMatchRows(props.matches.exact)));
-const matchesNarrowWithAddRow = computed<TableRow<Match>[]>(() => withAddRow(toMatchRows(props.matches.narrow)));
-const matchesRelatedWithAddRow = computed<TableRow<Match>[]>(() => withAddRow(toMatchRows(props.matches.related)));
+const matchConfigItems: Array<{ key: keyof Matches; type: MatchTypeEnum; labelKey: string }> = [
+  { key: 'broad', type: MatchTypeEnum.BROAD, labelKey: 'components.modalTabMatches.broad' },
+  { key: 'close', type: MatchTypeEnum.CLOSE, labelKey: 'components.modalTabMatches.close' },
+  { key: 'exact', type: MatchTypeEnum.EXACT, labelKey: 'components.modalTabMatches.exact' },
+  { key: 'narrow', type: MatchTypeEnum.NARROW, labelKey: 'components.modalTabMatches.narrow' },
+  { key: 'related', type: MatchTypeEnum.RELATED, labelKey: 'components.modalTabMatches.related' },
+];
+
+const matchTableConfigs = computed(() =>
+  matchConfigItems.map((item) => ({
+    type: item.type,
+    data: withAddRow(toMatchRows(props.matches[item.key] || [])),
+    mainColumn: getMainColumn(item.labelKey),
+    onAdd: () => adminUiStore.openMatchModal(item.type),
+  }))
+);
 </script>

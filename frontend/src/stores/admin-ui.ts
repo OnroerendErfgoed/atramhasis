@@ -64,18 +64,6 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
   const closeSourceModal = () => (sourceModalIsOpen.value = false);
 
-  const matchModalKey = ref(0);
-  const matchModalIsOpen = ref(false);
-  const matchModalMode = ref<ModalMode>(ModalMode.ADD);
-  const matchModalType = ref<MatchTypeEnum>();
-  const openMatchModal = (modalMode: ModalMode, matchType: MatchTypeEnum) => {
-    matchModalKey.value++;
-    matchModalIsOpen.value = true;
-    matchModalMode.value = modalMode;
-    matchModalType.value = matchType;
-  };
-  const closeMatchModal = () => (matchModalIsOpen.value = false);
-
   const conceptModalKey = ref(0);
   const conceptModalIsOpen = ref(false);
   const conceptModalMode = ref<ModalMode>(ModalMode.ADD);
@@ -115,6 +103,16 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     relationModalType.value = modalType;
   };
   const closeRelationModal = () => (relationModalIsOpen.value = false);
+
+  const matchModalKey = ref(0);
+  const matchModalIsOpen = ref(false);
+  const matchModalType = ref<MatchTypeEnum>();
+  const openMatchModal = (matchType: MatchTypeEnum) => {
+    matchModalKey.value++;
+    matchModalIsOpen.value = true;
+    matchModalType.value = matchType;
+  };
+  const closeMatchModal = () => (matchModalIsOpen.value = false);
 
   /* Breadcrumbs */
   const breadcrumbLabels = ref<Record<string, string>>({});
@@ -157,7 +155,6 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     matchModalKey,
     matchModalType,
     matchModalIsOpen,
-    matchModalMode,
     openMatchModal,
     closeMatchModal,
     providerModalKey,

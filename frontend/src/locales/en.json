@@ -41,7 +41,9 @@
         "language": "Language",
         "note": "Note",
         "source": "Source",
-        "actions": "Actions"
+        "actions": "Actions",
+        "uri": "URI",
+        "match": "{type}"
       },
       "actions": {
         "view": "View",
@@ -236,6 +238,13 @@
       "members": "Members",
       "superordinates": "Superordinates",
       "subordinateArrays": "Subordinate arrays"
+    },
+    "modalTabMatches": {
+      "exact": "Exact",
+      "close": "Close",
+      "broad": "Broad",
+      "narrow": "Narrow",
+      "related": "Related"
     },
     "modalDelete": {
       "title": "Delete {entity}",
