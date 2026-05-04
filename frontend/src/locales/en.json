@@ -95,6 +95,9 @@
         },
         "id": {
           "label": "ID"
+        },
+        "inferConceptRelations": {
+          "label": "Should member concepts of this collection be seen as narrower concept of a superordinate of the collection"
         }
       }
     },
@@ -222,6 +225,18 @@
         }
       }
     },
+    "modalRelation": {
+      "title": "Add a relation"
+    },
+    "modalTabRelations": {
+      "broader": "Broader",
+      "narrower": "Narrower",
+      "related": "Related",
+      "memberOf": "Member of",
+      "members": "Members",
+      "superordinates": "Superordinates",
+      "subordinateArrays": "Subordinate arrays"
+    },
     "modalDelete": {
       "title": "Delete {entity}",
       "message": "Are you sure you want to remove {entity} {item}?",
@@ -304,7 +319,8 @@
     "language": "language | languages",
     "label": "label | labels",
     "note": "note | notes",
-    "source": "source | sources"
+    "source": "source | sources",
+    "relation": "relation | relations"
   },
   "lists": {
     "languages": {
@@ -343,6 +359,10 @@
     "conceptTypes": {
       "concept": "Concept",
       "collection": "Collection"
+    },
+    "yesNo": {
+      "yes": "Yes",
+      "no": "No"
     }
   },
   "auth": {

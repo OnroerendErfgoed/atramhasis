@@ -67,7 +67,24 @@
             />
           </template>
 
-          <template #relations> relations </template>
+          <template #relations>
+            <ModalTabRelations
+              :scheme="form.conceptscheme"
+              :scheme-uri="formConceptschemeUri"
+              :data="form.type === ConceptTypeEnum.CONCEPT ? conceptRelations : collectionRelations"
+              @add="addRelation"
+              @delete="deleteRelation"
+            />
+            <UFormField
+              v-if="form.type === ConceptTypeEnum.COLLECTION"
+              class="mb-3"
+              name="concept-infer-relations"
+              size="lg"
+              :label="t('components.modalConcept.form.inferConceptRelations.label')"
+            >
+              <URadioGroup v-model="form.infer_concept_relations" orientation="horizontal" :items="yesNoOptions" />
+            </UFormField>
+          </template>
 
           <template #matches> matches </template>
         </UTabs>
@@ -82,6 +99,23 @@
   </UModal>
 </template>
 
+<script lang="ts">
+export type RelationKey =
+  | 'members'
+  | 'member_of'
+  | 'broader'
+  | 'narrower'
+  | 'related'
+  | 'subordinate_arrays'
+  | 'superordinates';
+
+export type RelationData = {
+  label: string;
+  data: TableRow<Relation>[];
+  key: RelationKey;
+};
+</script>
+
 <script setup lang="ts">
 import { useAdminUiStore } from '@stores/admin-ui';
 import { storeToRefs } from 'pinia';
@@ -95,21 +129,21 @@ import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useListStore } from '@stores/list';
-import type { ConceptForm } from '@models/concept';
+import type { ConceptForm, Relation } from '@models/concept';
 import type { TableRow } from './ModalTabTable.vue';
 
 const toast = useToast();
 const { t } = useI18n();
 
 const adminUiStore = useAdminUiStore();
-const { conceptModalIsOpen, conceptModalMode } = storeToRefs(adminUiStore);
+const { conceptModalIsOpen, conceptModalMode, relationModalType } = storeToRefs(adminUiStore);
 const isEditMode = computed(() => conceptModalMode.value === ModalMode.EDIT);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
 const { selectedConcept } = storeToRefs(conceptStore);
 const listStore = useListStore();
-const { conceptTypes, conceptschemeOptions } = storeToRefs(listStore);
+const { conceptTypes, conceptschemeOptions, yesNoOptions } = storeToRefs(listStore);
 
 // const apiService = new ApiService();
 const { handleApiError } = useApiError();
@@ -168,6 +202,14 @@ const form = ref<ConceptForm>({
   labels: [],
   notes: [],
   sources: [],
+  members: [],
+  member_of: [],
+  broader: [],
+  narrower: [],
+  related: [],
+  subordinate_arrays: [],
+  superordinates: [],
+  infer_concept_relations: undefined,
 });
 
 // Initial population of form when editing
@@ -178,11 +220,24 @@ onBeforeMount(() => {
       conceptscheme: `${selectedConceptscheme.value?.id}`,
       type: conceptClone.type,
       id: conceptClone.id,
-      labels: conceptClone.labels,
-      notes: conceptClone.notes,
-      sources: conceptClone.sources,
+      labels: conceptClone.labels ?? [],
+      notes: conceptClone.notes ?? [],
+      sources: conceptClone.sources ?? [],
+      members: conceptClone.members ?? [],
+      member_of: conceptClone.member_of ?? [],
+      broader: conceptClone.broader ?? [],
+      narrower: conceptClone.narrower ?? [],
+      related: conceptClone.related ?? [],
+      subordinate_arrays: conceptClone.subordinate_arrays ?? [],
+      superordinates: conceptClone.superordinates ?? [],
+      infer_concept_relations: conceptClone.infer_concept_relations,
     };
   }
+});
+
+const formConceptschemeUri = computed(() => {
+  const scheme = conceptschemeOptions.value.find((cs) => cs.value === form.value.conceptscheme);
+  return scheme ? scheme.uri : '';
 });
 
 /* Grid actions */
@@ -237,34 +292,88 @@ const deleteSource = (source: Source) => {
   }
 };
 
+const addRelation = (relation: Relation) => {
+  if (form.value[relationModalType.value]?.find((r) => r.id === relation.id)) {
+    return;
+  }
+  form.value[relationModalType.value]?.push(relation);
+};
+const deleteRelation = (relation: Relation) => {
+  const index = form.value[relationModalType.value]?.findIndex((r) => r.id === relation.id);
+  if (index !== undefined && index >= 0) {
+    form.value[relationModalType.value]?.splice(index, 1);
+  }
+};
+
 /* Table data */
-const labelsWithAddRow = computed<TableRow<Label>[]>(() => [
-  ...((form.value.labels.map((label, i) => ({
-    ...label,
-    id: i + 1,
-  })) ?? []) as TableRow<Label>[]),
+const withAddRow = <T extends { id?: string }>(items: T[]): TableRow<T>[] => [
+  ...items.map((item, i) => ({
+    ...item,
+    id: item.id ?? `${i + 1}`,
+  })),
   {
     isAddRow: true,
-  } as TableRow<Label>,
+  } as TableRow<T>,
+];
+
+const labelsWithAddRow = computed<TableRow<Label>[]>(() => withAddRow(form.value.labels));
+const notesWithAddRow = computed<TableRow<Note>[]>(() => withAddRow(form.value.notes));
+const sourcesWithAddRow = computed<TableRow<Source>[]>(() => withAddRow(form.value.sources));
+
+const membersWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.members || []));
+const memberOfWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.member_of || []));
+const broaderWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.broader || []));
+const narrowerWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.narrower || []));
+const relatedWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.related || []));
+const subordinateArraysWithAddRow = computed<TableRow<Relation>[]>(() =>
+  withAddRow(form.value.subordinate_arrays || [])
+);
+const superordinatesWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.superordinates || []));
+
+/* Relation modal data */
+const conceptRelations = computed<RelationData[]>(() => [
+  {
+    label: t('components.modalTabRelations.broader'),
+    data: broaderWithAddRow.value,
+    key: 'broader',
+  },
+  {
+    label: t('components.modalTabRelations.narrower'),
+    data: narrowerWithAddRow.value,
+    key: 'narrower',
+  },
+  {
+    label: t('components.modalTabRelations.related'),
+    data: relatedWithAddRow.value,
+    key: 'related',
+  },
+  {
+    label: t('components.modalTabRelations.memberOf'),
+    data: memberOfWithAddRow.value,
+    key: 'member_of',
+  },
+  {
+    label: t('components.modalTabRelations.subordinateArrays'),
+    data: subordinateArraysWithAddRow.value,
+    key: 'subordinate_arrays',
+  },
 ]);
 
-const notesWithAddRow = computed<TableRow<Note>[]>(() => [
-  ...((form.value.notes.map((note, i) => ({
-    ...note,
-    id: i + 1,
-  })) ?? []) as TableRow<Note>[]),
+const collectionRelations = computed<RelationData[]>(() => [
   {
-    isAddRow: true,
-  } as TableRow<Note>,
-]);
-
-const sourcesWithAddRow = computed<TableRow<Source>[]>(() => [
-  ...((form.value.sources.map((source, i) => ({
-    ...source,
-    id: i + 1,
-  })) ?? []) as TableRow<Source>[]),
+    label: t('components.modalTabRelations.members'),
+    data: membersWithAddRow.value,
+    key: 'members',
+  },
   {
-    isAddRow: true,
-  } as TableRow<Source>,
+    label: t('components.modalTabRelations.memberOf'),
+    data: memberOfWithAddRow.value,
+    key: 'member_of',
+  },
+  {
+    label: t('components.modalTabRelations.superordinates'),
+    data: superordinatesWithAddRow.value,
+    key: 'superordinates',
+  },
 ]);
 </script>

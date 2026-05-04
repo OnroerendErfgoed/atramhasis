@@ -9,21 +9,21 @@ export enum ModalMode {
 }
 
 export interface Label {
-  id?: number;
+  id?: string;
   label: string;
   language: string;
   type: LabelTypeEnum;
 }
 
 export interface Note {
-  id?: number;
+  id?: string;
   note: string;
   language: string;
   type: NoteTypeEnum;
 }
 
 export interface Source {
-  id?: number;
+  id?: string;
   citation: string;
 }
 

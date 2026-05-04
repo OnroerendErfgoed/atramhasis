@@ -1,3 +1,4 @@
+import type { RelationKey } from '@components/ModalConcept.vue';
 import { ModalMode } from '@models/util';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
@@ -93,6 +94,16 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
   const closeLanguageModal = () => (languageModalIsOpen.value = false);
 
+  const relationModalKey = ref(0);
+  const relationModalIsOpen = ref(false);
+  const relationModalType = ref<RelationKey>('member_of');
+  const openRelationModal = (modalType: RelationKey) => {
+    relationModalKey.value++;
+    relationModalIsOpen.value = true;
+    relationModalType.value = modalType;
+  };
+  const closeRelationModal = () => (relationModalIsOpen.value = false);
+
   /* Breadcrumbs */
   const breadcrumbLabels = ref<Record<string, string>>({});
 
@@ -141,6 +152,11 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     languageModalMode,
     openLanguageModal,
     closeLanguageModal,
+    relationModalKey,
+    relationModalIsOpen,
+    relationModalType,
+    openRelationModal,
+    closeRelationModal,
     breadcrumbLabels,
     setBreadcrumbLabel,
   };
