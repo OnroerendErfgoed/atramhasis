@@ -1,6 +1,7 @@
 <template>
   <UModal v-model:open="relationModalIsOpen" :dismissible="false" :title="t('components.modalRelation.title')">
     <template #body>
+      <ALoader v-if="isFullscreenLoading" mode="fullscreen" />
       <UTree :items="treeItems" virtualize @select="onSelect" />
     </template>
     <template #footer="{ close }">
@@ -37,9 +38,9 @@ const { t } = useI18n();
 const apiService = new ApiService();
 
 const adminUiStore = useAdminUiStore();
-const { relationModalIsOpen } = storeToRefs(adminUiStore);
+const { isFullscreenLoading, relationModalIsOpen } = storeToRefs(adminUiStore);
 
-const treeData = ref<Tree[]>([]);
+const RELATION_MODAL_LOADING_KEY = 'relation-modal-fetch-tree';
 const treeItems = ref<TreeItem[]>([]);
 const selectedItem = ref<TreeItem>();
 
@@ -58,8 +59,10 @@ const onSelect = (e: Event, item: TreeItem) => {
 };
 
 onMounted(async () => {
-  treeData.value = await apiService.getTreeByConceptscheme(props.scheme);
-  treeItems.value = formatTreeItems(treeData.value);
+  adminUiStore.startLoading(RELATION_MODAL_LOADING_KEY);
+  const data = await apiService.getTreeByConceptscheme(props.scheme);
+  treeItems.value = formatTreeItems(data);
+  adminUiStore.stopLoading(RELATION_MODAL_LOADING_KEY);
 });
 
 const add = () => {
