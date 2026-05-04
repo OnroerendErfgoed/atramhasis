@@ -1,89 +1,35 @@
 <template>
   <ModalTabTable
-    :data="broaderData"
-    :main-column="mainColumn"
+    v-for="relation in data"
+    :key="relation.key"
+    :data="relation.data"
+    :main-column="getMainColumn(relation.label)"
     :hide-edit="true"
     :on-add="() => adminUiStore.openRelationModal()"
     :on-edit="console.log"
     :on-delete="console.log"
+    class="mb-3"
   />
-  <ModalTabTable
-    :data="narrowerData"
-    :main-column="mainColumn"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openRelationModal()"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalTabTable
-    :data="relatedData"
-    :main-column="mainColumn"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openRelationModal()"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalTabTable
-    :data="memberOfData"
-    :main-column="mainColumn"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openRelationModal()"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalTabTable
-    :data="membersData"
-    :main-column="mainColumn"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openRelationModal()"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalTabTable
-    :data="subordinateArraysData"
-    :main-column="mainColumn"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openRelationModal()"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalTabTable
-    :data="superordinatesData"
-    :main-column="mainColumn"
-    :hide-edit="true"
-    :on-add="() => adminUiStore.openRelationModal()"
-    :on-edit="console.log"
-    :on-delete="console.log"
-  />
-  <ModalRelation :key="relationModalKey" :title="t('components.modalRelation.title', { item: '' })" :scheme="scheme" />
+  <ModalRelation :key="relationModalKey" :scheme="scheme" />
 </template>
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-
 import { storeToRefs } from 'pinia';
 import { useAdminUiStore } from '@stores/admin-ui';
 import type { TableRow } from '@components/ModalTabTable.vue';
 import type { Relation } from '@models/concept';
+import type { RelationData } from '@components/ModalConcept.vue';
 
 defineProps<{
   scheme: string;
-  membersData: TableRow<Relation>[];
-  memberOfData: TableRow<Relation>[];
-  broaderData: TableRow<Relation>[];
-  narrowerData: TableRow<Relation>[];
-  relatedData: TableRow<Relation>[];
-  subordinateArraysData: TableRow<Relation>[];
-  superordinatesData: TableRow<Relation>[];
+  data: RelationData[];
 }>();
-
-const { t } = useI18n();
 
 const adminUiStore = useAdminUiStore();
 const { relationModalKey } = storeToRefs(adminUiStore);
 
-const mainColumn = {
+const getMainColumn = (label: string) => ({
   accessorKey: 'label',
-  header: t('grid.columns.labels.broader'),
+  header: label,
   cell: (row: TableRow<Relation>) => row.label,
-};
+});
 </script>

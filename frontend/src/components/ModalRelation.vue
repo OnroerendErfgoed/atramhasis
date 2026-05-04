@@ -1,10 +1,5 @@
 <template>
-  <UModal
-    v-model:open="relationModalIsOpen"
-    :dismissible="false"
-    :title="title"
-    :description="capitalize(t('components.modalRelation.description'))"
-  >
+  <UModal v-model:open="relationModalIsOpen" :dismissible="false" :title="t('components.modalRelation.title')">
     <template #body>
       <UTree :items="treeItems" virtualize @select="onSelect" />
     </template>
@@ -20,7 +15,7 @@
 <script setup lang="ts">
 import { useAdminUiStore } from '@stores/admin-ui';
 import { storeToRefs } from 'pinia';
-import { capitalize, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { TreeItem } from '@nuxt/ui';
 import { ApiService } from '@services/api.service';
@@ -28,7 +23,6 @@ import { ConceptTypeEnum } from '@models/util';
 import type { Tree } from '@models/tree';
 
 const props = defineProps<{
-  title: string;
   scheme: string;
 }>();
 

@@ -70,13 +70,7 @@
           <template #relations>
             <ModalTabRelations
               :scheme="form.conceptscheme"
-              :members-data="membersWithAddRow"
-              :member-of-data="memberOfWithAddRow"
-              :broader-data="broaderWithAddRow"
-              :narrower-data="narrowerWithAddRow"
-              :related-data="relatedWithAddRow"
-              :subordinate-arrays-data="subordinateArraysWithAddRow"
-              :superordinates-data="superordinatesWithAddRow"
+              :data="form.type === ConceptTypeEnum.CONCEPT ? conceptRelations : collectionRelations"
             />
           </template>
 
@@ -92,6 +86,14 @@
     </template>
   </UModal>
 </template>
+
+<script lang="ts">
+export type RelationData = {
+  label: string;
+  data: TableRow<Relation>[];
+  key: keyof ConceptForm;
+};
+</script>
 
 <script setup lang="ts">
 import { useAdminUiStore } from '@stores/admin-ui';
@@ -286,4 +288,51 @@ const subordinateArraysWithAddRow = computed<TableRow<Relation>[]>(() =>
   withAddRow(form.value.subordinate_arrays || [])
 );
 const superordinatesWithAddRow = computed<TableRow<Relation>[]>(() => withAddRow(form.value.superordinates || []));
+
+/* Relation modal data */
+const conceptRelations = computed<RelationData[]>(() => [
+  {
+    label: t('components.modalTabRelations.broader'),
+    data: broaderWithAddRow.value,
+    key: 'broader',
+  },
+  {
+    label: t('components.modalTabRelations.narrower'),
+    data: narrowerWithAddRow.value,
+    key: 'narrower',
+  },
+  {
+    label: t('components.modalTabRelations.related'),
+    data: relatedWithAddRow.value,
+    key: 'related',
+  },
+  {
+    label: t('components.modalTabRelations.memberOf'),
+    data: memberOfWithAddRow.value,
+    key: 'member_of',
+  },
+  {
+    label: t('components.modalTabRelations.subordinateArrays'),
+    data: subordinateArraysWithAddRow.value,
+    key: 'subordinate_arrays',
+  },
+]);
+
+const collectionRelations = computed<RelationData[]>(() => [
+  {
+    label: t('components.modalTabRelations.members'),
+    data: membersWithAddRow.value,
+    key: 'members',
+  },
+  {
+    label: t('components.modalTabRelations.memberOf'),
+    data: memberOfWithAddRow.value,
+    key: 'member_of',
+  },
+  {
+    label: t('components.modalTabRelations.superordinates'),
+    data: superordinatesWithAddRow.value,
+    key: 'superordinates',
+  },
+]);
 </script>

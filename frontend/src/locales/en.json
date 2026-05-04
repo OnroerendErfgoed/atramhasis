@@ -221,6 +221,18 @@
         }
       }
     },
+    "modalRelation": {
+      "title": "Add a relation"
+    },
+    "modalTabRelations": {
+      "broader": "Broader",
+      "narrower": "Narrower",
+      "related": "Related",
+      "memberOf": "Member of",
+      "members": "Members",
+      "superordinates": "Superordinates",
+      "subordinateArrays": "Subordinate arrays"
+    },
     "modalDelete": {
       "title": "Delete {entity}",
       "message": "Are you sure you want to remove {entity} {item}?",
