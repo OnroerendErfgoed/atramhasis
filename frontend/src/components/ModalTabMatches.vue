@@ -7,27 +7,27 @@
     :extra-columns="extraColumns"
     :hide-edit="true"
     :on-add="config.onAdd"
-    :on-delete="console.log"
+    :on-delete="($event) => onDelete($event, config.type)"
     class="mb-3"
   />
-  <ModalMatch
-    :key="matchModalKey"
-    :title="t('components.modalMatch.title', { item: '' })"
-    :type="adminUiStore.matchModalType"
-  />
+  <ModalMatch :key="matchModalKey" @add="emit('add', $event)" />
+  <ModalDelete v-model:open="modalDeleteIsOpen" :entity="t('entities.match')" @confirm="confirmDelete" />
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import type { TableRow } from '@components/ModalTabTable.vue';
-import type { Match, Matches } from '@models/concept';
+import type { Match, Matches, MatchForm } from '@models/concept';
 import { MatchTypeEnum } from '@models/util';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
-const props = defineProps<{
-  matches: Matches;
+const props = defineProps<{ matches: Matches }>();
+
+const emit = defineEmits<{
+  add: [MatchForm];
+  delete: [Match];
 }>();
 
 const { t } = useI18n();
@@ -78,4 +78,17 @@ const matchTableConfigs = computed(() =>
     onAdd: () => adminUiStore.openMatchModal(item.type),
   }))
 );
+
+// Delete match
+const modalDeleteIsOpen = ref(false);
+const selectedMatch = ref<Match>();
+
+const onDelete = (row: TableRow<Match>, type: MatchTypeEnum) => {
+  selectedMatch.value = { ...row, type };
+  modalDeleteIsOpen.value = true;
+};
+const confirmDelete = () => {
+  emit('delete', selectedMatch.value as Match);
+  modalDeleteIsOpen.value = false;
+};
 </script>

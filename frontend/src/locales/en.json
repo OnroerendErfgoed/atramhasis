@@ -239,6 +239,26 @@
       "superordinates": "Superordinates",
       "subordinateArrays": "Subordinate arrays"
     },
+    "modalMatch": {
+      "title": "{type}",
+      "description": "Add a match",
+      "form": {
+        "externalScheme": {
+          "label": "External scheme"
+        },
+        "labelSearch": {
+          "label": "Search on label",
+          "placeholder": "Enter a label to filter matches"
+        },
+        "labels": {
+          "label": "Choose match",
+          "placeholder": "Choose a match"
+        },
+        "type": {
+          "label": "Change type of match if needed"
+        }
+      }
+    },
     "modalTabMatches": {
       "exact": "Exact",
       "close": "Close",
@@ -319,7 +339,8 @@
     "cancel": "Cancel",
     "add": "Add",
     "edit": "Edit",
-    "ok": "OK"
+    "ok": "OK",
+    "search": "Search"
   },
   "entities": {
     "conceptscheme": "conceptscheme | conceptschemes",
@@ -329,7 +350,8 @@
     "label": "label | labels",
     "note": "note | notes",
     "source": "source | sources",
-    "relation": "relation | relations"
+    "relation": "relation | relations",
+    "match": "match | matches"
   },
   "lists": {
     "languages": {

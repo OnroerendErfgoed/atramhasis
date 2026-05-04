@@ -106,7 +106,7 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
 
   const matchModalKey = ref(0);
   const matchModalIsOpen = ref(false);
-  const matchModalType = ref<MatchTypeEnum>();
+  const matchModalType = ref<MatchTypeEnum>(MatchTypeEnum.BROAD);
   const openMatchModal = (matchType: MatchTypeEnum) => {
     matchModalKey.value++;
     matchModalIsOpen.value = true;

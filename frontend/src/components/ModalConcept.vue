@@ -87,7 +87,7 @@
           </template>
 
           <template #matches>
-            <ModalTabMatches :matches="form.matches" />
+            <ModalTabMatches :matches="form.matches" @add="addMatch" @delete="deleteMatch" />
           </template>
         </UTabs>
       </div>
@@ -127,7 +127,7 @@ import { capitalize, computed, onBeforeMount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 // import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
-import type { ConceptForm, Relation } from '@models/concept';
+import type { ConceptForm, Match, MatchForm, Relation } from '@models/concept';
 import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
@@ -195,7 +195,15 @@ onBeforeMount(() => {
       subordinate_arrays: conceptClone.subordinate_arrays ?? [],
       superordinates: conceptClone.superordinates ?? [],
       infer_concept_relations: conceptClone.infer_concept_relations,
-      matches: conceptClone.matches,
+      matches: Object.keys(conceptClone.matches ?? {}).length
+        ? conceptClone.matches
+        : {
+            narrow: [],
+            broad: [],
+            related: [],
+            close: [],
+            exact: [],
+          },
     };
   }
 });
@@ -334,6 +342,15 @@ const deleteRelation = (relation: Relation) => {
   if (index !== undefined && index >= 0) {
     form.value[relationModalType.value]?.splice(index, 1);
   }
+};
+
+const addMatch = (match: MatchForm) => {
+  form.value.matches[match.type] = form.value.matches[match.type]
+    .concat(match.labels)
+    .filter((uri, index, self) => self.indexOf(uri) === index);
+};
+const deleteMatch = (match: Match) => {
+  form.value.matches[match.type!] = form.value.matches[match.type!].filter((label) => label !== match.uri);
 };
 
 /* Table data */

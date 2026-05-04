@@ -1,4 +1,4 @@
-import type { ConceptTypeEnum, Label, Note, Source } from '@models/util';
+import type { ConceptTypeEnum, Label, MatchTypeEnum, Note, Source } from '@models/util';
 
 export interface OverviewConcept {
   id: number;
@@ -45,7 +45,6 @@ export interface Relation {
   uri: string;
   label: string;
   type: ConceptTypeEnum;
-  matches: Matches;
 }
 
 export interface Matches {
@@ -59,4 +58,11 @@ export interface Matches {
 export interface Match {
   label: string;
   uri: string;
+  type?: MatchTypeEnum;
+}
+
+export interface MatchForm {
+  external_scheme: string;
+  labels: string[];
+  type: MatchTypeEnum;
 }
