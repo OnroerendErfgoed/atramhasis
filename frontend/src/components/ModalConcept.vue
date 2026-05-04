@@ -75,6 +75,18 @@
               @add="addRelation"
               @delete="deleteRelation"
             />
+            <UFormField
+              name="concept-infer-relations"
+              size="lg"
+              :label="t('components.modalConcept.form.inferConceptRelations.label')"
+            >
+              <URadioGroup
+                v-if="form.type === ConceptTypeEnum.COLLECTION"
+                v-model="form.infer_concept_relations"
+                orientation="horizontal"
+                :items="yesNoOptions"
+              />
+            </UFormField>
           </template>
 
           <template #matches> matches </template>
@@ -134,7 +146,7 @@ const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
 const { selectedConcept } = storeToRefs(conceptStore);
 const listStore = useListStore();
-const { conceptTypes, conceptschemeOptions } = storeToRefs(listStore);
+const { conceptTypes, conceptschemeOptions, yesNoOptions } = storeToRefs(listStore);
 
 // const apiService = new ApiService();
 const { handleApiError } = useApiError();
@@ -200,6 +212,7 @@ const form = ref<ConceptForm>({
   related: [],
   subordinate_arrays: [],
   superordinates: [],
+  infer_concept_relations: undefined,
 });
 
 // Initial population of form when editing
@@ -220,6 +233,7 @@ onBeforeMount(() => {
       related: conceptClone.related,
       subordinate_arrays: conceptClone.subordinate_arrays,
       superordinates: conceptClone.superordinates,
+      infer_concept_relations: conceptClone.infer_concept_relations,
     };
   }
 });

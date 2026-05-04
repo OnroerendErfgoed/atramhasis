@@ -94,6 +94,9 @@
         },
         "id": {
           "label": "ID"
+        },
+        "inferConceptRelations": {
+          "label": "Should member concepts of this collection be seen as narrower concept of a superordinate of the collection"
         }
       }
     },
@@ -355,6 +358,10 @@
     "conceptTypes": {
       "concept": "Concept",
       "collection": "Collection"
+    },
+    "yesNo": {
+      "yes": "Yes",
+      "no": "No"
     }
   }
 }

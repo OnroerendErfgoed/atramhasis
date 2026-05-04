@@ -36,6 +36,10 @@ export const useListStore = defineStore('list', () => {
     { label: t('lists.conceptTypes.concept'), value: ConceptTypeEnum.CONCEPT },
     { label: t('lists.conceptTypes.collection'), value: ConceptTypeEnum.COLLECTION },
   ]);
+  const yesNoOptions = computed(() => [
+    { label: t('lists.yesNo.yes'), value: true },
+    { label: t('lists.yesNo.no'), value: false },
+  ]);
   const languages = ref<Language[]>([]);
   const languageOptions = computed(() =>
     languages.value.map((lang) => ({
@@ -88,6 +92,7 @@ export const useListStore = defineStore('list', () => {
     languages,
     languageOptions,
     conceptschemeOptions,
+    yesNoOptions,
     fetchLanguages,
     getAll,
   };
