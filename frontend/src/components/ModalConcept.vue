@@ -77,6 +77,7 @@
             />
             <UFormField
               v-if="form.type === ConceptTypeEnum.COLLECTION"
+              class="mb-3"
               name="concept-infer-relations"
               size="lg"
               :label="t('components.modalConcept.form.inferConceptRelations.label')"
@@ -219,16 +220,16 @@ onBeforeMount(() => {
       conceptscheme: `${selectedConceptscheme.value?.id}`,
       type: conceptClone.type,
       id: conceptClone.id,
-      labels: conceptClone.labels,
-      notes: conceptClone.notes,
-      sources: conceptClone.sources,
-      members: conceptClone.members,
-      member_of: conceptClone.member_of,
-      broader: conceptClone.broader,
-      narrower: conceptClone.narrower,
-      related: conceptClone.related,
-      subordinate_arrays: conceptClone.subordinate_arrays,
-      superordinates: conceptClone.superordinates,
+      labels: conceptClone.labels ?? [],
+      notes: conceptClone.notes ?? [],
+      sources: conceptClone.sources ?? [],
+      members: conceptClone.members ?? [],
+      member_of: conceptClone.member_of ?? [],
+      broader: conceptClone.broader ?? [],
+      narrower: conceptClone.narrower ?? [],
+      related: conceptClone.related ?? [],
+      subordinate_arrays: conceptClone.subordinate_arrays ?? [],
+      superordinates: conceptClone.superordinates ?? [],
       infer_concept_relations: conceptClone.infer_concept_relations,
     };
   }
@@ -292,6 +293,7 @@ const deleteSource = (source: Source) => {
 };
 
 const addRelation = (relation: Relation) => {
+  console.log('Adding relation:', relation);
   if (form.value[relationModalType.value]?.find((r) => r.id === relation.id)) {
     return;
   }
