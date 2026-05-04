@@ -5,12 +5,11 @@
     :data="relation.data"
     :main-column="getMainColumn(relation.label)"
     :hide-edit="true"
-    :on-add="() => adminUiStore.openRelationModal()"
-    :on-edit="console.log"
+    :on-add="() => adminUiStore.openRelationModal(relation.key)"
     :on-delete="console.log"
     class="mb-3"
   />
-  <ModalRelation :key="relationModalKey" :scheme="scheme" />
+  <ModalRelation :key="relationModalKey" :scheme="scheme" :scheme-uri="schemeUri" @add="emit('add', $event)" />
 </template>
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
@@ -21,7 +20,13 @@ import type { RelationData } from '@components/ModalConcept.vue';
 
 defineProps<{
   scheme: string;
+  schemeUri: string;
   data: RelationData[];
+}>();
+
+const emit = defineEmits<{
+  add: [Relation];
+  delete: [Relation];
 }>();
 
 const adminUiStore = useAdminUiStore();

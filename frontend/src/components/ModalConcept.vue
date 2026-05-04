@@ -70,7 +70,9 @@
           <template #relations>
             <ModalTabRelations
               :scheme="form.conceptscheme"
+              :scheme-uri="formConceptschemeUri"
               :data="form.type === ConceptTypeEnum.CONCEPT ? conceptRelations : collectionRelations"
+              @add="addRelation"
             />
           </template>
 
@@ -88,10 +90,19 @@
 </template>
 
 <script lang="ts">
+export type RelationKey =
+  | 'members'
+  | 'member_of'
+  | 'broader'
+  | 'narrower'
+  | 'related'
+  | 'subordinate_arrays'
+  | 'superordinates';
+
 export type RelationData = {
   label: string;
   data: TableRow<Relation>[];
-  key: keyof ConceptForm;
+  key: RelationKey;
 };
 </script>
 
@@ -115,7 +126,7 @@ const toast = useToast();
 const { t } = useI18n();
 
 const adminUiStore = useAdminUiStore();
-const { conceptModalIsOpen, conceptModalMode } = storeToRefs(adminUiStore);
+const { conceptModalIsOpen, conceptModalMode, relationModalType } = storeToRefs(adminUiStore);
 const isEditMode = computed(() => conceptModalMode.value === ModalMode.EDIT);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
@@ -212,6 +223,11 @@ onBeforeMount(() => {
   }
 });
 
+const formConceptschemeUri = computed(() => {
+  const scheme = conceptschemeOptions.value.find((cs) => cs.value === form.value.conceptscheme);
+  return scheme ? scheme.uri : '';
+});
+
 /* Grid actions */
 const addLabel = (label: Label) => {
   form.value.labels.push(label);
@@ -262,6 +278,13 @@ const deleteSource = (source: Source) => {
   if (index !== undefined && index >= 0) {
     form.value.sources.splice(index, 1);
   }
+};
+
+const addRelation = (relation: Relation) => {
+  if (form.value[relationModalType.value]?.find((r) => r.id === relation.id)) {
+    return;
+  }
+  form.value[relationModalType.value]?.push(relation);
 };
 
 /* Table data */

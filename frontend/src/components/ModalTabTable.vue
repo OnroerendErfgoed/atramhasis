@@ -32,8 +32,8 @@ const props = defineProps<{
   extraColumns?: BaseColumn[];
   hideEdit?: boolean;
   onAdd: () => void;
-  onEdit: (row: TableRow<T>) => void;
   onDelete: (row: TableRow<T>) => void;
+  onEdit?: (row: TableRow<T>) => void;
 }>();
 
 const UButton = resolveComponent('UButton');
@@ -87,7 +87,7 @@ const columns = computed<TableColumn<TableRow<T>>[]>(() => {
               color: 'primary',
               variant: 'outline',
               size: 'xs',
-              onClick: () => props.onEdit(row.original),
+              onClick: () => props.onEdit?.(row.original),
             })
           : null,
         h(UButton, {

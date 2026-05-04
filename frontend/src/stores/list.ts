@@ -1,5 +1,5 @@
 import type { Language } from '@models/language';
-import { ConceptTypeEnum, LabelTypeEnum, MatchTypeEnum, NoteTypeEnum, type ListType } from '@models/util';
+import { ConceptTypeEnum, LabelTypeEnum, MatchTypeEnum, NoteTypeEnum } from '@models/util';
 import { ApiService } from '@services/api.service';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
@@ -44,7 +44,7 @@ export const useListStore = defineStore('list', () => {
     }))
   );
 
-  const conceptschemeOptions = ref<ListType[]>([]);
+  const conceptschemeOptions = ref<{ label: string; value: string; uri: string }[]>([]);
 
   const fetchLanguages = async () => {
     try {
@@ -64,7 +64,7 @@ export const useListStore = defineStore('list', () => {
   const fetchConceptschemes = async () => {
     try {
       const data = await apiService.getConceptschemes();
-      conceptschemeOptions.value = data.map((c) => ({ label: c.label, value: c.id }));
+      conceptschemeOptions.value = data.map((c) => ({ label: c.label, value: c.id, uri: c.uri }));
     } catch (error) {
       console.error(t('api.errors.fetch.title', { item: t('entities.conceptscheme', 1) }), error);
       toast.add({
