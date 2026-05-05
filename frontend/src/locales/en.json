@@ -266,7 +266,8 @@
       "close": "Close",
       "broad": "Broad",
       "narrow": "Narrow",
-      "related": "Related"
+      "related": "Related",
+      "loading": "Loading matches..."
     },
     "modalDelete": {
       "title": "Delete {entity}",

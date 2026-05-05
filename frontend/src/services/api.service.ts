@@ -50,6 +50,10 @@ export class ApiService extends HttpService {
     return (await this.get<Language[]>('/languages')).data;
   }
 
+  async getByUri<T>(uri: string): Promise<T> {
+    return (await this.get<T>(`/uris/${uri}`)).data;
+  }
+
   // Creators
   async createProvider(provider: ProviderForm): Promise<Provider> {
     return (await this.post<Provider, ProviderForm>('/providers', provider)).data;

@@ -73,6 +73,7 @@ import type { ListboxItem } from '@nuxt/ui';
 import { ApiService } from '@services/api.service';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useListStore } from '@stores/list';
+import { useMatchStore } from '@stores/match';
 import { storeToRefs } from 'pinia';
 import { capitalize, computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -87,6 +88,7 @@ const adminUiStore = useAdminUiStore();
 const { matchModalIsOpen, matchModalType } = storeToRefs(adminUiStore);
 const listStore = useListStore();
 const { externalConceptschemeOptions, matchTypes } = storeToRefs(listStore);
+const matchStore = useMatchStore();
 
 // Form state
 const labelSearch = ref('');
@@ -106,6 +108,12 @@ const form = ref<MatchForm>({
 
 const add = () => {
   if (!form.value.uris.length) return;
+  form.value.uris.forEach((uri) => {
+    matchStore.setMatch({
+      uri,
+      label: matches.value.find((m) => m.value === uri)?.label || uri,
+    });
+  });
   emit('add', form.value);
   adminUiStore.closeMatchModal();
 };
@@ -129,7 +137,6 @@ const fetchMatches = async () => {
       type: 'all',
       sort: 'label',
     });
-    console.log(concepts.value);
   } catch (error) {
     console.error(t('api.errors.fetch.title', { item: t('entities.concept', 2) }), error);
     toast.add({
