@@ -31,7 +31,7 @@
     <ModalDelete
       v-model:open="modalDeleteIsOpen"
       :entity="t('entities.language')"
-      :item="`${selectedLanguage?.id} (${selectedLanguage?.name})`"
+      :item="`${selectedLanguage?.name} (${selectedLanguage?.id})`"
       @confirm="deleteLanguage"
     />
   </div>
