@@ -248,11 +248,13 @@
         },
         "labelSearch": {
           "label": "Search on label",
-          "placeholder": "Enter a label to filter matches"
+          "placeholder": "Enter a label to filter matches",
+          "hint": "Enter at least 3 characters to search"
         },
         "labels": {
           "label": "Choose match",
-          "placeholder": "Choose a match"
+          "placeholder": "Choose a match",
+          "noResults": "No matches found"
         },
         "type": {
           "label": "Change type of match if needed"

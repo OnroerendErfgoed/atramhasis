@@ -346,11 +346,11 @@ const deleteRelation = (relation: Relation) => {
 
 const addMatch = (match: MatchForm) => {
   form.value.matches[match.type] = form.value.matches[match.type]
-    .concat(match.labels)
+    .concat(match.uris)
     .filter((uri, index, self) => self.indexOf(uri) === index);
 };
 const deleteMatch = (match: Match) => {
-  form.value.matches[match.type!] = form.value.matches[match.type!].filter((label) => label !== match.uri);
+  form.value.matches[match.type!] = form.value.matches[match.type!].filter((uri) => uri !== match.uri);
 };
 
 /* Table data */

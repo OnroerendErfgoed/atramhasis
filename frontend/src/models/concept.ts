@@ -63,6 +63,6 @@ export interface Match {
 
 export interface MatchForm {
   external_scheme: string;
-  labels: string[];
+  uris: string[];
   type: MatchTypeEnum;
 }
