@@ -43,7 +43,8 @@
         "source": "Source",
         "actions": "Actions",
         "uri": "URI",
-        "match": "{type}"
+        "match": "Match",
+        "matchType": "Match type"
       },
       "actions": {
         "view": "View",
@@ -102,6 +103,13 @@
           "label": "Should member concepts of this collection be seen as narrower concept of a superordinate of the collection"
         }
       }
+    },
+    "modalMerge": {
+      "noMatchesTitle": "No matches to merge",
+      "noMatchesDescription": "There are no matches available to merge for this concept or collection.",
+      "title": "{concept}",
+      "description": "Merge concept or collection",
+      "loading": "Loading matches..."
     },
     "modalProvider": {
       "title": "Manage providers",
@@ -343,7 +351,8 @@
     "add": "Add",
     "edit": "Edit",
     "ok": "OK",
-    "search": "Search"
+    "search": "Search",
+    "merge": "Merge"
   },
   "entities": {
     "conceptscheme": "conceptscheme | conceptschemes",

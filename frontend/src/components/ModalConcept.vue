@@ -202,7 +202,7 @@ onBeforeMount(() => {
             broad: [],
             related: [],
             close: [],
-            exact: ['http://vocab.getty.edu/aat/300389673'],
+            exact: [],
           },
     };
   }

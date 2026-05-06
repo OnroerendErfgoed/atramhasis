@@ -71,24 +71,25 @@
     </div>
 
     <ModalConcept :key="conceptModalKey" />
+    <ModalMerge :key="mergeModalKey" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { h, ref, computed, resolveComponent, useTemplateRef, capitalize, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { getPaginationRowModel } from '@tanstack/vue-table';
-import type { TableColumn } from '@nuxt/ui';
 import type { Concept, OverviewConcept } from '@models/concept';
-import { ApiService } from '@services/api.service';
-import { useI18n } from 'vue-i18n';
-import { useAdminUiStore } from '@stores/admin-ui';
-import { useListStore } from '@stores/list';
-import { storeToRefs } from 'pinia';
-import { useConceptschemeStore } from '@stores/conceptscheme';
 import type { Conceptscheme } from '@models/conceptscheme';
 import { ConceptTypeEnum, ModalMode } from '@models/util';
+import type { TableColumn } from '@nuxt/ui';
+import { ApiService } from '@services/api.service';
+import { useAdminUiStore } from '@stores/admin-ui';
 import { useConceptStore } from '@stores/concept';
+import { useConceptschemeStore } from '@stores/conceptscheme';
+import { useListStore } from '@stores/list';
+import { getPaginationRowModel } from '@tanstack/vue-table';
+import { storeToRefs } from 'pinia';
+import { capitalize, computed, h, ref, resolveComponent, useTemplateRef, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
@@ -100,7 +101,7 @@ const route = useRoute();
 const CONCEPT_LOADING_KEY = 'concept-fetch';
 
 const adminUiStore = useAdminUiStore();
-const { conceptModalKey } = storeToRefs(adminUiStore);
+const { conceptModalKey, mergeModalKey } = storeToRefs(adminUiStore);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
@@ -227,6 +228,48 @@ const columns: TableColumn<OverviewConcept>[] = [
           variant: 'outline',
           size: 'xs',
           disabled: row.original.type !== ConceptTypeEnum.CONCEPT,
+          onClick: async () => {
+            try {
+              adminUiStore.startLoading(CONCEPT_LOADING_KEY);
+              const concept = await conceptStore.getConcept(
+                selectedConceptscheme.value?.id as string,
+                row.original.id,
+                true
+              );
+              const enrichedConcept = {
+                ...concept,
+                matches: {
+                  narrow: [],
+                  broad: ['https://vocab.getty.edu/aat/300343911'],
+                  // broad: [],
+                  related: [],
+                  close: [],
+                  exact: ['http://vocab.getty.edu/aat/300389673'],
+                  // exact: [],
+                },
+              } as Concept;
+
+              conceptStore.setSelectedConcept(enrichedConcept);
+
+              const hasMatches =
+                Object.values(enrichedConcept.matches ?? {}).filter((matchArray) => matchArray.length > 0).length > 0;
+
+              if (hasMatches) {
+                adminUiStore.openMergeModal();
+              } else {
+                toast.add({
+                  title: t('components.modalMerge.noMatchesTitle'),
+                  description: t('components.modalMerge.noMatchesDescription'),
+                  icon: 'i-lucide-info',
+                  color: 'info',
+                });
+              }
+            } catch (error) {
+              console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);
+            } finally {
+              adminUiStore.stopLoading(CONCEPT_LOADING_KEY);
+            }
+          },
         }),
         h(UButton, {
           as: 'a',
