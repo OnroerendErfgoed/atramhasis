@@ -1,5 +1,6 @@
 import ui from '@nuxt/ui/vite';
 import vue from '@vitejs/plugin-vue';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'path';
 import { URL, fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
@@ -9,6 +10,19 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import vueDevTools from 'vite-plugin-vue-devtools';
 
 const outDir = resolve(__dirname, '../atramhasis/static');
+const developmentIniPath = resolve(__dirname, '../development.ini');
+
+function getAtramhasisUrlFromIni(defaultUrl: string): string {
+  if (!existsSync(developmentIniPath)) {
+    return defaultUrl;
+  }
+
+  const content = readFileSync(developmentIniPath, 'utf-8');
+  const match = content.match(/^\s*atramhasis\.url\s*=\s*(.+)\s*$/m);
+  return match?.[1]?.trim() || defaultUrl;
+}
+
+const atramhasisUrl = getAtramhasisUrlFromIni('http://localhost:6543');
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -64,6 +78,6 @@ export default defineConfig({
   },
   server: {
     cors: true,
-    origin: 'http://local.onroerenderfgoed.be:6543',
+    origin: atramhasisUrl,
   },
 });
