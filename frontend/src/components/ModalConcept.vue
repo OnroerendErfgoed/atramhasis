@@ -86,7 +86,9 @@
             </UFormField>
           </template>
 
-          <template #matches> matches </template>
+          <template #matches>
+            <ModalTabMatches :matches="form.matches" @add="addMatch" @delete="deleteMatch" />
+          </template>
         </UTabs>
       </div>
     </template>
@@ -117,19 +119,19 @@ export type RelationData = {
 </script>
 
 <script setup lang="ts">
-import { useAdminUiStore } from '@stores/admin-ui';
-import { storeToRefs } from 'pinia';
-import { useI18n } from 'vue-i18n';
 import type { TabsItem } from '@nuxt/ui';
-import { capitalize, computed, onBeforeMount, ref } from 'vue';
+import { useAdminUiStore } from '@stores/admin-ui';
 import { cloneDeep } from 'lodash-es';
+import { storeToRefs } from 'pinia';
+import { capitalize, computed, onBeforeMount, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 // import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
+import type { ConceptForm, Match, MatchForm, Relation } from '@models/concept';
+import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
-import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
 import { useListStore } from '@stores/list';
-import type { ConceptForm, Relation } from '@models/concept';
 import type { TableRow } from './ModalTabTable.vue';
 
 const toast = useToast();
@@ -149,51 +151,6 @@ const { conceptTypes, conceptschemeOptions, yesNoOptions } = storeToRefs(listSto
 const { handleApiError } = useApiError();
 const CONCEPT_MODAL_LOADING_KEY = 'concept-modal-submit';
 
-const activeTab = ref('0');
-const tabs = ref<TabsItem[]>([
-  {
-    label: t('components.modalConcept.tabs.labels'),
-    slot: 'labels',
-  },
-  {
-    label: t('components.modalConcept.tabs.notes'),
-    slot: 'notes',
-  },
-  {
-    label: t('components.modalConcept.tabs.sources'),
-    slot: 'sources',
-  },
-  {
-    label: t('components.modalConcept.tabs.relations'),
-    slot: 'relations',
-  },
-  {
-    label: t('components.modalConcept.tabs.matches'),
-    slot: 'matches',
-  },
-]);
-
-// Save handler
-const save = async () => {
-  if (!selectedConcept.value) return;
-  try {
-    adminUiStore.startLoading(CONCEPT_MODAL_LOADING_KEY);
-
-    // await apiService.updateConcept(selectedConcept.value);
-    toast.add({
-      title: t('api.success.update.title', { item: capitalize(t('entities.concept')) }),
-      description: t('api.success.update.description', { item: t('entities.concept') }),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    });
-    adminUiStore.closeConceptModal();
-  } catch (error) {
-    handleApiError(error);
-  } finally {
-    adminUiStore.stopLoading(CONCEPT_MODAL_LOADING_KEY);
-  }
-};
-
 // Form state
 const form = ref<ConceptForm>({
   conceptscheme: `${selectedConceptscheme.value?.id}`,
@@ -210,6 +167,13 @@ const form = ref<ConceptForm>({
   subordinate_arrays: [],
   superordinates: [],
   infer_concept_relations: undefined,
+  matches: {
+    narrow: [],
+    broad: [],
+    related: [],
+    close: [],
+    exact: [],
+  },
 });
 
 // Initial population of form when editing
@@ -231,6 +195,15 @@ onBeforeMount(() => {
       subordinate_arrays: conceptClone.subordinate_arrays ?? [],
       superordinates: conceptClone.superordinates ?? [],
       infer_concept_relations: conceptClone.infer_concept_relations,
+      matches: Object.keys(conceptClone.matches ?? {}).length
+        ? conceptClone.matches
+        : {
+            narrow: [],
+            broad: [],
+            related: [],
+            close: [],
+            exact: ['http://vocab.getty.edu/aat/300389673'],
+          },
     };
   }
 });
@@ -239,6 +212,72 @@ const formConceptschemeUri = computed(() => {
   const scheme = conceptschemeOptions.value.find((cs) => cs.value === form.value.conceptscheme);
   return scheme ? scheme.uri : '';
 });
+
+const activeTab = ref('0');
+const tabs = computed<TabsItem[]>(() => [
+  {
+    label: t('components.modalConcept.tabs.labels'),
+    slot: 'labels',
+  },
+  {
+    label: t('components.modalConcept.tabs.notes'),
+    slot: 'notes',
+  },
+  {
+    label: t('components.modalConcept.tabs.sources'),
+    slot: 'sources',
+  },
+  {
+    label: t('components.modalConcept.tabs.relations'),
+    slot: 'relations',
+  },
+  {
+    label: t('components.modalConcept.tabs.matches'),
+    slot: 'matches',
+    disabled: form.value.type === ConceptTypeEnum.COLLECTION,
+  },
+]);
+
+// Reset matches when switching to collection type, as collections cannot have matches
+watch(
+  () => form.value.type,
+  (newValue) => {
+    if (
+      activeTab.value === tabs.value.findIndex((t) => t.slot === 'matches').toString() &&
+      newValue === ConceptTypeEnum.COLLECTION
+    ) {
+      activeTab.value = '0';
+      form.value.matches = {
+        narrow: [],
+        broad: [],
+        related: [],
+        close: [],
+        exact: [],
+      };
+    }
+  }
+);
+
+// Save handler
+const save = async () => {
+  if (!selectedConcept.value) return;
+  try {
+    adminUiStore.startLoading(CONCEPT_MODAL_LOADING_KEY);
+
+    // await apiService.updateConcept(selectedConcept.value);
+    toast.add({
+      title: t('api.success.update.title', { item: capitalize(t('entities.concept')) }),
+      description: t('api.success.update.description', { item: t('entities.concept') }),
+      icon: 'i-lucide-check-circle',
+      color: 'success',
+    });
+    adminUiStore.closeConceptModal();
+  } catch (error) {
+    handleApiError(error);
+  } finally {
+    adminUiStore.stopLoading(CONCEPT_MODAL_LOADING_KEY);
+  }
+};
 
 /* Grid actions */
 const addLabel = (label: Label) => {
@@ -303,6 +342,15 @@ const deleteRelation = (relation: Relation) => {
   if (index !== undefined && index >= 0) {
     form.value[relationModalType.value]?.splice(index, 1);
   }
+};
+
+const addMatch = (match: MatchForm) => {
+  form.value.matches[match.type] = form.value.matches[match.type]
+    .concat(match.uris)
+    .filter((uri, index, self) => self.indexOf(uri) === index);
+};
+const deleteMatch = (match: Match) => {
+  form.value.matches[match.type!] = form.value.matches[match.type!].filter((uri) => uri !== match.uri);
 };
 
 /* Table data */

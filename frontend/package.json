@@ -14,7 +14,7 @@
     "compile-static-css": "sass src/scss/public/app.scss static/css/app.css -I node_modules --quiet-deps && sass src/scss/public/print.scss static/css/print.css -I node_modules --quiet-deps"
   },
   "dependencies": {
-    "@nuxt/ui": "^4.6.1",
+    "@nuxt/ui": "^4.7.1",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^14.2.1",

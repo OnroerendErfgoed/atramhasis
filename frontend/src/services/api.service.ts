@@ -21,7 +21,7 @@ export class ApiService extends HttpService {
 
   async getConceptsByConceptscheme(
     schemeId: string,
-    options?: { label?: string; match?: string }
+    options?: { label?: string; match?: string; type?: string; sort?: string }
   ): Promise<OverviewConcept[]> {
     return (await this.get<OverviewConcept[]>(`/conceptschemes/${schemeId}/c`, { params: options })).data;
   }
@@ -48,6 +48,10 @@ export class ApiService extends HttpService {
 
   async getLanguages(): Promise<Language[]> {
     return (await this.get<Language[]>('/languages')).data;
+  }
+
+  async getByUri<T>(uri: string): Promise<T> {
+    return (await this.get<T>(`/uris/${uri}`)).data;
   }
 
   // Creators
