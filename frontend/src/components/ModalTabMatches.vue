@@ -43,7 +43,7 @@ const matchStore = useMatchStore();
 
 const getMainColumn = (typeLabelKey: string) => ({
   accessorKey: 'label',
-  header: t('grid.columns.labels.match', { type: t(typeLabelKey) }),
+  header: t(typeLabelKey),
   cell: (row: TableRow<Match>) => row.label,
 });
 
@@ -100,11 +100,11 @@ const toMatchRows = async (items: string[] = []): Promise<Match[]> => {
 };
 
 const matchConfigItems: Array<{ key: keyof Matches; type: MatchTypeEnum; labelKey: string }> = [
-  { key: 'broad', type: MatchTypeEnum.BROAD, labelKey: 'components.modalTabMatches.broad' },
-  { key: 'close', type: MatchTypeEnum.CLOSE, labelKey: 'components.modalTabMatches.close' },
-  { key: 'exact', type: MatchTypeEnum.EXACT, labelKey: 'components.modalTabMatches.exact' },
-  { key: 'narrow', type: MatchTypeEnum.NARROW, labelKey: 'components.modalTabMatches.narrow' },
-  { key: 'related', type: MatchTypeEnum.RELATED, labelKey: 'components.modalTabMatches.related' },
+  { key: 'broad', type: MatchTypeEnum.BROAD, labelKey: 'lists.matchTypes.broad' },
+  { key: 'close', type: MatchTypeEnum.CLOSE, labelKey: 'lists.matchTypes.close' },
+  { key: 'exact', type: MatchTypeEnum.EXACT, labelKey: 'lists.matchTypes.exact' },
+  { key: 'narrow', type: MatchTypeEnum.NARROW, labelKey: 'lists.matchTypes.narrow' },
+  { key: 'related', type: MatchTypeEnum.RELATED, labelKey: 'lists.matchTypes.related' },
 ];
 
 type MatchTableConfig = {
