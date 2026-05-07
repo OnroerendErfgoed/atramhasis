@@ -5,11 +5,16 @@
     :data="relation.data"
     :main-column="getMainColumn(relation.label)"
     :hide-edit="true"
-    :on-add="() => adminUiStore.openRelationModal(relation.key)"
-    :on-delete="onDelete"
+    :on-add="() => onAdd(relation.key)"
+    :on-delete="(row) => onDelete(row, relation.key)"
     class="mb-3"
   />
-  <ModalRelation :key="relationModalKey" :scheme="scheme" :scheme-uri="schemeUri" @add="emit('add', $event)" />
+  <ModalRelation
+    :key="relationModalKey"
+    :scheme="scheme"
+    :scheme-uri="schemeUri"
+    @add="emit('add', { relation: $event, type: selectionType as RelationTypeEnum })"
+  />
   <ModalDelete v-model:open="modalDeleteIsOpen" :entity="t('entities.relation')" @confirm="confirmDelete" />
 </template>
 <script setup lang="ts">
@@ -19,7 +24,9 @@ import { useAdminUiStore } from '@stores/admin-ui';
 import type { TableRow } from '@components/ModalTabTable.vue';
 import type { Relation } from '@models/concept';
 import type { RelationData } from '@components/ModalConcept.vue';
+import { RelationTypeEnum } from '@models/util';
 import { ref } from 'vue';
+import { useRelationStore } from '@stores/relation';
 
 defineProps<{
   scheme: string;
@@ -28,16 +35,17 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  add: [Relation];
-  delete: [Relation];
+  add: [{ relation: Relation; type: RelationTypeEnum }];
+  delete: [{ relation: Relation; type: RelationTypeEnum }];
 }>();
 
 const { t } = useI18n();
 
 const adminUiStore = useAdminUiStore();
 const { relationModalKey } = storeToRefs(adminUiStore);
+const relationStore = useRelationStore();
+const { selectedRelation, selectionType } = storeToRefs(relationStore);
 const modalDeleteIsOpen = ref(false);
-const selectedRelation = ref<Relation>();
 
 const getMainColumn = (label: string) => ({
   accessorKey: 'label',
@@ -45,12 +53,18 @@ const getMainColumn = (label: string) => ({
   cell: (row: TableRow<Relation>) => row.label,
 });
 
-const onDelete = (row: TableRow<Relation>) => {
-  selectedRelation.value = row;
+const onAdd = (type: RelationTypeEnum) => {
+  adminUiStore.openRelationModal();
+  relationStore.setSelectionType(type);
+};
+
+const onDelete = (row: TableRow<Relation>, relationKey: RelationTypeEnum) => {
+  relationStore.setSelectedRelation(row);
+  relationStore.setSelectionType(relationKey);
   modalDeleteIsOpen.value = true;
 };
 const confirmDelete = () => {
-  emit('delete', selectedRelation.value as Relation);
+  emit('delete', { relation: selectedRelation.value as Relation, type: selectionType.value as RelationTypeEnum });
   modalDeleteIsOpen.value = false;
 };
 </script>

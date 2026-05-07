@@ -56,3 +56,13 @@ export enum ConceptTypeEnum {
   CONCEPT = 'concept',
   COLLECTION = 'collection',
 }
+
+export enum RelationTypeEnum {
+  MEMBERS = 'members',
+  MEMBER_OF = 'member_of',
+  BROADER = 'broader',
+  NARROWER = 'narrower',
+  RELATED = 'related',
+  SUBORDINATE_ARRAYS = 'subordinate_arrays',
+  SUPERORDINATES = 'superordinates',
+}
