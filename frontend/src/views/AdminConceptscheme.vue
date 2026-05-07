@@ -243,21 +243,14 @@ const columns: TableColumn<OverviewConcept>[] = [
                 row.original.id,
                 true
               );
-              const enrichedConcept = {
-                ...concept,
-                matches: {
-                  narrow: [],
-                  broad: [],
-                  related: [],
-                  close: [],
-                  exact: [],
-                },
-              } as Concept;
 
-              conceptStore.setSelectedConcept(enrichedConcept);
+              if (!concept) {
+                throw new Error('Concept not found');
+              }
 
+              conceptStore.setSelectedConcept(concept);
               const hasMatches =
-                Object.values(enrichedConcept.matches ?? {}).filter((matchArray) => matchArray.length > 0).length > 0;
+                Object.values(concept.matches ?? {}).filter((matchArray) => matchArray.length > 0).length > 0;
 
               if (hasMatches) {
                 adminUiStore.openMergeModal();
@@ -271,6 +264,12 @@ const columns: TableColumn<OverviewConcept>[] = [
               }
             } catch (error) {
               console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);
+              toast.add({
+                title: t('api.errors.fetch.title', { item: t('entities.concept') }),
+                description: t('api.errors.fetch.description', { item: t('entities.concept') }),
+                icon: 'i-lucide-alert-triangle',
+                color: 'error',
+              });
             } finally {
               adminUiStore.stopLoading(CONCEPT_LOADING_KEY);
             }
