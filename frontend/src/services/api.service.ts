@@ -1,5 +1,5 @@
 import type { Conceptscheme, OverviewConceptscheme } from '@models/conceptscheme';
-import type { Concept, OverviewConcept } from '@models/concept';
+import type { Concept, ConceptForm, OverviewConcept } from '@models/concept';
 import { HttpService } from './http.service';
 import type { Provider, ProviderForm } from '@models/provider';
 import type { Language } from '@models/language';
@@ -55,6 +55,10 @@ export class ApiService extends HttpService {
   }
 
   // Creators
+  async createConcept(concept: ConceptForm): Promise<Concept> {
+    return (await this.post<Concept, ConceptForm>(`/conceptschemes/${concept.conceptscheme}/c`, concept)).data;
+  }
+
   async createProvider(provider: ProviderForm): Promise<Provider> {
     return (await this.post<Provider, ProviderForm>('/providers', provider)).data;
   }
@@ -66,6 +70,11 @@ export class ApiService extends HttpService {
   // Updaters
   async updateConceptscheme(conceptscheme: Conceptscheme): Promise<Conceptscheme> {
     return (await this.put<Conceptscheme, Conceptscheme>(`/conceptschemes/${conceptscheme.id}`, conceptscheme)).data;
+  }
+
+  async updateConcept(concept: ConceptForm): Promise<Concept> {
+    return (await this.put<Concept, ConceptForm>(`/conceptschemes/${concept.conceptscheme}/c/${concept.id}`, concept))
+      .data;
   }
 
   async updateLanguage(language: Language): Promise<Language> {

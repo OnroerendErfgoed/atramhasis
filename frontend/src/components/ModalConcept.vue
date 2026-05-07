@@ -71,12 +71,12 @@
             <ModalTabRelations
               :scheme="form.conceptscheme"
               :scheme-uri="formConceptschemeUri"
-              :data="form.type === ConceptTypeEnum.CONCEPT ? conceptRelations : collectionRelations"
+              :data="isConcept ? conceptRelations : collectionRelations"
               @add="addRelation"
               @delete="deleteRelation"
             />
             <UFormField
-              v-if="form.type === ConceptTypeEnum.COLLECTION"
+              v-if="!isConcept"
               class="mb-3"
               name="concept-infer-relations"
               size="lg"
@@ -87,7 +87,12 @@
           </template>
 
           <template #matches>
-            <ModalTabMatches :matches="form.matches" @add="addMatch" @delete="deleteMatch" />
+            <ModalTabMatches
+              v-if="isConcept && form.matches"
+              :matches="form.matches"
+              @add="addMatch"
+              @delete="deleteMatch"
+            />
           </template>
         </UTabs>
       </div>
@@ -116,7 +121,7 @@ import { cloneDeep } from 'lodash-es';
 import { storeToRefs } from 'pinia';
 import { capitalize, computed, onBeforeMount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-// import { ApiService } from '@services/api.service';
+import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
 import type { ConceptForm, Match, MatchForm, Relation } from '@models/concept';
 import { ConceptTypeEnum, ModalMode, RelationTypeEnum, type Label, type Note, type Source } from '@models/util';
@@ -138,9 +143,10 @@ const { selectedConcept } = storeToRefs(conceptStore);
 const listStore = useListStore();
 const { conceptTypes, conceptschemeOptions, yesNoOptions } = storeToRefs(listStore);
 
-// const apiService = new ApiService();
+const apiService = new ApiService();
 const { handleApiError } = useApiError();
 const CONCEPT_MODAL_LOADING_KEY = 'concept-modal-submit';
+const isConcept = computed(() => form.value.type === ConceptTypeEnum.CONCEPT);
 
 // Form state
 const form = ref<ConceptForm>({
@@ -225,18 +231,15 @@ const tabs = computed<TabsItem[]>(() => [
   {
     label: t('components.modalConcept.tabs.matches'),
     slot: 'matches',
-    disabled: form.value.type === ConceptTypeEnum.COLLECTION,
+    disabled: !isConcept.value,
   },
 ]);
 
 // Reset matches when switching to collection type, as collections cannot have matches
 watch(
   () => form.value.type,
-  (newValue) => {
-    if (
-      activeTab.value === tabs.value.findIndex((t) => t.slot === 'matches').toString() &&
-      newValue === ConceptTypeEnum.COLLECTION
-    ) {
+  () => {
+    if (activeTab.value === tabs.value.findIndex((t) => t.slot === 'matches').toString() && !isConcept.value) {
       activeTab.value = '0';
       form.value.matches = {
         narrow: [],
@@ -250,18 +253,44 @@ watch(
 );
 
 // Save handler
+const conceptRelationKeys = [
+  RelationTypeEnum.BROADER,
+  RelationTypeEnum.NARROWER,
+  RelationTypeEnum.RELATED,
+  RelationTypeEnum.MEMBER_OF,
+  RelationTypeEnum.SUBORDINATE_ARRAYS,
+];
+const collectionRelationKeys = [RelationTypeEnum.MEMBERS, RelationTypeEnum.MEMBER_OF, RelationTypeEnum.SUPERORDINATES];
 const save = async () => {
-  if (!selectedConcept.value) return;
   try {
     adminUiStore.startLoading(CONCEPT_MODAL_LOADING_KEY);
-
-    // await apiService.updateConcept(selectedConcept.value);
-    toast.add({
-      title: t('api.success.update.title', { item: capitalize(t('entities.concept')) }),
-      description: t('api.success.update.description', { item: t('entities.concept') }),
-      icon: 'i-lucide-check-circle',
-      color: 'success',
-    });
+    const payload = { ...form.value };
+    if (isConcept.value) {
+      // Remove relation types that are not applicable to concepts
+      collectionRelationKeys.forEach((key) => delete payload[key]);
+      delete payload.infer_concept_relations;
+    } else {
+      // Remove relation types that are not applicable to collections
+      conceptRelationKeys.forEach((key) => delete payload[key]);
+      delete payload.matches;
+    }
+    if (isEditMode.value) {
+      await apiService.updateConcept(payload);
+      toast.add({
+        title: t('api.success.update.title', { item: capitalize(t('entities.concept')) }),
+        description: t('api.success.update.description', { item: t('entities.concept') }),
+        icon: 'i-lucide-check-circle',
+        color: 'success',
+      });
+    } else {
+      await apiService.createConcept(payload);
+      toast.add({
+        title: t('api.success.save.title', { item: capitalize(t('entities.concept')) }),
+        description: t('api.success.save.description', { item: t('entities.concept') }),
+        icon: 'i-lucide-check-circle',
+        color: 'success',
+      });
+    }
     adminUiStore.closeConceptModal();
   } catch (error) {
     handleApiError(error);
@@ -336,12 +365,12 @@ const deleteRelation = ({ relation, type }: { relation: Relation; type: Relation
 };
 
 const addMatch = (match: MatchForm) => {
-  form.value.matches[match.type] = form.value.matches[match.type]
-    .concat(match.uris)
+  form.value.matches![match.type] = form.value
+    .matches![match.type].concat(match.uris)
     .filter((uri, index, self) => self.indexOf(uri) === index);
 };
 const deleteMatch = (match: Match) => {
-  form.value.matches[match.type!] = form.value.matches[match.type!].filter((uri) => uri !== match.uri);
+  form.value.matches![match.type!] = form.value.matches![match.type!].filter((uri) => uri !== match.uri);
 };
 
 /* Table data */
