@@ -59,6 +59,9 @@ const onSelect = (e: Event, item: TreeItem) => {
 };
 
 onMounted(async () => {
+  if (!relationModalIsOpen.value) {
+    return;
+  }
   adminUiStore.startLoading(RELATION_MODAL_LOADING_KEY);
   const data = await apiService.getTreeByConceptscheme(props.scheme);
   treeItems.value = formatTreeItems(data);

@@ -49,7 +49,7 @@ const mainColumn = {
   header: t('grid.columns.labels.source'),
   cell: (row: TableRow<Source>) =>
     h('div', {
-      innerHTML: DOMPurify.sanitize(row.citation, { USE_PROFILES: { html: true } }),
+      innerHTML: DOMPurify.sanitize(row.citation, { USE_PROFILES: { html: true }, ADD_ATTR: ['target'] }),
     }),
 };
 

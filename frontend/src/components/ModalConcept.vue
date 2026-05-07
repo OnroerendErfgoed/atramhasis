@@ -102,19 +102,10 @@
 </template>
 
 <script lang="ts">
-export type RelationKey =
-  | 'members'
-  | 'member_of'
-  | 'broader'
-  | 'narrower'
-  | 'related'
-  | 'subordinate_arrays'
-  | 'superordinates';
-
 export type RelationData = {
   label: string;
   data: TableRow<Relation>[];
-  key: RelationKey;
+  key: RelationTypeEnum;
 };
 </script>
 
@@ -128,7 +119,7 @@ import { useI18n } from 'vue-i18n';
 // import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
 import type { ConceptForm, Match, MatchForm, Relation } from '@models/concept';
-import { ConceptTypeEnum, ModalMode, type Label, type Note, type Source } from '@models/util';
+import { ConceptTypeEnum, ModalMode, RelationTypeEnum, type Label, type Note, type Source } from '@models/util';
 import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import { useListStore } from '@stores/list';
@@ -138,7 +129,7 @@ const toast = useToast();
 const { t } = useI18n();
 
 const adminUiStore = useAdminUiStore();
-const { conceptModalIsOpen, conceptModalMode, relationModalType } = storeToRefs(adminUiStore);
+const { conceptModalIsOpen, conceptModalMode } = storeToRefs(adminUiStore);
 const isEditMode = computed(() => conceptModalMode.value === ModalMode.EDIT);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
@@ -331,16 +322,16 @@ const deleteSource = (source: Source) => {
   }
 };
 
-const addRelation = (relation: Relation) => {
-  if (form.value[relationModalType.value]?.find((r) => r.id === relation.id)) {
+const addRelation = ({ relation, type }: { relation: Relation; type: RelationTypeEnum }) => {
+  if (form.value[type]?.find((r) => r.id === relation.id)) {
     return;
   }
-  form.value[relationModalType.value]?.push(relation);
+  form.value[type]?.push(relation);
 };
-const deleteRelation = (relation: Relation) => {
-  const index = form.value[relationModalType.value]?.findIndex((r) => r.id === relation.id);
+const deleteRelation = ({ relation, type }: { relation: Relation; type: RelationTypeEnum }) => {
+  const index = form.value[type]?.findIndex((r) => r.id === relation.id);
   if (index !== undefined && index >= 0) {
-    form.value[relationModalType.value]?.splice(index, 1);
+    form.value[type]?.splice(index, 1);
   }
 };
 
@@ -383,27 +374,27 @@ const conceptRelations = computed<RelationData[]>(() => [
   {
     label: t('components.modalTabRelations.broader'),
     data: broaderWithAddRow.value,
-    key: 'broader',
+    key: RelationTypeEnum.BROADER,
   },
   {
     label: t('components.modalTabRelations.narrower'),
     data: narrowerWithAddRow.value,
-    key: 'narrower',
+    key: RelationTypeEnum.NARROWER,
   },
   {
     label: t('components.modalTabRelations.related'),
     data: relatedWithAddRow.value,
-    key: 'related',
+    key: RelationTypeEnum.RELATED,
   },
   {
     label: t('components.modalTabRelations.memberOf'),
     data: memberOfWithAddRow.value,
-    key: 'member_of',
+    key: RelationTypeEnum.MEMBER_OF,
   },
   {
     label: t('components.modalTabRelations.subordinateArrays'),
     data: subordinateArraysWithAddRow.value,
-    key: 'subordinate_arrays',
+    key: RelationTypeEnum.SUBORDINATE_ARRAYS,
   },
 ]);
 
@@ -411,17 +402,17 @@ const collectionRelations = computed<RelationData[]>(() => [
   {
     label: t('components.modalTabRelations.members'),
     data: membersWithAddRow.value,
-    key: 'members',
+    key: RelationTypeEnum.MEMBERS,
   },
   {
     label: t('components.modalTabRelations.memberOf'),
     data: memberOfWithAddRow.value,
-    key: 'member_of',
+    key: RelationTypeEnum.MEMBER_OF,
   },
   {
     label: t('components.modalTabRelations.superordinates'),
     data: superordinatesWithAddRow.value,
-    key: 'superordinates',
+    key: RelationTypeEnum.SUPERORDINATES,
   },
 ]);
 </script>
