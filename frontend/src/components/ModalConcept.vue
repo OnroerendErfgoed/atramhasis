@@ -233,19 +233,12 @@ const tabs = computed<TabsItem[]>(() => [
   },
 ]);
 
-// Reset matches when switching to collection type, as collections cannot have matches
+// Reset to first tab when switching between concept and collection
 watch(
   () => form.value.type,
   () => {
     if (activeTab.value === tabs.value.findIndex((t) => t.slot === 'matches').toString() && !isConcept.value) {
       activeTab.value = '0';
-      form.value.matches = {
-        narrow: [],
-        broad: [],
-        related: [],
-        close: [],
-        exact: [],
-      };
     }
   }
 );
