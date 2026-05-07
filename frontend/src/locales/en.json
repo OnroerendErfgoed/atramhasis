@@ -41,7 +41,9 @@
         "language": "Language",
         "note": "Note",
         "source": "Source",
-        "actions": "Actions"
+        "actions": "Actions",
+        "uri": "URI",
+        "match": "{type}"
       },
       "actions": {
         "view": "View",
@@ -237,6 +239,36 @@
       "superordinates": "Superordinates",
       "subordinateArrays": "Subordinate arrays"
     },
+    "modalMatch": {
+      "title": "{type}",
+      "description": "Add a match",
+      "form": {
+        "externalScheme": {
+          "label": "External scheme"
+        },
+        "labelSearch": {
+          "label": "Search on label",
+          "placeholder": "Enter a label to filter matches",
+          "hint": "Enter at least 3 characters to search"
+        },
+        "labels": {
+          "label": "Choose match",
+          "placeholder": "Choose a match",
+          "noResults": "No matches found"
+        },
+        "type": {
+          "label": "Change type of match if needed"
+        }
+      }
+    },
+    "modalTabMatches": {
+      "exact": "Exact",
+      "close": "Close",
+      "broad": "Broad",
+      "narrow": "Narrow",
+      "related": "Related",
+      "loading": "Loading matches..."
+    },
     "modalDelete": {
       "title": "Delete {entity}",
       "message": "Are you sure you want to remove {entity} {item}?",
@@ -310,7 +342,8 @@
     "cancel": "Cancel",
     "add": "Add",
     "edit": "Edit",
-    "ok": "OK"
+    "ok": "OK",
+    "search": "Search"
   },
   "entities": {
     "conceptscheme": "conceptscheme | conceptschemes",
@@ -320,7 +353,8 @@
     "label": "label | labels",
     "note": "note | notes",
     "source": "source | sources",
-    "relation": "relation | relations"
+    "relation": "relation | relations",
+    "match": "match | matches"
   },
   "lists": {
     "languages": {

@@ -1,5 +1,5 @@
 import type { RelationKey } from '@components/ModalConcept.vue';
-import { ModalMode } from '@models/util';
+import { MatchTypeEnum, ModalMode } from '@models/util';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
@@ -104,6 +104,16 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
   const closeRelationModal = () => (relationModalIsOpen.value = false);
 
+  const matchModalKey = ref(0);
+  const matchModalIsOpen = ref(false);
+  const matchModalType = ref<MatchTypeEnum>(MatchTypeEnum.BROAD);
+  const openMatchModal = (matchType: MatchTypeEnum) => {
+    matchModalKey.value++;
+    matchModalIsOpen.value = true;
+    matchModalType.value = matchType;
+  };
+  const closeMatchModal = () => (matchModalIsOpen.value = false);
+
   /* Breadcrumbs */
   const breadcrumbLabels = ref<Record<string, string>>({});
 
@@ -142,6 +152,11 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     sourceModalMode,
     openSourceModal,
     closeSourceModal,
+    matchModalKey,
+    matchModalType,
+    matchModalIsOpen,
+    openMatchModal,
+    closeMatchModal,
     providerModalKey,
     providerModalIsOpen,
     providerModalMode,

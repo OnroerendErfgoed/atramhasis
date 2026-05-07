@@ -1,4 +1,4 @@
-import type { ConceptTypeEnum, Label, Note, Source } from '@models/util';
+import type { ConceptTypeEnum, Label, MatchTypeEnum, Note, Source } from '@models/util';
 
 export interface OverviewConcept {
   id: number;
@@ -19,6 +19,7 @@ export interface Concept extends OverviewConcept {
   subordinate_arrays?: Relation[];
   superordinates?: Relation[];
   infer_concept_relations?: boolean;
+  matches: Matches;
 }
 
 export interface ConceptForm {
@@ -36,6 +37,7 @@ export interface ConceptForm {
   subordinate_arrays?: Relation[];
   superordinates?: Relation[];
   infer_concept_relations?: boolean;
+  matches: Matches;
 }
 
 export interface Relation {
@@ -43,4 +45,24 @@ export interface Relation {
   uri: string;
   label: string;
   type: ConceptTypeEnum;
+}
+
+export interface Matches {
+  narrow: string[];
+  broad: string[];
+  related: string[];
+  close: string[];
+  exact: string[];
+}
+
+export interface Match {
+  label: string;
+  uri: string;
+  type?: MatchTypeEnum;
+}
+
+export interface MatchForm {
+  external_scheme: string;
+  uris: string[];
+  type: MatchTypeEnum;
 }

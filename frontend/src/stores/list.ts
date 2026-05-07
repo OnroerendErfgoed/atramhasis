@@ -49,6 +49,7 @@ export const useListStore = defineStore('list', () => {
   );
 
   const conceptschemeOptions = ref<{ label: string; value: string; uri: string }[]>([]);
+  const externalConceptschemeOptions = ref<{ label: string; value: string; uri: string }[]>([]);
 
   const fetchLanguages = async () => {
     try {
@@ -69,6 +70,9 @@ export const useListStore = defineStore('list', () => {
     try {
       const data = await apiService.getConceptschemes();
       conceptschemeOptions.value = data.map((c) => ({ label: c.label, value: c.id, uri: c.uri }));
+      externalConceptschemeOptions.value = data
+        .filter((c) => c.subject.includes('external'))
+        .map((c) => ({ label: c.label, value: c.id, uri: c.uri }));
     } catch (error) {
       console.error(t('api.errors.fetch.title', { item: t('entities.conceptscheme', 1) }), error);
       toast.add({
@@ -92,6 +96,7 @@ export const useListStore = defineStore('list', () => {
     languages,
     languageOptions,
     conceptschemeOptions,
+    externalConceptschemeOptions,
     yesNoOptions,
     fetchLanguages,
     getAll,
