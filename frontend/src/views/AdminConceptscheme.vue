@@ -183,6 +183,41 @@ const pagination = ref({
   pageSize: 15,
 });
 
+const onMergeClick = async (row: OverviewConcept) => {
+  try {
+    adminUiStore.startLoading(CONCEPT_LOADING_KEY);
+    const concept = await conceptStore.getConcept(selectedConceptscheme.value?.id as string, row.id, true);
+
+    if (!concept) {
+      throw new Error('Concept not found');
+    }
+
+    conceptStore.setSelectedConcept(concept);
+    const hasMatches = Object.values(concept.matches ?? {}).some((matchArray) => matchArray.length > 0);
+
+    if (hasMatches) {
+      adminUiStore.openMergeModal();
+    } else {
+      toast.add({
+        title: t('components.modalMerge.noMatchesTitle'),
+        description: t('components.modalMerge.noMatchesDescription'),
+        icon: 'i-lucide-info',
+        color: 'info',
+      });
+    }
+  } catch (error) {
+    console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);
+    toast.add({
+      title: t('api.errors.fetch.title', { item: t('entities.concept') }),
+      description: t('api.errors.fetch.description', { item: t('entities.concept') }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  } finally {
+    adminUiStore.stopLoading(CONCEPT_LOADING_KEY);
+  }
+};
+
 const columns: TableColumn<OverviewConcept>[] = [
   {
     id: 'expand',
@@ -235,45 +270,7 @@ const columns: TableColumn<OverviewConcept>[] = [
           variant: 'outline',
           size: 'xs',
           disabled: row.original.type !== ConceptTypeEnum.CONCEPT,
-          onClick: async () => {
-            try {
-              adminUiStore.startLoading(CONCEPT_LOADING_KEY);
-              const concept = await conceptStore.getConcept(
-                selectedConceptscheme.value?.id as string,
-                row.original.id,
-                true
-              );
-
-              if (!concept) {
-                throw new Error('Concept not found');
-              }
-
-              conceptStore.setSelectedConcept(concept);
-              const hasMatches =
-                Object.values(concept.matches ?? {}).filter((matchArray) => matchArray.length > 0).length > 0;
-
-              if (hasMatches) {
-                adminUiStore.openMergeModal();
-              } else {
-                toast.add({
-                  title: t('components.modalMerge.noMatchesTitle'),
-                  description: t('components.modalMerge.noMatchesDescription'),
-                  icon: 'i-lucide-info',
-                  color: 'info',
-                });
-              }
-            } catch (error) {
-              console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);
-              toast.add({
-                title: t('api.errors.fetch.title', { item: t('entities.concept') }),
-                description: t('api.errors.fetch.description', { item: t('entities.concept') }),
-                icon: 'i-lucide-alert-triangle',
-                color: 'error',
-              });
-            } finally {
-              adminUiStore.stopLoading(CONCEPT_LOADING_KEY);
-            }
-          },
+          onClick: async () => onMergeClick(row.original),
         }),
         h(UButton, {
           as: 'a',
