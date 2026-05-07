@@ -247,12 +247,10 @@ const columns: TableColumn<OverviewConcept>[] = [
                 ...concept,
                 matches: {
                   narrow: [],
-                  broad: ['https://vocab.getty.edu/aat/300343911'],
-                  // broad: [],
+                  broad: [],
                   related: [],
                   close: [],
-                  exact: ['http://vocab.getty.edu/aat/300389673'],
-                  // exact: [],
+                  exact: [],
                 },
               } as Concept;
 

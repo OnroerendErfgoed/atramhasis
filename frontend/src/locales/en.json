@@ -109,7 +109,8 @@
       "noMatchesDescription": "There are no matches available to merge for this concept or collection.",
       "title": "{concept}",
       "description": "Merge concept or collection",
-      "loading": "Loading matches..."
+      "loading": "Loading matches...",
+      "mergeError": "Failed to merge concepts. Please try again later."
     },
     "modalProvider": {
       "title": "Manage providers",

@@ -20,7 +20,7 @@
     <template #footer="{ close }">
       <div class="flex w-full justify-end gap-2">
         <UButton :label="t('actions.cancel')" color="neutral" variant="outline" @click="close" />
-        <UButton :label="t('actions.merge')" :disabled="!Object.keys(rowSelection).length" @click="save" />
+        <UButton :label="t('actions.merge')" :disabled="!Object.keys(rowSelection).length" @click="merge" />
       </div>
     </template>
   </UModal>
@@ -28,13 +28,14 @@
 
 <script setup lang="ts">
 import type { Match } from '@models/concept';
+import { ModalMode } from '@models/util';
 import type { TableColumn, TableRow } from '@nuxt/ui';
 import { ApiService } from '@services/api.service';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useConceptStore } from '@stores/concept';
 import { useMatchStore } from '@stores/match';
 import { storeToRefs } from 'pinia';
-import { capitalize, h, onMounted, ref, resolveComponent, useTemplateRef } from 'vue';
+import { capitalize, h, nextTick, onMounted, ref, resolveComponent, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const UButton = resolveComponent('UButton');
@@ -51,14 +52,22 @@ const matchStore = useMatchStore();
 
 const apiService = new ApiService();
 const GET_MATCH_LOADING_KEY = 'get-match';
+const MERGE_CONCEPTS_LOADING_KEY = 'merge-concepts';
 
 const table = useTemplateRef('table');
 const rowSelection = ref<Record<string, boolean>>({});
+const selectedMatches = ref<Match[]>([]);
 
-const onSelect = (e: Event, row: TableRow<Match>) => {
-  row.toggleSelected(!row.getIsSelected());
-  console.log(rowSelection.value);
-};
+const onSelect = async (e: Event, row: TableRow<Match>) => row.toggleSelected(!row.getIsSelected());
+
+watch(
+  () => rowSelection.value,
+  async () => {
+    await nextTick();
+    selectedMatches.value = table.value?.tableApi.getSelectedRowModel().flatRows.map((r) => r.original) ?? [];
+  },
+  { deep: true }
+);
 
 const columns: TableColumn<Match>[] = [
   {
@@ -116,7 +125,7 @@ const getMatch = async (uri: string): Promise<Match> => {
   const byUri = await apiService.getByUri<{ id: string; concept_scheme: { id: string } }>(uri);
   const concept = await conceptStore.getConcept(byUri.concept_scheme.id, Number(byUri.id));
 
-  matchStore.setMatch({ uri, label: concept?.label || uri });
+  matchStore.setMatch({ uri, label: concept?.label || uri }, concept);
 
   return { label: concept?.label || uri, uri: concept?.uri || uri };
 };
@@ -154,7 +163,23 @@ onMounted(async () => {
 });
 
 // Save handler
-const save = async () => {
-  if (!selectedConcept.value) return;
+const merge = async () => {
+  if (!selectedConcept.value || !selectedMatches.value.length) return;
+
+  try {
+    adminUiStore.startLoading(MERGE_CONCEPTS_LOADING_KEY);
+    conceptStore.mergeWithSelectedConcept(selectedMatches.value.map((m) => m.uri));
+    adminUiStore.closeMergeModal();
+    adminUiStore.openConceptModal(ModalMode.EDIT);
+  } catch (error) {
+    console.error(error);
+    toast.add({
+      title: t('components.modalMerge.mergeError'),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  } finally {
+    adminUiStore.stopLoading(MERGE_CONCEPTS_LOADING_KEY);
+  }
 };
 </script>

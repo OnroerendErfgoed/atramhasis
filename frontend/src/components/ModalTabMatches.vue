@@ -88,7 +88,7 @@ const toMatchRows = async (items: string[] = []): Promise<Match[]> => {
         }>(uri);
 
         const concept = await conceptStore.getConcept(byUri.concept_scheme.id, Number(byUri.id));
-        matchStore.setMatch({ uri, label: concept?.label || uri });
+        matchStore.setMatch({ uri, label: concept?.label || uri }, concept);
         return { label: concept?.label || uri, uri: concept?.uri || uri };
       } catch {
         // Fall back to raw uri if enrichment fails.
