@@ -192,15 +192,13 @@ onBeforeMount(() => {
       subordinate_arrays: conceptClone.subordinate_arrays ?? [],
       superordinates: conceptClone.superordinates ?? [],
       infer_concept_relations: conceptClone.infer_concept_relations,
-      matches: Object.keys(conceptClone.matches ?? {}).length
-        ? conceptClone.matches
-        : {
-            narrow: [],
-            broad: [],
-            related: [],
-            close: [],
-            exact: ['http://vocab.getty.edu/aat/300389673'],
-          },
+      matches: {
+        narrow: conceptClone.matches?.narrow ?? [],
+        broad: conceptClone.matches?.broad ?? [],
+        related: conceptClone.matches?.related ?? [],
+        close: conceptClone.matches?.close ?? [],
+        exact: conceptClone.matches?.exact ?? [],
+      },
     };
   }
 });
@@ -235,19 +233,12 @@ const tabs = computed<TabsItem[]>(() => [
   },
 ]);
 
-// Reset matches when switching to collection type, as collections cannot have matches
+// Reset to first tab when switching between concept and collection
 watch(
   () => form.value.type,
   () => {
     if (activeTab.value === tabs.value.findIndex((t) => t.slot === 'matches').toString() && !isConcept.value) {
       activeTab.value = '0';
-      form.value.matches = {
-        narrow: [],
-        broad: [],
-        related: [],
-        close: [],
-        exact: [],
-      };
     }
   }
 );
