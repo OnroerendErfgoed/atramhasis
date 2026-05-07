@@ -192,15 +192,13 @@ onBeforeMount(() => {
       subordinate_arrays: conceptClone.subordinate_arrays ?? [],
       superordinates: conceptClone.superordinates ?? [],
       infer_concept_relations: conceptClone.infer_concept_relations,
-      matches: Object.keys(conceptClone.matches ?? {}).length
-        ? conceptClone.matches
-        : {
-            narrow: [],
-            broad: [],
-            related: [],
-            close: [],
-            exact: [],
-          },
+      matches: {
+        narrow: conceptClone.matches?.narrow ?? [],
+        broad: conceptClone.matches?.broad ?? [],
+        related: conceptClone.matches?.related ?? [],
+        close: conceptClone.matches?.close ?? [],
+        exact: conceptClone.matches?.exact ?? [],
+      },
     };
   }
 });
