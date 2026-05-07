@@ -19,7 +19,7 @@ export interface Concept extends OverviewConcept {
   subordinate_arrays?: Relation[];
   superordinates?: Relation[];
   infer_concept_relations?: boolean;
-  matches: Matches;
+  matches?: Matches;
 }
 
 export interface ConceptForm {
@@ -37,7 +37,7 @@ export interface ConceptForm {
   subordinate_arrays?: Relation[];
   superordinates?: Relation[];
   infer_concept_relations?: boolean;
-  matches: Matches;
+  matches?: Matches;
 }
 
 export interface Relation {

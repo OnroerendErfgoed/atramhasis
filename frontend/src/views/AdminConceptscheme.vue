@@ -152,6 +152,13 @@ const fetchConcepts = async () => {
 await fetchConceptscheme();
 await fetchConcepts();
 
+adminUiStore.$onAction(({ name }) => {
+  // Refresh concepts list after closing the concept modal
+  if (name === 'closeConceptModal') {
+    fetchConcepts();
+  }
+});
+
 const tableData = computed<OverviewConcept[]>(() => {
   let rows = concepts.value.map((c) => ({
     id: c.id,
