@@ -72,7 +72,7 @@
     },
     "modalConceptscheme": {
       "title": "{conceptscheme}",
-      "description": "{tab}",
+      "description": "Edit conceptscheme",
       "tabs": {
         "labels": "Labels",
         "notes": "Notes",
