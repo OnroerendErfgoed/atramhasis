@@ -240,6 +240,13 @@ watch(
     if (activeTab.value === tabs.value.findIndex((t) => t.slot === 'matches').toString() && !isConcept.value) {
       activeTab.value = '0';
     }
+
+    toast.add({
+      title: t('components.modalConcept.form.type.changeWarning.title'),
+      description: t('components.modalConcept.form.type.changeWarning.description'),
+      icon: 'i-lucide-alert-triangle',
+      color: 'warning',
+    });
   }
 );
 
