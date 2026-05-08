@@ -84,7 +84,7 @@ lazy-object-proxy==1.12.0
     # via openapi-spec-validator
 lxml==6.1.0
     # via pyld
-mako==1.3.11
+mako==1.3.12
     # via
     #   alembic
     #   pyramid-mako
