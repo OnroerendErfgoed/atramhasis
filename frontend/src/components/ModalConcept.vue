@@ -3,26 +3,18 @@
     v-model:open="conceptModalIsOpen"
     :dismissible="false"
     :title="t('components.modalConcept.title', { conceptscheme: selectedConceptscheme?.label })"
-    :description="t('components.modalConcept.description', { mode: isEditMode ? t('actions.edit') : t('actions.add') })"
+    :description="
+      t('components.modalConcept.description', {
+        mode: isEditMode ? t('actions.edit') : t('actions.add'),
+        concept: selectedConcept?.label ?? t('entities.concept'),
+      })
+    "
     class="max-w-4xl"
   >
     <template #body>
       <div class="flex h-[34rem] w-full flex-col">
         <UForm class="space-y-4 rounded-md bg-muted p-4">
           <div class="grid grid-cols-3 gap-4">
-            <UFormField
-              name="concept-conceptscheme"
-              size="lg"
-              :label="t('components.modalConcept.form.conceptscheme.label')"
-            >
-              <USelect
-                v-model="form.conceptscheme"
-                :items="conceptschemeOptions"
-                class="w-full"
-                :disabled="isEditMode"
-              />
-            </UFormField>
-
             <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
               <USelect v-model="form.type" :items="conceptTypes" class="w-full" />
             </UFormField>
@@ -69,8 +61,7 @@
 
           <template #relations>
             <ModalTabRelations
-              :scheme="form.conceptscheme"
-              :scheme-uri="formConceptschemeUri"
+              :conceptscheme="selectedConceptscheme as Conceptscheme"
               :data="isConcept ? conceptRelations : collectionRelations"
               @add="addRelation"
               @delete="deleteRelation"
@@ -129,6 +120,7 @@ import { useConceptStore } from '@stores/concept';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import { useListStore } from '@stores/list';
 import type { TableRow } from './ModalTabTable.vue';
+import type { Conceptscheme } from '@models/conceptscheme';
 
 const toast = useToast();
 const { t } = useI18n();
@@ -141,7 +133,7 @@ const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
 const { selectedConcept } = storeToRefs(conceptStore);
 const listStore = useListStore();
-const { conceptTypes, conceptschemeOptions, yesNoOptions } = storeToRefs(listStore);
+const { conceptTypes, yesNoOptions } = storeToRefs(listStore);
 
 const apiService = new ApiService();
 const { handleApiError } = useApiError();
@@ -150,7 +142,6 @@ const isConcept = computed(() => form.value.type === ConceptTypeEnum.CONCEPT);
 
 // Form state
 const form = ref<ConceptForm>({
-  conceptscheme: `${selectedConceptscheme.value?.id}`,
   type: ConceptTypeEnum.CONCEPT,
   id: undefined,
   labels: [],
@@ -178,7 +169,6 @@ onBeforeMount(() => {
   if (isEditMode.value && selectedConcept.value) {
     const conceptClone = cloneDeep(selectedConcept.value);
     form.value = {
-      conceptscheme: `${selectedConceptscheme.value?.id}`,
       type: conceptClone.type,
       id: conceptClone.id,
       labels: conceptClone.labels ?? [],
@@ -201,11 +191,6 @@ onBeforeMount(() => {
       },
     };
   }
-});
-
-const formConceptschemeUri = computed(() => {
-  const scheme = conceptschemeOptions.value.find((cs) => cs.value === form.value.conceptscheme);
-  return scheme ? scheme.uri : '';
 });
 
 const activeTab = ref('0');
@@ -266,7 +251,7 @@ const save = async () => {
       delete payload.matches;
     }
     if (isEditMode.value) {
-      await apiService.updateConcept(payload);
+      await apiService.updateConcept(selectedConceptscheme.value?.id as string, payload);
       toast.add({
         title: t('api.success.update.title', { item: capitalize(t('entities.concept')) }),
         description: t('api.success.update.description', { item: t('entities.concept') }),
@@ -274,7 +259,7 @@ const save = async () => {
         color: 'success',
       });
     } else {
-      await apiService.createConcept(payload);
+      await apiService.createConcept(selectedConceptscheme.value?.id as string, payload);
       toast.add({
         title: t('api.success.save.title', { item: capitalize(t('entities.concept')) }),
         description: t('api.success.save.description', { item: t('entities.concept') }),

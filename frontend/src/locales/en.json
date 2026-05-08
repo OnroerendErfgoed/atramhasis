@@ -8,9 +8,9 @@
       "users": "Users"
     },
     "actions": {
-      "addConcept": "Add a concept or collection",
-      "addProvider": "Add a provider",
-      "addLanguage": "Add a language"
+      "addConcept": "Add a @:entities.concept",
+      "addProvider": "Add a @:entities.provider",
+      "addLanguage": "Add a @:entities.language"
     },
     "goToHomepage": "Go to homepage",
     "logout": "Log out",
@@ -81,7 +81,7 @@
     },
     "modalConcept": {
       "title": "{conceptscheme}",
-      "description": "{mode} concept or collection",
+      "description": "{mode} {concept}",
       "tabs": {
         "labels": "Labels",
         "notes": "Notes",
@@ -90,9 +90,6 @@
         "matches": "Matches"
       },
       "form": {
-        "conceptscheme": {
-          "label": "Scheme"
-        },
         "type": {
           "label": "Type"
         },
@@ -366,7 +363,7 @@
   },
   "entities": {
     "conceptscheme": "conceptscheme | conceptschemes",
-    "concept": "concept | concepts",
+    "concept": "concept or collection | concepts or collections",
     "provider": "provider | providers",
     "language": "language | languages",
     "label": "label | labels",
