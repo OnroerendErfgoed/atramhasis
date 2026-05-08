@@ -23,6 +23,7 @@ import { storeToRefs } from 'pinia';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useLabelStore } from '@stores/label';
 import { ref } from 'vue';
+import { useListStore } from '@stores/list';
 
 defineProps<{
   data: TableRow<Label>[];
@@ -41,6 +42,8 @@ const adminUiStore = useAdminUiStore();
 const { labelModalKey } = storeToRefs(adminUiStore);
 const labelStore = useLabelStore();
 const { selectedLabel } = storeToRefs(labelStore);
+const listStore = useListStore();
+const { languageOptions } = storeToRefs(listStore);
 
 const modalDeleteIsOpen = ref(false);
 
@@ -54,7 +57,8 @@ const extraColumns = [
   {
     accessorKey: 'language',
     header: t('grid.columns.labels.language'),
-    cell: (row: TableRow<Label>) => t('lists.languages.' + row.language),
+    cell: (row: TableRow<Label>) =>
+      languageOptions.value.find((option) => option.value === row.language)?.label || row.language,
   },
   {
     accessorKey: 'type',

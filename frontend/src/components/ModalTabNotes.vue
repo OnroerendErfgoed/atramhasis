@@ -24,6 +24,7 @@ import DOMPurify from 'dompurify';
 import { storeToRefs } from 'pinia';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useNoteStore } from '@stores/note';
+import { useListStore } from '@stores/list';
 
 defineProps<{
   data: TableRow<Note>[];
@@ -42,6 +43,8 @@ const adminUiStore = useAdminUiStore();
 const { noteModalKey } = storeToRefs(adminUiStore);
 const noteStore = useNoteStore();
 const { selectedNote } = storeToRefs(noteStore);
+const listStore = useListStore();
+const { languageOptions } = storeToRefs(listStore);
 
 const modalDeleteIsOpen = ref(false);
 
@@ -58,7 +61,8 @@ const extraColumns = [
   {
     accessorKey: 'language',
     header: t('grid.columns.labels.language'),
-    cell: (row: TableRow<Note>) => t('lists.languages.' + row.language),
+    cell: (row: TableRow<Note>) =>
+      languageOptions.value.find((option) => option.value === row.language)?.label || row.language,
   },
   {
     accessorKey: 'type',
