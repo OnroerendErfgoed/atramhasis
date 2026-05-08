@@ -72,7 +72,7 @@
     },
     "modalConceptscheme": {
       "title": "{conceptscheme}",
-      "description": "{tab}",
+      "description": "Edit conceptscheme",
       "tabs": {
         "labels": "Labels",
         "notes": "Notes",
@@ -367,17 +367,6 @@
     "match": "match | matches"
   },
   "lists": {
-    "languages": {
-      "en": "English",
-      "nl": "Dutch",
-      "vls": "Flemish",
-      "und": "Undetermined",
-      "nl-BE": "Dutch, Flemish, Belgium",
-      "en-GB": "English, United Kingdom",
-      "fr": "French",
-      "de": "German",
-      "la": "Latin"
-    },
     "labelTypes": {
       "prefLabel": "Preferred",
       "altLabel": "Alternative",
