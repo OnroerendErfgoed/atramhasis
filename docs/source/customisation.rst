@@ -20,7 +20,8 @@ Requirements
 ------------
 
 *   Python 3.9+
-*   npm
+*   Node.js
+*   pnpm
 
 Usage
 -----
