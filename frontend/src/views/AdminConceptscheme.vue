@@ -75,6 +75,12 @@
 
     <ModalConcept :key="conceptModalKey" />
     <ModalMerge :key="mergeModalKey" />
+    <ModalDelete
+      v-model:open="modalDeleteIsOpen"
+      :entity="t('entities.concept')"
+      :item="`${selectedConcept?.label} (${selectedConcept?.id}) from scheme ${selectedConceptscheme?.id}`"
+      @confirm="deleteConcept"
+    />
   </div>
 </template>
 
@@ -109,6 +115,7 @@ const { conceptModalKey, mergeModalKey } = storeToRefs(adminUiStore);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
+const { selectedConcept } = storeToRefs(conceptStore);
 const listStore = useListStore();
 const { conceptTypes } = storeToRefs(listStore);
 const apiService = new ApiService();
@@ -153,14 +160,43 @@ const fetchConcepts = async () => {
   }
 };
 
+const modalDeleteIsOpen = ref(false);
+const deleteConcept = async () => {
+  if (!selectedConcept.value?.id) return;
+
+  try {
+    adminUiStore.startLoading('deleteConcept');
+    await apiService.deleteConcept(selectedConceptscheme.value!.id, selectedConcept.value.id);
+    toast.add({
+      title: t('api.success.delete.title', { item: capitalize(t('entities.concept', 1)) }),
+      description: t('api.success.delete.description', { item: t('entities.concept', 1) }),
+      icon: 'i-lucide-check',
+      color: 'success',
+    });
+    conceptStore.resetSelectedConcept();
+    await fetchConcepts();
+  } catch (error) {
+    console.error(t('api.errors.delete.title', { item: capitalize(t('entities.concept', 1)) }), error);
+    toast.add({
+      title: t('api.errors.delete.title', { item: capitalize(t('entities.concept', 1)) }),
+      description: t('api.errors.delete.description', { item: t('entities.concept', 1) }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+  } finally {
+    modalDeleteIsOpen.value = false;
+    adminUiStore.stopLoading('deleteConcept');
+  }
+};
+
 // Initial fetch
 await fetchConceptscheme();
 await fetchConcepts();
 
-adminUiStore.$onAction(({ name }) => {
+adminUiStore.$onAction(async ({ name }) => {
   // Refresh concepts list after closing the concept modal
   if (name === 'closeConceptModal') {
-    fetchConcepts();
+    await fetchConcepts();
   }
 });
 
@@ -316,6 +352,10 @@ const columns: TableColumn<OverviewConcept>[] = [
           variant: 'ghost',
           size: 'xs',
           'aria-label': t('grid.columns.actions.delete'),
+          onClick: () => {
+            conceptStore.setSelectedConcept(row.original as Concept);
+            modalDeleteIsOpen.value = true;
+          },
         }),
       ]),
   },

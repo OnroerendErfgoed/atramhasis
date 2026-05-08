@@ -86,6 +86,10 @@ export class ApiService extends HttpService {
   }
 
   // Deleters
+  async deleteConcept(conceptschemeId: string, conceptId: number): Promise<void> {
+    await this.delete(`/conceptschemes/${conceptschemeId}/c/${conceptId}`);
+  }
+
   async deleteProvider(providerId: string): Promise<void> {
     await this.delete(`/providers/${providerId}`);
   }
