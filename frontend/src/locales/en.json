@@ -94,7 +94,11 @@
           "label": "Scheme"
         },
         "type": {
-          "label": "Type"
+          "label": "Type",
+          "changeWarning": {
+            "title": "You are changing the type of this item",
+            "description": "Because concepts and collections use different relationship types, all relationships associated with the previous type will be removed when you save."
+          }
         },
         "id": {
           "label": "ID"
