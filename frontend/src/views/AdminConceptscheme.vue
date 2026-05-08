@@ -4,22 +4,24 @@
     <div class="flex justify-end px-4 py-3.5 gap-2">
       <UInput
         v-model="labelFilter"
-        :placeholder="t('placeholders.conceptScheme.label')"
+        :placeholder="t('views.adminConceptscheme.form.labelFilter.placeholder')"
         icon="i-lucide-search"
         class="w-64"
         @keydown.enter="fetchConcepts"
       />
-      <UInput
-        v-model="matchFilter"
-        :placeholder="t('placeholders.conceptScheme.match')"
-        icon="i-lucide-search"
-        class="w-64"
-        @keydown.enter="fetchConcepts"
-      />
+      <UTooltip :text="t('views.adminConceptscheme.form.matchFilter.tooltip')">
+        <UInput
+          v-model="matchFilter"
+          :placeholder="t('views.adminConceptscheme.form.matchFilter.placeholder')"
+          icon="i-lucide-search"
+          class="w-64"
+          @keydown.enter="fetchConcepts"
+        />
+      </UTooltip>
       <USelectMenu
         v-model="typeFilter"
         :items="conceptTypes"
-        :placeholder="t('placeholders.conceptScheme.type')"
+        :placeholder="t('views.adminConceptscheme.form.typeFilter.placeholder')"
         class="w-36"
         :search-input="false"
         clear
@@ -30,6 +32,7 @@
     <UTable
       ref="tableRef"
       v-model:pagination="pagination"
+      v-model:sorting="sorting"
       sticky
       class="flex-1 min-h-0"
       :ui="{ tr: 'data-[expanded=true]:bg-elevated/50' }"
@@ -79,6 +82,7 @@
 import type { Concept, OverviewConcept } from '@models/concept';
 import type { Conceptscheme } from '@models/conceptscheme';
 import { ConceptTypeEnum, ModalMode } from '@models/util';
+import SortableHeader from '@components/SortableHeader.vue';
 import type { TableColumn } from '@nuxt/ui';
 import { ApiService } from '@services/api.service';
 import { useAdminUiStore } from '@stores/admin-ui';
@@ -182,6 +186,7 @@ const pagination = ref({
   pageIndex: 0,
   pageSize: 15,
 });
+const sorting = ref([]);
 
 const onMergeClick = async (row: OverviewConcept) => {
   try {
@@ -235,7 +240,7 @@ const columns: TableColumn<OverviewConcept>[] = [
   },
   {
     accessorKey: 'label',
-    header: t('grid.columns.labels.label'),
+    header: ({ column }) => h(SortableHeader, { label: t('grid.columns.labels.label'), column }),
     meta: {
       class: {
         th: 'w-full',
@@ -245,11 +250,11 @@ const columns: TableColumn<OverviewConcept>[] = [
   },
   {
     accessorKey: 'id',
-    header: t('grid.columns.labels.id'),
+    header: ({ column }) => h(SortableHeader, { label: t('grid.columns.labels.id'), column }),
   },
   {
     accessorKey: 'type',
-    header: t('grid.columns.labels.type'),
+    header: ({ column }) => h(SortableHeader, { label: t('grid.columns.labels.type'), column }),
     cell: ({ row }) =>
       h(UBadge, {
         label: capitalize(row.original.type),
@@ -274,9 +279,10 @@ const columns: TableColumn<OverviewConcept>[] = [
         }),
         h(UButton, {
           as: 'a',
-          href: '#',
+          href: row.original.uri,
+          target: '_blank',
           label: t('grid.columns.actions.view'),
-          icon: 'i-lucide-eye',
+          icon: 'i-lucide-file-text',
           color: 'primary',
           variant: 'outline',
           size: 'xs',
