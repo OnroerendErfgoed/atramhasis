@@ -66,7 +66,7 @@ export const useConceptStore = defineStore('concept', () => {
   };
 
   watch(conceptModalIsOpen, (open) => {
-    if (!open && conceptModalIsOpen.value) {
+    if (!open && selectedConcept.value) {
       resetSelectedConcept();
     }
   });

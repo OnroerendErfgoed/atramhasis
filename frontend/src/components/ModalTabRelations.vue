@@ -11,8 +11,8 @@
   />
   <ModalRelation
     :key="relationModalKey"
-    :scheme="scheme"
-    :scheme-uri="schemeUri"
+    :scheme="conceptscheme.id"
+    :scheme-uri="conceptscheme.uri"
     @add="emit('add', { relation: $event, type: selectionType as RelationTypeEnum })"
   />
   <ModalDelete v-model:open="modalDeleteIsOpen" :entity="t('entities.relation')" @confirm="confirmDelete" />
@@ -27,10 +27,10 @@ import type { RelationData } from '@components/ModalConcept.vue';
 import { RelationTypeEnum } from '@models/util';
 import { ref } from 'vue';
 import { useRelationStore } from '@stores/relation';
+import type { Conceptscheme } from '@models/conceptscheme';
 
 defineProps<{
-  scheme: string;
-  schemeUri: string;
+  conceptscheme: Conceptscheme;
   data: RelationData[];
 }>();
 

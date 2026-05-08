@@ -23,7 +23,6 @@ export interface Concept extends OverviewConcept {
 }
 
 export interface ConceptForm {
-  conceptscheme: string;
   type: ConceptTypeEnum;
   id?: number;
   labels: Label[];

@@ -55,8 +55,8 @@ export class ApiService extends HttpService {
   }
 
   // Creators
-  async createConcept(concept: ConceptForm): Promise<Concept> {
-    return (await this.post<Concept, ConceptForm>(`/conceptschemes/${concept.conceptscheme}/c`, concept)).data;
+  async createConcept(schemeId: string, concept: ConceptForm): Promise<Concept> {
+    return (await this.post<Concept, ConceptForm>(`/conceptschemes/${schemeId}/c`, concept)).data;
   }
 
   async createProvider(provider: ProviderForm): Promise<Provider> {
@@ -72,9 +72,8 @@ export class ApiService extends HttpService {
     return (await this.put<Conceptscheme, Conceptscheme>(`/conceptschemes/${conceptscheme.id}`, conceptscheme)).data;
   }
 
-  async updateConcept(concept: ConceptForm): Promise<Concept> {
-    return (await this.put<Concept, ConceptForm>(`/conceptschemes/${concept.conceptscheme}/c/${concept.id}`, concept))
-      .data;
+  async updateConcept(schemeId: string, concept: ConceptForm): Promise<Concept> {
+    return (await this.put<Concept, ConceptForm>(`/conceptschemes/${schemeId}/c/${concept.id}`, concept)).data;
   }
 
   async updateLanguage(language: Language): Promise<Language> {

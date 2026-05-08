@@ -38,7 +38,7 @@ export const useConceptschemeStore = defineStore('conceptscheme', () => {
   const resetSelectedConceptscheme = () => (selectedConceptscheme.value = undefined);
 
   watch(conceptschemeModalIsOpen, (open) => {
-    if (!open && conceptschemeModalIsOpen.value) {
+    if (!open && selectedConceptscheme.value) {
       resetSelectedConceptscheme();
     }
   });
