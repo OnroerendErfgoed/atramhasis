@@ -8,7 +8,7 @@
       "users": "Users"
     },
     "actions": {
-      "addConcept": "Add a concept",
+      "addConcept": "Add a concept or collection",
       "addProvider": "Add a provider",
       "addLanguage": "Add a language"
     },
@@ -284,6 +284,22 @@
       "messageGeneric": "Are you sure you want to remove this {entity}?"
     }
   },
+  "views": {
+    "adminConceptscheme": {
+      "form": {
+        "labelFilter": {
+          "placeholder": "Filter by label"
+        },
+        "matchFilter": {
+          "placeholder": "Filter by match",
+          "tooltip": "e.g. http://vocab.getty.edu/aat/300005241"
+        },
+        "typeFilter": {
+          "placeholder": "Filter by type"
+        }
+      }
+    }
+  },
   "api": {
     "success": {
       "fetch": {
@@ -328,13 +344,6 @@
         "title": "An error occurred",
         "description": "An unexpected error occurred. Please try again later."
       }
-    }
-  },
-  "placeholders": {
-    "conceptScheme": {
-      "label": "Filter by label",
-      "match": "Filter by match e.g. http://vocab.getty.edu/aat/300005241",
-      "type": "Filter by type"
     }
   },
   "validation": {
