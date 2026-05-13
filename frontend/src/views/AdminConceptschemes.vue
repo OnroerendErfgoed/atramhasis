@@ -82,7 +82,7 @@ const conceptschemes = ref<OverviewConceptscheme[]>([]);
 
 const fetchConceptschemes = async () => {
   try {
-    conceptschemes.value = await apiService.getConceptschemes();
+    conceptschemes.value = (await apiService.getConceptschemes()).filter((cs) => !cs.subject.includes('external'));
   } catch (error) {
     console.error(t('api.errors.fetch.title', { item: t('entities.conceptscheme', 2) }), error);
     toast.add({
@@ -142,7 +142,7 @@ const columns: TableColumn<ConceptschemeRow>[] = [
         h(UButton, {
           as: 'a',
           to: { name: 'AdminConceptscheme', params: { id: row.original.id } },
-          label: t('grid.columns.actions.items'),
+          label: t('grid.columns.actions.concepts'),
           icon: 'i-lucide-eye',
           color: 'primary',
           variant: 'outline',
