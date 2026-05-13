@@ -99,7 +99,7 @@ import { getPaginationRowModel } from '@tanstack/vue-table';
 import { storeToRefs } from 'pinia';
 import { capitalize, computed, h, ref, resolveComponent, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
@@ -107,6 +107,7 @@ const UBadge = resolveComponent('UBadge');
 const { t } = useI18n();
 const toast = useToast();
 const route = useRoute();
+const router = useRouter();
 
 const CONCEPT_LOADING_KEY = 'concept-fetch';
 
@@ -191,7 +192,11 @@ const deleteConcept = async () => {
 
 // Initial fetch
 await fetchConceptscheme();
-await fetchConcepts();
+if (selectedConceptscheme.value?.subject.includes('external')) {
+  await router.replace({ name: 'AdminConceptschemes' });
+} else {
+  await fetchConcepts();
+}
 
 adminUiStore.$onAction(async ({ name }) => {
   // Refresh concepts list after closing the concept modal

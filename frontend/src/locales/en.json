@@ -53,7 +53,7 @@
         "publish": "Publish",
         "merge": "Merge",
         "delete": "Delete",
-        "items": "Items"
+        "concepts": "Concepts"
       }
     }
   },
@@ -367,7 +367,7 @@
   },
   "entities": {
     "conceptscheme": "conceptscheme | conceptschemes",
-    "concept": "concept or collection | concepts or collections",
+    "concept": "concept | concepts",
     "provider": "provider | providers",
     "language": "language | languages",
     "label": "label | labels",
