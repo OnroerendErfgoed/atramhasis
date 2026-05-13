@@ -55,7 +55,7 @@
         </div>
       </template>
       <template #expanded="{ row }">
-        <ConceptExpanded :scheme-id="schemeId" :concept-id="+row.original.id" />
+        <ConceptExpanded :scheme-id="schemeId" :concept-id="row.original.id" />
       </template>
     </UTable>
 
@@ -97,15 +97,16 @@ import { useConceptschemeStore } from '@stores/conceptscheme';
 import { useListStore } from '@stores/list';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import { storeToRefs } from 'pinia';
-import { capitalize, computed, h, ref, resolveComponent, useTemplateRef, watch } from 'vue';
+import { capitalize, computed, h, onMounted, ref, resolveComponent, useTemplateRef, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
 
 const { t } = useI18n();
 const toast = useToast();
+const router = useRouter();
 const route = useRoute();
 
 const CONCEPT_LOADING_KEY = 'concept-fetch';
@@ -199,6 +200,30 @@ adminUiStore.$onAction(async ({ name }) => {
     await fetchConcepts();
   }
 });
+
+onMounted(() => {
+  if (route.query.edit) {
+    const conceptId = route.query.edit as string;
+    const concept = concepts.value.find((c) => c.id === conceptId);
+    if (concept) {
+      openConceptModal(concept.id);
+    }
+    router.replace({ query: undefined });
+  }
+});
+
+const openConceptModal = async (conceptId: string) => {
+  try {
+    adminUiStore.startLoading(CONCEPT_LOADING_KEY);
+    const concept = await conceptStore.getConcept(selectedConceptscheme.value?.id as string, conceptId, true);
+    conceptStore.setSelectedConcept(concept as Concept);
+    adminUiStore.openConceptModal(ModalMode.EDIT);
+  } catch (error) {
+    console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);
+  } finally {
+    adminUiStore.stopLoading(CONCEPT_LOADING_KEY);
+  }
+};
 
 const tableData = computed<OverviewConcept[]>(() => {
   let rows = concepts.value.map((c) => ({
@@ -329,22 +354,7 @@ const columns: TableColumn<OverviewConcept>[] = [
           color: 'primary',
           variant: 'outline',
           size: 'xs',
-          onClick: async () => {
-            try {
-              adminUiStore.startLoading(CONCEPT_LOADING_KEY);
-              const concept = await conceptStore.getConcept(
-                selectedConceptscheme.value?.id as string,
-                row.original.id,
-                true
-              );
-              conceptStore.setSelectedConcept(concept as Concept);
-              adminUiStore.openConceptModal(ModalMode.EDIT);
-            } catch (error) {
-              console.error(t('api.errors.fetch.title', { item: t('entities.concept') }), error);
-            } finally {
-              adminUiStore.stopLoading(CONCEPT_LOADING_KEY);
-            }
-          },
+          onClick: async () => openConceptModal(row.original.id),
         }),
         h(UButton, {
           icon: 'i-lucide-trash-2',

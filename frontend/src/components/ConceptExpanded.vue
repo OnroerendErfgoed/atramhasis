@@ -52,7 +52,7 @@ import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   schemeId: string;
-  conceptId: number;
+  conceptId: string;
 }>();
 
 const { t } = useI18n();
