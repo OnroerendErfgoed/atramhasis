@@ -34,6 +34,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const toast = useToast();
 
 const apiService = new ApiService();
 
@@ -62,10 +63,22 @@ onMounted(async () => {
   if (!relationModalIsOpen.value) {
     return;
   }
-  adminUiStore.startLoading(RELATION_MODAL_LOADING_KEY);
-  const data = await apiService.getTreeByConceptscheme(props.scheme);
-  treeItems.value = formatTreeItems(data);
-  adminUiStore.stopLoading(RELATION_MODAL_LOADING_KEY);
+  try {
+    adminUiStore.startLoading(RELATION_MODAL_LOADING_KEY);
+    const data = await apiService.getTreeByConceptscheme(props.scheme);
+    treeItems.value = formatTreeItems(data);
+  } catch (error) {
+    console.error(t('api.errors.fetch.title', { item: t('entities.tree', 1) }), error);
+    toast.add({
+      title: t('api.errors.fetch.title', { item: t('entities.tree', 1) }),
+      description: t('api.errors.fetch.description', { item: t('entities.tree', 1) }),
+      icon: 'i-lucide-alert-triangle',
+      color: 'error',
+    });
+    adminUiStore.closeRelationModal();
+  } finally {
+    adminUiStore.stopLoading(RELATION_MODAL_LOADING_KEY);
+  }
 });
 
 const add = () => {
