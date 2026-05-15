@@ -1,7 +1,7 @@
 import type { ConceptTypeEnum, Label, MatchTypeEnum, Note, Source } from '@models/util';
 
 export interface OverviewConcept {
-  id: number;
+  id: string;
   uri: string;
   label: string;
   type: ConceptTypeEnum;
@@ -24,7 +24,7 @@ export interface Concept extends OverviewConcept {
 
 export interface ConceptForm {
   type: ConceptTypeEnum;
-  id?: number;
+  id?: string;
   labels: Label[];
   notes: Note[];
   sources: Source[];

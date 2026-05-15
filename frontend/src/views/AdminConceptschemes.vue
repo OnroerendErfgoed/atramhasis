@@ -57,7 +57,7 @@ export interface ConceptschemeRow {
 </script>
 
 <script setup lang="ts">
-import { h, ref, computed, resolveComponent, useTemplateRef } from 'vue';
+import { h, ref, computed, resolveComponent, useTemplateRef, onMounted } from 'vue';
 import { getPaginationRowModel } from '@tanstack/vue-table';
 import type { TableColumn } from '@nuxt/ui';
 import type { Conceptscheme, OverviewConceptscheme } from '@models/conceptscheme';
@@ -66,6 +66,7 @@ import { useI18n } from 'vue-i18n';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
+import { useRoute, useRouter } from 'vue-router';
 
 const UButton = resolveComponent('UButton');
 
@@ -75,6 +76,8 @@ const conceptschemeStore = useConceptschemeStore();
 const adminUiStore = useAdminUiStore();
 const { conceptschemeModalKey } = storeToRefs(adminUiStore);
 const apiService = new ApiService();
+const router = useRouter();
+const route = useRoute();
 
 const CONCEPTSCHEME_LOADING_KEY = 'conceptscheme-fetch';
 
@@ -103,6 +106,30 @@ adminUiStore.$onAction(({ name }) => {
     fetchConceptschemes();
   }
 });
+
+onMounted(() => {
+  if (route.query.edit) {
+    const conceptschemeId = route.query.edit as string;
+    const conceptscheme = conceptschemes.value.find((cs) => cs.id === conceptschemeId);
+    if (conceptscheme) {
+      openConceptschemeModal(conceptscheme.id);
+    }
+    router.replace({ query: undefined });
+  }
+});
+
+const openConceptschemeModal = async (id: string) => {
+  try {
+    adminUiStore.startLoading(CONCEPTSCHEME_LOADING_KEY);
+    const conceptscheme = await conceptschemeStore.getConceptscheme(id, true);
+    conceptschemeStore.setSelectedConceptscheme(conceptscheme as Conceptscheme);
+    adminUiStore.openConceptschemeModal();
+  } catch (error) {
+    console.error(t('api.errors.fetch.title', { item: t('entities.conceptscheme') }), error);
+  } finally {
+    adminUiStore.stopLoading(CONCEPTSCHEME_LOADING_KEY);
+  }
+};
 
 const tableData = computed<ConceptschemeRow[]>(() =>
   conceptschemes.value.map((cs) => ({
@@ -158,18 +185,7 @@ const columns: TableColumn<ConceptschemeRow>[] = [
             color: 'primary',
             variant: 'outline',
             size: 'xs',
-            onClick: async () => {
-              try {
-                adminUiStore.startLoading(CONCEPTSCHEME_LOADING_KEY);
-                const conceptscheme = await conceptschemeStore.getConceptscheme(row.original.id, true);
-                conceptschemeStore.setSelectedConceptscheme(conceptscheme as Conceptscheme);
-                adminUiStore.openConceptschemeModal();
-              } catch (error) {
-                console.error(t('api.errors.fetch.title', { item: t('entities.conceptscheme') }), error);
-              } finally {
-                adminUiStore.stopLoading(CONCEPTSCHEME_LOADING_KEY);
-              }
-            },
+            onClick: async () => openConceptschemeModal(row.original.id),
           })
         );
       }
