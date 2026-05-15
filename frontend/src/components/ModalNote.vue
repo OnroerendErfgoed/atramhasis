@@ -46,10 +46,15 @@
           :hint="t('components.modalNote.form.note.hint')"
           :error="(v$.note.$errors[0]?.$message as string) || false"
         >
-          <div class="rounded-md border border-gray-300 dark:border-gray-700 min-h-32">
+          <div
+            class="rounded-md border border-gray-300 dark:border-gray-700 min-h-32"
+            @mouseover="onEditorMouseover"
+            @mouseleave="onEditorMouseleave"
+          >
             <UEditor
               v-slot="{ editor }"
               v-model="form.note"
+              :handlers="customHandlers"
               :placeholder="t('components.modalNote.form.note.placeholder')"
             >
               <div class="border-b border-gray-300 px-2 py-1 dark:border-gray-700">
@@ -67,6 +72,15 @@
       </div>
     </template>
   </UModal>
+
+  <ModalEditorLink
+    v-model:open="linkModalOpen"
+    v-model:url="linkUrl"
+    :is-link-active="isLinkActive"
+    :hovered-link="hoveredLink"
+    @save="saveLink"
+    @remove="removeLink"
+  />
 </template>
 
 <script setup lang="ts">
@@ -79,6 +93,7 @@ import { useI18n } from 'vue-i18n';
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 import { useNoteStore } from '@stores/note';
+import { useEditorLink } from '@composables/useEditorLink';
 import type { EditorToolbarItem } from '@nuxt/ui';
 
 defineProps<{
@@ -102,10 +117,22 @@ const { selectedNote } = storeToRefs(noteStore);
 const listStore = useListStore();
 const { languageOptions, noteTypes } = storeToRefs(listStore);
 
-const items: EditorToolbarItem[] = [
+const {
+  customHandlers,
+  linkModalOpen,
+  linkUrl,
+  isLinkActive,
+  saveLink,
+  removeLink,
+  hoveredLink,
+  onEditorMouseover,
+  onEditorMouseleave,
+} = useEditorLink();
+
+const items: EditorToolbarItem<typeof customHandlers>[] = [
   { kind: 'mark', mark: 'bold', icon: 'i-lucide-bold' },
   { kind: 'mark', mark: 'italic', icon: 'i-lucide-italic' },
-  { kind: 'link', icon: 'i-lucide-link' },
+  { kind: 'customLink', icon: 'i-lucide-link' },
 ];
 
 const save = async () => {

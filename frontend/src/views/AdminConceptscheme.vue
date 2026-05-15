@@ -106,7 +106,6 @@ const UBadge = resolveComponent('UBadge');
 
 const { t } = useI18n();
 const toast = useToast();
-const router = useRouter();
 const route = useRoute();
 const router = useRouter();
 
