@@ -110,7 +110,7 @@ import type { TabsItem } from '@nuxt/ui';
 import { useAdminUiStore } from '@stores/admin-ui';
 import { cloneDeep } from 'lodash-es';
 import { storeToRefs } from 'pinia';
-import { capitalize, computed, onBeforeMount, ref, watch } from 'vue';
+import { capitalize, computed, onBeforeMount, ref, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { ApiService } from '@services/api.service';
 import { useApiError } from '@composables/useApiError';
@@ -138,6 +138,7 @@ const { conceptTypes, yesNoOptions } = storeToRefs(listStore);
 const apiService = new ApiService();
 const { handleApiError } = useApiError();
 const CONCEPT_MODAL_LOADING_KEY = 'concept-modal-submit';
+const isInitializingForm = ref(true);
 const isConcept = computed(() => form.value.type === ConceptTypeEnum.CONCEPT);
 
 // Form state
@@ -165,7 +166,7 @@ const form = ref<ConceptForm>({
 });
 
 // Initial population of form when editing
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (isEditMode.value && selectedConcept.value) {
     const conceptClone = cloneDeep(selectedConcept.value);
     form.value = {
@@ -191,6 +192,9 @@ onBeforeMount(() => {
       },
     };
   }
+
+  await nextTick();
+  isInitializingForm.value = false;
 });
 
 const activeTab = ref('0');
@@ -222,6 +226,8 @@ const tabs = computed<TabsItem[]>(() => [
 watch(
   () => form.value.type,
   () => {
+    if (isInitializingForm.value) return;
+
     if (activeTab.value === tabs.value.findIndex((t) => t.slot === 'matches').toString() && !isConcept.value) {
       activeTab.value = '0';
     }
