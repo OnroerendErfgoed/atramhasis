@@ -242,25 +242,25 @@ watch(
 );
 
 // Save handler
-const conceptRelationKeys = [
+// Excluding MEMBER_OF because it can be added to both concepts and collections
+const conceptRelationKeysToDelete = [
   RelationTypeEnum.BROADER,
   RelationTypeEnum.NARROWER,
   RelationTypeEnum.RELATED,
-  RelationTypeEnum.MEMBER_OF,
   RelationTypeEnum.SUBORDINATE_ARRAYS,
 ];
-const collectionRelationKeys = [RelationTypeEnum.MEMBERS, RelationTypeEnum.MEMBER_OF, RelationTypeEnum.SUPERORDINATES];
+const collectionRelationKeysToDelete = [RelationTypeEnum.MEMBERS, RelationTypeEnum.SUPERORDINATES];
 const save = async () => {
   try {
     adminUiStore.startLoading(CONCEPT_MODAL_LOADING_KEY);
     const payload = { ...form.value };
     if (isConcept.value) {
       // Remove relation types that are not applicable to concepts
-      collectionRelationKeys.forEach((key) => delete payload[key]);
+      collectionRelationKeysToDelete.forEach((key) => delete payload[key]);
       delete payload.infer_concept_relations;
     } else {
       // Remove relation types that are not applicable to collections
-      conceptRelationKeys.forEach((key) => delete payload[key]);
+      conceptRelationKeysToDelete.forEach((key) => delete payload[key]);
       delete payload.matches;
     }
     if (isEditMode.value) {

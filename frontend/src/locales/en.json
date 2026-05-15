@@ -374,7 +374,8 @@
     "note": "note | notes",
     "source": "source | sources",
     "relation": "relation | relations",
-    "match": "match | matches"
+    "match": "match | matches",
+    "tree": "tree | trees"
   },
   "lists": {
     "labelTypes": {
