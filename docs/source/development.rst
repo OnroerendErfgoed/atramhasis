@@ -11,7 +11,7 @@ Atramhasis is a python_ webapplication that is being developed within the
 pyramid_ framework. Other major technologies used are sqlalchemy_ as the ORM 
 and :term:`Jinja2` as the templating framework.
 
-Client side the main technologies being used are Zurb Foundation and Dojo toolkit.
+Client side the main technologies being used are Zurb Foundation and a Vue 3 application built with Vite.
 
 While Atramhasis is an editor for creating and editing :term:`SKOS` vocabularies,
 it uses other libraries that are more geared towards using a vocabulary in an
@@ -120,69 +120,62 @@ Afterward, run pip-compile to generate the requirements files.
     $ pip-compile $PIP_COMPILE_ARGS;
     $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
 
-Admin development
-=================
+Admin and frontend development
+==============================
 
-To work on the admin part, you'll need `npm`_, `grunt`_ and `java`_ installed.
-Consult your operating system documentation on how to install these. The following
-instructions will assume you're running a recent Debian based Linux distribution.
+The admin client was migrated from Dojo to Vue 3.
+To work on the frontend/admin client, install `Node.js`_ and `pnpm`_.
 
-Confirmed known versions are as followed:
+Required version ranges are:
+
+- Node.js: `>=22.12.0`
+- pnpm: `>=9`
 
 .. code-block:: bash
 
-    $ npm -v
-    10.2.4
-
+    # Verify installed versions
     $ node -v
-    v21.6.2
+    $ pnpm -v
 
-    $ grunt -V
-    grunt-cli v1.4.3
-
+If pnpm is not installed yet, you can enable it through corepack:
 
 .. code-block:: bash
 
-    # install npm and grunt-cli
-    $ sudo apt install nodejs
-    $ sudo apt install npm
-    $ sudo npm install -g grunt-cli
+    $ corepack enable
+    $ corepack prepare pnpm@latest --activate
 
-The JS dependencies are installed via a build hook (https://github.com/OnroerendErfgoed/atramhasis/blob/develop/build_hook.py)
-during the `General installation <#general-installation>`_.
-This will create a JS build and place the resulting files in :file:`atramhasis/static/admin/dist`.
-The build hook is triggered when installing the project via `pip install -e .`, but also when building a wheel or an sdist via `hatch build`."
-
-If you want to install the JS dependencies manually, you can do so by running the following commands:
+The frontend source lives in :file:`frontend`.
 
 .. code-block:: bash
 
-    # install JS dependencies for public site using npm
-    $ cd atramhasis/static
-    $ npm install
-    # install JS dependencies for admin using npm
-    $ cd atramhasis/static/admin
-    $ npm install
+    $ cd frontend
+    $ pnpm install
 
-These commands will install a couple of JS libraries that Atramhasis uses in
-:file:`/atramhasis/static/node_modules` and :file:`/atramhasis/static/admin/node_modules` and a set of tools to be able
-to generate JS builds. Builds are carried out through a simple `grunt`_ file:
+    # Start the Vue app in dev mode
+    $ pnpm dev
 
-.. code-block:: bash
+    # Type-check the Vue + TS application
+    $ pnpm type-check
 
-   # Build a dojo distribution
-   $ cd atramhasis/static/admin
-   $ grunt -v build
+    # Build production assets
+    $ pnpm build
 
-This will create a build and place the resulting files in
-:file:`atramhasis/static/admin/dist`. The web application can be told to use
-this build by setting `dojo.mode` in :file:`development.ini` to `dist`.
+The production build outputs static assets into :file:`atramhasis/static/dist`.
+In :file:`development.ini`, use `vue.mode` to control whether source (`src`) or
+built (`dist`) frontend assets are used.
 
-Frontend development
-====================
+When building a distribution with `hatch build`, the build hook installs frontend
+dependencies and runs the frontend build automatically.
 
-When updating the frontend templates, you might want to add extra translations.
-This can be done by placing {% trans %} tags in the templates
+Translations
+============
+
+Translations are handled differently for backend templates and the Vue admin frontend.
+
+Backend/template translations
+-----------------------------
+
+When updating the backend templates, add translation keys with {% trans %} tags in the templates.
 
 .. code-block:: html
 
@@ -226,6 +219,25 @@ language switcher. If you want to add your new language, you need to edit your
 
 After restarting your server you will now have the option of switching to
 German.
+
+Admin frontend translations (Vue i18n)
+--------------------------------------
+
+The Vue admin frontend uses `vue-i18n`_ with locale JSON files in :file:`frontend/src/locales`.
+Currently :file:`frontend/src/i18n.ts` loads :file:`frontend/src/locales/en.json`.
+
+To add or update admin UI translations:
+
+1. Edit translation keys in :file:`frontend/src/locales/en.json`.
+2. If adding another locale, create a new JSON file in :file:`frontend/src/locales`.
+3. Register that locale in :file:`frontend/src/i18n.ts` by importing the file and adding it to `messages`.
+4. Run frontend checks/build:
+
+.. code-block:: bash
+
+    $ cd frontend
+    $ pnpm type-check
+    $ pnpm build
 
 Update Cookiecutters
 ====================
@@ -363,7 +375,9 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 .. _orgoro/coverage: https://github.com/orgoro/coverage
 .. _pytest: https://pytest.org
 .. _npm: https://www.npmjs.org/
-.. _grunt: https://gruntjs.com
+.. _pnpm: https://pnpm.io
+.. _vue-i18n: https://vue-i18n.intlify.dev/
+.. _Node.js: https://nodejs.org
 .. _waitress: https://waitress.readthedocs.io
 .. _python: https://wwww.python.org
 .. _pyramid: https://www.pylonsproject.org/
@@ -374,4 +388,3 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 .. _pyramid_skosprovider: https://pyramid-skosprovider.readthedocs.io
 .. _skosprovider_getty: https://skosprovider-getty.readthedocs.io
 .. _skosprovider_heritagedata: https://skosprovider-heritagedata.readthedocs.io
-.. _java: https://www.java.com/en/download/manual.jsp
