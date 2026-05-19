@@ -62,6 +62,17 @@
       "copy": "Copy to clipboard | Copy {item} to clipboard",
       "copied": "Copied to clipboard."
     },
+    "editorLinkModal": {
+      "title": "Insert link",
+      "form": {
+        "url": {
+          "label": "URL"
+        }
+      },
+      "actions": {
+        "remove": "Remove link"
+      }
+    },
     "conceptExpanded": {
       "labels": "Labels",
       "prefLabel": "Preferred labels",
