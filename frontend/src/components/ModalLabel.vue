@@ -55,7 +55,7 @@
     <template #footer="{ close }">
       <div class="flex w-full justify-end gap-2">
         <UButton :label="t('actions.cancel')" color="neutral" variant="outline" @click="close" />
-        <UButton :label="t('actions.save')" @click="save" />
+        <UButton :label="t(`actions.${labelModalMode === ModalMode.ADD ? 'add' : 'edit'}`)" @click="save" />
       </div>
     </template>
   </UModal>
