@@ -123,7 +123,7 @@ Afterward, run pip-compile to generate the requirements files.
 Admin and frontend development
 ==============================
 
-The admin client was migrated from Dojo to Vue 3.
+Since version 3.3.0, the admin client uses Vue 3.
 To work on the frontend/admin client, install `Node.js`_ and `pnpm`_.
 
 Required version ranges are:
@@ -136,6 +136,15 @@ Required version ranges are:
     # Verify installed versions
     $ node -v
     $ pnpm -v
+
+If Node.js is not installed yet, install it first. We recommend using `fnm`_
+so you can manage Node.js versions per project:
+
+.. code-block:: bash
+
+    # Install Node.js (LTS) with fnm
+    $ fnm install --lts
+    $ fnm use lts-latest
 
 If pnpm is not installed yet, you can enable it through corepack:
 
@@ -376,6 +385,7 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 .. _pytest: https://pytest.org
 .. _npm: https://www.npmjs.org/
 .. _pnpm: https://pnpm.io
+.. _fnm: https://github.com/Schniz/fnm
 .. _vue-i18n: https://vue-i18n.intlify.dev/
 .. _Node.js: https://nodejs.org
 .. _waitress: https://waitress.readthedocs.io
