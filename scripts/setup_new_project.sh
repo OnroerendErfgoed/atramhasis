@@ -136,5 +136,3 @@ else
   echo "  dump_rdf development.ini  # if available"
   echo "  pserve development.ini"
 fi
-
-echo "Done."
