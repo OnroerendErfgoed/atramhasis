@@ -1,0 +1,99 @@
+import type { Conceptscheme, OverviewConceptscheme } from '@models/conceptscheme';
+import type { Concept, ConceptForm, OverviewConcept } from '@models/concept';
+import { HttpService } from './http.service';
+import type { Provider, ProviderForm } from '@models/provider';
+import type { Language } from '@models/language';
+import type { Tree } from '@models/tree';
+
+export class ApiService extends HttpService {
+  constructor() {
+    super();
+  }
+
+  // Getters
+  async getConceptschemes(): Promise<OverviewConceptscheme[]> {
+    return (await this.get<OverviewConceptscheme[]>('/conceptschemes')).data;
+  }
+
+  async getConceptscheme(schemeId: string): Promise<Conceptscheme> {
+    return (await this.get<Conceptscheme>(`/conceptschemes/${schemeId}`)).data;
+  }
+
+  async getConceptsByConceptscheme(
+    schemeId: string,
+    options?: { label?: string; match?: string; type?: string; sort?: string }
+  ): Promise<OverviewConcept[]> {
+    return (await this.get<OverviewConcept[]>(`/conceptschemes/${schemeId}/c`, { params: options })).data;
+  }
+
+  async getConceptByConceptschemeAndId(schemeId: string, conceptId: number): Promise<Concept> {
+    return (await this.get<Concept>(`/conceptschemes/${schemeId}/c/${conceptId}`)).data;
+  }
+
+  async getTreeByConceptscheme(schemeId: string): Promise<Tree[]> {
+    return (await this.get<Tree[]>(`/conceptschemes/${schemeId}/tree`)).data;
+  }
+
+  async getProvider(providerId: string): Promise<Provider> {
+    return (await this.get<Provider>(`/providers/${providerId}`)).data;
+  }
+
+  async getProviders(): Promise<Provider[]> {
+    return (await this.get<Provider[]>('/providers')).data;
+  }
+
+  async getLanguage(languageId: string): Promise<Language> {
+    return (await this.get<Language>(`/languages/${languageId}`)).data;
+  }
+
+  async getLanguages(): Promise<Language[]> {
+    return (await this.get<Language[]>('/languages')).data;
+  }
+
+  async getByUri<T>(uri: string): Promise<T> {
+    return (await this.get<T>(`/uris/${uri}`)).data;
+  }
+
+  // Creators
+  async createConcept(schemeId: string, concept: ConceptForm): Promise<Concept> {
+    return (await this.post<Concept, ConceptForm>(`/conceptschemes/${schemeId}/c`, concept)).data;
+  }
+
+  async createProvider(provider: ProviderForm): Promise<Provider> {
+    return (await this.post<Provider, ProviderForm>('/providers', provider)).data;
+  }
+
+  async createLanguage(language: Language): Promise<Language> {
+    return this.updateLanguage(language);
+  }
+
+  // Updaters
+  async updateConceptscheme(conceptscheme: Conceptscheme): Promise<Conceptscheme> {
+    return (await this.put<Conceptscheme, Conceptscheme>(`/conceptschemes/${conceptscheme.id}`, conceptscheme)).data;
+  }
+
+  async updateConcept(schemeId: string, concept: ConceptForm): Promise<Concept> {
+    return (await this.put<Concept, ConceptForm>(`/conceptschemes/${schemeId}/c/${concept.id}`, concept)).data;
+  }
+
+  async updateLanguage(language: Language): Promise<Language> {
+    return (await this.put<Language, Language>(`/languages/${language.id}`, language)).data;
+  }
+
+  async updateProvider(provider: Provider): Promise<Provider> {
+    return (await this.put<Provider, Provider>(`/providers/${provider.id}`, provider)).data;
+  }
+
+  // Deleters
+  async deleteConcept(conceptschemeId: string, conceptId: string): Promise<void> {
+    await this.delete(`/conceptschemes/${conceptschemeId}/c/${conceptId}`);
+  }
+
+  async deleteProvider(providerId: string): Promise<void> {
+    await this.delete(`/providers/${providerId}`);
+  }
+
+  async deleteLanguage(languageId: string): Promise<void> {
+    await this.delete(`/languages/${languageId}`);
+  }
+}
