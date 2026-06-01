@@ -64,7 +64,8 @@ watch(
   () => rowSelection.value,
   async () => {
     await nextTick();
-    selectedMatches.value = table.value?.tableApi.getSelectedRowModel().flatRows.map((r) => r.original) ?? [];
+    selectedMatches.value =
+      table.value?.tableApi.getSelectedRowModel().flatRows.map((r: TableRow<Match>) => r.original) ?? [];
   },
   { deep: true }
 );

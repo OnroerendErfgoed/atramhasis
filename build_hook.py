@@ -35,7 +35,7 @@ class BuildHook(BuildHookInterface):
         backend = root_dir / "atramhasis"
 
         subprocess.run(["pnpm", "install"], cwd=frontend, check=True)
-        subprocess.run(["pnpm", "build"], cwd=frontend, check=False)
+        subprocess.run(["pnpm", "build"], cwd=frontend, check=True)
 
         static = backend / "static"
         static_dist = static / "dist"
