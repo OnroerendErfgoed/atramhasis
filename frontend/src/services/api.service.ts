@@ -26,7 +26,7 @@ export class ApiService extends HttpService {
     return (await this.get<OverviewConcept[]>(`/conceptschemes/${schemeId}/c`, { params: options })).data;
   }
 
-  async getConceptByConceptschemeAndId(schemeId: string, conceptId: number): Promise<Concept> {
+  async getConceptByConceptschemeAndId(schemeId: string, conceptId: string): Promise<Concept> {
     return (await this.get<Concept>(`/conceptschemes/${schemeId}/c/${conceptId}`)).data;
   }
 
