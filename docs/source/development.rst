@@ -311,7 +311,7 @@ refer to the LDF server documentation for troubleshooting.
 .. code-block:: bash
 
     # Install ldf-server
-    $ [sudo] npm install -g @ldf/server
+    $ [sudo] pnpm add -g @ldf/server
     # Run ldf-server
     $ ldf-server ldf_server_config.json
 
@@ -383,7 +383,6 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 .. _GitHub Actions workflows: https://github.com/OnroerendErfgoed/atramhasis/actions
 .. _orgoro/coverage: https://github.com/orgoro/coverage
 .. _pytest: https://pytest.org
-.. _npm: https://www.npmjs.org/
 .. _pnpm: https://pnpm.io
 .. _fnm: https://github.com/Schniz/fnm
 .. _vue-i18n: https://vue-i18n.intlify.dev/
