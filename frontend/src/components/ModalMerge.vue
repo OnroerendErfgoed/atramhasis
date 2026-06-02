@@ -64,7 +64,8 @@ watch(
   () => rowSelection.value,
   async () => {
     await nextTick();
-    selectedMatches.value = table.value?.tableApi.getSelectedRowModel().flatRows.map((r) => r.original) ?? [];
+    selectedMatches.value =
+      table.value?.tableApi.getSelectedRowModel().flatRows.map((r: TableRow<Match>) => r.original) ?? [];
   },
   { deep: true }
 );
@@ -123,7 +124,7 @@ const getMatch = async (uri: string): Promise<Match> => {
   if (match) return match;
 
   const byUri = await apiService.getByUri<{ id: string; concept_scheme: { id: string } }>(uri);
-  const concept = await conceptStore.getConcept(byUri.concept_scheme.id, Number(byUri.id));
+  const concept = await conceptStore.getConcept(byUri.concept_scheme.id, byUri.id);
 
   matchStore.setMatch({ uri, label: concept?.label || uri }, concept);
 

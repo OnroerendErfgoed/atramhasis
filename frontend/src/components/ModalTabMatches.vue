@@ -87,7 +87,7 @@ const toMatchRows = async (items: string[] = []): Promise<Match[]> => {
           concept_scheme: { id: string };
         }>(uri);
 
-        const concept = await conceptStore.getConcept(byUri.concept_scheme.id, Number(byUri.id));
+        const concept = await conceptStore.getConcept(byUri.concept_scheme.id, byUri.id);
         matchStore.setMatch({ uri, label: concept?.label || uri }, concept);
         return { label: concept?.label || uri, uri: concept?.uri || uri };
       } catch {
