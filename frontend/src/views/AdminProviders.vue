@@ -4,6 +4,7 @@
     <UTable
       ref="tableRef"
       v-model:pagination="pagination"
+      v-model:column-pinning="columnPinning"
       sticky
       class="flex-1 min-h-0 rounded-t-lg"
       :data="providers"
@@ -37,11 +38,12 @@
 
 <script setup lang="ts">
 import type { Provider } from '@models/provider';
-import type { TableColumn } from '@nuxt/ui';
 import { ApiService } from '@services/api.service';
+import OverflowTooltip from '@components/OverflowTooltip.vue';
 import { useAdminUiStore } from '@/stores/admin-ui';
 import { getPaginationRowModel } from '@tanstack/vue-table';
-import { h, computed, ref, useTemplateRef, resolveComponent, capitalize } from 'vue';
+import type { TableColumn } from '@nuxt/ui';
+import { computed, h, ref, resolveComponent, useTemplateRef, capitalize } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { ModalMode } from '@models/util';
 import { useProviderStore } from '@stores/provider';
@@ -124,6 +126,10 @@ const pagination = ref({
   pageSize: 15,
 });
 
+const columnPinning = ref({
+  right: ['actions'],
+});
+
 const columns: TableColumn<Provider>[] = [
   {
     accessorKey: 'id',
@@ -138,6 +144,8 @@ const columns: TableColumn<Provider>[] = [
         td: 'max-w-3xs truncate',
       },
     },
+    cell: ({ row }) =>
+      h(OverflowTooltip, { text: row.original.conceptscheme_uri ?? '' }, () => row.original.conceptscheme_uri ?? ''),
   },
   {
     accessorKey: 'uri_pattern',
@@ -148,6 +156,8 @@ const columns: TableColumn<Provider>[] = [
         td: 'max-w-3xs truncate',
       },
     },
+    cell: ({ row }) =>
+      h(OverflowTooltip, { text: row.original.uri_pattern ?? '' }, () => row.original.uri_pattern ?? ''),
   },
   {
     accessorKey: 'type',
@@ -172,6 +182,13 @@ const columns: TableColumn<Provider>[] = [
   {
     id: 'actions',
     header: t('grid.columns.labels.actions'),
+    size: 140,
+    meta: {
+      class: {
+        th: 'bg-default',
+        td: 'bg-default',
+      },
+    },
     cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-1' }, [
         ...(!row.original.subject?.includes('external')
