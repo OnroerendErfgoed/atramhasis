@@ -35,7 +35,7 @@
       v-model:sorting="sorting"
       sticky
       class="flex-1 min-h-0"
-      :ui="{ tr: 'data-[expanded=true]:bg-elevated/50' }"
+      :ui="{ tr: 'data-[expanded=true]:bg-default' }"
       :data="tableData"
       :columns="columns"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"

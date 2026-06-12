@@ -183,12 +183,6 @@ const columns: TableColumn<Provider>[] = [
     id: 'actions',
     header: t('grid.columns.labels.actions'),
     size: 140,
-    meta: {
-      class: {
-        th: 'bg-default',
-        td: 'bg-default',
-      },
-    },
     cell: ({ row }) =>
       h('div', { class: 'flex items-center gap-1' }, [
         ...(!row.original.subject?.includes('external')
