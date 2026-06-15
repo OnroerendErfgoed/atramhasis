@@ -30,7 +30,38 @@ export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
-    ui(),
+    ui({
+      ui: {
+        table: {
+          slots: {
+            tr: 'bg-default',
+            th: 'bg-default px-4 py-3.5 text-sm text-highlighted text-left rtl:text-right font-semibold [&:has([role=checkbox])]:pe-0',
+            td: 'bg-default p-4 text-sm text-muted whitespace-nowrap [&:has([role=checkbox])]:pe-0',
+            tbody: 'isolate divide-y divide-default',
+          },
+          variants: {
+            pinned: {
+              true: {
+                th: 'sticky bg-default z-1',
+                td: 'sticky bg-default z-1',
+              },
+            },
+            sticky: {
+              true: {
+                thead: 'sticky top-0 inset-x-0 bg-default z-1',
+                tfoot: 'sticky bottom-0 inset-x-0 bg-default z-1',
+              },
+              header: {
+                thead: 'sticky top-0 inset-x-0 bg-default z-1',
+              },
+              footer: {
+                tfoot: 'sticky bottom-0 inset-x-0 bg-default z-1',
+              },
+            },
+          },
+        },
+      },
+    }),
     VueI18nPlugin({
       include: resolve(__dirname, './src/locales/**'),
     }),
