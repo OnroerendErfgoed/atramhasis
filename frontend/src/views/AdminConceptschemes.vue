@@ -4,6 +4,7 @@
     <UTable
       ref="tableRef"
       v-model:pagination="pagination"
+      v-model:sorting="sorting"
       sticky
       class="flex-1 min-h-0 rounded-t-lg"
       :data="tableData"
@@ -67,6 +68,7 @@ import { useAdminUiStore } from '@stores/admin-ui';
 import { useConceptschemeStore } from '@stores/conceptscheme';
 import { storeToRefs } from 'pinia';
 import { useRoute, useRouter } from 'vue-router';
+import SortableHeader from '@components/SortableHeader.vue';
 
 const UButton = resolveComponent('UButton');
 
@@ -149,11 +151,12 @@ const pagination = ref({
   pageIndex: 0,
   pageSize: 15,
 });
+const sorting = ref([]);
 
 const columns: TableColumn<ConceptschemeRow>[] = [
   {
     accessorKey: 'label',
-    header: t('grid.columns.labels.label'),
+    header: ({ column }) => h(SortableHeader, { label: t('grid.columns.labels.label'), column }),
     meta: {
       class: {
         th: 'w-full',
