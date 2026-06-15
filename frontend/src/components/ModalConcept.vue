@@ -12,7 +12,7 @@
     class="max-w-4xl"
   >
     <template #body>
-      <div class="flex h-[34rem] w-full flex-col">
+      <div class="flex h-[70vh] w-full flex-col">
         <UForm class="space-y-4 rounded-md bg-muted p-4">
           <div class="grid grid-cols-3 gap-4">
             <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
