@@ -72,6 +72,7 @@
     </div>
 
     <ModalConcept :key="conceptModalKey" />
+    <ModalImportConcept :key="importConceptModalKey" />
     <ModalMerge :key="mergeModalKey" />
     <ModalDelete
       v-model:open="modalDeleteIsOpen"
@@ -110,7 +111,7 @@ const router = useRouter();
 const CONCEPT_LOADING_KEY = 'concept-fetch';
 
 const adminUiStore = useAdminUiStore();
-const { conceptModalKey, mergeModalKey } = storeToRefs(adminUiStore);
+const { conceptModalKey, mergeModalKey, importConceptModalKey } = storeToRefs(adminUiStore);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
