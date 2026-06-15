@@ -42,9 +42,7 @@
     >
       <template #label-cell="{ row }">
         <div>
-          <a href="#" class="font-medium text-primary hover:underline">
-            {{ row.original.label }}
-          </a>
+          <span class="font-medium">{{ row.original.label }}</span>
           <div class="mt-0.5 flex items-center gap-1 text-xs text-muted">
             <span>{{ row.original.uri }}</span>
             <ClipboardCopy

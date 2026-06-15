@@ -137,3 +137,26 @@ button,
 .tiptap.ProseMirror {
   padding: 0 0.5rem;
 }
+
+/* HTML markup for editor cells */
+.html-cell,
+.html-cell u,
+.html-cell a,
+.html-cell a:link,
+.html-cell a:visited,
+.html-cell a:active {
+  text-decoration: none !important;
+}
+
+.html-cell a,
+.html-cell a:link,
+.html-cell a:visited,
+.html-cell a:active {
+  color: var(--ui-primary) !important;
+}
+
+.html-cell a:hover,
+.html-cell a:focus-visible {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
