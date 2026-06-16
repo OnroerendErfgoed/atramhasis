@@ -140,18 +140,19 @@ const importConcept = async () => {
   try {
     const concept = await apiService.getConceptByConceptschemeAndId(selectedScheme.value, selectedConcept.value.id);
     const preFill: Concept = {
-      ...concept,
       id: '',
-      matches: {
-        narrow: concept.matches?.narrow ?? [],
-        broad: concept.matches?.broad ?? [],
-        related: concept.matches?.related ?? [],
-        close: concept.matches?.close ?? [],
-        exact:
-          concept.type !== ConceptTypeEnum.COLLECTION
-            ? [concept.uri, ...(concept.matches?.exact ?? [])]
-            : (concept.matches?.exact ?? []),
-      },
+      uri: concept.uri,
+      label: concept.label,
+      labels: concept.labels,
+      type: concept.type,
+      notes: concept.notes,
+      sources: [],
+      members: [],
+      member_of: [],
+      matches:
+        concept.type !== ConceptTypeEnum.COLLECTION
+          ? { narrow: [], broad: [], related: [], close: [], exact: [concept.uri] }
+          : undefined,
     };
 
     conceptStore.setSelectedConcept(preFill);
