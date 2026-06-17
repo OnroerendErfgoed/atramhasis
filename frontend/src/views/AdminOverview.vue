@@ -240,6 +240,11 @@ const currentSectionActions = computed(() => {
           icon: 'i-lucide-plus',
           onClick: () => adminUiStore.openConceptModal(ModalMode.ADD),
         },
+        {
+          label: t('overview.actions.importExternalConcept'),
+          icon: 'i-lucide-download',
+          onClick: () => adminUiStore.openImportConceptModal(),
+        },
       ];
     case 'AdminLanguages':
       return [

@@ -16,7 +16,7 @@
         <UForm class="space-y-4 rounded-md bg-muted p-4">
           <div class="grid grid-cols-3 gap-4">
             <UFormField name="concept-type" size="lg" :label="t('components.modalConcept.form.type.label')">
-              <USelect v-model="form.type" :items="conceptTypes" class="w-full" />
+              <USelect v-model="form.type" :items="conceptTypes" :disabled="isImportMode" class="w-full" />
             </UFormField>
             <UFormField
               v-if="isEditMode"
@@ -128,6 +128,7 @@ const { t } = useI18n();
 const adminUiStore = useAdminUiStore();
 const { conceptModalIsOpen, conceptModalMode } = storeToRefs(adminUiStore);
 const isEditMode = computed(() => conceptModalMode.value === ModalMode.EDIT);
+const isImportMode = computed(() => !isEditMode.value && !!selectedConcept.value);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();
@@ -165,13 +166,13 @@ const form = ref<ConceptForm>({
   },
 });
 
-// Initial population of form when editing
+// Initial population of form when editing or importing
 onBeforeMount(async () => {
-  if (isEditMode.value && selectedConcept.value) {
+  if (selectedConcept.value) {
     const conceptClone = cloneDeep(selectedConcept.value);
     form.value = {
       type: conceptClone.type,
-      id: conceptClone.id,
+      id: isEditMode.value ? conceptClone.id : undefined,
       labels: conceptClone.labels ?? [],
       notes: conceptClone.notes ?? [],
       sources: conceptClone.sources ?? [],
