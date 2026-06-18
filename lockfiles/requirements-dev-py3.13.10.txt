@@ -12,7 +12,7 @@ babel==2.18.0
     #   sphinx
 beautifulsoup4==4.14.3
     # via webtest
-bleach==6.3.0
+bleach==6.4.0
     # via atramhasis (pyproject.toml)
 cachecontrol==0.14.4
     # via atramhasis (pyproject.toml)
