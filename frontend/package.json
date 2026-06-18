@@ -20,7 +20,7 @@
     "@vueuse/core": "^14.2.1",
     "axios": "^1.16.1",
     "d3": "~3.5.17",
-    "dompurify": "^3.4.9",
+    "dompurify": "^3.4.11",
     "foundation-sites": "~5.5.3",
     "lodash-es": "^4.18.1",
     "pinia": "^3.0.4",
@@ -48,7 +48,7 @@
     "prettier": "3.8.1",
     "sass": "^1.84.0",
     "typescript": "~6.0.0",
-    "vite": "^8.0.3",
+    "vite": "^8.0.16",
     "vite-plugin-static-copy": "^4.0.1",
     "vite-plugin-vue-devtools": "^8.1.1",
     "vue-tsc": "^3.2.6"
