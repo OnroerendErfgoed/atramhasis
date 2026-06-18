@@ -35,16 +35,14 @@
       v-model:sorting="sorting"
       sticky
       class="flex-1 min-h-0"
-      :ui="{ tr: 'data-[expanded=true]:bg-elevated/50' }"
+      :ui="{ tr: 'data-[expanded=true]:bg-default' }"
       :data="tableData"
       :columns="columns"
       :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
     >
       <template #label-cell="{ row }">
         <div>
-          <a href="#" class="font-medium text-primary hover:underline">
-            {{ row.original.label }}
-          </a>
+          <span class="font-medium">{{ row.original.label }}</span>
           <div class="mt-0.5 flex items-center gap-1 text-xs text-muted">
             <span>{{ row.original.uri }}</span>
             <ClipboardCopy
@@ -74,6 +72,7 @@
     </div>
 
     <ModalConcept :key="conceptModalKey" />
+    <ModalImportConcept :key="importConceptModalKey" />
     <ModalMerge :key="mergeModalKey" />
     <ModalDelete
       v-model:open="modalDeleteIsOpen"
@@ -112,7 +111,7 @@ const router = useRouter();
 const CONCEPT_LOADING_KEY = 'concept-fetch';
 
 const adminUiStore = useAdminUiStore();
-const { conceptModalKey, mergeModalKey } = storeToRefs(adminUiStore);
+const { conceptModalKey, mergeModalKey, importConceptModalKey } = storeToRefs(adminUiStore);
 const conceptschemeStore = useConceptschemeStore();
 const { selectedConceptscheme } = storeToRefs(conceptschemeStore);
 const conceptStore = useConceptStore();

@@ -10,7 +10,8 @@
     "actions": {
       "addConcept": "Add a @:entities.concept",
       "addProvider": "Add a @:entities.provider",
-      "addLanguage": "Add a @:entities.language"
+      "addLanguage": "Add a @:entities.language",
+      "importExternalConcept": "Import external @:entities.concept"
     },
     "goToHomepage": "Go to homepage",
     "logout": "Log out",
@@ -290,6 +291,24 @@
       "related": "Related",
       "loading": "Loading matches..."
     },
+    "modalImportConcept": {
+      "title": "Import external concept",
+      "description": "Search for a concept in an external scheme and import it into the current conceptscheme.",
+      "form": {
+        "externalScheme": {
+          "label": "External scheme"
+        },
+        "labelSearch": {
+          "label": "Search on label",
+          "placeholder": "Enter a label to search"
+        },
+        "results": {
+          "label": "Choose concept",
+          "placeholder": "Choose a concept",
+          "noResults": "No concepts found"
+        }
+      }
+    },
     "modalDelete": {
       "title": "Delete {entity}",
       "message": "Are you sure you want to remove {entity} {item}?",
@@ -374,7 +393,8 @@
     "edit": "Edit",
     "ok": "OK",
     "search": "Search",
-    "merge": "Merge"
+    "merge": "Merge",
+    "import": "Import"
   },
   "entities": {
     "conceptscheme": "conceptscheme | conceptschemes",

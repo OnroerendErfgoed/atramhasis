@@ -119,6 +119,14 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
   };
   const closeMatchModal = () => (matchModalIsOpen.value = false);
 
+  const importConceptModalKey = ref(0);
+  const importConceptModalIsOpen = ref(false);
+  const openImportConceptModal = () => {
+    importConceptModalKey.value++;
+    importConceptModalIsOpen.value = true;
+  };
+  const closeImportConceptModal = () => (importConceptModalIsOpen.value = false);
+
   /* Breadcrumbs */
   const breadcrumbLabels = ref<Record<string, string>>({});
 
@@ -180,6 +188,10 @@ export const useAdminUiStore = defineStore('admin-ui', () => {
     relationModalIsOpen,
     openRelationModal,
     closeRelationModal,
+    importConceptModalKey,
+    importConceptModalIsOpen,
+    openImportConceptModal,
+    closeImportConceptModal,
     breadcrumbLabels,
     setBreadcrumbLabel,
   };

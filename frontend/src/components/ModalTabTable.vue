@@ -1,5 +1,13 @@
 <template>
-  <UTable class="flex-1 min-h-0 rounded-lg border border-default" :data="data" :columns="columns" />
+  <UTable
+    class="flex-1 min-h-0 rounded-lg border border-default"
+    :data="data"
+    :columns="columns"
+    :ui="{
+      td: 'px-4 py-2',
+      th: 'px-4 py-2',
+    }"
+  />
 </template>
 
 <script lang="ts">

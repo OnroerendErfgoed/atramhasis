@@ -23,7 +23,7 @@
               class="flex-1"
               :placeholder="t('components.modalMatch.form.labelSearch.placeholder')"
             />
-            <UButton type="submit" :label="t('actions.search')" />
+            <UButton :loading="matchesLoading" type="submit" :label="t('actions.search')" />
           </div>
         </UFormField>
 

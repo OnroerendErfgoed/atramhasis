@@ -53,6 +53,7 @@ const mainColumn = {
   header: t('grid.columns.labels.note'),
   cell: (row: TableRow<Note>) =>
     h('div', {
+      class: 'html-cell',
       innerHTML: DOMPurify.sanitize(row.note, { USE_PROFILES: { html: true }, ADD_ATTR: ['target'] }),
     }),
 };

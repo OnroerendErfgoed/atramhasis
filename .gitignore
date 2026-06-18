@@ -79,6 +79,9 @@ atramhasis/static/css/
 atramhasis/static/js/
 atramhasis/static/img/
 
+# datadumps: Default location for datadumps created by the dump_rdf script
+datadumps
+
 # sqlite database created for tests.
 test.db
 
