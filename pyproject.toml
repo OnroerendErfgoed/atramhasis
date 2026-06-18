@@ -102,6 +102,9 @@ artifacts = [
     "/atramhasis/locale/*/LC_MESSAGES/*.mo",
     "/atramhasis/templates/admin.jinja2",
     "/atramhasis/static/dist",
+    "/atramhasis/static/css",
+    "/atramhasis/static/js",
+    "/atramhasis/static/img",
     # including node_modules bloats the build but we need refactoring
     "/atramhasis/static/admin/node_modules",
     "/atramhasis/static/node_modules",
