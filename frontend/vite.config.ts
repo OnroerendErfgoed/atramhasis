@@ -73,8 +73,16 @@ export default defineConfig({
           // themed build) can still @import atramhasis's partials without
           // needing the frontend source tree.
           src: 'src/scss/public/**/*',
-          dest: 'scss',
+          dest: 'scss/atramhasis',
           rename: { stripBase: 3 },
+        },
+        {
+          // Older downstream builds import "atramhasis/atramhasis-settings"
+          // as a separate partial from "atramhasis/settings"; keep both
+          // names resolvable by shipping the merged settings file twice.
+          src: 'src/scss/public/_settings.scss',
+          dest: 'scss/atramhasis',
+          rename: () => '../../../_atramhasis-settings.scss',
         },
         {
           src: 'node_modules/foundation-sites/js/**/*',
