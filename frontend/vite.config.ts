@@ -69,6 +69,14 @@ export default defineConfig({
       targets: [
         { src: 'static/**/*', dest: '.', rename: { stripBase: 1 } },
         {
+          // Ship the scss sources so downstream consumers (e.g. meemoo's
+          // themed build) can still @import atramhasis's partials without
+          // needing the frontend source tree.
+          src: 'src/scss/public/**/*',
+          dest: 'scss',
+          rename: { stripBase: 3 },
+        },
+        {
           src: 'node_modules/foundation-sites/js/**/*',
           dest: '.',
         },

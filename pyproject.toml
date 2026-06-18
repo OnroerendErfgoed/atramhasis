@@ -105,6 +105,7 @@ artifacts = [
     "/atramhasis/static/css",
     "/atramhasis/static/js",
     "/atramhasis/static/img",
+    "/atramhasis/static/scss",
     # including node_modules bloats the build but we need refactoring
     "/atramhasis/static/admin/node_modules",
     "/atramhasis/static/node_modules",
