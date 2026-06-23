@@ -1,5 +1,10 @@
 <template>
-  <UModal v-model:open="relationModalIsOpen" :dismissible="false" :title="t('components.modalRelation.title')">
+  <UModal
+    v-model:open="relationModalIsOpen"
+    :dismissible="false"
+    :title="t('components.modalRelation.title')"
+    class="max-w-4xl"
+  >
     <template #body>
       <ALoader v-if="isFullscreenLoading" mode="fullscreen" />
       <UTree :items="treeItems" virtualize @select="onSelect" />
