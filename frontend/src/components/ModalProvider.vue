@@ -6,6 +6,7 @@
     :description="
       t('components.modalProvider.description', { mode: isEditMode ? t('actions.edit') : t('actions.add') })
     "
+    class="max-w-4xl"
   >
     <template #body>
       <UForm class="space-y-4">

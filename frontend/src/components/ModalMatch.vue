@@ -4,6 +4,7 @@
     :dismissible="false"
     :title="capitalize(t('components.modalMatch.title', { type: matchModalType }))"
     :description="t('components.modalMatch.description')"
+    class="max-w-4xl"
   >
     <template #body>
       <UForm class="space-y-4" @submit.prevent="fetchMatches">
