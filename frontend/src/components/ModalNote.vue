@@ -4,6 +4,7 @@
     :dismissible="false"
     :title="title"
     :description="capitalize(t('components.modalNote.description', { mode: noteModalMode }))"
+    class="max-w-4xl"
   >
     <template #body>
       <UForm class="space-y-4">
@@ -47,7 +48,7 @@
           :error="(v$.note.$errors[0]?.$message as string) || false"
         >
           <div
-            class="rounded-md border border-gray-300 dark:border-gray-700 min-h-32"
+            class="rounded-md border border-gray-300 dark:border-gray-700 min-h-80"
             @mouseover="onEditorMouseover"
             @mouseleave="onEditorMouseleave"
           >
