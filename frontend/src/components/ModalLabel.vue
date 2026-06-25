@@ -4,7 +4,7 @@
     :dismissible="false"
     :title="title"
     :description="capitalize(t('components.modalLabel.description', { mode: labelModalMode }))"
-    class="max-w-4xl"
+    class="max-w-3xl"
   >
     <template #body>
       <UForm class="space-y-4">
