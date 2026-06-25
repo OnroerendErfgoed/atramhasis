@@ -5,7 +5,7 @@
     :label="props.label"
     :icon="sortIcon"
     class="-mx-2.5"
-    @click="column.toggleSorting(sortState === 'asc')"
+    @click="sortState === 'desc' ? column.clearSorting() : column.toggleSorting(sortState === 'asc')"
   />
 </template>
 
@@ -16,6 +16,7 @@ type SortState = false | 'asc' | 'desc';
 type SortableColumnLike = {
   getIsSorted: () => SortState;
   toggleSorting: (desc?: boolean) => void;
+  clearSorting: () => void;
 };
 
 const props = defineProps<{

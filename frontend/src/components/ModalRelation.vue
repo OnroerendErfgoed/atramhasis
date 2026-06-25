@@ -3,7 +3,7 @@
     v-model:open="relationModalIsOpen"
     :dismissible="false"
     :title="t('components.modalRelation.title')"
-    class="max-w-4xl"
+    class="max-w-3xl"
   >
     <template #body>
       <ALoader v-if="isFullscreenLoading" mode="fullscreen" />
