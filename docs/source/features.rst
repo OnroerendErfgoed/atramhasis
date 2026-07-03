@@ -52,59 +52,104 @@ is an Atramhasis implementation with custom styling and authentication.
 SKOS editor
 ===========
 
-.. image:: images/admin_search.png
-  :alt: The Atramhasis admin interface
+.. image:: images/admin_conceptschemes-overview.png
+  :alt: The conceptscheme overview in the Atramhasis admin interface
 
-The Atramhasis admin interface allows editors to find a certain concept or
-collection and edit or delete it. While it's also possiblel to edit
-conceptscheme attributes this way, they always need some code configuration and
-thus need to be created by a system administrator.
+When opening the admin page, you arrive at the overview of conceptschemes.
+From here, editors can quickly see the available conceptschemes and open one
+for further editing.
 
-.. image:: images/admin_import.png
-  :alt: Import a concept from the AAT
+.. image:: images/admin_conceptschemes-edit.png
+  :alt: Editing a conceptscheme
 
-While you can define concepts from scratch, it's also possible to import a
-concept from another thesaurus, such as the AAT. It will import labels and notes 
-from the original concept and add an automatic :term:`SKOS` match back to the
-original. Bear in mind that this actually creates a new concept with a new URI,
-while referencing the original. If you want to import an entire thesaurus, you
-need to go beyond the User Interface.
+Conceptschemes can be edited from this screen. While conceptscheme attributes
+can be adjusted here, new conceptschemes must be created in the Providers module.
 
-.. image:: images/admin_kerken_notes.png
-  :alt: The notes tab on a concept
+.. image:: images/admin_concepts-overview.png
+  :alt: The concepts and collections overview in the Atramhasis admin interface
 
-Editing a concept or collection is done using one or more tabs, such as the
-notes tab to edit scopenotes, sourcenotes, ... Adding HTML markup is supported.
+From the conceptscheme overview, you can click the Concepts button to open the
+concepts and collections inside a conceptscheme. This gives you an overview of
+all concepts and collections within that conceptscheme.
 
-.. image:: images/admin_kerken_relaties.png
-  :alt: The relations tab on a concept
+.. image:: images/admin_concepts-overview-search.png
+  :alt: Searching concepts and collections in the Atramhasis admin interface
+
+The concepts and collections overview also supports searching, making it easier
+to find a specific concept or collection in a larger conceptscheme.
+
+.. image:: images/admin_concepts-edit-labels.png
+  :alt: Editing the labels of a concept
+
+Editing a concept or collection is done using one or more tabs. The labels tab
+lets you update the preferred labels and alternative labels for a concept or
+collection.
+
+.. image:: images/admin_concepts-edit-notes.png
+  :alt: Editing the notes of a concept
+
+The notes tab is used to edit scopenotes, sourcenotes, and other notes. Adding
+HTML markup is supported.
+
+.. image:: images/admin_concepts-edit-relations.png
+  :alt: Editing the relations of a concept
 
 The relations tab allows editing the relations of concepts or collections with
-other concepts or collectons. Dropdown lists are present to facilitate editing.
+other concepts or collections.
 
-.. image:: images/admin_kerken_matches_tab.png
+.. image:: images/admin_concepts-edit-relations-add-relation.png
+  :alt: Adding a relation to a concept
+
+When adding a new relation, the interface helps you choose the appropriate
+relation type and the related concept or collection. Dropdown lists are present
+to facilitate editing.
+
+.. image:: images/admin_concepts-edit-sources.png
+  :alt: Editing the sources of a concept
+
+The sources tab allows editors to add and maintain the sources used in creating
+or researching a concept or collection.
+
+.. image:: images/admin_concepts-edit-matches.png
   :alt: The matches tab on a concept
 
 The matches tab allows an editor to match a local concept to a concept in a
 remote conceptscheme.
 
-.. image:: images/admin_kerken_matches.png
-  :alt: Editing the matches on a concept
+.. image:: images/admin_concepts-edit-matches-choose-external-concept.png
+  :alt: Choosing an external concept for a match
 
-Using the `skosprovider` that powers a remote conceptscheme, matching concepts
-can be searched for and added to the local concept.
+Using the `skosprovider` that powers a remote conceptscheme, matching
+concepts can be searched for and added to the local concept.
 
-.. image:: images/admin_kerktorens_merge.png
+.. image:: images/admin_concepts-merge.png
   :alt: Merging a concept with an external concept
 
-Once a concept has been matched with a concept from an external provider it's
+Once a concept has been matched with a concept from an external provider, it is
 possible to merge the two concepts. This is similar to importing a concept, but
-works for concepts that already exist in your local thesaurus. Merging with
-copy the labels and notes from the external concept. If you can link you
-concept with an external concept that has labels for the concept in different
-languages, this is a quick way to extend the number of languages supported by
-your local concept. Before saving the results of the merge, you are free to
-review the results of the merge and accept or reject certain labels and notes.
+works for concepts that already exist in your local thesaurus. Merging copies
+the labels and notes from the external concept. If you can link your concept to
+an external concept that has labels for the concept in different languages,
+this is a quick way to extend the number of languages supported by your local
+concept. Before saving the results of the merge, you are free to review the
+results and accept or reject certain labels and notes.
+
+.. image:: images/admin_providers-overview.png
+  :alt: The provider overview in the Atramhasis admin interface
+
+The providers screen gives an overview of all configured providers. From this
+screen, you can create a new provider or open an existing provider for editing.
+
+.. image:: images/admin_providers-edit.png
+  :alt: Editing a provider in the Atramhasis admin interface
+
+When editing a provider, you can update its configuration.
+
+.. image:: images/admin_languages.png
+  :alt: The languages overview in the Atramhasis admin interface
+
+The languages screen allows editors to add all languages they want to use in
+the application. You can choose from all IANA language tags.
 
 LDF server
 ==========
