@@ -4,7 +4,18 @@ $(document).foundation();
 
 // Function that makes the mobile menu work.
 $('#mobile-menu-select').change(function () {
-  window.location = $(this).val();
+  var selectedUrl = $(this).val();
+  try {
+    var parsedUrl = new URL(selectedUrl, window.location.origin);
+    if (
+      (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') &&
+      parsedUrl.origin === window.location.origin
+    ) {
+      window.location = parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
+    }
+  } catch (e) {
+    // Ignore invalid URL values.
+  }
 });
 
 $(document).ready(function () {

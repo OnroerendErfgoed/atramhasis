@@ -78,6 +78,7 @@ atramhasis/static/node_modules
 atramhasis/static/css/
 atramhasis/static/js/
 atramhasis/static/img/
+atramhasis/static/scss/
 
 # datadumps: Default location for datadumps created by the dump_rdf script
 datadumps

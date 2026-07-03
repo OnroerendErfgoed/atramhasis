@@ -4,6 +4,7 @@
     :dismissible="false"
     :title="title"
     :description="capitalize(t('components.modalSource.description', { mode: sourceModalMode }))"
+    class="max-w-3xl"
   >
     <template #body>
       <UForm class="space-y-4">
@@ -15,7 +16,7 @@
           :error="(v$.citation.$errors[0]?.$message as string) || false"
         >
           <div
-            class="rounded-md border border-gray-300 dark:border-gray-700 min-h-32"
+            class="rounded-md border border-gray-300 dark:border-gray-700 min-h-80"
             @mouseover="onEditorMouseover"
             @mouseleave="onEditorMouseleave"
           >
