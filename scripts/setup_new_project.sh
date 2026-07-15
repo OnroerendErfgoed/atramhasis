@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Create your own atramhasis project using cookiecutter templates. Choose between a demo app (with sample data) or
+# an empty project (minimal setup).
+# - https://atramhasis.readthedocs.io/en/latest/demo.html#running-a-demo-site-with-cookiecutter
+# - https://atramhasis.readthedocs.io/en/latest/customisation.html#creating-your-own-project
+
+# Variables:
+#   VENV_PATH: Path to store the virtual environment (default: $HOME/Envs)
+#   VENV_NAME: Name of the virtual environment (default: my_atramhasis)
+#   PROJECT_DIR: Directory to create the new project in (default: $HOME/dev/atram)
+
 # Usage:
-#   VENV_PATH="$HOME/Envs" VENV_NAME="my_atramhasis" PROJECT_DIR="$HOME/dev/atram" ./scripts/setup_demo.sh
+#   VENV_PATH="$HOME/Envs" VENV_NAME="my_atramhasis" PROJECT_DIR="$HOME/dev/atram" ./scripts/setup_new_project.sh
 
 # If environment variables are not set, defaults will be used.
 # Defaults (can be overridden by environment variables)
