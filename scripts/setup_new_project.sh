@@ -85,7 +85,8 @@ cookiecutter gh:OnroerendErfgoed/atramhasis --directory "cookiecutters/$COOKIECU
 echo "Detecting newly created project directory (if any)..."
 mapfile -t _after < <(find . -maxdepth 1 -mindepth 1 -type d -printf '%f\n' | sort)
 
-# compute difference between _after and _before
+# compute difference between _after and _before. This will help us find the newly created project directory
+# that was chosen by the user.
 NEW_DIR=""
 for d in "${_after[@]}"; do
   skip=false
@@ -137,8 +138,14 @@ if [ -n "$NEW_DIR" ]; then
   echo ". \"$VENV_DIR/bin/activate\""
   echo "cd $PROJECT_DIR/$NEW_DIR"
   echo "pserve development.ini"
+  echo "[Extra]"
+  echo "If you want to use a local Atramhasis branch in your new project to test code changes:"
+  echo "1. Check out the desired branch in your Atramhasis project folder."
+  echo "2. Install it in editable mode using the following command:"
+  echo "pip install -e .\"[dev]\" --no-deps --force-reinstall"
+
 else
-  echo "Could not automatically detect the created project directory."
+  echo "Could not automatically detect the created projectw directory."
   echo "Please cd into the scaffolded project root and run these commands manually:"
   echo "  pip install -e .\"[dev]\""
   echo "  alembic upgrade head  # if alembic is available and config exists"
