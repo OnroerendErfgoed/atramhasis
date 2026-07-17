@@ -393,7 +393,7 @@ Alternatively, you can specify your build as a wheel or as a source distribution
 .. _vue-i18n: https://vue-i18n.intlify.dev/
 .. _Node.js: https://nodejs.org
 .. _waitress: https://waitress.readthedocs.io
-.. _python: https://wwww.python.org
+.. _python: https://www.python.org
 .. _pyramid: https://www.pylonsproject.org/
 .. _sqlalchemy: https://www.sqlalchemy.org
 .. _skosprovider: https://skosprovider.readthedocs.io
