@@ -222,7 +222,7 @@ translations. Just as with updating the catalogs, you need to recompile them.
 
     $ pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
 
-At this moment, Atramhasis will still only show the default languages in it's
+At this moment, Atramhasis will still only show the default languages in its
 language switcher. If you want to add your new language, you need to edit your
 :file:`development.ini` (or similar file). Look for the line that says 
 `available_languages` and add your locale identifier.
