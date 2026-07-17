@@ -76,10 +76,17 @@ We recommend installing Atramhasis in a virtual environment.
    # Make sure pip and pip-tools are up to date
    $ pip install --upgrade pip pip-tools
 
-To install a fully working development environment a pip requirements-dev.txt
-file is provided. By passing this file to :command:`pip sync` all
-requirements for Atramhasis and development of the software (Sphinx, py.test)
-will be installed.
+To install a fully working development environment, version-specific development
+requirements files are provided in the lockfiles/ directory. Select the file
+that matches your Python version and pass it to pip sync. This will install all
+requirements needed for Atramhasis development, including development tools such as
+Sphinx and pytest.
+
+For example:
+
+.. code-block:: bash
+
+   $ pip-sync lockfiles/requirements-dev-py3.12.txt
 
 The following step will help you get the python development environment up and
 running. If you also need to work on the javascript admin backend, please refer
@@ -115,10 +122,8 @@ The dependencies are defined within pyproject.toml. There, you can add, modify, 
 Afterward, run pip-compile to generate the requirements files.
 
 .. code-block:: bash
-    # Update pyproject.toml and run pip-compile as follows:
-    $ PIP_COMPILE_ARGS="-v --strip-extras --no-header --resolver=backtracking --no-emit-options --no-emit-find-links";
-    $ pip-compile $PIP_COMPILE_ARGS;
-    $ pip-compile $PIP_COMPILE_ARGS --all-extras -o requirements-dev.txt;
+    # Update pyproject.toml and compile requirements files as follows:
+    $ ./scripts/compile-requirements.sh
 
 Admin and frontend development
 ==============================
