@@ -11,7 +11,9 @@ Atramhasis is a python_ webapplication that is being developed within the
 pyramid_ framework. Other major technologies used are sqlalchemy_ as the ORM 
 and :term:`Jinja2` as the templating framework.
 
-Client side the main technologies being used are Zurb Foundation and a Vue 3 application built with Vite.
+Client side there are two interfaces. The public interface is server rendered
+and styled with Foundation (version 5) and :term:`SCSS`. The admin interface is
+a Vue 3 application built with Vite and styled with Tailwind CSS and Nuxt UI.
 
 While Atramhasis is an editor for creating and editing :term:`SKOS` vocabularies,
 it uses other libraries that are more geared towards using a vocabulary in an
