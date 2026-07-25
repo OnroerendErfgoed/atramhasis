@@ -206,7 +206,7 @@ rpds-py==0.30.0
     # via
     #   jsonschema
     #   referencing
-setuptools==81.0.0
+setuptools==83.0.0
     # via
     #   atramhasis (pyproject.toml)
     #   pyramid
