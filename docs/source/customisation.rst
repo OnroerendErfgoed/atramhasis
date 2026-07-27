@@ -517,13 +517,13 @@ Atramhasis has two user interfaces that are styled in completely different ways:
 * The **public** user interface (browsing concepts, search, ...) is a set of
   server rendered :term:`Jinja2` templates styled with `Foundation`_
   (version 5) and a custom Atramhasis theme written in :term:`SCSS`.
-* The **admin** user interface (:file:`/admin`) is, since the Vue migration, a
-  single-page Vue application styled with `Tailwind CSS`_ and `Nuxt UI`_.
+* The **admin** user interface (:file:`/admin`) is a single-page Vue
+  application styled with `Tailwind CSS`_ and `Nuxt UI`_.
 
 Because they use different technologies, they are customised differently. The
 sections below describe both. If you have an older installation, note that the
 ``compass`` / Ruby Sass toolchain and the ``app-admin.scss`` file have been
-removed; the instructions below replace them.
+removed as of version 4.0.0; the instructions below replace them.
 
 Changing the public interface CSS
 .................................
@@ -648,7 +648,7 @@ called ``my_thesaurus``.
        )
 
 Automating the public SCSS build
-................................
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Compiling the :term:`SCSS` by hand is fine while experimenting, but for a real
 project you want it to happen automatically when your package is built. If your
