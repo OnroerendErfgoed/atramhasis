@@ -537,11 +537,15 @@ source tree. The most useful partials are:
 * ``atramhasis/settings`` -- all Foundation and Atramhasis :term:`SCSS`
   variables (also available under the legacy name ``atramhasis/atramhasis-settings``).
 * ``atramhasis/functions`` -- helper functions used by the settings.
-* ``atramhasis/atramhasis-custom``, ``atramhasis/atramhasis-header``,
-  ``atramhasis/atramhasis-footer``, ``atramhasis/atramhasis-home``,
-  ``atramhasis/atramhasis-icons``, ``atramhasis/atramhasis-article`` and
-  ``atramhasis/atramhasis-mquery`` -- the individual style partials that
-  together make up ``app.css``.
+* The individual style partials that together make up ``app.css``:
+
+  * ``atramhasis/atramhasis-custom``
+  * ``atramhasis/atramhasis-header``
+  * ``atramhasis/atramhasis-footer``
+  * ``atramhasis/atramhasis-home``
+  * ``atramhasis/atramhasis-icons``
+  * ``atramhasis/atramhasis-article``
+  * ``atramhasis/atramhasis-mquery``
 
 To override and hook your own :term:`SCSS` into the public interface, follow
 these steps. This example assumes a project created with the scaffold and
@@ -647,8 +651,7 @@ called ``my_thesaurus``.
            override_with="my_thesaurus:static/",
        )
 
-Automating the public SCSS build
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Automating the public SCSS build
 
 Compiling the :term:`SCSS` by hand is fine while experimenting, but for a real
 project you want it to happen automatically when your package is built. If your
