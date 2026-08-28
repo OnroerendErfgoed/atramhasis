@@ -64,6 +64,107 @@ Atramhasis with a link to the rdf2hdt command (requires a separate
 installation). In this case, everytime the conceptschemes are dumped to RDF, the
 dump files are also written in :term:`HDT` format.
 
+Development setup with mise
+===========================
+
+The quickest way to get a full development environment is mise_. It installs the
+tools (Python, uv, Node, pnpm, pre-commit), creates and activates the
+virtualenv, and drives the setup through a set of tasks. From a fresh clone:
+
+.. code-block:: bash
+
+    $ mise trust       # trust this config (depending on your mise settings)
+    $ mise install     # install python, uv, node, pnpm and pre-commit
+    $ mise run server  # runs the setup the first time, then starts the dev stack
+
+`mise run server` starts the Pyramid dev server on http://localhost:6543 and the
+Vite dev server for the Vue admin app on http://localhost:5173. Press Ctrl-C
+once to stop both.
+
+The first run (or any run without a virtualenv) performs `mise run setup`, which
+sets up everything described under `General installation`_ and
+`Admin and frontend development`_:
+
+* the virtualenv with the dependencies from the lockfile matching the pinned
+  Python version, and Atramhasis itself in editable mode;
+* the compiled gettext message catalogs;
+* the development database: `alembic upgrade head`, and for a new database the
+  demo vocabularies (`initialize_atramhasis_db`) plus a first RDF datadump
+  (`dump_rdf`) - see :file:`scripts/setup_backend.sh`;
+* the pre-commit git hooks;
+* the frontend: `pnpm install`, the Vite build, and the generated
+  :file:`atramhasis/templates/admin.jinja2` - see
+  :file:`scripts/build_frontend.py`, which is the same code the wheel build hook
+  uses, so a local setup and a wheel build produce an identical frontend.
+
+Once everything is set up, `mise run server` starts immediately. The database is
+never rebuilt as long as it exists, so local data is not lost. Existing
+databases are still migrated to head on every setup.
+
+To rebuild the database with the demo data:
+
+.. code-block:: bash
+
+    $ mise run db:reset            # wipe and rebuild the database (data loss!)
+    $ OVERWRITE=1 mise run setup   # full setup, database included
+    $ OVERWRITE=1 mise run server  # idem, and then start the dev stack
+
+Running the halves separately
+-----------------------------
+
+.. code-block:: bash
+
+    $ mise run server:backend   # only pserve, on http://localhost:6543
+    $ mise run server:frontend  # only the Vite dev server, on http://localhost:5173
+
+In :file:`development.ini`, `vue.mode = src` (the default) makes the admin page
+load its modules from the Vite dev server, so you get hot reloading. Set it to
+`dist` to use the built assets in :file:`atramhasis/static/dist` instead.
+
+Docker services
+---------------
+
+Atramhasis needs **no** services: it ships with a SQLite development database and
+its test suite runs entirely on SQLite, so `mise install && mise run server` works
+without Docker.
+
+A :file:`docker-compose.yml` is provided for the optional PostgreSQL setup
+(uncomment the `postgresql` url in :file:`development.ini` and
+:file:`scripts/setup_backend.sh` will create, migrate and seed that database) and
+to line up with the shared service stack used by the other Flanders Heritage
+applications:
+
+.. code-block:: bash
+
+    $ mise run docker       # start postgis, redis and minio (skips what already runs)
+    $ mise run docker:down  # stop them again (data is kept in the named volumes)
+
+Redis and MinIO are not used by Atramhasis; they are only part of that shared
+stack. There are consequently no MinIO buckets to create and no `minio` task.
+Elasticsearch is not included either, since Atramhasis does not use it.
+
+Activating mise in your shell
+-----------------------------
+
+.. code-block:: bash
+
+    $ echo 'eval "$(mise activate bash)"' >> ~/.bashrc   # ~/.zshrc for zsh
+
+The virtualenv is then activated automatically in this directory. It is also
+active inside `mise run` and `mise exec`.
+
+Other tasks
+-----------
+
+* `mise run test` - run the backend test suite
+* `mise run pip-compile` - regenerate the :file:`lockfiles/requirements-dev-py*.txt` files
+* `mise run build` - build the wheel and the sdist (`build:wheel` / `build:sdist` for one of the two)
+* `mise run cleanup` - remove everything the setup creates (virtualenv, node_modules, built assets, compiled catalogs)
+
+`mise tasks` always gives the complete, up-to-date list.
+
+.. _mise: https://mise.jdx.dev/getting-started/
+
 General installation
 ====================
 
