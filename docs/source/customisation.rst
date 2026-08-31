@@ -512,87 +512,262 @@ This should be a space or newline delimited list, limited to 4 entries.
 Changing the CSS
 ----------------
 
-Out of the box, Atramhasis, comes with the Zurb Foundation framework. We have
-created a custom style for this framework, but as always you are free to modify
-this style.
+Atramhasis has two user interfaces that are styled in completely different ways:
 
-**Note:**
-This guide will use ``compass`` because atramhasis is built with it. But beware
-compass is no longer actively maintained and should be considered depreciated.
+* The **public** user interface (browsing concepts, search, ...) is a set of
+  server rendered :term:`Jinja2` templates styled with `Foundation`_
+  (version 5) and a custom Atramhasis theme written in :term:`SCSS`.
+* The **admin** user interface (:file:`/admin`) is a single-page Vue
+  application styled with `Tailwind CSS`_ and `Nuxt UI`_.
 
-To override and hook your custom (s)css into the app follow these steps:
+Because they use different technologies, they are customised differently. The
+sections below describe both. If you have an older installation, note that the
+``compass`` / Ruby Sass toolchain and the ``app-admin.scss`` file have been
+removed as of version 4.0.0; the instructions below replace them.
 
-#. Create a ``static`` folder (the name can be anything, but adjust accordingly)
+Changing the public interface CSS
+.................................
 
-   .. code-block:: sh
+The public interface :term:`SCSS` is compiled with `Dart Sass`_ (the ``sass``
+command line tool). Atramhasis ships its :term:`SCSS` sources inside the
+installed package, under :file:`atramhasis/static/scss/atramhasis/`, so you can
+import these partials from your own project without vendoring the Atramhasis
+source tree. The most useful partials are:
 
-       mkdir static
+* ``atramhasis/settings`` -- all Foundation and Atramhasis :term:`SCSS`
+  variables (also available under the legacy name ``atramhasis/atramhasis-settings``).
+* ``atramhasis/functions`` -- helper functions used by the settings.
+* The individual style partials that together make up ``app.css``:
 
-#. Inside of the ``static`` folder, setup the scss directories
+  * ``atramhasis/atramhasis-custom``
+  * ``atramhasis/atramhasis-header``
+  * ``atramhasis/atramhasis-footer``
+  * ``atramhasis/atramhasis-home``
+  * ``atramhasis/atramhasis-icons``
+  * ``atramhasis/atramhasis-article``
+  * ``atramhasis/atramhasis-mquery``
 
-   .. code-block:: sh
+To override and hook your own :term:`SCSS` into the public interface, follow
+these steps. This example assumes a project created with the scaffold and
+called ``my_thesaurus``.
 
-       cd static
-       compass init
+#. Add the :term:`SCSS` build dependencies. Atramhasis compiles its
+   :term:`SCSS` against Foundation and Font Awesome, so you need those plus
+   ``sass`` itself. Create a :file:`my_thesaurus/static/package.json`:
 
-#. in ``config.rb`` (generated in the previous step) on top write
+   .. code-block:: json
 
-   .. code-block:: ruby
+       {
+           "name": "my_thesaurus",
+           "dependencies": {
+               "font-awesome": "~4.7.0",
+               "foundation-sites": "~5.5.0"
+           },
+           "devDependencies": {
+               "sass": "^1.63.3"
+           }
+       }
 
-       atramhasis_static_path = "#{ENV["VIRTUAL_ENV"]}/lib/python3.10/site-packages/atramhasis/static"
-       add_import_path "#{atramhasis_static_path}/scss/"
-       add_import_path "#{atramhasis_static_path}/node_modules/foundation-sites/scss"
-       add_import_path "#{atramhasis_static_path}/node_modules/font-awesome/scss"
-
-   **Note**: we use the ``ENV["VIRTUAL_ENV"]`` variable which would mean that for future
-   ``compass compile`` steps you'd need to be in the python virtual environment.
-   If you do not want this. Write the absolute path.
-
-   **Note**: ``python3.10`` on line one may be different for you.
-
-#. Add your own scss file in the scss directory. In this example we'll call it
-   ``my_app.scss`` and we'll override the main font color and font family.
-
-   .. code-block:: scss
-
-       @import "atramhasis/atramhasis-settings";
-       $body-font-color: #20ae3c;
-       $body-font-family: "Comic Sans MS", "Comic Sans";
-       @import "app";
-
-#. Compile the scss to css
+   Then install them (``npm``, ``pnpm`` or ``yarn`` all work):
 
    .. code-block:: bash
 
-       compass compile
+       $ cd my_thesaurus/static
+       $ npm install
 
-#. Lastly, add your new css to the pyramid configuration and restart the application.
+#. Create your own entry :term:`SCSS` file, e.g.
+   :file:`my_thesaurus/static/scss/app.scss`. Import the Atramhasis functions
+   and settings first, override any variables you like **after** the settings
+   import but **before** importing Foundation and the Atramhasis partials, then
+   add your own rules at the end:
+
+   .. code-block:: scss
+
+       @import "atramhasis/functions";
+       @import "atramhasis/settings";
+
+       // Override variables here, before Foundation and the partials are imported
+       $body-font-color: #20ae3c;
+       $body-font-family: "Comic Sans MS", "Comic Sans";
+       $primary-color: #944ea1;
+
+       @import "foundation";
+       @import "font-awesome";
+       @import "atramhasis/atramhasis-header";
+       @import "atramhasis/atramhasis-footer";
+       @import "atramhasis/atramhasis-custom";
+       @import "atramhasis/atramhasis-home";
+       @import "atramhasis/atramhasis-icons";
+       @import "atramhasis/atramhasis-article";
+       @import "atramhasis/atramhasis-mquery";
+
+       // Your own custom rules go here
+       .my-custom-banner {
+           background: $primary-color;
+       }
+
+   The order matters. Foundation and the Atramhasis partials read the variables
+   when they generate their :term:`CSS`, so your overrides have to come before
+   those imports. Placing them right after ``@import "atramhasis/settings"``
+   overrides both the plain and the ``!default`` variables the settings file
+   defines, without you having to copy the whole settings file.
+
+#. Compile your :term:`SCSS` to :term:`CSS` with ``sass``, telling it where to
+   find the Atramhasis partials, Foundation and Font Awesome through the ``-I``
+   (load path) option. The Atramhasis partials live inside the installed
+   ``atramhasis`` package:
+
+   .. code-block:: bash
+
+       $ cd my_thesaurus/static
+       # ATRAMHASIS_SCSS is the scss dir shipped inside the installed atramhasis package
+       $ ATRAMHASIS_SCSS=$(python -c "import atramhasis, os; print(os.path.join(os.path.dirname(atramhasis.__file__), 'static', 'scss'))")
+       $ ./node_modules/.bin/sass scss/app.scss css/app.css \
+           -I "$ATRAMHASIS_SCSS" \
+           -I node_modules/foundation-sites/scss \
+           -I node_modules/font-awesome/scss \
+           --quiet-deps --no-source-map
+
+#. Tell Pyramid to serve your compiled :term:`CSS` instead of the Atramhasis
+   default. The public layout loads ``atramhasis:static/css/app.css``, so you
+   can override either that single asset or your whole static directory in
+   :file:`my_thesaurus/__init__.py`:
+
+   .. code-block:: python
+
+       # Override just the stylesheet
+       config.override_asset(
+           to_override="atramhasis:static/css/app.css",
+           override_with="my_thesaurus:static/css/app.css",
+       )
+
+   Overriding the entire static directory is usually more convenient, because
+   it also lets you ship your own images, fonts and ``print.css``:
 
    .. code-block:: python
 
        config.override_asset(
-           to_override="atramhasis:static/css/app.css",
-           override_with="myproject:static/stylesheets/my_app.css",
+           to_override="atramhasis:static/",
+           override_with="my_thesaurus:static/",
        )
 
+.. rubric:: Automating the public SCSS build
 
-Further notes regarding SCSS
-............................
+Compiling the :term:`SCSS` by hand is fine while experimenting, but for a real
+project you want it to happen automatically when your package is built. If your
+project uses ``hatchling`` you can add a custom build hook that runs ``sass``
+when the wheel is built. The hook locates the Atramhasis partials in the
+installed package (so they never have to be vendored) and runs ``sass`` with the
+correct load paths:
 
-In the above example, ``atramhasis/atramhasis-settings`` is used. To know which files
-are possible you best look at `Github <https://github.com/OnroerendErfgoed/atramhasis/tree/master/atramhasis/static/scss>`_
-The settings file will contain most of the variables should you wish to edit any.
+.. code-block:: python
 
-The most commonly used files for scss overriding will be:
+    # build_hook.py
+    import importlib.util
+    import subprocess
+    from pathlib import Path
 
-* ``atramhasis/atramhasis-settings`` -- which contains most variables.
-* ``app.scss`` -- which generates ``app.css``, used by the public interface
-* ``app-admin.scss`` -- which generates ``app-admin.css``, used by the admin interface
+    from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
-| In the above example we wanted to change the main ``app.css`` so we imported ``app``
-  to recreate the entire ``app.css``. And **before** that import we edited the variables.
-| To prevent atramhasis of overriding the variables we just overrided ourselves, we
-  made sure to import ``atramhasis/atramhasis-settings`` first.
+
+    class BuildHook(BuildHookInterface):
+        def initialize(self, version, build_data):
+            super().initialize(version, build_data)
+            static = Path(__file__).parent / "my_thesaurus" / "static"
+            subprocess.run(["npm", "install"], cwd=static, check=True)
+            self.compile_css(static)
+
+        def compile_css(self, static):
+            atramhasis_spec = importlib.util.find_spec("atramhasis")
+            if atramhasis_spec is None or atramhasis_spec.origin is None:
+                raise RuntimeError(
+                    "The atramhasis package must be installed to compile the scss."
+                )
+            atramhasis_scss = Path(atramhasis_spec.origin).parent / "static" / "scss"
+
+            subprocess.run(
+                [
+                    str(static / "node_modules" / ".bin" / "sass"),
+                    "scss/app.scss",
+                    "css/app.css",
+                    "-I", str(atramhasis_scss),
+                    "-I", "node_modules/foundation-sites/scss",
+                    "-I", "node_modules/font-awesome/scss",
+                    "--quiet-deps",
+                    "--no-source-map",
+                ],
+                cwd=static,
+                check=True,
+            )
+
+Register the hook and make sure ``atramhasis`` is available at build time in
+your :file:`pyproject.toml`:
+
+.. code-block:: toml
+
+    [build-system]
+    requires = ["hatchling", "atramhasis"]
+    build-backend = "hatchling.build"
+
+    [tool.hatch.build.targets.wheel.hooks.custom]
+    path = "build_hook.py"
+
+Theming the admin interface
+...........................
+
+Since the Vue migration the admin interface is a single-page Vue application
+styled with `Tailwind CSS`_ and `Nuxt UI`_. Its :term:`CSS` is bundled and
+shipped as a hashed file under :file:`atramhasis/static/dist/` by the frontend
+build. This bundle **cannot** be customised through :term:`SCSS` overrides, and
+the old ``app-admin.scss`` / ``app-admin.css`` files no longer exist.
+
+Instead, you restyle the admin by providing an extra stylesheet that overrides
+the `Nuxt UI`_ design tokens (:term:`CSS` custom properties). Atramhasis injects
+this stylesheet *after* the admin bundle, so your values take precedence.
+
+#. Point the ``atramhasis.admin_theme_stylesheet`` setting in your
+   :file:`development.ini` (and :file:`production.ini`) at a static asset:
+
+   .. code-block:: ini
+
+       atramhasis.admin_theme_stylesheet = my_thesaurus:static/css/admin-theme.css
+
+#. Create that :term:`CSS` file and override the `Nuxt UI`_ variables you care
+   about. The most impactful ones are the primary colour scale and the
+   background, border and text tokens:
+
+   .. code-block:: css
+
+       :root {
+         --ui-radius: 0.5rem;
+
+         --ui-color-primary-50: #f8f1f9;
+         --ui-color-primary-100: #efdff2;
+         --ui-color-primary-500: #944ea1;
+         --ui-color-primary-600: #753f7f;
+         --ui-color-primary-900: #532b5a;
+
+         --ui-primary: var(--ui-color-primary-600);
+
+         --ui-bg: #fbfcfe;
+         --ui-text: var(--ui-color-neutral-800);
+         --ui-border: var(--ui-color-neutral-200);
+       }
+
+   See the `Nuxt UI theming documentation`_ for the full list of design tokens.
+
+.. note::
+
+    During frontend development you can run the admin from source instead of the
+    bundled ``dist`` by setting ``vue.mode = src`` in your ini file and running
+    the Vite dev server (``pnpm dev`` in the :file:`frontend` directory). The
+    ``admin_theme_stylesheet`` is still applied in this mode.
+
+.. _`Foundation`: https://get.foundation/sites/docs-v5/
+.. _`Dart Sass`: https://sass-lang.com/dart-sass/
+.. _`Tailwind CSS`: https://tailwindcss.com
+.. _`Nuxt UI`: https://ui.nuxt.com
+.. _`Nuxt UI theming documentation`: https://ui.nuxt.com/getting-started/theme
 
 
 .. _security:
@@ -1293,6 +1468,10 @@ functionality might fail to run properly.
 
     # DEFAULT - Run vue from source (src) or distribution (dist)
     vue.mode = dist
+
+    # DEFAULT empty - Extra stylesheet injected after the admin (Vue) bundle to
+    # override the Nuxt UI design tokens. See "Theming the admin interface".
+    atramhasis.admin_theme_stylesheet = my_thesaurus:static/css/admin-theme.css
 
     # DEFAULT json mapping of note type to sort order (keys: note type ids, values: integer sort position).
     # If unspecified, a built-in default order is used.
