@@ -52,7 +52,7 @@ dependencies = [
     "bleach",
     "pyramid_openapi3==0.19",
     "openapi-core<0.23",
-    "setuptools<82",
+    "setuptools<84",
 ]
 
 [project.urls]
