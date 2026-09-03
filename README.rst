@@ -51,3 +51,13 @@ Contributions are welcome. This could be improvements to the code, updated
 documentation or adding a new translation to the User Interface. Please see our 
 `contribution guidelines <https://github.com/OnroerendErfgoed/atramhasis/blob/develop/CONTRIBUTING.md>`_ 
 to find out how we can collaborate.
+
+Development
+-----------
+
+Atramhasis uses `mise <https://mise.jdx.dev/>`_ for its local development setup.
+From a fresh clone ``mise install`` followed by ``mise run server`` installs the
+tools, sets up the backend and the frontend and starts a development server on
+http://localhost:6543. Have a look at the
+`development documentation <https://atramhasis.readthedocs.io/en/latest/development.html>`_
+for the details and for a manual setup without mise.

@@ -1,0 +1,446 @@
+{
+  "loading": "Loading...",
+  "overview": {
+    "nav": {
+      "conceptschemes": "Conceptschemes",
+      "providers": "Providers",
+      "languages": "Languages",
+      "users": "Users"
+    },
+    "actions": {
+      "addConcept": "Add a @:entities.concept",
+      "addProvider": "Add a @:entities.provider",
+      "addLanguage": "Add a @:entities.language",
+      "importExternalConcept": "Import external @:entities.concept"
+    },
+    "goToHomepage": "Go to homepage",
+    "logout": "Log out",
+    "toggleSidebar": "Toggle sidebar"
+  },
+  "header": {
+    "titles": {
+      "conceptschemes": "Manage conceptschemes",
+      "conceptscheme": "{item} collections and concepts",
+      "providers": "Manage providers",
+      "languages": "Manage languages"
+    }
+  },
+  "grid": {
+    "rowsTotal": "{n} row total. | {n} rows total.",
+    "columns": {
+      "labels": {
+        "label": "Label",
+        "id": "ID",
+        "name": "Name",
+        "conceptschemeUri": "Conceptscheme URI",
+        "uriPattern": "URI pattern",
+        "type": "Type",
+        "defaultLanguage": "Def. lang.",
+        "idGenerationStrategy": "ID gen. strat.",
+        "subject": "Subject",
+        "expandStrategy": "Expand strategy",
+        "language": "Language",
+        "note": "Note",
+        "source": "Source",
+        "actions": "Actions",
+        "uri": "URI",
+        "match": "Match",
+        "matchType": "Match type"
+      },
+      "actions": {
+        "view": "View",
+        "edit": "Edit",
+        "access": "Access",
+        "publish": "Publish",
+        "merge": "Merge",
+        "delete": "Delete",
+        "concepts": "Concepts"
+      }
+    }
+  },
+  "components": {
+    "clipboardCopy": {
+      "copy": "Copy to clipboard | Copy {item} to clipboard",
+      "copied": "Copied to clipboard."
+    },
+    "editorLinkModal": {
+      "title": "Insert link",
+      "form": {
+        "url": {
+          "label": "URL"
+        }
+      },
+      "actions": {
+        "remove": "Remove link"
+      }
+    },
+    "conceptExpanded": {
+      "labels": "Labels",
+      "prefLabel": "Preferred labels",
+      "altLabels": "Alternative labels",
+      "hiddenLabels": "Hidden labels",
+      "sortLabels": "Sort labels",
+      "notes": "Notes"
+    },
+    "modalConceptscheme": {
+      "title": "{conceptscheme}",
+      "description": "Edit conceptscheme",
+      "tabs": {
+        "labels": "Labels",
+        "notes": "Notes",
+        "sources": "Sources"
+      }
+    },
+    "modalConcept": {
+      "title": "{conceptscheme}",
+      "description": "{mode} {concept}",
+      "tabs": {
+        "labels": "Labels",
+        "notes": "Notes",
+        "sources": "Sources",
+        "relations": "Relations",
+        "matches": "Matches"
+      },
+      "form": {
+        "type": {
+          "label": "Type",
+          "changeWarning": {
+            "title": "You are changing the type of this item",
+            "description": "Because concepts and collections use different relationship types, all relationships associated with the previous type will be removed when you save."
+          }
+        },
+        "id": {
+          "label": "ID"
+        },
+        "inferConceptRelations": {
+          "label": "Should member concepts of this collection be seen as narrower concept of a superordinate of the collection"
+        }
+      }
+    },
+    "modalMerge": {
+      "noMatchesTitle": "No matches to merge",
+      "noMatchesDescription": "There are no matches available to merge for this concept or collection.",
+      "title": "{concept}",
+      "description": "Merge concept or collection",
+      "loading": "Loading matches...",
+      "mergeError": "Failed to merge concepts. Please try again later."
+    },
+    "modalProvider": {
+      "title": "Manage providers",
+      "description": "{mode} a provider",
+      "form": {
+        "id": {
+          "label": "ID",
+          "description": "Leave blank to use the conceptscheme id",
+          "placeholder": "ID"
+        },
+        "conceptschemeUri": {
+          "label": "Conceptscheme URI",
+          "placeholder": "e.g. https://id.test.net/thesauri/example",
+          "hint": "Required"
+        },
+        "uriPattern": {
+          "label": "URI pattern",
+          "placeholder": "e.g. https://id.test.net/thesauri/example/%s",
+          "hint": "Required"
+        },
+        "subject": {
+          "label": "Subject",
+          "placeholder": "e.g. hidden"
+        },
+        "defaultLanguage": {
+          "label": "Default language",
+          "placeholder": "Choose a language"
+        },
+        "displayLanguage": {
+          "label": "Display language",
+          "placeholder": "Choose a language"
+        },
+        "idGenerationStrategy": {
+          "label": "ID generation strategy",
+          "placeholder": "Choose a strategy",
+          "options": {
+            "GUID": "GUID",
+            "NUMERIC": "NUMERIC",
+            "MANUAL": "MANUAL"
+          }
+        },
+        "expandStrategy": {
+          "label": "Expand strategy",
+          "placeholder": "Choose a strategy",
+          "options": {
+            "RECURSE": "Recurse",
+            "VISIT": "Visit"
+          }
+        }
+      }
+    },
+    "modalLanguage": {
+      "title": "Manage languages",
+      "description": "{mode} a language",
+      "form": {
+        "id": {
+          "label": "Code",
+          "placeholder": "Enter the language code",
+          "hint": "Required"
+        },
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter the language name",
+          "hint": "Required"
+        }
+      },
+      "reference": {
+        "beforeLink": "You can use",
+        "linkText": "this",
+        "afterLink": "list as a reference."
+      }
+    },
+    "modalLabel": {
+      "title": "{item}",
+      "description": "{mode} a label",
+      "form": {
+        "label": {
+          "label": "Label",
+          "placeholder": "Enter the label",
+          "hint": "Required"
+        },
+        "language": {
+          "label": "Language",
+          "placeholder": "Choose a language",
+          "hint": "Required"
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Choose a type",
+          "hint": "Required"
+        }
+      }
+    },
+    "modalNote": {
+      "title": "{item}",
+      "description": "{mode} a note",
+      "form": {
+        "language": {
+          "label": "Language",
+          "placeholder": "Choose a language",
+          "hint": "Required"
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Choose a type",
+          "hint": "Required"
+        },
+        "note": {
+          "label": "Note",
+          "placeholder": "Enter the note",
+          "hint": "Required"
+        }
+      }
+    },
+    "modalSource": {
+      "title": "{item}",
+      "description": "{mode} a source",
+      "form": {
+        "citation": {
+          "label": "Citation",
+          "placeholder": "Enter the source citation",
+          "hint": "Required"
+        }
+      }
+    },
+    "modalRelation": {
+      "title": "Add a relation"
+    },
+    "modalTabRelations": {
+      "broader": "Broader",
+      "narrower": "Narrower",
+      "related": "Related",
+      "memberOf": "Member of",
+      "members": "Members",
+      "superordinates": "Superordinates",
+      "subordinateArrays": "Subordinate arrays"
+    },
+    "modalMatch": {
+      "title": "{type}",
+      "description": "Add a match",
+      "form": {
+        "externalScheme": {
+          "label": "External scheme"
+        },
+        "labelSearch": {
+          "label": "Search on label",
+          "placeholder": "Enter a label to filter matches",
+          "hint": "Enter at least 3 characters to search"
+        },
+        "labels": {
+          "label": "Choose match",
+          "placeholder": "Choose a match",
+          "noResults": "No matches found"
+        },
+        "type": {
+          "label": "Change type of match if needed"
+        }
+      }
+    },
+    "modalTabMatches": {
+      "exact": "Exact",
+      "close": "Close",
+      "broad": "Broad",
+      "narrow": "Narrow",
+      "related": "Related",
+      "loading": "Loading matches..."
+    },
+    "modalImportConcept": {
+      "title": "Import external concept",
+      "description": "Search for a concept in an external scheme and import it into the current conceptscheme.",
+      "form": {
+        "externalScheme": {
+          "label": "External scheme"
+        },
+        "labelSearch": {
+          "label": "Search on label",
+          "placeholder": "Enter a label to search"
+        },
+        "results": {
+          "label": "Choose concept",
+          "placeholder": "Choose a concept",
+          "noResults": "No concepts found"
+        }
+      }
+    },
+    "modalDelete": {
+      "title": "Delete {entity}",
+      "message": "Are you sure you want to remove {entity} {item}?",
+      "messageGeneric": "Are you sure you want to remove this {entity}?"
+    }
+  },
+  "views": {
+    "adminConceptscheme": {
+      "form": {
+        "labelFilter": {
+          "placeholder": "Filter by label"
+        },
+        "matchFilter": {
+          "placeholder": "Filter by match",
+          "tooltip": "e.g. http://vocab.getty.edu/aat/300005241"
+        },
+        "typeFilter": {
+          "placeholder": "Filter by type"
+        }
+      }
+    }
+  },
+  "api": {
+    "success": {
+      "fetch": {
+        "title": "Data fetched",
+        "description": "The {item} data was fetched successfully."
+      },
+      "save": {
+        "title": "{item} created",
+        "description": "The {item} data was saved successfully."
+      },
+      "update": {
+        "title": "{item} updated",
+        "description": "The {item} data was updated successfully."
+      },
+      "delete": {
+        "title": "{item} deleted",
+        "description": "The {item} was deleted successfully."
+      },
+      "generic": {
+        "title": "Success",
+        "description": "The operation was completed successfully."
+      }
+    },
+    "errors": {
+      "fetch": {
+        "title": "Failed to fetch {item} data",
+        "description": "An error occurred while fetching {item} data. Please try again later."
+      },
+      "save": {
+        "title": "Failed to create {item}",
+        "description": "An error occurred while saving the {item} data. Please check your input and try again."
+      },
+      "update": {
+        "title": "Failed to update {item}",
+        "description": "An error occurred while updating the {item} data. Please check your input and try again."
+      },
+      "delete": {
+        "title": "Failed to delete {item}",
+        "description": "An error occurred while deleting the {item}. Please try again later."
+      },
+      "generic": {
+        "title": "An error occurred",
+        "description": "An unexpected error occurred. Please try again later."
+      }
+    }
+  },
+  "validation": {
+    "field": {
+      "required": "This field is required.",
+      "uri": "This field must be a valid URI."
+    },
+    "form": {
+      "invalid": "Please correct the errors in the form before submitting."
+    }
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "ok": "OK",
+    "search": "Search",
+    "merge": "Merge",
+    "import": "Import"
+  },
+  "entities": {
+    "conceptscheme": "conceptscheme | conceptschemes",
+    "concept": "concept | concepts",
+    "provider": "provider | providers",
+    "language": "language | languages",
+    "label": "label | labels",
+    "note": "note | notes",
+    "source": "source | sources",
+    "relation": "relation | relations",
+    "match": "match | matches",
+    "tree": "tree | trees"
+  },
+  "lists": {
+    "labelTypes": {
+      "prefLabel": "Preferred",
+      "altLabel": "Alternative",
+      "hiddenLabel": "Hidden",
+      "sortLabel": "Sort"
+    },
+    "noteTypes": {
+      "definition": "Definition",
+      "scopeNote": "Scope note",
+      "example": "Example",
+      "historyNote": "History note",
+      "editorialNote": "Editorial note",
+      "changeNote": "Change note",
+      "note": "Note"
+    },
+    "matchTypes": {
+      "exact": "Exact",
+      "close": "Close",
+      "broad": "Broad",
+      "narrow": "Narrow",
+      "related": "Related"
+    },
+    "conceptTypes": {
+      "concept": "Concept",
+      "collection": "Collection"
+    },
+    "yesNo": {
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "auth": {
+    "error": "Failed to fetch user information. Please try again later."
+  }
+}

@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from pathlib import Path
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
@@ -28,9 +29,14 @@ class BuildHook(BuildHookInterface):
         )
 
     def build_frontend(self):
+        """Build the frontend.
+
+        The actual work lives in scripts/build_frontend.py so that the wheel
+        build and `mise run setup` (setup:frontend) build the frontend in the
+        exact same way.
+        """
         root_dir = Path(__file__).parent
-        static = root_dir / "atramhasis" / "static"
-        static_admin = static / "admin"
-        subprocess.run(["npm", "install"], cwd=static, check=True)
-        subprocess.run(["npm", "install"], cwd=static_admin, check=True)
-        subprocess.run(["grunt", "-v", "build"], cwd=static_admin, check=True)
+        subprocess.run(
+            [sys.executable, str(root_dir / "scripts" / "build_frontend.py")],
+            check=True,
+        )

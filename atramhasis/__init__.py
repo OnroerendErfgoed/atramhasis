@@ -24,6 +24,7 @@ DEFAULT_SETTINGS = {
     "jinja2.filters": "label_sort = atramhasis.utils.label_sort",
     "jinja2.globals": "safe_get_by_uri = atramhasis.utils.safe_get_by_uri",
     "dojo.mode": "dist",
+    "atramhasis.admin_theme_stylesheet": "",
     "layout.focus_conceptschemes": [],
     "skosprovider.skosregistry_factory": "atramhasis.skos.create_registry",
     "skosprovider.skosregistry_location": "request",
