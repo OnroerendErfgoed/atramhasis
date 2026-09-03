@@ -1,0 +1,215 @@
+# mise configuration for Atramhasis
+# https://mise.jdx.dev/
+#
+# Quick start from a fresh clone:
+#   mise trust       # trust this config (depends on your mise settings)
+#   mise install     # install all tools below (python, uv, node, pnpm, pre-commit)
+#   mise run server  # start the dev stack (runs the setup the first time)
+#
+# Atramhasis needs no services to run or to test: it ships with a SQLite
+# development database. `mise run docker` brings up the shared OnroerendErfgoed
+# service stack (postgis, redis, minio) for people who want the optional
+# PostgreSQL setup - see the header of docker-compose.yml.
+#
+# `mise tasks` lists everything below.
+
+[tools]
+# Python 3.11 is one of the versions the CI matrix tests (3.10 - 3.13); the
+# lockfile used by setup:backend:dependencies must match this version.
+python = "3.11"
+uv = "latest"
+# Node 22 and pnpm 11.5 match frontend/package.json (engines + packageManager).
+node = "22"
+pnpm = "11.5.0"
+pre-commit = "latest"
+
+[env]
+# Auto-create and activate the project virtualenv (.venv) whenever you are in
+# this directory. With mise activated in your shell this means the venv is
+# active automatically; it is also active inside `mise run` / `mise exec`.
+_.python.venv = { path = ".venv", create = true }
+
+# ===========================================================================
+#  Elementary tasks
+# ===========================================================================
+[tasks.setup]
+description = "Set up the complete local development environment"
+depends = ["setup:backend", "setup:frontend"]
+
+[tasks.test]
+# Scoped to the tests/ directory like CI. The suite runs entirely on SQLite, so
+# no docker services are needed.
+description = "Run the backend test suite"
+run = [
+    # First-run guard: on a fresh clone .venv/bin/pytest does not exist yet.
+    'test -x .venv/bin/pytest || mise run setup',
+    ".venv/bin/pytest tests",
+]
+
+[tasks.server]
+description = "Run the full dev stack: backend (pserve) and the Vite dev server"
+run = [
+    # Run setup first if it has not been done yet (no venv, or no generated
+    # admin.jinja2). development.ini is committed in this repo, so unlike other
+    # OE projects there is nothing to generate for it. With OVERWRITE=1 setup
+    # always runs, so `OVERWRITE=1 mise run server` also wipes and rebuilds the
+    # development database before starting.
+    'test -x .venv/bin/pserve && test -f atramhasis/templates/admin.jinja2 && [ "${OVERWRITE:-0}" = 0 ] || mise run setup',
+    'test -d frontend/node_modules || mise run setup:frontend',
+    '''
+# Start the frontend dev server in the background and the backend in the
+# foreground. On exit or Ctrl-C, kill the whole process group so nothing
+# (vite/esbuild, pserve and its hupper reload child) is left running.
+trap 'trap - EXIT INT TERM; kill 0' EXIT INT TERM
+bash scripts/run_frontend.sh &
+bash scripts/run_backend.sh
+''',
+]
+
+[tasks."server:backend"]
+description = "Run the backend dev server (pserve) on http://localhost:6543"
+run = [
+    'test -x .venv/bin/pserve && test -f atramhasis/templates/admin.jinja2 && [ "${OVERWRITE:-0}" = 0 ] || mise run setup',
+    "bash scripts/run_backend.sh",
+]
+
+[tasks."server:frontend"]
+description = "Run the frontend (Vite) dev server on http://localhost:5173"
+run = [
+    'test -d frontend/node_modules || mise run setup:frontend',
+    "bash scripts/run_frontend.sh",
+]
+
+# ===========================================================================
+#  Services (standalone, NOT a dependency of setup)
+# ===========================================================================
+[tasks.docker]
+# Only starts services that are not already reachable, so it is safe to run when
+# you already have some of postgis/redis/minio up another way.
+# Use `mise run docker -- --force` to (re)create the full compose stack.
+description = "Start the shared OE service stack (postgis, redis, minio); skips ones already running"
+run = "bash scripts/start_services.sh"
+
+[tasks."docker:down"]
+description = "Stop the local service stack (data is kept in the named volumes)"
+run = "docker compose down"
+
+[tasks."db:reset"]
+description = "Wipe and rebuild the development database with demo data (data loss!)"
+run = "bash scripts/setup_backend.sh --overwrite"
+
+[tasks."pip-compile"]
+description = "Recompile the lockfiles/requirements-dev-py*.txt files from pyproject.toml"
+run = "bash scripts/compile-requirements.sh"
+
+# ===========================================================================
+#  Build (wheel / sdist)
+# ===========================================================================
+# hatch is not a project dependency (see docs/source/development.rst), so it is
+# run as a one-off tool. The wheel build triggers build_hook.py, which builds
+# the frontend and compiles the message catalogs.
+[tasks.build]
+description = "Build both the wheel and the sdist"
+run = "uvx hatch build"
+
+[tasks."build:wheel"]
+description = "Build the wheel (runs the frontend build hook via build_hook.py)"
+run = "uvx hatch build -t wheel"
+
+[tasks."build:sdist"]
+description = "Build the source distribution (sdist)"
+run = "uvx hatch build -t sdist"
+
+# ===========================================================================
+#  Backend setup (#1102)
+# ===========================================================================
+[tasks."setup:backend"]
+description = "Set up the backend (Python) development environment"
+depends = [
+    "setup:backend:package",
+    "setup:backend:messages",
+    "setup:backend:db",
+    "setup:backend:pre-commit",
+]
+alias = "sb"
+
+[tasks."setup:backend:dependencies"]
+# mise auto-creates and activates .venv (see the [env] block above), so uv
+# installs straight into it. The lockfile is per python version, matching the CI
+# matrix; keep it in sync with the python version in [tools] above.
+# `uv pip sync` prunes everything not in the file (including pip itself), so we
+# re-add pip/setuptools afterwards - that way a plain `pip list` / `pip install`
+# in the activated venv works as expected.
+description = "Install the python dependencies into the virtualenv"
+run = [
+    "uv pip sync lockfiles/requirements-dev-py3.11.txt",
+    "uv pip install pip setuptools",
+]
+hide = true
+
+[tasks."setup:backend:package"]
+# Installs atramhasis editable (provides the egg + console scripts like
+# initialize_atramhasis_db). HATCH_BUILD_NO_HOOKS skips the build hook; the
+# frontend is built by setup:frontend and the message catalogs by
+# setup:backend:messages, in the same way CI does it.
+description = "Install the atramhasis package itself (editable, without the build hook)"
+env = { HATCH_BUILD_NO_HOOKS = "true" }
+run = "uv pip install -e ."
+depends = ["setup:backend:dependencies"]
+hide = true
+
+[tasks."setup:backend:messages"]
+description = "Compile the gettext message catalogs"
+run = ".venv/bin/pybabel compile --directory atramhasis/locale --domain atramhasis --statistics true"
+depends = ["setup:backend:package"]
+hide = true
+
+[tasks."setup:backend:db"]
+# Non-destructive by default: an existing database is only migrated to head.
+# Use `mise run db:reset` (or OVERWRITE=1) to wipe and rebuild it.
+description = "Set up the development database (migrate + demo data + RDF dump)"
+run = "bash scripts/setup_backend.sh"
+depends = ["setup:backend:package"]
+hide = true
+
+[tasks."setup:backend:pre-commit"]
+# Depends on the dependencies install: the frontend hooks in
+# .pre-commit-config.yaml aside, pre-commit itself is installed as a dev
+# dependency, so running it while `uv pip sync` rewrites the venv would crash.
+description = "Install the pre-commit git hooks"
+run = "pre-commit install"
+depends = ["setup:backend:dependencies"]
+hide = true
+
+# ===========================================================================
+#  Frontend setup (#1103)
+# ===========================================================================
+[tasks."setup:frontend"]
+# Runs the same build as the wheel build_hook (pnpm install + pnpm build +
+# wiring the hashed assets into admin.jinja2), so the admin page works locally
+# too. `uv run --no-project` gives a python interpreter without touching the
+# virtualenv that setup:backend is populating in parallel; the script only needs
+# the standard library.
+description = "Install frontend deps, build the Vue app, and wire it into admin.jinja2"
+run = "uv run --no-project python scripts/build_frontend.py"
+alias = "sf"
+
+# ===========================================================================
+#  Cleanup
+# ===========================================================================
+# development.ini and the development database are deliberately NOT removed:
+# development.ini is committed in this repo and the database is handled by
+# `mise run db:reset`.
+[tasks.cleanup]
+description = "Remove everything created by the setup task"
+run = """
+rm -rf .venv
+rm -rf frontend/node_modules
+rm -rf frontend/static/css
+rm -rf atramhasis/static/dist
+rm -rf atramhasis/static/css
+rm -rf atramhasis/static/js
+rm -rf atramhasis/static/scss
+rm -f atramhasis/templates/admin.jinja2
+rm -f atramhasis/locale/*/LC_MESSAGES/*.mo
+"""

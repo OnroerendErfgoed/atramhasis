@@ -1,0 +1,88 @@
+# Local development services for Atramhasis.
+#
+#   mise run docker        # start (detached), skipping what is already running
+#   mise run docker:down   # stop (data is kept in the named volumes)
+#
+# NOTE: Atramhasis needs *none* of these to run or to test. It ships with a
+# SQLite development database (see `sqlalchemy.url` in development.ini) and its
+# test suite runs entirely on SQLite, so a plain `mise install && mise run
+# server` works without Docker at all.
+#
+# The stack is here for two reasons:
+#
+#  * postgis - development.ini documents an optional PostgreSQL url. Uncomment
+#    it and scripts/setup_backend.sh will create/migrate/seed that database
+#    through `docker exec postgis psql`, so the Postgres service MUST keep
+#    container_name: postgis.
+#  * redis / minio - Atramhasis does not use them, but they are part of the
+#    shared OnroerendErfgoed local development stack (see below). Keeping them
+#    here means `mise run docker` from this repo brings up the same stack as
+#    every other OE repo instead of a partial one.
+#
+# Elasticsearch is deliberately NOT included: Atramhasis has no Elasticsearch
+# code (search is done in the database) and it is by far the heaviest container
+# in the stack. If you also work on a repo that does need it, start it from that
+# repo. Mind that `mise run docker:down` stops the whole shared stack, ES
+# included, since all repos share the compose project name below.
+#
+# Shared compose project across ALL OE projects: the fixed `name` makes
+# `mise run docker` / `docker compose down` from any repo act on the SAME stack,
+# and prefixes the named volumes below to oe-dev_pgdata / _miniodata so the same
+# data is reused by every OE project (cross-project persistence).
+name: oe-dev
+
+services:
+  postgis:
+    image: postgis/postgis:13-3.3-alpine
+    container_name: postgis
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust # so `psql -U postgres` needs no password
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # web console
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    healthcheck:
+      test: ["CMD-SHELL", "mc ready local || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - miniodata:/data
+
+# Plain named volumes. Thanks to the shared `name: oe-dev` above they resolve to
+# oe-dev_pgdata / oe-dev_miniodata and are reused by every OE project (compose
+# auto-creates them on first `up`).
+volumes:
+  pgdata:
+  miniodata:
