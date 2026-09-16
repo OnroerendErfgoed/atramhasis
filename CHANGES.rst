@@ -1,3 +1,10 @@
+4.0.0 (16-09-2026)
+-------------------
+Features:
+- Migrated the frontend from Dojo to Vue. Note: When upgrading from an older
+installation, be aware that the Compass/Ruby Sass toolchain and the app-admin.scss
+file are no longer included and have been removed.
+
 3.2.1 (08-04-2026)
 -------------------
 Bugfixes:
