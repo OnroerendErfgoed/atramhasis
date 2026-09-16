@@ -7,16 +7,18 @@
 
 <script setup lang="ts">
 import { useAdminUiStore } from '@stores/admin-ui';
-import { useAuthStore } from '@stores/auth';
+// TODO: re-enable once the /userinfo endpoint exists on the backend
+// import { useAuthStore } from '@stores/auth';
 import { useListStore } from '@stores/list';
 import { onBeforeMount } from 'vue';
 
 const adminUiStore = useAdminUiStore();
 const listStore = useListStore();
-const authStore = useAuthStore();
+// const authStore = useAuthStore();
 
 onBeforeMount(async () => {
-  await authStore.fetchUserInfo();
+  // TODO: re-enable once the /userinfo endpoint exists on the backend
+  // await authStore.fetchUserInfo();
   await listStore.getAll();
 });
 </script>
