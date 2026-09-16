@@ -1,9 +1,11 @@
 4.0.0 (16-09-2026)
 -------------------
 Features:
-- Migrated the frontend from Dojo to Vue. Note: When upgrading from an older
-installation, be aware that the Compass/Ruby Sass toolchain and the app-admin.scss
-file are no longer included and have been removed.
+- Migrated the frontend from Dojo to Vue.
+
+Breaking change: When upgrading from an older installation,
+be aware that the Compass/Ruby Sass toolchain and the app-admin.scss file are no longer included and have been removed.
+See: https://atramhasis.readthedocs.io/en/latest/customisation.html#changing-the-css
 
 3.2.1 (08-04-2026)
 -------------------
