@@ -36,8 +36,14 @@ Glossary
     HyperText Markup Language is the markup language used to create webpage.
 
    CSS
-    Cascading Style Sheet is a style specification used to add style and 
+    Cascading Style Sheet is a style specification used to add style and
     presentation to webpages.
+
+   SCSS
+    `Sass <https://sass-lang.com>`__ (Syntactically Awesome Style Sheets) is a
+    :term:`CSS` preprocessor. SCSS is its most common, CSS-compatible syntax.
+    Atramhasis writes the styling of the public user interface in SCSS and
+    compiles it to :term:`CSS` with `Dart Sass <https://sass-lang.com/dart-sass/>`__.
 
    SOA
     `Service Oriented Architecture <https://en.wikipedia.org/wiki/Service-oriented_architecture>`__.

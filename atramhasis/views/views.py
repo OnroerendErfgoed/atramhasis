@@ -497,8 +497,23 @@ class AtramhasisAdminView:
         renderer="atramhasis:templates/admin.jinja2",
         permission="edit",
     )
+    @view_config(
+        route_name="catchall_admin",
+        renderer="atramhasis:templates/admin.jinja2",
+        permission="edit",
+    )
     def admin_view(self):
-        return {"admin": None}
+        theme_stylesheet = self.request.registry.settings.get(
+            "atramhasis.admin_theme_stylesheet"
+        )
+        if theme_stylesheet:
+            theme_stylesheet = self.request.static_path(theme_stylesheet)
+
+        return {
+            "admin": None,
+            "local": self.request.registry.settings.get("vue.mode", "dist") == "src",
+            "theme_stylesheet": theme_stylesheet,
+        }
 
     @view_config(
         route_name="scheme_tree_invalidate",

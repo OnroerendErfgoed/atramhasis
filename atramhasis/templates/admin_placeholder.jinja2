@@ -1,0 +1,21 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <title>Atramhasis - Admin</title>
+    {% if not local %}
+      <!-- if production -->
+    {% endif %}
+    {% if theme_stylesheet %}
+      <link rel="stylesheet" href="{{ theme_stylesheet }}">
+    {% endif %}
+  </head>
+
+  <body>
+    <div id="app" class="isolate"></div>
+    {% if local %}
+      <script type="module" src="http://localhost:5173/@vite/client"></script>
+      <script type="module" src="http://localhost:5173/src/main.ts"></script>
+    {% endif %}
+  </body>
+</html>

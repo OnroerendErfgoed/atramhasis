@@ -60,7 +60,7 @@ class LanguagesCrud:
         Get an existing language
 
         :raises atramhasis.errors.LanguageNotFoundException: If the language can't be found
-        :return the corresponding language
+        :return: the corresponding language
         """
         l_id = self.request.matchdict["l_id"]
         try:
@@ -98,7 +98,7 @@ class LanguagesCrud:
     @view_config(route_name="atramhasis.delete_language", permission="edit")
     def delete_language(self):
         """
-        Delete an existing concept
+        Delete an existing language
 
         :raises atramhasis.errors.LanguageNotFoundException: If the language can't be found
         """

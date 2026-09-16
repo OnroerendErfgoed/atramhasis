@@ -6,7 +6,7 @@ on:
       - atramhasis/**
       - scripts/**
       - tests/**
-      - "!atramhasis/static/**"
+      - '!atramhasis/static/**'
       - .github/workflows/atramhasis_backend.yaml
       - pyproject.toml
       - requirements*.txt
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13.10"]
+        python-version: ['3.10', '3.11', '3.12', '3.13.10']
 
     steps:
       - uses: actions/checkout@v4
@@ -38,6 +38,10 @@ jobs:
           pip install pip-tools
           pip-sync lockfiles/requirements-dev-py${{ matrix.python-version }}.txt
           pip install -e .
+
+      - name: Create jinja templates
+        run: |
+          touch atramhasis/templates/admin.jinja2
 
       - name: Compile message catalogs
         run: pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true

@@ -5,3 +5,21 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+  - repo: local
+    hooks:
+      - id: prettier
+        name: run format
+        language: system
+        entry: bash -c 'cd frontend && pnpm format'
+        pass_filenames: false
+        types_or: [ ts, javascript, scss, css, yaml, json, vue ]
+        files: ^frontend/
+  - repo: local
+    hooks:
+      - id: lint
+        name: run lint
+        language: system
+        entry: bash -c 'cd frontend && pnpm lint'
+        pass_filenames: false
+        types_or: [ ts, javascript, scss, css, yaml, json, vue ]
+        files: ^frontend/

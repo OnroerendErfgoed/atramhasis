@@ -12,7 +12,7 @@ babel==2.18.0
     #   sphinx
 beautifulsoup4==4.14.3
     # via webtest
-bleach==6.3.0
+bleach==6.4.0
     # via atramhasis (pyproject.toml)
 cachecontrol==0.14.4
     # via atramhasis (pyproject.toml)
@@ -44,7 +44,7 @@ html5lib==1.1
     #   skosprovider-rdf
 hupper==1.12.1
     # via pyramid
-idna==3.11
+idna==3.15
     # via requests
 imagesize==2.0.0
     # via sphinx
@@ -80,9 +80,9 @@ language-tags==1.2.0
     #   skosprovider
 lazy-object-proxy==1.12.0
     # via openapi-spec-validator
-lxml==6.0.2
+lxml==6.1.0
     # via pyld
-mako==1.3.10
+mako==1.3.12
     # via
     #   alembic
     #   pyramid-mako
@@ -132,7 +132,7 @@ pycodestyle==2.14.0
     # via flake8
 pyflakes==3.4.0
     # via flake8
-pygments==2.19.2
+pygments==2.20.0
     # via
     #   atramhasis (pyproject.toml)
     #   pyramid-debugtoolbar
@@ -166,7 +166,7 @@ pyramid-skosprovider==1.3.0
     # via atramhasis (pyproject.toml)
 pyramid-tm==2.6
     # via atramhasis (pyproject.toml)
-pytest==9.0.2
+pytest==9.0.3
     # via
     #   atramhasis (pyproject.toml)
     #   pytest-cov
@@ -189,7 +189,7 @@ referencing==0.36.2
     #   jsonschema
     #   jsonschema-path
     #   jsonschema-specifications
-requests==2.32.5
+requests==2.33.0
     # via
     #   atramhasis (pyproject.toml)
     #   cachecontrol
@@ -280,7 +280,7 @@ typing-extensions==4.15.0
     #   openapi-core
     #   referencing
     #   sqlalchemy
-urllib3==2.6.3
+urllib3==2.7.0
     # via requests
 venusian==3.1.1
     # via pyramid
@@ -292,7 +292,7 @@ webencodings==0.5.1
     # via
     #   bleach
     #   html5lib
-webob==1.8.9
+webob==1.8.10
     # via
     #   pyramid
     #   webtest
