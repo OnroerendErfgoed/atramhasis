@@ -145,7 +145,7 @@ if [ -n "$NEW_DIR" ]; then
   echo "pip install -e .\"[dev]\" --no-deps --force-reinstall"
 
 else
-  echo "Could not automatically detect the created projectw directory."
+  echo "Could not automatically detect the created project directory."
   echo "Please cd into the scaffolded project root and run these commands manually:"
   echo "  pip install -e .\"[dev]\""
   echo "  alembic upgrade head  # if alembic is available and config exists"
