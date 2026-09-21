@@ -13,7 +13,7 @@ $('#mobile-menu-select').change(function () {
     ) {
       window.location = parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
     }
-  } catch (e) {
+  } catch {
     // Ignore invalid URL values.
   }
 });

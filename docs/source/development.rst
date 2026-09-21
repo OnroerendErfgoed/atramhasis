@@ -225,6 +225,7 @@ The dependencies are defined within pyproject.toml. There, you can add, modify, 
 Afterward, run pip-compile to generate the requirements files.
 
 .. code-block:: bash
+
     # Update pyproject.toml and compile requirements files as follows:
     $ ./scripts/compile-requirements.sh
 
