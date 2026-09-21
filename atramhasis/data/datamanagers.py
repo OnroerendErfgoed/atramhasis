@@ -447,7 +447,7 @@ class AuditManager(DataManager):
         get the most popular concepts for a conceptscheme
         :param conceptscheme_id: id of the conceptscheme
         :param max_results: maximum number of results, default 5
-        :param period: 'last_day' or 'last_week' or 'last_month' or 'last_year', default 'last_mont'
+        :param period: 'last_day' or 'last_week' or 'last_month' or 'last_year', default 'last_month'
         :return: List of the most popular concepts of a conceptscheme over a certain period
         """
 
