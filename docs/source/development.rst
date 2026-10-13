@@ -435,6 +435,99 @@ Suppose you want to server both on the host `demo.atramhasis.org` with
 Atramhasis as the root of your domain and the LDF server at `/ldf`. In this
 case, set `atramhasis.ldf.baseurl` to `https://demo.atramhasis.org/ldf`.
 
+.. _prune_visit_log:
+
+Pruning the visit logs
+======================
+
+Every visit to a concept or conceptscheme adds a row to the
+`concept_visit_log` or `conceptscheme_visit_log` table. These rows are never
+removed automatically, so both tables keep growing. The `concept_visit_log` is
+used to show the most popular concepts of a conceptscheme. This only looks at
+a rolling period (`last_day`, `last_week`, `last_month` or `last_year`), so
+Atramhasis never uses visits older than one year. The
+`conceptscheme_visit_log` is only written, never read, by Atramhasis.
+
+The `prune_visit_log` script removes old rows from both tables. Like the other
+scripts it takes the application's ini file:
+
+.. code-block:: bash
+
+    $ prune_visit_log development.ini --keep year --buffer-days 3
+
+The following options are available:
+
+`--keep`
+    How much data to keep: `week`, `month` or `year`. Defaults to `year`.
+    The default templates show the most popular concepts of the last month,
+    so keeping only a `week` will make that list incomplete. The script logs
+    a warning when `--keep week` is used.
+`--buffer-days`
+    Extra days kept on top of `--keep`. Defaults to `3`.
+`--tables`
+    Which visit log tables to prune: `concept`, `conceptscheme` or both
+    (eg. `--tables concept conceptscheme`). Defaults to both.
+`--dry-run`
+    Only report how many rows would be deleted, without deleting them.
+
+All rows visited before `today - <keep> - <buffer-days>` are deleted. This
+uses the same rolling periods as the popular concepts, so a pruned table always
+covers the period it has to support.
+
+The script is safe to run while the application is live. It only deletes old
+rows, while new visits always get a recent timestamp, and it does not lock
+the tables. This makes it a good candidate for a nightly cron job:
+
+.. code-block:: bash
+
+    0 3 * * * /path/to/venv/bin/prune_visit_log /path/to/production.ini --keep year --buffer-days 3
+
+The script does not make a backup or export of the deleted rows. If you need
+to keep them, make sure they are part of your regular database backups.
+
+Disk space
+----------
+
+A `DELETE` does not shrink the table or index files on disk. For regular
+nightly runs this is not a problem: PostgreSQL's autovacuum makes the freed
+space reusable and the tables stay roughly the same size.
+
+First run on an existing large table
+------------------------------------
+
+On an instance that has been running for a long time, the first run can
+delete tens of millions of rows. For this one-off cleanup it is faster to copy
+the rows you want to keep, truncate the table and put the rows back. Run this
+manually during quiet hours, since `TRUNCATE` locks the table. On PostgreSQL:
+
+.. code-block:: sql
+
+    BEGIN;
+    CREATE TEMP TABLE keep ON COMMIT DROP AS
+    SELECT * FROM concept_visit_log
+    WHERE visited_at >= current_date - interval '1 year 3 days';
+    TRUNCATE concept_visit_log;
+    INSERT INTO concept_visit_log SELECT * FROM keep;
+    COMMIT;
+
+    VACUUM ANALYZE concept_visit_log;
+
+    BEGIN;
+    CREATE TEMP TABLE keep ON COMMIT DROP AS
+    SELECT * FROM conceptscheme_visit_log
+    WHERE visited_at >= current_date - interval '1 year 3 days';
+    TRUNCATE conceptscheme_visit_log;
+    INSERT INTO conceptscheme_visit_log SELECT * FROM keep;
+    COMMIT;
+
+    VACUUM ANALYZE conceptscheme_visit_log;
+
+Match the interval to the `--keep` and `--buffer-days` options you will use
+for the regular runs. `TRUNCATE` frees the disk space immediately, the
+`VACUUM ANALYZE` only refreshes the statistics and the visibility map. After
+this, the regular `prune_visit_log` runs only have a day's worth of rows to
+delete.
+
 
 Contributing
 ============
