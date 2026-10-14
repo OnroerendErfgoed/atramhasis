@@ -1477,6 +1477,14 @@ functionality might fail to run properly.
     # If unspecified, a built-in default order is used.
     atramhasis.note_type_order = {"definition": 0, "scopeNote": 1, "note": 2, "example": 3, "historyNote": 4, "changeNote": 5, "editorialNote": 6}
 
+    # DEFAULT all origins - Origins written to the visit log tables.
+    # Allowed: HTML, REST, RDF, CSV. See "Configuring the visit log".
+    atramhasis.audit.origins =
+      HTML
+      REST
+      RDF
+      CSV
+
     # The Twitter @username the card should be attributed to.
     twitter.site =
 
