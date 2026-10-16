@@ -1123,11 +1123,13 @@ class TestRdfFunctional:
         )
         assert "200 OK" == rdf_response.status
         assert "application/rdf+xml" == rdf_response.content_type
+        assert 86400 == rdf_response.cache_control.max_age
 
     def test_rdf_full_xml_ext(self, testapp):
         rdf_response = testapp.get("/conceptschemes/MATERIALS/c.rdf")
         assert "200 OK" == rdf_response.status
         assert "application/rdf+xml" == rdf_response.content_type
+        assert 86400 == rdf_response.cache_control.max_age
 
     def test_rdf_full_turtle(self, testapp):
         ttl_response = testapp.get(
@@ -1135,11 +1137,13 @@ class TestRdfFunctional:
         )
         assert "200 OK" == ttl_response.status
         assert "text/turtle" == ttl_response.content_type
+        assert 86400 == ttl_response.cache_control.max_age
 
     def test_rdf_full_turtle_ext(self, testapp):
         ttl_response = testapp.get("/conceptschemes/MATERIALS/c.ttl")
         assert "200 OK" == ttl_response.status
         assert "text/turtle" == ttl_response.content_type
+        assert 86400 == ttl_response.cache_control.max_age
 
     def test_rdf_conceptscheme_xml(self, testapp):
         rdf_response = testapp.get(
@@ -1147,11 +1151,13 @@ class TestRdfFunctional:
         )
         assert "200 OK" == rdf_response.status
         assert "application/rdf+xml" == rdf_response.content_type
+        assert 86400 == rdf_response.cache_control.max_age
 
     def test_rdf_conceptscheme_xml_ext(self, testapp):
         rdf_response = testapp.get("/conceptschemes/MATERIALS.rdf")
         assert "200 OK" == rdf_response.status
         assert "application/rdf+xml" == rdf_response.content_type
+        assert 86400 == rdf_response.cache_control.max_age
 
     def test_rdf_conceptscheme_turtle(self, testapp):
         ttl_response = testapp.get(
@@ -1159,11 +1165,13 @@ class TestRdfFunctional:
         )
         assert "200 OK" == ttl_response.status
         assert "text/turtle" == ttl_response.content_type
+        assert 86400 == ttl_response.cache_control.max_age
 
     def test_rdf_conceptscheme_turtle_ext(self, testapp):
         ttl_response = testapp.get("/conceptschemes/MATERIALS.ttl")
         assert "200 OK" == ttl_response.status
         assert "text/turtle" == ttl_response.content_type
+        assert 86400 == ttl_response.cache_control.max_age
 
     def test_rdf_conceptscheme_jsonld(self, testapp):
         res = testapp.get(
@@ -1171,11 +1179,13 @@ class TestRdfFunctional:
         )
         assert "200 OK" == res.status
         assert "application/ld+json" == res.content_type
+        assert 86400 == res.cache_control.max_age
 
     def test_rdf_conceptscheme_jsonld_ext(self, testapp):
         res = testapp.get("/conceptschemes/MATERIALS.jsonld")
         assert "200 OK" == res.status
         assert "application/ld+json" == res.content_type
+        assert 86400 == res.cache_control.max_age
 
     def test_rdf_individual_jsonld(self, testapp):
         res = testapp.get(
