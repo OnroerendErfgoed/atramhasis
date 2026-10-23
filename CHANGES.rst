@@ -71,6 +71,10 @@ Other:
 Breaking changes:
 
 - Inconsistent response code for deletes #938
+- The `import_file` script no longer takes the URI pattern as a positional
+  argument. Use the `--uri-pattern` option instead, which is required unless
+  `--no-create-provider` is passed. The other options also use dashes now (eg.
+  `--conceptscheme-label`). #940 #1164
 
 Features:
 
