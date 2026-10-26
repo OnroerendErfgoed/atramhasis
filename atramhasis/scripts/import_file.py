@@ -173,7 +173,8 @@ def parse_argv_for_import(argv):
         "--id-generation-strategy",
         dest="id_generation_strategy",
         type=str,
-        help="URI pattern input for the URIGenerator",
+        help="Strategy used to generate ids for new concepts and collections "
+        "(default: numeric)",
         required=False,
         choices=["numeric", "guid", "manual"],
         default=None,
@@ -280,7 +281,7 @@ def main(argv=sys.argv):  # pragma: no cover
     Documentation: import -h
     Run: import
     <path_input_file>
-    <uri_pattern>
+    --uri-pattern <uri_pattern>
     --to <conn_string>
     --conceptscheme-uri <cs_uri>
     --conceptscheme-label <cs_label>

@@ -1051,21 +1051,23 @@ Call it with the `help` argument to see the possible arguments.
     $ workon my_thesarus
     $ import_file --help
 
-    usage: import_file.py [-h] [--to conn_string] [--conceptscheme-label CS_LABEL]
-                          [--conceptscheme-uri CS_URI]
-                          [--create-provider | --no-create-provider]
-                          [--provider-id PROVIDER_ID]
-                          [--id-generation-strategy {numeric,guid,manual}]
-                          input_file uri_pattern
+    usage: import_file [-h] [--uri-pattern URI_PATTERN] [--to conn_string]
+                       [--conceptscheme-label CS_LABEL]
+                       [--conceptscheme-uri CS_URI]
+                       [--create-provider | --no-create-provider]
+                       [--provider-id PROVIDER_ID]
+                       [--id-generation-strategy {numeric,guid,manual}]
+                       input_file
 
     Import file to a database
 
     positional arguments:
       input_file            local path to the input file
-      uri_pattern           URI pattern input for the URIGenerator
 
     options:
       -h, --help            show this help message and exit
+      --uri-pattern URI_PATTERN
+                            URI pattern input for the URIGenerator
       --to conn_string      Connection string of the output database
       --conceptscheme-label CS_LABEL
                             Label of the conceptscheme
@@ -1074,26 +1076,36 @@ Call it with the `help` argument to see the possible arguments.
       --create-provider, --no-create-provider
                             An optional parameter if given a provider is created.
                             Use --no-create-provider to not create a provider
-                            (default: True)
       --provider-id PROVIDER_ID
                             An optional string (eg. ERFGOEDTYPES) to be assigned
                             to the provider id. If not specified, assign the
                             conceptscheme id to the provider id
       --id-generation-strategy {numeric,guid,manual}
-                            URI pattern input for the URIGenerator
+                            Strategy used to generate ids for new concepts and
+                            collections (default: numeric)
 
-    example: import_file.py atramhasis/scripts/my_file urn:x-skosprovider:trees:%s
-    --to sqlite:///atramhasis.sqlite --conceptscheme-label Labels --conceptscheme-
-    uri urn:x-skosprovider:trees --create-provider --provider-id ERFGOEDTYPES
-    --id-generation-strategy numeric
+    example: import_file atramhasis/scripts/my_file --uri-pattern
+    urn:x-skosprovider:trees:%s --to sqlite:///atramhasis.sqlite --conceptscheme-
+    label Labels --conceptscheme-uri urn:x-skosprovider:trees --create-provider
+    --provider-id ERFGOEDTYPES --id-generation-strategy numeric
 
 
 The `input_file` is a positional required argument and details where the file 
 you want to import is located, for example :file:`my_thesaurus/data/trees.json`. 
 It is relative to your current location.
 
-The `uri_pattern` is a positional required argument that details the URI pattern 
-that will be used by the provider to create concept and collection URI's.
+The `--uri-pattern` argument details the URI pattern that will be used by the
+provider to create concept and collection URI's, for example
+`http://id.trees.org/%s`. The pattern must contain exactly one `%s`, which
+will be replaced by the id of the concept or collection. It is required when a
+provider is created (the default) and is not allowed in combination with
+`--no-create-provider`.
+
+.. note::
+
+    Before Atramhasis 3.0.0, the URI pattern was a positional argument
+    (`import_file <input_file> <uri_pattern>`). Since 3.0.0 it has to be passed
+    with the `--uri-pattern` option.
 
 The `to` argument contains the connection string of output database. Only
 PostGreSQL and SQLite are supported. The structure is either
@@ -1103,8 +1115,8 @@ either `sqlite:///path/db_name.sqlite`. The default value is `sqlite:///atramhas
 The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. With a 
 :class:`~skosprovider_rdf.providers.RDFProvider` the conceptscheme can be present
 in the RDF file. The other providers can specify it on the command line
-through the `conceptscheme_label` argument. If no `conceptscheme_label` is present,
-the default label is the name of the file.
+through the `--conceptscheme-uri` and `--conceptscheme-label` arguments. If no
+`--conceptscheme-label` is present, the default label is the name of the file.
 
 Once the data is loaded in the database, your conceptscheme and provider will 
 be ready, unless you chose the `--no-create-provider` option. This is rarely what 
@@ -1181,94 +1193,30 @@ We run the following command:
 .. code-block:: bash
 
     $ workon my_thesarus
-    $ import_file my_thesaurus/data/trees.json <uri-pattern> --to sqlite:///my_thesaurus.sqlite --conceptscheme_label Trees
+    $ import_file my_thesaurus/data/trees.json \
+        --uri-pattern 'http://id.trees.org/%s' \
+        --to sqlite:///my_thesaurus.sqlite \
+        --conceptscheme-uri http://id.trees.org \
+        --conceptscheme-label Trees
 
 This will return output similar to this:
 
 .. code-block:: bash
 
-    sqlalchemy.engine.base.Engine SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
-    sqlalchemy.engine.base.Engine ()
-    sqlalchemy.engine.base.Engine SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
-    sqlalchemy.engine.base.Engine ()
-    sqlalchemy.engine.base.Engine BEGIN (implicit)
-    sqlalchemy.engine.base.Engine INSERT INTO note (note, notetype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('A type of tree.', 'definition', 'en')
-    sqlalchemy.engine.base.Engine INSERT INTO note (note, notetype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('A different type of tree.', 'definition', 'en')
-    sqlalchemy.engine.base.Engine INSERT INTO conceptscheme (uri) VALUES (?)
-    sqlalchemy.engine.base.Engine (None,)
-    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('Trees', 'prefLabel', 'nl')
-    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('The Larch', 'prefLabel', 'en')
-    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('De Lariks', 'prefLabel', 'nl')
-    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('The Chestnut', 'prefLabel', 'en')
-    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('De Paardekastanje', 'altLabel', 'nl')
-    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('la châtaigne', 'altLabel', 'fr')
-    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('Bomen per soort', 'prefLabel', 'nl')
-    sqlalchemy.engine.base.Engine INSERT INTO label (label, labeltype_id, language_id) VALUES (?, ?, ?)
-    sqlalchemy.engine.base.Engine ('Trees by species', 'prefLabel', 'en')
-    sqlalchemy.engine.base.Engine INSERT INTO conceptscheme_label (conceptscheme_id, label_id) VALUES (?, ?)
-    sqlalchemy.engine.base.Engine (11, 3548)
-    sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('concept', 1, 'http://id.trees.org/1', 11)
-    sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('concept', 2, 'http://id.trees.org/2', 11)
-    sqlalchemy.engine.base.Engine INSERT INTO concept (type, concept_id, uri, conceptscheme_id) VALUES (?, ?, ?, ?)
-    sqlalchemy.engine.base.Engine ('collection', 3, 'http://id.trees.org/3', 11)
-    sqlalchemy.engine.base.Engine INSERT INTO concept_label (concept_id, label_id) VALUES (?, ?)
-    sqlalchemy.engine.base.Engine ((2558, 3551), (2558, 3552), (2558, 3553), (2557, 3549), (2557, 3550), (2559, 3554), (2559, 3555))
-    sqlalchemy.engine.base.Engine INSERT INTO concept_note (concept_id, note_id) VALUES (?, ?)
-    sqlalchemy.engine.base.Engine ((2558, 3605), (2557, 3604))
-    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
-    FROM concept
-    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ? AND concept.type IN (?)
-    sqlalchemy.engine.base.Engine (11, 1, 'concept')
-    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
-    FROM concept
-    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ? AND concept.type IN (?)
-    sqlalchemy.engine.base.Engine (11, 2, 'concept')
-    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
-    FROM concept
-    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ? AND concept.type IN (?)
-    sqlalchemy.engine.base.Engine (11, 3, 'collection')
-    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
-    FROM concept
-    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ?
-    sqlalchemy.engine.base.Engine (11, 1)
-    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
-    FROM concept, collection_concept
-    WHERE ? = collection_concept.collection_id AND concept.id = collection_concept.concept_id
-    sqlalchemy.engine.base.Engine (2559,)
-    sqlalchemy.engine.base.Engine INSERT INTO collection_concept (collection_id, concept_id) VALUES (?, ?)
-    sqlalchemy.engine.base.Engine (2559, 2557)
-    sqlalchemy.engine.base.Engine SELECT concept.id AS concept_id_1, concept.type AS concept_type, concept.concept_id AS concept_concept_id, concept.uri AS concept_uri, concept.conceptscheme_id AS concept_conceptscheme_id
-    FROM concept
-    WHERE concept.conceptscheme_id = ? AND concept.concept_id = ?
-    sqlalchemy.engine.base.Engine (11, 2)
-    sqlalchemy.engine.base.Engine INSERT INTO collection_concept (collection_id, concept_id) VALUES (?, ?)
-    sqlalchemy.engine.base.Engine (2559, 2558)
-    sqlalchemy.engine.base.Engine COMMIT
-    sqlalchemy.engine.base.Engine BEGIN (implicit)
-    sqlalchemy.engine.base.Engine SELECT label.id AS label_id, label.label AS label_label, label.labeltype_id AS label_labeltype_id, label.language_id AS label_language_id
-    FROM label JOIN conceptscheme_label ON label.id = conceptscheme_label.label_id
-    WHERE label.label = ?
-     LIMIT ? OFFSET ?
-    sqlalchemy.engine.base.Engine ('Trees', 1, 0)
-    sqlalchemy.engine.base.Engine SELECT conceptscheme.id AS conceptscheme_id, conceptscheme.uri AS conceptscheme_uri
-    FROM conceptscheme, conceptscheme_label
-    WHERE ? = conceptscheme_label.label_id AND conceptscheme.id = conceptscheme_label.conceptscheme_id
-    sqlalchemy.engine.base.Engine (3548,)
+    Importing file my_thesaurus/data/trees.json to database sqlite:///my_thesaurus.sqlite ...
+    Connecting to database sqlite:///my_thesaurus.sqlite ...
+     ∟Database connection healthy
+    Concept('1')
+    Concept('2')
+    Collection('3')
+    Concept('1')
+    Concept('2')
+    Collection('3')
 
-
-    *** The import of the my_thesaurus/data/trees.json file with conceptscheme label 'Trees' to sqlite:///my_thesaurus.sqlite was successfull. ***
-
+    ***
+    The import of conceptscheme 1 from the my_thesaurus/data/trees.json file to sqlite:///my_thesaurus.sqlite was succesful.
+    You can now continue through the Atramhasis UI.
+    ***
 
 Now your thesaurus has been successfully imported and is ready to be browsed,
 expanded and edited.
