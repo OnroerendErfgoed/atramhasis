@@ -475,8 +475,9 @@ uses the same rolling periods as the popular concepts, so a pruned table always
 covers the period it has to support.
 
 The script is safe to run while the application is live. It only deletes old
-rows, while new visits always get a recent timestamp, and it does not lock
-the tables. This makes it a good candidate for a nightly cron job:
+rows, while new visits always get a recent timestamp, and it takes no lock
+that blocks the application's inserts or reads. This makes it a good
+candidate for a nightly cron job:
 
 .. code-block:: bash
 
