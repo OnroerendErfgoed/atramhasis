@@ -99,7 +99,7 @@ mccabe==0.7.0
     # via flake8
 more-itertools==10.8.0
     # via openapi-core
-msgpack==1.1.2
+msgpack==1.2.1
     # via cachecontrol
 openapi-core==0.22.0
     # via
