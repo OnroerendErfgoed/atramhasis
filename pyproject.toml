@@ -28,7 +28,7 @@ classifiers = [
 dependencies = [
     "pyramid",
     "pyramid_tm",
-    "SQLAlchemy",
+    "SQLAlchemy<2.1",
     "transaction",
     "zope.sqlalchemy",
     "skosprovider",
