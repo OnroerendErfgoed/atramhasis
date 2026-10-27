@@ -14,9 +14,9 @@
 #
 #   * sqlite (the default)  - the database is a plain file, so "create" and
 #     "drop" are just creating/removing that file.
-#   * postgresql            - the database is created through
-#     `docker exec postgis psql` (see docker-compose.yml), so no local psql
-#     client is needed. Override the container with PG_CONTAINER.
+#   * postgresql            - the database is created on the server of the
+#     configured url (the one of docker-compose.yml or any other), through the
+#     PostgreSQL driver of the venv, so no local psql client is needed.
 #
 # Used by `mise run setup` (setup:backend:db) and `mise run db:reset`. Relies on
 # the venv already existing (produced by `mise install && mise run setup`).
@@ -74,19 +74,36 @@ case "${db_url}" in
         fi
         ;;
     postgresql*|postgres:*)
-        PG_CONTAINER="${PG_CONTAINER:-postgis}"
         db_name="${db_url##*/}"
         db_name="${db_name%%\?*}"
-        pg() { docker exec "${PG_CONTAINER}" psql -U postgres "$@"; }
-        if pg -tAc "SELECT 1 FROM pg_database WHERE datname='${db_name}'" | grep -q 1 \
-           && [[ "${OVERWRITE}" == "0" ]]; then
+        # Usage: pg_database <exists|recreate>. Connects with the configured url
+        # to the `postgres` maintenance database of the same server.
+        pg_database() {
+            .venv/bin/python - "${db_url}" "$1" <<'PY'
+import sys
+
+from sqlalchemy import create_engine, text
+from sqlalchemy.engine import make_url
+
+url = make_url(sys.argv[1])
+engine = create_engine(url.set(database="postgres"), isolation_level="AUTOCOMMIT")
+with engine.connect() as conn:
+    params = {"name": url.database}
+    if sys.argv[2] == "exists":
+        print(conn.execute(text("SELECT count(*) FROM pg_database WHERE datname = :name"), params).scalar())
+    else:
+        name = conn.dialect.identifier_preparer.quote(url.database)
+        conn.execute(text("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = :name"), params)
+        conn.execute(text(f"DROP DATABASE IF EXISTS {name}"))
+        conn.execute(text(f"CREATE DATABASE {name}"))
+PY
+        }
+        if [[ "$(pg_database exists)" == "1" && "${OVERWRITE}" == "0" ]]; then
             echo "Database '${db_name}' already exists - skipping create + seed (use --overwrite to recreate)."
         else
             [[ "${OVERWRITE}" != "0" ]] && echo "Overwriting database '${db_name}'..." \
                                         || echo "Creating database '${db_name}'..."
-            pg -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='${db_name}'" >/dev/null
-            pg -c "DROP DATABASE IF EXISTS ${db_name}"
-            pg -c "CREATE DATABASE ${db_name}"
+            pg_database recreate
             db_created=1
         fi
         ;;

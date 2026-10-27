@@ -130,20 +130,20 @@ Atramhasis needs **no** services: it ships with a SQLite development database an
 its test suite runs entirely on SQLite, so `mise install && mise run server` works
 without Docker.
 
-A :file:`docker-compose.yml` is provided for the optional PostgreSQL setup
-(uncomment the `postgresql` url in :file:`development.ini` and
-:file:`scripts/setup_backend.sh` will create, migrate and seed that database) and
-to line up with the shared service stack used by the other Flanders Heritage
-applications:
+A :file:`docker-compose.yml` with a PostgreSQL container is provided for the
+optional PostgreSQL setup:
 
 .. code-block:: bash
 
-    $ mise run docker       # start postgis, redis and minio (skips what already runs)
-    $ mise run docker:down  # stop them again (data is kept in the named volumes)
+    $ mise run docker       # start PostgreSQL (skipped if port 5432 is already in use)
+    $ mise run docker:down  # stop it again (data is kept in the named volume)
 
-Redis and MinIO are not used by Atramhasis; they are only part of that shared
-stack. There are consequently no MinIO buckets to create and no `minio` task.
-Elasticsearch is not included either, since Atramhasis does not use it.
+To use it, install a PostgreSQL driver in the virtualenv
+(`uv pip install "psycopg[binary]"`), uncomment the `postgresql` url in
+:file:`development.ini` and run `mise run db:reset`, which creates, migrates and
+seeds that database. Any other PostgreSQL server works too: if something already
+listens on port 5432, `mise run docker` does not start the container and the
+database is created on that server instead.
 
 Activating mise in your shell
 -----------------------------
