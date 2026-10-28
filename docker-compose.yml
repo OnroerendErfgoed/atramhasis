@@ -9,9 +9,10 @@
 # works without Docker at all.
 #
 # To develop against PostgreSQL, uncomment the postgresql `sqlalchemy.url` in
-# development.ini (its credentials match the ones below) and run
-# `mise run db:reset`. Any other PostgreSQL server works just as well: point the
-# url at it and leave this file alone.
+# development.ini (its credentials match the ones below), run `mise run docker`
+# and then `mise run setup` (or `mise run db:reset` for an existing setup). Any
+# other PostgreSQL server works just as well: point the url at it and leave this
+# file alone.
 name: atramhasis
 
 services:

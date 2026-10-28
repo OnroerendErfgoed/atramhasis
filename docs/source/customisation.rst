@@ -104,6 +104,10 @@ some other database engine, as long as SQLAlchemy supports it. Configure the
 the database. See the documentation of SQLAlchemy for more information about
 this connection url.
 
+For PostgreSQL, install Atramhasis with the `postgresql` extra
+(`pip install "atramhasis[postgresql]"`), which provides the psycopg driver, and
+use a `postgresql+psycopg://username:password@host:port/db_name` url.
+
 Database initialisation
 .......................
 

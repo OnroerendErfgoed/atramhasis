@@ -62,6 +62,9 @@ Source = "https://github.com/OnroerendErfgoed/atramhasis"
 Documentation = "https://atramhasis.readthedocs.io/en/latest/"
 
 [project.optional-dependencies]
+postgresql = [
+    "psycopg[binary]>=3.1",
+]
 dev = [
     "pyramid-debugtoolbar>=4.10",
     "pytest>=7.4.2",

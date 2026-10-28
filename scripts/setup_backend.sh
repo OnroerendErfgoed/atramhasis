@@ -84,9 +84,11 @@ import sys
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
+from sqlalchemy.pool import NullPool
 
 url = make_url(sys.argv[1]).set(database="postgres")
-with create_engine(url, isolation_level="AUTOCOMMIT").connect() as conn:
+engine = create_engine(url, isolation_level="AUTOCOMMIT", poolclass=NullPool)
+with engine.connect() as conn:
     result = conn.execute(text(sys.argv[2]))
     if result.returns_rows:
         print(result.scalar())

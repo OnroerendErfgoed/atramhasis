@@ -138,10 +138,18 @@ optional PostgreSQL setup:
     $ mise run docker       # start PostgreSQL (skipped if port 5432 is already in use)
     $ mise run docker:down  # stop it again (data is kept in the named volume)
 
-To use it, install a PostgreSQL driver in the virtualenv
-(`uv pip install "psycopg[binary]"`), uncomment the `postgresql` url in
-:file:`development.ini` and run `mise run db:reset`, which creates, migrates and
-seeds that database. Any other PostgreSQL server works too: if something already
+To develop against PostgreSQL, uncomment the `postgresql` url in
+:file:`development.ini`, start the container and run the setup as usual. The
+PostgreSQL driver is part of the development dependencies, and the setup creates,
+migrates and seeds the database:
+
+.. code-block:: bash
+
+    $ mise run docker
+    $ mise run setup
+
+To switch an existing setup to PostgreSQL, run `mise run db:reset` instead of
+`mise run setup`. Any other PostgreSQL server works too: if something already
 listens on port 5432, `mise run docker` does not start the container and the
 database is created on that server instead.
 
