@@ -1109,7 +1109,7 @@ provider is created (the default) and is not allowed in combination with
 
 The `to` argument contains the connection string of output database. Only
 PostGreSQL and SQLite are supported. The structure is either
-`postgresql://username:password@host:port/db_name` or
+`postgresql+psycopg://username:password@host:port/db_name` or
 either `sqlite:///path/db_name.sqlite`. The default value is `sqlite:///atramhasis.sqlite`.
 
 The data is loaded in a :class:`~skosprovider_sqlalchemy.models.ConceptScheme`. With a 
@@ -1381,7 +1381,7 @@ functionality might fail to run properly.
 
     # REQUIRED
     sqlalchemy.url = sqlite:///test.db
-    # sqlalchemy.url = postgresql://postgres:postgres@localhost:5432/atramhasis_test
+    # sqlalchemy.url = postgresql+psycopg://postgres:postgres@localhost:5432/atramhasis_test
 
     # DEFAULT
     skosprovider.skosregistry_location = request

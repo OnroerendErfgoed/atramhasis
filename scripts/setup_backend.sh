@@ -76,34 +76,31 @@ case "${db_url}" in
     postgresql*|postgres:*)
         db_name="${db_url##*/}"
         db_name="${db_name%%\?*}"
-        # Usage: pg_database <exists|recreate>. Connects with the configured url
-        # to the `postgres` maintenance database of the same server.
-        pg_database() {
+        # Runs one SQL statement on the `postgres` maintenance database of the
+        # configured server and prints the first value of its result, if any.
+        pg_sql() {
             .venv/bin/python - "${db_url}" "$1" <<'PY'
 import sys
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
 
-url = make_url(sys.argv[1])
-engine = create_engine(url.set(database="postgres"), isolation_level="AUTOCOMMIT")
-with engine.connect() as conn:
-    params = {"name": url.database}
-    if sys.argv[2] == "exists":
-        print(conn.execute(text("SELECT count(*) FROM pg_database WHERE datname = :name"), params).scalar())
-    else:
-        name = conn.dialect.identifier_preparer.quote(url.database)
-        conn.execute(text("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = :name"), params)
-        conn.execute(text(f"DROP DATABASE IF EXISTS {name}"))
-        conn.execute(text(f"CREATE DATABASE {name}"))
+url = make_url(sys.argv[1]).set(database="postgres")
+with create_engine(url, isolation_level="AUTOCOMMIT").connect() as conn:
+    result = conn.execute(text(sys.argv[2]))
+    if result.returns_rows:
+        print(result.scalar())
 PY
         }
-        if [[ "$(pg_database exists)" == "1" && "${OVERWRITE}" == "0" ]]; then
+        if [[ "$(pg_sql "SELECT count(*) FROM pg_database WHERE datname = '${db_name}'")" == "1" \
+              && "${OVERWRITE}" == "0" ]]; then
             echo "Database '${db_name}' already exists - skipping create + seed (use --overwrite to recreate)."
         else
             [[ "${OVERWRITE}" != "0" ]] && echo "Overwriting database '${db_name}'..." \
                                         || echo "Creating database '${db_name}'..."
-            pg_database recreate
+            pg_sql "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '${db_name}'" >/dev/null
+            pg_sql "DROP DATABASE IF EXISTS \"${db_name}\""
+            pg_sql "CREATE DATABASE \"${db_name}\""
             db_created=1
         fi
         ;;

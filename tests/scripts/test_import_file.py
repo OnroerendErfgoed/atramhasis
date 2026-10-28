@@ -60,6 +60,11 @@ class TestValidateConnectionString:
             "postgresql://user:pass@localhost:5432/mydb"
         )
 
+    def test_valid_postgresql_with_driver(self):
+        assert import_file.validate_connection_string(
+            "postgresql+psycopg://user:pass@localhost:5432/mydb"
+        )
+
     def test_invalid_postgresql(self):
         assert not import_file.validate_connection_string(
             "postgresql://user@localhost/mydb"
