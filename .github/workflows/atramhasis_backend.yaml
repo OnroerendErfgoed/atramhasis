@@ -9,52 +9,35 @@ on:
       - '!atramhasis/static/**'
       - .github/workflows/atramhasis_backend.yaml
       - pyproject.toml
-      - requirements*.txt
+      - lockfiles/requirements*.txt
+
+  push:
+    branches:
+      - master
+
+permissions: {}
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.10', '3.11', '3.12', '3.13.10']
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      # You can test your matrix by printing the current Python version
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-
-      - name: Install python requirements
-        env:
-          HATCH_BUILD_NO_HOOKS: true
-        working-directory: ./
-        run: |
-          pip --version
-          pip install --upgrade "pip<25.3"
-          pip install pip-tools
-          pip-sync lockfiles/requirements-dev-py${{ matrix.python-version }}.txt
-          pip install -e .
-
-      - name: Create jinja templates
-        run: |
-          touch atramhasis/templates/admin.jinja2
-
-      - name: Compile message catalogs
-        run: pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
-
-      - name: Python tests
-        run: pytest tests --exitfirst --capture=no -vvv --full-trace --cov-report xml:${{ runner.temp }}/coverage.xml --cov=atramhasis
-
-      - name: Get Cover
-        uses: orgoro/coverage@v3.2
-        with:
-          coverageFile: ${{ runner.temp }}/coverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          sourceDir: atramhasis
-          thresholdAll: 0.9
-          thresholdNew: 0.9
-          thresholdModified: 0.8
+    uses: OnroerendErfgoed/shared-workflows/.github/workflows/python-tests.yml@v1
+    permissions:
+      contents: read
+      pull-requests: write # coverage comment
+    with:
+      runs-on: ubuntu-latest # public repo: no self-hosted runners
+      python-versions: '["3.10", "3.11", "3.12", "3.13.10"]'
+      # One lockfile per Python version
+      install-command: |
+        pip install --upgrade "pip<25.3"
+        pip install pip-tools
+        pip-sync "lockfiles/requirements-dev-py$PYTHON_VERSION.txt"
+        pip install -e .
+      lint-command: "" # the old workflow ran no linter
+      # The frontend isn't built (no build hooks): an empty admin template and the
+      # compiled message catalogs are enough for the tests.
+      test-command: |
+        touch atramhasis/templates/admin.jinja2
+        pybabel compile --directory 'atramhasis/locale' --domain atramhasis --statistics true
+        pytest tests --exitfirst --capture=no -vvv --full-trace --cov-report xml:"$COVERAGE_XML" --cov=atramhasis
+      coverage-source-dir: atramhasis
+      coverage-threshold-all: 0.9

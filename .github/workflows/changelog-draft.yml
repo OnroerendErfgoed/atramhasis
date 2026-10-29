@@ -1,0 +1,19 @@
+# When a PR from develop into master titled "release x.y.z" is opened (or its title is edited),
+# the version is bumped and a changelog section is committed to the PR branch.
+name: Changelog draft
+
+on:
+  pull_request:
+    types: [opened, reopened, edited]
+    branches: [master]
+
+permissions: {}
+
+jobs:
+  changelog-draft:
+    uses: OnroerendErfgoed/shared-workflows/.github/workflows/changelog-draft.yml@v1
+    permissions:
+      contents: write
+      issues: read
+      pull-requests: write
+    secrets: inherit # passes RELEASE_TOKEN when the repo or org has one
