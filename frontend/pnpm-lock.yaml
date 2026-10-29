@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@nuxt/ui':
         specifier: ^4.12.0
-        version: 4.12.0(a8e21b46fb87cf435c34536cc0b8aefe)
+        version: 4.12.0(7293b882f397620bc8c37ff8013e339f)
       '@vuelidate/core':
         specifier: ^2.0.3
         version: 2.0.3(vue@3.5.32(typescript@6.0.2))
@@ -21,8 +21,8 @@ importers:
         specifier: ^14.2.1
         version: 14.2.1(vue@3.5.32(typescript@6.0.2))
       axios:
-        specifier: ^1.16.1
-        version: 1.16.1
+        specifier: ^1.21.0
+        version: 1.21.0
       d3:
         specifier: ~3.5.17
         version: 3.5.17
@@ -1946,8 +1946,8 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  axios@1.16.1:
-    resolution: {integrity: sha512-caYkukvroVPO8KrzuJEb50Hm07KwfBZPEC3VeFHTsqWHvKTsy54hjJz9BS/cdaypROE2rH6xvm9mHX4fgWkr3A==}
+  axios@1.21.0:
+    resolution: {integrity: sha512-YCzXMB53Q9PZBsh7yN7wtapit4WepwcHS2fP8QhGsBxSz5YtgYobV7GGlWlAJi+RxfU77GQTQi2DSLUma42EYA==}
 
   balanced-match@4.0.4:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
@@ -2385,8 +2385,8 @@ packages:
       vite:
         optional: true
 
-  form-data@4.0.5:
-    resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
+  form-data@4.0.6:
+    resolution: {integrity: sha512-vKatAh4SlVfgbv+YtmhiRjhEMJsYpsG1Y2rMQtR+SVSbytsSD1YGzDIcrAJmdFec88u/+VoGmxnl+80gL1tRCQ==}
     engines: {node: '>= 6'}
 
   foundation-sites@5.5.3:
@@ -4453,7 +4453,7 @@ snapshots:
       pkg-types: 2.4.0
       std-env: 4.3.0
 
-  '@nuxt/ui@4.12.0(a8e21b46fb87cf435c34536cc0b8aefe)':
+  '@nuxt/ui@4.12.0(7293b882f397620bc8c37ff8013e339f)':
     dependencies:
       '@floating-ui/dom': 1.8.0
       '@iconify/vue': 5.0.4(vue@3.5.32(typescript@6.0.2))
@@ -4486,7 +4486,7 @@ snapshots:
       '@tiptap/vue-3': 3.22.4(@floating-ui/dom@1.8.0)(@tiptap/core@3.22.5(@tiptap/pm@3.22.5))(@tiptap/pm@3.22.5)(vue@3.5.32(typescript@6.0.2))
       '@unhead/vue': 3.4.3(@oxc-project/types@0.155.0)(esbuild@0.27.7)(lightningcss@1.33.0)(rolldown@1.2.15)(vite@8.3.5(@types/node@24.12.2)(esbuild@0.27.7)(jiti@2.6.1)(sass@1.99.0)(yaml@2.8.3))(vue@3.5.32(typescript@6.0.2))
       '@vueuse/core': 14.4.0(vue@3.5.32(typescript@6.0.2))
-      '@vueuse/integrations': 14.4.0(axios@1.16.1)(fuse.js@7.5.0)(vue@3.5.32(typescript@6.0.2))
+      '@vueuse/integrations': 14.4.0(axios@1.21.0)(fuse.js@7.5.0)(vue@3.5.32(typescript@6.0.2))
       '@vueuse/shared': 14.4.0(vue@3.5.32(typescript@6.0.2))
       colortranslator: 5.0.0
       consola: 3.4.2
@@ -5477,13 +5477,13 @@ snapshots:
       '@vueuse/shared': 14.4.0(vue@3.5.32(typescript@6.0.2))
       vue: 3.5.32(typescript@6.0.2)
 
-  '@vueuse/integrations@14.4.0(axios@1.16.1)(fuse.js@7.5.0)(vue@3.5.32(typescript@6.0.2))':
+  '@vueuse/integrations@14.4.0(axios@1.21.0)(fuse.js@7.5.0)(vue@3.5.32(typescript@6.0.2))':
     dependencies:
       '@vueuse/core': 14.4.0(vue@3.5.32(typescript@6.0.2))
       '@vueuse/shared': 14.4.0(vue@3.5.32(typescript@6.0.2))
       vue: 3.5.32(typescript@6.0.2)
     optionalDependencies:
-      axios: 1.16.1
+      axios: 1.21.0
       fuse.js: 7.5.0
 
   '@vueuse/metadata@10.11.1': {}
@@ -5555,10 +5555,10 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@1.16.1:
+  axios@1.21.0:
     dependencies:
       follow-redirects: 1.16.0
-      form-data: 4.0.5
+      form-data: 4.0.6
       https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
@@ -6072,7 +6072,7 @@ snapshots:
       - ioredis
       - uploadthing
 
-  form-data@4.0.5:
+  form-data@4.0.6:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
