@@ -1,0 +1,16 @@
+# When the release PR from develop into master is merged, a draft GitHub release x.y.z
+# is created from that version's section in CHANGES.rst.
+name: Release draft
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+
+permissions: {}
+
+jobs:
+  release-draft:
+    uses: OnroerendErfgoed/shared-workflows/.github/workflows/release-draft.yml@v1
+    permissions:
+      contents: write
