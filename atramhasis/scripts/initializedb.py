@@ -194,6 +194,7 @@ def main(argv=sys.argv):  # pragma: no cover
     with Session(engine) as session:
         initialize_providers(session)
         session.commit()
+    engine.dispose()
     print("--atramhasis-db-initialized--")
 
 
