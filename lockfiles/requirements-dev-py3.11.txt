@@ -36,7 +36,7 @@ docutils==0.22.4
     # via sphinx
 dogpile-cache==1.5.0
     # via atramhasis (pyproject.toml)
-filelock==4.2.4
+filelock==4.2.1
     # via
     #   python-discovery
     #   virtualenv
