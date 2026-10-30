@@ -128,9 +128,7 @@ class DummyAuditManager:
 
 @pytest.fixture(autouse=True)
 def pyramid_config():
-    config = testing.setUp(
-        settings={"atramhasis.audit.origins": {"HTML", "REST", "RDF", "CSV"}}
-    )
+    config = testing.setUp()
     yield config
     testing.tearDown()
 

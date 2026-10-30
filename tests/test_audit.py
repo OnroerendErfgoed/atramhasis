@@ -2,11 +2,12 @@ import logging
 from unittest.mock import MagicMock
 from unittest.mock import Mock
 
-import pytest
 from pyramid.exceptions import ConfigurationError
 from pyramid.response import Response
+import pytest
 from testfixtures import LogCapture
 
+from atramhasis.audit import ALL_ORIGINS
 from atramhasis.audit import _origin_from_response
 from atramhasis.audit import audit
 from atramhasis.audit import parse_origins_setting
@@ -55,9 +56,7 @@ def audit_manager():
 def dummy_parent(audit_manager):
     parent = DummyParent()
     parent.request.data_managers = {"audit_manager": audit_manager}
-    parent.request.registry.settings = {
-        "atramhasis.audit.origins": {"HTML", "REST", "RDF", "CSV"}
-    }
+    parent.request.registry.settings = {"atramhasis.audit.origins": ALL_ORIGINS}
     return parent
 
 
@@ -163,21 +162,26 @@ class TestAudit:
         assert 1 == len(audit_manager.saved_objects)
 
 
+def test_all_origins():
+    # prevents accidental changes to the constant.
+    assert ALL_ORIGINS == {"HTML", "REST", "RDF", "CSV"}
+
+
 class TestParseOriginsSetting:
     def test_missing_resolves_to_all(self):
         settings = {}
         parse_origins_setting(settings)
-        assert settings["atramhasis.audit.origins"] == {"HTML", "REST", "RDF", "CSV"}
+        assert settings["atramhasis.audit.origins"] == ALL_ORIGINS
 
     def test_empty_resolves_to_all(self):
         settings = {"atramhasis.audit.origins": "  "}
         parse_origins_setting(settings)
-        assert settings["atramhasis.audit.origins"] == {"HTML", "REST", "RDF", "CSV"}
+        assert settings["atramhasis.audit.origins"] == ALL_ORIGINS
 
     def test_all(self):
         settings = {"atramhasis.audit.origins": "HTML REST RDF CSV"}
         parse_origins_setting(settings)
-        assert settings["atramhasis.audit.origins"] == {"HTML", "REST", "RDF", "CSV"}
+        assert settings["atramhasis.audit.origins"] == ALL_ORIGINS
 
     def test_restricted(self):
         settings = {"atramhasis.audit.origins": "\nHTML\nREST"}

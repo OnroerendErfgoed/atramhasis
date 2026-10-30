@@ -10,6 +10,8 @@ from atramhasis.data.models import ConceptVisitLog
 
 log = logging.getLogger(__name__)
 
+ALL_ORIGINS = frozenset({"HTML", "REST", "RDF", "CSV"})
+
 
 def parse_origins_setting(settings):
     """
@@ -19,17 +21,16 @@ def parse_origins_setting(settings):
     values. Unknown origins raise a :class:`pyramid.exceptions.ConfigurationError`.
     """
     key = "atramhasis.audit.origins"
-    default = set({"HTML", "REST", "RDF", "CSV"})
     origins = set(aslist(settings.get(key) or ""))
 
-    invalid = origins - default
+    invalid = origins - ALL_ORIGINS
     if invalid:
         raise ConfigurationError(
             f"Invalid origin(s) for setting '{key}': {', '.join(sorted(invalid))}. "
-            f"Allowed: {', '.join(sorted(default))}."
+            f"Allowed: {', '.join(sorted(ALL_ORIGINS))}."
         )
 
-    settings[key] = origins or default
+    settings[key] = origins or ALL_ORIGINS
 
 
 def _get_origin(request: Request, response: Response) -> str | None:
@@ -104,7 +105,9 @@ def audit(fn):
         if not provider or "external" in provider.get_metadata()["subject"]:
             return response
 
-        origins_to_log = request.registry.settings["atramhasis.audit.origins"]
+        origins_to_log = request.registry.settings.get(
+            "atramhasis.audit.origins", ALL_ORIGINS
+        )
         origin = _get_origin(request, response)
         if origin not in origins_to_log:
             return response
