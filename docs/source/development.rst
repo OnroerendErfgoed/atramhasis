@@ -435,6 +435,39 @@ Suppose you want to server both on the host `demo.atramhasis.org` with
 Atramhasis as the root of your domain and the LDF server at `/ldf`. In this
 case, set `atramhasis.ldf.baseurl` to `https://demo.atramhasis.org/ldf`.
 
+Configuring the visit log
+=========================
+
+Every visit to a concept or conceptscheme is logged with the origin of the
+request:
+
+`HTML`
+    Browser visits to concept and conceptscheme pages. Requests without an
+    `Accept` header or with `Accept: */*` also get the HTML page and are
+    logged as `HTML`.
+`REST`
+    JSON requests, eg. applications using `skosprovider_atramhasis`.
+`RDF`
+    `.rdf`, `.ttl` and `.jsonld` requests, and content negotiation for RDF
+    formats.
+`CSV`
+    CSV exports of a conceptscheme.
+
+The `atramhasis.audit.origins` setting controls which origins are written to
+the `concept_visit_log` and `conceptscheme_visit_log` tables. By default all origins are logged. `HTML` visits are
+the best signal of what end users are interested in, while the other origins
+are mostly machine-to-machine traffic. Logging only `HTML` visits keeps the
+tables smaller and makes the most popular concepts reflect actual user
+interest:
+
+.. code-block:: ini
+
+    atramhasis.audit.origins = HTML
+
+An empty value logs all origins. Visits whose origin can not be determined are
+never logged. An unknown origin in the setting raises a configuration error at
+startup.
+
 .. _prune_visit_log:
 
 Pruning the visit logs

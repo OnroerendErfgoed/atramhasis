@@ -7,6 +7,7 @@ from pyramid.interfaces import ISessionFactory
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.settings import aslist
 
+from atramhasis.audit import parse_origins_setting
 from atramhasis.renderers import json_renderer_verbose
 from atramhasis.utils import parse_json_setting
 
@@ -37,6 +38,7 @@ def includeme(config):
     for key, value in DEFAULT_SETTINGS.items():
         if key not in settings:
             settings[key] = value
+    parse_origins_setting(settings)
     # Regexes in path params clash with this validation.
     settings["pyramid_openapi3.enable_endpoint_validation"] = False
     # Better to return the response we give rather than a validation error.
