@@ -97,7 +97,7 @@ class ConceptSchemeManager(DataManager):
                 select(Concept).filter(
                     Concept.conceptscheme_id == conceptscheme_id,
                     ~Concept.broader_concepts.any(),
-                    ~Collection.member_of.any(),
+                    ~sa.exists().where(collection_concept.c.concept_id == Concept.id),
                 )
             )
             .scalars()
@@ -115,7 +115,9 @@ class ConceptSchemeManager(DataManager):
                 select(Collection).filter(
                     Collection.conceptscheme_id == conceptscheme_id,
                     ~Collection.broader_concepts.any(),
-                    ~Collection.member_of.any(),
+                    ~sa.exists().where(
+                        collection_concept.c.concept_id == Collection.id
+                    ),
                 )
             )
             .scalars()

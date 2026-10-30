@@ -32,7 +32,7 @@ dependencies = [
     "transaction",
     "zope.sqlalchemy",
     "skosprovider",
-    "skosprovider_sqlalchemy>=2.1.1",
+    "skosprovider_sqlalchemy>=2.2.1",
     "skosprovider_rdf",
     "skosprovider_getty",
     "pyramid_skosprovider>=1.2.2",
