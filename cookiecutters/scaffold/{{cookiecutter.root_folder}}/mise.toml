@@ -1,0 +1,38 @@
+# mise configuration - https://mise.jdx.dev/
+#
+#   mise trust && mise install   # install python + uv
+#   mise run server              # runs the setup the first time, then pserve
+#
+# `mise tasks` lists everything below.
+
+[tools]
+# Atramhasis supports python 3.10 - 3.13.
+python = "3.11"
+uv = "latest"
+
+[env]
+# Auto-create and activate the project virtualenv (.venv) in this directory.
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.setup]
+description = "Install the project (editable, with dev extras) and set up the database"
+run = [
+    'uv pip install -e ".[dev]"',
+    ".venv/bin/alembic upgrade head",
+]
+
+[tasks.server]
+description = "Run the dev server (pserve) on http://localhost:6543"
+run = [
+    "test -x .venv/bin/pserve || mise run setup",
+    ".venv/bin/pserve development.ini --reload",
+]
+
+[tasks."atramhasis:local"]
+# Test unreleased Atramhasis changes: install a local checkout (editable) over
+# the released package. Build its frontend first (`mise run setup:frontend`
+# in that checkout) or the admin pages will be missing their assets.
+description = "Use a local Atramhasis checkout instead of the released package"
+usage = 'arg "<path>" help="Path to the local atramhasis checkout"'
+env = { HATCH_BUILD_NO_HOOKS = "true" }
+run = 'uv pip install --no-deps -e "${usage_path?}"'

@@ -162,6 +162,7 @@ Other tasks
 * `mise run pip-compile` - regenerate the :file:`lockfiles/requirements-dev-py*.txt` files
 * `mise run build` - build the wheel and the sdist (`build:wheel` / `build:sdist` for one of the two)
 * `mise run cleanup` - remove everything the setup creates (virtualenv, node_modules, built assets, compiled catalogs)
+* `mise run new-project demo|scaffold` - create a new project that uses Atramhasis as a library (see :ref:`update_cookiecutters`)
 
 `mise tasks` always gives the complete, up-to-date list.
 
@@ -357,22 +358,33 @@ To add or update admin UI translations:
     $ pnpm type-check
     $ pnpm build
 
+.. _update_cookiecutters:
+
 Update Cookiecutters
 ====================
 
-In case changes are needed for the cookiecutters, you may want to test them on an unreleased version of Atramhasis.
-You can test them on a specific branch by running the following commands:
+`mise run new-project` creates a new project that uses Atramhasis as a library,
+from the cookiecutter templates in your checkout (:file:`cookiecutters/demo` or
+:file:`cookiecutters/scaffold`). Every generated project has its own
+:file:`mise.toml`, so the task also installs it in its own virtualenv and sets up
+its database (with the sample data for a demo project).
 
 .. code-block:: bash
 
-    # fe you are working on the branch feature/876_cookiecutters and you want to test the demo cookiecutter
-    $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/demo --checkout feature/876_cookiecutters
-    $ cd atramhasis_demo  # or whatever you named the root_folder of your project
-    $ pip install "atramhasis @ git+ssh://git@github.com/OnroerendErfgoed/atramhasis.git@feature/876_cookiecutters"
-    $ pip install -e .[dev]
-    $ alembic upgrade head
-    $ initialize_atramhasis_db development.ini  # (for demo only)
-    $ pserve development.ini
+    $ mise run new-project demo                      # created in ~/dev/<root_folder>
+    $ mise run new-project scaffold -o ~/projects    # in another directory
+    $ cd ~/dev/atramhasis_demo && mise run server    # http://localhost:6543
+
+To test changes to the cookiecutters or to Atramhasis itself before they are
+released, add `--local-atramhasis`: the project then uses your checkout
+(editable) instead of the released package. Build the frontend of your checkout
+first (`mise run setup:frontend`), otherwise the admin pages miss their assets.
+In an existing project, `mise run atramhasis:local <path to checkout>` does the
+same.
+
+.. code-block:: bash
+
+    $ mise run new-project demo --local-atramhasis
 
 Running a Linked Data Fragments server
 ======================================

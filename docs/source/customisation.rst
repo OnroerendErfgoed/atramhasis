@@ -45,6 +45,14 @@ Usage
 
         $ cookiecutter gh:OnroerendErfgoed/atramhasis --directory cookiecutters/scaffold
 
+    .. tip::
+
+        The generated project comes with a :file:`mise.toml`. With mise_ installed,
+        `mise trust && mise install && mise run server` in the project directory
+        replaces the steps below: it creates a virtualenv, installs the project,
+        sets up the database and starts the server on http://localhost:6543.
+
+
 3.  Install requirements
 
 You can opt to generate requirements*.txt files from the pyproject.toml file and install the dependencies,
@@ -1438,3 +1446,5 @@ functionality might fail to run properly.
 
     # Enter your tracking snippet
     tracking_snippet =
+
+.. _mise: https://mise.jdx.dev/getting-started/

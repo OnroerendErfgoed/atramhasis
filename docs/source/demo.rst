@@ -37,6 +37,14 @@ unless you want to give your project a different name. After the
 cookiecutter command, there should be a directory with the name of your
 project (default: atramhasis_demo). Now enter this directory to start updating your virtual environment.
 
+.. tip::
+
+    The generated project comes with a :file:`mise.toml`. With mise_ installed,
+    `mise trust && mise install && mise run server` in the project directory
+    replaces the steps below: it creates a virtualenv, installs the project,
+    sets up the database and starts the server on http://localhost:6543.
+
+
 
 3.  Install requirements
 
@@ -128,3 +136,5 @@ what you're looking for. If you need persistence, but still want to use
 Docker, you can customise the 
 `Dockerfile <https://github.com/OnroerendErfgoed/atramhasis-demo-docker/>`_
 to suit your needs.
+
+.. _mise: https://mise.jdx.dev/getting-started/

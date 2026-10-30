@@ -98,6 +98,19 @@ run = "docker compose down"
 description = "Wipe and rebuild the development database with demo data (data loss!)"
 run = "bash scripts/setup_backend.sh --overwrite"
 
+[tasks."new-project"]
+# Replaces scripts/setup_new_project.sh. Uses the cookiecutter templates of this
+# checkout; the generated project has its own mise.toml (setup/server tasks).
+description = "Create a new project that uses Atramhasis as a library (from a cookiecutter)"
+usage = '''
+arg "<type>" help="demo (with sample data) or scaffold (empty project)" {
+    choices "demo" "scaffold"
+}
+flag "-o --output-dir <dir>" help="Directory to create the project in" default="~/dev"
+flag "--local-atramhasis" help="Install this atramhasis checkout (editable) instead of the released package"
+'''
+run = "bash scripts/new_project.sh"
+
 [tasks."pip-compile"]
 description = "Recompile the lockfiles/requirements-dev-py*.txt files from pyproject.toml"
 run = "bash scripts/compile-requirements.sh"
