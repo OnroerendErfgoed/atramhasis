@@ -141,6 +141,10 @@ pluggy==1.6.0
     #   pytest-cov
 pre-commit==4.7.0
     # via atramhasis (pyproject.toml)
+psycopg==3.3.6
+    # via atramhasis (pyproject.toml)
+psycopg-binary==3.3.6
+    # via psycopg
 pygments==2.20.0
     # via
     #   atramhasis (pyproject.toml)

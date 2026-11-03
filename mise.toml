@@ -7,9 +7,9 @@
 #   mise run server  # start the dev stack (runs the setup the first time)
 #
 # Atramhasis needs no services to run or to test: it ships with a SQLite
-# development database. `mise run docker` brings up the shared OnroerendErfgoed
-# service stack (postgis, redis, minio) for people who want the optional
-# PostgreSQL setup - see the header of docker-compose.yml.
+# development database. `mise run docker` starts a PostgreSQL container for
+# people who want the optional PostgreSQL setup - see the header of
+# docker-compose.yml.
 #
 # `mise tasks` lists everything below.
 
@@ -84,14 +84,13 @@ run = [
 #  Services (standalone, NOT a dependency of setup)
 # ===========================================================================
 [tasks.docker]
-# Only starts services that are not already reachable, so it is safe to run when
-# you already have some of postgis/redis/minio up another way.
-# Use `mise run docker -- --force` to (re)create the full compose stack.
-description = "Start the shared OE service stack (postgis, redis, minio); skips ones already running"
+# Skipped when port 5432 is already in use, so it is safe to run when you
+# already have a PostgreSQL server running another way.
+description = "Start the optional PostgreSQL container (skipped if port 5432 is in use)"
 run = "bash scripts/start_services.sh"
 
 [tasks."docker:down"]
-description = "Stop the local service stack (data is kept in the named volumes)"
+description = "Stop the PostgreSQL container (data is kept in the named volume)"
 run = "docker compose down"
 
 [tasks."db:reset"]

@@ -1,3 +1,23 @@
+4.1.0 (03-11-2026)
+------------------
+
+🐛 Bugs
+
+- initialize_atramhasis_db fails with NoResultFound on SQLAlchemy 2.1 (#1170)
+
+✨ Features
+
+- Mise setup (#1101)
+
+  - Mise setup (backend) (#1102)
+  - Mise setup (frontend) (#1103)
+  - Add docker compose + minio setup scripts (#1117)
+
+- Script to prune the visit log tables (#1158)
+- Make the logged visit origins configurable (#1159)
+- Add cache headers to all conceptscheme downloads (#1160)
+- Docs: import_file --uri-pattern breaking change (3.0.0) not documented (#1164)
+
 4.0.0 (16-09-2026)
 -------------------
 
