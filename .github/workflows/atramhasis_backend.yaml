@@ -24,7 +24,7 @@ jobs:
       contents: read
       pull-requests: write # coverage comment
     with:
-      runs-on: ubuntu-latest # public repo: no self-hosted runners
+      runs-on: ubuntu-24.04 # public repo: no self-hosted runners; Python 3.13.10 isn't available on Ubuntu 26.04
       python-versions: '["3.10", "3.11", "3.12", "3.13.10"]'
       # One lockfile per Python version
       install-command: |
