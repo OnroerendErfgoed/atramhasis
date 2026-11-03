@@ -7,7 +7,6 @@
 
 ✨ Features
 
-- Add code coverage integration (#4)
 - Mise setup (#1101)
 
   - Mise setup (backend) (#1102)
