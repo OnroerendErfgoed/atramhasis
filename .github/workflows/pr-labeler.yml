@@ -1,0 +1,16 @@
+name: PR Labeler
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - "develop"
+      - "epic"
+
+permissions: {}
+
+jobs:
+  pr-labeler:
+    uses: OnroerendErfgoed/shared-workflows/.github/workflows/pr-labeler.yml@v1
+    permissions:
+      contents: read # to read the labeler configuration
+      pull-requests: write # to add labels to the PR
