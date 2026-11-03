@@ -1,0 +1,34 @@
+# Optional PostgreSQL database for local Atramhasis development.
+#
+#   mise run docker        # start (detached), skipped if port 5432 is already in use
+#   mise run docker:down   # stop (data is kept in the named volume)
+#
+# NOTE: Atramhasis does not need this to run or to test. It ships with a SQLite
+# development database (see `sqlalchemy.url` in development.ini) and its test
+# suite runs entirely on SQLite, so a plain `mise install && mise run server`
+# works without Docker at all.
+#
+# To develop against PostgreSQL, uncomment the postgresql `sqlalchemy.url` in
+# development.ini (its credentials match the ones below), run `mise run docker`
+# and then `mise run setup` (or `mise run db:reset` for an existing setup). Any
+# other PostgreSQL server works just as well: point the url at it and leave this
+# file alone.
+name: atramhasis
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

@@ -66,6 +66,115 @@ Atramhasis with a link to the rdf2hdt command (requires a separate
 installation). In this case, everytime the conceptschemes are dumped to RDF, the
 dump files are also written in :term:`HDT` format.
 
+Development setup with mise
+===========================
+
+The quickest way to get a full development environment is mise_. It installs the
+tools (Python, uv, Node, pnpm, pre-commit), creates and activates the
+virtualenv, and drives the setup through a set of tasks. From a fresh clone:
+
+.. code-block:: bash
+
+    $ mise trust       # trust this config (depending on your mise settings)
+    $ mise install     # install python, uv, node, pnpm and pre-commit
+    $ mise run server  # runs the setup the first time, then starts the dev stack
+
+`mise run server` starts the Pyramid dev server on http://localhost:6543 and the
+Vite dev server for the Vue admin app on http://localhost:5173. Press Ctrl-C
+once to stop both.
+
+The first run (or any run without a virtualenv) performs `mise run setup`, which
+sets up everything described under `General installation`_ and
+`Admin and frontend development`_:
+
+* the virtualenv with the dependencies from the lockfile matching the pinned
+  Python version, and Atramhasis itself in editable mode;
+* the compiled gettext message catalogs;
+* the development database: `alembic upgrade head`, and for a new database the
+  demo vocabularies (`initialize_atramhasis_db`) plus a first RDF datadump
+  (`dump_rdf`) - see :file:`scripts/setup_backend.sh`;
+* the pre-commit git hooks;
+* the frontend: `pnpm install`, the Vite build, and the generated
+  :file:`atramhasis/templates/admin.jinja2` - see
+  :file:`scripts/build_frontend.py`, which is the same code the wheel build hook
+  uses, so a local setup and a wheel build produce an identical frontend.
+
+Once everything is set up, `mise run server` starts immediately. The database is
+never rebuilt as long as it exists, so local data is not lost. Existing
+databases are still migrated to head on every setup.
+
+To rebuild the database with the demo data:
+
+.. code-block:: bash
+
+    $ mise run db:reset            # wipe and rebuild the database (data loss!)
+    $ OVERWRITE=1 mise run setup   # full setup, database included
+    $ OVERWRITE=1 mise run server  # idem, and then start the dev stack
+
+Running the halves separately
+-----------------------------
+
+.. code-block:: bash
+
+    $ mise run server:backend   # only pserve, on http://localhost:6543
+    $ mise run server:frontend  # only the Vite dev server, on http://localhost:5173
+
+In :file:`development.ini`, `vue.mode = src` (the default) makes the admin page
+load its modules from the Vite dev server, so you get hot reloading. Set it to
+`dist` to use the built assets in :file:`atramhasis/static/dist` instead.
+
+Docker services
+---------------
+
+Atramhasis needs **no** services: it ships with a SQLite development database and
+its test suite runs entirely on SQLite, so `mise install && mise run server` works
+without Docker.
+
+A :file:`docker-compose.yml` with a PostgreSQL container is provided for the
+optional PostgreSQL setup:
+
+.. code-block:: bash
+
+    $ mise run docker       # start PostgreSQL (skipped if port 5432 is already in use)
+    $ mise run docker:down  # stop it again (data is kept in the named volume)
+
+To develop against PostgreSQL, uncomment the `postgresql` url in
+:file:`development.ini`, start the container and run the setup as usual. The
+PostgreSQL driver is part of the development dependencies, and the setup creates,
+migrates and seeds the database:
+
+.. code-block:: bash
+
+    $ mise run docker
+    $ mise run setup
+
+To switch an existing setup to PostgreSQL, run `mise run db:reset` instead of
+`mise run setup`. Any other PostgreSQL server works too: if something already
+listens on port 5432, `mise run docker` does not start the container and the
+database is created on that server instead.
+
+Activating mise in your shell
+-----------------------------
+
+.. code-block:: bash
+
+    $ echo 'eval "$(mise activate bash)"' >> ~/.bashrc   # ~/.zshrc for zsh
+
+The virtualenv is then activated automatically in this directory. It is also
+active inside `mise run` and `mise exec`.
+
+Other tasks
+-----------
+
+* `mise run test` - run the backend test suite
+* `mise run pip-compile` - regenerate the :file:`lockfiles/requirements-dev-py*.txt` files
+* `mise run build` - build the wheel and the sdist (`build:wheel` / `build:sdist` for one of the two)
+* `mise run cleanup` - remove everything the setup creates (virtualenv, node_modules, built assets, compiled catalogs)
+
+`mise tasks` always gives the complete, up-to-date list.
+
+.. _mise: https://mise.jdx.dev/getting-started/
+
 General installation
 ====================
 
@@ -124,6 +233,7 @@ The dependencies are defined within pyproject.toml. There, you can add, modify, 
 Afterward, run pip-compile to generate the requirements files.
 
 .. code-block:: bash
+
     # Update pyproject.toml and compile requirements files as follows:
     $ ./scripts/compile-requirements.sh
 
@@ -332,6 +442,133 @@ You can easily do this by setting the `atramhasis.ldf.baseurl` in your ini file.
 Suppose you want to server both on the host `demo.atramhasis.org` with
 Atramhasis as the root of your domain and the LDF server at `/ldf`. In this
 case, set `atramhasis.ldf.baseurl` to `https://demo.atramhasis.org/ldf`.
+
+Configuring the visit log
+=========================
+
+Every visit to a concept or conceptscheme is logged with the origin of the
+request:
+
+`HTML`
+    Browser visits to concept and conceptscheme pages. Requests without an
+    `Accept` header or with `Accept: */*` also get the HTML page and are
+    logged as `HTML`.
+`REST`
+    JSON requests, eg. applications using `skosprovider_atramhasis`.
+`RDF`
+    `.rdf`, `.ttl` and `.jsonld` requests, and content negotiation for RDF
+    formats.
+`CSV`
+    CSV exports of a conceptscheme.
+
+The `atramhasis.audit.origins` setting controls which origins are written to
+the `concept_visit_log` and `conceptscheme_visit_log` tables. By default all origins are logged. `HTML` visits are
+the best signal of what end users are interested in, while the other origins
+are mostly machine-to-machine traffic. Logging only `HTML` visits keeps the
+tables smaller and makes the most popular concepts reflect actual user
+interest:
+
+.. code-block:: ini
+
+    atramhasis.audit.origins = HTML
+
+An empty value logs all origins. Visits whose origin can not be determined are
+never logged. An unknown origin in the setting raises a configuration error at
+startup.
+
+.. _prune_visit_log:
+
+Pruning the visit logs
+======================
+
+Every visit to a concept or conceptscheme adds a row to the
+`concept_visit_log` or `conceptscheme_visit_log` table. These rows are never
+removed automatically, so both tables keep growing. The `concept_visit_log` is
+used to show the most popular concepts of a conceptscheme. This only looks at
+a rolling period (`last_day`, `last_week`, `last_month` or `last_year`), so
+Atramhasis never uses visits older than one year. The
+`conceptscheme_visit_log` is only written, never read, by Atramhasis.
+
+The `prune_visit_log` script removes old rows from both tables. Like the other
+scripts it takes the application's ini file:
+
+.. code-block:: bash
+
+    $ prune_visit_log development.ini --keep year --buffer-days 3
+
+The following options are available:
+
+`--keep`
+    How much data to keep: `week`, `month` or `year`. Defaults to `year`.
+    The default templates show the most popular concepts of the last month,
+    so keeping only a `week` will make that list incomplete. The script logs
+    a warning when `--keep week` is used.
+`--buffer-days`
+    Extra days kept on top of `--keep`. Defaults to `3`.
+`--tables`
+    Which visit log tables to prune: `concept`, `conceptscheme` or both
+    (eg. `--tables concept conceptscheme`). Defaults to both.
+`--dry-run`
+    Only report how many rows would be deleted, without deleting them.
+
+All rows visited before `today - <keep> - <buffer-days>` are deleted. This
+uses the same rolling periods as the popular concepts, so a pruned table always
+covers the period it has to support.
+
+The script is safe to run while the application is live. It only deletes old
+rows, while new visits always get a recent timestamp, and it takes no lock
+that blocks the application's inserts or reads. This makes it a good
+candidate for a nightly cron job:
+
+.. code-block:: bash
+
+    0 3 * * * /path/to/venv/bin/prune_visit_log /path/to/production.ini --keep year --buffer-days 3
+
+The script does not make a backup or export of the deleted rows. If you need
+to keep them, make sure they are part of your regular database backups.
+
+Disk space
+----------
+
+A `DELETE` does not shrink the table or index files on disk. For regular
+nightly runs this is not a problem: PostgreSQL's autovacuum makes the freed
+space reusable and the tables stay roughly the same size.
+
+First run on an existing large table
+------------------------------------
+
+On an instance that has been running for a long time, the first run can
+delete tens of millions of rows. For this one-off cleanup it is faster to copy
+the rows you want to keep, truncate the table and put the rows back. Run this
+manually during quiet hours, since `TRUNCATE` locks the table. On PostgreSQL:
+
+.. code-block:: sql
+
+    BEGIN;
+    CREATE TEMP TABLE keep ON COMMIT DROP AS
+    SELECT * FROM concept_visit_log
+    WHERE visited_at >= current_date - interval '1 year 3 days';
+    TRUNCATE concept_visit_log;
+    INSERT INTO concept_visit_log SELECT * FROM keep;
+    COMMIT;
+
+    VACUUM ANALYZE concept_visit_log;
+
+    BEGIN;
+    CREATE TEMP TABLE keep ON COMMIT DROP AS
+    SELECT * FROM conceptscheme_visit_log
+    WHERE visited_at >= current_date - interval '1 year 3 days';
+    TRUNCATE conceptscheme_visit_log;
+    INSERT INTO conceptscheme_visit_log SELECT * FROM keep;
+    COMMIT;
+
+    VACUUM ANALYZE conceptscheme_visit_log;
+
+Match the interval to the `--keep` and `--buffer-days` options you will use
+for the regular runs. `TRUNCATE` frees the disk space immediately, the
+`VACUUM ANALYZE` only refreshes the statistics and the visibility map. After
+this, the regular `prune_visit_log` runs only have a day's worth of rows to
+delete.
 
 
 Contributing

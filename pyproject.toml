@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-fancy-pypi-readme", "babel"]
 build-backend = "hatchling.build"
 
 [project]
-version = "4.0.0"
+version = "4.1.0"
 name = "atramhasis"
 dynamic = ["readme"]
 authors = [
@@ -32,7 +32,7 @@ dependencies = [
     "transaction",
     "zope.sqlalchemy",
     "skosprovider",
-    "skosprovider_sqlalchemy>=2.1.1",
+    "skosprovider_sqlalchemy>=2.2.1",
     "skosprovider_rdf",
     "skosprovider_getty",
     "pyramid_skosprovider>=1.2.2",
@@ -62,6 +62,9 @@ Source = "https://github.com/OnroerendErfgoed/atramhasis"
 Documentation = "https://atramhasis.readthedocs.io/en/latest/"
 
 [project.optional-dependencies]
+postgresql = [
+    "psycopg[binary]>=3.1",
+]
 dev = [
     "pyramid-debugtoolbar>=4.10",
     "pytest>=7.4.2",
@@ -87,6 +90,7 @@ generate_ldf_config = "atramhasis.scripts.generate_ldf_config:main"
 sitemap_generator = "atramhasis.scripts.sitemap_generator:main"
 delete_scheme = "atramhasis.scripts.delete_scheme:main"
 migrate_sqlalchemy_providers = "atramhasis.scripts.migrate_sqlalchemy_providers:main"
+prune_visit_log = "atramhasis.scripts.prune_visit_log:main"
 
 
 ##

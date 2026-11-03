@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import pytest
+from pyramid.exceptions import ConfigurationError
 from pyramid.paster import get_appsettings
 
 from atramhasis import main
@@ -21,6 +22,14 @@ class TestConfig:
             settings["atramhasis.dump_location"] = temp_dir
             app = main({}, **settings)
             assert app is not None
+
+    def test_config_audit_origins(self, db_session):
+        app = main({}, **{**settings, "atramhasis.audit.origins": "HTML\nRDF"})
+        assert app.registry.settings["atramhasis.audit.origins"] == {"HTML", "RDF"}
+
+    def test_config_invalid_audit_origins(self, db_session):
+        with pytest.raises(ConfigurationError):
+            main({}, **{**settings, "atramhasis.audit.origins": "HTML\nFOO"})
 
 
 class TestParseJsonSetting:

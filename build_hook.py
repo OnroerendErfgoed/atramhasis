@@ -1,5 +1,5 @@
-import json
 import subprocess
+import sys
 from pathlib import Path
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
@@ -29,32 +29,14 @@ class BuildHook(BuildHookInterface):
         )
 
     def build_frontend(self):
-        root_dir = Path(__file__).parent
+        """Build the frontend.
 
-        frontend = root_dir / "frontend"
-        backend = root_dir / "atramhasis"
-
-        subprocess.run(["pnpm", "install"], cwd=frontend, check=True)
-        subprocess.run(["pnpm", "build"], cwd=frontend, check=False)
-
-        static = backend / "static"
-        static_dist = static / "dist"
-        templates = backend / "templates"
-
-        with (static_dist / ".vite" / "manifest.json").open() as manifest_file:
-            manifest = json.load(manifest_file)
-
-        vue_config = f"""
-            <link
-                rel="stylesheet"
-                href="/static/{manifest["src/main.ts"]["css"][0]}"
-                />
-            <script
-                type="module"
-                src="/static/{manifest["src/main.ts"]["file"]}">
-            </script>
+        The actual work lives in scripts/build_frontend.py so that the wheel
+        build and `mise run setup` (setup:frontend) build the frontend in the
+        exact same way.
         """
-
-        contents = (templates / "admin_placeholder.jinja2").read_text()
-        contents = contents.replace("<!-- if production -->", vue_config)
-        (templates / "admin.jinja2").write_text(contents)
+        root_dir = Path(__file__).parent
+        subprocess.run(
+            [sys.executable, str(root_dir / "scripts" / "build_frontend.py")],
+            check=True,
+        )

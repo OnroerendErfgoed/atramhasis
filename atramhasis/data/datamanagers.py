@@ -97,7 +97,7 @@ class ConceptSchemeManager(DataManager):
                 select(Concept).filter(
                     Concept.conceptscheme_id == conceptscheme_id,
                     ~Concept.broader_concepts.any(),
-                    ~Collection.member_of.any(),
+                    ~sa.exists().where(collection_concept.c.concept_id == Concept.id),
                 )
             )
             .scalars()
@@ -115,7 +115,9 @@ class ConceptSchemeManager(DataManager):
                 select(Collection).filter(
                     Collection.conceptscheme_id == conceptscheme_id,
                     ~Collection.broader_concepts.any(),
-                    ~Collection.member_of.any(),
+                    ~sa.exists().where(
+                        collection_concept.c.concept_id == Collection.id
+                    ),
                 )
             )
             .scalars()
@@ -447,7 +449,7 @@ class AuditManager(DataManager):
         get the most popular concepts for a conceptscheme
         :param conceptscheme_id: id of the conceptscheme
         :param max_results: maximum number of results, default 5
-        :param period: 'last_day' or 'last_week' or 'last_month' or 'last_year', default 'last_mont h'
+        :param period: 'last_day' or 'last_week' or 'last_month' or 'last_year', default 'last_month'
         :return: List of the most popular concepts of a conceptscheme over a certain period
         """
 

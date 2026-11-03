@@ -173,7 +173,8 @@ def parse_argv_for_import(argv):
         "--id-generation-strategy",
         dest="id_generation_strategy",
         type=str,
-        help="URI pattern input for the URIGenerator",
+        help="Strategy used to generate ids for new concepts and collections "
+        "(default: numeric)",
         required=False,
         choices=["numeric", "guid", "manual"],
         default=None,
@@ -229,7 +230,7 @@ def validate_connection_string(connection_string):
     :return: Boolean True if correct connection string
     """
     u = url.make_url(connection_string)
-    if u.drivername == "postgresql":
+    if u.get_backend_name() == "postgresql":
         if u.username and u.password and u.host and u.port and u.database:
             return True
     elif u.drivername == "sqlite":
@@ -244,7 +245,7 @@ def validate_connection_string(connection_string):
         print("The database driver " + u.drivername + " is not supported.")
     print('Wrong structure of connection string "' + connection_string + '"')
     print(
-        "Structure: postgresql://username:password@host:port/db_name OR sqlite:///path/db_name.sqlite"
+        "Structure: postgresql+psycopg://username:password@host:port/db_name OR sqlite:///path/db_name.sqlite"
     )
     return False
 
@@ -280,7 +281,7 @@ def main(argv=sys.argv):  # pragma: no cover
     Documentation: import -h
     Run: import
     <path_input_file>
-    <uri_pattern>
+    --uri-pattern <uri_pattern>
     --to <conn_string>
     --conceptscheme-uri <cs_uri>
     --conceptscheme-label <cs_label>
@@ -292,7 +293,7 @@ def main(argv=sys.argv):  # pragma: no cover
      atramhasis/scripts/my_file
 
     structure conn_string:
-     postgresql://username:password@host:port/db_name
+     postgresql+psycopg://username:password@host:port/db_name
      sqlite:///path/db_name.sqlite
     default conn_string:
      sqlite:///atramhasis.sqlite

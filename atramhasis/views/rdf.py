@@ -91,6 +91,7 @@ class AtramhasisRDF:
         response.content_disposition = 'attachment; filename="{}.rdf"'.format(
             str(self.scheme_id)
         )
+        response.cache_expires(86400)
         return response
 
     @view_config(route_name="skosprovider.conceptscheme", accept="text/turtle")
@@ -103,6 +104,7 @@ class AtramhasisRDF:
         response.content_disposition = 'attachment; filename="{}.ttl"'.format(
             str(self.scheme_id)
         )
+        response.cache_expires(86400)
         return response
 
     @audit
@@ -133,10 +135,15 @@ class AtramhasisRDF:
     @audit
     @view_config(
         route_name="skosprovider.conceptscheme",
+        request_method="GET",
         permission="view",
         accept="application/ld+json",
     )
-    @view_config(route_name="skosprovider.conceptscheme.jsonld", permission="view")
+    @view_config(
+        route_name="skosprovider.conceptscheme.jsonld",
+        request_method="GET",
+        permission="view",
+    )
     def get_conceptscheme_jsonld(self):
         conceptscheme = ProviderView(self.request).get_conceptscheme_jsonld()
         response = Response(content_type="application/ld+json")
@@ -144,6 +151,7 @@ class AtramhasisRDF:
         response.content_disposition = 'attachment; filename="{}.jsonld"'.format(
             str(self.scheme_id)
         )
+        response.cache_expires(86400)
         return response
 
     @audit
